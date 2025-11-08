@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <!-- モーダル：仕様 -->
+  <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -58,7 +58,7 @@
     </div>
   </div>
 
-  <!-- モーダル：口コミ -->
+  <!-- モーダル: 口コミ -->
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -76,7 +76,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // 🔧 GitHubの raw 経由で常に最新ファイルを取得
+    // ✅ 最新CSV・画像・レビューを raw.githubusercontent.com から取得
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
@@ -88,23 +88,21 @@
         const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
         const data = await res.json();
         if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-      } catch {
-        cnyToJpy = 20;
-      }
+      } catch { cnyToJpy = 20; }
     }
 
     function convertToJPY(priceStr) {
       if (!priceStr) return "";
-      const match = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!match) return "";
-      const low = parseFloat(match[1]) * cnyToJpy * 10000;
-      const high = parseFloat(match[2]) * cnyToJpy * 10000;
+      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+      if (!m) return "";
+      const low = parseFloat(m[1]) * cnyToJpy * 10000;
+      const high = parseFloat(m[2]) * cnyToJpy * 10000;
       const fmt = (x) => (x / 10000).toFixed(1);
       return `（約${fmt(low)}〜${fmt(high)}万円）`;
     }
 
     function imgTag(rankStr, model, imageUrl) {
-      let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
         ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
         : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
@@ -114,12 +112,12 @@
       await fetchRate();
       try {
         const res = await fetch(CSV_PATH, { cache: "no-store" });
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        if (!res.ok) throw new Error(res.statusText);
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
         if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-        renderTable(parsed.data.filter(r => r && r.rank));
-        ok(`Autohome CSV 読み込み成功 ✔ (${parsed.data.length} 件)`);
+        renderTable(parsed.data);
+        ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
       } catch (err) {
         fail("CSV 読み込みエラー: " + err.message);
       }
@@ -140,8 +138,8 @@
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
 
-        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}');">仕様</button>` : "";
-        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}');">口コミ</button>` : "";
+        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
+        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
@@ -171,13 +169,12 @@
         if (!res.ok) throw new Error("Not found");
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true });
-        if(!parsed.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
         let html="<table class='table table-bordered table-sm'><thead><tr>";
         parsed.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
         parsed.data.forEach(row=>{html+="<tr>";parsed.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
         target.innerHTML=html+"</tbody></table>";
-      } catch(err){
-        target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`;
+      } catch {
+        target.innerHTML="<div class='text-danger'>仕様データが見つかりません。</div>";
       }
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }

@@ -43,7 +43,7 @@
     </div>
   </div>
 
-  <!-- モーダル: 仕様 -->
+  <!-- モーダル -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -58,7 +58,6 @@
     </div>
   </div>
 
-  <!-- モーダル: 口コミ -->
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -76,9 +75,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ✅ 常に最新データを取得（キャッシュ対策済）
-    const CSV_PATH = `output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-    const IMG_BASE = "output/pipeline/autohome-ranking-images/autohome_images/";
+    const CSV_PATH = "/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now();
+    const IMG_BASE = "/output/pipeline/autohome-ranking-images/autohome_images/";
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -101,24 +99,24 @@
 
     function imgTag(rankStr, model, imageUrl) {
       let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? `output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
+        ? "/output/pipeline/autohome-ranking-images" + imageUrl
+        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
     async function main() {
       await fetchRate();
-      try {
-        const res = await fetch(CSV_PATH);
-        if (!res.ok) throw new Error(res.statusText);
-        const text = await res.text();
-        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-        if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-        renderTable(parsed.data.filter(r => r && r.rank));
-        ok(`Autohome CSV 読み込み成功 ✔ (${parsed.data.length} 件)`);
-      } catch (err) {
-        fail("CSV 読み込みエラー: " + err.message);
-      }
+      Papa.parse(CSV_PATH, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: (res) => {
+          if (!res.meta.fields?.includes("rank")) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
+          renderTable(res.data.filter(r => r && r.rank));
+          ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
+        },
+        error: (err) => fail("CSV 読み込みエラー: " + err.message)
+      });
     }
 
     function renderTable(data) {
@@ -157,40 +155,29 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    async function showConfigCsv(carId, title){
-      const path=`output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+    function showConfigCsv(carId, title){
+      const path=`/output/autohome/${carId}/config_${carId}.ja.csv`;
       const target=document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
       target.innerHTML="読込中...";
-      try {
-        const res = await fetch(path);
-        if (!res.ok) throw new Error("not found");
-        const text = await res.text();
-        const parsed = Papa.parse(text, { header: true });
-        if(!parsed.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
+      Papa.parse(path,{download:true,header:true,complete:(res)=>{
+        if(!res.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
         let html="<table class='table table-bordered table-sm'><thead><tr>";
-        parsed.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
-        parsed.data.forEach(row=>{html+="<tr>";parsed.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
+        res.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
+        res.data.forEach(row=>{html+="<tr>";res.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
         target.innerHTML=html+"</tbody></table>";
-      } catch(err){
-        target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`;
-      }
+      },error:(err)=>target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`});
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
 
-    async function showStory(carId, title){
-      const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+    function showStory(carId, title){
+      const path=`/output/koubei/${carId}/story.txt`;
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
       target.textContent="読込中...";
-      try {
-        const res = await fetch(path);
-        if (!res.ok) throw new Error("not found");
-        const text = await res.text();
-        target.textContent = text;
-      } catch {
-        target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
-      }
+      fetch(path).then(res=>res.ok?res.text():Promise.reject("Not Found"))
+      .then(text=>target.textContent=text)
+      .catch(()=>target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>");
       new bootstrap.Modal(document.getElementById("storyModal")).show();
     }
 

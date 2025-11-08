@@ -1,154 +1,158 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>CSVビューア（output を読むだけ）</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>China Auto Dashboard - CSV Viewer</title>
   <style>
-    body { font-family: system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans JP", sans-serif; margin: 16px; }
-    h1 { font-size: 18px; margin: 0 0 12px; }
-    .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-    select, button { font-size: 14px; padding: 6px 10px; }
+    body {
+      font-family: system-ui, -apple-system, "Noto Sans JP", sans-serif;
+      margin: 20px;
+      background: #fafafa;
+    }
+    h1 {
+      font-size: 18px;
+      margin-bottom: 12px;
+    }
+    select, button {
+      font-size: 14px;
+      padding: 6px 10px;
+      margin-right: 8px;
+    }
     .status { font-size: 12px; color: #666; }
-    .wrap { margin-top: 12px; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; }
-    table { border-collapse: collapse; width: 100%; font-size: 13px; table-layout: fixed; }
-    thead th { position: sticky; top: 0; background: #fafafa; z-index: 1; }
-    th, td { border-bottom: 1px solid #eee; padding: 6px 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .scroller { overflow: auto; max-height: 75vh; }
-    .hidden { display: none; }
-    .error { color: #c00; font-weight: 600; }
-    .ok { color: #0a0; }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin-top: 10px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 4px 6px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    th {
+      background: #f0f0f0;
+      position: sticky;
+      top: 0;
+    }
+    .scroller {
+      overflow: auto;
+      max-height: 80vh;
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .error { color: red; font-weight: bold; }
   </style>
-  <!-- 依存ゼロでも動くけど、CSVのクォート対応のために PapaParse を使う（1ファイル、CDNのみ） -->
-  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 </head>
 <body>
-  <h1>CSVビューア（output をそのまま表示）</h1>
-
-  <div class="row">
-    <label for="csvSelect">CSV を選択:</label>
+  <h1>China Auto Dashboard CSV Viewer（outputを直接読む）</h1>
+  <div>
+    <label for="csvSelect">CSVファイル:</label>
     <select id="csvSelect"></select>
-    <button id="reloadBtn" title="再読込（完全にキャッシュ無効）">再読込</button>
+    <button id="reloadBtn">再読込</button>
     <span id="status" class="status"></span>
   </div>
 
-  <div id="error" class="error hidden"></div>
+  <div id="error" class="error" style="display:none;"></div>
 
-  <div class="wrap">
-    <div class="scroller">
-      <table id="table">
-        <thead></thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  <div class="scroller">
+    <table id="table">
+      <thead></thead>
+      <tbody></tbody>
+    </table>
   </div>
 
-<script>
-/**
- * ここに “output 配下の CSV パス” を相対パスで列挙するだけ。
- * 例はあなたの構成に合わせて適宜増減してください。
- */
-const CSV_FILES = [
-  // ランキング系（例）
-  "output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv",
+  <script>
+  // === あなたの output 構成に正確対応 ===
+  const CSV_FILES = [
+    "output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv",
+    "output/autohome/18/config_18.ja.csv",
+    // 必要ならここに追加:
+    // "output/autohome/19/config_19.ja.csv",
+    // "output/koubei/110/story.txt"  ← txtでも構わない
+  ];
 
-  // コンフィグ系（例）
-  "output/autohome/18/config_18.ja.csv",
-  // "output/autohome/18/config_18.csv",
+  const $select = document.getElementById("csvSelect");
+  const $reload = document.getElementById("reloadBtn");
+  const $status = document.getElementById("status");
+  const $error = document.getElementById("error");
+  const $thead = document.querySelector("#table thead");
+  const $tbody = document.querySelector("#table tbody");
 
-  // Koubei 等があれば追加
-  // "output/koubei/12345/koubei_summary_12345.csv",
-];
-
-// ---- ここから下は触らなくてOK（“読むだけ”実装） ----
-
-const $select = document.getElementById("csvSelect");
-const $status = document.getElementById("status");
-const $error  = document.getElementById("error");
-const $thead  = document.querySelector("#table thead");
-const $tbody  = document.querySelector("#table tbody");
-const $reload = document.getElementById("reloadBtn");
-
-// セレクトに一覧を詰める
-CSV_FILES.forEach(p => {
-  const opt = document.createElement("option");
-  opt.value = p;
-  opt.textContent = p;
-  $select.appendChild(opt);
-});
-
-// キャッシュ完全無効でフェッチ（no-store + キャッシュバスター）
-async function fetchCsvNoCache(path) {
-  const url = `${path}?v=${Date.now()}`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) {
-    throw new Error(`HTTP ${res.status} / ${res.statusText} @ ${path}`);
-  }
-  return await res.text();
-}
-
-function toTable(data) {
-  // ヘッダー生成
-  const header = data[0] || [];
-  $thead.innerHTML = "";
-  const trh = document.createElement("tr");
-  header.forEach(h => {
-    const th = document.createElement("th");
-    th.title = h ?? "";
-    th.textContent = h ?? "";
-    trh.appendChild(th);
+  // セレクト初期化
+  CSV_FILES.forEach(p => {
+    const opt = document.createElement("option");
+    opt.value = p;
+    opt.textContent = p;
+    $select.appendChild(opt);
   });
-  $thead.appendChild(trh);
 
-  // 本文
-  $tbody.innerHTML = "";
-  for (let i = 1; i < data.length; i++) {
-    const row = data[i];
-    if (row.length === 1 && row[0] === "") continue; // 余分な空行はスキップ
-    const tr = document.createElement("tr");
-    for (let c = 0; c < header.length; c++) {
-      const td = document.createElement("td");
-      const v = (row[c] ?? "").toString();
-      td.title = v;
-      td.textContent = v;
-      tr.appendChild(td);
-    }
-    $tbody.appendChild(tr);
+  async function fetchCsv(path) {
+    const url = `${path}?v=${Date.now()}`; // キャッシュ完全無効
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${path}`);
+    return await res.text();
   }
-}
 
-async function loadSelected() {
-  const path = $select.value;
-  $error.classList.add("hidden");
-  $error.textContent = "";
-  $status.textContent = `読込中… ${path}`;
-  try {
-    const csvText = await fetchCsvNoCache(path);
-    const parsed = Papa.parse(csvText.trim(), { header: false });
-    const rows = parsed.data || [];
-    toTable(rows);
-    $status.innerHTML = `OK: <span class="ok">${rows.length.toLocaleString()} 行</span>（${path}）`;
-  } catch (e) {
-    console.error(e);
+  function renderTable(rows) {
     $thead.innerHTML = "";
     $tbody.innerHTML = "";
-    $error.textContent = `読み込みエラー: ${e.message}`;
-    $error.classList.remove("hidden");
-    $status.textContent = "エラー";
+
+    if (!rows.length) {
+      $tbody.innerHTML = "<tr><td>（データなし）</td></tr>";
+      return;
+    }
+
+    const header = rows[0];
+    const trh = document.createElement("tr");
+    header.forEach(h => {
+      const th = document.createElement("th");
+      th.textContent = h;
+      trh.appendChild(th);
+    });
+    $thead.appendChild(trh);
+
+    for (let i = 1; i < rows.length; i++) {
+      const tr = document.createElement("tr");
+      for (let c = 0; c < header.length; c++) {
+        const td = document.createElement("td");
+        td.textContent = rows[i][c] || "";
+        tr.appendChild(td);
+      }
+      $tbody.appendChild(tr);
+    }
   }
-}
 
-// イベント
-$select.addEventListener("change", loadSelected);
-$reload.addEventListener("click", loadSelected);
+  async function loadCsv() {
+    const path = $select.value;
+    $status.textContent = `読込中: ${path}`;
+    $error.style.display = "none";
+    try {
+      const csvText = await fetchCsv(path);
+      const parsed = Papa.parse(csvText.trim(), { header: false });
+      renderTable(parsed.data);
+      $status.textContent = `OK: ${parsed.data.length.toLocaleString()} 行`;
+    } catch (err) {
+      $status.textContent = "エラー";
+      $error.textContent = err.message;
+      $error.style.display = "block";
+      console.error(err);
+    }
+  }
 
-// 初期表示
-if (CSV_FILES.length) {
-  $select.value = CSV_FILES[0];
-  loadSelected();
-} else {
-  $status.textContent = "CSV_FILES が空です。配列に output 配下の CSV パスを追加してください。";
-}
-</script>
+  $select.addEventListener("change", loadCsv);
+  $reload.addEventListener("click", loadCsv);
+
+  // 初期表示
+  if (CSV_FILES.length > 0) {
+    $select.value = CSV_FILES[0];
+    loadCsv();
+  }
+  </script>
 </body>
 </html>

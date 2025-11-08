@@ -191,7 +191,7 @@
 
     // 仕様CSV：固定ファイル名を Pages→Raw フォールバックで取得
     async function showConfigCsv(carId, title){
-      const rel = `output/autohome/${carId}/config_${carId}.ja.csv`;
+      const rel = `https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/autohome/${carId}/config_${carId}.ja.csv`;
       const target=document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
       target.innerHTML="読込中...";

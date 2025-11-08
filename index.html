@@ -16,8 +16,6 @@
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-    .muted { color:#6c757d;font-size:.85rem }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
   </style>
 </head>
 <body>
@@ -25,7 +23,6 @@
 
   <div class="container mt-3">
     <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
-    <div class="muted mono" id="debug"></div>
 
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle" id="carTable">
@@ -46,7 +43,7 @@
     </div>
   </div>
 
-  <!-- 仕様モーダル -->
+  <!-- モーダル -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -61,7 +58,6 @@
     </div>
   </div>
 
-  <!-- 口コミモーダル -->
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -79,40 +75,9 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // --- 設定 ---
-    // GitHub Pages（同一ホスト）と raw.githubusercontent.com のフォールバックを用意
-    const PAGES_BASE = ''; // 例: https://atqgamtgbgt.github.io/a8f3x9data/ 相対
-    const RAW_BASE   = 'https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/';
-
-    // ランキングCSV（固定ファイル名）
-    const RANKING_REL = 'output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv';
-
-    // 画像はPagesからでOK（容量＆権利的に raw は避ける）
-    const IMG_BASE = "output/pipeline/autohome-ranking-images/autohome_images/";
-
+    const CSV_PATH = "/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now();
+    const IMG_BASE = "/output/pipeline/autohome-ranking-images/autohome_images/";
     let cnyToJpy = 20;
-
-    // --- 共通: テキスト取得（Pages→Rawの順にフォールバック） ---
-    async function fetchTextWithFallback(relPath){
-      const cb = `cb=${performance.now()}`;
-      const urls = [
-        `${PAGES_BASE}${relPath}?${cb}`,
-        `${RAW_BASE}${relPath}?${cb}`
-      ];
-      const dbg = document.getElementById('debug');
-      for (const url of urls){
-        try {
-          const res = await fetch(url, { cache: 'no-store' });
-          if (!res.ok) { dbg.textContent = `try: ${url} -> ${res.status}`; continue; }
-          const text = await res.text();
-          dbg.textContent = `loaded: ${url}`;
-          return text;
-        } catch (e) {
-          dbg.textContent = `error: ${url} -> ${e.message}`;
-        }
-      }
-      throw new Error('全ての取得先で失敗しました: ' + urls.join(' | '));
-    }
 
     async function fetchRate() {
       try {
@@ -124,33 +89,34 @@
 
     function convertToJPY(priceStr) {
       if (!priceStr) return "";
-      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!m) return "";
-      const low = parseFloat(m[1]) * cnyToJpy * 10000;
-      const high = parseFloat(m[2]) * cnyToJpy * 10000;
+      const match = priceStr.match(/([\d.]+)-([\d.]+)万/);
+      if (!match) return "";
+      const low = parseFloat(match[1]) * cnyToJpy * 10000;
+      const high = parseFloat(match[2]) * cnyToJpy * 10000;
       const fmt = (x) => (x / 10000).toFixed(1);
       return `（約${fmt(low)}〜${fmt(high)}万円）`;
     }
 
     function imgTag(rankStr, model, imageUrl) {
-      const cb = `cb=${performance.now()}`;
       let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? `output/pipeline/autohome-ranking-images${imageUrl}?${cb}`
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?${cb}`);
+        ? "/output/pipeline/autohome-ranking-images" + imageUrl
+        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
     async function main() {
       await fetchRate();
-      try {
-        const text = await fetchTextWithFallback(RANKING_REL);
-        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-        if (!parsed.meta.fields?.includes('rank')) throw new Error('rank 列が見つかりません');
-        renderTable(parsed.data.filter(r => r && r.rank));
-        ok(`Autohome CSV 読み込み成功 ✔ (${parsed.data.length} 件)`);
-      } catch (err) {
-        fail("CSV 読み込みエラー: " + err.message);
-      }
+      Papa.parse(CSV_PATH, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: (res) => {
+          if (!res.meta.fields?.includes("rank")) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
+          renderTable(res.data.filter(r => r && r.rank));
+          ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
+        },
+        error: (err) => fail("CSV 読み込みエラー: " + err.message)
+      });
     }
 
     function renderTable(data) {
@@ -189,38 +155,29 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // 仕様CSV：固定ファイル名を Pages→Raw フォールバックで取得
-    async function showConfigCsv(carId, title){
-      const rel = `https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/autohome/${carId}/config_${carId}.ja.csv`;
+    function showConfigCsv(carId, title){
+      const path=`/output/autohome/${carId}/config_${carId}.ja.csv`;
       const target=document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
       target.innerHTML="読込中...";
-      try {
-        const text = await fetchTextWithFallback(rel);
-        const parsed = Papa.parse(text, { header: true });
-        if(!parsed.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
+      Papa.parse(path,{download:true,header:true,complete:(res)=>{
+        if(!res.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
         let html="<table class='table table-bordered table-sm'><thead><tr>";
-        parsed.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
-        parsed.data.forEach(row=>{html+="<tr>";parsed.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
+        res.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
+        res.data.forEach(row=>{html+="<tr>";res.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
         target.innerHTML=html+"</tbody></table>";
-      } catch(err){
-        target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`;
-      }
+      },error:(err)=>target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`});
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
 
-    // 口コミTXT：Pages→Raw フォールバック取得
-    async function showStory(carId, title){
-      const rel = `output/koubei/${carId}/story.txt`;
+    function showStory(carId, title){
+      const path=`/output/koubei/${carId}/story.txt`;
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
       target.textContent="読込中...";
-      try {
-        const text = await fetchTextWithFallback(rel);
-        target.textContent = text || "（本文なし）";
-      } catch {
-        target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
-      }
+      fetch(path).then(res=>res.ok?res.text():Promise.reject("Not Found"))
+      .then(text=>target.textContent=text)
+      .catch(()=>target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>");
       new bootstrap.Modal(document.getElementById("storyModal")).show();
     }
 

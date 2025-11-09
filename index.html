@@ -76,7 +76,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ✅ 常に最新版を取得（キャッシュ回避）
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
@@ -134,7 +133,7 @@
         const carId = link.match(/(\d+)/)?.[1] || "";
         const name = r.global_name || r.name || "";
         const price = (r.price || "") + " 元";
-        const priceJPY = convertToJPY(r.price || "");
+        const priceJPY = convertToJPY(r.price || "";
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
 
@@ -159,7 +158,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ セクション / 項目 を非表示（_ja は残す）
+    // ▼▼ ここだけ更新：左端2列（セクション_ja／項目_ja）を空欄＋結合（colspan=2）にする ▼▼
     async function showConfigCsv(carId, title){
       const path = `${RAW_BASE}output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target=document.getElementById("csvContent");
@@ -171,30 +170,49 @@
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true });
 
-        const hiddenCols = ["セクション", "項目"]; // 👈 非表示リスト
+        const cols = parsed.meta.fields.slice(); // オリジナル列
 
-        let html="<table class='table table-bordered table-sm'><thead><tr>";
-        parsed.meta.fields.forEach(f=>{
-          if (!hiddenCols.includes(f)) html+=`<th>${f}</th>`;
-        });
-        html+="</tr></thead><tbody>";
+        // 左端2列の候補名（どちらかが存在）
+        const C1 = cols.find(c => c === "セクション_ja") || cols.find(c => c === "セクション");
+        const C2 = cols.find(c => c === "項目_ja")     || cols.find(c => c === "項目");
 
+        let html = "<table class='table table-bordered table-sm'><thead><tr>";
+        // ヘッダ：左端2列は1セルにまとめて空欄
+        if (C1 && C2) {
+          html += `<th colspan="2"></th>`;
+        } else if (C1 || C2) {
+          html += `<th></th>`;
+        }
+        cols.forEach(f => { if (f!==C1 && f!==C2) html += `<th>${f}</th>`; });
+        html += "</tr></thead><tbody>";
+
+        // 本文
         parsed.data.forEach(row=>{
-          html+="<tr>";
-          parsed.meta.fields.forEach(f=>{
-            if (hiddenCols.includes(f)) return;
-            const val = (row[f] ?? "").replace(/\r?\n/g,"<br>");
-            html+=`<td>${val}</td>`;
+          html += "<tr>";
+          // 左端まとめセル（空欄）
+          if (C1 && C2) {
+            html += `<td colspan="2"></td>`;
+          } else if (C1 || C2) {
+            html += `<td></td>`;
+          }
+          // 残りの列
+          cols.forEach(f=>{
+            if (f===C1 || f===C2) return;
+            let val = (row[f] ?? "").toString().trim();
+            if (val.toLowerCase() === "nan") val = "";
+            val = val.replace(/\r?\n/g,"<br>");
+            html += `<td>${val}</td>`;
           });
-          html+="</tr>";
+          html += "</tr>";
         });
 
-        target.innerHTML=html+"</tbody></table>";
+        target.innerHTML = html + "</tbody></table>";
       } catch {
         target.innerHTML="<div class='text-danger'>仕様データが見つかりません。</div>";
       }
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
+    // ▲▲ ここまで ▲▲
 
     async function showStory(carId, title){
       const path = `${RAW_BASE}output/koubei/${carId}/story.txt?v=${Date.now()}`;

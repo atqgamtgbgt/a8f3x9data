@@ -106,55 +106,16 @@
 
     async function main() {
       await fetchRate();
-
-      // ✅ 解析用ログ領域を設置
-      const debugDiv = document.createElement("div");
-      debugDiv.className = "alert alert-secondary mt-3";
-      debugDiv.style.fontSize = "0.8rem";
-      debugDiv.id = "debug-log";
-      document.querySelector(".container").prepend(debugDiv);
-
-      const log = (msg) => {
-        console.log("[DEBUG]", msg);
-        debugDiv.innerHTML += `<div>${new Date().toLocaleTimeString()} ▶ ${msg}</div>`;
-      };
-
-      log(`CSV_PATH = ${CSV_PATH}`);
-
-      // ✅ fetch() で直接ステータス確認
-      try {
-        const res = await fetch(CSV_PATH, { cache: "no-store" });
-        log(`HTTP status = ${res.status} ${res.statusText}`);
-        log(`Content-Type = ${res.headers.get("content-type")}`);
-        if (!res.ok) {
-          log(`⚠️ fetch() 失敗: ${res.status} ${res.statusText}`);
-        } else {
-          const text = await res.text();
-          const firstLine = text.split("\n")[0].slice(0, 80);
-          log(`✅ fetch() 成功。最初の行: "${firstLine}"`);
-        }
-      } catch (err) {
-        log(`❌ fetch() 例外発生: ${err}`);
-      }
-
-      // ✅ Papa.parseによる解析
       Papa.parse(CSV_PATH, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: (res) => {
-          if (!res.meta.fields?.includes("rank")) {
-            log(`⚠️ Papa.parse完了（rank列なし）。列一覧=${JSON.stringify(res.meta.fields)}`);
-            return fail("CSV 読み込み失敗（rank 列が見つかりません）");
-          }
-          log(`✅ Papa.parse完了 (${res.data.length} 行)。最初のrank=${res.data[0]?.rank}`);
+          if (!res.meta.fields?.includes("rank")) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
           renderTable(res.data.filter(r => r && r.rank));
           ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
         },
-        error: (err, file, inputElem, reason) => {
-          log(`❌ Papa.parse error発生: ${err.message || err} | reason=${reason || "不明"}`);
-          fail("CSV 読み込みエラー: " + (err.message || err));
-        }
+        error: (err) => fail("CSV 読み込みエラー: " + err.message)
       });
     }
 

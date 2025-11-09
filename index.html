@@ -135,8 +135,10 @@
         const priceJPY = convertToJPY(r.price || "");
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
+
         const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
         const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${r.rank}</td>
@@ -155,6 +157,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
+    // ✅ セクション・項目を非表示にし、_jaのみ表示
     async function showConfigCsv(carId, title){
       const path = `${RAW_BASE}output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target=document.getElementById("csvContent");
@@ -165,11 +168,13 @@
         if (!res.ok) throw new Error("Not found");
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true });
+        // 🔽 表示列をフィルタリング
+        const fields = parsed.meta.fields.filter(f => !["セクション","項目"].includes(f));
         let html="<table class='table table-bordered table-sm'><thead><tr>";
-        parsed.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
+        fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
         parsed.data.forEach(row=>{
           html+="<tr>";
-          parsed.meta.fields.forEach(f=>{
+          fields.forEach(f=>{
             const val = (row[f] ?? "").replace(/\r?\n/g, "<br>");
             html+=`<td>${val}</td>`;
           });
@@ -186,17 +191,12 @@
       const path = `${RAW_BASE}output/koubei/${carId}/story.txt?v=${Date.now()}`;
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-      target.innerHTML="<div class='text-muted'>読込中...</div>";
+      target.textContent="読込中...";
       try {
         const res = await fetch(path, { cache: "no-store" });
         if (!res.ok) throw new Error("Not found");
-        let text = await res.text();
-        text = text
-          .replace(/```+/g, "")
-          .replace(/^#+\s*/gm, "")
-          .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
-          .replace(/\r?\n/g, "<br>");
-        target.innerHTML = `<div style="white-space:pre-wrap; line-height:1.6;">${text}</div>`;
+        const text = await res.text();
+        target.textContent = text || "（本文なし）";
       } catch {
         target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
       }

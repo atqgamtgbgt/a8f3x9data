@@ -60,7 +60,6 @@
   <script>
     const nocache = "?nocache=" + Math.random().toString(36).slice(2);
 
-    // ⚠️ ここを相対パスに修正（先頭の / を削除）
     const CSV_PATH = `output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv${nocache}`;
     const IMG_BASE = `output/pipeline/autohome-ranking-images/autohome_images/`;
 
@@ -202,8 +201,9 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
+    // ✅ 相対パスに修正（2箇所）
     function showConfigCsv(carId, title){
-      const path=`output/autohome/${carId}/config_${carId}.ja.csv${nocache}`;  // ←相対パス
+      const path=`output/autohome/${carId}/config_${carId}.ja.csv${nocache}`;
       const target=document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
       target.innerHTML="読込中...";
@@ -218,7 +218,7 @@
     }
 
     function showStory(carId, title){
-      const path=`output/koubei/${carId}/story.txt${nocache}`;  // ←相対パス
+      const path=`output/koubei/${carId}/story.txt${nocache}`;
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
       target.textContent="読込中...";

@@ -76,9 +76,11 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
+    // ✅ 常に最新版を取得（キャッシュ回避）
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -157,7 +159,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ セクション・項目を非表示にし、_jaのみ表示
+    // ✅ セクション / 項目 を非表示（_ja は残す）
     async function showConfigCsv(carId, title){
       const path = `${RAW_BASE}output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target=document.getElementById("csvContent");
@@ -168,18 +170,25 @@
         if (!res.ok) throw new Error("Not found");
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true });
-        // 🔽 表示列をフィルタリング
-        const fields = parsed.meta.fields.filter(f => !["セクション","項目"].includes(f));
+
+        const hiddenCols = ["セクション", "項目"]; // 👈 非表示リスト
+
         let html="<table class='table table-bordered table-sm'><thead><tr>";
-        fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
+        parsed.meta.fields.forEach(f=>{
+          if (!hiddenCols.includes(f)) html+=`<th>${f}</th>`;
+        });
+        html+="</tr></thead><tbody>";
+
         parsed.data.forEach(row=>{
           html+="<tr>";
-          fields.forEach(f=>{
-            const val = (row[f] ?? "").replace(/\r?\n/g, "<br>");
+          parsed.meta.fields.forEach(f=>{
+            if (hiddenCols.includes(f)) return;
+            const val = (row[f] ?? "").replace(/\r?\n/g,"<br>");
             html+=`<td>${val}</td>`;
           });
           html+="</tr>";
         });
+
         target.innerHTML=html+"</tbody></table>";
       } catch {
         target.innerHTML="<div class='text-danger'>仕様データが見つかりません。</div>";

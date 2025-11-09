@@ -9,17 +9,29 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <style>
     body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
-    header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
+    header { background: #0d6efd; color: #fff; padding: 12px 48px 12px 12px; text-align: center; font-size: 1.3rem; font-weight: 700; position: relative; }
     th { background-color: #f1f3f5; }
     .rank-up { color: #dc3545; font-weight: bold; }
     .rank-down { color: #0d6efd; font-weight: bold; }
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
+
+    /* 右上のCDNバッジ */
+    #cdnBadge { position:absolute; right:8px; top:8px; font-size:.8rem; }
+    #debug-log { font-size:.8rem; }
+    .badge-hit{ background:#198754!important; }   /* green */
+    .badge-miss{ background:#0d6efd!important; }  /* blue */
+    .badge-expired{ background:#ffc107!important; color:#111!important; } /* yellow */
+    .badge-dynamic{ background:#6c757d!important; } /* gray */
+    .badge-err{ background:#dc3545!important; }   /* red */
   </style>
 </head>
 <body>
-  <header>🚗 China Auto Dashboard</header>
+  <header>
+    🚗 China Auto Dashboard
+    <span id="cdnBadge" class="badge bg-secondary">CDN: —</span>
+  </header>
 
   <div class="container mt-3">
     <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
@@ -41,18 +53,74 @@
         <tbody></tbody>
       </table>
     </div>
+
+    <!-- 解析ログ -->
+    <div id="debug-log" class="alert alert-secondary mt-3"></div>
+  </div>
+
+  <!-- モーダル: 仕様 -->
+  <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <div id="csvContent" class="table-responsive"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル: 口コミ -->
+  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="storyModalLabel">口コミ概要</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <div id="storyContent">読込中...</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ✅ キャッシュ防止キーを発行
+    // キャッシュ無効キー（404キャッシュも避ける）
     const nocache = "?nocache=" + Math.random().toString(36).slice(2);
 
-    // ✅ ファイルパスをキャッシュ無効化版に
+    // 監視対象パス
     const CSV_PATH = `/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv${nocache}`;
     const IMG_BASE = `/output/pipeline/autohome-ranking-images/autohome_images/`;
+
     let cnyToJpy = 20;
+
+    // ログ出力
+    function log(msg){
+      console.log("[DEBUG]", msg);
+      const box = document.getElementById("debug-log");
+      box.innerHTML += `<div>${new Date().toLocaleTimeString()} ▶ ${msg}</div>`;
+    }
+
+    // CDNバッジ更新
+    function setCdnBadge(status, age){
+      const el = document.getElementById("cdnBadge");
+      const s = (status || "—").toUpperCase();
+      const ageStr = (age!=null && age!=="") ? `  Age:${age}s` : "";
+      el.textContent = `CDN: ${s}${ageStr}`;
+      el.className = "badge";
+      if (s === "HIT") el.classList.add("badge-hit");
+      else if (s === "MISS" || s === "BYPASS") el.classList.add("badge-miss");
+      else if (s === "EXPIRED") el.classList.add("badge-expired");
+      else if (s === "DYNAMIC") el.classList.add("badge-dynamic");
+      else if (s === "ERR" || s === "ERROR") el.classList.add("badge-err");
+      else el.classList.add("bg-secondary");
+    }
 
     async function fetchRate() {
       try {
@@ -79,20 +147,63 @@
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
+    // CSVのヘッダ情報（cf-cache-status など）を取得してUIに反映
+    async function probeHeaders(url){
+      try{
+        const res = await fetch(url, { cache: "no-store" });
+        const st = res.status;
+        const ctype = res.headers.get("content-type");
+        const cf = res.headers.get("cf-cache-status");
+        const age = res.headers.get("age");
+        log(`HTTP ${st} | Content-Type=${ctype} | cf-cache-status=${cf} | age=${age}`);
+        setCdnBadge(cf || (st===200?"MISS":"ERR"), age || "");
+        return res;
+      }catch(e){
+        log(`❌ fetch例外: ${e}`);
+        setCdnBadge("ERR", "");
+        throw e;
+      }
+    }
+
     async function main() {
+      log(`CSV_PATH = ${CSV_PATH}`);
       await fetchRate();
+
+      // まずヘッダを可視化（実体も一度GET）
+      const res = await probeHeaders(CSV_PATH);
+      if (!res.ok){
+        fail("CSV 読み込みエラー: " + res.status);
+        return;
+      }
+
+      // 取得できたら中身の一行目もログ
+      try{
+        const text = await res.clone().text();
+        const firstLine = text.split("\n")[0].slice(0, 140);
+        log(`先頭行プレビュー: "${firstLine}"`);
+      }catch{ /* noop */ }
+
+      // Papaで実パース
       Papa.parse(CSV_PATH, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: (res) => {
           const fields = res.meta.fields || [];
-          const hasRank = fields.includes("rank") || fields.includes("\ufeffrank");
-          if (!hasRank) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
-          renderTable(res.data.filter(r => r && (r.rank || r["\ufeffrank"])));
+          // BOM付き rank 許容
+          const hasRank = fields.includes("rank") || fields.includes("\ufeffrank") || (fields[0] && fields[0].replace(/^\ufeff/,"")==="rank");
+          if (!hasRank) {
+            log(`⚠️ rank列なし。fields=${JSON.stringify(fields)}`);
+            return fail("CSV 読み込み失敗（rank 列が見つかりません）");
+          }
+          log(`✅ Papa.parse完了: ${res.data.length} 行`);
+          renderTable(res.data.filter(r => r && (r.rank != null || r["\ufeffrank"] != null)));
           ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
         },
-        error: (err) => fail("CSV 読み込みエラー: " + err.message)
+        error: (err, file, inputElem, reason) => {
+          log(`❌ Papa.parse error: ${err?.message || err} | reason=${reason || "不明"}`);
+          fail("CSV 読み込みエラー: " + (err?.message || err));
+        }
       });
     }
 
@@ -100,7 +211,8 @@
       const tbody = document.querySelector("#carTable tbody");
       tbody.innerHTML = "";
       data.forEach(r => {
-        const rankStr = String(r.rank || r["\ufeffrank"]).padStart(3, "0");
+        const rankVal = r.rank ?? r["\ufeffrank"];
+        const rankStr = String(rankVal).padStart(3, "0");
         const diff = Number(r.delta_vs_last_month || 0);
         const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
         const link = r.link || "";
@@ -116,7 +228,7 @@
 
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td>${r.rank || r["\ufeffrank"]}</td>
+          <td>${rankVal}</td>
           <td>${diffHtml}</td>
           <td>${imgTag(rankStr, name, r.image_url)}</td>
           <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
@@ -152,7 +264,11 @@
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
       target.textContent="読込中...";
-      fetch(path).then(res=>res.ok?res.text():Promise.reject("Not Found"))
+      fetch(path,{cache:"no-store"}).then(res=>{
+        const cf = res.headers.get("cf-cache-status"); const age = res.headers.get("age");
+        log(`[story] HTTP ${res.status} cf-cache-status=${cf} age=${age}`);
+        return res.ok?res.text():Promise.reject("Not Found");
+      })
       .then(text=>target.textContent=text)
       .catch(()=>target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>");
       new bootstrap.Modal(document.getElementById("storyModal")).show();

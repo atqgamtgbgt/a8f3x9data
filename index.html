@@ -16,15 +16,13 @@
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-
-    /* 右上のCDNバッジ */
     #cdnBadge { position:absolute; right:8px; top:8px; font-size:.8rem; }
     #debug-log { font-size:.8rem; }
-    .badge-hit{ background:#198754!important; }   /* green */
-    .badge-miss{ background:#0d6efd!important; }  /* blue */
-    .badge-expired{ background:#ffc107!important; color:#111!important; } /* yellow */
-    .badge-dynamic{ background:#6c757d!important; } /* gray */
-    .badge-err{ background:#dc3545!important; }   /* red */
+    .badge-hit{ background:#198754!important; }
+    .badge-miss{ background:#0d6efd!important; }
+    .badge-expired{ background:#ffc107!important; color:#111!important; }
+    .badge-dynamic{ background:#6c757d!important; }
+    .badge-err{ background:#dc3545!important; }
   </style>
 </head>
 <body>
@@ -54,60 +52,25 @@
       </table>
     </div>
 
-    <!-- 解析ログ -->
     <div id="debug-log" class="alert alert-secondary mt-3"></div>
-  </div>
-
-  <!-- モーダル: 仕様 -->
-  <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="csvContent" class="table-responsive"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- モーダル: 口コミ -->
-  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="storyModalLabel">口コミ概要</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="storyContent">読込中...</div>
-        </div>
-      </div>
-    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // キャッシュ無効キー（404キャッシュも避ける）
     const nocache = "?nocache=" + Math.random().toString(36).slice(2);
 
-    // 監視対象パス
-    const CSV_PATH = `/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv${nocache}`;
-    const IMG_BASE = `/output/pipeline/autohome-ranking-images/autohome_images/`;
+    // ⚠️ ここを相対パスに修正（先頭の / を削除）
+    const CSV_PATH = `output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv${nocache}`;
+    const IMG_BASE = `output/pipeline/autohome-ranking-images/autohome_images/`;
 
     let cnyToJpy = 20;
 
-    // ログ出力
     function log(msg){
       console.log("[DEBUG]", msg);
       const box = document.getElementById("debug-log");
       box.innerHTML += `<div>${new Date().toLocaleTimeString()} ▶ ${msg}</div>`;
     }
-
-    // CDNバッジ更新
     function setCdnBadge(status, age){
       const el = document.getElementById("cdnBadge");
       const s = (status || "—").toUpperCase();
@@ -142,12 +105,11 @@
 
     function imgTag(rankStr, model, imageUrl) {
       let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? "/output/pipeline/autohome-ranking-images" + imageUrl + nocache
+        ? `output/pipeline/autohome-ranking-images${imageUrl}${nocache}`
         : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png${nocache}`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
-    // CSVのヘッダ情報（cf-cache-status など）を取得してUIに反映
     async function probeHeaders(url){
       try{
         const res = await fetch(url, { cache: "no-store" });
@@ -169,28 +131,24 @@
       log(`CSV_PATH = ${CSV_PATH}`);
       await fetchRate();
 
-      // まずヘッダを可視化（実体も一度GET）
       const res = await probeHeaders(CSV_PATH);
       if (!res.ok){
         fail("CSV 読み込みエラー: " + res.status);
         return;
       }
 
-      // 取得できたら中身の一行目もログ
       try{
         const text = await res.clone().text();
         const firstLine = text.split("\n")[0].slice(0, 140);
         log(`先頭行プレビュー: "${firstLine}"`);
-      }catch{ /* noop */ }
+      }catch{}
 
-      // Papaで実パース
       Papa.parse(CSV_PATH, {
         download: true,
         header: true,
         skipEmptyLines: true,
         complete: (res) => {
           const fields = res.meta.fields || [];
-          // BOM付き rank 許容
           const hasRank = fields.includes("rank") || fields.includes("\ufeffrank") || (fields[0] && fields[0].replace(/^\ufeff/,"")==="rank");
           if (!hasRank) {
             log(`⚠️ rank列なし。fields=${JSON.stringify(fields)}`);
@@ -245,7 +203,7 @@
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
     function showConfigCsv(carId, title){
-      const path=`/output/autohome/${carId}/config_${carId}.ja.csv${nocache}`;
+      const path=`output/autohome/${carId}/config_${carId}.ja.csv${nocache}`;  // ←相対パス
       const target=document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
       target.innerHTML="読込中...";
@@ -260,7 +218,7 @@
     }
 
     function showStory(carId, title){
-      const path=`/output/koubei/${carId}/story.txt${nocache}`;
+      const path=`output/koubei/${carId}/story.txt${nocache}`;  // ←相対パス
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
       target.textContent="読込中...";

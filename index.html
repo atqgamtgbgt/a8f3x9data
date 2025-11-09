@@ -75,8 +75,11 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const CSV_PATH = "/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now();
-    const IMG_BASE = "/output/pipeline/autohome-ranking-images/autohome_images/";
+    const BASE = new URL('.', location.href).href;
+    const url = (p) => new URL(p, BASE).href;
+
+    const CSV_PATH = url("output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now());
+    const IMG_BASE = url("output/pipeline/autohome-ranking-images/autohome_images/");
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -99,7 +102,7 @@
 
     function imgTag(rankStr, model, imageUrl) {
       let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? "/output/pipeline/autohome-ranking-images" + imageUrl
+        ? url("output/pipeline/autohome-ranking-images" + imageUrl)
         : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
@@ -156,7 +159,7 @@
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
     function showConfigCsv(carId, title){
-      const path=`/output/autohome/${carId}/config_${carId}.ja.csv`;
+      const path=url(`output/autohome/${carId}/config_${carId}.ja.csv`);
       const target=document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
       target.innerHTML="読込中...";
@@ -171,7 +174,7 @@
     }
 
     function showStory(carId, title){
-      const path=`/output/koubei/${carId}/story.txt`;
+      const path=url(`output/koubei/${carId}/story.txt`);
       const target=document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
       target.textContent="読込中...";

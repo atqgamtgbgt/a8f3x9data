@@ -165,7 +165,6 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ 唯一の変更点はこの中のテーブルクラス指定のみ（全体フォーマット統一）
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -241,8 +240,8 @@
           document.querySelectorAll(".spec-sidebar a").forEach(a => {
             a.addEventListener("click", e => {
               e.preventDefault();
-              const id = a.getAttribute("href");
-              const el = document.querySelector(id);
+              const href = a.getAttribute("href");
+              const el = document.getElementById(href.slice(1));
               if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
             });
           });

@@ -180,12 +180,11 @@
           const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
           if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
-          const headerIdx = rows.findIndex(r => /^(項目|項目_ja)$/.test((r[1] || "").trim()));
-          if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+const headerIdx = 0;
+const headerRow = rows[headerIdx];
+const modelHeaders = headerRow.slice(2);
+const dataRows = rows.slice(1);
 
-          const headerRow = rows[headerIdx];
-          const modelHeaders = headerRow.slice(2);
-          const dataRows = rows.slice(headerIdx + 1);
 
           const grouped = [];
           let currentSection = "";

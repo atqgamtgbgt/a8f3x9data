@@ -158,7 +158,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ 「セクション_ja」「項目_ja」「nan」を空欄にする（列名と値指定）
+    // ▼▼▼ ここだけ修正：列削除 + 位置指定セル空欄化 ▼▼▼
     function showConfigCsv(carId, title){
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -171,32 +171,37 @@
         skipEmptyLines: true,
         complete: (res) => {
           const fields = (res.meta.fields || []).map(f => f.replace(/^\ufeff/, ""));
-          const data = res.data || [];
-          if (!data.length) {
-            target.innerHTML = "<div class='text-danger'>CSVが空、または存在しません。</div>";
-            return;
-          }
+          const dataRaw = res.data || [];
+          if (!dataRaw.length) { target.innerHTML = "<div class='text-danger'>CSVが空、または存在しません。</div>"; return; }
 
-          // 列名指定で空欄化
-          data.forEach((row, idx) => {
-            ["セクション", "セクション_ja", "項目", "項目_ja"].forEach(col => {
-              if (row[col] && (idx <= 2)) row[col] = ""; // 最初の3行のみ
-            });
-            // 値が "nan" の場合も空欄
-            Object.keys(row).forEach(k => {
-              if (typeof row[k] === "string" && row[k].trim().toLowerCase() === "nan") {
-                row[k] = "";
-              }
-            });
+          // 1) 「セクション」「項目」列を完全に削除（除外）
+          const drop = new Set(["セクション","項目"]);
+          const filteredFields = fields.filter(f => !drop.has(f));
+
+          // 2) 表示用データ（除外済み列だけ残す）を作る
+          const data = dataRaw.map(row => {
+            const o = {};
+            filteredFields.forEach(f => { o[f] = row[f] ?? ""; });
+            return o;
           });
 
-          // 描画
+          // 3) 位置指定でセルだけ空欄化（列は消さない）
+          //    セクション_ja: 0行目・1行目・2行目を空欄
+          //    項目_ja: 0行目のみ空欄
+          if (data[0] && "セクション_ja" in data[0]) data[0]["セクション_ja"] = "";
+          if (data[1] && "セクション_ja" in data[1]) data[1]["セクション_ja"] = "";
+          if (data[2] && "セクション_ja" in data[2]) data[2]["セクション_ja"] = "";
+          if (data[0] && "項目_ja" in data[0])        data[0]["項目_ja"]        = "";
+
+          // 4) レンダリング（列順は filteredFields に厳密に従う）
           let html = "<table class='table table-bordered table-sm'><thead><tr>";
-          for (const f of fields) html += `<th>${f}</th>`;
+          for (const f of filteredFields) html += `<th>${f}</th>`;
           html += "</tr></thead><tbody>";
           for (const row of data) {
             html += "<tr>";
-            for (const f of fields) html += `<td>${row[f] ?? ""}</td>`;
+            for (const f of filteredFields) {
+              html += `<td>${row[f] ?? ""}</td>`;
+            }
             html += "</tr>";
           }
           html += "</tbody></table>";
@@ -209,6 +214,7 @@
 
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
+    // ▲▲▲ 修正ここまで ▲▲▲
 
     async function showStory(carId, title){
       const path = `output/koubei/${carId}/story.txt?v=${Date.now()}`;

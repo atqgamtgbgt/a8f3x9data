@@ -158,7 +158,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ 特定セルを空欄化（位置指定）
+    // 仕様CSV: 「セクション」「項目」列は削除 → その後 (0,0)(0,1)(1,0)(2,0) を空欄化（列順に厳密追従）
     function showConfigCsv(carId, title){
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -170,40 +170,42 @@
         header: true,
         skipEmptyLines: true,
         complete: (res) => {
+          // ヘッダ（列順）をそのまま取得
           let fields = (res.meta.fields || []).map(f => f.replace(/^\ufeff/, ""));
           if (!res.data?.length) {
             target.innerHTML = "<div class='text-danger'>CSVが空、または存在しません。</div>";
             return;
           }
 
-          // 🟢 指定位置を空欄に置換
-          if (res.data[0]) {
-            const keys = Object.keys(res.data[0]);
-            if (keys.length >= 2) {
-              res.data[0][keys[0]] = ""; // (1行1列目)
-              res.data[0][keys[1]] = ""; // (1行2列目)
-            }
-          }
-          if (res.data[1]) {
-            const keys = Object.keys(res.data[1]);
-            if (keys.length >= 1) res.data[1][keys[0]] = ""; // (2行1列目)
-          }
-          if (res.data[2]) {
-            const keys = Object.keys(res.data[2]);
-            if (keys.length >= 1) res.data[2][keys[0]] = ""; // (3行1列目)
-          }
+          // 1) 「セクション」「項目」列を除外（復活防止）
+          const drop = new Set(["セクション","項目"]);
+          const filteredFields = fields.filter(f => !drop.has(f));
 
+          // 2) 位置指定の空欄化（削除後の列順で処理）
+          // row 0: col 0 & col 1
+          if (res.data[0]) {
+            if (filteredFields[0]) res.data[0][filteredFields[0]] = "";
+            if (filteredFields[1]) res.data[0][filteredFields[1]] = "";
+          }
+          // row 1: col 0
+          if (res.data[1] && filteredFields[0]) res.data[1][filteredFields[0]] = "";
+          // row 2: col 0
+          if (res.data[2] && filteredFields[0]) res.data[2][filteredFields[0]] = "";
+
+          // 3) 描画（必ず filteredFields の順でアクセス）
           let html = "<table class='table table-bordered table-sm'><thead><tr>";
-          fields.forEach(f => html += `<th>${f}</th>`); html += "</tr></thead><tbody>";
-          res.data.forEach(row => {
+          for (const f of filteredFields) html += `<th>${f}</th>`;
+          html += "</tr></thead><tbody>";
+
+          for (const row of res.data) {
             html += "<tr>";
-            fields.forEach(f => {
-              const key = Object.keys(row).find(k => k.replace(/^\ufeff/, "") === f);
-              html += `<td>${row[key] ?? ""}</td>`;
-            });
+            for (const f of filteredFields) {
+              html += `<td>${row[f] ?? ""}</td>`;
+            }
             html += "</tr>";
-          });
-          target.innerHTML = html + "</tbody></table>";
+          }
+          html += "</tbody></table>";
+          target.innerHTML = html;
         },
         error: (err) => {
           target.innerHTML = `<div class='text-danger'>読み込み失敗: ${err.message}</div>`;

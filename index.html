@@ -16,6 +16,7 @@
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
+    td { white-space: pre-line; } /* ← 改行保持 */
   </style>
 </head>
 <body>
@@ -52,7 +53,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
-          <div id="csvContent" class="table-responsive"></div>
+          <div id="csvContent" class="table-responsive">読込中...</div>
         </div>
       </div>
     </div>
@@ -78,7 +79,7 @@
   <script>
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-    const IMG_BASE_ROOT = `${RAW_BASE}output/pipeline/autohome-ranking-images`;
+    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
 
     let cnyToJpy = 20;
 
@@ -100,10 +101,10 @@
       return `（約${fmt(low)}〜${fmt(high)}万円）`;
     }
 
-    // ✅ image_url列を直接利用（唯一の変更箇所）
-    function imgTag(imageUrl, model) {
-      if (!imageUrl) return "";
-      const fullPath = `${IMG_BASE_ROOT}${imageUrl}?v=${Date.now()}`;
+    function imgTag(rankStr, model, imageUrl) {
+      const fullPath = imageUrl
+        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
+        : `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`;
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
@@ -144,7 +145,7 @@
         tr.innerHTML = `
           <td>${r.rank}</td>
           <td>${diffHtml}</td>
-          <td>${imgTag(r.image_url, name)}</td>
+          <td>${imgTag(rankStr, name, r.image_url)}</td>
           <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
           <td>${maker}</td>
           <td>${units}</td>
@@ -158,41 +159,42 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    function showConfigCsv(carId, title){
-      const path = `${RAW_BASE}output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+    function showConfigCsv(carId, title) {
+      const CSV_URL = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
 
-      Papa.parse(path, {
+      Papa.parse(CSV_URL, {
         download: true,
-        header: true,
-        skipEmptyLines: true,
+        header: false,
+        skipEmptyLines: false,
         complete: (res) => {
-          let fields = (res.meta.fields || []).map(f => f.replace(/^\ufeff/, ""));
-          if (!res.data?.length) { target.innerHTML = "<div class='text-danger'>CSVが空、または存在しません。</div>"; return; }
-          let html = "<table class='table table-bordered table-sm'><thead><tr>";
-          fields.forEach(f => html += `<th>${f}</th>`); html += "</tr></thead><tbody>";
-          res.data.forEach(row => {
+          let rows = res.data.map(row => row.filter((_, idx) => idx !== 0 && idx !== 2));
+          rows = rows.map((r) =>
+            r.map(v => {
+              const val = (v || "").trim();
+              if (["セクション_ja", "項目_ja"].includes(val) || val.toLowerCase() === "nan") return "";
+              return val;
+            })
+          );
+          let html = "<table class='table table-bordered table-sm'><tbody>";
+          rows.forEach(r => {
             html += "<tr>";
-            fields.forEach(f => {
-              const key = Object.keys(row).find(k => k.replace(/^\ufeff/, "") === f);
-              html += `<td>${row[key] ?? ""}</td>`;
-            });
+            r.forEach(cell => html += `<td>${cell || ""}</td>`);
             html += "</tr>";
           });
-          target.innerHTML = html + "</tbody></table>";
+          html += "</tbody></table>";
+          target.innerHTML = html;
         },
-        error: (err) => {
-          target.innerHTML = `<div class='text-danger'>読み込み失敗: ${err.message}</div>`;
-        }
+        error: (err) => target.textContent = "読み込み失敗: " + err.message,
       });
 
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
 
     async function showStory(carId, title){
-      const path = `${RAW_BASE}output/koubei/${carId}/story.txt?v=${Date.now()}`;
+      const path = `output/koubei/${carId}/story.txt?v=${Date.now()}`;
       const target = document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent = `口コミ概要（${title} | ID:${carId}）`;
       target.textContent = "読込中...";
@@ -200,11 +202,8 @@
         const res = await fetch(path, { cache: "no-store" });
         if (!res.ok) throw new Error("Not found");
         let text = await res.text();
-        text = text.replace(/```/g, "");
-        text = text.replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>");
-        text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-        text = text.replace(/\r?\n/g, "<br>");
-        text = text.replace(/(<br>\s*){2,}/g, "<br><br>");
+        text = text.replace(/```/g, "").replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>");
+        text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\r?\n/g, "<br>").replace(/(<br>\s*){2,}/g, "<br><br>");
         target.innerHTML = `<div style="white-space:normal; line-height:1.7;">${text}</div>`;
       } catch {
         target.innerHTML = "<div class='text-danger'>口コミデータが見つかりません。</div>";

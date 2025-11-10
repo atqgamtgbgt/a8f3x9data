@@ -29,11 +29,10 @@
       top: 60px;
       left: 0;
       width: 100%;
-      background: var(--bs-body-bg);
+      background: #fff;
       z-index: 1056;
       padding: 8px;
       border-bottom: 1px solid #dee2e6;
-      display: block !important;
     }
     .section-toggle select {
       width: 100%;
@@ -42,35 +41,33 @@
       display: block;
     }
 
-    /* PC専用 左メニュー */
-    @media (min-width: 768px) {
-      .spec-table-container {
-        display: flex;
-        flex-direction: row;
-      }
+    /* ✅ PC用サイドバー（スマホには非表示） */
+    @media (min-width:992px) {
       .spec-sidebar {
-        width: 240px;
-        background: var(--bs-body-bg);
-        border-right: 1px solid #dee2e6;
-        padding: 12px;
         position: sticky;
         top: 0;
-        height: 100vh;
+        left: 0;
+        width: 220px;
+        flex: 0 0 220px;
+        background: var(--bs-body-bg);
+        border-right: 1px solid #dee2e6;
+        padding: 10px;
+        max-height: 80vh;
         overflow-y: auto;
       }
-      .spec-sidebar ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+      .spec-sidebar a {
+        display: block;
+        color: var(--bs-body-color);
+        text-decoration: none;
+        padding: 4px 0;
       }
-      .spec-sidebar li {
-        margin-bottom: 8px;
-        cursor: pointer;
-      }
-      .spec-sidebar li:hover {
+      .spec-sidebar a:hover {
         text-decoration: underline;
       }
-      .section-toggle { display: none !important; } /* ← PCでは上トグル非表示 */
+      .spec-table-container {
+        display: flex;
+        gap: 10px;
+      }
     }
   </style>
 </head>
@@ -135,6 +132,7 @@
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -191,6 +189,7 @@
         const priceJPY = convertToJPY(r.price || "");
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
+
         const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
         const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
 
@@ -203,7 +202,8 @@
           <td>${maker}</td>
           <td>${units}</td>
           <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-          <td>${specBtn}${storyBtn}</td>`;
+          <td>${specBtn}${storyBtn}</td>
+        `;
         tbody.appendChild(tr);
       });
     }
@@ -252,16 +252,23 @@
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          let options = "";
-          let sidebarList = "";
-          for (const g of grouped) {
-            const safeId = g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_");
-            options += `<option value="#sec_${safeId}">${g.section}</option>`;
-            sidebarList += `<li><a href="#sec_${safeId}" class="text-decoration-none">${g.section}</a></li>`;
+          // ✅ スマホはトグル、PCは左サイドバー
+          let navHtml = "";
+          if (window.innerWidth >= 992) {
+            navHtml = "<div class='spec-sidebar'>";
+            for (const g of grouped) {
+              const id = `#sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
+              navHtml += `<a href='${id}'>${g.section}</a>`;
+            }
+            navHtml += "</div>";
+          } else {
+            navHtml = `<div class='section-toggle'><select id='sectionSelect'>`;
+            for (const g of grouped) {
+              const id = `#sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
+              navHtml += `<option value='${id}'>${g.section}</option>`;
+            }
+            navHtml += `</select></div>`;
           }
-
-          const navHtml = `<div class="section-toggle"><select id="sectionSelect">${options}</select></div>`;
-          const sidebarHtml = `<div class="spec-sidebar d-none d-md-block"><ul>${sidebarList}</ul></div>`;
 
           const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody = "<tbody>";
@@ -276,56 +283,52 @@
           }
           tbody += "</tbody>";
 
-          const tableHtml = `
+          target.innerHTML = `
             <div class="spec-table-container">
-              ${sidebarHtml}
               ${navHtml}
               <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
-                    ${thead}${tbody}
+                    ${thead}
+                    ${tbody}
                   </table>
                 </div>
               </div>
             </div>`;
-          target.innerHTML = tableHtml;
 
-          // イベント設定
           const select = document.getElementById("sectionSelect");
           const sections = document.querySelectorAll("[data-section]");
           const scrollArea = document.getElementById("specScrollArea");
 
-          scrollArea.addEventListener("scroll", () => {
-            const scrollTop = scrollArea.scrollTop;
-            let current = "";
-            let minDiff = Infinity;
-            sections.forEach(sec => {
-              const diff = Math.abs(sec.offsetTop - scrollTop);
-              if (diff < minDiff) { minDiff = diff; current = sec.getAttribute("data-section"); }
+          // ✅ トグル選択・スクロール更新挙動は変更なし
+          if (select) {
+            scrollArea.addEventListener("scroll", () => {
+              const scrollTop = scrollArea.scrollTop;
+              let current = "";
+              let minDiff = Infinity;
+              sections.forEach(sec => {
+                const diff = Math.abs(sec.offsetTop - scrollTop);
+                if (diff < minDiff) {
+                  minDiff = diff;
+                  current = sec.getAttribute("data-section");
+                }
+              });
+              if (current) {
+                const option = [...select.options].find(o => o.text === current);
+                if (option) select.value = option.value;
+              }
             });
-            if (current) {
-              const option = [...select.options].find(o => o.text === current);
-              if (option) select.value = option.value;
-            }
-          });
 
-          select.addEventListener("change", e => {
-            const id = e.target.value;
-            const el = document.querySelector(id);
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-          });
-
-          document.querySelectorAll(".spec-sidebar a").forEach(link => {
-            link.addEventListener("click", e => {
-              e.preventDefault();
-              const id = e.target.getAttribute("href");
+            select.addEventListener("change", e => {
+              const id = e.target.value;
               const el = document.querySelector(id);
               if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
             });
-          });
+          }
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });
+
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
 

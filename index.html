@@ -207,10 +207,10 @@
           }
 
           let navHtml = "<div class='spec-sidebar p-2'>";
-          for (const g of grouped) {
-            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
-            navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
-          }
+for (const g of grouped) {
+  const id = `sec_${g.section.replace(/[／/]/g, "_").replace(/\s+/g, "_")}`;
+  navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
+}
           navHtml += "</div>";
 
           const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;

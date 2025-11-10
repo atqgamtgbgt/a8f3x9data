@@ -76,7 +76,6 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ✅ 相対パスのみ使用
     const CSV_PATH = `output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `output/pipeline/autohome-ranking-images/autohome_images/`;
 
@@ -84,7 +83,7 @@
 
     async function fetchRate() {
       try {
-        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY", { cache: "no-store" });
         const data = await res.json();
         if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
       } catch { cnyToJpy = 20; }
@@ -108,7 +107,7 @@
     async function main() {
       await fetchRate();
       try {
-        const res = await fetch(CSV_PATH, { cache: "no-store" });
+        const res = await fetch(CSV_PATH, { cache: "no-store" });  // ←ここだけ追加
         if (!res.ok) throw new Error(res.statusText);
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
@@ -156,7 +155,6 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ 修正版 showConfigCsv
     function showConfigCsv(carId, title) {
       const CSV_URL = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -167,23 +165,20 @@
         download: true,
         header: false,
         skipEmptyLines: false,
+        downloadRequestInit: { cache: "no-store" },  // ←ここを追加
         complete: (res) => {
           if (!res.data || !res.data.length) {
             target.textContent = "CSVが空です。";
             return;
           }
 
-          // 1列目(セクション)と3列目(項目)を削除
           let rows = res.data.map(row => row.filter((_, idx) => idx !== 0 && idx !== 2));
-
-          // 特定セル空欄化
           rows = rows.map((r, i) => r.map(v => {
             if (["セクション_ja", "項目_ja"].includes((v || "").trim())) return "";
             if ((v || "").trim().toLowerCase() === "nan") return "";
             return v;
           }));
 
-          // 表描画
           let html = "<table class='table table-bordered table-sm'><tbody>";
           rows.forEach(r => {
             html += "<tr>";

@@ -12,271 +12,112 @@
     header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
     th { background-color: #f1f3f5; }
     .rank-up { color: #dc3545; font-weight: bold; }
-    .rank-down { color: #0d6efd; font-weight: bold; }
-    img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-    .price-jpy { font-size: 0.85rem; color: #6c757d; }
-    .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-
-    /* 仕様テーブルの軽量レイアウト */
-    .spec-sidebar { flex: 0 0 180px; border-right: 1px solid #dee2e6; background: #fff; position: sticky; top: 0; max-height: 80vh; overflow: auto; }
-    .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
-    .sec-row th { background: #f8f9fa; position: sticky; top: 38px; z-index: 1; }
-    .item-col { background: #fcfcfc; min-width: 180px; }
-    .spec-content table td, .spec-content table th { vertical-align: middle; }
+    .rank-down { color: #198754; font-weight: bold; }
+    .spec-table-container { display: flex; flex-direction: row; }
+    .spec-sidebar { width: 220px; background: #fff; border-right: 1px solid #dee2e6; overflow-y: auto; }
+    .spec-content { flex: 1; padding: 1rem; }
+    .sec-row th { background: #e9ecef; font-size: 1.1rem; }
+    .item-col { width: 220px; background: #fff; font-weight: 500; }
   </style>
 </head>
 <body>
-  <header>🚗 China Auto Dashboard</header>
-
-  <div class="container mt-3">
-    <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
-
-    <div class="table-responsive">
-      <table class="table table-striped table-hover align-middle" id="carTable">
-        <thead>
-          <tr>
-            <th style="width:80px">順位</th>
-            <th style="width:80px">変動</th>
-            <th style="width:100px">画像</th>
-            <th>車名</th>
-            <th>メーカー</th>
-            <th style="width:110px">台数</th>
-            <th style="width:160px">価格</th>
-            <th style="width:100px">情報</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+  <header>Autohome 車種別仕様比較</header>
+  <div id="specs" class="container-fluid my-3">
+    <div class="text-center text-secondary">CSV読込中...</div>
   </div>
-
-  <!-- モーダル: 仕様 -->
-  <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="csvContent" class="table-responsive"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- モーダル: 口コミ -->
-  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="storyModalLabel">口コミ概要</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="storyContent">読込中...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+    const CSV_URL = "output/autohome/5714/config_5714.ja.csv";
 
-    let cnyToJpy = 20;
+    fetch(CSV_URL)
+      .then(res => res.text())
+      .then(text => {
+        const target = document.getElementById("specs");
+        const rows = Papa.parse(text.trim(), { skipEmptyLines: true }).data;
 
-    async function fetchRate() {
-      try {
-        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-        const data = await res.json();
-        if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-      } catch { cnyToJpy = 20; }
-    }
+        if (!rows || !rows.length) {
+          target.innerHTML = "<div class='text-danger'>CSVが空です。</div>";
+          return;
+        }
 
-    function convertToJPY(priceStr) {
-      if (!priceStr) return "";
-      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!m) return "";
-      const low = parseFloat(m[1]) * cnyToJpy * 10000;
-      const high = parseFloat(m[2]) * cnyToJpy * 10000;
-      const fmt = (x) => (x / 10000).toFixed(1);
-      return `（約${fmt(low)}〜${fmt(high)}万円）`;
-    }
+        // ✅ ヘッダー行を特定
+        const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+        if (headerIdx === -1) {
+          target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>";
+          return;
+        }
 
-    function imgTag(rankStr, model, imageUrl) {
-      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
-      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-    }
+        const headerRow = rows[headerIdx];
+        const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+        const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+        const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+        const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+        const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+        const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
 
-    async function main() {
-      await fetchRate();
-      try {
-        const res = await fetch(CSV_PATH, { cache: "no-store" });
-        if (!res.ok) throw new Error(res.statusText);
-        const text = await res.text();
-        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-        if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-        renderTable(parsed.data);
-        ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
-      } catch (err) {
-        fail("CSV 読み込みエラー: " + err.message);
-      }
-    }
+        if (secIdx === -1 || itemIdx === -1) {
+          target.innerHTML = "<div class='text-danger'>必要な列（セクション_ja/項目_ja）が見つかりません。</div>";
+          return;
+        }
 
-    function renderTable(data) {
-      const tbody = document.querySelector("#carTable tbody");
-      tbody.innerHTML = "";
-      data.forEach(r => {
-        const rankStr = String(r.rank).padStart(3, "0");
-        const diff = Number(r.delta_vs_last_month || 0);
-        const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
-        const link = r.link || "";
-        const carId = link.match(/(\d+)/)?.[1] || "";
-        const name = r.global_name || r.name || "";
-        const price = (r.price || "") + " 元";
-        const priceJPY = convertToJPY(r.price || "");
-        const maker = r.manufacturer_ja || r.manufacturer || "";
-        const units = r.units || "";
+        const modelStart   = Math.max(secIdx, itemIdx) + 1;
+        const modelHeaders = headerRow.slice(modelStart);
+        const dataRows     = rows.slice(headerIdx + 1);
 
-        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
-        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
-
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r.rank}</td>
-          <td>${diffHtml}</td>
-          <td>${imgTag(rankStr, name, r.image_url)}</td>
-          <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
-          <td>${maker}</td>
-          <td>${units}</td>
-          <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-          <td>${specBtn}${storyBtn}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-
-    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
-    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
-    // ✅ headerIdx 検出だけ修正版（他は完全維持）
-    function showConfigCsv(carId, title) {
-      const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
-      const target = document.getElementById("csvContent");
-      document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
-      target.innerHTML = "読込中...";
-
-      Papa.parse(path, {
-        download: true,
-        header: false,
-        skipEmptyLines: false,
-        complete: (res) => {
-          const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
-          if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
-
-          // ✅ この1行のみ修正
-          const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
-
-          if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
-
-          const headerRow = rows[headerIdx];
-          const modelHeaders = headerRow.slice(2);
-          const dataRows = rows.slice(headerIdx + 1);
-
-          const grouped = [];
-          let currentSection = "";
-          for (const r of dataRows) {
-            const sec = (r[0] || "").trim();
-            if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
-            if (!currentSection) continue;
-            const item = (r[1] || "").trim();
-            if (/^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
-            const cols = r.slice(2);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) {
-              grouped.push({ section: currentSection, rows: [] });
-            }
-            grouped[grouped.length - 1].rows.push([item, ...cols]);
+        const grouped = [];
+        let currentSection = "";
+        for (const r of dataRows) {
+          const sec = (r[secIdx] || "").trim();
+          if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+          if (!currentSection) continue;
+          const item = (r[itemIdx] || "").trim();
+          if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+          const cols = r.slice(modelStart);
+          if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) {
+            grouped.push({ section: currentSection, rows: [] });
           }
+          grouped[grouped.length - 1].rows.push([item, ...cols]);
+        }
 
-          let navHtml = "<div class='spec-sidebar p-2'>";
-          for (const g of grouped) {
-            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
-            navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
+        const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
+
+        let navHtml = "<div class='spec-sidebar p-2'>";
+        for (const g of grouped) {
+          const id = `sec_${g.section.replace(/\s+/g, "_")}`;
+          navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
+        }
+        navHtml += "</div>";
+
+        let tbody = "<tbody>";
+        for (const g of grouped) {
+          const id = `sec_${g.section.replace(/\s+/g, "_")}`;
+          tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
+          for (const row of g.rows) {
+            const item = row[0] || "";
+            const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
+            tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
           }
-          navHtml += "</div>";
+        }
+        tbody += "</tbody>";
 
-          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
-
-          let tbody = "<tbody>";
-          for (const g of grouped) {
-            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
-            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
-            for (const row of g.rows) {
-              const item = row[0] || "";
-              const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
-              tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
-            }
-          }
-          tbody += "</tbody>";
-
-          const tableHtml = `
-            <div class="spec-table-container d-flex" style="max-height:80vh;">
-              ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-sm spec-table mb-0">
-                    ${thead}
-                    ${tbody}
-                  </table>
-                </div>
+        const tableHtml = `
+          <div class="spec-table-container d-flex" style="max-height:80vh;">
+            ${navHtml}
+            <div class="spec-content p-2 flex-grow-1 overflow-auto">
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm spec-table mb-0">
+                  ${thead}
+                  ${tbody}
+                </table>
               </div>
-            </div>`;
+            </div>
+          </div>`;
 
-          target.innerHTML = tableHtml;
-
-          document.querySelectorAll(".spec-sidebar a").forEach(a => {
-            a.addEventListener("click", e => {
-              e.preventDefault();
-              const id = a.getAttribute("href");
-              const el = document.querySelector(id);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-          });
-        },
-        error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
+        target.innerHTML = tableHtml;
+      })
+      .catch(err => {
+        document.getElementById("specs").innerHTML = `<div class='text-danger'>読込エラー: ${err}</div>`;
       });
-
-      new bootstrap.Modal(document.getElementById("csvModal")).show();
-    }
-
-    async function showStory(carId, title){
-      const path = `output/koubei/${carId}/story.txt?v=${Date.now()}`;
-      const target = document.getElementById("storyContent");
-      document.getElementById("storyModalLabel").textContent = `口コミ概要（${title} | ID:${carId}）`;
-      target.textContent = "読込中...";
-      try {
-        const res = await fetch(path, { cache: "no-store" });
-        if (!res.ok) throw new Error("Not found");
-        let text = await res.text();
-        text = text.replace(/```/g, "");
-        text = text.replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>");
-        text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-        text = text.replace(/\r?\n/g, "<br>");
-        text = text.replace(/(<br>\s*){2,}/g, "<br><br>");
-        target.innerHTML = `<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-      } catch {
-        target.innerHTML = "<div class='text-danger'>口コミデータが見つかりません。</div>";
-      }
-      new bootstrap.Modal(document.getElementById("storyModal")).show();
-    }
-
-    main();
   </script>
 </body>
 </html>

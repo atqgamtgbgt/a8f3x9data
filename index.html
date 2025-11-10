@@ -16,6 +16,13 @@
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
+
+    /* 仕様テーブルの軽量レイアウト */
+    .spec-sidebar { flex: 0 0 180px; border-right: 1px solid #dee2e6; background: #fff; position: sticky; top: 0; max-height: 80vh; overflow: auto; }
+    .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
+    .sec-row th { background: #f8f9fa; position: sticky; top: 38px; z-index: 1; }
+    .item-col { background: #fcfcfc; min-width: 180px; }
+    .spec-content table td, .spec-content table th { vertical-align: middle; }
   </style>
 </head>
 <body>
@@ -158,7 +165,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ 差し替え部分：セクション_jaグループ化 + 折りたたみ + 左リスト
+    // ✅ 軽量版 showConfigCsv（折り畳みなし・1枚テーブル・アンカー付き）
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -170,50 +177,66 @@
         header: false,
         skipEmptyLines: false,
         complete: (res) => {
-          if (!res.data || !res.data.length) {
-            target.innerHTML = "<div class='text-danger'>CSVが空です。</div>";
-            return;
+          const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+          if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+
+          const headerIdx = rows.findIndex(r => /^(項目|項目_ja)$/.test((r[1] || "").trim()));
+          if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+
+          const headerRow = rows[headerIdx];
+          const modelHeaders = headerRow.slice(2);
+          const dataRows = rows.slice(headerIdx + 1);
+
+          const grouped = [];
+          let currentSection = "";
+          for (const r of dataRows) {
+            const sec = (r[0] || "").trim();
+            if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+            if (!currentSection) continue;
+            const item = (r[1] || "").trim();
+            if (/^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+            const cols = r.slice(2);
+            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) {
+              grouped.push({ section: currentSection, rows: [] });
+            }
+            grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          const rows = res.data;
-          const grouped = {};
-          rows.forEach(r => {
-            const section = (r[0] || "").trim() || "その他";
-            if (!grouped[section]) grouped[section] = [];
-            grouped[section].push(r.slice(1));
-          });
+          let navHtml = "<div class='spec-sidebar p-2'>";
+          for (const g of grouped) {
+            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
+            navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
+          }
+          navHtml += "</div>";
 
-          let sidebar = "<div class='spec-sidebar p-2'>";
-          Object.keys(grouped).forEach(sec => {
-            const id = `sec_${sec.replace(/\s+/g, "_")}`;
-            sidebar += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${sec}</a>`;
-          });
-          sidebar += "</div>";
+          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
 
-          let content = "<div class='spec-content p-2'>";
-          Object.entries(grouped).forEach(([section, rows]) => {
-            const id = `sec_${section.replace(/\s+/g, "_")}`;
-            content += `<details id="${id}" open class="mb-3 border rounded shadow-sm">
-                          <summary class="bg-light p-2 fw-bold border-bottom">${section}</summary>
-                          <div class="table-responsive">
-                            <table class='table table-bordered table-sm spec-table mb-0'><tbody>`;
-            rows.forEach(r => {
-              content += "<tr>";
-              r.forEach(cell => {
-                const v = (cell || "").trim();
-                content += `<td style="white-space:pre-line;">${v}</td>`;
-              });
-              content += "</tr>";
-            });
-            content += "</tbody></table></div></details>";
-          });
-          content += "</div>";
+          let tbody = "<tbody>";
+          for (const g of grouped) {
+            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
+            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            for (const row of g.rows) {
+              const item = row[0] || "";
+              const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
+              tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
+            }
+          }
+          tbody += "</tbody>";
 
-          target.innerHTML = `
-            <div class="spec-table-container d-flex" style="max-height:80vh; overflow:hidden;">
-              ${sidebar}
-              ${content}
+          const tableHtml = `
+            <div class="spec-table-container d-flex" style="max-height:80vh;">
+              ${navHtml}
+              <div class="spec-content p-2 flex-grow-1 overflow-auto">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm spec-table mb-0">
+                    ${thead}
+                    ${tbody}
+                  </table>
+                </div>
+              </div>
             </div>`;
+
+          target.innerHTML = tableHtml;
 
           document.querySelectorAll(".spec-sidebar a").forEach(a => {
             a.addEventListener("click", e => {
@@ -224,9 +247,7 @@
             });
           });
         },
-        error: (err) => {
-          target.textContent = "読み込み失敗: " + err.message;
-        }
+        error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });
 
       new bootstrap.Modal(document.getElementById("csvModal")).show();

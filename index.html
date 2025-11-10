@@ -25,21 +25,21 @@
 
     /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
-      .spec-sidebar {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        width: 220px;
-        height: calc(100vh - 60px);
-        overflow-y: auto;
-        background: var(--bs-body-bg);
-        border-right: 1px solid #dee2e6;
-        padding: 10px;
-        z-index: 1055;
-      }
-      .spec-content {
-        margin-left: 240px; /* 左メニュー分だけ本文をずらす */
-      }
+.spec-sidebar {
+  flex: 0 0 220px;
+  border-right: 1px solid #dee2e6;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+  padding: 10px;
+}
+.spec-content {
+  flex-grow: 1;
+  overflow: auto;
+  padding: 10px;
+}
     }
 
     /* ✅ スマホ用トグル固定（変更なし） */

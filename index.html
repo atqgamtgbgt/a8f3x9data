@@ -183,7 +183,8 @@
           if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
           const headerRow = rows[headerIdx];
-          const modelHeaders = headerRow.slice(2);
+          const modelStart = Math.max(headerRow.findIndex(v => (v || "").trim() === "セクション_ja"), headerRow.findIndex(v => (v || "").trim() === "項目_ja")) + 1;
+          const modelHeaders = headerRow.slice(modelStart + 1);
           const dataRows = rows.slice(headerIdx + 1);
 
           const grouped = [];

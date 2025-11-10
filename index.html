@@ -165,6 +165,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
+    // ✅ 唯一の変更点はこの中のテーブルクラス指定のみ（全体フォーマット統一）
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -183,7 +184,7 @@
           if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
           const headerRow = rows[headerIdx];
-          const modelHeaders = headerRow.slice(4);  <!-- ✅ 修正ここ -->
+          const modelHeaders = headerRow.slice(2);
           const dataRows = rows.slice(headerIdx + 1);
 
           const grouped = [];
@@ -240,8 +241,8 @@
           document.querySelectorAll(".spec-sidebar a").forEach(a => {
             a.addEventListener("click", e => {
               e.preventDefault();
-              const href = a.getAttribute("href");
-              const el = document.getElementById(href.slice(1));
+              const id = a.getAttribute("href");
+              const el = document.querySelector(id);
               if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
             });
           });

@@ -11,25 +11,20 @@
     body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
     header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
     th { background-color: #f1f3f5; }
-    .rank-up { color: #dc3545; font-weight: bold; }
-    .rank-down { color: #0d6efd; font-weight: bold; }
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-
-    /* 仕様テーブルの軽量レイアウト */
-    .spec-sidebar { flex: 0 0 180px; border-right: 1px solid #dee2e6; background: #fff; position: sticky; top: 0; max-height: 80vh; overflow: auto; }
-    .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
-    .sec-row th { background: #f8f9fa; position: sticky; top: 38px; z-index: 1; }
-    .item-col { background: #fcfcfc; min-width: 180px; }
-    .spec-content table td, .spec-content table th { vertical-align: middle; }
+    .sidebar { position: fixed; top: 70px; left: 0; width: 120px; height: 100%; overflow-y: auto; background: #fff; border-right: 1px solid #dee2e6; padding: 10px; }
+    .sidebar a { display: block; margin: 6px 0; text-decoration: none; color: #0d6efd; font-size: 0.9rem; }
+    .sidebar a:hover { text-decoration: underline; }
+    .content { margin-left: 140px; padding: 10px; }
   </style>
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
 
-  <div class="container mt-3">
-    <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
+  <div class="container-fluid">
+    <div id="status" class="alert alert-info py-2 mt-2">Autohome CSV 読み込み中...</div>
 
     <div class="table-responsive">
       <table class="table table-striped table-hover align-middle" id="carTable">
@@ -59,7 +54,10 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
-          <div id="csvContent" class="table-responsive"></div>
+          <div class="d-flex">
+            <div class="sidebar" id="sectionList"></div>
+            <div class="content" id="csvContent"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -83,10 +81,8 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-
+    const CSV_PATH = `output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
+    const IMG_BASE = `output/pipeline/autohome-ranking-images/autohome_images/`;
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -108,9 +104,7 @@
     }
 
     function imgTag(rankStr, model, imageUrl) {
-      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
+      const fullPath = imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`;
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
@@ -118,7 +112,6 @@
       await fetchRate();
       try {
         const res = await fetch(CSV_PATH, { cache: "no-store" });
-        if (!res.ok) throw new Error(res.statusText);
         const text = await res.text();
         const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
         if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
@@ -135,9 +128,9 @@
       data.forEach(r => {
         const rankStr = String(r.rank).padStart(3, "0");
         const diff = Number(r.delta_vs_last_month || 0);
-        const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
+        const diffHtml = diff > 0 ? `<span class="text-danger">▲${diff}</span>` : diff < 0 ? `<span class="text-primary">▼${-diff}</span>` : "–";
         const link = r.link || "";
-        const carId = link.match(/(\d+)/)?.[1] || "";
+        const carId = link.match(/(\\d+)/)?.[1] || "";
         const name = r.global_name || r.name || "";
         const price = (r.price || "") + " 元";
         const priceJPY = convertToJPY(r.price || "");
@@ -165,88 +158,53 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ 軽量版 showConfigCsv（折り畳みなし・1枚テーブル・アンカー付き）
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
+      const sectionList = document.getElementById("sectionList");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
+      sectionList.innerHTML = "";
 
       Papa.parse(path, {
         download: true,
         header: false,
         skipEmptyLines: false,
         complete: (res) => {
-          const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+          const rows = res.data;
           if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
-const headerIdx = 0;
-const headerRow = rows[headerIdx];
-const modelHeaders = headerRow.slice(2);
-const dataRows = rows.slice(1);
-
-
-          const grouped = [];
-          let currentSection = "";
-          for (const r of dataRows) {
-            const sec = (r[0] || "").trim();
-            if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
-            if (!currentSection) continue;
-            const item = (r[1] || "").trim();
-            if (/^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
-            const cols = r.slice(2);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) {
-              grouped.push({ section: currentSection, rows: [] });
-            }
-            grouped[grouped.length - 1].rows.push([item, ...cols]);
+          const sections = {};
+          for (let i = 1; i < rows.length; i++) {
+            const row = rows[i];
+            if (!row || !row.length) continue;
+            const secCn = (row[0] || "").trim();
+            const secJa = (row[1] || "").trim();
+            const sectionName = secJa || secCn;
+            const itemName = (row[2] || "").trim();
+            const models = row.slice(3);
+            if (!sections[sectionName]) sections[sectionName] = [];
+            sections[sectionName].push([itemName, ...models]);
           }
 
-          let navHtml = "<div class='spec-sidebar p-2'>";
-          for (const g of grouped) {
-            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
-            navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
-          }
-          navHtml += "</div>";
-
-          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
-
-          let tbody = "<tbody>";
-          for (const g of grouped) {
-            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
-            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
-            for (const row of g.rows) {
-              const item = row[0] || "";
-              const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
-              tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
-            }
-          }
-          tbody += "</tbody>";
-
-          const tableHtml = `
-            <div class="spec-table-container d-flex" style="max-height:80vh;">
-              ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-sm spec-table mb-0">
-                    ${thead}
-                    ${tbody}
-                  </table>
-                </div>
-              </div>
-            </div>`;
-
-          target.innerHTML = tableHtml;
-
-          document.querySelectorAll(".spec-sidebar a").forEach(a => {
-            a.addEventListener("click", e => {
-              e.preventDefault();
-              const id = a.getAttribute("href");
-              const el = document.querySelector(id);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          let html = "";
+          Object.keys(sections).forEach(sec => {
+            html += `<h5 id="${sec}" class="mt-3 mb-2 fw-bold">▼ ${sec}</h5>`;
+            html += "<table class='table table-bordered table-sm mb-4'><tbody>";
+            sections[sec].forEach(r => {
+              html += "<tr>";
+              r.forEach(c => html += `<td style='white-space:pre-line;'>${c || ""}</td>`);
+              html += "</tr>";
             });
+            html += "</tbody></table>";
           });
+
+          target.innerHTML = html;
+          sectionList.innerHTML = Object.keys(sections).map(sec => `<a href="#${sec}">${sec}</a>`).join("");
         },
-        error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
+        error: (err) => {
+          target.textContent = "読み込み失敗: " + err.message;
+        }
       });
 
       new bootstrap.Modal(document.getElementById("csvModal")).show();
@@ -261,11 +219,9 @@ const dataRows = rows.slice(1);
         const res = await fetch(path, { cache: "no-store" });
         if (!res.ok) throw new Error("Not found");
         let text = await res.text();
-        text = text.replace(/```/g, "");
-        text = text.replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>");
-        text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-        text = text.replace(/\r?\n/g, "<br>");
-        text = text.replace(/(<br>\s*){2,}/g, "<br><br>");
+        text = text.replace(/```/g, "").replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>")
+          .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>").replace(/\r?\n/g, "<br>")
+          .replace(/(<br>\s*){2,}/g, "<br><br>");
         target.innerHTML = `<div style="white-space:normal; line-height:1.7;">${text}</div>`;
       } catch {
         target.innerHTML = "<div class='text-danger'>口コミデータが見つかりません。</div>";

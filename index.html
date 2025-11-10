@@ -25,20 +25,19 @@
 
     /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
-.spec-sidebar {
-    position: fixed;
-    top: 100px; /* ヘッダー分の補正。Autohomeはcalc(138px+0px) */
-    left: calc(50% - 600px); /* ページ中央に対して本文左端へ合わせる（container幅1200px相当） */
+  .spec-sidebar {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
     width: 220px;
-    height: calc(100vh - 100px);
+    height: calc(100vh - 160px);
     overflow-y: auto;
     background: var(--bs-body-bg);
     border-right: 1px solid #dee2e6;
     padding: 10px;
-    z-index: 1055;
   }
   .spec-content {
-    margin-left: 240px; /* サイドバー分だけ本文を右に */
+    margin-left: 0; /* stickyはflex構造内で位置が保たれるので不要 */
   }
     }
 

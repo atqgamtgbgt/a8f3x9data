@@ -165,21 +165,24 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    // ✅ CSV読み込みを fetch→text→Papa.parse(text) に変更（これ以外一切変更なし）
+    // ✅ headerIdx 検出だけ修正版（他は完全維持）
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
 
-      fetch(path, { cache: "no-store" })
-        .then(r => r.text())
-        .then(csvText => {
-          const res = Papa.parse(csvText, { header: false, skipEmptyLines: false });
+      Papa.parse(path, {
+        download: true,
+        header: false,
+        skipEmptyLines: false,
+        complete: (res) => {
           const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
           if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
-          const headerIdx = rows.findIndex(r => /^(項目|項目_ja)$/.test((r[1] || "").trim()));
+          // ✅ この1行のみ修正
+          const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+
           if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
           const headerRow = rows[headerIdx];
@@ -234,6 +237,7 @@
                 </div>
               </div>
             </div>`;
+
           target.innerHTML = tableHtml;
 
           document.querySelectorAll(".spec-sidebar a").forEach(a => {
@@ -244,8 +248,9 @@
               if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
             });
           });
-        })
-        .catch(err => target.textContent = "読み込み失敗: " + err.message);
+        },
+        error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
+      });
 
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }

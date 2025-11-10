@@ -23,13 +23,13 @@
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-    /* トグルナビ常時固定（スマホ用） */
+    /* トグルナビ常時固定 */
     .section-toggle {
       position: fixed;
       top: 60px;
       left: 0;
       width: 100%;
-      background: #fff;
+      background: var(--bs-body-bg);
       z-index: 1056;
       padding: 8px;
       border-bottom: 1px solid #dee2e6;
@@ -41,32 +41,25 @@
       display: block;
     }
 
-    /* ✅ PC用サイドバー（スマホには非表示） */
+    /* ✅ PC左メニュー固定 */
     @media (min-width:992px) {
       .spec-sidebar {
+        flex: 0 0 180px;
+        border-right: 1px solid #dee2e6;
+        background: var(--bs-body-bg);
         position: sticky;
         top: 0;
-        left: 0;
-        width: 220px;
-        flex: 0 0 220px;
-        background: var(--bs-body-bg);
-        border-right: 1px solid #dee2e6;
-        padding: 10px;
-        max-height: 80vh;
+        height: 100vh;
         overflow-y: auto;
       }
       .spec-sidebar a {
         display: block;
-        color: var(--bs-body-color);
+        color: var(--bs-link-color);
         text-decoration: none;
         padding: 4px 0;
       }
       .spec-sidebar a:hover {
         text-decoration: underline;
-      }
-      .spec-table-container {
-        display: flex;
-        gap: 10px;
       }
     }
   </style>
@@ -125,7 +118,6 @@
       </div>
     </div>
   </div>
-
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
@@ -210,7 +202,6 @@
 
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -252,22 +243,21 @@
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          // ✅ スマホはトグル、PCは左サイドバー
+          /* スマホ：上部トグル / PC：左サイドバー */
           let navHtml = "";
-          if (window.innerWidth >= 992) {
-            navHtml = "<div class='spec-sidebar'>";
+          if (window.innerWidth < 992) {
+            let options = "";
             for (const g of grouped) {
-              const id = `#sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
-              navHtml += `<a href='${id}'>${g.section}</a>`;
+              options += `<option value="#sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}">${g.section}</option>`;
+            }
+            navHtml = `<div class="section-toggle"><select id="sectionSelect">${options}</select></div>`;
+          } else {
+            navHtml = `<div class="spec-sidebar p-2">`;
+            for (const g of grouped) {
+              const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
+              navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
             }
             navHtml += "</div>";
-          } else {
-            navHtml = `<div class='section-toggle'><select id='sectionSelect'>`;
-            for (const g of grouped) {
-              const id = `#sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
-              navHtml += `<option value='${id}'>${g.section}</option>`;
-            }
-            navHtml += `</select></div>`;
           }
 
           const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
@@ -283,8 +273,8 @@
           }
           tbody += "</tbody>";
 
-          target.innerHTML = `
-            <div class="spec-table-container">
+          const tableHtml = `
+            <div class="spec-table-container d-flex">
               ${navHtml}
               <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
                 <div class="table-responsive">
@@ -296,11 +286,13 @@
               </div>
             </div>`;
 
+          target.innerHTML = tableHtml;
+
           const select = document.getElementById("sectionSelect");
           const sections = document.querySelectorAll("[data-section]");
           const scrollArea = document.getElementById("specScrollArea");
 
-          // ✅ トグル選択・スクロール更新挙動は変更なし
+          /* トグルのスクロール同期 */
           if (select) {
             scrollArea.addEventListener("scroll", () => {
               const scrollTop = scrollArea.scrollTop;
@@ -325,6 +317,16 @@
               if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
             });
           }
+
+          /* PC用：左ナビクリックスクロール */
+          document.querySelectorAll(".spec-sidebar a").forEach(a => {
+            a.addEventListener("click", e => {
+              e.preventDefault();
+              const id = a.getAttribute("href");
+              const el = document.querySelector(id);
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          });
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });

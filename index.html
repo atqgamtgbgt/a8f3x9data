@@ -234,7 +234,7 @@
           let tbody = "<tbody>";
           for (const g of grouped) {
             const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
-            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            tbody += `<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
             for (const row of g.rows) {
               const item = row[0] || "";
               const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
@@ -246,7 +246,7 @@
           const tableHtml = `
             <div class="spec-table-container">
               ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto">
+              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}
@@ -258,11 +258,25 @@
 
           target.innerHTML = tableHtml;
 
+          // トグル変更でスクロール
           document.getElementById("sectionSelect").addEventListener("change", e => {
             const id = e.target.value;
             const el = document.querySelector(id);
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           });
+
+          // IntersectionObserverで現在セクション検出
+          const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                const sec = entry.target.getAttribute("data-section");
+                const opt = [...document.querySelectorAll("#sectionSelect option")].find(o => o.textContent === sec);
+                if (opt) document.getElementById("sectionSelect").value = opt.value;
+              }
+            });
+          }, { root: document.getElementById("specScrollArea"), threshold: 0.3 });
+
+          document.querySelectorAll(".sec-row").forEach(sec => observer.observe(sec));
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });

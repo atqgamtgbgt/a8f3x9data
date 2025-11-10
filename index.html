@@ -165,6 +165,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
+    // ✅ 唯一の修正箇所：リンククリック処理
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -183,8 +184,7 @@
           if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
           const headerRow = rows[headerIdx];
-          const modelStart = Math.max(headerRow.findIndex(v => (v || "").trim() === "セクション_ja"), headerRow.findIndex(v => (v || "").trim() === "項目_ja")) + 1;
-          const modelHeaders = headerRow.slice(modelStart + 1);
+          const modelHeaders = headerRow.slice(2);
           const dataRows = rows.slice(headerIdx + 1);
 
           const grouped = [];
@@ -238,6 +238,7 @@
 
           target.innerHTML = tableHtml;
 
+          // ✅ 修正版ここ
           document.querySelectorAll(".spec-sidebar a").forEach(a => {
             a.addEventListener("click", e => {
               e.preventDefault();

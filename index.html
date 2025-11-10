@@ -183,9 +183,10 @@
           const rows = res.data || [];
           if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
-const headerRow = (rows[0] || []).map(v => String(v ?? "").replace(/^\ufeff/, "").trim());
+const headerRow = Array.isArray(rows[0]) ? rows[0].map(v => String(v ?? "").replace(/^\ufeff/, "").trim()) : [];
 const modelHeaders = headerRow.slice(2);
-const dataRows = rows.slice(1).filter(r => r && r.length && r.some(c => String(c ?? "").trim() !== ""));
+const dataRows = rows.slice(1).filter(r => Array.isArray(r) && r.length > 1 && r.some(c => String(c ?? "").trim() !== ""));
+
 
 
           const grouped = [];

@@ -25,11 +25,11 @@
 
     /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
-  .spec-table-container {
+ .spec-table-container {
     display: flex;
     align-items: flex-start;
+    /* overflow: hidden; ← ❌ 削除 */
     max-height: 80vh;
-    overflow: hidden; /* 全体の二重スクロール防止 */
   }
 
   .spec-sidebar {
@@ -45,8 +45,10 @@
 
   .spec-content {
     flex: 1;
-    overflow-x: auto;
+    /* ✅ 本文をスクロール対象にする */
     overflow-y: auto;
+    overflow-x: auto;
+    max-height: 80vh;
     padding: 8px;
   }
     }

@@ -258,25 +258,30 @@
 
           target.innerHTML = tableHtml;
 
-          // トグル変更でスクロール
-          document.getElementById("sectionSelect").addEventListener("change", e => {
+          const select = document.getElementById("sectionSelect");
+          const sections = document.querySelectorAll("[data-section]");
+          const scrollArea = document.getElementById("specScrollArea");
+
+          scrollArea.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach(sec => {
+              const rect = sec.getBoundingClientRect();
+              const modalRect = scrollArea.getBoundingClientRect();
+              if (rect.top >= modalRect.top && rect.top < modalRect.bottom / 2) {
+                current = sec.getAttribute("data-section");
+              }
+            });
+            if (current) {
+              const option = [...select.options].find(o => o.text === current);
+              if (option) select.value = option.value;
+            }
+          });
+
+          select.addEventListener("change", e => {
             const id = e.target.value;
             const el = document.querySelector(id);
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           });
-
-          // IntersectionObserverで現在セクション検出
-          const observer = new IntersectionObserver(entries => {
-            entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                const sec = entry.target.getAttribute("data-section");
-                const opt = [...document.querySelectorAll("#sectionSelect option")].find(o => o.textContent === sec);
-                if (opt) document.getElementById("sectionSelect").value = opt.value;
-              }
-            });
-          }, { root: document.getElementById("specScrollArea"), threshold: 0.3 });
-
-          document.querySelectorAll(".sec-row").forEach(sec => observer.observe(sec));
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });

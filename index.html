@@ -23,41 +23,54 @@
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-    /* PC左メニュー固定 */
-    .spec-sidebar {
-      flex: 0 0 180px;
-      border-right: 1px solid #dee2e6;
+    /* トグルナビ常時固定（スマホ用） */
+    .section-toggle {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
       background: var(--bs-body-bg);
-      position: sticky;
-      top: 0;
-      max-height: 80vh;
-      overflow-y: auto;
+      z-index: 1056;
       padding: 8px;
+      border-bottom: 1px solid #dee2e6;
+      display: block !important;
+    }
+    .section-toggle select {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      display: block;
     }
 
-    /* スマホ時は左メニュー非表示＆トグル表示 */
-    .section-toggle {
-      display: none;
-    }
-    @media (max-width: 768px) {
-      .spec-sidebar { display: none; }
-      .section-toggle {
-        display: block;
-        position: fixed;
-        top: 60px;
-        left: 0;
-        width: 100%;
+    /* PC専用 左メニュー */
+    @media (min-width: 768px) {
+      .spec-table-container {
+        display: flex;
+        flex-direction: row;
+      }
+      .spec-sidebar {
+        width: 240px;
         background: var(--bs-body-bg);
-        z-index: 1056;
-        padding: 8px;
-        border-bottom: 1px solid #dee2e6;
+        border-right: 1px solid #dee2e6;
+        padding: 12px;
+        position: sticky;
+        top: 0;
+        height: 100vh;
+        overflow-y: auto;
       }
-      .section-toggle select {
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-        display: block;
+      .spec-sidebar ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
       }
+      .spec-sidebar li {
+        margin-bottom: 8px;
+        cursor: pointer;
+      }
+      .spec-sidebar li:hover {
+        text-decoration: underline;
+      }
+      .section-toggle { display: none !important; } /* ← PCでは上トグル非表示 */
     }
   </style>
 </head>
@@ -122,7 +135,6 @@
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -179,7 +191,6 @@
         const priceJPY = convertToJPY(r.price || "");
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
-
         const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
         const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
 
@@ -192,14 +203,14 @@
           <td>${maker}</td>
           <td>${units}</td>
           <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-          <td>${specBtn}${storyBtn}</td>
-        `;
+          <td>${specBtn}${storyBtn}</td>`;
         tbody.appendChild(tr);
       });
     }
 
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
+
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -237,25 +248,20 @@
             const item = (r[itemIdx] || "").trim();
             if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
             const cols = r.slice(modelStart);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
-              grouped.push({ section: currentSection, rows: [] });
+            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          // 左メニュー（PC用）
-          let navHtml = "<div class='spec-sidebar'>";
-          for (const g of grouped) {
-            const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
-            navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
-          }
-          navHtml += "</div>";
-
-          // 上トグル（スマホ用）
           let options = "";
+          let sidebarList = "";
           for (const g of grouped) {
-            options += `<option value="#sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}">${g.section}</option>`;
+            const safeId = g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_");
+            options += `<option value="#sec_${safeId}">${g.section}</option>`;
+            sidebarList += `<li><a href="#sec_${safeId}" class="text-decoration-none">${g.section}</a></li>`;
           }
-          const toggleHtml = `<div class="section-toggle"><select id="sectionSelect">${options}</select></div>`;
+
+          const navHtml = `<div class="section-toggle"><select id="sectionSelect">${options}</select></div>`;
+          const sidebarHtml = `<div class="spec-sidebar d-none d-md-block"><ul>${sidebarList}</ul></div>`;
 
           const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody = "<tbody>";
@@ -271,34 +277,31 @@
           tbody += "</tbody>";
 
           const tableHtml = `
-            <div class="spec-table-container d-flex">
+            <div class="spec-table-container">
+              ${sidebarHtml}
               ${navHtml}
               <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
-                ${toggleHtml}
-                <div class="table-responsive mt-2">
+                <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
-                    ${thead}
-                    ${tbody}
+                    ${thead}${tbody}
                   </table>
                 </div>
               </div>
             </div>`;
-
           target.innerHTML = tableHtml;
 
-          // スクロールとトグル同期
+          // イベント設定
           const select = document.getElementById("sectionSelect");
           const sections = document.querySelectorAll("[data-section]");
           const scrollArea = document.getElementById("specScrollArea");
 
           scrollArea.addEventListener("scroll", () => {
+            const scrollTop = scrollArea.scrollTop;
             let current = "";
+            let minDiff = Infinity;
             sections.forEach(sec => {
-              const rect = sec.getBoundingClientRect();
-              const modalRect = scrollArea.getBoundingClientRect();
-              if (rect.top >= modalRect.top && rect.top < modalRect.bottom / 2) {
-                current = sec.getAttribute("data-section");
-              }
+              const diff = Math.abs(sec.offsetTop - scrollTop);
+              if (diff < minDiff) { minDiff = diff; current = sec.getAttribute("data-section"); }
             });
             if (current) {
               const option = [...select.options].find(o => o.text === current);
@@ -311,10 +314,18 @@
             const el = document.querySelector(id);
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           });
+
+          document.querySelectorAll(".spec-sidebar a").forEach(link => {
+            link.addEventListener("click", e => {
+              e.preventDefault();
+              const id = e.target.getAttribute("href");
+              const el = document.querySelector(id);
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          });
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });
-
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
 

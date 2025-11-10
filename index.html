@@ -262,12 +262,15 @@
           const sections = document.querySelectorAll("[data-section]");
           const scrollArea = document.getElementById("specScrollArea");
 
+          // ✅ 修正版：スクロール位置でトグル更新
           scrollArea.addEventListener("scroll", () => {
+            const scrollTop = scrollArea.scrollTop;
             let current = "";
+            let minDiff = Infinity;
             sections.forEach(sec => {
-              const rect = sec.getBoundingClientRect();
-              const modalRect = scrollArea.getBoundingClientRect();
-              if (rect.top >= modalRect.top && rect.top < modalRect.bottom / 2) {
+              const diff = Math.abs(sec.offsetTop - scrollTop);
+              if (diff < minDiff) {
+                minDiff = diff;
                 current = sec.getAttribute("data-section");
               }
             });

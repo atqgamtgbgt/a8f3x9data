@@ -182,7 +182,7 @@
           let html = "<table class='table table-bordered table-sm'><tbody>";
           rows.forEach(r => {
             html += "<tr>";
-            r.forEach(cell => html += `<td>${cell || ""}</td>`);
+            r.forEach(cell => html += `<td>${(cell || "").replace(/\r?\n/g, "<br>")}</td>`);  <!-- ★ここだけ修正（セル内改行→<br>） -->
             html += "</tr>";
           });
           html += "</tbody></table>";

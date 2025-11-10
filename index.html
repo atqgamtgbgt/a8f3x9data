@@ -17,21 +17,24 @@
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-    /* 仕様テーブル */
-    .spec-sidebar { flex: 0 0 180px; border-right: 1px solid #dee2e6; background: #fff; position: sticky; top: 0; max-height: 80vh; overflow: auto; }
+    /* 仕様テーブルの軽量レイアウト */
     .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
     .sec-row th { background: #f8f9fa; position: sticky; top: 38px; z-index: 1; }
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-    /* トグル固定 */
-    .section-selector-fixed {
+    /* トグルナビ固定 */
+    .section-toggle {
       position: sticky;
       top: 0;
-      z-index: 10;
       background: #fff;
-      padding: 6px 10px;
+      z-index: 10;
+      padding: 8px;
       border-bottom: 1px solid #dee2e6;
+    }
+    .section-toggle select {
+      width: 100%;
+      max-width: 300px;
     }
   </style>
 </head>
@@ -216,35 +219,32 @@
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          // トグル作成（固定表示）
-          let navHtml = "<div class='section-selector-fixed'>";
-          navHtml += "<select id='sectionSelect' class='form-select form-select-sm w-auto d-inline-block'>";
+          let options = "";
           for (const g of grouped) {
-            const id = `sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
-            navHtml += `<option value='${id}'>${g.section}</option>`;
+            options += `<option value="#sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}">${g.section}</option>`;
           }
-          navHtml += "</select></div>";
 
-          const thead = `<thead><tr><th style='min-width:180px;'>項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join('')}</tr></thead>`;
+          const navHtml = `<div class="section-toggle"><select id="sectionSelect">${options}</select></div>`;
 
+          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody = "<tbody>";
           for (const g of grouped) {
-            const id = `sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
-            tbody += `<tr id='${id}' class='sec-row'><th colspan='${1 + modelHeaders.length}'>▼ ${g.section}</th></tr>`;
+            const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
+            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
             for (const row of g.rows) {
               const item = row[0] || "";
-              const cells = row.slice(1).map(v => `<td style='white-space:pre-line;'>${(v || "").replace(/^nan$/i,"")}</td>`).join("");
-              tbody += `<tr><th class='item-col'>${item}</th>${cells}</tr>`;
+              const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
+              tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
             }
           }
           tbody += "</tbody>";
 
           const tableHtml = `
-            <div class='spec-table-container'>
+            <div class="spec-table-container">
               ${navHtml}
-              <div class='spec-content p-2 flex-grow-1 overflow-auto'>
-                <div class='table-responsive'>
-                  <table class='table table-bordered table-sm spec-table mb-0'>
+              <div class="spec-content p-2 flex-grow-1 overflow-auto">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}
                     ${tbody}
                   </table>
@@ -254,14 +254,11 @@
 
           target.innerHTML = tableHtml;
 
-          const sel = document.getElementById("sectionSelect");
-          sel.onchange = function(){
-            const id = this.value;
-            setTimeout(() => {
-              const el = document.getElementById(id);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-            }, 200);
-          };
+          document.getElementById("sectionSelect").addEventListener("change", e => {
+            const id = e.target.value;
+            const el = document.querySelector(id);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });
@@ -283,7 +280,7 @@
         text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
         text = text.replace(/\r?\n/g, "<br>");
         text = text.replace(/(<br>\s*){2,}/g, "<br><br>");
-        target.innerHTML = `<div style='white-space:normal; line-height:1.7;'>${text}</div>`;
+        target.innerHTML = `<div style="white-space:normal; line-height:1.7;">${text}</div>`;
       } catch {
         target.innerHTML = "<div class='text-danger'>口コミデータが見つかりません。</div>";
       }

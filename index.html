@@ -184,7 +184,8 @@
           if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
           const headerRow = rows[headerIdx];
-          const modelHeaders = headerRow.slice(2);
+          const startIdx = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+const modelHeaders = headerRow.slice(startIdx + 1);
           const dataRows = rows.slice(headerIdx + 1);
 
           const grouped = [];

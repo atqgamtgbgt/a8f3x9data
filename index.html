@@ -52,7 +52,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
-          <div id="csvContent" class="table-responsive">読込中...</div>
+          <div id="csvContent" class="table-responsive"></div>
         </div>
       </div>
     </div>
@@ -76,16 +76,16 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    const CSV_PATH = `output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-
-    // ✅ 修正箇所：GitHub Pages配下にも対応する動的ベースパス
-    const IMG_BASE = `${window.location.pathname.replace(/index\.html$/, "").replace(/\/$/, "")}/output/pipeline/autohome-ranking-images/autohome_images/`;
+    // ✅ GitHub raw固定（唯一の変更点）
+    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
+    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
 
     let cnyToJpy = 20;
 
     async function fetchRate() {
       try {
-        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY", { cache: "no-store" });
+        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
         const data = await res.json();
         if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
       } catch { cnyToJpy = 20; }
@@ -102,7 +102,9 @@
     }
 
     function imgTag(rankStr, model, imageUrl) {
-      const fullPath = imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`;
+      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
+        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
@@ -157,41 +159,33 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    function showConfigCsv(carId, title) {
-      const CSV_URL = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+    function showConfigCsv(carId, title){
+      const path = `${RAW_BASE}output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
 
-      Papa.parse(CSV_URL, {
+      Papa.parse(path, {
         download: true,
-        header: false,
-        skipEmptyLines: false,
-        downloadRequestInit: { cache: "no-store" },
+        header: true,
+        skipEmptyLines: true,
         complete: (res) => {
-          if (!res.data || !res.data.length) {
-            target.textContent = "CSVが空です。";
-            return;
-          }
-
-          let rows = res.data.map(row => row.filter((_, idx) => idx !== 0 && idx !== 2));
-          rows = rows.map((r, i) => r.map(v => {
-            if (["セクション_ja", "項目_ja"].includes((v || "").trim())) return "";
-            if ((v || "").trim().toLowerCase() === "nan") return "";
-            return v;
-          }));
-
-          let html = "<table class='table table-bordered table-sm'><tbody>";
-          rows.forEach(r => {
+          let fields = (res.meta.fields || []).map(f => f.replace(/^\ufeff/, ""));
+          if (!res.data?.length) { target.innerHTML = "<div class='text-danger'>CSVが空、または存在しません。</div>"; return; }
+          let html = "<table class='table table-bordered table-sm'><thead><tr>";
+          fields.forEach(f => html += `<th>${f}</th>`); html += "</tr></thead><tbody>";
+          res.data.forEach(row => {
             html += "<tr>";
-            r.forEach(cell => html += `<td>${(cell || "").replace(/\r?\n/g, "<br>")}</td>`);
+            fields.forEach(f => {
+              const key = Object.keys(row).find(k => k.replace(/^\ufeff/, "") === f);
+              html += `<td>${row[key] ?? ""}</td>`;
+            });
             html += "</tr>";
           });
-          html += "</tbody></table>";
-          target.innerHTML = html;
+          target.innerHTML = html + "</tbody></table>";
         },
         error: (err) => {
-          target.textContent = "読み込み失敗: " + err.message;
+          target.innerHTML = `<div class='text-danger'>読み込み失敗: ${err.message}</div>`;
         }
       });
 
@@ -199,7 +193,7 @@
     }
 
     async function showStory(carId, title){
-      const path = `output/koubei/${carId}/story.txt?v=${Date.now()}`;
+      const path = `${RAW_BASE}output/koubei/${carId}/story.txt?v=${Date.now()}`;
       const target = document.getElementById("storyContent");
       document.getElementById("storyModalLabel").textContent = `口コミ概要（${title} | ID:${carId}）`;
       target.textContent = "読込中...";

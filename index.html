@@ -29,7 +29,7 @@
       top: 60px;
       left: 0;
       width: 100%;
-      background: #fff;
+      background: var(--bs-body-bg);
       z-index: 1056;
       padding: 8px;
       border-bottom: 1px solid #dee2e6;
@@ -234,7 +234,7 @@
           let tbody = "<tbody>";
           for (const g of grouped) {
             const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
-            tbody += `<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
             for (const row of g.rows) {
               const item = row[0] || "";
               const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
@@ -246,7 +246,7 @@
           const tableHtml = `
             <div class="spec-table-container">
               ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+              <div class="spec-content p-2 flex-grow-1 overflow-auto">
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}
@@ -259,31 +259,26 @@
           target.innerHTML = tableHtml;
 
           const select = document.getElementById("sectionSelect");
-          const sections = document.querySelectorAll("[data-section]");
-          const scrollArea = document.getElementById("specScrollArea");
-
-          // ✅ 修正版：スクロール位置でトグル更新
-          scrollArea.addEventListener("scroll", () => {
-            const scrollTop = scrollArea.scrollTop;
-            let current = "";
-            let minDiff = Infinity;
-            sections.forEach(sec => {
-              const diff = Math.abs(sec.offsetTop - scrollTop);
-              if (diff < minDiff) {
-                minDiff = diff;
-                current = sec.getAttribute("data-section");
-              }
-            });
-            if (current) {
-              const option = [...select.options].find(o => o.text === current);
-              if (option) select.value = option.value;
-            }
-          });
+          const sections = [...document.querySelectorAll("tr.sec-row")];
 
           select.addEventListener("change", e => {
             const id = e.target.value;
             const el = document.querySelector(id);
             if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
+
+          // ✅ 修正版：モーダル内のスクロールを監視してトグル更新
+          const modalBody = document.querySelector("#csvModal .modal-body");
+          modalBody.addEventListener("scroll", () => {
+            const scrollTop = modalBody.scrollTop;
+            let current = "";
+            for (const sec of sections) {
+              if (sec.offsetTop - scrollTop <= 120) current = sec.querySelector("th").textContent.replace("▼ ","");
+            }
+            if (current) {
+              const option = [...select.options].find(o => o.text === current);
+              if (option) select.value = option.value;
+            }
           });
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }

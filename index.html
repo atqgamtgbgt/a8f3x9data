@@ -23,21 +23,26 @@
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-    /* PC: 左メニュー固定 */
+    /* PC左メニュー固定 */
     .spec-sidebar {
       flex: 0 0 180px;
       border-right: 1px solid #dee2e6;
-      background: #fff;
+      background: var(--bs-body-bg);
       position: sticky;
       top: 0;
       max-height: 80vh;
-      overflow: auto;
+      overflow-y: auto;
+      padding: 8px;
     }
 
-    /* スマホ: トグル表示 */
+    /* スマホ時は左メニュー非表示＆トグル表示 */
+    .section-toggle {
+      display: none;
+    }
     @media (max-width: 768px) {
       .spec-sidebar { display: none; }
       .section-toggle {
+        display: block;
         position: fixed;
         top: 60px;
         left: 0;
@@ -195,7 +200,6 @@
 
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
@@ -233,29 +237,31 @@
             const item = (r[itemIdx] || "").trim();
             if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
             const cols = r.slice(modelStart);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
+            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+              grouped.push({ section: currentSection, rows: [] });
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          // 左メニュー（PC）＋ トグル（スマホ）
-          let navHtml = "<div class='spec-sidebar p-2 d-none d-md-block'>";
+          // 左メニュー（PC用）
+          let navHtml = "<div class='spec-sidebar'>";
           for (const g of grouped) {
-            const id = `sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
+            const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
             navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
           }
           navHtml += "</div>";
 
+          // 上トグル（スマホ用）
           let options = "";
           for (const g of grouped) {
-            options += `<option value="#sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}">${g.section}</option>`;
+            options += `<option value="#sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}">${g.section}</option>`;
           }
-          const toggleHtml = `<div class="section-toggle d-md-none"><select id="sectionSelect">${options}</select></div>`;
+          const toggleHtml = `<div class="section-toggle"><select id="sectionSelect">${options}</select></div>`;
 
           const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody = "<tbody>";
           for (const g of grouped) {
-            const id = `sec_${g.section.replace(/[／\/]/g, '_').replace(/\s+/g, '_')}`;
-            tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
+            tbody += `<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
             for (const row of g.rows) {
               const item = row[0] || "";
               const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
@@ -265,11 +271,11 @@
           tbody += "</tbody>";
 
           const tableHtml = `
-            <div class="spec-table-container d-flex" style="max-height:80vh;">
+            <div class="spec-table-container d-flex">
               ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto">
+              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
                 ${toggleHtml}
-                <div class="table-responsive">
+                <div class="table-responsive mt-2">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}
                     ${tbody}
@@ -280,24 +286,31 @@
 
           target.innerHTML = tableHtml;
 
-          // イベント
-          document.querySelectorAll(".spec-sidebar a").forEach(a => {
-            a.addEventListener("click", e => {
-              e.preventDefault();
-              const id = a.getAttribute("href");
-              const el = document.querySelector(id);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          // スクロールとトグル同期
+          const select = document.getElementById("sectionSelect");
+          const sections = document.querySelectorAll("[data-section]");
+          const scrollArea = document.getElementById("specScrollArea");
+
+          scrollArea.addEventListener("scroll", () => {
+            let current = "";
+            sections.forEach(sec => {
+              const rect = sec.getBoundingClientRect();
+              const modalRect = scrollArea.getBoundingClientRect();
+              if (rect.top >= modalRect.top && rect.top < modalRect.bottom / 2) {
+                current = sec.getAttribute("data-section");
+              }
             });
+            if (current) {
+              const option = [...select.options].find(o => o.text === current);
+              if (option) select.value = option.value;
+            }
           });
 
-          const select = document.getElementById("sectionSelect");
-          if (select) {
-            select.addEventListener("change", e => {
-              const id = e.target.value;
-              const el = document.querySelector(id);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-          }
+          select.addEventListener("change", e => {
+            const id = e.target.value;
+            const el = document.querySelector(id);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          });
         },
         error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
       });

@@ -221,12 +221,7 @@
             tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
             for (const row of g.rows) {
               const item = row[0] || "";
-              const cells = row.slice(1).map(v => {
-                const val = (v || "").replace(/^nan$/i,"");
-                const centered = /^[●○⚫⚪\-ー－]+$/.test(val);
-                const align = centered ? "text-align:center;vertical-align:middle;" : "";
-                return `<td style="white-space:pre-line;${align}">${val}</td>`;
-              }).join("");
+              const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
               tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
             }
           }

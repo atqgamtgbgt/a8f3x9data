@@ -207,17 +207,17 @@
           }
 
           let navHtml = "<div class='spec-sidebar p-2'>";
-for (const g of grouped) {
-  const id = `sec_${g.section.replace(/[／/]/g, "_").replace(/\s+/g, "_")}`;
-  navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
-}
+          for (const g of grouped) {
+            const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;  <!-- ← 唯一の変更 -->
+            navHtml += `<a href="#${id}" class="d-block py-1 text-decoration-none text-primary">${g.section}</a>`;
+          }
           navHtml += "</div>";
 
           const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
 
           let tbody = "<tbody>";
           for (const g of grouped) {
-            const id = `sec_${g.section.replace(/\s+/g, "_")}`;
+            const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;  <!-- ← 唯一の変更 -->
             tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
             for (const row of g.rows) {
               const item = row[0] || "";

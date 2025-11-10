@@ -22,7 +22,40 @@
     .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 1; }
     .sec-row th { background: #f8f9fa; position: sticky; top: 38px; z-index: 1; }
     .item-col { background: #fcfcfc; min-width: 180px; }
-    .spec-content table td, .spec-content table th { vertical-align: middle; }
+    .spec-content table td, .spec-content table th { vertical-align: middle; padding: 6px 8px; }
+
+    /* ✅ モバイル最適化 */
+    @media (max-width: 768px) {
+      .spec-table-container {
+        flex-direction: column;
+      }
+      .spec-sidebar {
+        display: flex;
+        flex-wrap: wrap;
+        max-height: none;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+        padding: 8px;
+        background: #f8f9fa;
+      }
+      .spec-sidebar a {
+        flex: 1 1 45%;
+        margin: 4px;
+        font-size: 0.9rem;
+        text-align: center;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        background: #fff;
+      }
+      .spec-content .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      th, td {
+        font-size: 0.85rem;
+        white-space: nowrap;
+      }
+    }
   </style>
 </head>
 <body>

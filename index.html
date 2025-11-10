@@ -26,20 +26,20 @@
     /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
 .spec-sidebar {
-  flex: 0 0 220px;
-  border-right: 1px solid #dee2e6;
-  background: #fff;
-  position: sticky;
-  top: 0;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 10px;
-}
-.spec-content {
-  flex-grow: 1;
-  overflow: auto;
-  padding: 10px;
-}
+    position: fixed;
+    top: 100px; /* ヘッダー分の補正。Autohomeはcalc(138px+0px) */
+    left: calc(50% - 600px); /* ページ中央に対して本文左端へ合わせる（container幅1200px相当） */
+    width: 220px;
+    height: calc(100vh - 100px);
+    overflow-y: auto;
+    background: var(--bs-body-bg);
+    border-right: 1px solid #dee2e6;
+    padding: 10px;
+    z-index: 1055;
+  }
+  .spec-content {
+    margin-left: 240px; /* サイドバー分だけ本文を右に */
+  }
     }
 
     /* ✅ スマホ用トグル固定（変更なし） */

@@ -136,6 +136,18 @@
       display: block;
     }
   }
+  /* ✅ padding部の透け防止（はみ出し補正） */
+.spec-content {
+  background-clip: padding-box;  /* ← 内側塗りつぶしを有効に */
+  box-shadow: inset 0 0 0 0 #fff; /* ← ブラウザ差対策のため空指定 */
+}
+
+/* padding部分がはみ出す際の白補正 */
+.spec-content::before,
+.spec-content::after {
+  background: #fff; /* ← 確実に白塗りで上書き */
+}
+
 </style>
 
 </head>

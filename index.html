@@ -7,22 +7,9 @@
   <link rel="icon" href="https://img.icons8.com/emoji/48/automobile.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-    }
-    header {
-      background: #0d6efd;
-      color: #fff;
-      padding: 12px;
-      text-align: center;
-      font-size: 1.3rem;
-      font-weight: 700;
-      position: sticky;
-      top: 0;
-      z-index: 2000;
-    }
+    <style>
+    body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
+    header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
     th { background-color: #f1f3f5; }
     .rank-up { color: #dc3545; font-weight: bold; }
     .rank-down { color: #0d6efd; font-weight: bold; }
@@ -31,22 +18,19 @@
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
     /* 仕様テーブルの軽量レイアウト */
-    .spec-content thead th {
+    .spec-content thead th { 
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 30; /* 最上層 */
       background: #fff;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+      border-bottom: 1px solid #dee2e6; /* 下線を明示 */
     }
-    .sec-row th {
-      background: #f8f9fa;
-      position: sticky;
-      top: 38px;
-      z-index: 90;
-    }
+    .sec-row th { background: #f8f9fa; }
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-    /* ✅ PC用レイアウト：左メニュー＋本文 */
+    /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
       .spec-table-container {
         display: flex;
@@ -55,29 +39,29 @@
       }
       .spec-sidebar {
         position: sticky;
-        top: 52px; /* ヘッダー高さ分の補正 */
+        top: 0;
         flex: 0 0 180px;
-        height: calc(80vh - 52px);
+        height: 80vh;
         overflow-y: auto;
         background: #fff;
         border-right: 1px solid #dee2e6;
         padding: 8px;
-        margin: 0;
       }
       .spec-content {
         flex: 1;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: auto;
         max-height: 80vh;
-        padding: 0;
+        padding: 8px;
         position: relative;
       }
-      /* ✅ stickyが効くよう中間overflowを無効化 */
+      /* ✅ sticky有効化のため中間overflowを無効化 */
       .spec-content .table-responsive {
         overflow: visible !important;
       }
     }
 
-    /* ✅ スマホ用セレクト */
+    /* ✅ スマホ用トグル固定 */
     @media (max-width: 991px) {
       .section-toggle {
         position: fixed;
@@ -97,7 +81,7 @@
       }
     }
 
-    /* ✅ ヘッダー行・セクション見出し横固定＋ズレ防止 */
+    /* ✅ 横スクロール時の固定強化 + セクション行追従 */
     @media (min-width: 992px) {
       .spec-table {
         position: relative;
@@ -107,30 +91,38 @@
       .spec-table thead th.sticky-col {
         position: sticky;
         left: 0;
-        z-index: 110;
+        z-index: 31; /* 最上層 */
         background: #fff;
       }
       .spec-table tbody th.item-col {
         position: sticky;
         left: 0;
-        z-index: 90;
+        z-index: 12;
         background: #fff;
+        border-right: 1px solid #dee2e6;
       }
+      /* ✅ セクション行をヘッダー直下に */
       .spec-table tbody tr.sec-row th {
         position: sticky;
         left: 0;
-        z-index: 120;
+        top: 42px; /* thead高さに一致 */
+        z-index: 20;
         background: #f8f9fa;
-      }
-
-      /* ✅ スクロール時のズレ補正 */
-      .spec-table thead th,
-      .spec-table tbody th,
-      .spec-table td {
-        box-shadow: inset 0 0 0 1px #dee2e6;
+        box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+        border-bottom: 1px solid #dee2e6;
       }
     }
+
+    /* ✅ stickyズレ・はみ出し防止 */
+    .spec-table thead th,
+    .spec-table tbody th.item-col,
+    .spec-table tbody tr.sec-row th {
+      background-clip: padding-box;
+      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+    }
   </style>
+
+
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -186,6 +178,7 @@
       </div>
     </div>
   </div>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
@@ -263,7 +256,6 @@
         tbody.appendChild(tr);
       });
     }
-
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
@@ -272,6 +264,7 @@
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
+
       Papa.parse(path, {
         download: true,
         header: false,
@@ -322,7 +315,7 @@
               <select id="sectionSelect">${options}</select>
             </div>`;
 
-          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+          const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody="<tbody>";
           for(const g of grouped){
             const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
@@ -348,15 +341,30 @@
             </div>`;
           target.innerHTML=tableHtml;
 
+          // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
+          const headerTh = document.querySelector(".spec-content thead th");
+          const headerHeight = headerTh ? headerTh.offsetHeight : 38;
+          document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+            a.addEventListener("click",ev=>{
+              ev.preventDefault();
+              const id=a.getAttribute("href");
+              const el=document.querySelector(id);
+              if(el){
+                const offset = el.offsetTop - headerHeight;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+              }
+            });
+          });
+
+          // ✅ 改良2: セレクトからも同様にヘッダー直下へ
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{
               const id=e.target.value;
               const el=document.querySelector(id);
-              const headerH = 52; // ヘッダー高さ補正
               if(el){
-                const top=el.getBoundingClientRect().top+window.scrollY-headerH;
-                window.scrollTo({top,behavior:"smooth"});
+                const offset = el.offsetTop - headerHeight;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           }

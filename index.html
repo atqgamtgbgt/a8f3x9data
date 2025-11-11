@@ -8,28 +8,12 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-  }
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
+  body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
+  header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
   th { background-color: #f1f3f5; }
   .rank-up { color: #dc3545; font-weight: bold; }
   .rank-down { color: #0d6efd; font-weight: bold; }
-  img.car-thumb {
-    width: 80px;
-    height: 60px;
-    object-fit: cover;
-    border-radius: 6px;
-    background:#eee;
-  }
+  img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
   .price-jpy { font-size: 0.85rem; color: #6c757d; }
   .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
@@ -39,7 +23,7 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow: hidden; /* 横スクロールは親で */
+      overflow-x: auto; /* 横スクロールは親で */
       background: #fff;
     }
 
@@ -52,18 +36,17 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
-      z-index: 20;
     }
 
     .spec-content {
       flex: 1;
-      overflow-y: auto !important;
+      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
       overflow-x: visible !important;
       height: 80vh;
       padding: 8px;
       position: relative;
       background: #fff;
-      background-clip: padding-box;
+      background-clip: padding-box; /* padding部も白く塗る */
     }
 
     .spec-content .table-responsive { overflow: visible !important; }
@@ -72,7 +55,6 @@
       position: relative;
       border-collapse: separate;
       border-spacing: 0;
-      min-width: 100%;
     }
 
     /* ✅ ヘッダー固定 */
@@ -100,16 +82,15 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（縦＆横両方向固定） */
+    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
       top: var(--secOffset, 42px);
-      left: 0;                     /* ← 横スクロール時も固定 */
-      z-index: 40;                 /* ← 他より上 */
+      /* left: 0; ←削除！これが横スクロールの原因 */
+      z-index: 40;
       background: #f8f9fa;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
-      white-space: nowrap;
     }
 
     /* ✅ 背景透け防止マスク */
@@ -170,6 +151,7 @@
     background: #fff !important;
   }
 </style>
+
 
 </head>
 <body>

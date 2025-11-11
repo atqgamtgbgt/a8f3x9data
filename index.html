@@ -18,8 +18,8 @@
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
     /* 仕様テーブルの軽量レイアウト */
-    .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 2; } /* ✅ 追加: ヘッダーのz-indexを上げ固定 */
-    .sec-row th { background: #f8f9fa; position: sticky; top: 38px; z-index: 1; } /* ✅ セクション見出し基本 */
+    .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 3; } /* ✅ ヘッダー固定強化 */
+    .sec-row th { background: #f8f9fa; }
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
@@ -50,7 +50,7 @@
     overflow-x: auto;
     max-height: 80vh;
     padding: 8px;
-    position: relative; /* ✅ 追加: sticky基準のため */
+    position: relative; /* ✅ 追加: sticky基準 */
   }
     }
 
@@ -74,7 +74,7 @@
       }
     }
 
-    /* ✅ 追加: ヘッダー行と先頭列を固定（上段） */
+    /* ✅ 追加: 列・ヘッダー・セクション見出し固定 */
     @media (min-width: 992px) {
       .spec-table {
         position: relative;
@@ -90,13 +90,13 @@
       .spec-table tbody th.item-col {
         position: sticky;
         left: 0;
-        z-index: 3;
+        z-index: 2;
         background: #fff;
       }
-      /* ✅ 追加: セクション見出しもsticky化 */
+      /* ✅ セクション見出しを横スクロールで固定 */
       .spec-table tbody tr.sec-row th {
         position: sticky;
-        top: 38px;
+        left: 0; /* ✅ 左固定 */
         z-index: 5;
         background: #f8f9fa;
       }

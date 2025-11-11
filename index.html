@@ -21,8 +21,9 @@
     .spec-content thead th { 
       position: sticky; 
       top: 0; 
-      z-index: 10; 
+      z-index: 20; 
       background: #fff; 
+      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
     }
     .sec-row th { background: #f8f9fa; }
     .item-col { background: #fcfcfc; min-width: 180px; }
@@ -30,35 +31,32 @@
 
     /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
- .spec-table-container {
-    display: flex;
-    align-items: flex-start;
-    max-height: 80vh;
-  }
-
-  .spec-sidebar {
-    position: sticky;
-    top: 0;
-    flex: 0 0 180px;
-    height: 80vh;
-    overflow-y: auto;
-    background: #fff;
-    border-right: 1px solid #dee2e6;
-    padding: 8px;
-  }
-
-  .spec-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: auto;
-    max-height: 80vh;
-    padding: 8px;
-    position: relative;
-    z-index: 0; /* ✅ 追加: stacking context調整 */
-  }
+      .spec-table-container {
+        display: flex;
+        align-items: flex-start;
+        max-height: 80vh;
+      }
+      .spec-sidebar {
+        position: sticky;
+        top: 0;
+        flex: 0 0 180px;
+        height: 80vh;
+        overflow-y: auto;
+        background: #fff;
+        border-right: 1px solid #dee2e6;
+        padding: 8px;
+      }
+      .spec-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: auto;
+        max-height: 80vh;
+        padding: 8px;
+        position: relative;
+      }
     }
 
-    /* ✅ スマホ用トグル固定（変更なし） */
+    /* ✅ スマホ用トグル固定 */
     @media (max-width: 991px) {
       .section-toggle {
         position: fixed;
@@ -78,7 +76,7 @@
       }
     }
 
-    /* ✅ ヘッダー行・セクション見出し横固定 */
+    /* ✅ 横スクロール時の固定強化 */
     @media (min-width: 992px) {
       .spec-table {
         position: relative;
@@ -88,37 +86,24 @@
       .spec-table thead th.sticky-col {
         position: sticky;
         left: 0;
-        z-index: 11;
+        z-index: 21;
         background: #fff;
       }
       .spec-table tbody th.item-col {
         position: sticky;
         left: 0;
-        z-index: 5;
+        z-index: 10;
         background: #fff;
       }
+      /* ✅ セクション行をヘッダー下＋左固定 */
       .spec-table tbody tr.sec-row th {
         position: sticky;
         left: 0;
-        z-index: 12;
+        top: 38px; /* ヘッダー直下に配置 */
+        z-index: 19;
         background: #f8f9fa;
+        box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       }
-    }
-
-    /* ✅ 追加: overflowを整理してthead固定を有効化＋見出し重なり防止 */
-    .modal-dialog.modal-dialog-scrollable .modal-body,
-    .spec-content .table-responsive {
-      overflow: visible !important;
-    }
-    .spec-content table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: #fff;
-      box-shadow: 0 2px 2px rgba(0,0,0,0.05); /* ✅ 視覚的区切り */
-    }
-    .spec-table tbody tr.sec-row th {
-      top: 38px;
     }
   </style>
 </head>
@@ -146,6 +131,7 @@
       </table>
     </div>
   </div>
+
   <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -261,6 +247,7 @@
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
+
       Papa.parse(path, {
         download: true,
         header: false,
@@ -337,31 +324,33 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ✅ 改良: スクロール位置調整（ヘッダー高さを考慮）
-          const select=document.getElementById("sectionSelect");
-          if(select){
-            select.addEventListener("change",e=>{
-              const id=e.target.value;
-              const el=document.querySelector(id);
-              if(el){
-                const offset=el.getBoundingClientRect().top + window.scrollY - 42;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
-          }
-
-          // ✅ 改良: 左メニュークリック時の被り防止
+          // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
+          const headerTh = document.querySelector(".spec-content thead th");
+          const headerHeight = headerTh ? headerTh.offsetHeight : 38;
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
               const id=a.getAttribute("href");
               const el=document.querySelector(id);
               if(el){
-                const offset=el.offsetTop - 38;
+                const offset = el.offsetTop - headerHeight;
                 document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           });
+
+          // ✅ 改良2: セレクトからも同様にヘッダー直下へ
+          const select=document.getElementById("sectionSelect");
+          if(select){
+            select.addEventListener("change",e=>{
+              const id=e.target.value;
+              const el=document.querySelector(id);
+              if(el){
+                const offset = el.offsetTop - headerHeight;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+              }
+            });
+          }
         },
         error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
       });

@@ -54,6 +54,7 @@
     max-height: 80vh;
     padding: 8px;
     position: relative;
+    z-index: 0; /* ✅ 追加: stacking context調整 */
   }
     }
 
@@ -104,7 +105,7 @@
       }
     }
 
-    /* ✅ 追加: overflowを整理してthead固定を有効化 */
+    /* ✅ 追加: overflowを整理してthead固定を有効化＋見出し重なり防止 */
     .modal-dialog.modal-dialog-scrollable .modal-body,
     .spec-content .table-responsive {
       overflow: visible !important;
@@ -112,8 +113,9 @@
     .spec-content table thead th {
       position: sticky;
       top: 0;
-      z-index: 60;
+      z-index: 100;
       background: #fff;
+      box-shadow: 0 2px 2px rgba(0,0,0,0.05); /* ✅ 視覚的区切り */
     }
     .spec-table tbody tr.sec-row th {
       top: 38px;
@@ -175,12 +177,10 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
     const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
     const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
     const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -222,6 +222,7 @@
         fail("CSV 読み込みエラー: " + err.message);
       }
     }
+
     function renderTable(data) {
       const tbody = document.querySelector("#carTable tbody");
       tbody.innerHTML = "";
@@ -236,10 +237,8 @@
         const priceJPY = convertToJPY(r.price || "");
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
-
         const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
         const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
-
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${r.rank}</td>
@@ -254,7 +253,6 @@
         tbody.appendChild(tr);
       });
     }
-
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
@@ -313,7 +311,7 @@
               <select id="sectionSelect">${options}</select>
             </div>`;
 
-          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+          const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody="<tbody>";
           for(const g of grouped){
             const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
@@ -339,14 +337,31 @@
             </div>`;
           target.innerHTML=tableHtml;
 
+          // ✅ 改良: スクロール位置調整（ヘッダー高さを考慮）
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{
               const id=e.target.value;
               const el=document.querySelector(id);
-              if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+              if(el){
+                const offset=el.getBoundingClientRect().top + window.scrollY - 42;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+              }
             });
           }
+
+          // ✅ 改良: 左メニュークリック時の被り防止
+          document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+            a.addEventListener("click",ev=>{
+              ev.preventDefault();
+              const id=a.getAttribute("href");
+              const el=document.querySelector(id);
+              if(el){
+                const offset=el.offsetTop - 38;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+              }
+            });
+          });
         },
         error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
       });

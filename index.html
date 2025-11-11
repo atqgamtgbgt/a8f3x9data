@@ -21,40 +21,46 @@
     .spec-content thead th { 
       position: sticky; 
       top: 0; 
-      z-index: 10; 
+      z-index: 20; /* ✅ 追加: 最上段モデル名を常時固定 */
       background: #fff; 
-    } /* ✅ 追加: モデル名ヘッダーを縦スクロール固定 */
-    .sec-row th { background: #f8f9fa; }
+    }
+    .sec-row th { 
+      background: #f8f9fa; 
+      position: sticky; 
+      top: 38px; /* ✅ 追加: thead下に吸着 */
+      left: 0; 
+      z-index: 15; 
+    }
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
 
     /* ✅ PC用左メニュー固定 */
     @media (min-width: 992px) {
- .spec-table-container {
-    display: flex;
-    align-items: flex-start;
-    max-height: 80vh;
-  }
+      .spec-table-container {
+        display: flex;
+        align-items: flex-start;
+        max-height: 80vh;
+      }
 
-  .spec-sidebar {
-    position: sticky;
-    top: 0;
-    flex: 0 0 180px;
-    height: 80vh;
-    overflow-y: auto;
-    background: #fff;
-    border-right: 1px solid #dee2e6;
-    padding: 8px;
-  }
+      .spec-sidebar {
+        position: sticky;
+        top: 0;
+        flex: 0 0 180px;
+        height: 80vh;
+        overflow-y: auto;
+        background: #fff;
+        border-right: 1px solid #dee2e6;
+        padding: 8px;
+      }
 
-  .spec-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: auto;
-    max-height: 80vh;
-    padding: 8px;
-    position: relative;
-  }
+      .spec-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: auto;
+        max-height: 80vh;
+        padding: 8px;
+        position: relative;
+      }
     }
 
     /* ✅ スマホ用トグル固定（変更なし） */
@@ -77,7 +83,7 @@
       }
     }
 
-    /* ✅ 追加: ヘッダー行・セクション見出し横固定 */
+    /* ✅ 追加: ヘッダー行・左列固定 */
     @media (min-width: 992px) {
       .spec-table {
         position: relative;
@@ -87,21 +93,21 @@
       .spec-table thead th.sticky-col {
         position: sticky;
         left: 0;
-        z-index: 11;
+        z-index: 21;
         background: #fff;
       }
       .spec-table tbody th.item-col {
         position: sticky;
         left: 0;
-        z-index: 5;
+        z-index: 10;
         background: #fff;
       }
       .spec-table tbody tr.sec-row th {
         position: sticky;
         left: 0;
-        z-index: 12;
+        z-index: 22;
         background: #f8f9fa;
-      } /* ✅ 追加: セクション見出しを横スクロールで固定 */
+      }
     }
   </style>
 </head>
@@ -129,7 +135,6 @@
       </table>
     </div>
   </div>
-
   <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -240,8 +245,7 @@
 
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
-    /* ✅ 追加: 仕様CSVを表示（先頭列固定＆ヘッダー縦固定に対応） */
+    /* ✅ 追加: 仕様CSVを表示（Autohome式セクション固定対応） */
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");

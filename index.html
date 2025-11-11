@@ -7,7 +7,7 @@
   <link rel="icon" href="https://img.icons8.com/emoji/48/automobile.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <style>
+ <style>
   body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
   header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
   th { background-color: #f1f3f5; }
@@ -21,16 +21,16 @@
   .spec-content thead th { 
     position: sticky;
     top: 0;
-    z-index: 30; /* 最上層 */
+    z-index: 60;
     background: #fff;
     box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-    border-bottom: 1px solid #dee2e6; /* 下線を明示 */
+    border-bottom: 1px solid #dee2e6;
   }
   .sec-row th { background: #f8f9fa; }
   .item-col { background: #fcfcfc; min-width: 180px; }
   .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-  /* ✅ PC用左メニュー固定 */
+  /* PC用左メニュー固定 */
   @media (min-width: 992px) {
     .spec-table-container {
       display: flex;
@@ -46,23 +46,24 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
+      z-index: 70;
     }
     .spec-content {
       flex: 1;
-      overflow-x: auto !important; /* 横スクロール常時表示 */
+      overflow-x: auto !important;  /* ← 横スクロールを必ず表示 */
       overflow-y: auto !important;
       max-height: 80vh;
       padding: 8px;
       position: relative;
-      background: #fff; /* はみ出し防止 */
+      background: #fff;
     }
-    /* ✅ sticky有効化のため中間overflowを無効化 */
+    /* sticky有効化のため中間overflowを無効化 */
     .spec-content .table-responsive {
       overflow: visible !important;
     }
   }
 
-  /* ✅ スマホ用トグル固定 */
+  /* スマホ用トグル固定 */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -82,17 +83,18 @@
     }
   }
 
-  /* ✅ 横スクロール時の固定強化 + セクション行追従 */
+  /* 横スクロール時の固定強化 + セクション行追従 */
   @media (min-width: 992px) {
     .spec-table {
       position: relative;
       border-collapse: separate;
       border-spacing: 0;
+      min-width: max-content;       /* ← 内容幅優先で横スクロール発生 */
     }
     .spec-table thead th.sticky-col {
       position: sticky;
       left: 0;
-      z-index: 60;
+      z-index: 61;
       background: #fff;
     }
     .spec-table tbody th.item-col {
@@ -102,7 +104,7 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
     }
-    /* ✅ セクション行をヘッダー直下に */
+    /* セクション行をヘッダー直下に */
     .spec-table tbody tr.sec-row th {
       position: sticky;
       left: 0;
@@ -114,15 +116,44 @@
     }
   }
 
-  /* ✅ stickyズレ・はみ出し防止 */
+  /* stickyズレ・はみ出し防止（セル自体） */
   .spec-table thead th,
   .spec-table tbody th.item-col,
   .spec-table tbody tr.sec-row th {
-    background: #fff !important;
+    background: #fff;
     background-clip: padding-box;
     box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
   }
+  .spec-table tbody tr.sec-row th { background:#f8f9fa; }
+
+  /* 追加：上端・左端を白で覆うマスク（数値はthead=42px, 左列=180pxに合わせる） */
+  .spec-content::before {
+    content:"";
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 42px;               /* ← ヘッダー高さ */
+    background: #fff;
+    z-index: 50;                /* コンテンツより上、ヘッダーより下 */
+    pointer-events: none;       /* UI操作を妨げない */
+    display: block;
+  }
+  .spec-content::after {
+    content:"";
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 180px;               /* ← 左固定列幅 */
+    height: 100%;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    z-index: 51;                /* コンテンツより上、左列/ヘッダーより下 */
+    pointer-events: none;
+    display: block;
+  }
 </style>
+
 
 
 </head>

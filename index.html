@@ -23,7 +23,7 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: visible; /* ← 横スクロールは内部で処理するためvisibleに */
+      overflow-x: auto; /* 横スクロールは親で */
       background: #fff;
     }
 
@@ -38,23 +38,18 @@
       padding: 8px;
     }
 
-    /* ✅ overflow調整：横スクロールをtable-responsive側に集約 */
     .spec-content {
       flex: 1;
-      overflow-x: hidden !important; /* 横は子要素に任せる */
-      overflow-y: auto !important;
+      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
+      overflow-x: visible !important;
       height: 80vh;
       padding: 8px;
       position: relative;
       background: #fff;
-      background-clip: padding-box;
+      background-clip: padding-box; /* padding部も白く塗る */
     }
 
-    /* ✅ 横スクロールのコンテナをtable-responsiveに変更 */
-    .spec-content .table-responsive {
-      position: relative;
-      overflow: auto !important; /* 横スクロールの基準をここに */
-    }
+    .spec-content .table-responsive { overflow: visible !important; }
 
     .spec-table {
       position: relative;
@@ -87,15 +82,15 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（縦＋横） */
+    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
-      top: var(--secOffset, 42px);
+      top: var(--secOffset, 42px); /* ← 実測高さに同期 */
       left: 0;
-      z-index: 50; /* 左列より上に重ねる */
+      z-index: 40; /* item-colより上 */
       background: #f8f9fa;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.05), inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
     }
 
     /* ✅ 背景透け防止マスク */
@@ -127,6 +122,7 @@
     .spec-table tbody th.item-col,
     .spec-table tbody tr.sec-row th {
       background-clip: padding-box;
+      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
     }
   }
 
@@ -365,8 +361,7 @@
           const tableHtml=`
             <div class="spec-table-container d-flex">
               ${navHtml}
-              <!-- ★ overflow-auto → overflow-visible に変更 -->
-              <div class="spec-content p-2 flex-grow-1 overflow-visible" id="specScrollArea">
+              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}${tbody}
@@ -376,7 +371,7 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ★追加: ヘッダー高さをCSS変数に反映
+          // ★追加: thead高さをCSS変数に反映して縦位置をヘッダー直下に合わせる
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
@@ -392,7 +387,7 @@
             );
           }
 
-          // ✅ 左メニュークリック時の位置調整
+          // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
@@ -405,7 +400,7 @@
             });
           });
 
-          // ✅ セレクトからも同様
+          // ✅ 改良2: セレクトからも同様にヘッダー直下へ
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{

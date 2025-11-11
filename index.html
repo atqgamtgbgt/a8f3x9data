@@ -20,10 +20,9 @@
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
     .spec-table-container {
-      display: flex;
-      align-items: flex-start;
+       display: block;
       height: 80vh;
-      overflow-x: auto; /* 横スクロールは親で */
+      overflow: visible;
       background: #fff;
     }
 
@@ -40,8 +39,7 @@
 
     .spec-content {
       flex: 1;
-      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
-      overflow-x: visible !important;
+      overflow: auto !important; /* ← 縦も横もここに統一 */
       height: 80vh;
       padding: 8px;
       position: relative;

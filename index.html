@@ -17,58 +17,107 @@
   .price-jpy { font-size: 0.85rem; color: #6c757d; }
   .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-  /* 仕様テーブルの軽量レイアウト */
-  .spec-content thead th { 
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: #fff;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-    border-bottom: 1px solid #dee2e6;
-  }
-  .sec-row th { background: #f8f9fa; }
-  .item-col { background: #fcfcfc; min-width: 180px; }
-  .spec-content table td, .spec-content table th { vertical-align: middle; }
+  /* === 仕様テーブル用 === */
+  @media (min-width: 992px) {
+    .spec-table-container {
+      display: flex;
+      align-items: flex-start;
+      height: 80vh;
+      overflow-x: auto;  /* 横スクロール */
+      background: #fff;
+    }
 
-  /* ✅ PC用左メニュー固定 */
- @media (min-width: 992px) {
-  .spec-table-container {
-    display: flex;
-    align-items: flex-start;
-    max-height: 80vh;
-    overflow-y: auto;   /* ← ここを追加 */
-    overflow-x: auto;   /* ← 横も追加 */
-    background: #fff;   /* ← 背景を白で固定 */
+    .spec-sidebar {
+      position: sticky;
+      top: 0;
+      flex: 0 0 180px;
+      height: 80vh;
+      overflow-y: auto;
+      background: #fff;
+      border-right: 1px solid #dee2e6;
+      padding: 8px;
+    }
+
+    .spec-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: visible;
+      height: 80vh;
+      padding: 8px;
+      position: relative;
+      background: #fff;
+    }
+
+    .spec-content .table-responsive { overflow: visible !important; }
+
+    .spec-table {
+      position: relative;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+
+    /* ✅ ヘッダー固定 */
+    .spec-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: #fff;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    /* ✅ 左列固定 */
+    .spec-table thead th.sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 31;
+      background: #fff;
+    }
+    .spec-table tbody th.item-col {
+      position: sticky;
+      left: 0;
+      z-index: 12;
+      background: #fff;
+      border-right: 1px solid #dee2e6;
+    }
+
+    /* ✅ セクション見出し固定 */
+    .spec-table tbody tr.sec-row th {
+      position: sticky;
+      left: 0;
+      top: 42px;
+      z-index: 20;
+      background: #f8f9fa;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    /* ✅ 白マスク（透け防止） */
+    .spec-content::before {
+      content: "";
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 42px;
+      background: #fff;
+      z-index: 25;
+      pointer-events: none;
+    }
+    .spec-content::after {
+      content: "";
+      position: sticky;
+      top: 0;
+      left: 0;
+      width: 180px;
+      height: 100%;
+      background: #fff;
+      z-index: 24;
+      pointer-events: none;
+    }
   }
 
-  .spec-sidebar {
-    position: sticky;
-    top: 0;
-    flex: 0 0 180px;
-    height: 80vh;
-    overflow-y: auto;
-    background: #fff;
-    border-right: 1px solid #dee2e6;
-    padding: 8px;
-  }
-
-  .spec-content {
-    flex: 1;
-    /* ← 以下の2行を削除 */
-    /* overflow-y: auto;
-       overflow-x: auto; */
-    max-height: none;   /* ← 制限を解除 */
-    padding: 8px;
-    position: relative;
-    background: #fff;
-  }
-
-  .spec-content .table-responsive {
-    overflow: visible !important;
-  }
-}
-
-  /* ✅ スマホ用トグル固定 */
+  /* === モバイル用 === */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -87,92 +136,6 @@
       display: block;
     }
   }
-
-  /* ✅ 横スクロール時の固定強化 + セクション行追従 */
-  @media (min-width: 992px) {
-    .spec-table {
-      position: relative;
-      border-collapse: separate;
-      border-spacing: 0;
-    }
-    .spec-table thead th.sticky-col {
-      position: sticky;
-      left: 0;
-      z-index: 31;
-      background: #fff;
-    }
-    .spec-table tbody th.item-col {
-      position: sticky;
-      left: 0;
-      z-index: 12;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-    }
-    .spec-table tbody tr.sec-row th {
-      position: sticky;
-      left: 0;
-      top: 42px;
-      z-index: 20;
-      background: #f8f9fa;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
-      border-bottom: 1px solid #dee2e6;
-    }
-  }
-
-  /* ✅ stickyズレ・はみ出し防止 */
-  .spec-table thead th,
-  .spec-table tbody th.item-col,
-  .spec-table tbody tr.sec-row th {
-    background-clip: padding-box;
-    box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-  }
-
-  /* ✅ ← ここだけ追加：はみ出し部分の背景上塗り（純粋な白マスク） */
-  .spec-content::before,
-  .spec-content::after {
-    content: "";
-    position: sticky;
-    background: #fff;
-    z-index: 29; /* ヘッダーの下、本文の上 */
-    pointer-events: none;
-  }
-  .spec-content::before {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 42px; /* ヘッダー高さに合わせる */
-  }
-  .spec-content::after {
-    top: 0;
-    left: 0;
-    width: 180px; /* 左固定列幅に合わせる */
-    height: 100%;
-  }
-  /* === 白マスク（上・左を覆う実体ブロック） === */
-.spec-mask-top,
-.spec-mask-left {
-  position: sticky;
-  background: #fff;
-  pointer-events: none;
-  z-index: 100; /* sticky要素の上に確実に重なる */
-}
-
-.spec-mask-top {
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 42px; /* ← thead高さに合わせて調整 */
-  border-bottom: 1px solid #dee2e6;
-}
-
-.spec-mask-left {
-  top: 0;
-  left: 0;
-  width: 180px; /* ← 左列幅に合わせて調整 */
-  height: 100%;
-  border-right: 1px solid #dee2e6;
-}
-
 </style>
 
 </head>

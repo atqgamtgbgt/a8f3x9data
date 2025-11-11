@@ -31,35 +31,42 @@
   .spec-content table td, .spec-content table th { vertical-align: middle; }
 
   /* ✅ PC用左メニュー固定 */
-  @media (min-width: 992px) {
-    .spec-table-container {
-      display: flex;
-      align-items: flex-start;
-      max-height: 80vh;
-    }
-    .spec-sidebar {
-      position: sticky;
-      top: 0;
-      flex: 0 0 180px;
-      height: 80vh;
-      overflow-y: auto;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-      padding: 8px;
-    }
-    .spec-content {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: auto;
-      max-height: 80vh;
-      padding: 8px;
-      position: relative;
-      background: #fff;
-    }
-    .spec-content .table-responsive {
-      overflow: visible !important;
-    }
+ @media (min-width: 992px) {
+  .spec-table-container {
+    display: flex;
+    align-items: flex-start;
+    max-height: 80vh;
+    overflow-y: auto;   /* ← ここを追加 */
+    overflow-x: auto;   /* ← 横も追加 */
+    background: #fff;   /* ← 背景を白で固定 */
   }
+
+  .spec-sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0 0 180px;
+    height: 80vh;
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    padding: 8px;
+  }
+
+  .spec-content {
+    flex: 1;
+    /* ← 以下の2行を削除 */
+    /* overflow-y: auto;
+       overflow-x: auto; */
+    max-height: none;   /* ← 制限を解除 */
+    padding: 8px;
+    position: relative;
+    background: #fff;
+  }
+
+  .spec-content .table-responsive {
+    overflow: visible !important;
+  }
+}
 
   /* ✅ スマホ用トグル固定 */
   @media (max-width: 991px) {

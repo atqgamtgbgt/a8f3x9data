@@ -145,6 +145,14 @@
       display: block;
     }
   }
+  /* === ✅ Bootstrapの.p-2パディング透け対策 === */
+.spec-content.p-2 {
+  background: #fff !important;         /* 常に真っ白で塗る */
+  background-clip: border-box !important; /* padding部分まで完全塗りつぶし */
+  box-shadow: inset 0 0 0 100vmax #fff !important; /* ←決め手: 内側を白で強制上書き */
+  clip-path: inset(0); /* ブラウザ差異防止 */
+}
+
 </style>
 
 

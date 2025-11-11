@@ -18,7 +18,12 @@
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
     /* 仕様テーブルの軽量レイアウト */
-    .spec-content thead th { position: sticky; top: 0; background: #fff; z-index: 3; } /* ✅ ヘッダー固定強化 */
+    .spec-content thead th { 
+      position: sticky; 
+      top: 0; 
+      z-index: 10; 
+      background: #fff;
+    } /* ✅ モデル名ヘッダーを縦固定 */
     .sec-row th { background: #f8f9fa; }
     .item-col { background: #fcfcfc; min-width: 180px; }
     .spec-content table td, .spec-content table th { vertical-align: middle; }
@@ -28,7 +33,6 @@
  .spec-table-container {
     display: flex;
     align-items: flex-start;
-    /* overflow: hidden; ← ❌ 削除 */
     max-height: 80vh;
   }
 
@@ -45,16 +49,15 @@
 
   .spec-content {
     flex: 1;
-    /* ✅ 本文をスクロール対象にする */
     overflow-y: auto;
     overflow-x: auto;
     max-height: 80vh;
     padding: 8px;
-    position: relative; /* ✅ 追加: sticky基準 */
+    position: relative; /* ✅ sticky基準 */
   }
     }
 
-    /* ✅ スマホ用トグル固定（変更なし） */
+    /* ✅ スマホ用トグル固定 */
     @media (max-width: 991px) {
       .section-toggle {
         position: fixed;
@@ -74,7 +77,7 @@
       }
     }
 
-    /* ✅ 追加: 列・ヘッダー・セクション見出し固定 */
+    /* ✅ 列・セクション見出し横固定 */
     @media (min-width: 992px) {
       .spec-table {
         position: relative;
@@ -84,22 +87,21 @@
       .spec-table thead th.sticky-col {
         position: sticky;
         left: 0;
-        z-index: 4;
+        z-index: 11;
         background: #fff;
       }
       .spec-table tbody th.item-col {
         position: sticky;
         left: 0;
-        z-index: 2;
+        z-index: 5;
         background: #fff;
       }
-      /* ✅ セクション見出しを横スクロールで固定 */
       .spec-table tbody tr.sec-row th {
         position: sticky;
-        left: 0; /* ✅ 左固定 */
-        z-index: 5;
+        left: 0;
+        z-index: 12;
         background: #f8f9fa;
-      }
+      } /* ✅ セクション見出しを横スクロールで固定 */
     }
   </style>
 </head>
@@ -127,7 +129,6 @@
       </table>
     </div>
   </div>
-
   <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">

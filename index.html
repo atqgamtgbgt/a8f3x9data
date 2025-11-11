@@ -7,120 +7,122 @@
   <link rel="icon" href="https://img.icons8.com/emoji/48/automobile.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-    <style>
-    body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
-    header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
-    th { background-color: #f1f3f5; }
-    .rank-up { color: #dc3545; font-weight: bold; }
-    .rank-down { color: #0d6efd; font-weight: bold; }
-    img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-    .price-jpy { font-size: 0.85rem; color: #6c757d; }
-    .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
+  <style>
+  body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
+  header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
+  th { background-color: #f1f3f5; }
+  .rank-up { color: #dc3545; font-weight: bold; }
+  .rank-down { color: #0d6efd; font-weight: bold; }
+  img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
+  .price-jpy { font-size: 0.85rem; color: #6c757d; }
+  .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-    /* 仕様テーブルの軽量レイアウト */
-    .spec-content thead th { 
+  /* 仕様テーブルの軽量レイアウト */
+  .spec-content thead th { 
+    position: sticky;
+    top: 0;
+    z-index: 30; /* 最上層 */
+    background: #fff;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+    border-bottom: 1px solid #dee2e6; /* 下線を明示 */
+  }
+  .sec-row th { background: #f8f9fa; }
+  .item-col { background: #fcfcfc; min-width: 180px; }
+  .spec-content table td, .spec-content table th { vertical-align: middle; }
+
+  /* ✅ PC用左メニュー固定 */
+  @media (min-width: 992px) {
+    .spec-table-container {
+      display: flex;
+      align-items: flex-start;
+      max-height: 80vh;
+    }
+    .spec-sidebar {
       position: sticky;
       top: 0;
-      z-index: 30; /* 最上層 */
+      flex: 0 0 180px;
+      height: 80vh;
+      overflow-y: auto;
       background: #fff;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-      border-bottom: 1px solid #dee2e6; /* 下線を明示 */
+      border-right: 1px solid #dee2e6;
+      padding: 8px;
     }
-    .sec-row th { background: #f8f9fa; }
-    .item-col { background: #fcfcfc; min-width: 180px; }
-    .spec-content table td, .spec-content table th { vertical-align: middle; }
-
-    /* ✅ PC用左メニュー固定 */
-    @media (min-width: 992px) {
-      .spec-table-container {
-        display: flex;
-        align-items: flex-start;
-        max-height: 80vh;
-      }
-      .spec-sidebar {
-        position: sticky;
-        top: 0;
-        flex: 0 0 180px;
-        height: 80vh;
-        overflow-y: auto;
-        background: #fff;
-        border-right: 1px solid #dee2e6;
-        padding: 8px;
-      }
-      .spec-content {
-        flex: 1;
-        overflow-y: auto;
-        overflow-x: auto;
-        max-height: 80vh;
-        padding: 8px;
-        position: relative;
-      }
-      /* ✅ sticky有効化のため中間overflowを無効化 */
-      .spec-content .table-responsive {
-        overflow: visible !important;
-      }
+    .spec-content {
+      flex: 1;
+      overflow-x: auto !important; /* 横スクロール常時表示 */
+      overflow-y: auto !important;
+      max-height: 80vh;
+      padding: 8px;
+      position: relative;
+      background: #fff; /* はみ出し防止 */
     }
-
-    /* ✅ スマホ用トグル固定 */
-    @media (max-width: 991px) {
-      .section-toggle {
-        position: fixed;
-        top: 60px;
-        left: 0;
-        width: 100%;
-        background: #fff;
-        z-index: 1056;
-        padding: 8px;
-        border-bottom: 1px solid #dee2e6;
-      }
-      .section-toggle select {
-        width: 100%;
-        max-width: 300px;
-        margin: 0 auto;
-        display: block;
-      }
+    /* ✅ sticky有効化のため中間overflowを無効化 */
+    .spec-content .table-responsive {
+      overflow: visible !important;
     }
+  }
 
-    /* ✅ 横スクロール時の固定強化 + セクション行追従 */
-    @media (min-width: 992px) {
-      .spec-table {
-        position: relative;
-        border-collapse: separate;
-        border-spacing: 0;
-      }
-      .spec-table thead th.sticky-col {
-        position: sticky;
-        left: 0;
-        z-index: 31; /* 最上層 */
-        background: #fff;
-      }
-      .spec-table tbody th.item-col {
-        position: sticky;
-        left: 0;
-        z-index: 12;
-        background: #fff;
-        border-right: 1px solid #dee2e6;
-      }
-      /* ✅ セクション行をヘッダー直下に */
-      .spec-table tbody tr.sec-row th {
-        position: sticky;
-        left: 0;
-        top: 42px; /* thead高さに一致 */
-        z-index: 20;
-        background: #f8f9fa;
-        box-shadow: 0 2px 3px rgba(0,0,0,0.05);
-        border-bottom: 1px solid #dee2e6;
-      }
+  /* ✅ スマホ用トグル固定 */
+  @media (max-width: 991px) {
+    .section-toggle {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      z-index: 1056;
+      padding: 8px;
+      border-bottom: 1px solid #dee2e6;
     }
+    .section-toggle select {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      display: block;
+    }
+  }
 
-    /* ✅ stickyズレ・はみ出し防止 */
-    .spec-table thead th,
-    .spec-table tbody th.item-col,
+  /* ✅ 横スクロール時の固定強化 + セクション行追従 */
+  @media (min-width: 992px) {
+    .spec-table {
+      position: relative;
+      border-collapse: separate;
+      border-spacing: 0;
+    }
+    .spec-table thead th.sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 60;
+      background: #fff;
+    }
+    .spec-table tbody th.item-col {
+      position: sticky;
+      left: 0;
+      z-index: 55;
+      background: #fff;
+      border-right: 1px solid #dee2e6;
+    }
+    /* ✅ セクション行をヘッダー直下に */
     .spec-table tbody tr.sec-row th {
-      background-clip: padding-box;
-      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+      position: sticky;
+      left: 0;
+      top: 42px; /* thead高さに一致 */
+      z-index: 52;
+      background: #f8f9fa;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #dee2e6;
     }
-  </style>
+  }
+
+  /* ✅ stickyズレ・はみ出し防止 */
+  .spec-table thead th,
+  .spec-table tbody th.item-col,
+  .spec-table tbody tr.sec-row th {
+    background: #fff !important;
+    background-clip: padding-box;
+    box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+  }
+</style>
 
 
 </head>

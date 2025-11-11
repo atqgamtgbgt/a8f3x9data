@@ -141,6 +141,31 @@
     width: 180px; /* 左固定列幅に合わせる */
     height: 100%;
   }
+  /* === 白マスク（上・左を覆う実体ブロック） === */
+.spec-mask-top,
+.spec-mask-left {
+  position: sticky;
+  background: #fff;
+  pointer-events: none;
+  z-index: 100; /* sticky要素の上に確実に重なる */
+}
+
+.spec-mask-top {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42px; /* ← thead高さに合わせて調整 */
+  border-bottom: 1px solid #dee2e6;
+}
+
+.spec-mask-left {
+  top: 0;
+  left: 0;
+  width: 180px; /* ← 左列幅に合わせて調整 */
+  height: 100%;
+  border-right: 1px solid #dee2e6;
+}
+
 </style>
 
 </head>
@@ -360,6 +385,13 @@
               </div>
             </div>`;
           target.innerHTML=tableHtml;
+// 白マスク要素を挿入（透け防止）
+const specArea = document.getElementById("specScrollArea");
+if (specArea) {
+  specArea.insertAdjacentHTML("beforeend",
+    `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
+  );
+}
 
           // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
           const headerTh = document.querySelector(".spec-content thead th");

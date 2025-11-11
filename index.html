@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-bs-theme="auto">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -16,6 +16,93 @@
     img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
     .price-jpy { font-size: 0.85rem; color: #6c757d; }
     .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
+
+    /* 仕様テーブルの軽量レイアウト */
+    .spec-content thead th { 
+      position: sticky; 
+      top: 0; 
+      z-index: 10; 
+      background: #fff; 
+    } /* ✅ 追加: モデル名ヘッダーを縦スクロール固定 */
+    .sec-row th { background: #f8f9fa; }
+    .item-col { background: #fcfcfc; min-width: 180px; }
+    .spec-content table td, .spec-content table th { vertical-align: middle; }
+
+    /* ✅ PC用左メニュー固定 */
+    @media (min-width: 992px) {
+ .spec-table-container {
+    display: flex;
+    align-items: flex-start;
+    max-height: 80vh;
+  }
+
+  .spec-sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0 0 180px;
+    height: 80vh;
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    padding: 8px;
+  }
+
+  .spec-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+    max-height: 80vh;
+    padding: 8px;
+    position: relative;
+  }
+    }
+
+    /* ✅ スマホ用トグル固定（変更なし） */
+    @media (max-width: 991px) {
+      .section-toggle {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        z-index: 1056;
+        padding: 8px;
+        border-bottom: 1px solid #dee2e6;
+      }
+      .section-toggle select {
+        width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
+        display: block;
+      }
+    }
+
+    /* ✅ 追加: ヘッダー行・セクション見出し横固定 */
+    @media (min-width: 992px) {
+      .spec-table {
+        position: relative;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      .spec-table thead th.sticky-col {
+        position: sticky;
+        left: 0;
+        z-index: 11;
+        background: #fff;
+      }
+      .spec-table tbody th.item-col {
+        position: sticky;
+        left: 0;
+        z-index: 5;
+        background: #fff;
+      }
+      .spec-table tbody tr.sec-row th {
+        position: sticky;
+        left: 0;
+        z-index: 12;
+        background: #f8f9fa;
+      } /* ✅ 追加: セクション見出しを横スクロールで固定 */
+    }
   </style>
 </head>
 <body>
@@ -43,7 +130,7 @@
     </div>
   </div>
 
-  <!-- モーダル -->
+  <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -58,6 +145,7 @@
     </div>
   </div>
 
+  <!-- モーダル: 口コミ -->
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -73,10 +161,10 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
   <script>
-    const CSV_PATH = "/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now();
-    const IMG_BASE = "/output/pipeline/autohome-ranking-images/autohome_images/";
+    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
+    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
     let cnyToJpy = 20;
 
     async function fetchRate() {
@@ -89,34 +177,34 @@
 
     function convertToJPY(priceStr) {
       if (!priceStr) return "";
-      const match = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!match) return "";
-      const low = parseFloat(match[1]) * cnyToJpy * 10000;
-      const high = parseFloat(match[2]) * cnyToJpy * 10000;
+      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+      if (!m) return "";
+      const low = parseFloat(m[1]) * cnyToJpy * 10000;
+      const high = parseFloat(m[2]) * cnyToJpy * 10000;
       const fmt = (x) => (x / 10000).toFixed(1);
       return `（約${fmt(low)}〜${fmt(high)}万円）`;
     }
 
     function imgTag(rankStr, model, imageUrl) {
-      let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? "/output/pipeline/autohome-ranking-images" + imageUrl
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png`);
+      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
+        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
       return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
 
     async function main() {
       await fetchRate();
-      Papa.parse(CSV_PATH, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (res) => {
-          if (!res.meta.fields?.includes("rank")) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
-          renderTable(res.data.filter(r => r && r.rank));
-          ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
-        },
-        error: (err) => fail("CSV 読み込みエラー: " + err.message)
-      });
+      try {
+        const res = await fetch(CSV_PATH, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.statusText);
+        const text = await res.text();
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+        if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+        renderTable(parsed.data);
+        ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
+      } catch (err) {
+        fail("CSV 読み込みエラー: " + err.message);
+      }
     }
 
     function renderTable(data) {
@@ -133,10 +221,8 @@
         const priceJPY = convertToJPY(r.price || "");
         const maker = r.manufacturer_ja || r.manufacturer || "";
         const units = r.units || "";
-
-        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}');">仕様</button>` : "";
-        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}');">口コミ</button>` : "";
-
+        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
+        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
         const tr = document.createElement("tr");
         tr.innerHTML = `
           <td>${r.rank}</td>
@@ -154,33 +240,6 @@
 
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
-    function showConfigCsv(carId, title){
-      const path=`/output/autohome/${carId}/config_${carId}.ja.csv`;
-      const target=document.getElementById("csvContent");
-      document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
-      target.innerHTML="読込中...";
-      Papa.parse(path,{download:true,header:true,complete:(res)=>{
-        if(!res.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
-        let html="<table class='table table-bordered table-sm'><thead><tr>";
-        res.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
-        res.data.forEach(row=>{html+="<tr>";res.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
-        target.innerHTML=html+"</tbody></table>";
-      },error:(err)=>target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`});
-      new bootstrap.Modal(document.getElementById("csvModal")).show();
-    }
-
-    function showStory(carId, title){
-      const path=`/output/koubei/${carId}/story.txt`;
-      const target=document.getElementById("storyContent");
-      document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-      target.textContent="読込中...";
-      fetch(path).then(res=>res.ok?res.text():Promise.reject("Not Found"))
-      .then(text=>target.textContent=text)
-      .catch(()=>target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>");
-      new bootstrap.Modal(document.getElementById("storyModal")).show();
-    }
-
     main();
   </script>
 </body>

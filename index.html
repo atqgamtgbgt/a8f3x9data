@@ -23,7 +23,7 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: auto; /* 横スクロールは親で */
+      overflow-x: auto;
       background: #fff;
     }
 
@@ -40,13 +40,13 @@
 
     .spec-content {
       flex: 1;
-      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
+      overflow-y: auto !important;
       overflow-x: visible !important;
       height: 80vh;
       padding: 8px;
       position: relative;
       background: #fff;
-      background-clip: padding-box; /* padding部も白く塗る */
+      background-clip: padding-box;
     }
 
     .spec-content .table-responsive { overflow: visible !important; }
@@ -82,15 +82,24 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
+    /* ✅ セクション見出し修正版（divラップで固定） */
     .spec-table tbody tr.sec-row th {
+      position: static;   /* ← stickyをセルではなく中のdivに移す */
+      padding: 0;
+    }
+
+    .spec-table tbody tr.sec-row th .sec-wrap {
       position: sticky;
       top: var(--secOffset, 42px);
-      /* left: 0; ←削除！これが横スクロールの原因 */
+      left: 0;
       z-index: 40;
+      display: block;
+      padding: 4px 8px;
       background: #f8f9fa;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      background-clip: padding-box;
+      white-space: nowrap;
     }
 
     /* ✅ 背景透け防止マスク */
@@ -117,10 +126,9 @@
       pointer-events: none;
     }
 
-    /* ✅ stickyズレ防止 */
     .spec-table thead th,
     .spec-table tbody th.item-col,
-    .spec-table tbody tr.sec-row th {
+    .spec-table tbody tr.sec-row th .sec-wrap {
       background-clip: padding-box;
       box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
     }
@@ -151,8 +159,6 @@
     background: #fff !important;
   }
 </style>
-
-
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -178,8 +184,7 @@
       </table>
     </div>
   </div>
-
-  <!-- モーダル: 仕様 -->
+    <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -286,10 +291,10 @@
         tbody.appendChild(tr);
       });
     }
+
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
-    function showConfigCsv(carId, title) {
+        function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
@@ -326,7 +331,8 @@
             const item = (r[itemIdx] || "").trim();
             if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
             const cols = r.slice(modelStart);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
+            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+              grouped.push({ section: currentSection, rows: [] });
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
@@ -349,7 +355,8 @@
           let tbody="<tbody>";
           for(const g of grouped){
             const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-            tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            // ✅ ラッパーdivを追加して sticky を内部に適用
+            tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}"><div class="sec-wrap">▼ ${g.section}</div></th></tr>`;
             for(const row of g.rows){
               const item=row[0]||"";
               const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
@@ -371,23 +378,14 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ★追加: thead高さをCSS変数に反映して縦位置をヘッダー直下に合わせる
+          // ★ thead高さをCSS変数に反映（縦位置をヘッダー直下に）
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
           if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
           const headerHeight = theadH;
-          // ★ここまで追加
 
-          // 白マスク要素を挿入（透け防止）
-          const specArea = document.getElementById("specScrollArea");
-          if (specArea) {
-            specArea.insertAdjacentHTML("beforeend",
-              `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
-            );
-          }
-
-          // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
+          // ✅ 左メニュークリックでヘッダー直下にスクロール
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
@@ -400,7 +398,6 @@
             });
           });
 
-          // ✅ 改良2: セレクトからも同様にヘッダー直下へ
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{

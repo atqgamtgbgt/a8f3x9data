@@ -72,6 +72,33 @@
         display: block;
       }
     }
+
+    /* ✅ 追加: ヘッダー行と先頭可視列を固定 */
+    @media (min-width: 992px) {
+      .spec-table {
+        position: relative;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      .spec-content thead th {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        background: #fff;
+      }
+      .spec-table thead th.sticky-col {
+        position: sticky;
+        left: 0;
+        z-index: 4;
+        background: #fff;
+      }
+      .spec-table tbody th.item-col {
+        position: sticky;
+        left: 0;
+        z-index: 3;
+        background: #fff;
+      }
+    }
   </style>
 </head>
 <body>
@@ -269,7 +296,7 @@
               <select id="sectionSelect">${options}</select>
             </div>`;
 
-          const thead = `<thead><tr><th style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+          const thead = `<thead><tr><th class="item-col sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody="<tbody>";
           for(const g of grouped){
             const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;

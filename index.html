@@ -82,17 +82,16 @@
       border-right: 1px solid #dee2e6;
     }
 
-/* ✅ セクション見出し固定（縦＋横） */
-.spec-table tbody tr.sec-row th {
-  position: sticky;
-  top: 42px;
-  left: 0;
-  z-index: 40; /* ← 左列より上に来るように調整 */
-  background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6, 0 2px 3px rgba(0,0,0,0.05);
-}
-
+    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
+    .spec-table tbody tr.sec-row th {
+      position: sticky;
+      top: var(--secOffset, 42px); /* ← 実測高さに同期 */
+      left: 0;
+      z-index: 40; /* item-colより上 */
+      background: #f8f9fa;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #dee2e6;
+    }
 
     /* ✅ 背景透け防止マスク */
     .spec-content::before {
@@ -101,7 +100,7 @@
       top: 0;
       left: 0;
       width: 100%;
-      height: calc(42px + 0.5rem); /* thead高さ + padding */
+      height: var(--secOffset, 42px);
       background: #fff;
       z-index: 25;
       pointer-events: none;
@@ -111,7 +110,7 @@
       position: sticky;
       top: 0;
       left: 0;
-      width: calc(180px + 0.5rem); /* 左固定列 + padding */
+      width: calc(180px + 0.5rem);
       height: 100%;
       background: #fff;
       z-index: 24;
@@ -148,15 +147,12 @@
   }
 
 .spec-content.p-2 {
-  padding: 0 !important;        /* ← Bootstrapの.p-2を完全無効化 */
-  background: #fff !important;  /* ← 透け防止 */
+  padding: 0 !important;
+  background: #fff !important;
 }
 
 }
-
 </style>
-
-
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -374,17 +370,24 @@
               </div>
             </div>`;
           target.innerHTML=tableHtml;
-// 白マスク要素を挿入（透け防止）
-const specArea = document.getElementById("specScrollArea");
-if (specArea) {
-  specArea.insertAdjacentHTML("beforeend",
-    `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
-  );
-}
+
+          // ★追加: thead高さをCSS変数に反映して縦位置をヘッダー直下に合わせる
+          const scrollArea = document.getElementById("specScrollArea");
+          const theadEl = scrollArea?.querySelector(".spec-table thead");
+          const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+          const headerHeight = theadH;
+          // ★ここまで追加
+
+          // 白マスク要素を挿入（透け防止）
+          const specArea = document.getElementById("specScrollArea");
+          if (specArea) {
+            specArea.insertAdjacentHTML("beforeend",
+              `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
+            );
+          }
 
           // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
-          const headerTh = document.querySelector(".spec-content thead th");
-          const headerHeight = headerTh ? headerTh.offsetHeight : 38;
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();

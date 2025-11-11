@@ -10,7 +10,7 @@
 <style>
   body {
     background-color: #f8f9fa;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
   }
   header {
     background: #0d6efd;
@@ -28,14 +28,10 @@
     height: 60px;
     object-fit: cover;
     border-radius: 6px;
-    background: #eee;
+    background:#eee;
   }
   .price-jpy { font-size: 0.85rem; color: #6c757d; }
-  .btn-spec, .btn-story {
-    font-size: 0.8rem;
-    padding: 2px 6px;
-    margin: 2px;
-  }
+  .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
@@ -43,7 +39,7 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow: visible !important; /* ← 横スクロールを無効化し、stickyの基準を一本化 */
+      overflow-x: auto; /* 横スクロールは親で */
       background: #fff;
     }
 
@@ -56,12 +52,13 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
-      z-index: 50;
+      z-index: 20;
     }
 
     .spec-content {
       flex: 1;
-      overflow: auto !important; /* ← 縦横どちらのスクロールもここで処理 */
+      overflow-y: auto !important;
+      overflow-x: visible !important;
       height: 80vh;
       padding: 8px;
       position: relative;
@@ -69,15 +66,13 @@
       background-clip: padding-box;
     }
 
-    .spec-content .table-responsive {
-      overflow: visible !important;
-    }
+    .spec-content .table-responsive { overflow: visible !important; }
 
     .spec-table {
       position: relative;
       border-collapse: separate;
       border-spacing: 0;
-      width: max-content; /* ← 横幅を必要に応じて拡張 */
+      min-width: 100%;
     }
 
     /* ✅ ヘッダー固定 */
@@ -105,15 +100,16 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（縦横両固定） */
+    /* ✅ セクション見出し固定（縦＆横両方向固定） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
       top: var(--secOffset, 42px);
-      left: 0;
-      z-index: 40;
+      left: 0;                     /* ← 横スクロール時も固定 */
+      z-index: 40;                 /* ← 他より上 */
       background: #f8f9fa;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
+      white-space: nowrap;
     }
 
     /* ✅ 背景透け防止マスク */
@@ -140,19 +136,12 @@
       pointer-events: none;
     }
 
-    /* ✅ stickyズレ防止（罫線＆背景補正） */
+    /* ✅ stickyズレ防止 */
     .spec-table thead th,
     .spec-table tbody th.item-col,
     .spec-table tbody tr.sec-row th {
       background-clip: padding-box;
       box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-    }
-
-    /* ✅ 最終保険: overflowを強制上書き */
-    .spec-table-container,
-    .spec-content,
-    .spec-content .table-responsive {
-      overflow: visible !important;
     }
   }
 

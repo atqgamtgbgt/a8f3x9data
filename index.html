@@ -17,11 +17,13 @@
   .price-jpy { font-size: 0.85rem; color: #6c757d; }
   .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-  /* 仕様テーブルの軽量レイアウト */
+  /* ----------------------------
+     仕様テーブルの軽量レイアウト
+  -----------------------------*/
   .spec-content thead th { 
     position: sticky;
     top: 0;
-    z-index: 40;
+    z-index: 20; /* ←低すぎたのを修正 */
     background: #fff;
     box-shadow: 0 2px 3px rgba(0,0,0,0.08);
     border-bottom: 1px solid #dee2e6;
@@ -30,13 +32,12 @@
   .item-col { background: #fcfcfc; min-width: 180px; }
   .spec-content table td, .spec-content table th { vertical-align: middle; }
 
-  /* PC用左メニュー固定 */
+  /* ✅ PC用左メニュー固定 */
   @media (min-width: 992px) {
     .spec-table-container {
       display: flex;
       align-items: flex-start;
       max-height: 80vh;
-      position: relative;
     }
     .spec-sidebar {
       position: sticky;
@@ -47,27 +48,23 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
-      z-index: 50;
+      z-index: 30; /* ←これを追加 */
     }
     .spec-content {
       flex: 1;
-      overflow-x: auto;
+      overflow-x: auto;  /* ← visible禁止、autoに戻す */
       overflow-y: auto;
       max-height: 80vh;
       padding: 8px;
       position: relative;
-      background: #fff;
+      background: #fff; /* 背景固定で透け防止 */
     }
     .spec-content .table-responsive {
-      overflow: visible !important;
-    }
-    /* 横スクロールを常に出す */
-    .spec-content::-webkit-scrollbar {
-      height: 10px;
+      overflow: auto !important; /* ← visibleをやめてauto */
     }
   }
 
-  /* スマホ用トグル固定 */
+  /* ✅ スマホ用トグル固定 */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -87,69 +84,47 @@
     }
   }
 
-  /* 横スクロール時の固定強化 + セクション行追従 */
+  /* ✅ sticky構造（元ベースそのまま、z-index再調整） */
   @media (min-width: 992px) {
     .spec-table {
       position: relative;
       border-collapse: separate;
       border-spacing: 0;
-      min-width: max-content; /* ← 横スクロール強制 */
+      min-width: max-content; /* ← 横スクロールを確実に出す */
     }
     .spec-table thead th.sticky-col {
       position: sticky;
       left: 0;
-      z-index: 60;
+      z-index: 40;
       background: #fff;
     }
     .spec-table tbody th.item-col {
       position: sticky;
       left: 0;
-      z-index: 55;
+      z-index: 35;
       background: #fff;
       border-right: 1px solid #dee2e6;
     }
     .spec-table tbody tr.sec-row th {
       position: sticky;
       left: 0;
-      top: 42px;
-      z-index: 52;
+      top: 42px; /* ヘッダー高さ */
+      z-index: 25;
       background: #f8f9fa;
       border-bottom: 1px solid #dee2e6;
     }
   }
 
-  /* 固定セルの透け防止 */
+  /* ✅ はみ出し防止と白背景の強制 */
   .spec-table thead th,
   .spec-table tbody th.item-col,
   .spec-table tbody tr.sec-row th {
-    background-clip: padding-box;
-    box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-  }
-
-  /* ✅ 上・左マスク要素 */
-  .spec-mask-top,
-  .spec-mask-left {
-    position: sticky;
     background: #fff;
-    z-index: 70;
-    pointer-events: none;
+    background-clip: padding-box;
   }
-  .spec-mask-top {
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 42px; /* ヘッダー高さ */
-    border-bottom: 1px solid #dee2e6;
-  }
-  .spec-mask-left {
-    top: 0;
-    left: 0;
-    width: 180px; /* 左列幅 */
-    height: 100%;
-    border-right: 1px solid #dee2e6;
-  }
-</style>
+  .spec-table tbody tr.sec-row th { background:#f8f9fa; }
 
+</style>
 
 </head>
 <body>

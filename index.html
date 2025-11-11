@@ -23,7 +23,7 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: visible; /* ← 横スクロールは内部で処理するためvisibleに */
+      overflow-x: auto; /* ✅ 横スクロールはここで発生 */
       background: #fff;
     }
 
@@ -38,22 +38,14 @@
       padding: 8px;
     }
 
-    /* ✅ overflow調整：横スクロールをtable-responsive側に集約 */
     .spec-content {
       flex: 1;
-      overflow-x: hidden !important; /* 横は子要素に任せる */
-      overflow-y: auto !important;
+      overflow-y: auto;     /* ✅ 縦スクロール */
+      overflow-x: visible;  /* ✅ 横は親へ任せる */
       height: 80vh;
-      padding: 8px;
       position: relative;
       background: #fff;
       background-clip: padding-box;
-    }
-
-    /* ✅ 横スクロールのコンテナをtable-responsiveに変更 */
-    .spec-content .table-responsive {
-      position: relative;
-      overflow: auto !important; /* 横スクロールの基準をここに */
     }
 
     .spec-table {
@@ -92,7 +84,7 @@
       position: sticky;
       top: var(--secOffset, 42px);
       left: 0;
-      z-index: 50; /* 左列より上に重ねる */
+      z-index: 50;
       background: #f8f9fa;
       border-bottom: 1px solid #dee2e6;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05), inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
@@ -363,10 +355,10 @@
           tbody+="</tbody>";
 
           const tableHtml=`
-            <div class="spec-table-container d-flex">
+            <!-- ✅ 横スクロール親 -->
+            <div class="spec-table-container d-flex overflow-auto">
               ${navHtml}
-              <!-- ★ overflow-auto → overflow-visible に変更 -->
-              <div class="spec-content p-2 flex-grow-1 overflow-visible" id="specScrollArea">
+              <div class="spec-content p-2 flex-grow-1" id="specScrollArea">
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}${tbody}
@@ -376,43 +368,32 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ★追加: ヘッダー高さをCSS変数に反映
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
           if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-          const headerHeight = theadH;
-          // ★ここまで追加
 
-          // 白マスク要素を挿入（透け防止）
-          const specArea = document.getElementById("specScrollArea");
-          if (specArea) {
-            specArea.insertAdjacentHTML("beforeend",
-              `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
-            );
-          }
-
-          // ✅ 左メニュークリック時の位置調整
+          // 左メニュークリック
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
               const id=a.getAttribute("href");
               const el=document.querySelector(id);
               if(el){
-                const offset = el.offsetTop - headerHeight;
+                const offset = el.offsetTop - theadH;
                 document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           });
 
-          // ✅ セレクトからも同様
+          // セクションセレクト
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{
               const id=e.target.value;
               const el=document.querySelector(id);
               if(el){
-                const offset = el.offsetTop - headerHeight;
+                const offset = el.offsetTop - theadH;
                 document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
               }
             });

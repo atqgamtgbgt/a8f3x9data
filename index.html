@@ -151,6 +151,27 @@
       pointer-events: none;
     }
   }
+
+
+  /* === モバイル（トグル固定） === */
+  @media (max-width: 991px) {
+    .section-toggle {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      width: 100%;
+      background: #fff;
+      z-index: 1056;
+      padding: 8px;
+      border-bottom: 1px solid #dee2e6;
+    }
+    .section-toggle select {
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto;
+      display: block;
+    }
+  }
 /* === モバイル: トグルを中央・適正幅に修正 === */
 @media (max-width: 991px) {
   #csvModal .section-toggle {
@@ -174,40 +195,6 @@
   }
 }
 
-  /* === モバイル（トグル固定） === */
-  @media (max-width: 991px) {
-    .section-toggle {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      z-index: 1056;
-      padding: 8px;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .section-toggle select {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: block;
-    }
-  }
-/* === モバイル: トグル位置をヘッダー直下に固定 === */
-@media (max-width: 991px) {
-  #csvModal .section-toggle {
-    position: sticky !important;
-    top: 0 !important; /* モーダルヘッダー直下に固定 */
-    z-index: 1056;
-    background: #fff;
-    border-bottom: 1px solid #dee2e6;
-    padding: 8px;
-    margin-bottom: 0;
-  }
-  #csvModal .modal-body {
-    padding-top: 0 !important; /* 余白を減らす */
-  }
-}
 
   .spec-content.p-2 {
     padding: 0 !important;

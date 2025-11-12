@@ -422,9 +422,7 @@
 
         // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
         const scrollArea =
-          document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
-            ? document.querySelector("#specScrollArea .table-responsive")
-            : document.getElementById("specScrollArea"); // ←★スマホ用フォールバック強化
+          document.getElementById("specScrollArea");
         const theadEl = scrollArea?.querySelector(".spec-table thead");
         const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
         if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");

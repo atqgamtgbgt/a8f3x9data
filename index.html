@@ -464,6 +464,31 @@
     }
 
     main();
+    /* === セクション行の横スクロール補正 === */
+function enableSectionRowStickyFix(modalRoot) {
+  const scrollArea = modalRoot.querySelector(".spec-content .table-responsive");
+  if (!scrollArea) return;
+
+  scrollArea.addEventListener("scroll", () => {
+    const scrollX = scrollArea.scrollLeft;
+    // 横スクロール量に応じて全セクション行を補正
+    scrollArea.querySelectorAll(".spec-table tbody tr.sec-row th").forEach(th => {
+      th.style.transform = `translateX(${scrollX}px)`;
+    });
+  });
+}
+
+/* === 既存 showConfigCsv の完了後に呼び出すようにフック === */
+const originalShowConfigCsv = window.showConfigCsv;
+window.showConfigCsv = async function(carId, title) {
+  await originalShowConfigCsv(carId, title);
+
+  // モーダル生成後にDOM安定を少し待ってから適用
+  setTimeout(() => {
+    const modalRoot = document.querySelector("#csvModal");
+    if (modalRoot) enableSectionRowStickyFix(modalRoot);
+  }, 400);
+};
   </script>
 </body>
 </html>

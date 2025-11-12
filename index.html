@@ -81,16 +81,22 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
     }
-
-    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
+   /* セクション行全体をブロック化 */
+    .spec-table tbody tr.sec-row {
+      display: block;
+      width: 100%;
+    }
+   /* ✅ セクション見出し固定(ヘッダー直下に正確固定 + 左固定) */
     .spec-table tbody tr.sec-row th {
       position: sticky;
       top: var(--secOffset, 42px); /* ← 実測高さに同期 */
-      left: 0;
+      left: 0 !important;
       z-index: 40; /* item-colより上 */
       background: #f8f9fa;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
+      width: 100%; /* colspanでも左端に固定 */
+      display: block; /* tableセルをblockに変更して左固定を強制 */
     }
 
     /* ✅ 背景透け防止マスク */

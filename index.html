@@ -171,6 +171,21 @@
       display: block;
     }
   }
+/* === モバイル: トグル位置をヘッダー直下に固定 === */
+@media (max-width: 991px) {
+  #csvModal .section-toggle {
+    position: sticky !important;
+    top: 0 !important; /* モーダルヘッダー直下に固定 */
+    z-index: 1056;
+    background: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 8px;
+    margin-bottom: 0;
+  }
+  #csvModal .modal-body {
+    padding-top: 0 !important; /* 余白を減らす */
+  }
+}
 
   .spec-content.p-2 {
     padding: 0 !important;

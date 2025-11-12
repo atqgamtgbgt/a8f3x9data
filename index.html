@@ -158,7 +158,13 @@
       display: block;
     }
   }
-/* ✅ セクション行の高さを統一（はみ出し防止） */
+
+  .spec-content.p-2 {
+    padding: 0 !important;
+    background: #fff !important;
+  }
+
+  /* ✅ セクション行の高さを統一（はみ出し防止） */
 .spec-table tbody tr.sec-row {
   height: 2.6em;  /* 行の高さを統一（1.8〜2.8emあたりで調整可） */
 }
@@ -170,10 +176,6 @@
   white-space: nowrap;  /* 折り返しを防止（重要） */
 }
 
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
 </style>
 </head>
 <body>

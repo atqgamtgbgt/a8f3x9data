@@ -84,13 +84,12 @@
 
     /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
     .spec-table tbody tr.sec-row th {
-      position: sticky;
-      top: var(--secOffset, 42px); /* ← 実測高さに同期 */
-      left: 0;
-      z-index: 40; /* item-colより上 */
-      background: #f8f9fa;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
-      border-bottom: 1px solid #dee2e6;
+ position: sticky;
+  top: var(--secOffset, 42px);
+  z-index: 40;
+  background: #f8f9fa;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+  border-bottom: 1px solid #dee2e6;
     }
 
     /* ✅ 背景透け防止マスク */

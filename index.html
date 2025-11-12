@@ -23,7 +23,6 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: auto;
       background: #fff;
     }
 
@@ -32,7 +31,7 @@
       top: 0;
       flex: 0 0 180px;
       height: 80vh;
-      overflow-y: auto;
+      overflow: auto; /* ← 左メニューは独立スクロール */
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
@@ -40,46 +39,108 @@
 
     .spec-content {
       flex: 1;
-      overflow-y: auto !important;
-      overflow-x: auto !important;
       height: 80vh;
       padding: 8px;
       position: relative;
       background: #fff;
       background-clip: padding-box;
+      display: flex;           /* ← 中にスクロール要素を1つだけ置く */
+      flex-direction: column;
     }
 
-    .spec-content .table-responsive { overflow: visible !important; }
+    /* ★ 唯一のスクロール親（overflowはここだけ） */
+    .spec-scroll {
+      overflow: auto;          /* ← 横縦スクロールはこの1箇所のみ */
+      height: 100%;
+      contain: paint;
+    }
 
     .spec-table {
       position: relative;
-      border-collapse: separate;
+      border-collapse: separate;   /* ← sticky(left)の相性を上げる */
       border-spacing: 0;
-      min-width: max-content;
+      width: max-content;          /* ← 列数分だけ横に広がる */
+      background: #fff;
     }
 
-    /* ✅ 背景透け防止マスク */
-    .spec-content::before {
+    /* ✅ ヘッダー固定（縦） */
+    .spec-table thead th {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      background: #fff;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+      border-bottom: 1px solid #dee2e6;
+    }
+
+    /* ✅ 左列固定（縦横） */
+    .spec-table thead th.sticky-col {
+      position: sticky;
+      left: 0;
+      z-index: 40; /* 角セルが最前 */
+      background: #fff;
+    }
+    .spec-table tbody th.item-col {
+      position: sticky;
+      left: 0;
+      z-index: 35;
+      background: #fff;
+      border-right: 1px solid #dee2e6;
+    }
+
+    /* ✅ セクション見出し（ヘッダー直下＆左固定） */
+    .spec-table tbody tr.sec-row th {
+      position: static;   /* ← stickyは内側のdivに適用 */
+      padding: 0;
+      background: transparent;
+      border: none;
+    }
+    .spec-table tbody tr.sec-row th .sec-wrap {
+      position: sticky;
+      top: var(--secOffset, 42px);
+      left: 0;
+      z-index: 38; /* item-colより上・角セルより下 */
+      display: block;
+      padding: 4px 8px;
+      background: #f8f9fa;
+      border-bottom: 1px solid #dee2e6;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      background-clip: padding-box;
+      white-space: nowrap;
+    }
+
+    /* ✅ 背景透け防止マスク（ヘッダー帯／左帯） */
+    .spec-scroll::before {
       content: "";
       position: sticky;
       top: 0;
       left: 0;
+      display: block;
       width: 100%;
       height: var(--secOffset, 42px);
       background: #fff;
       z-index: 25;
       pointer-events: none;
     }
-    .spec-content::after {
+    .spec-scroll::after {
       content: "";
       position: sticky;
       top: 0;
       left: 0;
-      width: calc(180px + 0.5rem);
+      display: block;
+      width: 180px;  /* サイド幅に合わせる */
       height: 100%;
       background: #fff;
       z-index: 24;
       pointer-events: none;
+    }
+
+    /* ✅ 線のにじみ防止 */
+    .spec-table thead th,
+    .spec-table tbody th.item-col,
+    .spec-table tbody tr.sec-row th .sec-wrap {
+      background-clip: padding-box;
+      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
     }
   }
 
@@ -107,40 +168,12 @@
     padding: 0 !important;
     background: #fff !important;
   }
-
-  /* === ✅ 追加: 固定ヘッダー＆固定左列（B案用） === */
-  .fixed-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 50;
-  }
-
-  .fixed-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background: #fff;
-    z-index: 51;
-  }
-
-  .fixed-left {
-    position: absolute;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    background: #fff;
-    z-index: 52;
-    border-right: 1px solid #dee2e6;
-  }
 </style>
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
 
-    <div class="container mt-3">
+  <div class="container mt-3">
     <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
 
     <div class="table-responsive">
@@ -171,7 +204,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
-          <div id="csvContent" class="table-responsive"></div>
+          <div id="csvContent"></div> <!-- ← table-responsive を外す -->
         </div>
       </div>
     </div>
@@ -273,7 +306,7 @@
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-        function showConfigCsv(carId, title) {
+    function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
@@ -334,7 +367,7 @@
           let tbody="<tbody>";
           for(const g of grouped){
             const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-            tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}"><div class="sec-wrap">▼ ${g.section}</div></th></tr>`;
             for(const row of g.rows){
               const item=row[0]||"";
               const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
@@ -343,11 +376,12 @@
           }
           tbody+="</tbody>";
 
+          /* ★ .spec-scroll（唯一のスクロール親）で包む */
           const tableHtml=`
-            <div class="spec-table-container d-flex">
+            <div class="spec-table-container">
               ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
-                <div class="table-responsive">
+              <div class="spec-content p-2" id="specScrollArea">
+                <div class="spec-scroll">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}${tbody}
                   </table>
@@ -356,14 +390,14 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ✅ thead高さをCSS変数に反映（縦位置調整）
+          // thead高さをCSS変数に反映（縦位置をヘッダー直下に）
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
           if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
           const headerHeight = theadH;
 
-          // ✅ メニュークリックで該当セクションへ
+          // 左メニュークリックでヘッダー直下へ
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
@@ -371,10 +405,11 @@
               const el=document.querySelector(id);
               if(el){
                 const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+                document.querySelector(".spec-scroll").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           });
+
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{
@@ -382,46 +417,10 @@
               const el=document.querySelector(id);
               if(el){
                 const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+                document.querySelector(".spec-scroll").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           }
-
-          /* === ✅ ここからB案（複製で固定） === */
-          setTimeout(() => {
-            const scrollArea = document.getElementById("specScrollArea");
-            const table = scrollArea.querySelector("table.spec-table");
-
-            // 既存複製削除
-            scrollArea.querySelectorAll(".fixed-overlay").forEach(e => e.remove());
-
-            // 複製コンテナ作成
-            const overlay = document.createElement("div");
-            overlay.className = "fixed-overlay";
-
-            const headerClone = table.cloneNode(true);
-            const leftClone = table.cloneNode(true);
-            headerClone.className = "table table-bordered table-sm fixed-header";
-            leftClone.className = "table table-bordered table-sm fixed-left";
-
-            // ヘッダー複製：tbody削除
-            headerClone.querySelectorAll("tbody").forEach(tb => tb.remove());
-
-            // 左列複製：最初のthのみ残す
-            leftClone.querySelectorAll("thead th:not(:first-child), tbody td, tbody th:not(:first-child)").forEach(el => el.remove());
-
-            overlay.appendChild(headerClone);
-            overlay.appendChild(leftClone);
-            scrollArea.appendChild(overlay);
-
-            // スクロール連動（transformで固定実現）
-            scrollArea.addEventListener("scroll", () => {
-              const { scrollTop, scrollLeft } = scrollArea;
-              headerClone.style.transform = `translateY(${scrollTop}px)`;
-              leftClone.style.transform = `translateX(${scrollLeft}px)`;
-            });
-          }, 200);
-          /* === ✅ B案ここまで === */
         },
         error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
       });

@@ -394,20 +394,26 @@
 
         target.innerHTML = tableHtml;
 
-        // === 修正版：scrollAreaとheaderHeightを取得 ===
+        // === scrollAreaとheaderHeightを取得 ===
         const scrollArea =
           document.querySelector("#specScrollArea .table-responsive") ||
           document.getElementById("specScrollArea");
         const headerHeight =
           scrollArea?.querySelector(".spec-table thead")?.getBoundingClientRect().height || 0;
 
-        // ✅ トグル選択で正しくスクロール（scrollIntoView → scrollTo）
+        // ✅ PCはscrollIntoView、スマホはscrollToでオフセット補正付き
         const select = document.getElementById("sectionSelect");
         if (select) {
           select.addEventListener("change", (e) => {
             const id = e.target.value;
             const el = document.querySelector(id);
-            if (el && scrollArea) {
+            if (!el) return;
+
+            if (window.innerWidth >= 992) {
+              // PC幅 → 元の動作
+              el.scrollIntoView({ behavior: "smooth", block: "start" });
+            } else {
+              // スマホ幅 → モーダル内でscrollTo
               const offset = el.offsetTop - headerHeight;
               scrollArea.scrollTo({ top: offset, behavior: "smooth" });
             }

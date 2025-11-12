@@ -32,17 +32,17 @@
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
 
-    /* 横＋縦スクロールを統合して扱う */
+    /* ✅ 親コンテナは横スクロールのみ（縦は子に任せる） */
     .spec-table-container {
-      position: relative;
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow: auto !important; /* 横も縦もこの1要素でスクロール管理 */
+      overflow-x: auto;
+      overflow-y: hidden;
       background: #fff;
     }
 
-    /* 左サイドバー */
+    /* ✅ 左サイドバーは個別にsticky管理（top固定） */
     .spec-sidebar {
       position: sticky;
       top: 0;
@@ -52,17 +52,18 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
+      z-index: 50;
     }
 
-    /* テーブルエリア */
+    /* ✅ メインエリアは縦スクロール（sticky基準） */
     .spec-content {
       flex: 1;
       height: 80vh;
-      overflow: visible !important; /* sticky基準を壊さない */
+      overflow-y: auto !important;
+      overflow-x: visible !important;
       padding: 8px;
       position: relative;
       background: #fff;
-      background-clip: padding-box;
     }
 
     .spec-content .table-responsive {
@@ -73,6 +74,7 @@
       position: relative;
       border-collapse: separate;
       border-spacing: 0;
+      width: 100%;
     }
 
     /* ✅ ヘッダー固定 */
@@ -101,15 +103,15 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（ヘッダー直下・横にも固定） */
+    /* ✅ セクション見出し固定（ヘッダー直下） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
       top: var(--secOffset, 42px);
       left: 0;
       z-index: 40;
       background: #f8f9fa;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
     }
 
     /* ✅ 背景透け防止マスク */
@@ -167,12 +169,13 @@
     }
   }
 
-  /* テーブル内部のパディング調整 */
+  /* ✅ テーブル内部パディング調整 */
   .spec-content.p-2 {
     padding: 0 !important;
     background: #fff !important;
   }
 </style>
+
 
 </head>
 <body>

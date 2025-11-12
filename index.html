@@ -663,7 +663,31 @@
     }
     new bootstrap.Modal(document.getElementById("storyModal")).show();
   }
+// === モーダル開閉時のトグル制御 ===
+  const csvModalEl = document.getElementById('csvModal');
+  csvModalEl.addEventListener('shown.bs.modal', () => {
+    const toggle = document.querySelector('.section-toggle');
+    if (toggle) {
+      toggle.style.position = 'fixed';
+      toggle.style.top = '60px';
+      toggle.style.left = '0';
+      toggle.style.width = '100%';
+      toggle.style.zIndex = '2000';
+      toggle.style.background = '#fff';
+      toggle.style.borderBottom = '1px solid #dee2e6';
+    }
+  });
 
+  csvModalEl.addEventListener('hidden.bs.modal', () => {
+    const toggle = document.querySelector('.section-toggle');
+    if (toggle) {
+      toggle.style.position = '';
+      toggle.style.top = '';
+      toggle.style.zIndex = '';
+      toggle.style.background = '';
+      toggle.style.borderBottom = '';
+    }
+  });
   main();
 </script>
 

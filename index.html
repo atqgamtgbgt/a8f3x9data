@@ -156,14 +156,12 @@
   /* === モバイル（トグル固定） === */
   @media (max-width: 991px) {
     .section-toggle {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      z-index: 1056;
-      padding: 8px;
-      border-bottom: 1px solid #dee2e6;
+    position: sticky !important;  /* ← fixedを解除してstickyに */
+    top: 0 !important;
+    z-index: 1060 !important;     /* モーダルの上層に */
+    background: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 8px;
     }
     .section-toggle select {
       width: 100%;

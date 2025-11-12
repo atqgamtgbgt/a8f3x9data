@@ -49,7 +49,7 @@
 
     .spec-content {
       flex: 1;
-      overflow-x: auto !important; /* ← 横スクロールをここに統一 */
+      overflow-x: auto !important;
       overflow-y: auto !important;
       height: 80vh;
       padding: 8px;
@@ -92,10 +92,11 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し行 sticky対応版 */
+    /* ✅ セクション見出し行 sticky対応版（top補正入り） */
     .spec-table tbody tr.sec-row .section-col {
       position: sticky;
       left: 0;
+      top: var(--secOffset, 42px); /* ← ★追加：ヘッダー高さに同期 */
       z-index: 40;
       background: #f8f9fa;
       font-weight: 600;
@@ -129,13 +130,6 @@
       background: #fff;
       z-index: 24;
       pointer-events: none;
-    }
-
-    /* ✅ stickyズレ防止 */
-    .spec-table thead th,
-    .spec-table tbody th.item-col,
-    .spec-table tbody tr.sec-row .section-col {
-      background-clip: padding-box;
     }
   }
 
@@ -375,7 +369,7 @@
               <select id="sectionSelect">${options}</select>
             </div>`;
 
-          // === tbody生成（colspan除去版） ===
+          // === tbody生成（colspan廃止・section-col固定対応） ===
           const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody="<tbody>";
           for(const g of grouped){
@@ -406,14 +400,14 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ★ thead高さをCSS変数に反映（sticky補正）
+          // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
           if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
           const headerHeight = theadH;
 
-          // ✅ 左メニュークリックでヘッダー下へ正確に移動
+          // ✅ 左メニュークリックでヘッダー直下へ正確に移動
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();

@@ -19,6 +19,7 @@
 
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
+
     .spec-table-container {
       display: flex;
       align-items: flex-start;
@@ -31,39 +32,49 @@
       top: 0;
       flex: 0 0 180px;
       height: 80vh;
-      overflow: auto; /* ← 左メニューは独立スクロール */
+      overflow-y: auto;
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
     }
 
+    /* ✅ overflowコンテナを1つに統一 */
     .spec-content {
       flex: 1;
       height: 80vh;
-      padding: 8px;
-      position: relative;
       background: #fff;
-      background-clip: padding-box;
-      display: flex;           /* ← 中にスクロール要素を1つだけ置く */
-      flex-direction: column;
+      overflow: hidden;
+      padding: 0;
+      position: relative;
     }
 
-    /* ★ 唯一のスクロール親（overflowはここだけ） */
+    /* ✅ 実際のスクロール領域 */
     .spec-scroll {
-      overflow: auto;          /* ← 横縦スクロールはこの1箇所のみ */
+      overflow: auto;
       height: 100%;
-      contain: paint;
-    }
-
-    .spec-table {
-      position: relative;
-      border-collapse: separate;   /* ← sticky(left)の相性を上げる */
-      border-spacing: 0;
-      width: max-content;          /* ← 列数分だけ横に広がる */
+      width: 100%;
       background: #fff;
     }
 
-    /* ✅ ヘッダー固定（縦） */
+    /* ✅ table本体をblock表示 */
+    .spec-table {
+      display: block;
+      border-collapse: separate;
+      border-spacing: 0;
+      width: max-content;
+      min-width: 100%;
+      position: relative;
+    }
+
+    .spec-table thead,
+    .spec-table tbody,
+    .spec-table tr {
+      display: table;
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    /* ✅ ヘッダー固定 */
     .spec-table thead th {
       position: sticky;
       top: 0;
@@ -73,33 +84,32 @@
       border-bottom: 1px solid #dee2e6;
     }
 
-    /* ✅ 左列固定（縦横） */
+    /* ✅ 左列固定 */
     .spec-table thead th.sticky-col {
       position: sticky;
       left: 0;
-      z-index: 40; /* 角セルが最前 */
+      z-index: 31;
       background: #fff;
     }
     .spec-table tbody th.item-col {
       position: sticky;
       left: 0;
-      z-index: 35;
+      z-index: 12;
       background: #fff;
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し（ヘッダー直下＆左固定） */
+    /* ✅ セクション見出し修正版（divラップで固定） */
     .spec-table tbody tr.sec-row th {
-      position: static;   /* ← stickyは内側のdivに適用 */
+      position: static;
       padding: 0;
-      background: transparent;
-      border: none;
     }
+
     .spec-table tbody tr.sec-row th .sec-wrap {
       position: sticky;
       top: var(--secOffset, 42px);
       left: 0;
-      z-index: 38; /* item-colより上・角セルより下 */
+      z-index: 40;
       display: block;
       padding: 4px 8px;
       background: #f8f9fa;
@@ -109,17 +119,16 @@
       white-space: nowrap;
     }
 
-    /* ✅ 背景透け防止マスク（ヘッダー帯／左帯） */
+    /* ✅ 背景透け防止マスク（z-indexを下げる） */
     .spec-scroll::before {
       content: "";
       position: sticky;
       top: 0;
       left: 0;
-      display: block;
       width: 100%;
       height: var(--secOffset, 42px);
       background: #fff;
-      z-index: 25;
+      z-index: 5;
       pointer-events: none;
     }
     .spec-scroll::after {
@@ -127,20 +136,11 @@
       position: sticky;
       top: 0;
       left: 0;
-      display: block;
-      width: 180px;  /* サイド幅に合わせる */
+      width: 180px;
       height: 100%;
       background: #fff;
-      z-index: 24;
+      z-index: 4;
       pointer-events: none;
-    }
-
-    /* ✅ 線のにじみ防止 */
-    .spec-table thead th,
-    .spec-table tbody th.item-col,
-    .spec-table tbody tr.sec-row th .sec-wrap {
-      background-clip: padding-box;
-      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
     }
   }
 
@@ -204,7 +204,7 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
-          <div id="csvContent"></div> <!-- ← table-responsive を外す -->
+          <div id="csvContent" class="table-responsive"></div>
         </div>
       </div>
     </div>
@@ -376,11 +376,10 @@
           }
           tbody+="</tbody>";
 
-          /* ★ .spec-scroll（唯一のスクロール親）で包む */
           const tableHtml=`
-            <div class="spec-table-container">
+            <div class="spec-table-container d-flex">
               ${navHtml}
-              <div class="spec-content p-2" id="specScrollArea">
+              <div class="spec-content p-2 flex-grow-1" id="specScrollArea">
                 <div class="spec-scroll">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}${tbody}
@@ -390,14 +389,15 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // thead高さをCSS変数に反映（縦位置をヘッダー直下に）
+          // ✅ ヘッダー高さ→CSS変数（.spec-scroll にセット）
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+          const scrollEl = scrollArea?.querySelector(".spec-scroll");
+          if (scrollEl) scrollEl.style.setProperty("--secOffset", theadH + "px");
           const headerHeight = theadH;
 
-          // 左メニュークリックでヘッダー直下へ
+          // ✅ 左メニュークリック
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();

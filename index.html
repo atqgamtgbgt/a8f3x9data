@@ -8,20 +8,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  }
-
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-
+  body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
+  header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
   th { background-color: #f1f3f5; }
   .rank-up { color: #dc3545; font-weight: bold; }
   .rank-down { color: #0d6efd; font-weight: bold; }
@@ -31,17 +19,14 @@
 
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
-
-    /* ✅ 親コンテナはoverflowを殺し、基準を一致させる */
     .spec-table-container {
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow: hidden; /* ← 横も縦もここでは発生させない */
+      overflow-x: auto; /* 横スクロールは親で */
       background: #fff;
     }
 
-    /* ✅ 左メニューはstickyのまま維持 */
     .spec-sidebar {
       position: sticky;
       top: 0;
@@ -51,31 +36,25 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
-      z-index: 50;
     }
 
-    /* ✅ メインエリアはoverflowをvisibleにし、sticky基準を壊さない */
     .spec-content {
       flex: 1;
+      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
+      overflow-x: visible !important;
       height: 80vh;
-      overflow: hidden; /* ← ここでもscrollを発生させない */
       padding: 8px;
-      background: #fff;
       position: relative;
+      background: #fff;
+      background-clip: padding-box; /* padding部も白く塗る */
     }
 
-    /* ✅ スクロールはここで一括管理（縦＋横） */
-    .spec-content .table-responsive {
-      position: relative;
-      height: 100%;
-      overflow: auto !important; /* ← 唯一のスクロール要素 */
-    }
+    .spec-content .table-responsive { overflow: visible !important; }
 
     .spec-table {
+      position: relative;
       border-collapse: separate;
       border-spacing: 0;
-      width: 100%;
-      position: relative;
     }
 
     /* ✅ ヘッダー固定 */
@@ -95,7 +74,6 @@
       z-index: 31;
       background: #fff;
     }
-
     .spec-table tbody th.item-col {
       position: sticky;
       left: 0;
@@ -104,18 +82,18 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（ヘッダー直下＋横にも固定） */
+    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
+      top: var(--secOffset, 42px); /* ← 実測高さに同期 */
       left: 0;
-      top: var(--secOffset, 42px);
-      z-index: 40;
+      z-index: 40; /* item-colより上 */
       background: #f8f9fa;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
     }
 
-    /* ✅ 背景透け防止 */
+    /* ✅ 背景透け防止マスク */
     .spec-content::before {
       content: "";
       position: sticky;
@@ -127,7 +105,6 @@
       z-index: 25;
       pointer-events: none;
     }
-
     .spec-content::after {
       content: "";
       position: sticky;
@@ -149,7 +126,7 @@
     }
   }
 
-  /* === モバイル === */
+  /* === モバイル（トグル固定） === */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -161,7 +138,6 @@
       padding: 8px;
       border-bottom: 1px solid #dee2e6;
     }
-
     .section-toggle select {
       width: 100%;
       max-width: 300px;
@@ -170,13 +146,13 @@
     }
   }
 
-  /* ✅ テーブル内部の余白調整 */
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
-</style>
+.spec-content.p-2 {
+  padding: 0 !important;
+  background: #fff !important;
+}
 
+}
+</style>
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -234,270 +210,236 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-let cnyToJpy = 20;
+  <script>
+    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
+    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+    let cnyToJpy = 20;
 
-async function fetchRate() {
-  try {
-    const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-    const data = await res.json();
-    if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-  } catch { cnyToJpy = 20; }
-}
+    async function fetchRate() {
+      try {
+        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+        const data = await res.json();
+        if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
+      } catch { cnyToJpy = 20; }
+    }
 
-function convertToJPY(priceStr) {
-  if (!priceStr) return "";
-  const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-  if (!m) return "";
-  const low = parseFloat(m[1]) * cnyToJpy * 10000;
-  const high = parseFloat(m[2]) * cnyToJpy * 10000;
-  const fmt = (x) => (x / 10000).toFixed(1);
-  return `（約${fmt(low)}〜${fmt(high)}万円）`;
-}
+    function convertToJPY(priceStr) {
+      if (!priceStr) return "";
+      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+      if (!m) return "";
+      const low = parseFloat(m[1]) * cnyToJpy * 10000;
+      const high = parseFloat(m[2]) * cnyToJpy * 10000;
+      const fmt = (x) => (x / 10000).toFixed(1);
+      return `（約${fmt(low)}〜${fmt(high)}万円）`;
+    }
 
-function imgTag(rankStr, model, imageUrl) {
-  const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-    ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-    : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
-  return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-}
+    function imgTag(rankStr, model, imageUrl) {
+      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
+        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
+      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    }
 
-async function main() {
-  await fetchRate();
-  try {
-    const res = await fetch(CSV_PATH, { cache: "no-store" });
-    if (!res.ok) throw new Error(res.statusText);
-    const text = await res.text();
-    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-    if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-    renderTable(parsed.data);
-    ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
-  } catch (err) {
-    fail("CSV 読み込みエラー: " + err.message);
-  }
-}
-
-function renderTable(data) {
-  const tbody = document.querySelector("#carTable tbody");
-  tbody.innerHTML = "";
-  data.forEach(r => {
-    const rankStr = String(r.rank).padStart(3, "0");
-    const diff = Number(r.delta_vs_last_month || 0);
-    const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
-    const link = r.link || "";
-    const carId = link.match(/(\d+)/)?.[1] || "";
-    const name = r.global_name || r.name || "";
-    const price = (r.price || "") + " 元";
-    const priceJPY = convertToJPY(r.price || "");
-    const maker = r.manufacturer_ja || r.manufacturer || "";
-    const units = r.units || "";
-    const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
-    const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${r.rank}</td>
-      <td>${diffHtml}</td>
-      <td>${imgTag(rankStr, name, r.image_url)}</td>
-      <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
-      <td>${maker}</td>
-      <td>${units}</td>
-      <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-      <td>${specBtn}${storyBtn}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
-function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
-/* === モーダル: 車両仕様 === */
-function showConfigCsv(carId, title) {
-  const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
-  const target = document.getElementById("csvContent");
-  document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
-  target.innerHTML = "読込中...";
-
-  Papa.parse(path, {
-    download: true,
-    header: false,
-    skipEmptyLines: false,
-    complete: (res) => {
-      const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
-      if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
-
-      const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
-      if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
-
-      const headerRow = rows[headerIdx];
-      const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
-      const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
-      const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
-      const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
-      const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
-      const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
-      const modelStart = Math.max(secIdx, itemIdx) + 1;
-      const modelHeaders = headerRow.slice(modelStart);
-      const dataRows = rows.slice(headerIdx + 1);
-
-      const grouped = [];
-      let currentSection = "";
-      for (const r of dataRows) {
-        const sec = (r[secIdx] || "").trim();
-        if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
-        if (!currentSection) continue;
-        const item = (r[itemIdx] || "").trim();
-        if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
-        const cols = r.slice(modelStart);
-        if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
-        grouped[grouped.length - 1].rows.push([item, ...cols]);
+    async function main() {
+      await fetchRate();
+      try {
+        const res = await fetch(CSV_PATH, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.statusText);
+        const text = await res.text();
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+        if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+        renderTable(parsed.data);
+        ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
+      } catch (err) {
+        fail("CSV 読み込みエラー: " + err.message);
       }
+    }
 
-      let options = "";
-      for (const g of grouped) {
-        options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
-      }
-
-      const navHtml = `
-        <div class="spec-sidebar d-none d-lg-block">
-          <ul class="list-unstyled m-0 p-0">
-            ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
-          </ul>
-        </div>
-        <div class="section-toggle d-lg-none">
-          <select id="sectionSelect">${options}</select>
-        </div>`;
-
-      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
-      let tbody="<tbody>";
-      for(const g of grouped){
-        const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-        tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}">▼ ${g.section}</th></tr>`;
-        for(const row of g.rows){
-          const item=row[0]||"";
-          const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
-          tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
-        }
-      }
-      tbody+="</tbody>";
-
-      const tableHtml=`
-        <div class="spec-table-container d-flex">
-          ${navHtml}
-          <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
-            <div class="table-responsive">
-              <table class="table table-bordered table-sm spec-table mb-0">
-                ${thead}${tbody}
-              </table>
-            </div>
-          </div>
-        </div>`;
-      target.innerHTML=tableHtml;
-
-      const scrollArea = document.getElementById("specScrollArea");
-      const theadEl = scrollArea?.querySelector(".spec-table thead");
-      const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-      if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-      const headerHeight = theadH;
-
-      // 左メニュークリック：セクション位置にスクロール
-      document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-        a.addEventListener("click",ev=>{
-          ev.preventDefault();
-          const id=a.getAttribute("href");
-          const el=document.querySelector(id);
-          if(el){
-            const offset = el.offsetTop - headerHeight;
-            document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
-          }
-        });
+    function renderTable(data) {
+      const tbody = document.querySelector("#carTable tbody");
+      tbody.innerHTML = "";
+      data.forEach(r => {
+        const rankStr = String(r.rank).padStart(3, "0");
+        const diff = Number(r.delta_vs_last_month || 0);
+        const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
+        const link = r.link || "";
+        const carId = link.match(/(\d+)/)?.[1] || "";
+        const name = r.global_name || r.name || "";
+        const price = (r.price || "") + " 元";
+        const priceJPY = convertToJPY(r.price || "");
+        const maker = r.manufacturer_ja || r.manufacturer || "";
+        const units = r.units || "";
+        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
+        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.rank}</td>
+          <td>${diffHtml}</td>
+          <td>${imgTag(rankStr, name, r.image_url)}</td>
+          <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
+          <td>${maker}</td>
+          <td>${units}</td>
+          <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+          <td>${specBtn}${storyBtn}</td>
+        `;
+        tbody.appendChild(tr);
       });
+    }
+    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
+    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-      // モバイルセレクトも同様
-      const select=document.getElementById("sectionSelect");
-      if(select){
-        select.addEventListener("change",e=>{
-          const id=e.target.value;
-          const el=document.querySelector(id);
-          if(el){
-            const offset = el.offsetTop - headerHeight;
-            document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+    function showConfigCsv(carId, title) {
+      const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+      const target = document.getElementById("csvContent");
+      document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
+      target.innerHTML = "読込中...";
+
+      Papa.parse(path, {
+        download: true,
+        header: false,
+        skipEmptyLines: false,
+        complete: (res) => {
+          const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+          if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+
+          const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+          if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+
+          const headerRow = rows[headerIdx];
+          const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+          const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+          const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+          const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+          const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+          const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+          const modelStart = Math.max(secIdx, itemIdx) + 1;
+          const modelHeaders = headerRow.slice(modelStart);
+          const dataRows = rows.slice(headerIdx + 1);
+
+          const grouped = [];
+          let currentSection = "";
+          for (const r of dataRows) {
+            const sec = (r[secIdx] || "").trim();
+            if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+            if (!currentSection) continue;
+            const item = (r[itemIdx] || "").trim();
+            if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+            const cols = r.slice(modelStart);
+            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
+            grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
-        });
+
+          let options = "";
+          for (const g of grouped) {
+            options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+          }
+
+          const navHtml = `
+            <div class="spec-sidebar d-none d-lg-block">
+              <ul class="list-unstyled m-0 p-0">
+                ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+              </ul>
+            </div>
+            <div class="section-toggle d-lg-none">
+              <select id="sectionSelect">${options}</select>
+            </div>`;
+
+          const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+          let tbody="<tbody>";
+          for(const g of grouped){
+            const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+            tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}">▼ ${g.section}</th></tr>`;
+            for(const row of g.rows){
+              const item=row[0]||"";
+              const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
+              tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
+            }
+          }
+          tbody+="</tbody>";
+
+          const tableHtml=`
+            <div class="spec-table-container d-flex">
+              ${navHtml}
+              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+                <div class="table-responsive">
+                  <table class="table table-bordered table-sm spec-table mb-0">
+                    ${thead}${tbody}
+                  </table>
+                </div>
+              </div>
+            </div>`;
+          target.innerHTML=tableHtml;
+
+          // ★追加: thead高さをCSS変数に反映して縦位置をヘッダー直下に合わせる
+          const scrollArea = document.getElementById("specScrollArea");
+          const theadEl = scrollArea?.querySelector(".spec-table thead");
+          const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+          const headerHeight = theadH;
+          // ★ここまで追加
+
+          // 白マスク要素を挿入（透け防止）
+          const specArea = document.getElementById("specScrollArea");
+          if (specArea) {
+            specArea.insertAdjacentHTML("beforeend",
+              `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
+            );
+          }
+
+          // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
+          document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+            a.addEventListener("click",ev=>{
+              ev.preventDefault();
+              const id=a.getAttribute("href");
+              const el=document.querySelector(id);
+              if(el){
+                const offset = el.offsetTop - headerHeight;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+              }
+            });
+          });
+
+          // ✅ 改良2: セレクトからも同様にヘッダー直下へ
+          const select=document.getElementById("sectionSelect");
+          if(select){
+            select.addEventListener("change",e=>{
+              const id=e.target.value;
+              const el=document.querySelector(id);
+              if(el){
+                const offset = el.offsetTop - headerHeight;
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+              }
+            });
+          }
+        },
+        error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+      });
+      new bootstrap.Modal(document.getElementById("csvModal")).show();
+    }
+
+    async function showStory(carId,title){
+      const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+      const target=document.getElementById("storyContent");
+      document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+      target.textContent="読込中...";
+      try{
+        const res=await fetch(path,{cache:"no-store"});
+        if(!res.ok)throw new Error("Not found");
+        let text=await res.text();
+        text=text.replace(/```/g,"");
+        text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+        text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+        text=text.replace(/\r?\n/g,"<br>");
+        text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+        target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+      }catch{
+        target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
       }
+      new bootstrap.Modal(document.getElementById("storyModal")).show();
+    }
 
-      // === 横スクロール固定用 overlay レイヤー ===
-      enableSectionRowOverlayFix(document.getElementById("csvModal"));
-    },
-    error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
-  });
-  new bootstrap.Modal(document.getElementById("csvModal")).show();
-}
-
-/* === 横スクロール固定 overlay 方式 === */
-function enableSectionRowOverlayFix(modalRoot) {
-  const scrollArea = modalRoot.querySelector(".spec-content .table-responsive");
-  if (!scrollArea) return;
-
-  // 既存overlayを除去してから再生成
-  const old = scrollArea.querySelector(".sec-overlay");
-  if (old) old.remove();
-
-  const overlay = document.createElement("div");
-  overlay.className = "sec-overlay";
-  overlay.style.position = "absolute";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100%";
-  overlay.style.pointerEvents = "none";
-  overlay.style.zIndex = "60";
-  scrollArea.appendChild(overlay);
-
-  const secRows = scrollArea.querySelectorAll(".spec-table tbody tr.sec-row th");
-  secRows.forEach(th => {
-    const clone = th.cloneNode(true);
-    clone.style.position = "absolute";
-    clone.style.left = `${th.offsetLeft}px`;
-    clone.style.top = `${th.offsetTop}px`;
-    clone.style.width = `${th.offsetWidth}px`;
-    clone.style.background = "#f8f9fa";
-    clone.style.pointerEvents = "none";
-    overlay.appendChild(clone);
-  });
-
-  scrollArea.addEventListener("scroll", () => {
-    const { scrollLeft, scrollTop } = scrollArea;
-    overlay.style.transform = `translate(${-scrollLeft}px, ${-scrollTop}px)`;
-  });
-}
-
-/* === モーダル: 口コミ === */
-async function showStory(carId,title){
-  const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
-  const target=document.getElementById("storyContent");
-  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-  target.textContent="読込中...";
-  try{
-    const res=await fetch(path,{cache:"no-store"});
-    if(!res.ok)throw new Error("Not found");
-    let text=await res.text();
-    text=text.replace(/```/g,"");
-    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
-    text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
-    text=text.replace(/\r?\n/g,"<br>");
-    text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
-    target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-  }catch{
-    target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
-  }
-  new bootstrap.Modal(document.getElementById("storyModal")).show();
-}
-
-main();
-</script>
-
+    main();
+  </script>
 </body>
 </html>

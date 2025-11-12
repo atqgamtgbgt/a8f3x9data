@@ -211,261 +211,278 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-    let cnyToJpy = 20;
+<script>
+  const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+  const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
+  const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+  let cnyToJpy = 20;
 
-    async function fetchRate() {
-      try {
-        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-        const data = await res.json();
-        if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-      } catch { cnyToJpy = 20; }
+  async function fetchRate() {
+    try {
+      const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+      const data = await res.json();
+      if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
+    } catch { cnyToJpy = 20; }
+  }
+
+  function convertToJPY(priceStr) {
+    if (!priceStr) return "";
+    const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+    if (!m) return "";
+    const low = parseFloat(m[1]) * cnyToJpy * 10000;
+    const high = parseFloat(m[2]) * cnyToJpy * 10000;
+    const fmt = (x) => (x / 10000).toFixed(1);
+    return `（約${fmt(low)}〜${fmt(high)}万円）`;
+  }
+
+  function imgTag(rankStr, model, imageUrl) {
+    const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+      ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
+      : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+
+  async function main() {
+    await fetchRate();
+    try {
+      const res = await fetch(CSV_PATH, { cache: "no-store" });
+      if (!res.ok) throw new Error(res.statusText);
+      const text = await res.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+      renderTable(parsed.data);
+      ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
+    } catch (err) {
+      fail("CSV 読み込みエラー: " + err.message);
     }
+  }
 
-    function convertToJPY(priceStr) {
-      if (!priceStr) return "";
-      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!m) return "";
-      const low = parseFloat(m[1]) * cnyToJpy * 10000;
-      const high = parseFloat(m[2]) * cnyToJpy * 10000;
-      const fmt = (x) => (x / 10000).toFixed(1);
-      return `（約${fmt(low)}〜${fmt(high)}万円）`;
-    }
+  function renderTable(data) {
+    const tbody = document.querySelector("#carTable tbody");
+    tbody.innerHTML = "";
+    data.forEach(r => {
+      const rankStr = String(r.rank).padStart(3, "0");
+      const diff = Number(r.delta_vs_last_month || 0);
+      const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
+      const link = r.link || "";
+      const carId = link.match(/(\d+)/)?.[1] || "";
+      const name = r.global_name || r.name || "";
+      const price = (r.price || "") + " 元";
+      const priceJPY = convertToJPY(r.price || "");
+      const maker = r.manufacturer_ja || r.manufacturer || "";
+      const units = r.units || "";
+      const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
+      const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.rank}</td>
+        <td>${diffHtml}</td>
+        <td>${imgTag(rankStr, name, r.image_url)}</td>
+        <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
+        <td>${maker}</td>
+        <td>${units}</td>
+        <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+        <td>${specBtn}${storyBtn}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
 
-    function imgTag(rankStr, model, imageUrl) {
-      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
-      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-    }
+  function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
+  function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    async function main() {
-      await fetchRate();
-      try {
-        const res = await fetch(CSV_PATH, { cache: "no-store" });
-        if (!res.ok) throw new Error(res.statusText);
-        const text = await res.text();
-        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-        if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-        renderTable(parsed.data);
-        ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
-      } catch (err) {
-        fail("CSV 読み込みエラー: " + err.message);
-      }
-    }
+  function showConfigCsv(carId, title) {
+    const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+    const target = document.getElementById("csvContent");
+    document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
+    target.innerHTML = "読込中...";
 
-    function renderTable(data) {
-      const tbody = document.querySelector("#carTable tbody");
-      tbody.innerHTML = "";
-      data.forEach(r => {
-        const rankStr = String(r.rank).padStart(3, "0");
-        const diff = Number(r.delta_vs_last_month || 0);
-        const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
-        const link = r.link || "";
-        const carId = link.match(/(\d+)/)?.[1] || "";
-        const name = r.global_name || r.name || "";
-        const price = (r.price || "") + " 元";
-        const priceJPY = convertToJPY(r.price || "");
-        const maker = r.manufacturer_ja || r.manufacturer || "";
-        const units = r.units || "";
-        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>` : "";
-        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>` : "";
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r.rank}</td>
-          <td>${diffHtml}</td>
-          <td>${imgTag(rankStr, name, r.image_url)}</td>
-          <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
-          <td>${maker}</td>
-          <td>${units}</td>
-          <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-          <td>${specBtn}${storyBtn}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
-    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
-    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
+    Papa.parse(path, {
+      download: true,
+      header: false,
+      skipEmptyLines: false,
+      complete: (res) => {
+        const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+        if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
-    function showConfigCsv(carId, title) {
-      const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
-      const target = document.getElementById("csvContent");
-      document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
-      target.innerHTML = "読込中...";
+        const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+        if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
-      Papa.parse(path, {
-        download: true,
-        header: false,
-        skipEmptyLines: false,
-        complete: (res) => {
-          const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
-          if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+        const headerRow = rows[headerIdx];
+        const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+        const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+        const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+        const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+        const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+        const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+        const modelStart = Math.max(secIdx, itemIdx) + 1;
+        const modelHeaders = headerRow.slice(modelStart);
+        const dataRows = rows.slice(headerIdx + 1);
 
-          const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
-          if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+        const grouped = [];
+        let currentSection = "";
+        for (const r of dataRows) {
+          const sec = (r[secIdx] || "").trim();
+          if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+          if (!currentSection) continue;
+          const item = (r[itemIdx] || "").trim();
+          if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+          const cols = r.slice(modelStart);
+          if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
+          grouped[grouped.length - 1].rows.push([item, ...cols]);
+        }
 
-          const headerRow = rows[headerIdx];
-          const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
-          const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
-          const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
-          const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
-          const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
-          const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
-          const modelStart = Math.max(secIdx, itemIdx) + 1;
-          const modelHeaders = headerRow.slice(modelStart);
-          const dataRows = rows.slice(headerIdx + 1);
+        let options = "";
+        for (const g of grouped) {
+          options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+        }
 
-          const grouped = [];
-          let currentSection = "";
-          for (const r of dataRows) {
-            const sec = (r[secIdx] || "").trim();
-            if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
-            if (!currentSection) continue;
-            const item = (r[itemIdx] || "").trim();
-            if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
-            const cols = r.slice(modelStart);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection) grouped.push({ section: currentSection, rows: [] });
-            grouped[grouped.length - 1].rows.push([item, ...cols]);
+        const navHtml = `
+          <div class="spec-sidebar d-none d-lg-block">
+            <ul class="list-unstyled m-0 p-0">
+              ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+            </ul>
+          </div>
+          <div class="section-toggle d-lg-none">
+            <select id="sectionSelect">${options}</select>
+          </div>`;
+
+        const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+        let tbody="<tbody>";
+        for(const g of grouped){
+          const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+          tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}">▼ ${g.section}</th></tr>`;
+          for(const row of g.rows){
+            const item=row[0]||"";
+            const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
+            tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
           }
+        }
+        tbody+="</tbody>";
 
-          let options = "";
-          for (const g of grouped) {
-            options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
-          }
-
-          const navHtml = `
-            <div class="spec-sidebar d-none d-lg-block">
-              <ul class="list-unstyled m-0 p-0">
-                ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
-              </ul>
-            </div>
-            <div class="section-toggle d-lg-none">
-              <select id="sectionSelect">${options}</select>
-            </div>`;
-
-          const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
-          let tbody="<tbody>";
-          for(const g of grouped){
-            const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-            tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}">▼ ${g.section}</th></tr>`;
-            for(const row of g.rows){
-              const item=row[0]||"";
-              const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
-              tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
-            }
-          }
-          tbody+="</tbody>";
-
-          const tableHtml=`
-            <div class="spec-table-container d-flex">
-              ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-sm spec-table mb-0">
-                    ${thead}${tbody}
-                  </table>
-                </div>
+        const tableHtml=`
+          <div class="spec-table-container d-flex">
+            ${navHtml}
+            <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm spec-table mb-0">
+                  ${thead}${tbody}
+                </table>
               </div>
-            </div>`;
-          target.innerHTML=tableHtml;
+            </div>
+          </div>`;
+        target.innerHTML=tableHtml;
 
-          // ★追加: thead高さをCSS変数に反映して縦位置をヘッダー直下に合わせる
-          const scrollArea = document.getElementById("specScrollArea");
-          const theadEl = scrollArea?.querySelector(".spec-table thead");
-          const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-          const headerHeight = theadH;
-          // ★ここまで追加
+        // thead高さをCSS変数に反映
+        const scrollArea = document.getElementById("specScrollArea");
+        const theadEl = scrollArea?.querySelector(".spec-table thead");
+        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+        const headerHeight = theadH;
 
-          // 白マスク要素を挿入（透け防止）
-          const specArea = document.getElementById("specScrollArea");
-          if (specArea) {
-            specArea.insertAdjacentHTML("beforeend",
-              `<div class="spec-mask-top"></div><div class="spec-mask-left"></div>`
-            );
-          }
-
-          // ✅ 改良1: 左メニュークリック時の位置調整（ヘッダー直下）
-          document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-            a.addEventListener("click",ev=>{
-              ev.preventDefault();
-              const id=a.getAttribute("href");
-              const el=document.querySelector(id);
-              if(el){
-                const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
+        // 左メニュー：ヘッダー直下にスクロール
+        document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+          a.addEventListener("click",ev=>{
+            ev.preventDefault();
+            const id=a.getAttribute("href");
+            const el=document.querySelector(id);
+            if(el){
+              const offset = el.offsetTop - headerHeight;
+              document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+            }
           });
+        });
 
-          // ✅ 改良2: セレクトからも同様にヘッダー直下へ
-          const select=document.getElementById("sectionSelect");
-          if(select){
-            select.addEventListener("change",e=>{
-              const id=e.target.value;
-              const el=document.querySelector(id);
-              if(el){
-                const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
-          }
-        },
-        error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
-      });
-      new bootstrap.Modal(document.getElementById("csvModal")).show();
-    }
+        // モバイルセレクトも同様
+        const select=document.getElementById("sectionSelect");
+        if(select){
+          select.addEventListener("change",e=>{
+            const id=e.target.value;
+            const el=document.querySelector(id);
+            if(el){
+              const offset = el.offsetTop - headerHeight;
+              document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        }
 
-    async function showStory(carId,title){
-      const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
-      const target=document.getElementById("storyContent");
-      document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-      target.textContent="読込中...";
-      try{
-        const res=await fetch(path,{cache:"no-store"});
-        if(!res.ok)throw new Error("Not found");
-        let text=await res.text();
-        text=text.replace(/```/g,"");
-        text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
-        text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
-        text=text.replace(/\r?\n/g,"<br>");
-        text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
-        target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-      }catch{
-        target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
-      }
-      new bootstrap.Modal(document.getElementById("storyModal")).show();
-    }
+        // === ここから “横スクロール打ち消し” を最小追加 ===
+        attachSectionHorizontalLock();
+        // === ここまで ===
+      },
+      error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+    });
+    new bootstrap.Modal(document.getElementById("csvModal")).show();
+  }
 
-    main();
-    // === 横スクロール中のセクション行固定補正（軽量安定版）===
-function enableSmoothSectionFix() {
-  const modal = document.getElementById("csvModal");
-  const observer = new MutationObserver(() => {
-    const scrollArea = modal.querySelector(".spec-table-container");
-    if (!scrollArea) return;
+  // 横スクロールを視覚的に打ち消して、セクション行を“固定して見せる”
+  function attachSectionHorizontalLock() {
+    const container = document.querySelector(".spec-table-container");          // 横スクロール親（overflow-x: auto）
+    const content   = document.querySelector(".spec-content");                  // 縦スクロール親
+    if (!container || !content) return;
 
-    const table = scrollArea.querySelector(".spec-table");
+    const table = content.querySelector(".spec-table");
     if (!table) return;
 
-    scrollArea.addEventListener("scroll", () => {
-      const x = scrollArea.scrollLeft;
-      const secRows = table.querySelectorAll("tbody tr.sec-row th");
-      secRows.forEach(th => {
-        // sticky(left) が効いているので、transformで軽く補正してブレ防止
-        th.style.transform = `translateX(${x * 0.0001}px)`;
-      });
+    const secHeaders = table.querySelectorAll("tbody tr.sec-row th");
+    if (!secHeaders.length) return;
+
+    // 視覚補正用のスタイルセット（競合防止）
+    secHeaders.forEach(th => {
+      th.style.willChange = "transform";
+      // left:0 はあなたのCSS通り維持（縦stickyと両立）
     });
-  });
 
-  observer.observe(modal, { childList: true, subtree: true });
-}
+    const sync = () => {
+      const x = container.scrollLeft; // ← 横スクロール量は“container”に付く
+      // 横に動いた分だけ逆向きに動かすことで、見た目上は固定
+      secHeaders.forEach(th => {
+        th.style.transform = x ? `translateX(${x}px)` : "none";
+      });
+    };
 
-enableSmoothSectionFix();
+    // 初期同期
+    sync();
 
-  </script>
+    // 横スクロールで同期
+    container.addEventListener("scroll", sync, { passive: true });
+
+    // リサイズ等でも同期
+    const ro = new ResizeObserver(sync);
+    ro.observe(container);
+
+    // モーダルが閉じられたらクリーンアップ
+    const modal = document.getElementById("csvModal");
+    modal.addEventListener("hidden.bs.modal", () => {
+      container.removeEventListener("scroll", sync);
+      ro.disconnect();
+      secHeaders.forEach(th => th.style.transform = "none");
+    }, { once: true });
+  }
+
+  async function showStory(carId,title){
+    const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+    const target=document.getElementById("storyContent");
+    document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+    target.textContent="読込中...";
+    try{
+      const res=await fetch(path,{cache:"no-store"});
+      if(!res.ok)throw new Error("Not found");
+      let text=await res.text();
+      text=text.replace(/```/g,"");
+      text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+      text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+      text=text.replace(/\r?\n/g,"<br>");
+      text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+      target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+    }catch{
+      target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
+    }
+    new bootstrap.Modal(document.getElementById("storyModal")).show();
+  }
+
+  main();
+</script>
+
 </body>
 </html>

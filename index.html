@@ -151,6 +151,20 @@
       pointer-events: none;
     }
   }
+.spec-table {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+}
+.spec-table thead th.sticky-col,
+.spec-table tbody th.item-col {
+  background: #fff !important;
+  border-collapse: separate !important;
+}
+@supports (-webkit-touch-callout: none) {
+  .spec-table thead th.sticky-col {
+    transform: translateZ(0);
+  }
+}
 
 
 @media (max-width: 991px) {

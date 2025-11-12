@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ja" data-bs-theme="auto">
 <head>
@@ -9,20 +8,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
-  }
-
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-
+  body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
+  header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
   th { background-color: #f1f3f5; }
   .rank-up { color: #dc3545; font-weight: bold; }
   .rank-down { color: #0d6efd; font-weight: bold; }
@@ -32,17 +19,14 @@
 
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
-
-    /* ✅ 親コンテナはoverflowを殺し、基準を一致させる */
     .spec-table-container {
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow: hidden; /* ← 横も縦もここでは発生させない */
+      overflow-x: auto; /* 横スクロールは親で */
       background: #fff;
     }
 
-    /* ✅ 左メニューはstickyのまま維持 */
     .spec-sidebar {
       position: sticky;
       top: 0;
@@ -52,31 +36,25 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
-      z-index: 50;
     }
 
-    /* ✅ メインエリアはoverflowをvisibleにし、sticky基準を壊さない */
     .spec-content {
       flex: 1;
+      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
+      overflow-x: visible !important;
       height: 80vh;
-      overflow: hidden; /* ← ここでもscrollを発生させない */
       padding: 8px;
-      background: #fff;
       position: relative;
+      background: #fff;
+      background-clip: padding-box; /* padding部も白く塗る */
     }
 
-    /* ✅ スクロールはここで一括管理（縦＋横） */
-    .spec-content .table-responsive {
-      position: relative;
-      height: 100%;
-      overflow: auto !important; /* ← 唯一のスクロール要素 */
-    }
+    .spec-content .table-responsive { overflow: visible !important; }
 
     .spec-table {
+      position: relative;
       border-collapse: separate;
       border-spacing: 0;
-      width: 100%;
-      position: relative;
     }
 
     /* ✅ ヘッダー固定 */
@@ -96,7 +74,6 @@
       z-index: 31;
       background: #fff;
     }
-
     .spec-table tbody th.item-col {
       position: sticky;
       left: 0;
@@ -105,18 +82,18 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（ヘッダー直下＋横にも固定） */
+    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
-      top: var(--secOffset, 42px);
+      top: var(--secOffset, 42px); /* ← 実測高さに同期 */
       left: 0;
-      z-index: 40;
+      z-index: 40; /* item-colより上 */
       background: #f8f9fa;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05);
       border-bottom: 1px solid #dee2e6;
     }
 
-    /* ✅ 背景透け防止 */
+    /* ✅ 背景透け防止マスク */
     .spec-content::before {
       content: "";
       position: sticky;
@@ -128,7 +105,6 @@
       z-index: 25;
       pointer-events: none;
     }
-
     .spec-content::after {
       content: "";
       position: sticky;
@@ -150,7 +126,7 @@
     }
   }
 
-  /* === モバイル === */
+  /* === モバイル（トグル固定） === */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -162,7 +138,6 @@
       padding: 8px;
       border-bottom: 1px solid #dee2e6;
     }
-
     .section-toggle select {
       width: 100%;
       max-width: 300px;
@@ -171,13 +146,13 @@
     }
   }
 
-  /* ✅ テーブル内部の余白調整 */
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
-</style>
+.spec-content.p-2 {
+  padding: 0 !important;
+  background: #fff !important;
+}
 
+}
+</style>
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -465,33 +440,6 @@
     }
 
     main();
-
-
-/* === セクション行の横スクロール補正 === */
-function enableSectionRowStickyFix(modalRoot) {
-  const scrollArea = modalRoot.querySelector(".spec-content .table-responsive");
-  if (!scrollArea) return;
-
-  scrollArea.addEventListener("scroll", () => {
-    const scrollX = scrollArea.scrollLeft;
-    // 横スクロール量に応じて全セクション行を補正
-    scrollArea.querySelectorAll(".spec-table tbody tr.sec-row th").forEach(th => {
-      th.style.transform = `translateX(${scrollX}px)`;
-    });
-  });
-}
-
-/* === 既存 showConfigCsv の完了後に呼び出すようにフック === */
-const originalShowConfigCsv = window.showConfigCsv;
-window.showConfigCsv = async function(carId, title) {
-  await originalShowConfigCsv(carId, title);
-
-  // モーダル生成後にDOM安定を少し待ってから適用
-  setTimeout(() => {
-    const modalRoot = document.querySelector("#csvModal");
-    if (modalRoot) enableSectionRowStickyFix(modalRoot);
-  }, 400);
-};
   </script>
 </body>
 </html>

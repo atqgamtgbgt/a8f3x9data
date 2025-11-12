@@ -8,8 +8,20 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-  body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
-  header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
+  body {
+    background-color: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  }
+
+  header {
+    background: #0d6efd;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
+
   th { background-color: #f1f3f5; }
   .rank-up { color: #dc3545; font-weight: bold; }
   .rank-down { color: #0d6efd; font-weight: bold; }
@@ -19,14 +31,18 @@
 
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
+
+    /* 横＋縦スクロールを統合して扱う */
     .spec-table-container {
+      position: relative;
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: auto; /* 横スクロールは親で */
+      overflow: auto !important; /* 横も縦もこの1要素でスクロール管理 */
       background: #fff;
     }
 
+    /* 左サイドバー */
     .spec-sidebar {
       position: sticky;
       top: 0;
@@ -38,18 +54,20 @@
       padding: 8px;
     }
 
+    /* テーブルエリア */
     .spec-content {
       flex: 1;
-      overflow-y: auto !important; /* Bootstrapのoverflow-auto!importantを上書き */
-      overflow-x: visible !important;
       height: 80vh;
+      overflow: visible !important; /* sticky基準を壊さない */
       padding: 8px;
       position: relative;
       background: #fff;
-      background-clip: padding-box; /* padding部も白く塗る */
+      background-clip: padding-box;
     }
 
-    .spec-content .table-responsive { overflow: visible !important; }
+    .spec-content .table-responsive {
+      overflow: visible !important;
+    }
 
     .spec-table {
       position: relative;
@@ -74,6 +92,7 @@
       z-index: 31;
       background: #fff;
     }
+
     .spec-table tbody th.item-col {
       position: sticky;
       left: 0;
@@ -82,16 +101,16 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（ヘッダー直下に正確固定） */
-.spec-table tbody tr.sec-row th {
-  position: sticky;
-  top: var(--secOffset, 42px);
-  left: auto !important;  /* ★ 横固定を完全解除 */
-  z-index: 40;
-  background: #f8f9fa;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.05);
-  border-bottom: 1px solid #dee2e6;
-}
+    /* ✅ セクション見出し固定（ヘッダー直下・横にも固定） */
+    .spec-table tbody tr.sec-row th {
+      position: sticky;
+      top: var(--secOffset, 42px);
+      left: 0;
+      z-index: 40;
+      background: #f8f9fa;
+      box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #dee2e6;
+    }
 
     /* ✅ 背景透け防止マスク */
     .spec-content::before {
@@ -105,6 +124,7 @@
       z-index: 25;
       pointer-events: none;
     }
+
     .spec-content::after {
       content: "";
       position: sticky;
@@ -138,6 +158,7 @@
       padding: 8px;
       border-bottom: 1px solid #dee2e6;
     }
+
     .section-toggle select {
       width: 100%;
       max-width: 300px;
@@ -146,13 +167,13 @@
     }
   }
 
-.spec-content.p-2 {
-  padding: 0 !important;
-  background: #fff !important;
-}
-
-}
+  /* テーブル内部のパディング調整 */
+  .spec-content.p-2 {
+    padding: 0 !important;
+    background: #fff !important;
+  }
 </style>
+
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>

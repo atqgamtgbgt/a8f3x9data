@@ -152,7 +152,7 @@
     }
   }
 
-  /* === モバイル（トグル固定） === */
+  /* === モバイル（PCと同一理論で固定） === */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -171,7 +171,7 @@
       display: block;
     }
 
-    /* === 以下追加: モバイルでもヘッダー・左列・セクション固定 === */
+    /* PCと同じsticky理論をモバイルにも適用 */
     .spec-table thead th {
       position: sticky;
       top: 0;
@@ -220,6 +220,9 @@
       pointer-events: none;
     }
   }
+
+  /* ✅ モーダルスクロール競合を防ぐ（sticky維持） */
+  #csvModal .modal-body { overflow: hidden; }
 
   .spec-content.p-2 {
     padding: 0 !important;
@@ -420,7 +423,8 @@ function showConfigCsv(carId, title) {
       let tbody = "<tbody>";
       for (const g of grouped) {
         const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
-        tbody += `<tr id="${id}" class="sec-row"><th colspan="${1 + modelHeaders.length}">▼ ${g.section}</th></tr>`;
+        // ✅ PCと同じsticky構造に修正済み
+        tbody += `<tr id="${id}" class="sec-row"><th class="section-col">▼ ${g.section}</th><td class="section-fill" colspan="${modelHeaders.length}"></td></tr>`;
         for (const row of g.rows) {
           const item = row[0] || "";
           const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i,"")}</td>`).join("");
@@ -444,11 +448,9 @@ function showConfigCsv(carId, title) {
 
       target.innerHTML = tableHtml;
 
-      // スクロール領域とヘッダー高さ
       const scrollArea = target.querySelector("#specScrollArea .table-responsive") || target.querySelector("#specScrollArea");
       const headerHeight = scrollArea?.querySelector(".spec-table thead")?.getBoundingClientRect().height || 0;
 
-      // === PC / スマホ分岐 ===
       const select = target.querySelector("#sectionSelect");
       if (select) {
         select.addEventListener("change", (e) => {
@@ -457,10 +459,8 @@ function showConfigCsv(carId, title) {
           if (!el) return;
 
           if (window.innerWidth >= 992) {
-            // 💻 PC: 元のscrollIntoView動作
             el.scrollIntoView({ behavior: "smooth", block: "start" });
           } else {
-            // 📱 スマホ: モーダル内部scrollToで確実に動かす
             const offset = el.offsetTop - headerHeight;
             scrollArea.scrollTo({ top: offset, behavior: "smooth" });
           }
@@ -471,31 +471,6 @@ function showConfigCsv(carId, title) {
   });
 
   new bootstrap.Modal(document.getElementById("csvModal")).show();
-}
-
-async function showStory(carId, title){
-  const path = `output/koubei/${carId}/story.txt?v=${Date.now()}`;
-  const target = document.getElementById("storyContent");
-  document.getElementById("storyModalLabel").textContent = `口コミ概要（${title} | ID:${carId}）`;
-  target.textContent = "読込中...";
-  try {
-    const res = await fetch(path, { cache: "no-store" });
-    if (!res.ok) throw new Error("Not found");
-    let text = await res.text();
-    text = text.replace(/```/g, "");
-    text = text.replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>");
-    text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
-    text = text.replace(/\r?\n/g, "<br>");
-    text = text.replace(/(<br>\s*){2,}/g, "<br><br>");
-    target.innerHTML = `<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-  } catch {
-    target.innerHTML = "<div class='text-danger'>口コミデータが見つかりません。</div>";
-  }
-  new bootstrap.Modal(document.getElementById("storyModal")).show();
-}
-
-main();
-</script>
 
 
 </body>

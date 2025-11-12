@@ -49,8 +49,7 @@
 
     .spec-content {
       flex: 1;
-      overflow-x: auto !important;
-      overflow-y: auto !important;
+      overflow: hidden !important; /* ← 縦scrollは下層divへ任せる */
       height: 80vh;
       padding: 8px;
       position: relative;
@@ -58,7 +57,11 @@
       background-clip: padding-box;
     }
 
-    .spec-content .table-responsive { overflow: visible !important; }
+    .spec-content .table-responsive {
+      position: relative;
+      height: 100%;
+      overflow: auto !important; /* ← ここが唯一のscroll領域 */
+    }
 
     .spec-table {
       position: relative;
@@ -92,11 +95,11 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し行 sticky対応版（top補正入り） */
+    /* ✅ セクション行 */
     .spec-table tbody tr.sec-row .section-col {
       position: sticky;
       left: 0;
-      top: var(--secOffset, 42px); /* ← ★追加：ヘッダー高さに同期 */
+      top: var(--secOffset, 42px);
       z-index: 40;
       background: #f8f9fa;
       font-weight: 600;
@@ -104,8 +107,24 @@
       border-bottom: 1px solid #dee2e6;
     }
     .spec-table tbody tr.sec-row .section-fill {
+      position: sticky;
+      left: 180px;
+      top: var(--secOffset, 42px);
+      z-index: 39;
       background: #f8f9fa;
       border-bottom: 1px solid #dee2e6;
+      box-shadow: inset -1px 0 0 #dee2e6;
+    }
+
+    /* ✅ セクション行の高さを統一（はみ出し防止） */
+    .spec-table tbody tr.sec-row {
+      height: 2.6em;
+    }
+    .spec-table tbody tr.sec-row .section-col,
+    .spec-table tbody tr.sec-row .section-fill {
+      line-height: 2.6em;
+      vertical-align: middle;
+      white-space: nowrap;
     }
 
     /* ✅ 背景透け防止マスク */
@@ -152,28 +171,6 @@
       display: block;
     }
   }
-/* ✅ セクション行の右側灰色セルも縦横固定する */
-.spec-table tbody tr.sec-row .section-fill {
-  position: sticky;
-  left: 180px;              /* ← 左の固定列の幅に合わせる */
-  top: var(--secOffset, 42px); /* ← ★ヘッダー直下固定！ */
-  z-index: 39;              /* section-colより1段下 */
-  background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-  box-shadow: inset -1px 0 0 #dee2e6;
-}
-/* ✅ セクション行の高さを統一（はみ出し防止） */
-.spec-table tbody tr.sec-row {
-  height: 2.6em;  /* 行の高さを統一（1.8〜2.8emあたりで調整可） */
-}
-
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {
-  line-height: 2.6em;   /* テキストを中央にそろえる */
-  vertical-align: middle;
-  white-space: nowrap;  /* 折り返しを防止（重要） */
-}
-
 
   .spec-content.p-2 {
     padding: 0 !important;
@@ -205,6 +202,7 @@
       </table>
     </div>
   </div>
+
   <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -322,23 +320,16 @@
       });
     }
 
-    function ok(msg){
-      const s=document.getElementById("status");
-      s.className="alert alert-success py-2";
-      s.textContent=msg;
-    }
-    function fail(msg){
-      const s=document.getElementById("status");
-      s.className="alert alert-danger py-2";
-      s.textContent=msg;
-    }
+    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
+    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
-    /* ==== showConfigCsv 開始 ==== */
+    /* ==== showConfigCsv ==== */
     function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
       target.innerHTML = "読込中...";
+
       Papa.parse(path, {
         download: true,
         header: false,
@@ -375,7 +366,6 @@
             grouped[grouped.length - 1].rows.push([item, ...cols]);
           }
 
-          // === ナビゲーション生成 ===
           let options = "";
           for (const g of grouped) {
             options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
@@ -391,7 +381,6 @@
               <select id="sectionSelect">${options}</select>
             </div>`;
 
-          // === tbody生成（colspan廃止・section-col固定対応） ===
           const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
           let tbody="<tbody>";
           for(const g of grouped){
@@ -412,7 +401,7 @@
           const tableHtml=`
             <div class="spec-table-container d-flex">
               ${navHtml}
-              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+              <div class="spec-content p-2 flex-grow-1" id="specScrollArea">
                 <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}${tbody}
@@ -422,14 +411,13 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
-          const scrollArea = document.getElementById("specScrollArea");
+          const scrollArea = document.querySelector("#specScrollArea .table-responsive");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
           if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
           const headerHeight = theadH;
 
-          // ✅ 左メニュークリックでヘッダー直下へ正確に移動
+          // ✅ 左メニュークリックでヘッダー直下へ
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
@@ -437,12 +425,12 @@
               const el=document.querySelector(id);
               if(el){
                 const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+                scrollArea.scrollTo({top:offset,behavior:"smooth"});
               }
             });
           });
 
-          // ✅ セクションセレクトでも同様に移動
+          // ✅ モバイルのセクション選択でもスクロール有効
           const select=document.getElementById("sectionSelect");
           if(select){
             select.addEventListener("change",e=>{
@@ -450,7 +438,7 @@
               const el=document.querySelector(id);
               if(el){
                 const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
+                scrollArea.scrollTo({top:offset,behavior:"smooth"});
               }
             });
           }
@@ -460,7 +448,6 @@
       new bootstrap.Modal(document.getElementById("csvModal")).show();
     }
 
-    /* ==== 口コミデータ ==== */
     async function showStory(carId,title){
       const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
       const target=document.getElementById("storyContent");

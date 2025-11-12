@@ -234,242 +234,263 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-    const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-    const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-    let cnyToJpy = 20;
+<script>
+  const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+  const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
+  const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+  let cnyToJpy = 20;
 
-    async function fetchRate() {
-      try {
-        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-        const data = await res.json();
-        if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-      } catch {
-        cnyToJpy = 20;
-      }
+  async function fetchRate() {
+    try {
+      const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+      const data = await res.json();
+      if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
+    } catch {
+      cnyToJpy = 20;
     }
+  }
 
-    function convertToJPY(priceStr) {
-      if (!priceStr) return "";
-      const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!m) return "";
-      const low = parseFloat(m[1]) * cnyToJpy * 10000;
-      const high = parseFloat(m[2]) * cnyToJpy * 10000;
-      const fmt = (x) => (x / 10000).toFixed(1);
-      return `（約${fmt(low)}〜${fmt(high)}万円）`;
+  function convertToJPY(priceStr) {
+    if (!priceStr) return "";
+    const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+    if (!m) return "";
+    const low = parseFloat(m[1]) * cnyToJpy * 10000;
+    const high = parseFloat(m[2]) * cnyToJpy * 10000;
+    const fmt = (x) => (x / 10000).toFixed(1);
+    return `（約${fmt(low)}〜${fmt(high)}万円）`;
+  }
+
+  function imgTag(rankStr, model, imageUrl) {
+    const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+      ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
+      : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+
+  async function main() {
+    await fetchRate();
+    try {
+      const res = await fetch(CSV_PATH, { cache: "no-store" });
+      if (!res.ok) throw new Error(res.statusText);
+      const text = await res.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+      renderTable(parsed.data);
+      ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
+    } catch (err) {
+      fail("CSV 読み込みエラー: " + err.message);
     }
+  }
 
-    function imgTag(rankStr, model, imageUrl) {
-      const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
-      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-    }
+  function renderTable(data) {
+    const tbody = document.querySelector("#carTable tbody");
+    tbody.innerHTML = "";
+    data.forEach(r => {
+      const rankStr = String(r.rank).padStart(3, "0");
+      const diff = Number(r.delta_vs_last_month || 0);
+      const diffHtml = diff > 0
+        ? `<span class="rank-up">▲${diff}</span>`
+        : diff < 0
+        ? `<span class="rank-down">▼${-diff}</span>`
+        : "–";
+      const link = r.link || "";
+      const carId = link.match(/(\d+)/)?.[1] || "";
+      const name = r.global_name || r.name || "";
+      const price = (r.price || "") + " 元";
+      const priceJPY = convertToJPY(r.price || "");
+      const maker = r.manufacturer_ja || r.manufacturer || "";
+      const units = r.units || "";
+      const specBtn = carId
+        ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>`
+        : "";
+      const storyBtn = carId
+        ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>`
+        : "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${r.rank}</td>
+        <td>${diffHtml}</td>
+        <td>${imgTag(rankStr, name, r.image_url)}</td>
+        <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
+        <td>${maker}</td>
+        <td>${units}</td>
+        <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+        <td>${specBtn}${storyBtn}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
 
-    async function main() {
-      await fetchRate();
-      try {
-        const res = await fetch(CSV_PATH, { cache: "no-store" });
-        if (!res.ok) throw new Error(res.statusText);
-        const text = await res.text();
-        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-        if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-        renderTable(parsed.data);
-        ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
-      } catch (err) {
-        fail("CSV 読み込みエラー: " + err.message);
-      }
-    }
+  function ok(msg) {
+    const s = document.getElementById("status");
+    s.className = "alert alert-success py-2";
+    s.textContent = msg;
+  }
 
-    function renderTable(data) {
-      const tbody = document.querySelector("#carTable tbody");
-      tbody.innerHTML = "";
-      data.forEach(r => {
-        const rankStr = String(r.rank).padStart(3, "0");
-        const diff = Number(r.delta_vs_last_month || 0);
-        const diffHtml = diff > 0
-          ? `<span class="rank-up">▲${diff}</span>`
-          : diff < 0
-          ? `<span class="rank-down">▼${-diff}</span>`
-          : "–";
-        const link = r.link || "";
-        const carId = link.match(/(\d+)/)?.[1] || "";
-        const name = r.global_name || r.name || "";
-        const price = (r.price || "") + " 元";
-        const priceJPY = convertToJPY(r.price || "");
-        const maker = r.manufacturer_ja || r.manufacturer || "";
-        const units = r.units || "";
-        const specBtn = carId
-          ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>`
-          : "";
-        const storyBtn = carId
-          ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>`
-          : "";
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r.rank}</td>
-          <td>${diffHtml}</td>
-          <td>${imgTag(rankStr, name, r.image_url)}</td>
-          <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
-          <td>${maker}</td>
-          <td>${units}</td>
-          <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-          <td>${specBtn}${storyBtn}</td>`;
-        tbody.appendChild(tr);
-      });
-    }
+  function fail(msg) {
+    const s = document.getElementById("status");
+    s.className = "alert alert-danger py-2";
+    s.textContent = msg;
+  }
 
-    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
-    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
+  /* ==== showConfigCsv ==== */
+  function showConfigCsv(carId, title) {
+    const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+    const target = document.getElementById("csvContent");
+    document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
+    target.innerHTML = "読込中...";
 
-    /* ==== showConfigCsv ==== */
-    function showConfigCsv(carId, title) {
-      const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
-      const target = document.getElementById("csvContent");
-      document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
-      target.innerHTML = "読込中...";
+    Papa.parse(path, {
+      download: true,
+      header: false,
+      skipEmptyLines: false,
+      complete: (res) => {
+        const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+        if (!rows.length) {
+          target.innerHTML = "<div class='text-danger'>CSVが空です。</div>";
+          return;
+        }
 
-      Papa.parse(path, {
-        download: true,
-        header: false,
-        skipEmptyLines: false,
-        complete: (res) => {
-          const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
-          if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+        const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+        if (headerIdx === -1) {
+          target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>";
+          return;
+        }
 
-          const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
-          if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+        const headerRow = rows[headerIdx];
+        const idxSecJa = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+        const idxSec = headerRow.findIndex(v => (v || "").trim() === "セクション");
+        const secIdx = (idxSecJa !== -1 ? idxSecJa : idxSec);
+        const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+        const idxItem = headerRow.findIndex(v => (v || "").trim() === "項目");
+        const itemIdx = (idxItemJa !== -1 ? idxItemJa : idxItem);
+        const modelStart = Math.max(secIdx, itemIdx) + 1;
+        const modelHeaders = headerRow.slice(modelStart);
+        const dataRows = rows.slice(headerIdx + 1);
 
-          const headerRow = rows[headerIdx];
-          const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
-          const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
-          const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
-          const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
-          const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
-          const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
-          const modelStart = Math.max(secIdx, itemIdx) + 1;
-          const modelHeaders = headerRow.slice(modelStart);
-          const dataRows = rows.slice(headerIdx + 1);
+        const grouped = [];
+        let currentSection = "";
+        for (const r of dataRows) {
+          const sec = (r[secIdx] || "").trim();
+          if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+          if (!currentSection) continue;
+          const item = (r[itemIdx] || "").trim();
+          if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+          const cols = r.slice(modelStart);
+          if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+            grouped.push({ section: currentSection, rows: [] });
+          grouped[grouped.length - 1].rows.push([item, ...cols]);
+        }
 
-          const grouped = [];
-          let currentSection = "";
-          for (const r of dataRows) {
-            const sec = (r[secIdx] || "").trim();
-            if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
-            if (!currentSection) continue;
-            const item = (r[itemIdx] || "").trim();
-            if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
-            const cols = r.slice(modelStart);
-            if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
-              grouped.push({ section: currentSection, rows: [] });
-            grouped[grouped.length - 1].rows.push([item, ...cols]);
+        // === ナビゲーション生成 ===
+        let options = "";
+        for (const g of grouped) {
+          options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+        }
+
+        const navHtml = `
+          <div class="spec-sidebar d-none d-lg-block">
+            <ul class="list-unstyled m-0 p-0">
+              ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+            </ul>
+          </div>
+          <div class="section-toggle d-lg-none">
+            <select id="sectionSelect">${options}</select>
+          </div>`;
+
+        // === tbody生成 ===
+        const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h => `<th>${h}</th>`).join("")}</tr></thead>`;
+        let tbody = "<tbody>";
+        for (const g of grouped) {
+          const id = `sec_${g.section.replace(/[／\/]/g, "_").replace(/\s+/g, "_")}`;
+          tbody += `
+            <tr id="${id}" class="sec-row" data-section="${g.section}">
+              <th class="item-col section-col">▼ ${g.section}</th>
+              <td colspan="${modelHeaders.length}" class="section-fill"></td>
+            </tr>`;
+          for (const row of g.rows) {
+            const item = row[0] || "";
+            const cells = row.slice(1).map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i, "")}</td>`).join("");
+            tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
           }
+        }
+        tbody += "</tbody>";
 
-          let options = "";
-          for (const g of grouped) {
-            options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
-          }
-
-          const navHtml = `
-            <div class="spec-sidebar d-none d-lg-block">
-              <ul class="list-unstyled m-0 p-0">
-                ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
-              </ul>
-            </div>
-            <div class="section-toggle d-lg-none">
-              <select id="sectionSelect">${options}</select>
-            </div>`;
-
-          const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
-          let tbody="<tbody>";
-          for(const g of grouped){
-            const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-            tbody+=`
-              <tr id="${id}" class="sec-row" data-section="${g.section}">
-                <th class="item-col section-col">▼ ${g.section}</th>
-                <td colspan="${modelHeaders.length}" class="section-fill"></td>
-              </tr>`;
-            for(const row of g.rows){
-              const item=row[0]||"";
-              const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
-              tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
-            }
-          }
-          tbody+="</tbody>";
-
-          const tableHtml=`
-            <div class="spec-table-container d-flex">
-              ${navHtml}
-              <div class="spec-content p-2 flex-grow-1" id="specScrollArea">
-                <div class="table-responsive">
-                  <table class="table table-bordered table-sm spec-table mb-0">
-                    ${thead}${tbody}
-                  </table>
-                </div>
+        const tableHtml = `
+          <div class="spec-table-container d-flex">
+            ${navHtml}
+            <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+              <div class="table-responsive">
+                <table class="table table-bordered table-sm spec-table mb-0">
+                  ${thead}${tbody}
+                </table>
               </div>
-            </div>`;
-          target.innerHTML=tableHtml;
+            </div>
+          </div>`;
+        target.innerHTML = tableHtml;
 
-          const scrollArea = document.querySelector("#specScrollArea .table-responsive");
-          const theadEl = scrollArea?.querySelector(".spec-table thead");
-          const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-          const headerHeight = theadH;
+        // === thead高さ反映（sticky補正） ===
+        const scrollArea = document.querySelector("#specScrollArea .table-responsive") 
+                        || document.getElementById("specScrollArea"); // ←★ フォールバック追加
+        const theadEl = scrollArea?.querySelector(".spec-table thead");
+        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+        const headerHeight = theadH;
 
-          // ✅ 左メニュークリックでヘッダー直下へ
-          document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-            a.addEventListener("click",ev=>{
-              ev.preventDefault();
-              const id=a.getAttribute("href");
-              const el=document.querySelector(id);
-              if(el){
-                const offset = el.offsetTop - headerHeight;
-                scrollArea.scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
+        // ✅ 左メニュークリック時スクロール
+        document.querySelectorAll(".spec-sidebar a").forEach(a => {
+          a.addEventListener("click", ev => {
+            ev.preventDefault();
+            const id = a.getAttribute("href");
+            const el = document.querySelector(id);
+            if (el) {
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({ top: offset, behavior: "smooth" });
+            }
           });
+        });
 
-          // ✅ モバイルのセクション選択でもスクロール有効
-          const select=document.getElementById("sectionSelect");
-          if(select){
-            select.addEventListener("change",e=>{
-              const id=e.target.value;
-              const el=document.querySelector(id);
-              if(el){
-                const offset = el.offsetTop - headerHeight;
-                scrollArea.scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
-          }
-        },
-        error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
-      });
-      new bootstrap.Modal(document.getElementById("csvModal")).show();
+        // ✅ スマホselectスクロール
+        const select = document.getElementById("sectionSelect");
+        if (select) {
+          select.addEventListener("change", e => {
+            const id = e.target.value;
+            const el = document.querySelector(id);
+            if (el) {
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({ top: offset, behavior: "smooth" });
+            }
+          });
+        }
+      },
+      error: (err) => { target.textContent = "読み込み失敗: " + err.message; }
+    });
+    new bootstrap.Modal(document.getElementById("csvModal")).show();
+  }
+
+  /* ==== 口コミデータ ==== */
+  async function showStory(carId, title) {
+    const path = `output/koubei/${carId}/story.txt?v=${Date.now()}`;
+    const target = document.getElementById("storyContent");
+    document.getElementById("storyModalLabel").textContent = `口コミ概要（${title} | ID:${carId}）`;
+    target.textContent = "読込中...";
+    try {
+      const res = await fetch(path, { cache: "no-store" });
+      if (!res.ok) throw new Error("Not found");
+      let text = await res.text();
+      text = text.replace(/```/g, "");
+      text = text.replace(/^### (.*)$/gm, "<h6 class='mt-3 fw-bold'>$1</h6>");
+      text = text.replace(/\*\*(.*?)\*\*/g, "<b>$1</b>");
+      text = text.replace(/\r?\n/g, "<br>");
+      text = text.replace(/(<br>\s*){2,}/g, "<br><br>");
+      target.innerHTML = `<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+    } catch {
+      target.innerHTML = "<div class='text-danger'>口コミデータが見つかりません。</div>";
     }
+    new bootstrap.Modal(document.getElementById("storyModal")).show();
+  }
 
-    async function showStory(carId,title){
-      const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
-      const target=document.getElementById("storyContent");
-      document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-      target.textContent="読込中...";
-      try{
-        const res=await fetch(path,{cache:"no-store"});
-        if(!res.ok)throw new Error("Not found");
-        let text=await res.text();
-        text=text.replace(/```/g,"");
-        text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
-        text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
-        text=text.replace(/\r?\n/g,"<br>");
-        text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
-        target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-      }catch{
-        target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
-      }
-      new bootstrap.Modal(document.getElementById("storyModal")).show();
-    }
+  main();
+</script>
 
-    main();
-  </script>
 </body>
 </html>

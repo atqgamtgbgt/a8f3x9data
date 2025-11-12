@@ -440,6 +440,31 @@
     }
 
     main();
+    // === 横スクロール中のセクション行固定補正（軽量安定版）===
+function enableSmoothSectionFix() {
+  const modal = document.getElementById("csvModal");
+  const observer = new MutationObserver(() => {
+    const scrollArea = modal.querySelector(".spec-table-container");
+    if (!scrollArea) return;
+
+    const table = scrollArea.querySelector(".spec-table");
+    if (!table) return;
+
+    scrollArea.addEventListener("scroll", () => {
+      const x = scrollArea.scrollLeft;
+      const secRows = table.querySelectorAll("tbody tr.sec-row th");
+      secRows.forEach(th => {
+        // sticky(left) が効いているので、transformで軽く補正してブレ防止
+        th.style.transform = `translateX(${x * 0.0001}px)`;
+      });
+    });
+  });
+
+  observer.observe(modal, { childList: true, subtree: true });
+}
+
+enableSmoothSectionFix();
+
   </script>
 </body>
 </html>

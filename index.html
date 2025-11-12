@@ -19,11 +19,11 @@
 
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
-
     .spec-table-container {
       display: flex;
       align-items: flex-start;
       height: 80vh;
+      overflow-x: auto;
       background: #fff;
     }
 
@@ -38,40 +38,23 @@
       padding: 8px;
     }
 
-    /* ✅ overflowコンテナを1つに統一 */
     .spec-content {
       flex: 1;
+      overflow-y: auto !important;
+      overflow-x: visible !important;
       height: 80vh;
-      background: #fff;
-      overflow: hidden;
-      padding: 0;
+      padding: 8px;
       position: relative;
-    }
-
-    /* ✅ 実際のスクロール領域 */
-    .spec-scroll {
-      overflow: auto;
-      height: 100%;
-      width: 100%;
       background: #fff;
+      background-clip: padding-box;
     }
 
-    /* ✅ table本体をblock表示 */
+    .spec-content .table-responsive { overflow: visible !important; }
+
     .spec-table {
-      display: block;
+      position: relative;
       border-collapse: separate;
       border-spacing: 0;
-      width: max-content;
-      min-width: 100%;
-      position: relative;
-    }
-
-    .spec-table thead,
-    .spec-table tbody,
-    .spec-table tr {
-      display: table;
-      width: 100%;
-      table-layout: fixed;
     }
 
     /* ✅ ヘッダー固定 */
@@ -101,7 +84,7 @@
 
     /* ✅ セクション見出し修正版（divラップで固定） */
     .spec-table tbody tr.sec-row th {
-      position: static;
+      position: static;   /* ← stickyをセルではなく中のdivに移す */
       padding: 0;
     }
 
@@ -119,8 +102,8 @@
       white-space: nowrap;
     }
 
-    /* ✅ 背景透け防止マスク（z-indexを下げる） */
-    .spec-scroll::before {
+    /* ✅ 背景透け防止マスク */
+    .spec-content::before {
       content: "";
       position: sticky;
       top: 0;
@@ -128,19 +111,26 @@
       width: 100%;
       height: var(--secOffset, 42px);
       background: #fff;
-      z-index: 5;
+      z-index: 25;
       pointer-events: none;
     }
-    .spec-scroll::after {
+    .spec-content::after {
       content: "";
       position: sticky;
       top: 0;
       left: 0;
-      width: 180px;
+      width: calc(180px + 0.5rem);
       height: 100%;
       background: #fff;
-      z-index: 4;
+      z-index: 24;
       pointer-events: none;
+    }
+
+    .spec-table thead th,
+    .spec-table tbody th.item-col,
+    .spec-table tbody tr.sec-row th .sec-wrap {
+      background-clip: padding-box;
+      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
     }
   }
 
@@ -194,8 +184,7 @@
       </table>
     </div>
   </div>
-
-  <!-- モーダル: 仕様 -->
+    <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -305,8 +294,7 @@
 
     function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
     function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
-
-    function showConfigCsv(carId, title) {
+        function showConfigCsv(carId, title) {
       const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
       const target = document.getElementById("csvContent");
       document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
@@ -367,6 +355,7 @@
           let tbody="<tbody>";
           for(const g of grouped){
             const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+            // ✅ ラッパーdivを追加して sticky を内部に適用
             tbody+=`<tr id="${id}" class="sec-row" data-section="${g.section}"><th colspan="${1+modelHeaders.length}"><div class="sec-wrap">▼ ${g.section}</div></th></tr>`;
             for(const row of g.rows){
               const item=row[0]||"";
@@ -379,8 +368,8 @@
           const tableHtml=`
             <div class="spec-table-container d-flex">
               ${navHtml}
-              <div class="spec-content p-2 flex-grow-1" id="specScrollArea">
-                <div class="spec-scroll">
+              <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+                <div class="table-responsive">
                   <table class="table table-bordered table-sm spec-table mb-0">
                     ${thead}${tbody}
                   </table>
@@ -389,15 +378,14 @@
             </div>`;
           target.innerHTML=tableHtml;
 
-          // ✅ ヘッダー高さ→CSS変数（.spec-scroll にセット）
+          // ★ thead高さをCSS変数に反映（縦位置をヘッダー直下に）
           const scrollArea = document.getElementById("specScrollArea");
           const theadEl = scrollArea?.querySelector(".spec-table thead");
           const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-          const scrollEl = scrollArea?.querySelector(".spec-scroll");
-          if (scrollEl) scrollEl.style.setProperty("--secOffset", theadH + "px");
+          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
           const headerHeight = theadH;
 
-          // ✅ 左メニュークリック
+          // ✅ 左メニュークリックでヘッダー直下にスクロール
           document.querySelectorAll(".spec-sidebar a").forEach(a=>{
             a.addEventListener("click",ev=>{
               ev.preventDefault();
@@ -405,7 +393,7 @@
               const el=document.querySelector(id);
               if(el){
                 const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-scroll").scrollTo({top:offset,behavior:"smooth"});
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           });
@@ -417,7 +405,7 @@
               const el=document.querySelector(id);
               if(el){
                 const offset = el.offsetTop - headerHeight;
-                document.querySelector(".spec-scroll").scrollTo({top:offset,behavior:"smooth"});
+                document.querySelector(".spec-content").scrollTo({top:offset,behavior:"smooth"});
               }
             });
           }

@@ -32,17 +32,16 @@
   /* === 仕様テーブル（PC） === */
   @media (min-width: 992px) {
 
-    /* ✅ 親コンテナは横スクロールのみ（縦は子に任せる） */
+    /* ✅ 親コンテナはoverflowを殺し、基準を一致させる */
     .spec-table-container {
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: auto;
-      overflow-y: hidden;
+      overflow: hidden; /* ← 横も縦もここでは発生させない */
       background: #fff;
     }
 
-    /* ✅ 左サイドバーは個別にsticky管理（top固定） */
+    /* ✅ 左メニューはstickyのまま維持 */
     .spec-sidebar {
       position: sticky;
       top: 0;
@@ -55,26 +54,28 @@
       z-index: 50;
     }
 
-    /* ✅ メインエリアは縦スクロール（sticky基準） */
+    /* ✅ メインエリアはoverflowをvisibleにし、sticky基準を壊さない */
     .spec-content {
       flex: 1;
       height: 80vh;
-      overflow-y: auto !important;
-      overflow-x: visible !important;
+      overflow: hidden; /* ← ここでもscrollを発生させない */
       padding: 8px;
-      position: relative;
       background: #fff;
+      position: relative;
     }
 
+    /* ✅ スクロールはここで一括管理（縦＋横） */
     .spec-content .table-responsive {
-      overflow: visible !important;
+      position: relative;
+      height: 100%;
+      overflow: auto !important; /* ← 唯一のスクロール要素 */
     }
 
     .spec-table {
-      position: relative;
       border-collapse: separate;
       border-spacing: 0;
       width: 100%;
+      position: relative;
     }
 
     /* ✅ ヘッダー固定 */
@@ -103,18 +104,18 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し固定（ヘッダー直下） */
+    /* ✅ セクション見出し固定（ヘッダー直下＋横にも固定） */
     .spec-table tbody tr.sec-row th {
       position: sticky;
       top: var(--secOffset, 42px);
       left: 0;
       z-index: 40;
       background: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
       box-shadow: 0 2px 3px rgba(0,0,0,0.05);
+      border-bottom: 1px solid #dee2e6;
     }
 
-    /* ✅ 背景透け防止マスク */
+    /* ✅ 背景透け防止 */
     .spec-content::before {
       content: "";
       position: sticky;
@@ -148,7 +149,7 @@
     }
   }
 
-  /* === モバイル（トグル固定） === */
+  /* === モバイル === */
   @media (max-width: 991px) {
     .section-toggle {
       position: fixed;
@@ -169,13 +170,12 @@
     }
   }
 
-  /* ✅ テーブル内部パディング調整 */
+  /* ✅ テーブル内部の余白調整 */
   .spec-content.p-2 {
     padding: 0 !important;
     background: #fff !important;
   }
 </style>
-
 
 </head>
 <body>

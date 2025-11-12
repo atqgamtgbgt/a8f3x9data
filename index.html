@@ -8,8 +8,18 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-  body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
-  header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
+  body {
+    background-color: #f8f9fa;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  }
+  header {
+    background: #0d6efd;
+    color: #fff;
+    padding: 12px;
+    text-align: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+  }
   th { background-color: #f1f3f5; }
   .rank-up { color: #dc3545; font-weight: bold; }
   .rank-down { color: #0d6efd; font-weight: bold; }
@@ -23,7 +33,7 @@
       display: flex;
       align-items: flex-start;
       height: 80vh;
-      overflow-x: visible; /* ← 修正：auto→visible（sticky対策） */
+      overflow: hidden; /* ← sticky基準を一元化 */
       background: #fff;
     }
 
@@ -36,12 +46,12 @@
       background: #fff;
       border-right: 1px solid #dee2e6;
       padding: 8px;
+      z-index: 50;
     }
 
     .spec-content {
       flex: 1;
-      overflow-y: auto !important;
-      overflow-x: auto !important; /* ← 修正：visible→auto（横スクロール担当をこちらに） */
+      overflow: auto;
       height: 80vh;
       padding: 8px;
       position: relative;
@@ -55,6 +65,7 @@
       position: relative;
       border-collapse: separate;
       border-spacing: 0;
+      min-width: 100%;
     }
 
     /* ✅ ヘッダー固定 */
@@ -82,17 +93,18 @@
       border-right: 1px solid #dee2e6;
     }
 
-    /* ✅ セクション見出し修正版（divラップで固定） */
+    /* ✅ セクション見出しの2軸固定 */
     .spec-table tbody tr.sec-row th {
-      position: static;   /* ← stickyをセルではなく中のdivに移す */
       padding: 0;
+      position: relative;
+      z-index: 40;
     }
 
     .spec-table tbody tr.sec-row th .sec-wrap {
       position: sticky;
       top: var(--secOffset, 42px);
       left: 0;
-      z-index: 40;
+      z-index: 45;
       display: block;
       padding: 4px 8px;
       background: #f8f9fa;

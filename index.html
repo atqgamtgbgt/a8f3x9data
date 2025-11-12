@@ -184,31 +184,7 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
   }
 }
 
-/* === sticky部分の透け完全防止 === */
-.spec-table thead th.sticky-col,
-.spec-table tbody th.item-col,
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {
-  background-color: #fff !important;  /* ← 背景透け防止 */
-  background-clip: padding-box !important; /* ← セルの内側だけ塗る */
-  border-right: 1px solid #dee2e6;
-  z-index: 15;
-}
 
-/* セクション見出しは1段階上にして完全に被せる */
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {
-  z-index: 40 !important; /* ← ヘッダー下で上に重なる */
-}
-
-/* Safari用の再描画バグ防止 */
-@supports (-webkit-touch-callout: none) {
-  .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col {
-    transform: translateZ(0);
-    will-change: transform;
-  }
-}
 
 
   .spec-content.p-2 {

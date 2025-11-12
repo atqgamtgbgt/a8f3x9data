@@ -157,6 +157,17 @@
     padding: 0 !important;
     background: #fff !important;
   }
+  /* ✅ セクション行の右側灰色セルも縦横固定する */
+.spec-table tbody tr.sec-row .section-fill {
+  position: sticky;
+  left: 180px;              /* ← 左の固定列の幅に合わせる */
+  top: var(--secOffset, 42px); /* ← ★ヘッダー直下固定！ */
+  z-index: 39;              /* section-colより1段下 */
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: inset -1px 0 0 #dee2e6;
+}
+
 </style>
 </head>
 <body>

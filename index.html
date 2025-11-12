@@ -153,23 +153,27 @@
   }
 
 
-  /* === モバイル（トグル固定） === */
-  @media (max-width: 991px) {
-    .section-toggle {
-    position: sticky !important;  /* ← fixedを解除してstickyに */
-    top: 0 !important;
-    z-index: 1060 !important;     /* モーダルの上層に */
+@media (max-width: 991px) {
+  .section-toggle {
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 1060;
     background: #fff;
     border-bottom: 1px solid #dee2e6;
     padding: 8px;
-    }
-    .section-toggle select {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: block;
-    }
+    width: 100%;                 /* ←★これが重要 */
+    flex: 0 0 100%;              /* ←★flexコンテナ内でも横幅を確保 */
+    box-sizing: border-box;
   }
+  .section-toggle select {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+  }
+}
+
 
 
 

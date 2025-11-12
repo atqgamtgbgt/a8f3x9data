@@ -339,6 +339,21 @@
     padding: 0 !important;
     background: #fff !important;
   }
+  /* ✅ 左列とセクション帯の間の隙間を消す */
+.spec-table tbody th.item-col {
+  border-right: none !important;  /* ← 左列の線を消す */
+}
+
+.spec-table tbody tr.sec-row .section-col {
+  border-right: 1px solid #dee2e6 !important;  /* ← ここで右境界を統一 */
+  box-shadow: none !important;                 /* ← inset影線を消す */
+}
+
+/* ✅ fill側をわずかに詰めて物理的ギャップも除去 */
+.spec-table tbody tr.sec-row .section-fill {
+  left: 179px !important;  /* ← 180→179pxに微調整 */
+}
+
 </style>
 
 <body>

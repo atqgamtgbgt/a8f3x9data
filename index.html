@@ -14,7 +14,7 @@
 ========================================================= */
 body {
   background-color: #f8f9fa;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
 header {
   background: #0d6efd;
@@ -32,7 +32,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
 /* =========================================================
-   sticky 共通（PC＋スマホ共通）
+   sticky 共通（PC＋スマホ）
 ========================================================= */
 .spec-table thead th {
   position: sticky;
@@ -62,7 +62,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 40;
   background: #f8f9fa;
   font-weight: 600;
-  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
   border-bottom: 1px solid #dee2e6;
 }
 .spec-table tbody tr.sec-row .section-fill {
@@ -72,7 +71,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 39;
   background: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
-  box-shadow: inset -1px 0 0 #dee2e6;
 }
 .spec-table tbody tr.sec-row {
   height: 2.6em;
@@ -84,7 +82,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   white-space: nowrap;
 }
 
-/* 背景透け防止マスク */
+/* 背景透け防止 */
 .spec-content::before {
   content: "";
   position: sticky;
@@ -94,7 +92,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   height: var(--secOffset, 42px);
   background: #fff;
   z-index: 25;
-  pointer-events: none;
 }
 .spec-content::after {
   content: "";
@@ -105,7 +102,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   height: 100%;
   background: #fff;
   z-index: 24;
-  pointer-events: none;
 }
 
 /* =========================================================
@@ -133,9 +129,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     overflow: hidden !important;
     height: 80vh;
     padding: 8px;
-    position: relative;
     background: #fff;
-    background-clip: padding-box;
   }
   .spec-content .table-responsive {
     position: relative;
@@ -154,16 +148,16 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 ========================================================= */
 @media (max-width: 991px) {
 
-  /* トグル（スマホ） */
+  /* ★ここだけ正しいモバイルトグル（sticky扱い） */
   .section-toggle {
-    position: fixed;
-    top: 60px;
+    position: sticky;
+    top: 0;
     left: 0;
-    width: 100%;
+    z-index: 1060;
     background: #fff;
-    z-index: 1056;
     padding: 8px;
     border-bottom: 1px solid #dee2e6;
+    width: 100%;
   }
   .section-toggle select {
     width: 100%;
@@ -172,7 +166,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     display: block;
   }
 
-  /* スマホのスクロール領域 */
+  /* スマホスクロール領域 */
   .spec-content .table-responsive {
     max-height: 70vh;
     overflow: auto !important;
@@ -180,27 +174,23 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 }
 
 /* =========================================================
-   PC＋スマホ共通：隙間補正（あなたが入れたやつ）
+   隙間補正（あなたが入れていたやつ）
 ========================================================= */
 .spec-table tbody th.item-col {
   border-right: none !important;
 }
 .spec-table tbody tr.sec-row .section-col {
   border-right: 1px solid #dee2e6 !important;
-  box-shadow: none !important;
 }
 .spec-table tbody tr.sec-row .section-fill {
   left: 179px !important;
 }
 
 /* =========================================================
-   ★★★ スマホ見やすさ最終オーバーライド（ここが一番重要） ★★★
-   → 必ずすべての CSS より後で読み込まれる
-   → 見た目だけ改善。sticky/scroll には触れない
+   ★★★ スマホ最終オーバーライド（見た目だけ改善） ★★★
 ========================================================= */
 @media (max-width: 991px) {
 
-  /* 左項目列を太くして折返し改善 */
   .spec-table tbody th.item-col {
     min-width: 150px !important;
     font-size: 1rem !important;
@@ -209,7 +199,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     white-space: normal !important;
   }
 
-  /* データセルの行間・余白 */
   .spec-table td {
     font-size: 1rem !important;
     padding: 12px 8px !important;
@@ -218,7 +207,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     border-color: #d0d0d0 !important;
   }
 
-  /* セクション帯（汽车之家風） */
   .spec-table tbody tr.sec-row .section-col {
     font-size: 1rem !important;
     padding: 12px 8px !important;

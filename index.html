@@ -433,6 +433,16 @@ function showConfigCsv(carId, title) {
           grouped.push({ section: currentSection, rows: [] });
         grouped[grouped.length - 1].rows.push([item, ...cols]);
       }
+// === モーダルの表示を阻害しないための overflow 修正 ===
+const sa = document.querySelector("#specScrollArea");
+if (sa) {
+  sa.style.overflow = "visible";
+}
+
+const tr = document.querySelector("#specScrollArea .table-responsive");
+if (tr) {
+  tr.style.overflow = "visible";
+}
 
       // === ナビ生成 ===
       let options = "";

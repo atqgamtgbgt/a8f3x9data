@@ -364,6 +364,43 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
 .spec-table tbody tr.sec-row .section-fill {
   left: 179px !important;  /* ← 180→179pxに微調整 */
 }
+/* === スマホ見やすさ改善（見た目だけ） === */
+@media (max-width: 991px) {
+
+  /* 左の項目列を太くする（折り返し軽減） */
+  .spec-table tbody th.item-col {
+    min-width: 140px !important;
+    font-size: 0.95rem !important;
+    padding: 10px 6px !important;
+    white-space: normal !important; /* ← 長文も自然に折り返す */
+  }
+
+  /* 全セルの行間を広げて読みやすくする */
+  .spec-table td {
+    font-size: 0.95rem !important;
+    padding: 12px 6px !important;
+    line-height: 1.5 !important;
+    white-space: normal !important;
+  }
+
+  /* セクション帯を大きく（汽车之家風） */
+  .spec-table tbody tr.sec-row .section-col {
+    font-size: 1rem !important;
+    padding: 12px 8px !important;
+    background: #f6f6f6 !important;
+  }
+
+  /* 境界線を強調（表が見やすくなる） */
+  .spec-table td,
+  .spec-table th {
+    border-color: #d0d0d0 !important;
+  }
+
+  /* 1行をやや高くする */
+  .spec-table tbody tr {
+    height: auto !important;
+  }
+}
 
 </style>
 

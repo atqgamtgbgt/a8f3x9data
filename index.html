@@ -49,42 +49,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   background: #fff;
   border-right: 1px solid #dee2e6;
 }
-
-/* ← Part2 に続く */
-/* === section-row（セクション帯） === */
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {
-  line-height: 2.6em;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-
-.spec-table tbody tr.sec-row {
-  height: 2.6em;
-  /* ★ 方式②：セクション行を背景レイヤー化するため relative にする */
-  position: relative;   /* ★追加 */
-}
-
-/* ★ 方式②：tr.sec-row 背景を専用レイヤーにする */
-.spec-table tbody tr.sec-row::before {   /* ★追加 */
-  content: "";                           /* ★追加 */
-  position: absolute;                    /* ★追加 */
-  top: 0;                                 /* ★追加 */
-  left: 0;                                /* ★追加 */
-  width: 100%;                            /* ★追加：tr の幅を自由化できる */
-  height: 100%;                           /* ★追加 */
-  background: #f8f9fa;                    /* ★追加：セクション帯の背景色 */
-  z-index: 1;                             /* ★追加：セルより背面 */
-}
-
-/* ★ 方式②：セクションの th / td は前面に配置 */
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {  /* ★追加 */
-  position: relative;                          /* ★追加 */
-  z-index: 2;                                   /* ★追加：背景より上 */
-}
-
-/* セクション名：sticky */
 .spec-table tbody tr.sec-row .section-col {
   position: sticky;
   left: 0;
@@ -176,14 +140,13 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     border-spacing: 0;
     min-width: 100%;
   }
-
+  
   /* PC用：fill側の位置調整 */
   .spec-table tbody tr.sec-row .section-fill {
     left: 179px !important;
   }
 }
 
-/* ← Part3 に続く */
 /* === モバイル（sticky＋セレクトトグル両立） === */
 @media (max-width: 991px) {
   .spec-content .table-responsive {
@@ -257,7 +220,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
-
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -618,6 +580,3 @@ main();
 
 </body>
 </html>
-
-今のスクリプトは上部で、スマホからの見え方は添付。
-本来見えてほしい感じのものも添付したけど、「見た目だけ」これに近づけたい。（固定位置とか、スクロール位置とかは一切崩したくない）

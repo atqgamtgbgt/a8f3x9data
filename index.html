@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
+
 body {
   background-color: #f8f9fa;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
@@ -140,6 +141,11 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     border-spacing: 0;
     min-width: 100%;
   }
+  
+  /* PC用：fill側の位置調整 */
+  .spec-table tbody tr.sec-row .section-fill {
+    left: 179px !important;
+  }
 }
 
 /* === モバイル（sticky＋セレクトトグル両立） === */
@@ -206,19 +212,12 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   box-shadow: none !important;
 }
 
-/* ✅ fill側をわずかに詰めて物理的ギャップも除去 */
-.spec-table tbody tr.sec-row .section-fill {
-  left: 179px !important;
-}
-
 /* ✅ 通常のデータセルのz-indexを下げる */
 .spec-table tbody tr:not(.sec-row) td {
   position: relative;
   z-index: 10;
   background: #fff !important;
 }
-
-
 </style>
 
 

@@ -170,22 +170,22 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     display: block;
   }
   
-  /* 通常の項目名：100px（セクション行以外） */
-  .spec-table thead th.sticky-col,
-  .spec-table tbody tr:not(.sec-row) th.item-col {
-    min-width: 100px !important;
-    max-width: 100px !important;
-    width: 100px !important;
-    font-size: 0.85rem;
-    padding: 4px 6px !important;
-  }
-  
-  /* セクション名だけ：200px */
+  /* セクション名：200px（先に書く） */
   .spec-table tbody tr.sec-row th.section-col {
     min-width: 200px !important;
     max-width: 200px !important;
     width: 200px !important;
     font-size: 0.9rem;
+  }
+  
+  /* 通常の項目名：100px（後に書いて上書きを防ぐ） */
+  .spec-table thead th.sticky-col,
+  .spec-table tbody th.item-col:not(.section-col) {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.85rem;
+    padding: 4px 6px !important;
   }
   
   .spec-table tbody tr.sec-row .section-fill {
@@ -218,7 +218,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
-
 </style>
 
 

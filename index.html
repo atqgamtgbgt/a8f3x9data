@@ -563,7 +563,7 @@ function showConfigCsv(carId, title) {
       const secRows = [...document.querySelectorAll("tr.sec-row")];
 
       secRows.forEach((row, i) => {
-        const baseZ = 500;          // sticky との競合防止のため高め
+        const baseZ = 50;          // sticky との競合防止のため高め
         const z = baseZ + i;        // 下の row ほど z が大きい
 
         const col = row.querySelector(".section-col");

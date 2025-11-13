@@ -184,6 +184,42 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
   }
 }
 
+@media (max-width: 991px) {
+  /* PCの固定列/固定行はOFFにする */
+  .spec-table thead th,
+  .spec-table tbody th.item-col,
+  .spec-table tbody tr.sec-row .section-col,
+  .spec-table tbody tr.sec-row .section-fill {
+    position: static !important;
+  }
+
+  /* テーブル全体をスワイプ領域化 */
+  .spec-content .table-responsive {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory;
+    display: flex;
+  }
+
+  /* モデル列ごとにカード化 */
+  .spec-table {
+    min-width: 100% !important;
+    border-collapse: separate !important;
+  }
+  .spec-table th,
+  .spec-table td {
+    white-space: normal !important;
+  }
+
+  /* 各モデル列を「1枚のカード」として分割 */
+  .spec-table tr > *:nth-child(n+2) {
+    display: none; /* モバイルではまず全部隠す */
+  }
+
+  /* JSで選択中のモデルだけ表示 */
+  .model-active {
+    display: table-cell !important;
+  }
+}
 
 
 
@@ -700,6 +736,27 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
       toggle.style.borderBottom = '';
     }
   });
+  /* ==== モバイル表示：モデルカード切替 ==== */
+function activateMobileColumn(colIndex) {
+  document.querySelectorAll(".spec-table tr").forEach(tr => {
+    tr.querySelectorAll("th,td").forEach((cell, idx) => {
+      cell.classList.toggle("model-active", idx === colIndex);
+    });
+  });
+}
+
+// モーダル表示後：最初のモデルを表示
+if (window.innerWidth < 992) {
+  activateMobileColumn(1); // 2列目（最初のモデル）
+}
+
+// トグルで切替（PCでは無効）
+document.getElementById("sectionSelect")?.addEventListener("change", () => {
+  if (window.innerWidth < 992) {
+    activateMobileColumn(1); // モデル列は固定なので必要なら他のUIと連動可能
+  }
+});
+
   main();
 </script>
 

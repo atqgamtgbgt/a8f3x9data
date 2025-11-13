@@ -534,8 +534,7 @@ function showConfigCsv(carId, title) {
         });
       }
 
-      /* === ★ 追加機能：スクロール位置でトグルを自動更新する === */
-
+      /* === ★ スクロールでトグル自動更新 === */
       if (scrollArea && select) {
 
         const sections = [...document.querySelectorAll("tr.sec-row")].map(row => ({
@@ -559,6 +558,28 @@ function showConfigCsv(carId, title) {
           }
         });
       }
+
+      /* === ★ セクション z-index 自動加算（下ほど前面に来る） === */
+      const secRows = [...document.querySelectorAll("tr.sec-row")];
+
+      secRows.forEach((row, i) => {
+        const baseZ = 500;          // sticky との競合防止のため高め
+        const z = baseZ + i;        // 下の row ほど z が大きい
+
+        const col = row.querySelector(".section-col");
+        if (col) {
+          col.style.position = "sticky";
+          col.style.zIndex = z + 2;  // section-col が最強
+          col.style.background = "#fff";
+        }
+
+        const fill = row.querySelector(".section-fill");
+        if (fill) {
+          fill.style.position = "sticky";
+          fill.style.zIndex = z + 1; // 背景が次
+          fill.style.background = "#fff";
+        }
+      });
 
     },
     error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
@@ -588,7 +609,7 @@ async function showStory(carId,title){
   new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
 
-// === モーダルでのトグル表示固定 ===
+// === モーダルでトグル位置固定 ===
 const csvModalEl = document.getElementById('csvModal');
 csvModalEl.addEventListener('shown.bs.modal', () => {
   const toggle = document.querySelector('.section-toggle');
@@ -616,6 +637,7 @@ csvModalEl.addEventListener('hidden.bs.modal', () => {
 
 main();
 </script>
+
 
 
 

@@ -170,17 +170,9 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     display: block;
   }
   
-  /* セクション名：200px（先に書く） */
-  .spec-table tbody tr.sec-row th.section-col {
-    min-width: 200px !important;
-    max-width: 200px !important;
-    width: 200px !important;
-    font-size: 0.9rem;
-  }
-  
-  /* 通常の項目名：100px（後に書いて上書きを防ぐ） */
+  /* スマホ時：左端列を100pxに統一 */
   .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col:not(.section-col) {
+  .spec-table tbody th.item-col {
     min-width: 100px !important;
     max-width: 100px !important;
     width: 100px !important;
@@ -188,8 +180,15 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     padding: 4px 6px !important;
   }
   
+  .spec-table tbody tr.sec-row .section-col {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.9rem;
+  }
+  
   .spec-table tbody tr.sec-row .section-fill {
-    left: 199px !important;
+    left: 99px !important;
   }
   
   .spec-content::after {
@@ -218,15 +217,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
-  @media (max-width: 991px) {
-  .spec-table tbody tr.sec-row .section-col {
-    min-width: 100px !important;  /* 左端は100pxのまま */
-    background: #f8f9fa !important;  /* 背景色を確実に適用 */
-    box-shadow: 200px 0 0 0 #f8f9fa !important;  /* 右側に影で背景を延長 */
-  }
-}
-</style>
-
 
 <body>
   <header>🚗 China Auto Dashboard</header>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" data-bs-theme="auto">
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -7,370 +7,17 @@
   <link rel="icon" href="https://img.icons8.com/emoji/48/automobile.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-  }
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-  th { background-color: #f1f3f5; }
-  .rank-up { color: #dc3545; font-weight: bold; }
-  .rank-down { color: #0d6efd; font-weight: bold; }
-  img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-  .price-jpy { font-size: 0.85rem; color: #6c757d; }
-  .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-
-  /* === 仕様テーブル（PC） === */
-  @media (min-width: 992px) {
-    .spec-table-container {
-      display: flex;
-      align-items: flex-start;
-      height: 80vh;
-      background: #fff;
-    }
-
-    .spec-sidebar {
-      position: sticky;
-      top: 0;
-      flex: 0 0 180px;
-      height: 80vh;
-      overflow-y: auto;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-      padding: 8px;
-    }
-
-    .spec-content {
-      flex: 1;
-      overflow: hidden !important; /* ← 縦scrollは下層divへ任せる */
-      height: 80vh;
-      padding: 8px;
-      position: relative;
-      background: #fff;
-      background-clip: padding-box;
-    }
-
-    .spec-content .table-responsive {
-      position: relative;
-      height: 100%;
-      overflow: auto !important; /* ← ここが唯一のscroll領域 */
-    }
-
-    .spec-table {
-border-collapse: separate !important; /* ← sticky位置を正しく保つ */
-  border-spacing: 0 !important;
-    }
-.spec-table thead th.sticky-col,
-.spec-table tbody th.item-col {
-  background: #fff !important;
-  box-shadow: 0 0 0 0.5px #dee2e6 inset; /* ← 隙間の視覚消し */
-}
-
-/* --- Safari特有のsubpixelズレ対策 --- */
-@supports (-webkit-touch-callout: none) {
-  .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col {
-    transform: translateZ(0);
-    will-change: transform;
-  }
-}
-    /* ✅ ヘッダー固定 */
-    .spec-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: #fff;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-      border-bottom: 1px solid #dee2e6;
-    }
-
-    /* ✅ 左列固定 */
-    .spec-table thead th.sticky-col {
-      position: sticky;
-      left: 0;
-      z-index: 31;
-      background: #fff;
-    }
-    .spec-table tbody th.item-col {
-      position: sticky;
-      left: 0;
-      z-index: 12;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-    }
-
-    /* ✅ セクション行 */
-    .spec-table tbody tr.sec-row .section-col {
-      position: sticky;
-      left: 0;
-      top: var(--secOffset, 42px);
-      z-index: 40;
-      background: #f8f9fa;
-      font-weight: 600;
-      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .spec-table tbody tr.sec-row .section-fill {
-      position: sticky;
-      left: 180px;
-      top: var(--secOffset, 42px);
-      z-index: 39;
-      background: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
-      box-shadow: inset -1px 0 0 #dee2e6;
-    }
-
-    /* ✅ セクション行の高さを統一（はみ出し防止） */
-    .spec-table tbody tr.sec-row {
-      height: 2.6em;
-    }
-    .spec-table tbody tr.sec-row .section-col,
-    .spec-table tbody tr.sec-row .section-fill {
-      line-height: 2.6em;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-
-    /* ✅ 背景透け防止マスク */
-    .spec-content::before {
-      content: "";
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: var(--secOffset, 42px);
-      background: #fff;
-      z-index: 25;
-      pointer-events: none;
-    }
-    .spec-content::after {
-      content: "";
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: calc(180px + 0.5rem);
-      height: 100%;
-      background: #fff;
-      z-index: 24;
-      pointer-events: none;
-    }
-  }
-
-@media (max-width: 991px) {
-  .section-toggle {
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 1060;
-    background: #fff;
-    border-bottom: 1px solid #dee2e6;
-    padding: 8px;
-    width: 100%;                 /* ←★これが重要 */
-    flex: 0 0 100%;              /* ←★flexコンテナ内でも横幅を確保 */
-    box-sizing: border-box;
-  }
-  .section-toggle select {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-    display: block;
-  }
-}
-
-
-
-
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
-</style><style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-  }
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-  th { background-color: #f1f3f5; }
-  .rank-up { color: #dc3545; font-weight: bold; }
-  .rank-down { color: #0d6efd; font-weight: bold; }
-  img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-  .price-jpy { font-size: 0.85rem; color: #6c757d; }
-  .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-
-  /* === sticky共通（PC＋スマホ共通で有効） === */
-  .spec-table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: #fff;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-    border-bottom: 1px solid #dee2e6;
-  }
-  .spec-table thead th.sticky-col {
-    position: sticky;
-    left: 0;
-    z-index: 31;
-    background: #fff;
-  }
-  .spec-table tbody th.item-col {
-    position: sticky;
-    left: 0;
-    z-index: 12;
-    background: #fff;
-    border-right: 1px solid #dee2e6;
-  }
-  .spec-table tbody tr.sec-row .section-col {
-    position: sticky;
-    left: 0;
-    top: var(--secOffset, 42px);
-    z-index: 40;
-    background: #f8f9fa;
-    font-weight: 600;
-    box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-    border-bottom: 1px solid #dee2e6;
-  }
-  .spec-table tbody tr.sec-row .section-fill {
-    position: sticky;
-    left: 180px;
-    top: var(--secOffset, 42px);
-    z-index: 39;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    box-shadow: inset -1px 0 0 #dee2e6;
-  }
-  .spec-table tbody tr.sec-row {
-    height: 2.6em;
-  }
-  .spec-table tbody tr.sec-row .section-col,
-  .spec-table tbody tr.sec-row .section-fill {
-    line-height: 2.6em;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  /* 背景透け防止マスク（共通） */
-  .spec-content::before {
-    content: "";
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--secOffset, 42px);
-    background: #fff;
-    z-index: 25;
-    pointer-events: none;
-  }
-  .spec-content::after {
-    content: "";
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: calc(180px + 0.5rem);
-    height: 100%;
-    background: #fff;
-    z-index: 24;
-    pointer-events: none;
-  }
-
-  /* === 仕様テーブル（PC） === */
-  @media (min-width: 992px) {
-    .spec-table-container {
-      display: flex;
-      align-items: flex-start;
-      height: 80vh;
-      background: #fff;
-    }
-    .spec-sidebar {
-      position: sticky;
-      top: 0;
-      flex: 0 0 180px;
-      height: 80vh;
-      overflow-y: auto;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-      padding: 8px;
-    }
-    .spec-content {
-      flex: 1;
-      overflow: hidden !important;
-      height: 80vh;
-      padding: 8px;
-      position: relative;
-      background: #fff;
-      background-clip: padding-box;
-    }
-    .spec-content .table-responsive {
-      position: relative;
-      height: 100%;
-      overflow: auto !important;
-    }
-    .spec-table {
-      position: relative;
-      border-collapse: separate;
-      border-spacing: 0;
-      min-width: 100%;
-    }
-  }
-
-  /* === モバイル（sticky＋セレクトトグル両立） === */
-  @media (max-width: 991px) {
-    .spec-content .table-responsive {
-      max-height: 70vh;
-      overflow: auto !important;
-    }
-    .section-toggle {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      z-index: 1056;
-      padding: 8px;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .section-toggle select {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: block;
-    }
-  }
-
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
-  /* ✅ 左列とセクション帯の間の隙間を消す */
-.spec-table tbody th.item-col {
-  border-right: none !important;  /* ← 左列の線を消す */
-}
-
-.spec-table tbody tr.sec-row .section-col {
-  border-right: 1px solid #dee2e6 !important;  /* ← ここで右境界を統一 */
-  box-shadow: none !important;                 /* ← inset影線を消す */
-}
-
-/* ✅ fill側をわずかに詰めて物理的ギャップも除去 */
-.spec-table tbody tr.sec-row .section-fill {
-  left: 179px !important;  /* ← 180→179pxに微調整 */
-}
-
-</style>
-
+  <style>
+    body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
+    header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
+    th { background-color: #f1f3f5; }
+    .rank-up { color: #dc3545; font-weight: bold; }
+    .rank-down { color: #0d6efd; font-weight: bold; }
+    img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
+    .price-jpy { font-size: 0.85rem; color: #6c757d; }
+    .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
+  </style>
+</head>
 <body>
   <header>🚗 China Auto Dashboard</header>
 
@@ -396,7 +43,7 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
     </div>
   </div>
 
-  <!-- モーダル: 仕様 -->
+  <!-- モーダル -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -411,7 +58,6 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
     </div>
   </div>
 
-  <!-- モーダル: 口コミ -->
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -427,282 +73,115 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
-  const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-  const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
-  const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
-  let cnyToJpy = 20;
 
-  async function fetchRate() {
-    try {
-      const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-      const data = await res.json();
-      if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-    } catch {
-      cnyToJpy = 20;
+  <script>
+    const CSV_PATH = "/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now();
+    const IMG_BASE = "/output/pipeline/autohome-ranking-images/autohome_images/";
+    let cnyToJpy = 20;
+
+    async function fetchRate() {
+      try {
+        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+        const data = await res.json();
+        if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
+      } catch { cnyToJpy = 20; }
     }
-  }
 
-  function convertToJPY(priceStr) {
-    if (!priceStr) return "";
-    const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-    if (!m) return "";
-    const low = parseFloat(m[1]) * cnyToJpy * 10000;
-    const high = parseFloat(m[2]) * cnyToJpy * 10000;
-    const fmt = (x) => (x / 10000).toFixed(1);
-    return `（約${fmt(low)}〜${fmt(high)}万円）`;
-  }
-
-  function imgTag(rankStr, model, imageUrl) {
-    const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-      ? `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`
-      : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png?v=${Date.now()}`);
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  }
-
-  async function main() {
-    await fetchRate();
-    try {
-      const res = await fetch(CSV_PATH, { cache: "no-store" });
-      if (!res.ok) throw new Error(res.statusText);
-      const text = await res.text();
-      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-      if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-      renderTable(parsed.data);
-      ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
-    } catch (err) {
-      fail("CSV 読み込みエラー: " + err.message);
+    function convertToJPY(priceStr) {
+      if (!priceStr) return "";
+      const match = priceStr.match(/([\d.]+)-([\d.]+)万/);
+      if (!match) return "";
+      const low = parseFloat(match[1]) * cnyToJpy * 10000;
+      const high = parseFloat(match[2]) * cnyToJpy * 10000;
+      const fmt = (x) => (x / 10000).toFixed(1);
+      return `（約${fmt(low)}〜${fmt(high)}万円）`;
     }
-  }
 
-  function renderTable(data) {
-    const tbody = document.querySelector("#carTable tbody");
-    tbody.innerHTML = "";
-    data.forEach(r => {
-      const rankStr = String(r.rank).padStart(3, "0");
-      const diff = Number(r.delta_vs_last_month || 0);
-      const diffHtml = diff > 0
-        ? `<span class="rank-up">▲${diff}</span>`
-        : diff < 0
-        ? `<span class="rank-down">▼${-diff}</span>`
-        : "–";
-      const link = r.link || "";
-      const carId = link.match(/(\d+)/)?.[1] || "";
-      const name = r.global_name || r.name || "";
-      const price = (r.price || "") + " 元";
-      const priceJPY = convertToJPY(r.price || "");
-      const maker = r.manufacturer_ja || r.manufacturer || "";
-      const units = r.units || "";
-      const specBtn = carId
-        ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>`
-        : "";
-      const storyBtn = carId
-        ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>`
-        : "";
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${r.rank}</td>
-        <td>${diffHtml}</td>
-        <td>${imgTag(rankStr, name, r.image_url)}</td>
-        <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
-        <td>${maker}</td>
-        <td>${units}</td>
-        <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-        <td>${specBtn}${storyBtn}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-
-  function ok(msg){
-    const s=document.getElementById("status");
-    s.className="alert alert-success py-2";
-    s.textContent=msg;
-  }
-  function fail(msg){
-    const s=document.getElementById("status");
-    s.className="alert alert-danger py-2";
-    s.textContent=msg;
-  }
-
-  /* ==== showConfigCsv 開始 ==== */
-  function showConfigCsv(carId, title) {
-    const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
-    const target = document.getElementById("csvContent");
-    document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
-    target.innerHTML = "読込中...";
-    Papa.parse(path, {
-      download: true,
-      header: false,
-      skipEmptyLines: false,
-      complete: (res) => {
-        const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
-        if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
-
-        const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
-        if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
-
-        const headerRow = rows[headerIdx];
-        const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
-        const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
-        const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
-        const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
-        const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
-        const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
-        const modelStart = Math.max(secIdx, itemIdx) + 1;
-        const modelHeaders = headerRow.slice(modelStart);
-        const dataRows = rows.slice(headerIdx + 1);
-
-        const grouped = [];
-        let currentSection = "";
-        for (const r of dataRows) {
-          const sec = (r[secIdx] || "").trim();
-          if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
-          if (!currentSection) continue;
-          const item = (r[itemIdx] || "").trim();
-          if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
-          const cols = r.slice(modelStart);
-          if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
-            grouped.push({ section: currentSection, rows: [] });
-          grouped[grouped.length - 1].rows.push([item, ...cols]);
-        }
-
-        // === ナビゲーション生成 ===
-        let options = "";
-        for (const g of grouped) {
-          options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
-        }
-
-        const navHtml = `
-          <div class="spec-sidebar d-none d-lg-block">
-            <ul class="list-unstyled m-0 p-0">
-              ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
-            </ul>
-          </div>
-          <div class="section-toggle d-lg-none">
-            <select id="sectionSelect">${options}</select>
-          </div>`;
-
-        // === tbody生成（colspan廃止・section-col固定対応） ===
-        const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
-        let tbody="<tbody>";
-        for(const g of grouped){
-          const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-          tbody+=`
-            <tr id="${id}" class="sec-row" data-section="${g.section}">
-              <th class="item-col section-col">▼ ${g.section}</th>
-              <td colspan="${modelHeaders.length}" class="section-fill"></td>
-            </tr>`;
-          for(const row of g.rows){
-            const item=row[0]||"";
-            const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
-            tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
-          }
-        }
-        tbody+="</tbody>";
-
-        const tableHtml=`
-          <div class="spec-table-container d-flex">
-            ${navHtml}
-            <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
-              <div class="table-responsive">
-                <table class="table table-bordered table-sm spec-table mb-0">
-                  ${thead}${tbody}
-                </table>
-              </div>
-            </div>
-          </div>`;
-        target.innerHTML=tableHtml;
-
-        // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
-        const scrollArea =
-          document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
-            ? document.querySelector("#specScrollArea .table-responsive")
-            : document.getElementById("specScrollArea"); // ←★スマホ用フォールバック強化
-        const theadEl = scrollArea?.querySelector(".spec-table thead");
-        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-        const headerHeight = theadH;
-
-        // ✅ 左メニュークリックでヘッダー直下へ正確に移動
-        document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-          a.addEventListener("click",ev=>{
-            ev.preventDefault();
-            const id=a.getAttribute("href");
-            const el=document.querySelector(id);
-            if(el && scrollArea){
-              const offset = el.offsetTop - headerHeight;
-              scrollArea.scrollTo({top:offset,behavior:"smooth"});
-            }
-          });
-        });
-
-        // ✅ セクションセレクトでも同様に移動（スマホ対応）
-        const select=document.getElementById("sectionSelect");
-        if(select){
-          select.addEventListener("change",e=>{
-            const id=e.target.value;
-            const el=document.querySelector(id);
-            if(el && scrollArea){
-              const offset = el.offsetTop - headerHeight;
-              scrollArea.scrollTo({top:offset,behavior:"smooth"});
-            }
-          });
-        }
-      },
-      error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
-    });
-    new bootstrap.Modal(document.getElementById("csvModal")).show();
-  }
-
-  /* ==== 口コミデータ ==== */
-  async function showStory(carId,title){
-    const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
-    const target=document.getElementById("storyContent");
-    document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-    target.textContent="読込中...";
-    try{
-      const res=await fetch(path,{cache:"no-store"});
-      if(!res.ok)throw new Error("Not found");
-      let text=await res.text();
-      text=text.replace(/```/g,"");
-      text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
-      text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
-      text=text.replace(/\r?\n/g,"<br>");
-      text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
-      target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-    }catch{
-      target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
+    function imgTag(rankStr, model, imageUrl) {
+      let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
+        ? "/output/pipeline/autohome-ranking-images" + imageUrl
+        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png`);
+      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
     }
-    new bootstrap.Modal(document.getElementById("storyModal")).show();
-  }
-// === モーダル開閉時のトグル制御 ===
-  const csvModalEl = document.getElementById('csvModal');
-  csvModalEl.addEventListener('shown.bs.modal', () => {
-    const toggle = document.querySelector('.section-toggle');
-    if (toggle) {
-      toggle.style.position = 'fixed';
-      toggle.style.top = '60px';
-      toggle.style.left = '0';
-      toggle.style.width = '100%';
-      toggle.style.zIndex = '2000';
-      toggle.style.background = '#fff';
-      toggle.style.borderBottom = '1px solid #dee2e6';
+
+    async function main() {
+      await fetchRate();
+      Papa.parse(CSV_PATH, {
+        download: true,
+        header: true,
+        skipEmptyLines: true,
+        complete: (res) => {
+          if (!res.meta.fields?.includes("rank")) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
+          renderTable(res.data.filter(r => r && r.rank));
+          ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
+        },
+        error: (err) => fail("CSV 読み込みエラー: " + err.message)
+      });
     }
-  });
 
-  csvModalEl.addEventListener('hidden.bs.modal', () => {
-    const toggle = document.querySelector('.section-toggle');
-    if (toggle) {
-      toggle.style.position = '';
-      toggle.style.top = '';
-      toggle.style.zIndex = '';
-      toggle.style.background = '';
-      toggle.style.borderBottom = '';
+    function renderTable(data) {
+      const tbody = document.querySelector("#carTable tbody");
+      tbody.innerHTML = "";
+      data.forEach(r => {
+        const rankStr = String(r.rank).padStart(3, "0");
+        const diff = Number(r.delta_vs_last_month || 0);
+        const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
+        const link = r.link || "";
+        const carId = link.match(/(\d+)/)?.[1] || "";
+        const name = r.global_name || r.name || "";
+        const price = (r.price || "") + " 元";
+        const priceJPY = convertToJPY(r.price || "");
+        const maker = r.manufacturer_ja || r.manufacturer || "";
+        const units = r.units || "";
+
+        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}');">仕様</button>` : "";
+        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}');">口コミ</button>` : "";
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${r.rank}</td>
+          <td>${diffHtml}</td>
+          <td>${imgTag(rankStr, name, r.image_url)}</td>
+          <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
+          <td>${maker}</td>
+          <td>${units}</td>
+          <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+          <td>${specBtn}${storyBtn}</td>
+        `;
+        tbody.appendChild(tr);
+      });
     }
-  });
-  main();
-</script>
 
+    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
+    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
 
+    function showConfigCsv(carId, title){
+      const path=`/output/autohome/${carId}/config_${carId}.ja.csv`;
+      const target=document.getElementById("csvContent");
+      document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
+      target.innerHTML="読込中...";
+      Papa.parse(path,{download:true,header:true,complete:(res)=>{
+        if(!res.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
+        let html="<table class='table table-bordered table-sm'><thead><tr>";
+        res.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
+        res.data.forEach(row=>{html+="<tr>";res.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
+        target.innerHTML=html+"</tbody></table>";
+      },error:(err)=>target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`});
+      new bootstrap.Modal(document.getElementById("csvModal")).show();
+    }
+
+    function showStory(carId, title){
+      const path=`/output/koubei/${carId}/story.txt`;
+      const target=document.getElementById("storyContent");
+      document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+      target.textContent="読込中...";
+      fetch(path).then(res=>res.ok?res.text():Promise.reject("Not Found"))
+      .then(text=>target.textContent=text)
+      .catch(()=>target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>");
+      new bootstrap.Modal(document.getElementById("storyModal")).show();
+    }
+
+    main();
+  </script>
 </body>
 </html>

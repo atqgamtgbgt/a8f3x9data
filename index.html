@@ -8,7 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-
 body {
   background-color: #f8f9fa;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
@@ -171,7 +170,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     display: block;
   }
   
-  /* スマホ時：左端列を狭く */
+  /* 通常の項目名：100pxのまま */
   .spec-table thead th.sticky-col,
   .spec-table tbody th.item-col {
     min-width: 100px !important;
@@ -181,15 +180,16 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     padding: 4px 6px !important;
   }
   
+  /* セクション名だけ：140pxに広げる */
   .spec-table tbody tr.sec-row .section-col {
-    min-width: 100px !important;
-    max-width: 100px !important;
-    width: 100px !important;
+    min-width: 140px !important;
+    max-width: 140px !important;
+    width: 140px !important;
     font-size: 0.9rem;
   }
   
   .spec-table tbody tr.sec-row .section-fill {
-    left: 99px !important;
+    left: 139px !important;
   }
   
   .spec-content::after {
@@ -217,9 +217,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   position: relative;
   z-index: 10;
   background: #fff !important;
-}
-  .spec-table tbody tr.sec-row {
-  background: #f8f9fa !important;
 }
 </style>
 

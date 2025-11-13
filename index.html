@@ -210,6 +210,13 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 .spec-table tbody tr.sec-row .section-fill {
   left: 179px !important;
 }
+
+/* ✅ 通常のデータセルのz-indexを下げる */
+.spec-table tbody tr:not(.sec-row) td {
+  position: relative;
+  z-index: 10;
+}
+
 </style>
 
 

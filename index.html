@@ -8,9 +8,6 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-/* ============================================
-   基本設定
-============================================ */
 body {
   background-color: #f8f9fa;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
@@ -27,19 +24,92 @@ th { background-color: #f1f3f5; }
 .rank-up { color: #dc3545; font-weight: bold; }
 .rank-down { color: #0d6efd; font-weight: bold; }
 img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
+.price-jpy { font-size: 0.85rem; color: #6c757d; }
+.btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-/* ============================================
-   PC（sticky完全保持）
-============================================ */
+/* === sticky共通（PC＋スマホ共通で有効） === */
+.spec-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+  border-bottom: 1px solid #dee2e6;
+}
+.spec-table thead th.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 31;
+  background: #fff;
+}
+.spec-table tbody th.item-col {
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: #fff;
+  border-right: 1px solid #dee2e6;
+}
+.spec-table tbody tr.sec-row .section-col {
+  position: sticky;
+  left: 0;
+  top: var(--secOffset, 42px);
+  z-index: 40;
+  background: #f8f9fa;
+  font-weight: 600;
+  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+}
+.spec-table tbody tr.sec-row .section-fill {
+  position: sticky;
+  left: 180px;
+  top: var(--secOffset, 42px);
+  z-index: 39;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: inset -1px 0 0 #dee2e6;
+}
+.spec-table tbody tr.sec-row {
+  height: 2.6em;
+}
+.spec-table tbody tr.sec-row .section-col,
+.spec-table tbody tr.sec-row .section-fill {
+  line-height: 2.6em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* 背景透け防止マスク（共通） */
+.spec-content::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--secOffset, 42px);
+  background: #fff;
+  z-index: 25;
+  pointer-events: none;
+}
+.spec-content::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: calc(180px + 0.5rem);
+  height: 100%;
+  background: #fff;
+  z-index: 24;
+  pointer-events: none;
+}
+
+/* === 仕様テーブル（PC） === */
 @media (min-width: 992px) {
-
   .spec-table-container {
     display: flex;
     align-items: flex-start;
     height: 80vh;
     background: #fff;
   }
-
   .spec-sidebar {
     position: sticky;
     top: 0;
@@ -50,7 +120,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     border-right: 1px solid #dee2e6;
     padding: 8px;
   }
-
   .spec-content {
     flex: 1;
     overflow: hidden !important;
@@ -60,134 +129,86 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     background: #fff;
     background-clip: padding-box;
   }
-
   .spec-content .table-responsive {
     position: relative;
     height: 100%;
     overflow: auto !important;
   }
-
   .spec-table {
-    border-collapse: separate !important;
-    border-spacing: 0 !important;
-  }
-
-  .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col {
-    background: #fff !important;
-    box-shadow: 0 0 0 0.5px #dee2e6 inset;
-  }
-
-  .spec-table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: #fff;
-    border-bottom: 1px solid #dee2e6;
-  }
-  .spec-table thead th.sticky-col {
-    left: 0;
-    z-index: 31;
-  }
-  .spec-table tbody th.item-col {
-    left: 0;
-    z-index: 12;
-    border-right: 1px solid #dee2e6;
-  }
-
-  .spec-table tbody tr.sec-row .section-col {
-    position: sticky;
-    left: 0;
-    top: var(--secOffset, 42px);
-    z-index: 40;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-  }
-
-  .spec-table tbody tr.sec-row .section-fill {
-    position: sticky;
-    left: 180px;
-    top: var(--secOffset, 42px);
-    z-index: 39;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-  }
-
-  .spec-table tbody tr.sec-row {
-    height: 2.6em;
-  }
-  .spec-table tbody tr.sec-row .section-col,
-  .spec-table tbody tr.sec-row .section-fill {
-    line-height: 2.6em;
-    white-space: nowrap;
+    position: relative;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 100%;
   }
 }
 
-/* ============================================
-   スマホ用：sticky壊さず「見た目だけ」左を細く
-============================================ */
+/* === モバイル（sticky＋セレクトトグル両立） === */
 @media (max-width: 991px) {
-
-  /* ▼ トグル幅確保 */
-  .section-toggle {
-    position: sticky;
-    top: 0;
-    left: 0;
-    z-index: 1060;
-    background: #fff;
-    border-bottom: 1px solid #dee2e6;
-    padding: 8px;
-    width: 100%;
-  }
-
-  /* ▼ スクロール領域はそのまま */
   .spec-content .table-responsive {
     max-height: 70vh;
     overflow: auto !important;
   }
-
-  /* ▼ 左側項目列を “見た目だけ” 細くする */
+  .section-toggle {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 1056;
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .section-toggle select {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+    display: block;
+  }
+  
+  /* スマホ時：左端列を狭く */
+  .spec-table thead th.sticky-col,
   .spec-table tbody th.item-col {
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
-    white-space: normal !important;
-    font-size: 0.9rem !important;
-    line-height: 1.25 !important;
-    padding: 6px 4px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.85rem;
+    padding: 4px 6px !important;
   }
-
-  /* ▼ セクション帯も合わせて110pxに */
+  
   .spec-table tbody tr.sec-row .section-col {
-    width: 110px !important;
-    min-width: 110px !important;
-    max-width: 110px !important;
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.9rem;
   }
-
-  /* ▼ section-fill の left を110pxに（sticky崩さない） */
+  
   .spec-table tbody tr.sec-row .section-fill {
-    left: 110px !important;
+    left: 99px !important;
+  }
+  
+  .spec-content::after {
+    width: calc(100px + 0.5rem) !important;
   }
 }
 
-/* ============================================
-  背景透け防止（共通）
-============================================ */
-.spec-content::before {
-  content: "";
-  position: sticky;
-  top: 0;
-  height: var(--secOffset, 42px);
-  background: #fff;
-  z-index: 25;
+.spec-content.p-2 {
+  padding: 0 !important;
+  background: #fff !important;
 }
-.spec-content::after {
-  content: "";
-  position: sticky;
-  top: 0;
-  width: calc(180px + 0.5rem);
-  background: #fff;
-  z-index: 24;
+
+/* ✅ 左列とセクション帯の間の隙間を消す */
+.spec-table tbody th.item-col {
+  border-right: none !important;
+}
+
+.spec-table tbody tr.sec-row .section-col {
+  border-right: 1px solid #dee2e6 !important;
+  box-shadow: none !important;
+}
+
+/* ✅ fill側をわずかに詰めて物理的ギャップも除去 */
+.spec-table tbody tr.sec-row .section-fill {
+  left: 179px !important;
 }
 </style>
 

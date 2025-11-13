@@ -8,173 +8,162 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-  }
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-  th { background-color: #f1f3f5; }
-  .rank-up { color: #dc3545; font-weight: bold; }
-  .rank-down { color: #0d6efd; font-weight: bold; }
-  img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-  .price-jpy { font-size: 0.85rem; color: #6c757d; }
-  .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-  /* === 仕様テーブル（PC） === */
-  @media (min-width: 992px) {
-    .spec-table-container {
-      display: flex;
-      align-items: flex-start;
-      height: 80vh;
-      background: #fff;
-    }
+/* =========================================================
+   共通
+========================================================= */
+body {
+  background-color: #f8f9fa;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+}
+header {
+  background: #0d6efd;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+th { background-color: #f1f3f5; }
+.rank-up { color: #dc3545; font-weight: bold; }
+.rank-down { color: #0d6efd; font-weight: bold; }
+img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
+.price-jpy { font-size: 0.85rem; color: #6c757d; }
+.btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-    .spec-sidebar {
-      position: sticky;
-      top: 0;
-      flex: 0 0 180px;
-      height: 80vh;
-      overflow-y: auto;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-      padding: 8px;
-    }
-
-    .spec-content {
-      flex: 1;
-      overflow: hidden !important; /* ← 縦scrollは下層divへ任せる */
-      height: 80vh;
-      padding: 8px;
-      position: relative;
-      background: #fff;
-      background-clip: padding-box;
-    }
-
-    .spec-content .table-responsive {
-      position: relative;
-      height: 100%;
-      overflow: auto !important; /* ← ここが唯一のscroll領域 */
-    }
-
-    .spec-table {
-border-collapse: separate !important; /* ← sticky位置を正しく保つ */
-  border-spacing: 0 !important;
-    }
-.spec-table thead th.sticky-col,
+/* =========================================================
+   sticky 共通（PC＋スマホ共通）
+========================================================= */
+.spec-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+  border-bottom: 1px solid #dee2e6;
+}
+.spec-table thead th.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 31;
+  background: #fff;
+}
 .spec-table tbody th.item-col {
-  background: #fff !important;
-  box-shadow: 0 0 0 0.5px #dee2e6 inset; /* ← 隙間の視覚消し */
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: #fff;
+  border-right: 1px solid #dee2e6;
+}
+.spec-table tbody tr.sec-row .section-col {
+  position: sticky;
+  left: 0;
+  top: var(--secOffset, 42px);
+  z-index: 40;
+  background: #f8f9fa;
+  font-weight: 600;
+  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+  border-bottom: 1px solid #dee2e6;
+}
+.spec-table tbody tr.sec-row .section-fill {
+  position: sticky;
+  left: 180px;
+  top: var(--secOffset, 42px);
+  z-index: 39;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: inset -1px 0 0 #dee2e6;
+}
+.spec-table tbody tr.sec-row {
+  height: 2.6em;
+}
+.spec-table tbody tr.sec-row .section-col,
+.spec-table tbody tr.sec-row .section-fill {
+  line-height: 2.6em;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
-/* --- Safari特有のsubpixelズレ対策 --- */
-@supports (-webkit-touch-callout: none) {
-  .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col {
-    transform: translateZ(0);
-    will-change: transform;
-  }
+/* 背景透け防止マスク */
+.spec-content::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--secOffset, 42px);
+  background: #fff;
+  z-index: 25;
+  pointer-events: none;
 }
-    /* ✅ ヘッダー固定 */
-    .spec-table thead th {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: #fff;
-      box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-      border-bottom: 1px solid #dee2e6;
-    }
+.spec-content::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: calc(180px + 0.5rem);
+  height: 100%;
+  background: #fff;
+  z-index: 24;
+  pointer-events: none;
+}
 
-    /* ✅ 左列固定 */
-    .spec-table thead th.sticky-col {
-      position: sticky;
-      left: 0;
-      z-index: 31;
-      background: #fff;
-    }
-    .spec-table tbody th.item-col {
-      position: sticky;
-      left: 0;
-      z-index: 12;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-    }
-
-    /* ✅ セクション行 */
-    .spec-table tbody tr.sec-row .section-col {
-      position: sticky;
-      left: 0;
-      top: var(--secOffset, 42px);
-      z-index: 40;
-      background: #f8f9fa;
-      font-weight: 600;
-      box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .spec-table tbody tr.sec-row .section-fill {
-      position: sticky;
-      left: 180px;
-      top: var(--secOffset, 42px);
-      z-index: 39;
-      background: #f8f9fa;
-      border-bottom: 1px solid #dee2e6;
-      box-shadow: inset -1px 0 0 #dee2e6;
-    }
-
-    /* ✅ セクション行の高さを統一（はみ出し防止） */
-    .spec-table tbody tr.sec-row {
-      height: 2.6em;
-    }
-    .spec-table tbody tr.sec-row .section-col,
-    .spec-table tbody tr.sec-row .section-fill {
-      line-height: 2.6em;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-
-    /* ✅ 背景透け防止マスク */
-    .spec-content::before {
-      content: "";
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: var(--secOffset, 42px);
-      background: #fff;
-      z-index: 25;
-      pointer-events: none;
-    }
-    .spec-content::after {
-      content: "";
-      position: sticky;
-      top: 0;
-      left: 0;
-      width: calc(180px + 0.5rem);
-      height: 100%;
-      background: #fff;
-      z-index: 24;
-      pointer-events: none;
-    }
+/* =========================================================
+   PC（992px〜）
+========================================================= */
+@media (min-width: 992px) {
+  .spec-table-container {
+    display: flex;
+    align-items: flex-start;
+    height: 80vh;
+    background: #fff;
   }
-
-@media (max-width: 991px) {
-  .section-toggle {
+  .spec-sidebar {
     position: sticky;
     top: 0;
-    left: 0;
-    z-index: 1060;
+    flex: 0 0 180px;
+    height: 80vh;
+    overflow-y: auto;
     background: #fff;
-    border-bottom: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
     padding: 8px;
-    width: 100%;                 /* ←★これが重要 */
-    flex: 0 0 100%;              /* ←★flexコンテナ内でも横幅を確保 */
-    box-sizing: border-box;
+  }
+  .spec-content {
+    flex: 1;
+    overflow: hidden !important;
+    height: 80vh;
+    padding: 8px;
+    position: relative;
+    background: #fff;
+    background-clip: padding-box;
+  }
+  .spec-content .table-responsive {
+    position: relative;
+    height: 100%;
+    overflow: auto !important;
+  }
+  .spec-table {
+    border-collapse: separate !important;
+    border-spacing: 0 !important;
+    min-width: 100%;
+  }
+}
+
+/* =========================================================
+   モバイル（〜991px）
+========================================================= */
+@media (max-width: 991px) {
+
+  /* トグル（スマホ） */
+  .section-toggle {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 1056;
+    padding: 8px;
+    border-bottom: 1px solid #dee2e6;
   }
   .section-toggle select {
     width: 100%;
@@ -182,226 +171,61 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
     margin: 0 auto;
     display: block;
   }
+
+  /* スマホのスクロール領域 */
+  .spec-content .table-responsive {
+    max-height: 70vh;
+    overflow: auto !important;
+  }
 }
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
-</style><style>
-  body {
-    background-color: #f8f9fa;
-    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
-  }
-  header {
-    background: #0d6efd;
-    color: #fff;
-    padding: 12px;
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-  }
-  th { background-color: #f1f3f5; }
-  .rank-up { color: #dc3545; font-weight: bold; }
-  .rank-down { color: #0d6efd; font-weight: bold; }
-  img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-  .price-jpy { font-size: 0.85rem; color: #6c757d; }
-  .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-  /* === sticky共通（PC＋スマホ共通で有効） === */
-  .spec-table thead th {
-    position: sticky;
-    top: 0;
-    z-index: 30;
-    background: #fff;
-    box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-    border-bottom: 1px solid #dee2e6;
-  }
-  .spec-table thead th.sticky-col {
-    position: sticky;
-    left: 0;
-    z-index: 31;
-    background: #fff;
-  }
-  .spec-table tbody th.item-col {
-    position: sticky;
-    left: 0;
-    z-index: 12;
-    background: #fff;
-    border-right: 1px solid #dee2e6;
-  }
-  .spec-table tbody tr.sec-row .section-col {
-    position: sticky;
-    left: 0;
-    top: var(--secOffset, 42px);
-    z-index: 40;
-    background: #f8f9fa;
-    font-weight: 600;
-    box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-    border-bottom: 1px solid #dee2e6;
-  }
-  .spec-table tbody tr.sec-row .section-fill {
-    position: sticky;
-    left: 180px;
-    top: var(--secOffset, 42px);
-    z-index: 39;
-    background: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    box-shadow: inset -1px 0 0 #dee2e6;
-  }
-  .spec-table tbody tr.sec-row {
-    height: 2.6em;
-  }
-  .spec-table tbody tr.sec-row .section-col,
-  .spec-table tbody tr.sec-row .section-fill {
-    line-height: 2.6em;
-    vertical-align: middle;
-    white-space: nowrap;
-  }
-
-  /* 背景透け防止マスク（共通） */
-  .spec-content::before {
-    content: "";
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: var(--secOffset, 42px);
-    background: #fff;
-    z-index: 25;
-    pointer-events: none;
-  }
-  .spec-content::after {
-    content: "";
-    position: sticky;
-    top: 0;
-    left: 0;
-    width: calc(180px + 0.5rem);
-    height: 100%;
-    background: #fff;
-    z-index: 24;
-    pointer-events: none;
-  }
-
-  /* === 仕様テーブル（PC） === */
-  @media (min-width: 992px) {
-    .spec-table-container {
-      display: flex;
-      align-items: flex-start;
-      height: 80vh;
-      background: #fff;
-    }
-    .spec-sidebar {
-      position: sticky;
-      top: 0;
-      flex: 0 0 180px;
-      height: 80vh;
-      overflow-y: auto;
-      background: #fff;
-      border-right: 1px solid #dee2e6;
-      padding: 8px;
-    }
-    .spec-content {
-      flex: 1;
-      overflow: hidden !important;
-      height: 80vh;
-      padding: 8px;
-      position: relative;
-      background: #fff;
-      background-clip: padding-box;
-    }
-    .spec-content .table-responsive {
-      position: relative;
-      height: 100%;
-      overflow: auto !important;
-    }
-    .spec-table {
-      position: relative;
-      border-collapse: separate;
-      border-spacing: 0;
-      min-width: 100%;
-    }
-  }
-
-  /* === モバイル（sticky＋セレクトトグル両立） === */
-  @media (max-width: 991px) {
-    .spec-content .table-responsive {
-      max-height: 70vh;
-      overflow: auto !important;
-    }
-    .section-toggle {
-      position: fixed;
-      top: 60px;
-      left: 0;
-      width: 100%;
-      background: #fff;
-      z-index: 1056;
-      padding: 8px;
-      border-bottom: 1px solid #dee2e6;
-    }
-    .section-toggle select {
-      width: 100%;
-      max-width: 300px;
-      margin: 0 auto;
-      display: block;
-    }
-  }
-
-  .spec-content.p-2 {
-    padding: 0 !important;
-    background: #fff !important;
-  }
-  /* ✅ 左列とセクション帯の間の隙間を消す */
+/* =========================================================
+   PC＋スマホ共通：隙間補正（あなたが入れたやつ）
+========================================================= */
 .spec-table tbody th.item-col {
-  border-right: none !important;  /* ← 左列の線を消す */
+  border-right: none !important;
 }
-
 .spec-table tbody tr.sec-row .section-col {
-  border-right: 1px solid #dee2e6 !important;  /* ← ここで右境界を統一 */
-  box-shadow: none !important;                 /* ← inset影線を消す */
+  border-right: 1px solid #dee2e6 !important;
+  box-shadow: none !important;
+}
+.spec-table tbody tr.sec-row .section-fill {
+  left: 179px !important;
 }
 
-/* ✅ fill側をわずかに詰めて物理的ギャップも除去 */
-.spec-table tbody tr.sec-row .section-fill {
-  left: 179px !important;  /* ← 180→179pxに微調整 */
-}
-/* === スマホ見やすさ改善（見た目だけ） === */
+/* =========================================================
+   ★★★ スマホ見やすさ最終オーバーライド（ここが一番重要） ★★★
+   → 必ずすべての CSS より後で読み込まれる
+   → 見た目だけ改善。sticky/scroll には触れない
+========================================================= */
 @media (max-width: 991px) {
 
-  /* 左の項目列を太くする（折り返し軽減） */
+  /* 左項目列を太くして折返し改善 */
   .spec-table tbody th.item-col {
-    min-width: 140px !important;
-    font-size: 0.95rem !important;
-    padding: 10px 6px !important;
-    white-space: normal !important; /* ← 長文も自然に折り返す */
-  }
-
-  /* 全セルの行間を広げて読みやすくする */
-  .spec-table td {
-    font-size: 0.95rem !important;
-    padding: 12px 6px !important;
+    min-width: 150px !important;
+    font-size: 1rem !important;
+    padding: 12px 8px !important;
     line-height: 1.5 !important;
     white-space: normal !important;
   }
 
-  /* セクション帯を大きく（汽车之家風） */
-  .spec-table tbody tr.sec-row .section-col {
+  /* データセルの行間・余白 */
+  .spec-table td {
     font-size: 1rem !important;
     padding: 12px 8px !important;
-    background: #f6f6f6 !important;
-  }
-
-  /* 境界線を強調（表が見やすくなる） */
-  .spec-table td,
-  .spec-table th {
+    line-height: 1.6 !important;
+    white-space: normal !important;
     border-color: #d0d0d0 !important;
   }
 
-  /* 1行をやや高くする */
-  .spec-table tbody tr {
-    height: auto !important;
+  /* セクション帯（汽车之家風） */
+  .spec-table tbody tr.sec-row .section-col {
+    font-size: 1rem !important;
+    padding: 12px 8px !important;
+    background: #f2f2f2 !important;
+    line-height: 1.6 !important;
   }
 }
-
 
 </style>
 

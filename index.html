@@ -558,6 +558,35 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
       toggle.style.borderBottom = '';
     }
   });
+csvModalEl.addEventListener("shown.bs.modal", () => {
+
+  // 左列
+  document.querySelectorAll(".spec-table tbody th.item-col").forEach(el => {
+    el.style.minWidth = "150px";
+    el.style.fontSize = "1rem";
+    el.style.padding = "12px 8px";
+    el.style.lineHeight = "1.5";
+    el.style.whiteSpace = "normal";
+  });
+
+  // データセル
+  document.querySelectorAll(".spec-table td").forEach(el => {
+    el.style.fontSize = "1rem";
+    el.style.padding = "12px 8px";
+    el.style.lineHeight = "1.6";
+    el.style.whiteSpace = "normal";
+    el.style.borderColor = "#d0d0d0";
+  });
+
+  // セクション行
+  document.querySelectorAll(".spec-table tbody tr.sec-row .section-col").forEach(el => {
+    el.style.fontSize = "1rem";
+    el.style.padding = "12px 8px";
+    el.style.background = "#f2f2f2";
+    el.style.lineHeight = "1.6";
+  });
+
+});
 
   main();
 </script>

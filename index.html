@@ -184,6 +184,31 @@ border-collapse: separate !important; /* ← sticky位置を正しく保つ */
   }
 }
 
+@media (max-width: 991px) {
+
+  /* PCのstickyを無効化 */
+  .spec-table thead th,
+  .spec-table tbody th.item-col,
+  .spec-table tbody tr.sec-row .section-col,
+  .spec-table tbody tr.sec-row .section-fill {
+    position: static !important;
+  }
+
+  .spec-content .table-responsive {
+    overflow-x: auto !important;
+  }
+
+  /* 1列目（項目）＋ 2列目（モデル1）を常時表示 */
+  .spec-table tr > *:nth-child(1),
+  .spec-table tr > *:nth-child(2) {
+    display: table-cell !important;
+  }
+
+  /* 3列目以降は隠す */
+  .spec-table tr > *:nth-child(n+3) {
+    display: none !important;
+  }
+}
 
 
 

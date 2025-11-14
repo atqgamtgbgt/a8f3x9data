@@ -159,19 +159,34 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     max-height: 70vh;
     overflow: auto !important;
   }
-  .section-toggle {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    z-index: 1056;
-    padding: 8px;
-    pointer-events: none;
+  
+  /* モーダルヘッダー内にトグルメニューを配置 */
+  #csvModal .modal-header {
+    position: relative;
   }
+  
+  /* モーダルタイトルを非表示 */
+  #csvModal .modal-title {
+    display: none;
+  }
+  
+  /* トグルメニューをヘッダー中央に配置 */
+  .section-toggle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    z-index: 1;
+    padding: 0;
+    pointer-events: auto;
+  }
+  
   .section-toggle select {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
+    width: auto;
+    min-width: 250px;
+    max-width: 80vw;
+    margin: 0;
     display: block;
     pointer-events: auto;
     background: #fff;
@@ -439,8 +454,8 @@ function showConfigCsv(carId, title) {
           <select id="sectionSelect">${options}</select>
         </div>`;
 
-      // === tbody生成（colspan廃止・section-col固定対応）- 「項目」を空文字に変更 ===
-      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      // === tbody生成（colspan廃止・section-col固定対応） ===
+      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
       let tbody="<tbody>";
       for(const g of grouped){
         const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
@@ -563,28 +578,6 @@ async function showStory(carId,title){
   }
   new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
-
-// === モーダル開閉時のトグル制御 ===
-const csvModalEl = document.getElementById('csvModal');
-csvModalEl.addEventListener('shown.bs.modal', () => {
-  const toggle = document.querySelector('.section-toggle');
-  if (toggle) {
-    toggle.style.position = 'fixed';
-    toggle.style.top = '60px';
-    toggle.style.left = '0';
-    toggle.style.width = '100%';
-    toggle.style.zIndex = '2000';
-  }
-});
-
-csvModalEl.addEventListener('hidden.bs.modal', () => {
-  const toggle = document.querySelector('.section-toggle');
-  if (toggle) {
-    toggle.style.position = '';
-    toggle.style.top = '';
-    toggle.style.zIndex = '';
-  }
-});
 
 main();
 </script>

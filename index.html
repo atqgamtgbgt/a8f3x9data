@@ -594,8 +594,8 @@ function renderTable(data) {
       : "";
     const tr = document.createElement("tr");
     tr.innerHTML = `
-      <td>${r.rank}</td>
-      <td>${diffHtml}</td>
+      <td class="rank-badge">${r.rank}</td>
+      <td class="diff-badge">${diffHtml}</td>
       <td>${imgTag(rankStr, name, r.image_url)}</td>
       <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
       <td>${maker}</td>

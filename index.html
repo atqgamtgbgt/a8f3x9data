@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja" data-bs-theme="auto">
 <head>
   <meta charset="UTF-8" />
@@ -29,231 +30,236 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 
 /* === sticky共通（PC＋スマホ共通で有効） === */
 .spec-table thead th {
-  position: sticky;
-  top: 0;
-  z-index: 30;
-  background: #fff;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.08);
-  border-bottom: 1px solid #dee2e6;
-  vertical-align: middle !important;
-  padding-top: 6px;
-  padding-bottom: 6px;
+position: sticky;
+top: 0;
+z-index: 30;
+background: #fff;
+box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+border-bottom: 1px solid #dee2e6;
+vertical-align: middle !important;
+padding-top: 6px;
+padding-bottom: 6px;
 }
 .spec-table thead th.sticky-col {
-  position: sticky;
-  left: 0;
-  z-index: 31;
-  background: #fff;
+position: sticky;
+left: 0;
+z-index: 31;
+background: #fff;
 }
 .spec-table tbody th.item-col {
-  position: sticky;
-  left: 0;
-  z-index: 12;
-  background: #fff;
-  border-right: 1px solid #dee2e6;
+position: sticky;
+left: 0;
+z-index: 12;
+background: #fff;
+border-right: 1px solid #dee2e6;
 }
 
 /* ✅ セクション行（z-indexは動的に設定） */
 .spec-table tbody tr.sec-row {
-  height: 2.6em;
+height: 2.6em;
 }
 
 .spec-table tbody tr.sec-row .section-col {
-  position: sticky;
-  left: 0;
-  top: var(--secOffset, 42px);
-  z-index: 41; /* デフォルト値、JSで動的に上書き */
-  background: #f8f9fa;
-  font-weight: 600;
-  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-  border-bottom: 1px solid #dee2e6;
+position: sticky;
+left: 0;
+top: var(–secOffset, 42px);
+z-index: 41; /* デフォルト値、JSで動的に上書き */
+background: #f8f9fa;
+font-weight: 600;
+box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
+border-bottom: 1px solid #dee2e6;
 }
 .spec-table tbody tr.sec-row .section-fill {
-  position: sticky;
-  left: 180px;
-  top: var(--secOffset, 42px);
-  z-index: 39; /* デフォルト値、JSで動的に上書き */
-  background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-  box-shadow: inset -1px 0 0 #dee2e6;
+position: sticky;
+left: 180px;
+top: var(–secOffset, 42px);
+z-index: 39; /* デフォルト値、JSで動的に上書き */
+background: #f8f9fa;
+border-bottom: 1px solid #dee2e6;
+box-shadow: inset -1px 0 0 #dee2e6;
 }
 .spec-table tbody tr.sec-row .section-col,
 .spec-table tbody tr.sec-row .section-fill {
-  line-height: 2.6em;
-  vertical-align: middle;
-  white-space: nowrap;
+line-height: 2.6em;
+vertical-align: middle;
+white-space: nowrap;
 }
 
 /* 背景透け防止マスク（共通） */
 .spec-content::before {
-  content: "";
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--secOffset, 42px);
-  background: #fff;
-  z-index: 25;
-  pointer-events: none;
+content: “”;
+position: sticky;
+top: 0;
+left: 0;
+width: 100%;
+height: var(–secOffset, 42px);
+background: #fff;
+z-index: 25;
+pointer-events: none;
 }
 .spec-content::after {
-  content: "";
-  position: sticky;
-  top: 0;
-  left: 0;
-  width: calc(180px + 0.5rem);
-  height: 100%;
-  background: #fff;
-  z-index: 24;
-  pointer-events: none;
+content: “”;
+position: sticky;
+top: 0;
+left: 0;
+width: calc(180px + 0.5rem);
+height: 100%;
+background: #fff;
+z-index: 24;
+pointer-events: none;
 }
 
 /* === 仕様テーブル（PC） === */
 @media (min-width: 992px) {
-  .spec-table-container {
-    display: flex;
-    align-items: flex-start;
-    height: 80vh;
-    background: #fff;
-  }
-  .spec-sidebar {
-    position: sticky;
-    top: 0;
-    flex: 0 0 180px;
-    height: 80vh;
-    overflow-y: auto;
-    background: #fff;
-    border-right: 1px solid #dee2e6;
-    padding: 8px;
-  }
-  .spec-content {
-    flex: 1;
-    overflow: hidden !important;
-    height: 80vh;
-    padding: 8px;
-    position: relative;
-    background: #fff;
-    background-clip: padding-box;
-  }
-  .spec-content .table-responsive {
-    position: relative;
-    height: 100%;
-    overflow: auto !important;
-  }
-  .spec-table {
-    position: relative;
-    border-collapse: separate;
-    border-spacing: 0;
-    min-width: 100%;
-  }
-  
-  /* PC用：fill側の位置調整 */
-  .spec-table tbody tr.sec-row .section-fill {
-    left: 179px !important;
-  }
+.spec-table-container {
+display: flex;
+align-items: flex-start;
+height: 80vh;
+background: #fff;
+}
+.spec-sidebar {
+position: sticky;
+top: 0;
+flex: 0 0 180px;
+height: 80vh;
+overflow-y: auto;
+background: #fff;
+border-right: 1px solid #dee2e6;
+padding: 8px;
+}
+.spec-content {
+flex: 1;
+overflow: hidden !important;
+height: 80vh;
+padding: 8px;
+position: relative;
+background: #fff;
+background-clip: padding-box;
+}
+.spec-content .table-responsive {
+position: relative;
+height: 100%;
+overflow: auto !important;
+}
+.spec-table {
+position: relative;
+border-collapse: separate;
+border-spacing: 0;
+min-width: 100%;
+}
+
+/* PC用：fill側の位置調整 */
+.spec-table tbody tr.sec-row .section-fill {
+left: 179px !important;
+}
 }
 
 /* === モバイル（sticky＋セレクトトグル両立） === */
 @media (max-width: 991px) {
-  .spec-content .table-responsive {
-    max-height: 70vh;
-    overflow: auto !important;
-  }
-  .section-toggle {
-    position: fixed;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    z-index: 1056;
-    padding: 8px;
-    pointer-events: none;
-  }
-  .section-toggle select {
-    width: 100%;
-    max-width: 300px;
-    margin: 0 auto;
-    display: block;
-    pointer-events: auto;
-    background: #fff;
-  }
-  
-  /* スマホ時：左端列を100pxに統一 */
-  .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col {
-    min-width: 100px !important;
-    max-width: 100px !important;
-    width: 100px !important;
-    font-size: 0.85rem;
-    padding: 4px 6px !important;
-  }
-  
-  /* セクション名：背景を右側に延長 */
-  .spec-table tbody tr.sec-row .section-col {
-    min-width: 100px !important;
-    max-width: 100px !important;
-    width: 100px !important;
-    font-size: 0.9rem;
-    background: #f8f9fa !important;
-    box-shadow: 150px 0 0 0 #f8f9fa !important;
-  }
-  
-  .spec-table tbody tr.sec-row .section-fill {
-    left: 99px !important;
-  }
-  
-  .spec-content::after {
-    width: calc(100px + 0.5rem) !important;
-  }
+.spec-content .table-responsive {
+max-height: 70vh;
+overflow: auto !important;
+}
+.section-toggle {
+position: fixed;
+top: 110px;
+left: 0;
+width: 100%;
+z-index: 1056;
+padding: 8px;
+pointer-events: none;
+}
+.section-toggle select {
+width: 100%;
+max-width: 300px;
+margin: 0 auto;
+display: block;
+pointer-events: auto;
+background: #fff;
+}
+
+/* スマホ時：左端列を100pxに統一 */
+.spec-table thead th.sticky-col,
+.spec-table tbody th.item-col {
+min-width: 100px !important;
+max-width: 100px !important;
+width: 100px !important;
+font-size: 0.85rem;
+padding: 4px 6px !important;
+}
+
+/* セクション名：背景を右側に延長 */
+.spec-table tbody tr.sec-row .section-col {
+min-width: 100px !important;
+max-width: 100px !important;
+width: 100px !important;
+font-size: 0.9rem;
+background: #f8f9fa !important;
+box-shadow: 150px 0 0 0 #f8f9fa !important;
+}
+
+.spec-table tbody tr.sec-row .section-fill {
+left: 99px !important;
+}
+
+.spec-content::after {
+width: calc(100px + 0.5rem) !important;
+}
 }
 
 .spec-content.p-2 {
-  padding: 0 !important;
-  background: #fff !important;
+padding: 0 !important;
+background: #fff !important;
 }
 
 /* ✅ 左列とセクション帯の間の隙間を消す */
 .spec-table tbody th.item-col {
-  border-right: none !important;
+border-right: none !important;
 }
 
 .spec-table tbody tr.sec-row .section-col {
-  border-right: 1px solid #dee2e6 !important;
-  box-shadow: none !important;
+border-right: 1px solid #dee2e6 !important;
+box-shadow: none !important;
 }
 
 /* ✅ 通常のデータセルのz-indexを下げる */
 .spec-table tbody tr:not(.sec-row) td {
-  position: relative;
-  z-index: 10;
-  background: #fff !important;
+position: relative;
+z-index: 10;
+background: #fff !important;
 }
 </style>
+
 <body>
   <header>🚗 China Auto Dashboard</header>
 
   <div class="container mt-3">
     <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
 
-    <div class="table-responsive">
-      <table class="table table-striped table-hover align-middle" id="carTable">
-        <thead>
-          <tr>
-            <th style="width:80px">順位</th>
-            <th style="width:80px">変動</th>
-            <th style="width:100px">画像</th>
-            <th>車名</th>
-            <th>メーカー</th>
-            <th style="width:110px">台数</th>
-            <th style="width:160px">価格</th>
-            <th style="width:100px">情報</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+```
+<div class="table-responsive">
+  <table class="table table-striped table-hover align-middle" id="carTable">
+    <thead>
+      <tr>
+        <th style="width:80px">順位</th>
+        <th style="width:80px">変動</th>
+        <th style="width:100px">画像</th>
+        <th>車名</th>
+        <th>メーカー</th>
+        <th style="width:110px">台数</th>
+        <th style="width:160px">価格</th>
+        <th style="width:100px">情報</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</div>
+```
+
   </div>
 
   <!-- モーダル: 仕様 -->
+
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -269,6 +275,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   </div>
 
   <!-- モーダル: 口コミ -->
+
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -284,6 +291,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
  const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
@@ -570,7 +578,7 @@ csvModalEl.addEventListener('shown.bs.modal', () => {
   const toggle = document.querySelector('.section-toggle');
   if (toggle) {
     toggle.style.position = 'fixed';
-    toggle.style.top = '60px';
+    toggle.style.top = '110px';
     toggle.style.left = '0';
     toggle.style.width = '100%';
     toggle.style.zIndex = '2000';
@@ -588,7 +596,6 @@ csvModalEl.addEventListener('hidden.bs.modal', () => {
 
 main();
 </script>
-
 
 </body>
 </html>

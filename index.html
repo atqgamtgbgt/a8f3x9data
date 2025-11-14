@@ -195,7 +195,9 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     max-height: calc(1.2em * 2);         /* 実質3行まで */
     overflow: hidden;                    /* それ以上は切り捨てて見えないように */
   }
-  
+    .spec-table tbody tr.sec-row {
+    height: calc(1.2em * 2) !important;  /* ← ここが肝心 */
+  }
   .spec-table tbody tr.sec-row .section-fill {
     left: 99px !important;
   }

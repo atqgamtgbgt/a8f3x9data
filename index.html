@@ -55,7 +55,42 @@ img.car-thumb {
   padding: 2px 6px;
   margin: 2px;
 }
+.spec-table {
+  position: relative;
+  border-collapse: collapse !important;  /* separate から collapse に変更 */
+  border-spacing: 0;
+  min-width: 100%;
+}
 
+/* sticky要素の境界線を調整 */
+.spec-table thead th.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 31;
+  background: #fff;
+  border-right: 2px solid #dee2e6;  /* 右側の境界線を強化 */
+}
+
+.spec-table tbody th.item-col {
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: #fff;
+  border-right: 2px solid #dee2e6;  /* 右側の境界線を強化 */
+}
+
+/* セクション行の固定列 */
+.spec-table tbody tr.sec-row .section-col {
+  position: sticky;
+  left: 0;
+  top: var(--secOffset, 42px);
+  z-index: 41;
+  background: #f8f9fa;
+  font-weight: 600;
+  border-right: 2px solid #dee2e6 !important;  /* 強化 */
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 2px 0 3px rgba(0,0,0,0.05);  /* 右側に薄い影を追加 */
+}
 /* =====================================
    sticky（PC＋スマホ共通）
 ===================================== */

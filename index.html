@@ -180,23 +180,15 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     padding: 4px 6px !important;
   }
 
-  /* ★ セクション名（section-col）だけ折り返し＋3行制限 */
   .spec-table tbody tr.sec-row .section-col {
-    min-width: 100px !important;
-    max-width: 100px !important;
-    width: 100px !important;
-    font-size: 0.9rem;
-    background: #f8f9fa !important;
-    box-shadow: 150px 0 0 0 #f8f9fa !important;
-
-    /* ここからがポイント */
-    white-space: normal !important;       /* 折り返しOK（共通の nowrap を上書き） */
-    line-height: 1.2　!important;
-    max-height: calc(1.2em * 2);         /* 実質3行まで */
-    overflow: hidden;                    /* それ以上は切り捨てて見えないように */
+    height: 2.4em !important;     /* 好きな高さにする（例：2行相当） */
+    line-height: 1.2 !important;  /* 行間 */
+    overflow: hidden !important;  /* 超えた分は全て非表示 */
+    white-space: normal !important; 
   }
-    .spec-table tbody tr.sec-row {
-    height: calc(1.2em * 2) !important;  /* ← ここが肝心 */
+
+  .spec-table tbody tr.sec-row {
+    height: 2.4em !important;     /* tr 全体も固定（ここ重要） */
   }
   .spec-table tbody tr.sec-row .section-fill {
     left: 99px !important;

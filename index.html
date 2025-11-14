@@ -77,6 +77,11 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   vertical-align: middle;
   white-space: nowrap;
 }
+/* セクション名：長い場合は折り返す */
+.spec-table tbody tr.sec-row .section-col {
+  white-space: normal !important;
+  line-height: 1.3em !important;
+}
 
 /* 背景透け防止マスク（共通） */
 .spec-content::before {
@@ -580,3 +585,5 @@ main();
 
 </body>
 </html>
+
+これをベースに、高さ統一と、はみ出す際は短くするには？ 

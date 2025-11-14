@@ -152,7 +152,56 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     left: 179px !important;
   }
 }
+/* スマホ：幅 576px 以下に適用 */
+@media (max-width: 576px) {
 
+  /* ヘッダー非表示（幅が足りないので） */
+  #carTable thead {
+    display: none;
+  }
+
+  /* 行をカード化 */
+  #carTable tbody tr {
+    display: block;
+    padding: 10px 8px;
+    margin-bottom: 12px;
+    border-radius: 6px;
+    background: #111; /* ダークでも見やすい */
+    border: 1px solid #333;
+  }
+
+  /* 各セルを縦並び */
+  #carTable td {
+    display: block;
+    width: 100%;
+    padding: 4px 0 !important;
+    white-space: normal !important;
+    text-align: left !important;
+  }
+
+  /* 画像を中央寄せ */
+  #carTable td:nth-child(3) img {
+    display: block;
+    margin: 0 auto 6px auto;
+    width: 90px;
+    height: auto;
+  }
+
+  /* 順位・変動も縦並びで表示 */
+  #carTable td:nth-child(1),
+  #carTable td:nth-child(2) {
+    font-weight: 600;
+    display: inline-block;
+    width: auto;
+    padding-right: 10px !important;
+  }
+
+  /* 情報（仕様 / 口コミ）も中央寄せではなく左寄せに調整 */
+  #carTable td:nth-child(8) {
+    margin-top: 6px;
+    text-align: left !important;
+  }
+}
 /* === モバイル（sticky＋セレクトトグル両立） === */
 @media (max-width: 991px) {
   .spec-content .table-responsive {

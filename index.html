@@ -55,42 +55,7 @@ img.car-thumb {
   padding: 2px 6px;
   margin: 2px;
 }
-.spec-table {
-  position: relative;
-  border-collapse: collapse !important;  /* separate から collapse に変更 */
-  border-spacing: 0;
-  min-width: 100%;
-}
 
-/* sticky要素の境界線を調整 */
-.spec-table thead th.sticky-col {
-  position: sticky;
-  left: 0;
-  z-index: 31;
-  background: #fff;
-  border-right: 2px solid #dee2e6;  /* 右側の境界線を強化 */
-}
-
-.spec-table tbody th.item-col {
-  position: sticky;
-  left: 0;
-  z-index: 12;
-  background: #fff;
-  border-right: 2px solid #dee2e6;  /* 右側の境界線を強化 */
-}
-
-/* セクション行の固定列 */
-.spec-table tbody tr.sec-row .section-col {
-  position: sticky;
-  left: 0;
-  top: var(--secOffset, 42px);
-  z-index: 41;
-  background: #f8f9fa;
-  font-weight: 600;
-  border-right: 2px solid #dee2e6 !important;  /* 強化 */
-  border-bottom: 1px solid #dee2e6;
-  box-shadow: 2px 0 3px rgba(0,0,0,0.05);  /* 右側に薄い影を追加 */
-}
 /* =====================================
    sticky（PC＋スマホ共通）
 ===================================== */
@@ -100,7 +65,6 @@ img.car-thumb {
   z-index: 30;
   background: #fff;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
-  border-bottom: 1px solid #dee2e6;
   vertical-align: middle !important;
   padding-top: 6px;
   padding-bottom: 6px;
@@ -118,7 +82,6 @@ img.car-thumb {
   left: 0;
   z-index: 12;
   background: #fff;
-  border-right: 1px solid #dee2e6;
 }
 
 /* =====================================
@@ -135,8 +98,6 @@ img.car-thumb {
   z-index: 41;
   background: #f8f9fa;
   font-weight: 600;
-  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
-  border-bottom: 1px solid #dee2e6;
 }
 
 .spec-table tbody tr.sec-row .section-fill {
@@ -145,8 +106,6 @@ img.car-thumb {
   top: var(--secOffset, 42px);
   z-index: 39;
   background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
-  box-shadow: inset -1px 0 0 #dee2e6;
 }
 
 .spec-table tbody tr.sec-row .section-col,
@@ -297,6 +256,11 @@ img.car-thumb {
     height: auto !important;
   }
 
+  /* 変動なしの場合は非表示 */
+  #carTable td:nth-child(2):empty {
+    display: none !important;
+  }
+
   /* 変動が上昇の場合 */
   #carTable td:nth-child(2):has(.rank-up) {
     background: rgba(220, 53, 69, 0.9) !important;
@@ -438,20 +402,55 @@ img.car-thumb {
 }
 
 /* =====================================
+   テーブルのボーダーをbox-shadowで実装
+===================================== */
+.spec-table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 100%;
+}
+
+/* 全てのセルにbox-shadowでボーダーを適用 */
+.spec-table td,
+.spec-table th {
+  box-shadow: 
+    inset -1px 0 0 #dee2e6,
+    inset 0 -1px 0 #dee2e6;
+}
+
+/* sticky列は右側の線を強調 */
+.spec-table thead th.sticky-col {
+  box-shadow: 
+    inset -2px 0 0 #dee2e6,
+    inset 0 -1px 0 #dee2e6,
+    0 2px 3px rgba(0, 0, 0, 0.08) !important;
+}
+
+.spec-table tbody th.item-col {
+  box-shadow: 
+    inset -2px 0 0 #dee2e6,
+    inset 0 -1px 0 #dee2e6 !important;
+}
+
+.spec-table tbody tr.sec-row .section-col {
+  box-shadow: 
+    inset -2px 0 0 #dee2e6,
+    inset 0 -1px 0 #dee2e6 !important;
+}
+
+.spec-table tbody tr.sec-row .section-fill {
+  box-shadow: 
+    inset -1px 0 0 #dee2e6,
+    inset 0 -1px 0 #dee2e6;
+}
+
+/* =====================================
    その他調整
 ===================================== */
 .spec-content.p-2 {
   padding: 0 !important;
   background: #fff !important;
-}
-
-.spec-table tbody th.item-col {
-  border-right: none !important;
-}
-
-.spec-table tbody tr.sec-row .section-col {
-  border-right: 1px solid #dee2e6 !important;
-  box-shadow: none !important;
 }
 
 .spec-table tbody tr:not(.sec-row) td {

@@ -200,7 +200,6 @@ img.car-thumb {
 
 /* =====================================
    スマホ最適化（576px 以下）
-   ※重複していた 3 つを 1 つに統合
 ===================================== */
 @media (max-width: 576px) {
 
@@ -209,10 +208,11 @@ img.car-thumb {
     border-radius: 10px !important;
     padding: 10px 12px !important;
     margin: 12px 6px !important;
-    background: #111 !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
-    border: 1px solid #333 !important;
+    background: #fff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #dee2e6 !important;
     display: block;
+    position: relative;
   }
 
   /* --- ヘッダー削除（狭いため） --- */
@@ -227,6 +227,54 @@ img.car-thumb {
     padding: 4px 0 !important;
     white-space: normal !important;
     text-align: left !important;
+    border: none !important;
+  }
+
+  /* --- 順位セル（1列目）--- */
+  #carTable td:nth-child(1) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem !important;
+    font-weight: bold !important;
+    color: #fff !important;
+    background: rgba(13, 110, 253, 0.9) !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  /* --- 変動セル（2列目）--- */
+  #carTable td:nth-child(2) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 60px !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    color: #fff !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  /* 変動が上昇の場合 */
+  #carTable td:nth-child(2):has(.rank-up) {
+    background: rgba(220, 53, 69, 0.9) !important;
+  }
+
+  /* 変動が下降の場合 */
+  #carTable td:nth-child(2):has(.rank-down) {
+    background: rgba(13, 110, 253, 0.9) !important;
+  }
+
+  /* 変動なしの場合 */
+  #carTable td:nth-child(2):not(:has(.rank-up)):not(:has(.rank-down)) {
+    background: rgba(108, 117, 125, 0.9) !important;
   }
 
   /* --- 画像セル --- */
@@ -240,36 +288,13 @@ img.car-thumb {
     justify-content: center !important;
     height: 120px !important;
     padding: 0 !important;
+    margin-top: 30px !important;
   }
 
   #carTable td:nth-child(3) img.car-thumb {
     max-height: 100px !important;
+    max-width: 110px !important;
     object-fit: contain !important;
-  }
-
-  /* --- 順位・変動の badge（絶対配置）--- */
-  #carTable td.rank-badge,
-  #carTable td.diff-badge {
-    position: absolute !important;
-    top: 6px !important;
-    padding: 3px 6px !important;
-    border-radius: 4px !important;
-    font-size: 0.8rem !important;
-    color: #fff !important;
-    z-index: 999 !important;
-    display: inline-block !important;
-    width: auto !important;
-    height: auto !important;
-  }
-
-  #carTable td.rank-badge {
-    left: 6px !important;
-    background: rgba(0, 0, 0, 0.75) !important;
-  }
-
-  #carTable td.diff-badge {
-    left: 52px !important;
-    background: rgba(220, 0, 0, 0.75) !important;
   }
 
   /* --- テキスト部分を右側へ --- */
@@ -283,6 +308,19 @@ img.car-thumb {
     padding-top: 2px !important;
     padding-bottom: 2px !important;
     font-size: 0.92rem !important;
+  }
+
+  /* 車名を大きく */
+  #carTable td:nth-child(4) {
+    font-weight: 600;
+    font-size: 1rem !important;
+    padding-top: 32px !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* ボタン */
+  #carTable td:nth-child(8) {
+    margin-top: 8px !important;
   }
 
   #carTable td:nth-child(8) button {
@@ -386,7 +424,6 @@ img.car-thumb {
   z-index: 10;
   background: #fff !important;
 }
-
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>

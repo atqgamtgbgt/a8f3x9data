@@ -225,6 +225,17 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
+  /* --- セクション名の自動縮小用（classのみ定義） --- */
+.section-col.auto-shrink {
+  font-size: 0.9rem;      /* 初期 */
+}
+.section-col.shrink-sm {
+  font-size: 0.75rem !important;
+}
+.section-col.shrink-xs {
+  font-size: 0.6rem !important;
+}
+
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -466,6 +477,44 @@ function shrinkLongSections() {
     if (text.length > 12) col.style.fontSize = "0.65rem";
   });
 }
+/* =========================================
+   セクション名が長い場合だけ自動で縮小
+   ========================================= */
+function adjustSectionFont() {
+  document.querySelectorAll(".section-col").forEach(col => {
+    col.classList.add("auto-shrink");
+
+    const maxWidth = col.offsetWidth;
+
+    // 計測のため span を一時追加
+    const span = document.createElement("span");
+    span.style.visibility = "hidden";
+    span.style.whiteSpace = "nowrap";
+    span.textContent = col.textContent.trim();
+    document.body.appendChild(span);
+
+    const textWidth = span.offsetWidth;
+    document.body.removeChild(span);
+
+    // 幅に収まらない場合フォント縮小
+    col.classList.remove("shrink-sm", "shrink-xs");
+    if (textWidth > maxWidth * 1.15) {
+      col.classList.add("shrink-sm");
+    }
+    if (textWidth > maxWidth * 1.35) {
+      col.classList.add("shrink-xs");
+    }
+  });
+}
+
+/* モーダルで仕様を表示したあとに実行 */
+document.addEventListener("click", e => {
+  if (e.target.classList.contains("btn-spec")) {
+    setTimeout(() => {
+      adjustSectionFont();
+    }, 800);   // テーブル描画が完了してから
+  }
+});
 
 main();
 </script>

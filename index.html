@@ -245,6 +245,16 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   max-height: 44px !important;
   overflow: hidden;
 }
+/* === セクション名（section-col）を2行以内に収めて高さ統一 + 自動縮小 === */
+.spec-table tbody tr.sec-row .section-col {
+  max-height: 2.6em;         /* 2行ぶんの高さに固定 */
+  overflow: hidden;          /* はみ出し部分は隠す */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;     /* 最大2行で切る */
+  -webkit-box-orient: vertical;
+  font-size: clamp(0.7rem, 2.5vw, 0.9rem);   /* 自動縮小 */
+  line-height: 1.3em !important;
+}
 
 /* ▲▲▲ 追加部分ここまで ▲▲▲ */
 /

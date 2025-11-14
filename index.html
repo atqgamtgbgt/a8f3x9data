@@ -455,10 +455,10 @@ function showConfigCsv(carId, title) {
           <ul class="list-unstyled m-0 p-0">
             ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
           </ul>
-        </div>
-        <div class="section-toggle d-lg-none">
-          <select id="sectionSelect">${options}</select>
         </div>`;
+      
+      // スマホ用のトグルメニュー（後でヘッダーに移動）
+      const toggleHtml = `<div class="section-toggle d-lg-none"><select id="sectionSelect">${options}</select></div>`;
 
       // === tbody生成（colspan廃止・section-col固定対応） ===
       const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
@@ -490,6 +490,21 @@ function showConfigCsv(carId, title) {
           </div>
         </div>`;
       target.innerHTML=tableHtml;
+      
+      // スマホ時：トグルメニューをモーダルヘッダーに追加
+      if (window.innerWidth <= 991) {
+        const modalHeader = document.querySelector('#csvModal .modal-header');
+        const existingToggle = modalHeader.querySelector('.section-toggle');
+        if (existingToggle) existingToggle.remove();
+        
+        const toggleDiv = document.createElement('div');
+        toggleDiv.className = 'section-toggle';
+        toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
+        
+        // タイトルの後、閉じるボタンの前に挿入
+        const closeBtn = modalHeader.querySelector('.btn-close');
+        modalHeader.insertBefore(toggleDiv, closeBtn);
+      }
 
       // === スマホ時の幅調整（JavaScript強制適用） ===
       if (window.innerWidth <= 991) {

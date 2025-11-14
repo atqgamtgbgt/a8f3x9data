@@ -197,41 +197,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   .spec-content::after {
     width: calc(100px + 0.5rem) !important;
   }
-  
-  /* ✅ スマホ時：セクション行の高さ統一と文字はみ出し時の自動縮小 */
-  .spec-table tbody tr.sec-row {
-    height: 40px !important;
-  }
-  
-  .spec-table tbody tr.sec-row .section-col {
-    height: 40px !important;
-    
-    /* Flexboxで中央配置 */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    
-    /* 折り返しと改行 */
-    white-space: normal !important;
-    word-break: break-word !important;
-    
-    /* パディング最小化 */
-    padding: 2px 4px !important;
-    
-    /* 行間を詰める */
-    line-height: 1.15 !important;
-    
-    /* はみ出し防止 */
-    overflow: hidden !important;
-    
-    /* フォントサイズ自動調整（核心部分） */
-    font-size: clamp(9px, 2.5vw, 13px) !important;
-  }
-  
-  .spec-table tbody tr.sec-row .section-fill {
-    height: 40px !important;
-  }
 }
 
 .spec-content.p-2 {

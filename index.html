@@ -461,7 +461,7 @@ function showConfigCsv(carId, title) {
       const toggleHtml = `<div class="section-toggle d-lg-none"><select id="sectionSelect">${options}</select></div>`;
 
       // === tbody生成（colspan廃止・section-col固定対応） ===
-      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+     const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
       let tbody="<tbody>";
       for(const g of grouped){
         const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;

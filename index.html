@@ -225,6 +225,22 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
+  /* === セクション名（section-col）を 2 行まで表示しつつ長文は縮小 === */
+.spec-table tbody tr.sec-row .section-col {
+  /* 折り返しを許可 */
+  white-space: normal !important;
+
+  /* 最大2行まで見せる（高さは変動OK → sticky は JS offset 計算があるので乱れない） */
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+
+  /* 長すぎる場合は文字を縮小（縮小しすぎない安全値） */
+  font-size: clamp(0.75rem, 2.3vw, 0.95rem) !important;
+  line-height: 1.25em !important;
+}
+
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>

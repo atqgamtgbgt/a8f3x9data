@@ -304,9 +304,8 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
- const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
 const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
 let cnyToJpy = 20;
@@ -400,6 +399,29 @@ function fail(msg){
   const s=document.getElementById("status");
   s.className="alert alert-danger py-2";
   s.textContent=msg;
+}
+
+/* 🔹 セクションタイトルの自動縮小（2行以内に収める） */
+function shrinkSectionTitles(maxLines = 2, minFontPx = 9) {
+  const els = document.querySelectorAll('.spec-table tbody tr.sec-row .section-col');
+  els.forEach(el => {
+    const computed = window.getComputedStyle(el);
+    let fontSize = parseFloat(computed.fontSize) || 12;
+    const lineHeight = parseFloat(computed.lineHeight) || (fontSize * 1.2);
+    const maxHeight = lineHeight * maxLines;
+
+    // 上限高さをセット
+    el.style.maxHeight = maxHeight + 'px';
+    el.style.overflow = 'hidden';
+    el.style.whiteSpace = 'normal';
+
+    let safety = 0;
+    while (el.scrollHeight > maxHeight && fontSize > minFontPx && safety < 30) {
+      fontSize -= 0.5;
+      el.style.fontSize = fontSize + 'px';
+      safety++;
+    }
+  });
 }
 
 /* ==== showConfigCsv 開始 ==== */
@@ -548,6 +570,9 @@ function showConfigCsv(carId, title) {
           }
         });
       }
+
+      /* 🔹 最後に、セクション名を2行以内に収めるための縮小を実行 */
+      shrinkSectionTitles(2, 9);
     },
     error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
   });

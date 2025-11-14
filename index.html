@@ -201,6 +201,80 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     margin-top: 6px;
     text-align: left !important;
   }
+}/* ============================================================
+   📱 スマホ最適化フルセット（あなたのHTMLを壊さない安全版）
+   ============================================================ */
+
+@media (max-width: 576px) {
+
+  /* ① 順位・変動をバッジ化して視認性UP */
+  #carTable td:nth-child(1),
+  #carTable td:nth-child(2) {
+    display: inline-block;
+    padding: 4px 8px !important;
+    background: #222;
+    border-radius: 6px;
+    margin-right: 6px;
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  /* ② 画像の横に情報をまとめて「カードビュー」にする */
+  #carTable td:nth-child(3) {
+    float: left;
+    width: 120px !important;
+    text-align: center;
+  }
+
+  /* 車名・メーカー・台数・価格を横へ */
+  #carTable td:nth-child(4),
+  #carTable td:nth-child(5),
+  #carTable td:nth-child(6),
+  #carTable td:nth-child(7) {
+    margin-left: 135px !important;
+    display: block;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    font-size: 0.92rem;
+  }
+
+  /* 情報（仕様・口コミ）も下に並べる */
+  #carTable td:nth-child(8) {
+    margin-left: 135px !important;
+    margin-top: 6px !important;
+    display: block;
+  }
+
+  /* ④ ボタンをスマホ向け最適化 */
+  #carTable td:nth-child(8) button {
+    min-width: 70px;
+    padding: 4px 8px !important;
+    margin-right: 6px !important;
+    margin-bottom: 4px !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* ③ 行をカード化（枠と影で視認性UP） */
+  #carTable tbody tr {
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
+    border-radius: 8px;
+    padding: 10px !important;
+    margin-bottom: 18px !important;
+    display: block;   /* ← カード化するために必須 */
+    background: #111;
+  }
+
+  /* ⑤ 全体フォントを少し縮める（スマホ最適化） */
+  #carTable td,
+  #carTable th {
+    font-size: 0.92rem !important;
+  }
+
+  /* テーブル内の従来横線を無効化（行がカード化されたため） */
+  #carTable td, #carTable th {
+    border-top: none !important;
+  }
 }
 /* === モバイル（sticky＋セレクトトグル両立） === */
 @media (max-width: 991px) {

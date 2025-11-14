@@ -439,7 +439,7 @@ function showConfigCsv(carId, title) {
         </div>`;
 
       // === tbody生成（colspan廃止・section-col固定対応） ===
-      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
       let tbody="<tbody>";
       for(const g of grouped){
         const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;

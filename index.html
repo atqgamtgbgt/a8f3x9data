@@ -202,6 +202,39 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   .spec-content::after {
     width: calc(100px + 0.5rem) !important;
   }
+  
+  /* ✅✅ スマホ専用：セクション行の高さ統一と自動縮小 */
+  /* セクション行の高さを40pxに固定 */
+  .spec-table tbody tr.sec-row {
+    height: 40px !important;
+  }
+
+  /* セクション名セルを高さ内に収める */
+  .spec-table tbody tr.sec-row .section-col {
+    height: 40px !important;
+    
+    /* Flexboxで中央配置 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    /* パディング最小化 */
+    padding: 2px 4px !important;
+    
+    /* 行間を詰める */
+    line-height: 1.15 !important;
+    
+    /* はみ出し防止 */
+    overflow: hidden !important;
+    word-break: break-word !important;
+    
+    /* フォントサイズ自動調整（核心） */
+    font-size: clamp(9px, 2.5vw, 13px) !important;
+  }
+  
+  .spec-table tbody tr.sec-row .section-fill {
+    height: 40px !important;
+  }
 }
 
 .spec-content.p-2 {
@@ -224,43 +257,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   position: relative;
   z-index: 10;
   background: #fff !important;
-}
-
-/* ✅✅ スマホ時：セクション行の高さ統一と自動縮小（追加部分） */
-@media (max-width: 991px) {
-  /* セクション行の高さを40pxに固定 */
-  .spec-table tbody tr.sec-row {
-    height: 40px !important;
-  }
-
-  /* セクション名セルの内容を40px内に収める */
-  .spec-table tbody tr.sec-row .section-col {
-    /* 高さを親のtr要素に合わせる */
-    height: 40px !important;
-    
-    /* テキストのレイアウト調整 */
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    text-align: center !important;
-    
-    /* パディングを最小化 */
-    padding: 2px 4px !important;
-    
-    /* 行間を詰める */
-    line-height: 1.15 !important;
-    
-    /* はみ出しを防止 */
-    overflow: hidden !important;
-    word-break: break-word !important;
-    
-    /* フォントサイズの自動調整（核心部分） */
-    font-size: clamp(9px, 2.5vw, 13px) !important;
-  }
-  
-  .spec-table tbody tr.sec-row .section-fill {
-    height: 40px !important;
-  }
 }
 
 </style>

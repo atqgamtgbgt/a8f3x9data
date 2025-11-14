@@ -463,6 +463,75 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
+  /* スマホ：順位と変動を画像左上に重ねてバッジ化 */
+@media (max-width: 576px) {
+
+  /* 基準位置として画像セルを relative にする */
+  #carTable td:nth-child(3) {
+    position: relative !important;
+  }
+
+  /* 順位バッジ（左上） */
+  #carTable td.rank-badge {
+    position: absolute !important;
+    top: 6px !important;
+    left: 6px !important;
+    padding: 3px 6px !important;
+    background: rgba(0,0,0,0.65);
+    color: #fff !important;
+    border-radius: 4px;
+    font-size: 0.8rem !important;
+    z-index: 20 !important;
+  }
+
+  /* 変動バッジ（順位の横） */
+  #carTable td.diff-badge {
+    position: absolute !important;
+    top: 6px !important;
+    left: 46px !important;
+    padding: 3px 6px !important;
+    background: rgba(200,0,0,0.70); /* 赤バッジ */
+    color: #fff !important;
+    border-radius: 4px;
+    font-size: 0.8rem !important;
+    z-index: 20 !important;
+  }
+}
+/* スマホ：順位と変動を画像左上に重ねてバッジ化 */
+@media (max-width: 576px) {
+
+  /* 基準位置として画像セルを relative にする */
+  #carTable td:nth-child(3) {
+    position: relative !important;
+  }
+
+  /* 順位バッジ（左上） */
+  #carTable td.rank-badge {
+    position: absolute !important;
+    top: 6px !important;
+    left: 6px !important;
+    padding: 3px 6px !important;
+    background: rgba(0,0,0,0.65);
+    color: #fff !important;
+    border-radius: 4px;
+    font-size: 0.8rem !important;
+    z-index: 20 !important;
+  }
+
+  /* 変動バッジ（順位の横） */
+  #carTable td.diff-badge {
+    position: absolute !important;
+    top: 6px !important;
+    left: 46px !important;
+    padding: 3px 6px !important;
+    background: rgba(200,0,0,0.70); /* 赤バッジ */
+    color: #fff !important;
+    border-radius: 4px;
+    font-size: 0.8rem !important;
+    z-index: 20 !important;
+  }
+}
+
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>

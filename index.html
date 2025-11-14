@@ -486,6 +486,15 @@ function showConfigCsv(carId, title) {
         });
       }
 
+      // ✅ 動的z-index設定：下のセクションほど高いz-indexを設定
+      document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+        const baseZ = 100;
+        const colEl = row.querySelector('.section-col');
+        const fillEl = row.querySelector('.section-fill');
+        if (colEl) colEl.style.zIndex = baseZ + index * 2 + 1;
+        if (fillEl) fillEl.style.zIndex = baseZ + index * 2;
+      });
+
       // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
       const scrollArea =
         document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0

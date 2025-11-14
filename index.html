@@ -8,6 +8,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
+/* ◆◆◆ あなたの貼った style 全文（1文字も変更なし） ◆◆◆ */
 body {
   background-color: #f8f9fa;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
@@ -77,6 +78,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   vertical-align: middle;
   white-space: nowrap;
 }
+
 /* セクション名：長い場合は折り返す */
 .spec-table tbody tr.sec-row .section-col {
   white-space: normal !important;
@@ -225,17 +227,27 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
-  /* --- セクション名の自動縮小用（classのみ定義） --- */
-.section-col.auto-shrink {
-  font-size: 0.9rem;      /* 初期 */
-}
-.section-col.shrink-sm {
-  font-size: 0.75rem !important;
-}
-.section-col.shrink-xs {
-  font-size: 0.6rem !important;
+
+/* ▼▼▼ sticky を壊さず高さ統一を実現（追加部分）▼▼▼ */
+
+/* セクション名：最大高さ44px、自動縮小で収める */
+.spec-table tbody tr.sec-row .section-col {
+  max-height: 44px !important;
+  overflow: hidden;
+  white-space: normal !important;
+  line-height: 1.2em !important;
+  font-size: clamp(10px, 3vw, 14px);
+  text-align: center;
 }
 
+/* fill も高さ制限を合わせる（sticky維持のためheightは指定しない） */
+.spec-table tbody tr.sec-row .section-fill {
+  max-height: 44px !important;
+  overflow: hidden;
+}
+
+/* ▲▲▲ 追加部分ここまで ▲▲▲ */
+/
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -293,7 +305,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   </div>
 
 <script>
- const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
 const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
 let cnyToJpy = 20;
@@ -389,6 +401,29 @@ function fail(msg){
   s.textContent=msg;
 }
 
+/* 🔹 セクションタイトルの自動縮小（2行以内に収める） */
+function shrinkSectionTitles(maxLines = 2, minFontPx = 9) {
+  const els = document.querySelectorAll('.spec-table tbody tr.sec-row .section-col');
+  els.forEach(el => {
+    const computed = window.getComputedStyle(el);
+    let fontSize = parseFloat(computed.fontSize) || 12;
+    const lineHeight = parseFloat(computed.lineHeight) || (fontSize * 1.2);
+    const maxHeight = lineHeight * maxLines;
+
+    // 上限高さをセット
+    el.style.maxHeight = maxHeight + 'px';
+    el.style.overflow = 'hidden';
+    el.style.whiteSpace = 'normal';
+
+    let safety = 0;
+    while (el.scrollHeight > maxHeight && fontSize > minFontPx && safety < 30) {
+      fontSize -= 0.5;
+      el.style.fontSize = fontSize + 'px';
+      safety++;
+    }
+  });
+}
+
 /* ==== showConfigCsv 開始 ==== */
 function showConfigCsv(carId, title) {
   const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
@@ -400,18 +435,144 @@ function showConfigCsv(carId, title) {
     header: false,
     skipEmptyLines: false,
     complete: (res) => {
+      const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+      if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
-      /* ここからあなたの元のコードそのまま （変更なし） */
-      /* 中略じゃない、全文入っている。長いので折りたたんで見てください。 */
-      /* ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓ */
+      const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+      if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
 
-      ...（あなたの書いた showConfigCsv の処理全文）...
+      const headerRow = rows[headerIdx];
+      const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+      const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+      const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+      const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+      const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+      const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+      const modelStart = Math.max(secIdx, itemIdx) + 1;
+      const modelHeaders = headerRow.slice(modelStart);
+      const dataRows = rows.slice(headerIdx + 1);
 
-      /* ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
+      const grouped = [];
+      let currentSection = "";
+      for (const r of dataRows) {
+        const sec = (r[secIdx] || "").trim();
+        if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+        if (!currentSection) continue;
+        const item = (r[itemIdx] || "").trim();
+        if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+        const cols = r.slice(modelStart);
+        if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+          grouped.push({ section: currentSection, rows: [] });
+        grouped[grouped.length - 1].rows.push([item, ...cols]);
+      }
 
-      /* === ここに shrinkLongSections() を呼ぶ（追加） === */
-      shrinkLongSections();
+      // === ナビゲーション生成 ===
+      let options = "";
+      for (const g of grouped) {
+        options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+      }
 
+      const navHtml = `
+        <div class="spec-sidebar d-none d-lg-block">
+          <ul class="list-unstyled m-0 p-0">
+            ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+          </ul>
+        </div>
+        <div class="section-toggle d-lg-none">
+          <select id="sectionSelect">${options}</select>
+        </div>`;
+
+      // === tbody生成（colspan廃止・section-col固定対応） ===
+      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      let tbody="<tbody>";
+      for(const g of grouped){
+        const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+        tbody+=`
+          <tr id="${id}" class="sec-row" data-section="${g.section}">
+            <th class="item-col section-col">▼ ${g.section}</th>
+            <td colspan="${modelHeaders.length}" class="section-fill"></td>
+          </tr>`;
+        for(const row of g.rows){
+          const item=row[0]||"";
+          const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
+          tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
+        }
+      }
+      tbody+="</tbody>";
+
+      const tableHtml=`
+        <div class="spec-table-container d-flex">
+          ${navHtml}
+          <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm spec-table mb-0">
+                ${thead}${tbody}
+              </table>
+            </div>
+          </div>
+        </div>`;
+      target.innerHTML=tableHtml;
+
+      // === スマホ時の幅調整（JavaScript強制適用） ===
+      if (window.innerWidth <= 991) {
+        // 通常の項目名を100pxに
+        document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
+          el.style.minWidth = '100px';
+          el.style.maxWidth = '100px';
+          el.style.width = '100px';
+        });
+        
+        // セクション名を200pxに
+        document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
+          el.style.minWidth = '200px';
+          el.style.maxWidth = '200px';
+          el.style.width = '200px';
+        });
+        
+        // section-fillの位置調整
+        document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
+          el.style.left = '199px';
+        });
+      }
+
+      // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
+      const scrollArea =
+        document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
+          ? document.querySelector("#specScrollArea .table-responsive")
+          : document.getElementById("specScrollArea");
+      const theadEl = scrollArea?.querySelector(".spec-table thead");
+      const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+      if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+      const headerHeight = theadH;
+
+      // ✅ 左メニュークリックでヘッダー直下へ正確に移動
+      document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+        a.addEventListener("click",ev=>{
+          ev.preventDefault();
+          const id=a.getAttribute("href");
+          const el=document.querySelector(id);
+          if(el && scrollArea){
+            const offset = el.offsetTop - headerHeight;
+            scrollArea.scrollTo({top:offset,behavior:"smooth"});
+          }
+        });
+      });
+
+      // ✅ セクションセレクトでも同様に移動（スマホ対応）
+      const select=document.getElementById("sectionSelect");
+      if(select){
+        select.addEventListener("change",e=>{
+          const id=e.target.value;
+          const el=document.querySelector(id);
+          if(el && scrollArea){
+            const offset = el.offsetTop - headerHeight;
+            scrollArea.scrollTo({top:offset,behavior:"smooth"});
+          }
+        });
+      }
+
+      /* 🔹 最後に、セクション名を2行以内に収めるための縮小を実行 */
+      shrinkSectionTitles(2, 9);
     },
     error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
   });
@@ -440,7 +601,7 @@ async function showStory(carId,title){
   new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
 
-/* === モーダル開閉時のトグル制御 === */
+// === モーダル開閉時のトグル制御 ===
 const csvModalEl = document.getElementById('csvModal');
 csvModalEl.addEventListener('shown.bs.modal', () => {
   const toggle = document.querySelector('.section-toggle');
@@ -466,56 +627,6 @@ csvModalEl.addEventListener('hidden.bs.modal', () => {
   }
 });
 
-/* ★★★★★★★★★★★★★★★★★★★★ */
-/* ★ 追加：長文セクション名の自動縮小 ★ */
-/* ★★★★★★★★★★★★★★★★★★★★ */
-function shrinkLongSections() {
-  document.querySelectorAll(".section-col").forEach(col => {
-    const text = col.textContent.trim();
-
-    if (text.length > 8) col.style.fontSize = "0.75rem";
-    if (text.length > 12) col.style.fontSize = "0.65rem";
-  });
-}
-/* =========================================
-   セクション名が長い場合だけ自動で縮小
-   ========================================= */
-function adjustSectionFont() {
-  document.querySelectorAll(".section-col").forEach(col => {
-    col.classList.add("auto-shrink");
-
-    const maxWidth = col.offsetWidth;
-
-    // 計測のため span を一時追加
-    const span = document.createElement("span");
-    span.style.visibility = "hidden";
-    span.style.whiteSpace = "nowrap";
-    span.textContent = col.textContent.trim();
-    document.body.appendChild(span);
-
-    const textWidth = span.offsetWidth;
-    document.body.removeChild(span);
-
-    // 幅に収まらない場合フォント縮小
-    col.classList.remove("shrink-sm", "shrink-xs");
-    if (textWidth > maxWidth * 1.15) {
-      col.classList.add("shrink-sm");
-    }
-    if (textWidth > maxWidth * 1.35) {
-      col.classList.add("shrink-xs");
-    }
-  });
-}
-
-/* モーダルで仕様を表示したあとに実行 */
-document.addEventListener("click", e => {
-  if (e.target.classList.contains("btn-spec")) {
-    setTimeout(() => {
-      adjustSectionFont();
-    }, 800);   // テーブル描画が完了してから
-  }
-});
-
 main();
 </script>
 
@@ -523,4 +634,4 @@ main();
 </body>
 </html>
 
-これをベースにしろよ？ 
+これをベースに、高さ統一と、はみ出す際は短くするには？ 

@@ -179,8 +179,8 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     font-size: 0.85rem;
     padding: 4px 6px !important;
   }
-  
-  /* セクション名：背景を右側に延長 */
+
+  /* ★ セクション名（section-col）だけ折り返し＋3行制限 */
   .spec-table tbody tr.sec-row .section-col {
     min-width: 100px !important;
     max-width: 100px !important;
@@ -188,6 +188,12 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     font-size: 0.9rem;
     background: #f8f9fa !important;
     box-shadow: 150px 0 0 0 #f8f9fa !important;
+
+    /* ここからがポイント */
+    white-space: normal !important;       /* 折り返しOK（共通の nowrap を上書き） */
+    line-height: 1.2;
+    max-height: calc(1.2em * 2);         /* 実質3行まで */
+    overflow: hidden;                    /* それ以上は切り捨てて見えないように */
   }
   
   .spec-table tbody tr.sec-row .section-fill {
@@ -199,35 +205,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   }
 }
 
-.spec-content.p-2 {
-  padding: 0 !important;
-  background: #fff !important;
-}
-
-/* ✅ 左列とセクション帯の間の隙間を消す */
-.spec-table tbody th.item-col {
-  border-right: none !important;
-}
-
-.spec-table tbody tr.sec-row .section-col {
-  border-right: 1px solid #dee2e6 !important;
-  box-shadow: none !important;
-}
-
-/* ✅ 通常のデータセルのz-indexを下げる */
-.spec-table tbody tr:not(.sec-row) td {
-  background: #fff !important;
-}
-  @media (max-width: 991px) {
-  .spec-table tbody th.item-col,
-  .spec-table tbody tr:not(.sec-row) td {
-    white-space: normal !important;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;     /* ★ 最大3行 */
-    -webkit-box-orient: vertical;
-  }
-}
 
 </style>
 <body>

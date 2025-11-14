@@ -225,16 +225,21 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
-  /* === セクション名（section-col）を2行以内に収めて高さ統一 + 自動縮小 === */
+/* === セクション行：高さ固定＋折り返し ＋ 自動縮小 === */
+.spec-table tbody tr.sec-row {
+  height: 2.6em !important;       /* ← 高さを完全に固定（固定が最重要） */
+}
+
 .spec-table tbody tr.sec-row .section-col {
-  max-height: 2.6em;         /* 2行ぶんの高さに固定 */
-  overflow: hidden;          /* はみ出し部分は隠す */
-  display: -webkit-box;
-  -webkit-line-clamp: 2;     /* 最大2行で切る */
-  -webkit-box-orient: vertical;
-  font-size: clamp(0.7rem, 2.5vw, 0.9rem);   /* 自動縮小 */
+  white-space: normal !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;     /* 2行で切る */
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  font-size: clamp(0.75rem, 2.3vw, 0.9rem) !important;  /* 自動縮小 */
   line-height: 1.3em !important;
 }
+
 
 </style>
 <body>

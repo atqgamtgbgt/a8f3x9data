@@ -225,26 +225,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
-/* === セクション帯（section-col & section-fill）を2行分の高さに完全固定 === */
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {
-  height: calc(1.3em * 2) !important;   /* 2行分の高さを完全に固定 */
-  line-height: 1.3em !important;
-  overflow: hidden !important;
-  vertical-align: middle !important;
-}
-
-/* === セクション名：2行で折り返し。3行目は切る === */
-.spec-table tbody tr.sec-row .section-col {
-  white-space: normal !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;   /* 2行で切る */
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-  font-size: clamp(0.75rem, 2.2vw, 0.9rem) !important; /* 収まらない場合は縮小 */
-}
-
-
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>

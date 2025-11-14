@@ -225,6 +225,29 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 10;
   background: #fff !important;
 }
+  /* ▼ セクション行の高さを統一（例：40px） */
+.spec-table tbody tr.sec-row {
+  height: 40px !important;
+}
+
+/* ▼ セクション名セルを折り返し＋縮小して高さ内に収める */
+.spec-table tbody tr.sec-row .section-col {
+  white-space: normal !important;
+  line-height: 1.2em !important;
+
+  display: flex;
+  align-items: center;      /* 垂直中央 */
+  justify-content: center;  /* 水平中央 */
+
+  height: 100%;
+  text-align: center;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  font-size: clamp(10px, 3vw, 14px); /* 自動縮小の核心 */
+}
+
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>

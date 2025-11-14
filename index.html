@@ -164,16 +164,17 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     top: 60px;
     left: 0;
     width: 100%;
-    background: #fff;
     z-index: 1056;
     padding: 8px;
-    border-bottom: 1px solid #dee2e6;
+    pointer-events: none;
   }
   .section-toggle select {
     width: 100%;
     max-width: 300px;
     margin: 0 auto;
     display: block;
+    pointer-events: auto;
+    background: #fff;
   }
   
   /* スマホ時：左端列を100pxに統一 */
@@ -438,7 +439,7 @@ function showConfigCsv(carId, title) {
           <select id="sectionSelect">${options}</select>
         </div>`;
 
-      // === tbody生成（colspan廃止・section-col固定対応） ===
+      // === tbody生成（colspan廃止・section-col固定対応）- 「項目」を空文字に変更 ===
       const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
       let tbody="<tbody>";
       for(const g of grouped){
@@ -573,8 +574,6 @@ csvModalEl.addEventListener('shown.bs.modal', () => {
     toggle.style.left = '0';
     toggle.style.width = '100%';
     toggle.style.zIndex = '2000';
-    toggle.style.background = '#fff';
-    toggle.style.borderBottom = '1px solid #dee2e6';
   }
 });
 
@@ -584,8 +583,6 @@ csvModalEl.addEventListener('hidden.bs.modal', () => {
     toggle.style.position = '';
     toggle.style.top = '';
     toggle.style.zIndex = '';
-    toggle.style.background = '';
-    toggle.style.borderBottom = '';
   }
 });
 
@@ -595,4 +592,3 @@ main();
 
 </body>
 </html>
-まずは、これを熟読して

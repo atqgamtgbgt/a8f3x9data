@@ -197,6 +197,41 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   .spec-content::after {
     width: calc(100px + 0.5rem) !important;
   }
+  
+  /* ✅ スマホ時：セクション行の高さ統一と文字はみ出し時の自動縮小 */
+  .spec-table tbody tr.sec-row {
+    height: 40px !important;
+  }
+  
+  .spec-table tbody tr.sec-row .section-col {
+    height: 40px !important;
+    
+    /* Flexboxで中央配置 */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    
+    /* 折り返しと改行 */
+    white-space: normal !important;
+    word-break: break-word !important;
+    
+    /* パディング最小化 */
+    padding: 2px 4px !important;
+    
+    /* 行間を詰める */
+    line-height: 1.15 !important;
+    
+    /* はみ出し防止 */
+    overflow: hidden !important;
+    
+    /* フォントサイズ自動調整（核心部分） */
+    font-size: clamp(9px, 2.5vw, 13px) !important;
+  }
+  
+  .spec-table tbody tr.sec-row .section-fill {
+    height: 40px !important;
+  }
 }
 
 .spec-content.p-2 {
@@ -221,63 +256,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   background: #fff !important;
 }
 </style>
-<body>
-  <header>🚗 China Auto Dashboard</header>
-
-  <div class="container mt-3">
-    <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
-
-    <div class="table-responsive">
-      <table class="table table-striped table-hover align-middle" id="carTable">
-        <thead>
-          <tr>
-            <th style="width:80px">順位</th>
-            <th style="width:80px">変動</th>
-            <th style="width:100px">画像</th>
-            <th>車名</th>
-            <th>メーカー</th>
-            <th style="width:110px">台数</th>
-            <th style="width:160px">価格</th>
-            <th style="width:100px">情報</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- モーダル: 仕様 -->
-  <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="csvContent" class="table-responsive"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- モーダル: 口コミ -->
-  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="storyModalLabel">口コミ概要</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="storyContent">読込中...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script>
  const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
 const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;

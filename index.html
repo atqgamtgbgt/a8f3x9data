@@ -437,11 +437,20 @@ function showConfigCsv(carId, title) {
       let tbody="<tbody>";
       for(const g of grouped){
         const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-        tbody+=`
-          <tr id="${id}" class="sec-row" data-section="${g.section}">
-            <th class="item-col section-col">▼ ${g.section}</th>
-            <td colspan="${modelHeaders.length}" class="section-fill"></td>
-          </tr>`;
+let sectionOrder = 0;
+
+for(const g of grouped){
+  sectionOrder++;
+
+  const id = `sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+  const z = 40 + sectionOrder;   // 下のsectionほど大きくなる
+
+  tbody += `
+    <tr id="${id}" class="sec-row" data-section="${g.section}">
+      <th class="item-col section-col" style="z-index:${z + 1};">▼ ${g.section}</th>
+      <td colspan="${modelHeaders.length}" class="section-fill" style="z-index:${z};"></td>
+    </tr>`;
+
         for(const row of g.rows){
           const item=row[0]||"";
           const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");

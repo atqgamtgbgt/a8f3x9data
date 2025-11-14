@@ -378,6 +378,7 @@ function showConfigCsv(carId, title) {
   const target = document.getElementById("csvContent");
   document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
   target.innerHTML = "読込中...";
+
   Papa.parse(path, {
     download: true,
     header: false,
@@ -396,25 +397,30 @@ function showConfigCsv(carId, title) {
       const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
       const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
       const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+
       const modelStart = Math.max(secIdx, itemIdx) + 1;
       const modelHeaders = headerRow.slice(modelStart);
       const dataRows = rows.slice(headerIdx + 1);
 
+      // ==== セクションごとに grouped ====
       const grouped = [];
       let currentSection = "";
       for (const r of dataRows) {
         const sec = (r[secIdx] || "").trim();
         if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
         if (!currentSection) continue;
+
         const item = (r[itemIdx] || "").trim();
         if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+
         const cols = r.slice(modelStart);
         if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
           grouped.push({ section: currentSection, rows: [] });
+
         grouped[grouped.length - 1].rows.push([item, ...cols]);
       }
 
-      // === ナビゲーション生成 ===
+      // === ナビ生成 ===
       let options = "";
       for (const g of grouped) {
         options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
@@ -430,25 +436,42 @@ function showConfigCsv(carId, title) {
           <select id="sectionSelect">${options}</select>
         </div>`;
 
-      // === tbody生成（colspan廃止・section-col固定対応） ===
-      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
-      let tbody="<tbody>";
-      for(const g of grouped){
-        const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
-        tbody+=`
+      // === thead ===
+      const thead =
+        `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>` +
+        modelHeaders.map(h => `<th>${h}</th>`).join("") +
+        `</tr></thead>`;
+
+      // === tbody ===
+      let tbody = "<tbody>";
+
+      for (const g of grouped) {
+        const id = `sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+
+        // ★ セクション行（列分離した決定版）
+        tbody += `
           <tr id="${id}" class="sec-row" data-section="${g.section}">
-            <th class="item-col section-col">▼ ${g.section}</th>
+            <th class="section-col">▼ ${g.section}</th>
+            <th class="item-col" style="display:none;"></th>
             <td colspan="${modelHeaders.length}" class="section-fill"></td>
           </tr>`;
-        for(const row of g.rows){
-          const item=row[0]||"";
-          const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
-          tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
+
+        // ★ 項目行（あなたの元コードをそのまま）
+        for (const row of g.rows) {
+          const item = row[0] || "";
+          const cells = row
+            .slice(1)
+            .map(v => `<td style="white-space:pre-line;">${(v || "").replace(/^nan$/i, "")}</td>`)
+            .join("");
+
+          tbody += `<tr><th class="item-col">${item}</th>${cells}</tr>`;
         }
       }
-      tbody+="</tbody>";
 
-      const tableHtml=`
+      tbody += "</tbody>";
+
+      // === table HTML ===
+      const tableHtml = `
         <div class="spec-table-container d-flex">
           ${navHtml}
           <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
@@ -459,70 +482,77 @@ function showConfigCsv(carId, title) {
             </div>
           </div>
         </div>`;
-      target.innerHTML=tableHtml;
 
-      // === スマホ時の幅調整（JavaScript強制適用） ===
+      target.innerHTML = tableHtml;
+
+      // === スマホ幅調整 ===
       if (window.innerWidth <= 991) {
-        // 通常の項目名を100pxに
         document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
           el.style.minWidth = '100px';
           el.style.maxWidth = '100px';
           el.style.width = '100px';
         });
-        
-        // セクション名を200pxに
+
         document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
           el.style.minWidth = '200px';
           el.style.maxWidth = '200px';
           el.style.width = '200px';
         });
-        
-        // section-fillの位置調整
+
         document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
           el.style.left = '199px';
         });
       }
 
-      // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
+      // === ヘッダー高さをCSS変数に反映 ===
       const scrollArea =
         document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
           ? document.querySelector("#specScrollArea .table-responsive")
           : document.getElementById("specScrollArea");
+
       const theadEl = scrollArea?.querySelector(".spec-table thead");
-      const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+      const theadH =
+        theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+
       if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+
       const headerHeight = theadH;
 
-      // ✅ 左メニュークリックでヘッダー直下へ正確に移動
-      document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-        a.addEventListener("click",ev=>{
+      // === 左メニュークリック ===
+      document.querySelectorAll(".spec-sidebar a").forEach(a => {
+        a.addEventListener("click", ev => {
           ev.preventDefault();
-          const id=a.getAttribute("href");
-          const el=document.querySelector(id);
-          if(el && scrollArea){
+          const id = a.getAttribute("href");
+          const el = document.querySelector(id);
+          if (el && scrollArea) {
             const offset = el.offsetTop - headerHeight;
-            scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            scrollArea.scrollTo({ top: offset, behavior: "smooth" });
           }
         });
       });
 
-      // ✅ セクションセレクトでも同様に移動（スマホ対応）
-      const select=document.getElementById("sectionSelect");
-      if(select){
-        select.addEventListener("change",e=>{
-          const id=e.target.value;
-          const el=document.querySelector(id);
-          if(el && scrollArea){
+      // === スマホ select ===
+      const select = document.getElementById("sectionSelect");
+      if (select) {
+        select.addEventListener("change", e => {
+          const id = e.target.value;
+          const el = document.querySelector(id);
+          if (el && scrollArea) {
             const offset = el.offsetTop - headerHeight;
-            scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            scrollArea.scrollTo({ top: offset, behavior: "smooth" });
           }
         });
       }
     },
-    error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+
+    error: (err) => {
+      target.textContent = "読み込み失敗: " + err.message;
+    }
   });
+
   new bootstrap.Modal(document.getElementById("csvModal")).show();
 }
+/* ==== showConfigCsv 終了 ==== */
 
 /* ==== 口コミデータ ==== */
 async function showStory(carId,title){

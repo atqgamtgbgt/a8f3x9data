@@ -27,7 +27,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 .price-jpy { font-size: 0.85rem; color: #6c757d; }
 .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-/* === sticky共通（PC＋スマホ共通で有効） === */
+/* === sticky共通 === */
 .spec-table thead th {
   position: sticky;
   top: 0;
@@ -49,6 +49,23 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   background: #fff;
   border-right: 1px solid #dee2e6;
 }
+
+/* === セクション行（2行固定＋折り返し＋高さ安定） === */
+.spec-table tbody tr.sec-row .section-col,
+.spec-table tbody tr.sec-row .section-fill {
+  height: calc(1.3em * 2) !important;  /* 2行ぶん固定 */
+  line-height: 1.3em !important;
+  overflow: hidden !important;
+}
+
+.spec-table tbody tr.sec-row .section-col {
+  white-space: normal !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  font-size: clamp(0.75rem, 2.3vw, 0.9rem) !important;
+}
+
 .spec-table tbody tr.sec-row .section-col {
   position: sticky;
   left: 0;
@@ -56,7 +73,6 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 41;
   background: #f8f9fa;
   font-weight: 600;
-  box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
   border-bottom: 1px solid #dee2e6;
 }
 .spec-table tbody tr.sec-row .section-fill {
@@ -66,24 +82,9 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 39;
   background: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
-  box-shadow: inset -1px 0 0 #dee2e6;
-}
-.spec-table tbody tr.sec-row {
-  height: 2.6em;
-}
-.spec-table tbody tr.sec-row .section-col,
-.spec-table tbody tr.sec-row .section-fill {
-  line-height: 2.6em;
-  vertical-align: middle;
-  white-space: nowrap;
-}
-/* セクション名：長い場合は折り返す */
-.spec-table tbody tr.sec-row .section-col {
-  white-space: normal !important;
-  line-height: 1.3em !important;
 }
 
-/* 背景透け防止マスク（共通） */
+/* 背景透け防止 */
 .spec-content::before {
   content: "";
   position: sticky;
@@ -107,7 +108,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   pointer-events: none;
 }
 
-/* === 仕様テーブル（PC） === */
+/* === PC === */
 @media (min-width: 992px) {
   .spec-table-container {
     display: flex;
@@ -132,27 +133,13 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     padding: 8px;
     position: relative;
     background: #fff;
-    background-clip: padding-box;
   }
-  .spec-content .table-responsive {
-    position: relative;
-    height: 100%;
-    overflow: auto !important;
-  }
-  .spec-table {
-    position: relative;
-    border-collapse: separate;
-    border-spacing: 0;
-    min-width: 100%;
-  }
-  
-  /* PC用：fill側の位置調整 */
   .spec-table tbody tr.sec-row .section-fill {
     left: 179px !important;
   }
 }
 
-/* === モバイル（sticky＋セレクトトグル両立） === */
+/* === スマホ === */
 @media (max-width: 991px) {
   .spec-content .table-responsive {
     max-height: 70vh;
@@ -174,72 +161,37 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     margin: 0 auto;
     display: block;
   }
-  
-  /* スマホ時：左端列を100pxに統一 */
-  .spec-table thead th.sticky-col,
-  .spec-table tbody th.item-col {
+
+  .spec-table tbody th.item-col,
+  .spec-table thead th.sticky-col {
     min-width: 100px !important;
     max-width: 100px !important;
     width: 100px !important;
-    font-size: 0.85rem;
-    padding: 4px 6px !important;
   }
-  
-  /* セクション名：背景を右側に延長 */
+
   .spec-table tbody tr.sec-row .section-col {
     min-width: 100px !important;
-    max-width: 100px !important;
     width: 100px !important;
-    font-size: 0.9rem;
-    background: #f8f9fa !important;
     box-shadow: 150px 0 0 0 #f8f9fa !important;
   }
-  
+
   .spec-table tbody tr.sec-row .section-fill {
     left: 99px !important;
   }
-  
+
   .spec-content::after {
     width: calc(100px + 0.5rem) !important;
   }
 }
 
-.spec-content.p-2 {
-  padding: 0 !important;
-  background: #fff !important;
-}
-
-/* ✅ 左列とセクション帯の間の隙間を消す */
-.spec-table tbody th.item-col {
-  border-right: none !important;
-}
-
-.spec-table tbody tr.sec-row .section-col {
-  border-right: 1px solid #dee2e6 !important;
-  box-shadow: none !important;
-}
-
-/* ✅ 通常のデータセルのz-indexを下げる */
+/* 細かい調整 */
+.spec-table tbody th.item-col { border-right: none !important; }
+.spec-table tbody tr.sec-row .section-col { border-right: 1px solid #dee2e6 !important; }
 .spec-table tbody tr:not(.sec-row) td {
   position: relative;
   z-index: 10;
   background: #fff !important;
 }
-/* === セクション行：高さ固定＋折り返し ＋ 自動縮小 === */
-.spec-table tbody tr.sec-row {
-  height: 2.6em !important;       /* ← 高さを完全に固定（固定が最重要） */
-}
-
-.spec-table tbody tr.sec-row .section-col {
-  white-space: normal !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;     /* 2行で切る */
-  -webkit-box-orient: vertical !important;
-  overflow: hidden !important;
-  font-size: clamp(0.75rem, 2.3vw, 0.9rem) !important;  /* 自動縮小 */
-  line-height: 1.3em !important;
-}
-
 
 </style>
 <body>
@@ -299,7 +251,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
- const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
 const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
 let cnyToJpy = 20;
@@ -395,17 +347,19 @@ function fail(msg){
   s.textContent=msg;
 }
 
-/* ==== showConfigCsv 開始 ==== */
+/* ==== showConfigCsv ==== */
 function showConfigCsv(carId, title) {
   const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
   const target = document.getElementById("csvContent");
   document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
   target.innerHTML = "読込中...";
+
   Papa.parse(path, {
     download: true,
     header: false,
     skipEmptyLines: false,
     complete: (res) => {
+
       const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
       if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
 
@@ -437,7 +391,6 @@ function showConfigCsv(carId, title) {
         grouped[grouped.length - 1].rows.push([item, ...cols]);
       }
 
-      // === ナビゲーション生成 ===
       let options = "";
       for (const g of grouped) {
         options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
@@ -453,9 +406,9 @@ function showConfigCsv(carId, title) {
           <select id="sectionSelect">${options}</select>
         </div>`;
 
-      // === tbody生成（colspan廃止・section-col固定対応） ===
       const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;">項目</th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
       let tbody="<tbody>";
+
       for(const g of grouped){
         const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
         tbody+=`
@@ -484,70 +437,77 @@ function showConfigCsv(carId, title) {
         </div>`;
       target.innerHTML=tableHtml;
 
-      // === スマホ時の幅調整（JavaScript強制適用） ===
+      /* === スマホ幅調整 === */
       if (window.innerWidth <= 991) {
-        // 通常の項目名を100pxに
         document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
           el.style.minWidth = '100px';
           el.style.maxWidth = '100px';
           el.style.width = '100px';
         });
-        
-        // セクション名を200pxに
+
         document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
           el.style.minWidth = '200px';
           el.style.maxWidth = '200px';
           el.style.width = '200px';
         });
-        
-        // section-fillの位置調整
+
         document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
           el.style.left = '199px';
         });
       }
 
-      // === thead高さをCSS変数に反映（stickyヘッダー高さ同期） ===
+      /* === ★ sticky offset 計算：完全版 ★ === */
       const scrollArea =
         document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
           ? document.querySelector("#specScrollArea .table-responsive")
           : document.getElementById("specScrollArea");
-      const theadEl = scrollArea?.querySelector(".spec-table thead");
-      const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-      if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-      const headerHeight = theadH;
 
-      // ✅ 左メニュークリックでヘッダー直下へ正確に移動
+      const theadEl = scrollArea?.querySelector(".spec-table thead");
+      const secEl = scrollArea?.querySelector(".spec-table tbody tr.sec-row .section-col");
+
+      const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+      const secH = secEl ? Math.ceil(secEl.getBoundingClientRect().height) : 0;
+
+      const offset = theadH + secH;
+
+      if (scrollArea) {
+        scrollArea.style.setProperty("--secOffset", offset + "px");
+      }
+
+      const headerHeight = offset;
+
       document.querySelectorAll(".spec-sidebar a").forEach(a=>{
         a.addEventListener("click",ev=>{
           ev.preventDefault();
           const id=a.getAttribute("href");
           const el=document.querySelector(id);
           if(el && scrollArea){
-            const offset = el.offsetTop - headerHeight;
-            scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            const move = el.offsetTop - headerHeight;
+            scrollArea.scrollTo({top:move,behavior:"smooth"});
           }
         });
       });
 
-      // ✅ セクションセレクトでも同様に移動（スマホ対応）
       const select=document.getElementById("sectionSelect");
       if(select){
         select.addEventListener("change",e=>{
           const id=e.target.value;
           const el=document.querySelector(id);
           if(el && scrollArea){
-            const offset = el.offsetTop - headerHeight;
-            scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            const move = el.offsetTop - headerHeight;
+            scrollArea.scrollTo({top:move,behavior:"smooth"});
           }
         });
       }
+
     },
     error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
   });
+
   new bootstrap.Modal(document.getElementById("csvModal")).show();
 }
 
-/* ==== 口コミデータ ==== */
+/* ==== 口コミ ==== */
 async function showStory(carId,title){
   const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
   const target=document.getElementById("storyContent");
@@ -569,7 +529,7 @@ async function showStory(carId,title){
   new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
 
-// === モーダル開閉時のトグル制御 ===
+/* === モーダル開閉時のトグル === */
 const csvModalEl = document.getElementById('csvModal');
 csvModalEl.addEventListener('shown.bs.modal', () => {
   const toggle = document.querySelector('.section-toggle');
@@ -583,7 +543,6 @@ csvModalEl.addEventListener('shown.bs.modal', () => {
     toggle.style.borderBottom = '1px solid #dee2e6';
   }
 });
-
 csvModalEl.addEventListener('hidden.bs.modal', () => {
   const toggle = document.querySelector('.section-toggle');
   if (toggle) {
@@ -596,6 +555,7 @@ csvModalEl.addEventListener('hidden.bs.modal', () => {
 });
 
 main();
+
 </script>
 
 

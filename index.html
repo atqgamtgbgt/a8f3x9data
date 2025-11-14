@@ -10,8 +10,9 @@
 <style>
 body {
   background-color: #f8f9fa;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
 }
+
 header {
   background: #0d6efd;
   color: #fff;
@@ -20,31 +21,63 @@ header {
   font-size: 1.3rem;
   font-weight: 700;
 }
-th { background-color: #f1f3f5; }
-.rank-up { color: #dc3545; font-weight: bold; }
-.rank-down { color: #0d6efd; font-weight: bold; }
-img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-.price-jpy { font-size: 0.85rem; color: #6c757d; }
-.btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
 
-/* === sticky共通（PC＋スマホ共通で有効） === */
+th {
+  background-color: #f1f3f5;
+}
+
+.rank-up {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.rank-down {
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+img.car-thumb {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #eee;
+}
+
+.price-jpy {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.btn-spec,
+.btn-story {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  margin: 2px;
+}
+
+/* =====================================
+   sticky（PC＋スマホ共通）
+===================================== */
 .spec-table thead th {
   position: sticky;
   top: 0;
   z-index: 30;
   background: #fff;
-  box-shadow: 0 2px 3px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
   border-bottom: 1px solid #dee2e6;
   vertical-align: middle !important;
   padding-top: 6px;
   padding-bottom: 6px;
 }
+
 .spec-table thead th.sticky-col {
   position: sticky;
   left: 0;
   z-index: 31;
   background: #fff;
 }
+
 .spec-table tbody th.item-col {
   position: sticky;
   left: 0;
@@ -53,7 +86,9 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   border-right: 1px solid #dee2e6;
 }
 
-/* ✅ セクション行（z-indexは動的に設定） */
+/* =====================================
+   セクション行（z-index は JS で上書き）
+===================================== */
 .spec-table tbody tr.sec-row {
   height: 2.6em;
 }
@@ -62,21 +97,23 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   position: sticky;
   left: 0;
   top: var(--secOffset, 42px);
-  z-index: 41; /* デフォルト値、JSで動的に上書き */
+  z-index: 41;
   background: #f8f9fa;
   font-weight: 600;
   box-shadow: inset -1px 0 0 #dee2e6, inset 0 -1px 0 #dee2e6;
   border-bottom: 1px solid #dee2e6;
 }
+
 .spec-table tbody tr.sec-row .section-fill {
   position: sticky;
   left: 180px;
   top: var(--secOffset, 42px);
-  z-index: 39; /* デフォルト値、JSで動的に上書き */
+  z-index: 39;
   background: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
   box-shadow: inset -1px 0 0 #dee2e6;
 }
+
 .spec-table tbody tr.sec-row .section-col,
 .spec-table tbody tr.sec-row .section-fill {
   line-height: 2.6em;
@@ -84,7 +121,9 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   white-space: nowrap;
 }
 
-/* 背景透け防止マスク（共通） */
+/* =====================================
+   背景透け防止マスク（共通）
+===================================== */
 .spec-content::before {
   content: "";
   position: sticky;
@@ -96,6 +135,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   z-index: 25;
   pointer-events: none;
 }
+
 .spec-content::after {
   content: "";
   position: sticky;
@@ -108,7 +148,9 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   pointer-events: none;
 }
 
-/* === 仕様テーブル（PC） === */
+/* =====================================
+   PC レイアウト
+===================================== */
 @media (min-width: 992px) {
   .spec-table-container {
     display: flex;
@@ -116,6 +158,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     height: 80vh;
     background: #fff;
   }
+
   .spec-sidebar {
     position: sticky;
     top: 0;
@@ -126,6 +169,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     border-right: 1px solid #dee2e6;
     padding: 8px;
   }
+
   .spec-content {
     flex: 1;
     overflow: hidden !important;
@@ -135,110 +179,48 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     background: #fff;
     background-clip: padding-box;
   }
+
   .spec-content .table-responsive {
     position: relative;
     height: 100%;
     overflow: auto !important;
   }
+
   .spec-table {
     position: relative;
     border-collapse: separate;
     border-spacing: 0;
     min-width: 100%;
   }
-  
-  /* PC用：fill側の位置調整 */
+
   .spec-table tbody tr.sec-row .section-fill {
     left: 179px !important;
   }
 }
+
+/* =====================================
+   スマホ最適化（576px 以下）
+   ※重複していた 3 つを 1 つに統合
+===================================== */
 @media (max-width: 576px) {
 
-  /* カード全体をスマホに最適化 */
+  /* --- 行全体をカード化 --- */
   #carTable tbody tr {
     border-radius: 10px !important;
     padding: 10px 12px !important;
-    margin: 12px 6px !important;    /* 左右の余白をぎゅっと縮める */
+    margin: 12px 6px !important;
     background: #111 !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.35) !important;
-  }
-
-  /* 画像の存在感アップ＆位置調整 */
-  #carTable td:nth-child(3) {
-    float: left;
-    width: 105px !important;        /* 画像幅を少し縮めてバランスUP */
-    margin-right: 10px !important;  /* テキストと適度な距離 */
-    text-align: center;
-  }
-
-  /* テキスト右側カラムの横幅最適化 */
-  #carTable td:nth-child(4),
-  #carTable td:nth-child(5),
-  #carTable td:nth-child(6),
-  #carTable td:nth-child(7) {
-    margin-left: 120px !important;
-    margin-right: 6px !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35) !important;
+    border: 1px solid #333 !important;
     display: block;
-    padding: 1px 0 !important;
-    font-size: 0.93rem !important;
   }
 
-  /* 車名リンクの視認性UP */
-  #carTable td:nth-child(4) a {
-    font-size: 1.0rem !important;
-    font-weight: 600 !important;
-  }
-
-  /* 価格は少し行間を詰める */
-  #carTable td:nth-child(7) {
-    line-height: 1.25;
-  }
-
-  /* ボタン（仕様・口コミ）を右揃えに */
-  #carTable td:nth-child(8) {
-    margin-left: 120px !important;
-    text-align: left !important;
-    padding-top: 6px !important;
-  }
-
-  #carTable td:nth-child(8) button {
-    min-width: 70px;
-    padding: 5px 8px !important;
-    margin-right: 8px !important;
-    margin-bottom: 3px !important;
-    font-size: 0.85rem !important;
-  }
-
-  /* 順位＋変動の位置と見栄えを調整 */
-  #carTable td:nth-child(1),
-  #carTable td:nth-child(2) {
-    display: inline-block;
-    background: #222;
-    padding: 4px 8px !important;
-    border-radius: 6px;
-    margin-right: 4px;
-    font-size: 0.88rem !important;
-  }
-
-}/* スマホ：幅 576px 以下に適用 */
-@media (max-width: 576px) {
-
-  /* ヘッダー非表示（幅が足りないので） */
+  /* --- ヘッダー削除（狭いため） --- */
   #carTable thead {
     display: none;
   }
 
-  /* 行をカード化 */
-  #carTable tbody tr {
-    display: block;
-    padding: 10px 8px;
-    margin-bottom: 12px;
-    border-radius: 6px;
-    background: #111; /* ダークでも見やすい */
-    border: 1px solid #333;
-  }
-
-  /* 各セルを縦並び */
+  /* --- 各セルをブロック化 --- */
   #carTable td {
     display: block;
     width: 100%;
@@ -247,73 +229,62 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     text-align: left !important;
   }
 
-  /* 画像を中央寄せ */
-  #carTable td:nth-child(3) img {
-    display: block;
-    margin: 0 auto 6px auto;
-    width: 90px;
-    height: auto;
-  }
-
-  /* 順位・変動も縦並びで表示 */
-  #carTable td:nth-child(1),
-  #carTable td:nth-child(2) {
-    font-weight: 600;
-    display: inline-block;
-    width: auto;
-    padding-right: 10px !important;
-  }
-
-  /* 情報（仕様 / 口コミ）も中央寄せではなく左寄せに調整 */
-  #carTable td:nth-child(8) {
-    margin-top: 6px;
-    text-align: left !important;
-  }
-}/* ============================================================
-   📱 スマホ最適化フルセット（あなたのHTMLを壊さない安全版）
-   ============================================================ */
-
-@media (max-width: 576px) {
-
-  /* ① 順位・変動をバッジ化して視認性UP */
-  #carTable td:nth-child(1),
-  #carTable td:nth-child(2) {
-    display: inline-block;
-    padding: 4px 8px !important;
-    background: #222;
-    border-radius: 6px;
-    margin-right: 6px;
-    font-size: 0.9rem;
-    text-align: center;
-  }
-
-  /* ② 画像の横に情報をまとめて「カードビュー」にする */
+  /* --- 画像セル --- */
   #carTable td:nth-child(3) {
     float: left;
     width: 120px !important;
     text-align: center;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 120px !important;
+    padding: 0 !important;
   }
 
-  /* 車名・メーカー・台数・価格を横へ */
+  #carTable td:nth-child(3) img.car-thumb {
+    max-height: 100px !important;
+    object-fit: contain !important;
+  }
+
+  /* --- 順位・変動の badge（絶対配置）--- */
+  #carTable td.rank-badge,
+  #carTable td.diff-badge {
+    position: absolute !important;
+    top: 6px !important;
+    padding: 3px 6px !important;
+    border-radius: 4px !important;
+    font-size: 0.8rem !important;
+    color: #fff !important;
+    z-index: 999 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  #carTable td.rank-badge {
+    left: 6px !important;
+    background: rgba(0, 0, 0, 0.75) !important;
+  }
+
+  #carTable td.diff-badge {
+    left: 52px !important;
+    background: rgba(220, 0, 0, 0.75) !important;
+  }
+
+  /* --- テキスト部分を右側へ --- */
   #carTable td:nth-child(4),
   #carTable td:nth-child(5),
   #carTable td:nth-child(6),
-  #carTable td:nth-child(7) {
+  #carTable td:nth-child(7),
+  #carTable td:nth-child(8) {
     margin-left: 135px !important;
     display: block;
     padding-top: 2px !important;
     padding-bottom: 2px !important;
-    font-size: 0.92rem;
+    font-size: 0.92rem !important;
   }
 
-  /* 情報（仕様・口コミ）も下に並べる */
-  #carTable td:nth-child(8) {
-    margin-left: 135px !important;
-    margin-top: 6px !important;
-    display: block;
-  }
-
-  /* ④ ボタンをスマホ向け最適化 */
   #carTable td:nth-child(8) button {
     min-width: 70px;
     padding: 4px 8px !important;
@@ -321,80 +292,33 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     margin-bottom: 4px !important;
     font-size: 0.85rem !important;
   }
-
-  /* ③ 行をカード化（枠と影で視認性UP） */
-  #carTable tbody tr {
-    border: 1px solid rgba(255,255,255,0.15) !important;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.4) !important;
-    border-radius: 8px;
-    padding: 10px !important;
-    margin-bottom: 18px !important;
-    display: block;   /* ← カード化するために必須 */
-    background: #111;
-  }
-
-  /* ⑤ 全体フォントを少し縮める（スマホ最適化） */
-  #carTable td,
-  #carTable th {
-    font-size: 0.92rem !important;
-  }
-
-  /* テーブル内の従来横線を無効化（行がカード化されたため） */
-  #carTable td, #carTable th {
-    border-top: none !important;
-  }
-    #carTable td:nth-child(3) {
-    display: flex !important;
-    align-items: center !important;   /* ←縦中央寄せ */
-    justify-content: center !important;
-    height: 120px !important;         /* カードの高さに合わせる */
-    padding: 0 !important;
-  }
-
-  img.car-thumb {
-    max-height: 100px !important;
-    object-fit: contain !important;
-  }
-    #carTable td:nth-child(3) {
-    display: flex !important;
-    align-items: center !important;   /* ←縦中央寄せ */
-    justify-content: center !important;
-    height: 120px !important;         /* カードの高さに合わせる */
-    padding: 0 !important;
-  }
-
-  img.car-thumb {
-    max-height: 100px !important;
-    object-fit: contain !important;
-  }
 }
-/* === モバイル（sticky＋セレクトトグル両立） === */
+
+/* =====================================
+   sticky＋セレクトトグル（スマホ991px以下）
+===================================== */
 @media (max-width: 991px) {
   .spec-content .table-responsive {
     max-height: 70vh;
     overflow: auto !important;
   }
-  
-  /* モーダルヘッダーをflexboxで配置 */
+
   #csvModal .modal-header {
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
   }
-  
-  /* モーダルタイトルを非表示 */
+
   #csvModal .modal-title {
     display: none;
   }
-  
-  /* 閉じるボタンを右端に固定 */
+
   #csvModal .btn-close {
     position: absolute;
     right: 1rem;
   }
-  
-  /* トグルメニューを中央に配置 */
+
   .section-toggle {
     position: static;
     transform: none;
@@ -402,7 +326,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     padding: 0;
     pointer-events: auto;
   }
-  
+
   .section-toggle select {
     width: auto;
     min-width: 200px;
@@ -412,8 +336,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     pointer-events: auto;
     background: #fff;
   }
-  
-  /* スマホ時：左端列を100pxに統一 */
+
   .spec-table thead th.sticky-col,
   .spec-table tbody th.item-col {
     min-width: 100px !important;
@@ -422,8 +345,7 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     font-size: 0.85rem;
     padding: 4px 6px !important;
   }
-  
-  /* セクション名：背景を右側に延長 */
+
   .spec-table tbody tr.sec-row .section-col {
     min-width: 100px !important;
     max-width: 100px !important;
@@ -432,22 +354,24 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     background: #f8f9fa !important;
     box-shadow: 150px 0 0 0 #f8f9fa !important;
   }
-  
+
   .spec-table tbody tr.sec-row .section-fill {
     left: 99px !important;
   }
-  
+
   .spec-content::after {
     width: calc(100px + 0.5rem) !important;
   }
 }
 
+/* =====================================
+   その他調整
+===================================== */
 .spec-content.p-2 {
   padding: 0 !important;
   background: #fff !important;
 }
 
-/* ✅ 左列とセクション帯の間の隙間を消す */
 .spec-table tbody th.item-col {
   border-right: none !important;
 }
@@ -457,122 +381,10 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
   box-shadow: none !important;
 }
 
-/* ✅ 通常のデータセルのz-indexを下げる */
 .spec-table tbody tr:not(.sec-row) td {
   position: relative;
   z-index: 10;
   background: #fff !important;
-}
-  /* スマホ：順位と変動を画像左上に重ねてバッジ化 */
-@media (max-width: 576px) {
-
-  /* 基準位置として画像セルを relative にする */
-  #carTable td:nth-child(3) {
-    position: relative !important;
-  }
-
-  /* 順位バッジ（左上） */
-  #carTable td.rank-badge {
-    position: absolute !important;
-    top: 6px !important;
-    left: 6px !important;
-    padding: 3px 6px !important;
-    background: rgba(0,0,0,0.65);
-    color: #fff !important;
-    border-radius: 4px;
-    font-size: 0.8rem !important;
-    z-index: 20 !important;
-  }
-
-  /* 変動バッジ（順位の横） */
-  #carTable td.diff-badge {
-    position: absolute !important;
-    top: 6px !important;
-    left: 46px !important;
-    padding: 3px 6px !important;
-    background: rgba(200,0,0,0.70); /* 赤バッジ */
-    color: #fff !important;
-    border-radius: 4px;
-    font-size: 0.8rem !important;
-    z-index: 20 !important;
-  }
-}
-/* スマホ：順位と変動を画像左上に重ねてバッジ化 */
-@media (max-width: 576px) {
-
-  /* 基準位置として画像セルを relative にする */
-  #carTable td:nth-child(3) {
-    position: relative !important;
-  }
-
-  /* 順位バッジ（左上） */
-  #carTable td.rank-badge {
-    position: absolute !important;
-    top: 6px !important;
-    left: 6px !important;
-    padding: 3px 6px !important;
-    background: rgba(0,0,0,0.65);
-    color: #fff !important;
-    border-radius: 4px;
-    font-size: 0.8rem !important;
-    z-index: 20 !important;
-  }
-
-  /* 変動バッジ（順位の横） */
-  #carTable td.diff-badge {
-    position: absolute !important;
-    top: 6px !important;
-    left: 46px !important;
-    padding: 3px 6px !important;
-    background: rgba(200,0,0,0.70); /* 赤バッジ */
-    color: #fff !important;
-    border-radius: 4px;
-    font-size: 0.8rem !important;
-    z-index: 20 !important;
-  }
-  /* 🔥 最優先で順位・変動を絶対配置する強制上書き */
-@media (max-width: 576px) {
-
-  /* 画像セルを相対化（絶対配置の基準） */
-  #carTable td:nth-child(3) {
-    position: relative !important;
-  }
-
-  /* 順位バッジ */
-  #carTable td.rank-badge {
-    position: absolute !important;
-    top: 6px !important;
-    left: 6px !important;
-    padding: 3px 6px !important;
-    background: rgba(0,0,0,0.75) !important;
-    color: #fff !important;
-    border-radius: 4px !important;
-    font-size: 0.8rem !important;
-    z-index: 99 !important;
-
-    /* 競合を全て潰す */
-    display: inline-block !important;
-    width: auto !important;
-  }
-
-  /* 変動バッジ */
-  #carTable td.diff-badge {
-    position: absolute !important;
-    top: 6px !important;
-    left: 52px !important;
-    padding: 3px 6px !important;
-    background: rgba(220,0,0,0.75) !important;
-    color: #fff !important;
-    border-radius: 4px !important;
-    font-size: 0.8rem !important;
-    z-index: 99 !important;
-
-    /* 競合を全て潰す */
-    display: inline-block !important;
-    width: auto !important;
-  }
-}
-
 }
 
 </style>

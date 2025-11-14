@@ -152,7 +152,75 @@ img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px
     left: 179px !important;
   }
 }
-/* スマホ：幅 576px 以下に適用 */
+@media (max-width: 576px) {
+
+  /* カード全体をスマホに最適化 */
+  #carTable tbody tr {
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    margin: 12px 6px !important;    /* 左右の余白をぎゅっと縮める */
+    background: #111 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.35) !important;
+  }
+
+  /* 画像の存在感アップ＆位置調整 */
+  #carTable td:nth-child(3) {
+    float: left;
+    width: 105px !important;        /* 画像幅を少し縮めてバランスUP */
+    margin-right: 10px !important;  /* テキストと適度な距離 */
+    text-align: center;
+  }
+
+  /* テキスト右側カラムの横幅最適化 */
+  #carTable td:nth-child(4),
+  #carTable td:nth-child(5),
+  #carTable td:nth-child(6),
+  #carTable td:nth-child(7) {
+    margin-left: 120px !important;
+    margin-right: 6px !important;
+    display: block;
+    padding: 1px 0 !important;
+    font-size: 0.93rem !important;
+  }
+
+  /* 車名リンクの視認性UP */
+  #carTable td:nth-child(4) a {
+    font-size: 1.0rem !important;
+    font-weight: 600 !important;
+  }
+
+  /* 価格は少し行間を詰める */
+  #carTable td:nth-child(7) {
+    line-height: 1.25;
+  }
+
+  /* ボタン（仕様・口コミ）を右揃えに */
+  #carTable td:nth-child(8) {
+    margin-left: 120px !important;
+    text-align: left !important;
+    padding-top: 6px !important;
+  }
+
+  #carTable td:nth-child(8) button {
+    min-width: 70px;
+    padding: 5px 8px !important;
+    margin-right: 8px !important;
+    margin-bottom: 3px !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* 順位＋変動の位置と見栄えを調整 */
+  #carTable td:nth-child(1),
+  #carTable td:nth-child(2) {
+    display: inline-block;
+    background: #222;
+    padding: 4px 8px !important;
+    border-radius: 6px;
+    margin-right: 4px;
+    font-size: 0.88rem !important;
+  }
+
+}/* スマホ：幅 576px 以下に適用 */
 @media (max-width: 576px) {
 
   /* ヘッダー非表示（幅が足りないので） */

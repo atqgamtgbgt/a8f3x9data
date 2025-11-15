@@ -199,10 +199,17 @@ img.car-thumb {
     height: 100%;
     overflow: auto !important;
     cursor: grab;
+    will-change: scroll-position;
   }
 
-  .spec-content .table-responsive:active {
+  .spec-content .table-responsive.active-drag {
     cursor: grabbing;
+    user-select: none;
+  }
+
+  .spec-content .table-responsive.active-drag * {
+    user-select: none;
+    pointer-events: none;
   }
 
   .spec-table {
@@ -915,7 +922,7 @@ function showConfigCsv(carId, title) {
         if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
         const headerHeight = theadH;
 
-        // ✅ ドラッグスクロール機能を追加
+        // ✅ ドラッグスクロール機能を追加（最適化版）
         let isDown = false;
         let startX;
         let startY;
@@ -924,25 +931,27 @@ function showConfigCsv(carId, title) {
 
         scrollArea.addEventListener('mousedown', (e) => {
           // リンクやボタンのクリックは無視
-          if (e.target.tagName === 'A' || e.target.closest('a')) return;
+          if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON') return;
           
           isDown = true;
-          scrollArea.style.cursor = 'grabbing';
-          scrollArea.style.userSelect = 'none';
+          scrollArea.classList.add('active-drag');
           startX = e.pageX - scrollArea.offsetLeft;
           startY = e.pageY - scrollArea.offsetTop;
           scrollLeft = scrollArea.scrollLeft;
           scrollTop = scrollArea.scrollTop;
+          
+          // スムーズスクロールを無効化
+          scrollArea.style.scrollBehavior = 'auto';
         });
 
         scrollArea.addEventListener('mouseleave', () => {
           isDown = false;
-          scrollArea.style.cursor = 'grab';
+          scrollArea.classList.remove('active-drag');
         });
 
         scrollArea.addEventListener('mouseup', () => {
           isDown = false;
-          scrollArea.style.cursor = 'grab';
+          scrollArea.classList.remove('active-drag');
         });
 
         scrollArea.addEventListener('mousemove', (e) => {
@@ -950,10 +959,14 @@ function showConfigCsv(carId, title) {
           e.preventDefault();
           const x = e.pageX - scrollArea.offsetLeft;
           const y = e.pageY - scrollArea.offsetTop;
-          const walkX = (x - startX) * 1.5; // スクロール速度調整
-          const walkY = (y - startY) * 1.5;
-          scrollArea.scrollLeft = scrollLeft - walkX;
-          scrollArea.scrollTop = scrollTop - walkY;
+          const walkX = (x - startX);
+          const walkY = (y - startY);
+          
+          // requestAnimationFrameを使用してスムーズに
+          requestAnimationFrame(() => {
+            scrollArea.scrollLeft = scrollLeft - walkX;
+            scrollArea.scrollTop = scrollTop - walkY;
+          });
         });
 
         // 初期カーソル設定
@@ -963,6 +976,7 @@ function showConfigCsv(carId, title) {
         document.querySelectorAll(".spec-sidebar a").forEach(a=>{
           a.addEventListener("click",ev=>{
             ev.preventDefault();
+            scrollArea.style.scrollBehavior = 'smooth';
             const id=a.getAttribute("href");
             const el=document.querySelector(id);
             if(el && scrollArea){
@@ -976,6 +990,7 @@ function showConfigCsv(carId, title) {
         const select=document.getElementById("sectionSelect");
         if(select){
           select.addEventListener("change",e=>{
+            scrollArea.style.scrollBehavior = 'smooth';
             const id=e.target.value;
             const el=document.querySelector(id);
             if(el && scrollArea){

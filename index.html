@@ -510,6 +510,31 @@ img.car-thumb {
   pointer-events: none;
 }
 
+/* 引用元ボタン */
+.source-link-btn {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .source-link-btn {
+    display: inline-block;
+    order: 0;
+    margin-right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    background: #0d6efd;
+    color: white !important;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .source-link-btn:hover {
+    background: #0b5ed7;
+    color: white !important;
+  }
+}
+
 /* モーダルヘッダーのボタン配置 */
 #csvModal .modal-header {
   display: flex;
@@ -1086,6 +1111,8 @@ function showConfigCsv(carId, title) {
   
   // タイトルを作成（IDの代わりに引用元ページのリンク）
   const configUrl = seriesUrlsMap[carId];
+  window.currentConfigUrl = configUrl; // グローバルに保存（後で使用）
+  
   let modalTitle = `車両仕様（${title}`;
   if (configUrl) {
     modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
@@ -1184,9 +1211,23 @@ function showConfigCsv(carId, title) {
       if (existingToggle) existingToggle.remove();
       const existingFullBtn = modalHeader.querySelector('.btn-open-full');
       if (existingFullBtn) existingFullBtn.remove();
+      const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
+      if (existingSourceBtn) existingSourceBtn.remove();
       
-      // スマホ時：セレクトメニューを追加
+      // スマホ時：引用元ボタンとセレクトメニューを追加
       if (window.innerWidth <= 991) {
+        // 引用元ボタン
+        if (configUrl) {
+          const sourceBtn = document.createElement('a');
+          sourceBtn.className = 'source-link-btn';
+          sourceBtn.href = configUrl;
+          sourceBtn.target = '_blank';
+          sourceBtn.rel = 'noopener';
+          sourceBtn.textContent = '引用元';
+          modalHeader.insertBefore(sourceBtn, closeBtn);
+        }
+        
+        // セクションセレクト
         const toggleDiv = document.createElement('div');
         toggleDiv.className = 'section-toggle';
         toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;

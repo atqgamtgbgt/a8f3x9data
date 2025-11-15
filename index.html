@@ -696,7 +696,7 @@ function renderTable(data) {
     const link = r.link || "";
     const carId = link.match(/(\d+)/)?.[1] || "";
     const name = r.global_name || r.name || "";
-    const price = (r.price || "") + " 元";
+    const price = (r.price || "") + "元";
     const priceJPY = convertToJPY(r.price || "");
     const maker = r.manufacturer_ja || r.manufacturer || "";
     const units = r.units || "";

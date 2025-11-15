@@ -361,18 +361,26 @@ img.car-thumb {
 
   #csvModal .modal-header {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    position: relative;
+    gap: 0.5rem;
   }
 
   #csvModal .modal-title {
     display: none;
   }
 
+  #csvModal .section-toggle {
+    flex: 1;
+    order: 1;
+  }
+
+  #csvModal .btn-open-full {
+    order: 2;
+  }
+
   #csvModal .btn-close {
-    position: absolute;
-    right: 1rem;
+    order: 3;
   }
 
   .section-toggle {
@@ -469,14 +477,38 @@ img.car-thumb {
 .btn-open-full {
   width: 22px;
   height: 22px;
-  margin-right: 10px;
+  padding: 0;
+  margin: 0 0.5rem 0 0;
   background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230d6efd" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 1h5v1H2v4H1V1zm14 0v5h-1V2h-4V1h5zm-1 14h-5v-1h4v-4h1v5zM1 15h5v-1H2v-4H1v5z"/></svg>') center/16px no-repeat;
   border: none;
   opacity: 0.8;
   cursor: pointer;
+  flex-shrink: 0;
 }
 .btn-open-full:hover {
   opacity: 1;
+}
+
+/* モーダルヘッダーのボタン配置 */
+#csvModal .modal-header {
+  display: flex;
+  align-items: center;
+}
+
+#csvModal .modal-header .modal-title {
+  flex: 1;
+  margin-right: auto;
+}
+
+#csvModal .modal-header .btn-open-full,
+#csvModal .modal-header .btn-close {
+  order: 10;
+}
+
+@media (min-width: 992px) {
+  #csvModal .modal-title {
+    display: block !important;
+  }
 }
 </style>
 <body>

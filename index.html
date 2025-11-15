@@ -691,182 +691,346 @@ function openFullSpec() {
   // 完全なスタイルを取得
   const allStyles = document.querySelector('style').textContent;
   
-  // セクションセレクトのオプションを取得
-  const selectEl = document.getElementById("sectionSelect");
-  const selectOptions = selectEl ? selectEl.innerHTML : '';
+  // セクション情報を取得
+  const sectionRows = document.querySelectorAll('.spec-table tbody tr.sec-row');
+  let selectOptions = '';
+  sectionRows.forEach(row => {
+    const sectionName = row.getAttribute('data-section');
+    const sectionId = row.id;
+    if (sectionName && sectionId) {
+      selectOptions += `<option value="#${sectionId}">${sectionName}</option>`;
+    }
+  });
   
-  // HTML全体を作成（モーダルの構造を完全再現）
+  // HTML全体を作成（iOS Brave対策を強化）
   const fullHTML = `
     <!DOCTYPE html>
     <html lang="ja">
       <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=yes">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
         <title>${title}</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
         <style>
           ${allStyles}
-          body { 
-            margin: 0;
-            padding: 0;
-            background: #f8f9fa;
-            overflow: hidden;
+          
+          /* iOS Brave 専用の強制スタイル */
+          * {
+            -webkit-overflow-scrolling: touch !important;
           }
+          
+          html, body { 
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            background: #f8f9fa !important;
+            position: fixed !important;
+          }
+          
+          .fullscreen-container {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+          }
+          
           .fullscreen-modal-header {
-            background: #fff;
-            padding: 1rem;
-            border-bottom: 1px solid #dee2e6;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.5rem;
-            position: sticky;
-            top: 0;
-            z-index: 1055;
+            background: #fff !important;
+            padding: 1rem !important;
+            border-bottom: 1px solid #dee2e6 !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            z-index: 2000 !important;
           }
+          
           .fullscreen-modal-header h5 {
-            margin: 0;
-            font-size: 1.25rem;
-            flex: 1;
+            margin: 0 !important;
+            font-size: 1.25rem !important;
+            flex: 1 !important;
           }
+          
           .fullscreen-modal-body {
-            height: calc(100vh - 60px);
-            overflow: auto;
-            background: #fff;
+            flex: 1 !important;
+            overflow: hidden !important;
+            background: #fff !important;
+            position: relative !important;
           }
+          
+          #specScrollArea,
+          #specScrollArea .table-responsive {
+            height: 100% !important;
+            width: 100% !important;
+            overflow: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            position: relative !important;
+          }
+          
           .close-fullscreen {
-            background: transparent;
-            border: none;
-            font-size: 1.5rem;
-            opacity: 0.5;
-            cursor: pointer;
-            padding: 0;
-            width: 1em;
-            height: 1em;
-            line-height: 1;
+            background: transparent !important;
+            border: none !important;
+            font-size: 1.5rem !important;
+            opacity: 0.5 !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+            width: 1em !important;
+            height: 1em !important;
+            line-height: 1 !important;
+            flex-shrink: 0 !important;
           }
+          
           .close-fullscreen:hover {
-            opacity: 1;
+            opacity: 1 !important;
           }
-          /* iOS Brave対策 */
+          
+          .section-toggle {
+            position: static !important;
+            transform: none !important;
+            width: auto !important;
+            padding: 0 !important;
+            pointer-events: auto !important;
+            flex: 1 !important;
+            order: 1 !important;
+          }
+          
+          .section-toggle select {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            display: block !important;
+            pointer-events: auto !important;
+            background: #fff !important;
+          }
+          
+          .close-fullscreen {
+            order: 2 !important;
+          }
+          
+          /* iOS Brave: sticky 強制適用 */
           .spec-table thead th {
             position: -webkit-sticky !important;
             position: sticky !important;
+            top: 0 !important;
+            z-index: 30 !important;
+            background: #fff !important;
+            will-change: transform !important;
           }
+          
           .spec-table thead th.sticky-col {
             position: -webkit-sticky !important;
             position: sticky !important;
+            left: 0 !important;
+            z-index: 31 !important;
+            background: #fff !important;
+            will-change: transform !important;
           }
+          
           .spec-table tbody th.item-col {
             position: -webkit-sticky !important;
             position: sticky !important;
+            left: 0 !important;
+            z-index: 12 !important;
+            background: #fff !important;
+            will-change: transform !important;
           }
+          
           .spec-table tbody tr.sec-row .section-col {
             position: -webkit-sticky !important;
             position: sticky !important;
+            left: 0 !important;
+            top: var(--secOffset, 42px) !important;
+            background: #f8f9fa !important;
+            will-change: transform !important;
           }
+          
           .spec-table tbody tr.sec-row .section-fill {
             position: -webkit-sticky !important;
             position: sticky !important;
+            top: var(--secOffset, 42px) !important;
+            background: #f8f9fa !important;
+            will-change: transform !important;
+          }
+          
+          @media (max-width: 991px) {
+            .fullscreen-modal-header h5 {
+              display: none !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-fill {
+              left: 99px !important;
+            }
+            
+            .spec-table thead th.sticky-col,
+            .spec-table tbody th.item-col {
+              min-width: 100px !important;
+              max-width: 100px !important;
+              width: 100px !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-col {
+              min-width: 100px !important;
+              max-width: 100px !important;
+              width: 100px !important;
+            }
+          }
+          
+          @media (min-width: 992px) {
+            .section-toggle {
+              display: none !important;
+            }
+            
+            .fullscreen-modal-header h5 {
+              display: block !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-fill {
+              left: 179px !important;
+            }
           }
         </style>
       </head>
       <body>
-        <div class="fullscreen-modal-header" id="modalHeader">
-          <h5 id="modalTitle">${title}</h5>
-          <button type="button" class="close-fullscreen" onclick="window.close()" aria-label="閉じる">×</button>
-        </div>
-        <div class="fullscreen-modal-body">
-          ${html}
+        <div class="fullscreen-container">
+          <div class="fullscreen-modal-header" id="modalHeader">
+            <h5 id="modalTitle">${title}</h5>
+            <button type="button" class="close-fullscreen" onclick="window.close()" aria-label="閉じる">×</button>
+          </div>
+          <div class="fullscreen-modal-body">
+            ${html}
+          </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"><\/script>
         <script>
-          setTimeout(() => {
+          function forceSticky() {
+            // iOS Brave対策：強制的にstickyを適用
+            const allSticky = document.querySelectorAll('.spec-table thead th, .spec-table tbody th.item-col, .spec-table tbody tr.sec-row .section-col, .spec-table tbody tr.sec-row .section-fill');
+            allSticky.forEach(el => {
+              el.style.setProperty('position', 'sticky', 'important');
+              el.style.setProperty('-webkit-position', 'sticky', 'important');
+            });
+          }
+          
+          function initFullscreen() {
             const scrollArea = document.querySelector("#specScrollArea .table-responsive") || document.getElementById("specScrollArea");
-            if (!scrollArea) return;
+            if (!scrollArea) {
+              console.error('Scroll area not found');
+              setTimeout(initFullscreen, 100);
+              return;
+            }
             
             const theadEl = scrollArea.querySelector(".spec-table thead");
             const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
             
-            if (scrollArea) {
-              scrollArea.style.setProperty("--secOffset", theadH + "px");
-              
-              // z-indexを再設定（モーダルと同じ）
-              document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
-                const baseZ = 100;
-                const colEl = row.querySelector('.section-col');
-                const fillEl = row.querySelector('.section-fill');
-                if (colEl) colEl.style.zIndex = baseZ + index * 2 + 1;
-                if (fillEl) fillEl.style.zIndex = baseZ + index * 2;
-              });
-            }
+            console.log('Initializing fullscreen...');
+            console.log('Scroll area:', scrollArea);
+            console.log('Header height:', theadH);
+            
+            scrollArea.style.setProperty("--secOffset", theadH + "px");
+            
+            // z-indexを再設定
+            document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+              const baseZ = 100;
+              const colEl = row.querySelector('.section-col');
+              const fillEl = row.querySelector('.section-fill');
+              if (colEl) {
+                colEl.style.setProperty('position', 'sticky', 'important');
+                colEl.style.setProperty('z-index', (baseZ + index * 2 + 1).toString(), 'important');
+              }
+              if (fillEl) {
+                fillEl.style.setProperty('position', 'sticky', 'important');
+                fillEl.style.setProperty('z-index', (baseZ + index * 2).toString(), 'important');
+              }
+            });
+            
+            // sticky強制適用
+            forceSticky();
             
             const modalHeader = document.getElementById('modalHeader');
             const closeBtn = modalHeader.querySelector('.close-fullscreen');
             
-            // 既存の要素を削除
-            const existingToggle = modalHeader.querySelector('.section-toggle');
-            if (existingToggle) existingToggle.remove();
-            const existingFullBtn = modalHeader.querySelector('.btn-open-full');
-            if (existingFullBtn) existingFullBtn.remove();
-            
-            // スマホ時：セクションセレクトを追加（モーダルと同じ処理）
+            // スマホ時：セクションセレクトを追加
             if (window.innerWidth <= 991) {
-              const modalTitle = document.getElementById('modalTitle');
-              if (modalTitle) modalTitle.style.display = 'none';
+              console.log('Mobile mode: Adding section select');
               
               const toggleDiv = document.createElement('div');
               toggleDiv.className = 'section-toggle';
-              toggleDiv.innerHTML = '<select id="sectionSelect">${selectOptions}</select>';
+              toggleDiv.innerHTML = '<select id="sectionSelect" class="form-select">${selectOptions}</select>';
               modalHeader.insertBefore(toggleDiv, closeBtn);
               
-              // スマホ時の幅調整（モーダルと同じ）
+              // スマホ時の幅調整
               document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
-                el.style.minWidth = '100px';
-                el.style.maxWidth = '100px';
-                el.style.width = '100px';
+                el.style.setProperty('min-width', '100px', 'important');
+                el.style.setProperty('max-width', '100px', 'important');
+                el.style.setProperty('width', '100px', 'important');
               });
               
               document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
-                el.style.minWidth = '100px';
-                el.style.maxWidth = '100px';
-                el.style.width = '100px';
+                el.style.setProperty('min-width', '100px', 'important');
+                el.style.setProperty('max-width', '100px', 'important');
+                el.style.setProperty('width', '100px', 'important');
               });
               
               document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
-                el.style.left = '99px';
+                el.style.setProperty('left', '99px', 'important');
               });
+              
+              // セクションセレクトのイベント
+              const select = document.getElementById("sectionSelect");
+              if (select) {
+                console.log('Section select created with', select.options.length, 'options');
+                select.addEventListener("change", e => {
+                  const id = e.target.value;
+                  console.log('Scrolling to section:', id);
+                  const el = document.querySelector(id);
+                  if (el && scrollArea) {
+                    const offset = el.offsetTop - theadH;
+                    console.log('Scroll offset:', offset);
+                    scrollArea.scrollTo({top: offset, behavior: "smooth"});
+                  } else {
+                    console.error('Section not found:', id);
+                  }
+                });
+              } else {
+                console.error('Failed to create section select');
+              }
             }
             
-            const headerHeight = theadH;
-            
-            // ナビゲーションクリック（モーダルと同じ）
-            document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-              a.addEventListener("click",ev=>{
+            // ナビゲーションクリック
+            document.querySelectorAll(".spec-sidebar a").forEach(a => {
+              a.addEventListener("click", ev => {
                 ev.preventDefault();
-                const id=a.getAttribute("href");
-                const el=document.querySelector(id);
-                if(el && scrollArea){
-                  const offset = el.offsetTop - headerHeight;
-                  scrollArea.scrollTo({top:offset,behavior:"smooth"});
+                const id = a.getAttribute("href");
+                const el = document.querySelector(id);
+                if (el && scrollArea) {
+                  const offset = el.offsetTop - theadH;
+                  scrollArea.scrollTo({top: offset, behavior: "smooth"});
                 }
               });
             });
             
-            // セクションセレクト（モーダルと同じ）
-            const select=document.getElementById("sectionSelect");
-            if(select){
-              select.addEventListener("change",e=>{
-                const id=e.target.value;
-                const el=document.querySelector(id);
-                if(el && scrollArea){
-                  const offset = el.offsetTop - headerHeight;
-                  scrollArea.scrollTo({top:offset,behavior:"smooth"});
-                }
-              });
-            }
-          }, 300);
+            console.log('Fullscreen initialization complete');
+          }
+          
+          // DOMの準備ができたら実行
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              setTimeout(initFullscreen, 200);
+              // 追加でもう一度強制適用
+              setTimeout(forceSticky, 500);
+            });
+          } else {
+            setTimeout(initFullscreen, 200);
+            setTimeout(forceSticky, 500);
+          }
         <\/script>
       </body>
     </html>

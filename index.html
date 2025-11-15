@@ -591,7 +591,9 @@ img.car-thumb {
 <script>const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
 const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
+const SERIES_URLS_PATH = `${RAW_BASE}output/pipeline/autohome-series-urls/series_urls.csv?v=${Date.now()}`;
 let cnyToJpy = 20;
+let seriesUrlsMap = {}; // carId -> config_url のマッピング
 
 async function fetchRate() {
   try {
@@ -600,6 +602,25 @@ async function fetchRate() {
     if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
   } catch {
     cnyToJpy = 20;
+  }
+}
+
+async function fetchSeriesUrls() {
+  try {
+    const res = await fetch(SERIES_URLS_PATH, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    
+    // series_id -> config_url のマッピングを作成
+    parsed.data.forEach(row => {
+      if (row.series_id && row.config_url) {
+        seriesUrlsMap[row.series_id] = row.config_url;
+      }
+    });
+    console.log('Series URLs loaded:', Object.keys(seriesUrlsMap).length);
+  } catch (err) {
+    console.error('Failed to load series URLs:', err);
   }
 }
 
@@ -622,6 +643,7 @@ function imgTag(rankStr, model, imageUrl) {
 
 async function main() {
   await fetchRate();
+  await fetchSeriesUrls(); // series_urls.csvを読み込む
   try {
     const res = await fetch(CSV_PATH, { cache: "no-store" });
     if (!res.ok) throw new Error(res.statusText);
@@ -1061,7 +1083,17 @@ function openFullSpec() {
 function showConfigCsv(carId, title) {
   const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
   const target = document.getElementById("csvContent");
-  document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
+  
+  // タイトルを作成（IDの代わりに引用元ページのリンク）
+  const configUrl = seriesUrlsMap[carId];
+  let modalTitle = `車両仕様（${title}`;
+  if (configUrl) {
+    modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
+  } else {
+    modalTitle += ` | ID:${carId}）`;
+  }
+  
+  document.getElementById("csvModalLabel").innerHTML = modalTitle;
   target.innerHTML = "読込中...";
   Papa.parse(path, {
     download: true,

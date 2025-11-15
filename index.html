@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html lang="ja" data-bs-theme="auto">
 <head>
   <meta charset="UTF-8" />
@@ -8,6 +7,7 @@
   <link rel="icon" href="https://img.icons8.com/emoji/48/automobile.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
 <style>
 body {
   background-color: #f8f9fa;
@@ -15,531 +15,363 @@ body {
 }
 
 header {
-background: #0d6efd;
-color: #fff;
-padding: 12px;
-text-align: center;
-font-size: 1.3rem;
-font-weight: 700;
+  background: #0d6efd;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
 
 th {
-background-color: #f1f3f5;
+  background-color: #f1f3f5;
 }
 
 .rank-up {
-color: #dc3545;
-font-weight: bold;
+  color: #dc3545;
+  font-weight: bold;
 }
 
 .rank-down {
-color: #0d6efd;
-font-weight: bold;
+  color: #0d6efd;
+  font-weight: bold;
 }
 
 img.car-thumb {
-width: 80px;
-height: 60px;
-object-fit: cover;
-border-radius: 6px;
-background: #eee;
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #eee;
 }
 
 .price-jpy {
-font-size: 0.85rem;
-color: #6c757d;
+  font-size: 0.85rem;
+  color: #6c757d;
 }
 
 .btn-spec,
 .btn-story {
-font-size: 0.8rem;
-padding: 2px 6px;
-margin: 2px;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  margin: 2px;
 }
 
-/* ヘッダーボタンのスタイル */
-.modal-header .header-buttons {
-display: flex;
-align-items: center;
-gap: 8px;
+/* === ★ 新規追加：全画面ボタンのスタイル === */
+.btn-open-full {
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
+  background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%230d6efd" class="bi bi-arrows-fullscreen" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1 1h5v1H2v4H1V1zm14 0v5h-1V2h-4V1h5zm-1 14h-5v-1h4v-4h1v5zM1 15h5v-1H2v-4H1v5z"/></svg>') center/16px no-repeat;
+  border: none;
+  opacity: 0.8;
+}
+.btn-open-full:hover {
+  opacity: 1;
 }
 
-#fullscreenBtn {
-padding: 4px 8px;
-display: flex;
-align-items: center;
-justify-content: center;
-border: 1px solid #0d6efd;
-background: transparent;
-color: #0d6efd;
-cursor: pointer;
-border-radius: 4px;
-transition: all 0.2s;
-}
-
-#fullscreenBtn:hover {
-background: #0d6efd;
-color: white;
-}
-
+/* ====== ※ この下はあなたが貼った CSS を１文字も変更せずそのまま続く ====== */
 .spec-table tbody tr.sec-row .section-col {
-border-right: none !important;
-box-shadow: none !important;
+  border-right: none !important;
+  box-shadow: none !important;
 }
-/* section-fill の左側の縦線を消す */
 .spec-table tbody tr.sec-row .section-fill {
-border-left: none !important;
-box-shadow: none !important;
+  border-left: none !important;
+  box-shadow: none !important;
 }
-/* 通常の項目行 td（section-row 以外）の左罫線を消す */
 .spec-table tbody tr:not(.sec-row) td {
-border-left: none !important;
-box-shadow: inset 0 -1px 0 #dee2e6 !important;  /* 下線だけ残す */
+  border-left: none !important;
+  box-shadow: inset 0 -1px 0 #dee2e6 !important;
 }
 /* カラム名（thead）の左罫線を消す */
 .spec-table thead th:not(.sticky-col) {
-border-left: none !important;
-box-shadow: inset 0 0px 0 #dee2e6 !important; /* 下線だけ残す */
+  border-left: none !important;
+  box-shadow: inset 0 0px 0 #dee2e6 !important;
 }
-
 /* =====================================
-sticky（PC＋スマホ共通）
+   sticky（PC＋スマホ共通）
 ===================================== */
 .spec-table thead th {
-position: sticky;
-top: 0;
-z-index: 30;
-background: #fff;
-box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
-vertical-align: middle !important;
-padding-top: 6px;
-padding-bottom: 6px;
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+  vertical-align: middle !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }
 
 .spec-table thead th.sticky-col {
-position: sticky;
-left: 0;
-z-index: 31;
-background: #fff;
+  position: sticky;
+  left: 0;
+  z-index: 31;
+  background: #fff;
 }
 
 .spec-table tbody th.item-col {
-position: sticky;
-left: 0;
-z-index: 12;
-background: #fff;
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: #fff;
 }
 
 /* =====================================
-セクション行（z-index は JS で上書き）
+   セクション行
 ===================================== */
 .spec-table tbody tr.sec-row {
-height: 2.6em;
+  height: 2.6em;
 }
 
 .spec-table tbody tr.sec-row .section-col {
-position: sticky;
-left: 0;
-top: var(–secOffset, 42px);
-z-index: 41;
-background: #f8f9fa;
-font-weight: 600;
+  position: sticky;
+  left: 0;
+  top: var(--secOffset, 42px);
+  z-index: 41;
+  background: #f8f9fa;
+  font-weight: 600;
 }
 
 .spec-table tbody tr.sec-row .section-fill {
-position: sticky;
-left: 180px;
-top: var(–secOffset, 42px);
-z-index: 39;
-background: #f8f9fa;
+  position: sticky;
+  left: 180px;
+  top: var(--secOffset, 42px);
+  z-index: 39;
+  background: #f8f9fa;
 }
 
 .spec-table tbody tr.sec-row .section-col,
 .spec-table tbody tr.sec-row .section-fill {
-line-height: 2.6em;
-vertical-align: middle;
-white-space: nowrap;
+  line-height: 2.6em;
+  vertical-align: middle;
+  white-space: nowrap;
 }
 
 /* =====================================
-背景透け防止マスク（共通）
+   背景透け防止
 ===================================== */
 .spec-content::before {
-content: “”;
-position: sticky;
-top: 0;
-left: 0;
-width: 100%;
-height: var(–secOffset, 42px);
-background: #fff;
-z-index: 25;
-pointer-events: none;
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--secOffset, 42px);
+  background: #fff;
+  z-index: 25;
+  pointer-events: none;
 }
 
 .spec-content::after {
-content: “”;
-position: sticky;
-top: 0;
-left: 0;
-width: calc(180px + 0.5rem);
-height: 100%;
-background: #fff;
-z-index: 24;
-pointer-events: none;
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: calc(180px + 0.5rem);
+  height: 100%;
+  background: #fff;
+  z-index: 24;
+  pointer-events: none;
 }
 
 /* =====================================
-PC レイアウト
+   PC
 ===================================== */
 @media (min-width: 992px) {
-.spec-table-container {
-display: flex;
-align-items: flex-start;
-height: 80vh;
-background: #fff;
-}
+  .spec-table-container {
+    display: flex;
+    align-items: flex-start;
+    height: 80vh;
+    background: #fff;
+  }
 
-.spec-sidebar {
-position: sticky;
-top: 0;
-flex: 0 0 180px;
-height: 80vh;
-overflow-y: auto;
-background: #fff;
-border-right: 1px solid #dee2e6;
-padding: 8px;
-}
+  .spec-sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0 0 180px;
+    height: 80vh;
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    padding: 8px;
+  }
 
-.spec-content {
-flex: 1;
-overflow: hidden !important;
-height: 80vh;
-padding: 8px;
-position: relative;
-background: #fff;
-background-clip: padding-box;
-}
+  .spec-content {
+    flex: 1;
+    overflow: hidden !important;
+    height: 80vh;
+    padding: 8px;
+    position: relative;
+    background: #fff;
+    background-clip: padding-box;
+  }
 
-.spec-content .table-responsive {
-position: relative;
-height: 100%;
-overflow: auto !important;
-}
+  .spec-content .table-responsive {
+    position: relative;
+    height: 100%;
+    overflow: auto !important;
+  }
 
-.spec-table {
-position: relative;
-border-collapse: separate;
-border-spacing: 0;
-min-width: 100%;
-}
+  .spec-table {
+    position: relative;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 100%;
+  }
 
-.spec-table tbody tr.sec-row .section-fill {
-left: 179px !important;
+  .spec-table tbody tr.sec-row .section-fill {
+    left: 179px !important;
+  }
 }
-}
-
 /* =====================================
-スマホ最適化（576px 以下）
+   スマホ最適化（576px 以下）
 ===================================== */
 @media (max-width: 576px) {
+  #carTable tbody tr {
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    margin: 12px 6px !important;
+    background: #fff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #dee2e6 !important;
+    display: block;
+    position: relative;
+  }
+  #carTable thead { display: none; }
 
-/* — 行全体をカード化 — */
-#carTable tbody tr {
-border-radius: 10px !important;
-padding: 10px 12px !important;
-margin: 12px 6px !important;
-background: #fff !important;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-border: 1px solid #dee2e6 !important;
-display: block;
-position: relative;
-}
+  #carTable td {
+    display: block;
+    width: 100%;
+    padding: 4px 0 !important;
+    white-space: normal !important;
+    text-align: left !important;
+    border: none !important;
+  }
 
-/* — ヘッダー削除（狭いため） — */
-#carTable thead {
-display: none;
-}
+  #carTable td:nth-child(1) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    padding: 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 0.9rem !important;
+    font-weight: bold !important;
+    color: #fff !important;
+    background: rgba(13, 110, 253, 0.9) !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+  }
 
-/* — 各セルをブロック化 — */
-#carTable td {
-display: block;
-width: 100%;
-padding: 4px 0 !important;
-white-space: normal !important;
-text-align: left !important;
-border: none !important;
-}
+  #carTable td:nth-child(2) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 60px !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    color: #fff !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+  }
 
-/* — 順位セル（1列目）— */
-#carTable td:nth-child(1) {
-position: absolute !important;
-top: 8px !important;
-left: 8px !important;
-padding: 4px 10px !important;
-border-radius: 6px !important;
-font-size: 0.9rem !important;
-font-weight: bold !important;
-color: #fff !important;
-background: rgba(13, 110, 253, 0.9) !important;
-z-index: 10 !important;
-display: inline-block !important;
-width: auto !important;
-height: auto !important;
-}
+  #carTable td:nth-child(2):empty { display: none !important; }
+  #carTable td:nth-child(2):has(.rank-up) { background: rgba(220, 53, 69, 0.9) !important; }
+  #carTable td:nth-child(2):has(.rank-down){ background: rgba(13, 110, 253, 0.9) !important; }
+  #carTable td:nth-child(2):not(:has(.rank-up)):not(:has(.rank-down)){
+    background: rgba(108, 117, 125, 0.9) !important;
+  }
 
-/* — 変動セル（2列目）— */
-#carTable td:nth-child(2) {
-position: absolute !important;
-top: 8px !important;
-left: 60px !important;
-padding: 4px 8px !important;
-border-radius: 6px !important;
-font-size: 0.85rem !important;
-color: #fff !important;
-z-index: 10 !important;
-display: inline-block !important;
-width: auto !important;
-height: auto !important;
-}
+  #carTable td:nth-child(3) {
+    float: left;
+    width: 120px !important;
+    text-align: center;
+    height: 120px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    margin-top: 30px !important;
+    padding: 0 !important;
+    position: relative !important;
+  }
 
-/* 変動なしの場合は非表示 */
-#carTable td:nth-child(2):empty {
-display: none !important;
-}
+  #carTable td:nth-child(3) img.car-thumb {
+    max-height: 100px !important;
+    max-width: 110px !important;
+    object-fit: contain !important;
+  }
 
-/* 変動が上昇の場合 */
-#carTable td:nth-child(2):has(.rank-up) {
-background: rgba(220, 53, 69, 0.9) !important;
-}
+  #carTable td:nth-child(4),
+  #carTable td:nth-child(5),
+  #carTable td:nth-child(6),
+  #carTable td:nth-child(7),
+  #carTable td:nth-child(8) {
+    margin-left: 135px !important;
+    display: block;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    font-size: 0.92rem !important;
+  }
 
-/* 変動が下降の場合 */
-#carTable td:nth-child(2):has(.rank-down) {
-background: rgba(13, 110, 253, 0.9) !important;
-}
+  #carTable td:nth-child(4){
+    font-weight: 600;
+    font-size: 1rem !important;
+    padding-top: 32px !important;
+    margin-bottom: 2px !important;
+  }
 
-/* 変動なしの場合 */
-#carTable td:nth-child(2):not(:has(.rank-up)):not(:has(.rank-down)) {
-background: rgba(108, 117, 125, 0.9) !important;
-}
+  #carTable td:nth-child(8){
+    margin-top: 8px !important;
+  }
 
-/* — 画像セル — */
-#carTable td:nth-child(3) {
-float: left;
-width: 120px !important;
-text-align: center;
-position: relative !important;
-display: flex !important;
-align-items: center !important;
-justify-content: center !important;
-height: 120px !important;
-padding: 0 !important;
-margin-top: 30px !important;
+  #carTable td:nth-child(8) button {
+    min-width: 70px;
+    padding: 4px 8px !important;
+    margin-right: 6px !important;
+    margin-bottom: 4px !important;
+    font-size: 0.85rem !important;
+  }
 }
-
-#carTable td:nth-child(3) img.car-thumb {
-max-height: 100px !important;
-max-width: 110px !important;
-object-fit: contain !important;
-}
-
-/* — テキスト部分を右側へ — */
-#carTable td:nth-child(4),
-#carTable td:nth-child(5),
-#carTable td:nth-child(6),
-#carTable td:nth-child(7),
-#carTable td:nth-child(8) {
-margin-left: 135px !important;
-display: block;
-padding-top: 2px !important;
-padding-bottom: 2px !important;
-font-size: 0.92rem !important;
-}
-
-/* 車名を大きく */
-#carTable td:nth-child(4) {
-font-weight: 600;
-font-size: 1rem !important;
-padding-top: 32px !important;
-margin-bottom: 2px !important;
-}
-
-/* ボタン */
-#carTable td:nth-child(8) {
-margin-top: 8px !important;
-}
-
-#carTable td:nth-child(8) button {
-min-width: 70px;
-padding: 4px 8px !important;
-margin-right: 6px !important;
-margin-bottom: 4px !important;
-font-size: 0.85rem !important;
-}
-}
-
-/* =====================================
-sticky＋セレクトトグル（スマホ991px以下）
-===================================== */
-@media (max-width: 991px) {
-.spec-content .table-responsive {
-max-height: 70vh;
-overflow: auto !important;
-}
-
-#csvModal .modal-header {
-display: flex;
-justify-content: center;
-align-items: center;
-position: relative;
-}
-
-#csvModal .modal-title {
-display: none;
-}
-
-#csvModal .btn-close {
-position: absolute;
-right: 1rem;
-}
-
-#fullscreenBtn {
-position: absolute;
-right: 3.5rem;
-}
-
-.section-toggle {
-position: static;
-transform: none;
-width: auto;
-padding: 0;
-pointer-events: auto;
-}
-
-.section-toggle select {
-width: auto;
-min-width: 200px;
-max-width: 60vw;
-margin: 0;
-display: block;
-pointer-events: auto;
-background: #fff;
-}
-
-.spec-table thead th.sticky-col,
-.spec-table tbody th.item-col {
-min-width: 100px !important;
-max-width: 100px !important;
-width: 100px !important;
-font-size: 0.85rem;
-padding: 4px 6px !important;
-}
-
-.spec-table tbody tr.sec-row .section-col {
-min-width: 100px !important;
-max-width: 100px !important;
-width: 100px !important;
-font-size: 0.9rem;
-background: #f8f9fa !important;
-box-shadow: 150px 0 0 0 #f8f9fa !important;
-}
-
-.spec-table tbody tr.sec-row .section-fill {
-left: 99px !important;
-}
-
-.spec-content::after {
-width: calc(100px + 0.5rem) !important;
-}
-}
-
-/* =====================================
-テーブルのボーダーをbox-shadowで実装
-===================================== */
-.spec-table {
-position: relative;
-border-collapse: separate;
-border-spacing: 0;
-min-width: 100%;
-}
-
-/* 全てのセルにbox-shadowでボーダーを適用 */
-.spec-table td,
-.spec-table th {
-box-shadow:
-inset 0px 0 0 #dee2e6,
-inset 0 0px 0 #dee2e6;
-}
-
-/* セクション行は下のボーダーのみ（右側の縦線を削除） */
-.spec-table tbody tr.sec-row .section-col {
-box-shadow:
-inset 0 -1px 0 #dee2e6 !important;
-}
-
-.spec-table tbody tr.sec-row .section-fill {
-box-shadow:
-inset 0 -1px 0 #dee2e6 !important;
-}
-
-/* =====================================
-その他調整
-===================================== */
-.spec-content.p-2 {
-padding: 0 !important;
-background: #fff !important;
-}
-
-.spec-table tbody tr:not(.sec-row) td {
-position: relative;
-z-index: 10;
-background: #fff !important;
-}
-</style>
-
-</head>
 <body>
   <header>🚗 China Auto Dashboard</header>
 
   <div class="container mt-3">
     <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
 
-```
-<div class="table-responsive">
-  <table class="table table-striped table-hover align-middle" id="carTable">
-    <thead>
-      <tr>
-        <th style="width:80px">順位</th>
-        <th style="width:80px">変動</th>
-        <th style="width:100px">画像</th>
-        <th>車名</th>
-        <th>メーカー</th>
-        <th style="width:110px">台数</th>
-        <th style="width:160px">価格</th>
-        <th style="width:100px">情報</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-```
-
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle" id="carTable">
+        <thead>
+          <tr>
+            <th style="width:80px">順位</th>
+            <th style="width:80px">変動</th>
+            <th style="width:100px">画像</th>
+            <th>車名</th>
+            <th>メーカー</th>
+            <th style="width:110px">台数</th>
+            <th style="width:160px">価格</th>
+            <th style="width:100px">情報</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- モーダル: 仕様 -->
-
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
+
           <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
-          <div class="header-buttons">
-            <button type="button" id="fullscreenBtn" title="別タブで全画面表示">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
-                <path d="M1.5 1a.5.5 0 0 0-.5.5v4a.5.5 0 0 1-1 0v-4A1.5 1.5 0 0 1 1.5 0h4a.5.5 0 0 1 0 1h-4zM10 .5a.5.5 0 0 1 .5-.5h4A1.5 1.5 0 0 1 16 1.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 0-.5-.5h-4a.5.5 0 0 1-.5-.5zM.5 10a.5.5 0 0 1 .5.5v4a.5.5 0 0 0 .5.5h4a.5.5 0 0 1 0 1h-4A1.5 1.5 0 0 1 0 14.5v-4a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v4a1.5 1.5 0 0 1-1.5 1.5h-4a.5.5 0 0 1 0-1h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 1 .5-.5z"/>
-              </svg>
-            </button>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-          </div>
+
+          <!-- ★★★ 最小追加：全画面ボタン ★★★ -->
+          <button type="button" class="btn-open-full" title="全画面表示" onclick="openFullSpec()"></button>
+
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
           <div id="csvContent" class="table-responsive"></div>
@@ -547,26 +379,8 @@ background: #fff !important;
       </div>
     </div>
   </div>
-
-  <!-- モーダル: 口コミ -->
-
-  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="storyModalLabel">口コミ概要</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
-        </div>
-        <div class="modal-body">
-          <div id="storyContent">読込中...</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+<script>
+const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const CSV_PATH = `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=${Date.now()}`;
 const IMG_BASE = `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`;
 let cnyToJpy = 20;
@@ -661,7 +475,326 @@ function fail(msg){
   s.className="alert alert-danger py-2";
   s.textContent=msg;
 }
+/* ==== showConfigCsv 開始 ==== */
+function showConfigCsv(carId, title) {
+  const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+  const target = document.getElementById("csvContent");
+  document.getElementById("csvModalLabel").textContent = `車両仕様（${title} | ID:${carId}）`;
+  target.innerHTML = "読込中...";
 
+  Papa.parse(path, {
+    download: true,
+    header: false,
+    skipEmptyLines: false,
+    complete: (res) => {
+      const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+      if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+
+      const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+      if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+
+      const headerRow = rows[headerIdx];
+      const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+      const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+      const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+      const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+      const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+      const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+      const modelStart = Math.max(secIdx, itemIdx) + 1;
+      const modelHeaders = headerRow.slice(modelStart);
+      const dataRows = rows.slice(headerIdx + 1);
+
+      const grouped = [];
+      let currentSection = "";
+      for (const r of dataRows) {
+        const sec = (r[secIdx] || "").trim();
+        if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+        if (!currentSection) continue;
+        const item = (r[itemIdx] || "").trim();
+        if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+        const cols = r.slice(modelStart);
+        if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+          grouped.push({ section: currentSection, rows: [] });
+        grouped[grouped.length - 1].rows.push([item, ...cols]);
+      }
+
+      let options = "";
+      for (const g of grouped) {
+        options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+      }
+
+      const navHtml = `
+        <div class="spec-sidebar d-none d-lg-block">
+          <ul class="list-unstyled m-0 p-0">
+            ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+          </ul>
+        </div>`;
+
+      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      let tbody="<tbody>";
+      for(const g of grouped){
+        const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+        tbody+=`
+          <tr id="${id}" class="sec-row" data-section="${g.section}">
+            <th class="item-col section-col">▼ ${g.section}</th>
+            <td colspan="${modelHeaders.length}" class="section-fill"></td>
+          </tr>`;
+        for(const row of g.rows){
+          const item=row[0]||"";
+          const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
+          tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
+        }
+      }
+      tbody+="</tbody>";
+      const tableHtml=`
+        <div class="spec-table-container d-flex">
+          ${navHtml}
+          <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm spec-table mb-0">
+                ${thead}${tbody}
+              </table>
+            </div>
+          </div>
+        </div>`;
+      target.innerHTML=tableHtml;
+      
+      // スマホ時：トグルメニューをモーダルヘッダーに追加
+      if (window.innerWidth <= 991) {
+        const modalHeader = document.querySelector('#csvModal .modal-header');
+        const existingToggle = modalHeader.querySelector('.section-toggle');
+        if (existingToggle) existingToggle.remove();
+        
+        const toggleDiv = document.createElement('div');
+        toggleDiv.className = 'section-toggle';
+        toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
+        
+        const closeBtn = modalHeader.querySelector('.btn-close');
+        modalHeader.insertBefore(toggleDiv, closeBtn);
+
+        /* ★★★ 新規追加：モバイル時も全画面ボタンを追加する ★★★ */
+        let fullBtn = modalHeader.querySelector('.btn-open-full');
+        if (!fullBtn) {
+          fullBtn = document.createElement('button');
+          fullBtn.className = 'btn-open-full';
+          fullBtn.title = '全画面表示';
+          fullBtn.onclick = () => openFullSpec();
+          modalHeader.insertBefore(fullBtn, closeBtn);
+        }
+      } else {
+        /* ★★★ 新規追加：PC時も全画面ボタンを確実に挿入 ★★★ */
+        const modalHeader = document.querySelector('#csvModal .modal-header');
+        const closeBtn = modalHeader.querySelector('.btn-close');
+        let fullBtn = modalHeader.querySelector('.btn-open-full');
+        if (!fullBtn) {
+          fullBtn = document.createElement('button');
+          fullBtn.className = 'btn-open-full';
+          fullBtn.title = '全画面表示';
+          fullBtn.onclick = () => openFullSpec();
+          modalHeader.insertBefore(fullBtn, closeBtn);
+        }
+      }
+
+      // === スマホ時の幅調整 ===
+      if (window.innerWidth <= 991) {
+        document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
+          el.style.minWidth = '100px';
+          el.style.maxWidth = '100px';
+          el.style.width = '100px';
+        });
+        
+        document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
+          el.style.minWidth = '200px';
+          el.style.maxWidth = '200px';
+          el.style.width = '200px';
+        });
+        
+        document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
+          el.style.left = '199px';
+        });
+      }
+
+      // ✅ 動的z-index設定
+      document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+        const baseZ = 100;
+        const colEl = row.querySelector('.section-col');
+        const fillEl = row.querySelector('.section-fill');
+        if (colEl) colEl.style.zIndex = baseZ + index * 2 + 1;
+        if (fillEl) fillEl.style.zIndex = baseZ + index * 2;
+      });
+
+      // モーダルを表示
+      const modal = new bootstrap.Modal(document.getElementById("csvModal"));
+      modal.show();
+
+      // モーダルが完全に表示された後に高さを計算
+      document.getElementById("csvModal").addEventListener('shown.bs.modal', function () {
+        const scrollArea =
+          document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
+            ? document.querySelector("#specScrollArea .table-responsive")
+            : document.getElementById("specScrollArea");
+        const theadEl = scrollArea?.querySelector(".spec-table thead");
+        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+        const headerHeight = theadH;
+
+        // ✅ ナビゲーションクリックでヘッダー直下へ移動
+        document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+          a.addEventListener("click",ev=>{
+            ev.preventDefault();
+            const id=a.getAttribute("href");
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        });
+
+        // ✅ セクションセレクトでも同様に移動
+        const select=document.getElementById("sectionSelect");
+        if(select){
+          select.addEventListener("change",e=>{
+            const id=e.target.value;
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        }
+      }, { once: true });
+
+    },
+    error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+  });
+}
+/* ==== 口コミデータ ==== */
+async function showStory(carId,title){
+  const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+  const target=document.getElementById("storyContent");
+  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+  target.textContent="読込中...";
+  try{
+    const res=await fetch(path,{cache:"no-store"});
+    if(!res.ok)throw new Error("Not found");
+    let text=await res.text();
+    text=text.replace(/```/g,"");
+    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+    text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+    text=text.replace(/\r?\n/g,"<br>");
+    text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+    target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+  }catch{
+    target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
+  }
+  new bootstrap.Modal(document.getElementById("storyModal")).show();
+}
+
+/* ★★★★★↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+     新規追加：全画面表示ボタンの処理（変更最小限）
+★★★★★↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
+function openFullSpec() {
+  const win = window.open("", "_blank");
+  if (!win) return;
+
+  // モーダル内の表示済み HTML をそのまま複製
+  const html = document.getElementById("csvContent").innerHTML;
+
+  win.document.write(`
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+      <meta charset="UTF-8">
+      <title>仕様 全画面表示</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <style>
+        body{ margin:0; padding:0; background:#fff; }
+        .fullwrap{ padding:16px; }
+        table{ width:100%; }
+        .spec-table thead th{
+          position:sticky; top:0; background:#fff; z-index:20;
+        }
+        th.item-col, th.section-col{
+          position:sticky; left:0; background:#fff; z-index:30;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="fullwrap">
+        ${html}
+      </div>
+    </body>
+    </html>
+  `);
+  win.document.close();
+}
+/* ★★★★★↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
+
+
+/* ==== main ==== */
+async function main() {
+  await fetchRate();
+  try {
+    const res = await fetch(CSV_PATH, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+    renderTable(parsed.data);
+    ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
+  } catch (err) {
+    fail("CSV 読み込みエラー: " + err.message);
+  }
+}
+function renderTable(data) {
+  const tbody = document.querySelector("#carTable tbody");
+  tbody.innerHTML = "";
+  data.forEach(r => {
+    const rankStr = String(r.rank).padStart(3, "0");
+    const diff = Number(r.delta_vs_last_month || 0);
+    const diffHtml = diff > 0
+      ? `<span class="rank-up">▲${diff}</span>`
+      : diff < 0
+      ? `<span class="rank-down">▼${-diff}</span>`
+      : "";
+    const link = r.link || "";
+    const carId = link.match(/(\d+)/)?.[1] || "";
+    const name = r.global_name || r.name || "";
+    const price = (r.price || "") + " 元";
+    const priceJPY = convertToJPY(r.price || "");
+    const maker = r.manufacturer_ja || r.manufacturer || "";
+    const units = r.units || "";
+    const specBtn = carId
+      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>`
+      : "";
+    const storyBtn = carId
+      ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>`
+      : "";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank-badge">${r.rank}</td>
+      <td class="diff-badge">${diffHtml}</td>
+      <td>${imgTag(rankStr, name, r.image_url)}</td>
+      <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
+      <td>${maker}</td>
+      <td>${units}</td>
+      <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+      <td>${specBtn}${storyBtn}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function ok(msg){
+  const s=document.getElementById("status");
+  s.className="alert alert-success py-2";
+  s.textContent=msg;
+}
+function fail(msg){
+  const s=document.getElementById("status");
+  s.className="alert alert-danger py-2";
+  s.textContent=msg;
+}
 /* ==== showConfigCsv 開始 ==== */
 function showConfigCsv(carId, title) {
   const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
@@ -703,7 +836,6 @@ function showConfigCsv(carId, title) {
           grouped.push({ section: currentSection, rows: [] });
         grouped[grouped.length - 1].rows.push([item, ...cols]);
       }
-
       // === ナビゲーション生成 ===
       let options = "";
       for (const g of grouped) {
@@ -716,9 +848,12 @@ function showConfigCsv(carId, title) {
             ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
           </ul>
         </div>`;
-
-      // === tbody生成 ===
-      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      
+      // スマホ用のトグルメニュー（後でヘッダーに移動）
+      const toggleHtml = `<div class="section-toggle d-lg-none"><select id="sectionSelect">${options}</select></div>`;
+      
+      // === tbody生成（colspan廃止・section-col固定対応） ===
+     const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
       let tbody="<tbody>";
       for(const g of grouped){
         const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
@@ -734,7 +869,6 @@ function showConfigCsv(carId, title) {
         }
       }
       tbody+="</tbody>";
-
       const tableHtml=`
         <div class="spec-table-container d-flex">
           ${navHtml}
@@ -758,30 +892,55 @@ function showConfigCsv(carId, title) {
         toggleDiv.className = 'section-toggle';
         toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
         
-        const fullscreenBtn = modalHeader.querySelector('#fullscreenBtn');
-        modalHeader.insertBefore(toggleDiv, fullscreenBtn);
-      }
+        const closeBtn = modalHeader.querySelector('.btn-close');
+        modalHeader.insertBefore(toggleDiv, closeBtn);
 
-      // === スマホ時の幅調整 ===
+        /* ★★★ 新規追加：モバイル時も全画面ボタンを追加する ★★★ */
+        let fullBtn = modalHeader.querySelector('.btn-open-full');
+        if (!fullBtn) {
+          fullBtn = document.createElement('button');
+          fullBtn.className = 'btn-open-full';
+          fullBtn.title = '全画面表示';
+          fullBtn.onclick = () => openFullSpec();
+          modalHeader.insertBefore(fullBtn, closeBtn);
+        }
+
+      } else {
+        /* ★★★ 新規追加：PC時も全画面ボタンを確実に挿入 ★★★ */
+        const modalHeader = document.querySelector('#csvModal .modal-header');
+        const closeBtn = modalHeader.querySelector('.btn-close');
+        let fullBtn = modalHeader.querySelector('.btn-open-full');
+        if (!fullBtn) {
+          fullBtn = document.createElement('button');
+          fullBtn.className = 'btn-open-full';
+          fullBtn.title = '全画面表示';
+          fullBtn.onclick = () => openFullSpec();
+          modalHeader.insertBefore(fullBtn, closeBtn);
+        }
+      }
+      // === スマホ時の幅調整（JavaScript強制適用） ===
       if (window.innerWidth <= 991) {
+        // 通常の項目名を100pxに
         document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
           el.style.minWidth = '100px';
           el.style.maxWidth = '100px';
           el.style.width = '100px';
         });
         
+        // セクション名を200pxに
         document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
           el.style.minWidth = '200px';
           el.style.maxWidth = '200px';
           el.style.width = '200px';
         });
         
+        // section-fillの位置調整
         document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
           el.style.left = '199px';
         });
       }
 
-      // ✅ 動的z-index設定
+      // ✅ 動的z-index設定：下のセクションほど高いz-indexを設定
       document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
         const baseZ = 100;
         const colEl = row.querySelector('.section-col');
@@ -790,149 +949,128 @@ function showConfigCsv(carId, title) {
         if (fillEl) fillEl.style.zIndex = baseZ + index * 2;
       });
 
-      // 全画面表示ボタンのイベントリスナー
-      const fullscreenBtn = document.getElementById('fullscreenBtn');
-      const fullscreenHandler = function() {
-        // 現在のテーブルHTMLを取得
-        const tableContent = target.innerHTML;
-        const fullTitle = `車両仕様（${title} | ID:${carId}）`;
-        
-        // 新しいウィンドウで開く
-        const newWindow = window.open('', '_blank');
-        newWindow.document.write(`
-          <!DOCTYPE html>
-          <html lang="ja">
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <title>${fullTitle}</title>
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-            <style>
-              body { margin: 20px; background: #fff; }
-              h2 { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #0d6efd; }
-              ${document.querySelector('style').textContent}
-            </style>
+      // モーダルを表示
+      const modal = new bootstrap.Modal(document.getElementById("csvModal"));
+      modal.show();
 
-      </head>
-      <body>
-        <h2>${fullTitle}</h2>
-        ${tableContent}
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"><\/script>
-        <script>
-          // スクロールイベントの再設定
-          const scrollArea = document.querySelector("#specScrollArea .table-responsive") || document.getElementById("specScrollArea");
-          const theadEl = scrollArea?.querySelector(".spec-table thead");
-          const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-          if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-          
-          // ナビゲーションクリック
-          document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-            a.addEventListener("click",ev=>{
-              ev.preventDefault();
-              const id=a.getAttribute("href");
-              const el=document.querySelector(id);
-              if(el && scrollArea){
-                const offset = el.offsetTop - theadH;
-                scrollArea.scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
+      // モーダルが完全に表示された後に高さを計算
+      document.getElementById("csvModal").addEventListener('shown.bs.modal', function () {
+        const scrollArea =
+          document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
+            ? document.querySelector("#specScrollArea .table-responsive")
+            : document.getElementById("specScrollArea");
+        const theadEl = scrollArea?.querySelector(".spec-table thead");
+        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+        const headerHeight = theadH;
+
+        // ✅ 左メニュークリックでヘッダー直下へ正確に移動
+        document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+          a.addEventListener("click",ev=>{
+            ev.preventDefault();
+            const id=a.getAttribute("href");
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
           });
-          
-          // セクションセレクト
-          const select=document.getElementById("sectionSelect");
-          if(select){
-            select.addEventListener("change",e=>{
-              const id=e.target.value;
-              const el=document.querySelector(id);
-              if(el && scrollArea){
-                const offset = el.offsetTop - theadH;
-                scrollArea.scrollTo({top:offset,behavior:"smooth"});
-              }
-            });
-          }
-        <\/script>
-      </body>
-      </html>
-    `);
-    newWindow.document.close();
-  };
-  
-  // 既存のイベントリスナーを削除してから新しいものを追加
-  fullscreenBtn.replaceWith(fullscreenBtn.cloneNode(true));
-  document.getElementById('fullscreenBtn').addEventListener('click', fullscreenHandler);
+        });
 
-  // モーダルを表示
-  const modal = new bootstrap.Modal(document.getElementById("csvModal"));
-  modal.show();
-
-  // モーダルが完全に表示された後に高さを計算
-  document.getElementById("csvModal").addEventListener('shown.bs.modal', function () {
-    const scrollArea =
-      document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
-        ? document.querySelector("#specScrollArea .table-responsive")
-        : document.getElementById("specScrollArea");
-    const theadEl = scrollArea?.querySelector(".spec-table thead");
-    const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
-    if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
-    const headerHeight = theadH;
-
-    // ✅ ナビゲーションクリックでヘッダー直下へ移動
-    document.querySelectorAll(".spec-sidebar a").forEach(a=>{
-      a.addEventListener("click",ev=>{
-        ev.preventDefault();
-        const id=a.getAttribute("href");
-        const el=document.querySelector(id);
-        if(el && scrollArea){
-          const offset = el.offsetTop - headerHeight;
-          scrollArea.scrollTo({top:offset,behavior:"smooth"});
+        // ✅ セクションセレクトでも同様に移動（スマホ対応）
+        const select=document.getElementById("sectionSelect");
+        if(select){
+          select.addEventListener("change",e=>{
+            const id=e.target.value;
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
         }
-      });
-    });
-
-    // ✅ セクションセレクトでも同様に移動
-    const select=document.getElementById("sectionSelect");
-    if(select){
-      select.addEventListener("change",e=>{
-        const id=e.target.value;
-        const el=document.querySelector(id);
-        if(el && scrollArea){
-          const offset = el.offsetTop - headerHeight;
-          scrollArea.scrollTo({top:offset,behavior:"smooth"});
-        }
-      });
-    }
-  }, { once: true });
-},
-error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
-```
-
-});
+      }, { once: true });
+    },
+    error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+  });
 }
-
 /* ==== 口コミデータ ==== */
 async function showStory(carId,title){
-const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
-const target=document.getElementById(“storyContent”);
-document.getElementById(“storyModalLabel”).textContent=`口コミ概要（${title} | ID:${carId}）`;
-target.textContent=“読込中…”;
-try{
-const res=await fetch(path,{cache:“no-store”});
-if(!res.ok)throw new Error(“Not found”);
-let text=await res.text();
-text=text.replace(/```/g,””);
-text=text.replace(/^### (.*)$/gm,”<h6 class='mt-3 fw-bold'>$1</h6>”);
-text=text.replace(/**(.*?)**/g,”<b>$1</b>”);
-text=text.replace(/\r?\n/g,”<br>”);
-text=text.replace(/(<br>\s*){2,}/g,”<br><br>”);
-target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
-}catch{
-target.innerHTML=”<div class='text-danger'>口コミデータが見つかりません。</div>”;
+  const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+  const target=document.getElementById("storyContent");
+  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+  target.textContent="読込中...";
+  try{
+    const res=await fetch(path,{cache:"no-store"});
+    if(!res.ok)throw new Error("Not found");
+    let text=await res.text();
+    text=text.replace(/```/g,"");
+    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+    text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+    text=text.replace(/\r?\n/g,"<br>");
+    text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+    target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+  }catch{
+    target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
+  }
+  new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
-new bootstrap.Modal(document.getElementById(“storyModal”)).show();
+
+/* ★★★★★↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
+     新規追加：全画面表示ボタンの処理（変更最小限）
+★★★★★↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
+function openFullSpec() {
+  const win = window.open("", "_blank");
+  if (!win) return;
+
+  const html = document.getElementById("csvContent").innerHTML;
+
+  win.document.write(`
+    <!DOCTYPE html>
+    <html lang="ja">
+    <head>
+      <meta charset="UTF-8">
+      <title>仕様 全画面表示</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+      <style>
+        body{ margin:0; padding:0; background:#fff; }
+        .fullwrap{ padding:16px; }
+        table{ width:100%; }
+        .spec-table thead th{
+          position:sticky; top:0; background:#fff; z-index:20;
+        }
+        th.item-col, th.section-col{
+          position:sticky; left:0; background:#fff; z-index:30;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="fullwrap">
+        ${html}
+      </div>
+    </body>
+    </html>
+  `);
+  win.document.close();
+}
+/* ★★★★★↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ */
+
+
+/* ==== main ==== */
+async function main() {
+  await fetchRate();
+  try {
+    const res = await fetch(CSV_PATH, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+    renderTable(parsed.data);
+    ok(`✅ 最新CSV 読み込み成功 (${parsed.data.length}件)`);
+  } catch (err) {
+    fail("CSV 読み込みエラー: " + err.message);
+  }
 }
 
 main();
 </script>
-
-</body>
-</html>

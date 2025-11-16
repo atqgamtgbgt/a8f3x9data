@@ -754,9 +754,14 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
   // Heziの場合は元の中国語名を使用
   const fileName = source === 'hezi' ? originalName : model;
   
-  // image_urlがある場合の処理
+  // Heziの場合は常にファイル名ベースで生成（image_urlを無視）
+  if (source === 'hezi') {
+    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+  
+  // Autohomeの場合：image_urlがある場合の処理
   if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
-    // Autohomeの場合
     const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
     return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   } else if (imageUrl) {

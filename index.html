@@ -749,11 +749,13 @@ function convertToJPY(priceStr) {
   return `（約${fmt(low)}〜${fmt(high)}万円）`;
 }
 
-function imgTag(rankStr, model, imageUrl, source) {
+function imgTag(rankStr, model, imageUrl, source, originalName) {
   const imgBase = DATA_SOURCES[source].imgBase;
+  // Heziの場合は元の中国語名を使用
+  const fileName = source === 'hezi' ? originalName : model;
   const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
     ? `${RAW_BASE}output/pipeline/${source === 'hezi' ? 'hezi/' : ''}autohome-${source === 'hezi' ? 'hezi-' : ''}ranking-images${imageUrl}?v=${Date.now()}`
-    : (imageUrl || `${imgBase}${rankStr}_${model}.png?v=${Date.now()}`);
+    : (imageUrl || `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`);
   return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
 }
 
@@ -810,7 +812,7 @@ function renderTable(data, tableId, source) {
     tr.innerHTML = `
       <td class="rank-badge">${r.rank}</td>
       <td class="diff-badge">${diffHtml}</td>
-      <td>${imgTag(rankStr, globalName, r.image_url, source)}</td>
+      <td>${imgTag(rankStr, globalName, r.image_url, source, originalName)}</td>
       <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
       <td>${maker}</td>
       <td>${units}</td>

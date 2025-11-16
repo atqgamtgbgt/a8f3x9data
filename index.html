@@ -1,49 +1,720 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" data-bs-theme="auto">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>China Auto Dashboard</title>
   <link rel="icon" href="https://img.icons8.com/emoji/48/automobile.png" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <style>
-    body { background-color: #f8f9fa; font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",sans-serif; }
-    header { background: #0d6efd; color: #fff; padding: 12px; text-align: center; font-size: 1.3rem; font-weight: 700; }
-    th { background-color: #f1f3f5; }
-    .rank-up { color: #dc3545; font-weight: bold; }
-    .rank-down { color: #0d6efd; font-weight: bold; }
-    img.car-thumb { width: 80px; height: 60px; object-fit: cover; border-radius: 6px; background:#eee; }
-    .price-jpy { font-size: 0.85rem; color: #6c757d; }
-    .btn-spec, .btn-story { font-size: 0.8rem; padding: 2px 6px; margin: 2px; }
-  </style>
+<style>
+body {
+  background-color: #f8f9fa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+}
+
+header {
+  background: #0d6efd;
+  color: #fff;
+  padding: 12px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+/* タブスタイル */
+.nav-tabs {
+  border-bottom: 2px solid #dee2e6;
+  margin-bottom: 1rem;
+}
+
+.nav-tabs .nav-link {
+  color: #6c757d;
+  font-weight: 500;
+  border: none;
+  border-bottom: 3px solid transparent;
+  padding: 0.75rem 1.5rem;
+}
+
+.nav-tabs .nav-link:hover {
+  border-bottom-color: #0d6efd;
+  color: #0d6efd;
+}
+
+.nav-tabs .nav-link.active {
+  color: #0d6efd;
+  border-bottom-color: #0d6efd;
+  background-color: transparent;
+}
+
+.original-name {
+  color: #6c757d;
+  font-size: 0.9em;
+  font-weight: normal;
+}
+
+th {
+  background-color: #f1f3f5;
+}
+
+/* 金銀銅メダル風ランキングバッジ（PC表示用） */
+.car-table tbody tr:nth-child(1) td:nth-child(1) {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 6px rgba(255, 215, 0, 0.4) !important;
+}
+
+.car-table tbody tr:nth-child(2) td:nth-child(1) {
+  background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%) !important;
+  color: #000 !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 6px rgba(192, 192, 192, 0.4) !important;
+}
+
+.car-table tbody tr:nth-child(3) td:nth-child(1) {
+  background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%) !important;
+  color: #fff !important;
+  font-weight: bold !important;
+  box-shadow: 0 2px 6px rgba(205, 127, 50, 0.4) !important;
+}
+
+.rank-up {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.rank-down {
+  color: #0d6efd;
+  font-weight: bold;
+}
+
+img.car-thumb {
+  width: 80px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: #eee;
+}
+
+.price-jpy {
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+.btn-spec,
+.btn-story {
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  margin: 2px;
+}
+.spec-table tbody tr.sec-row .section-col {
+  border-right: none !important;
+  box-shadow: none !important;
+}
+/* section-fill の左側の縦線を消す */
+.spec-table tbody tr.sec-row .section-fill {
+  border-left: none !important;
+  box-shadow: none !important;
+}
+/* 通常の項目行 td（section-row 以外）の左罫線を消す */
+.spec-table tbody tr:not(.sec-row) td {
+  border-left: none !important;
+  box-shadow: inset 0 -1px 0 #dee2e6 !important;  /* 下線だけ残す */
+}
+/* カラム名（thead）の左罫線を消す */
+.spec-table thead th:not(.sticky-col) {
+  border-left: none !important;
+  box-shadow: inset 0 0px 0 #dee2e6 !important; /* 下線だけ残す */
+}
+
+/* =====================================
+   sticky（PC＋スマホ共通）
+===================================== */
+.spec-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+  vertical-align: middle !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.spec-table thead th.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 31;
+  background: #fff;
+}
+
+.spec-table tbody th.item-col {
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: #fff;
+}
+
+/* =====================================
+   セクション行（z-index は JS で上書き）
+===================================== */
+.spec-table tbody tr.sec-row {
+  height: 2.6em;
+}
+
+.spec-table tbody tr.sec-row .section-col {
+  position: sticky;
+  left: 0;
+  top: var(--secOffset, 42px);
+  z-index: 41;
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+.spec-table tbody tr.sec-row .section-fill {
+  position: sticky;
+  left: 180px;
+  top: var(--secOffset, 42px);
+  z-index: 39;
+  background: #f8f9fa;
+}
+
+.spec-table tbody tr.sec-row .section-col,
+.spec-table tbody tr.sec-row .section-fill {
+  line-height: 2.6em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* =====================================
+   背景透け防止マスク（共通）
+===================================== */
+.spec-content::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--secOffset, 42px);
+  background: #fff;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.spec-content::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: calc(180px + 0.5rem);
+  height: 100%;
+  background: #fff;
+  z-index: 24;
+  pointer-events: none;
+}
+
+/* =====================================
+   PC レイアウト
+===================================== */
+@media (min-width: 992px) {
+  .spec-table-container {
+    display: flex;
+    align-items: flex-start;
+    height: 80vh;
+    background: #fff;
+  }
+
+  .spec-sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0 0 180px;
+    height: 80vh;
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    padding: 8px;
+  }
+
+  .spec-content {
+    flex: 1;
+    overflow: hidden !important;
+    height: 80vh;
+    padding: 8px;
+    position: relative;
+    background: #fff;
+    background-clip: padding-box;
+  }
+
+  .spec-content .table-responsive {
+    position: relative;
+    height: 100%;
+    overflow: auto !important;
+    cursor: grab;
+    will-change: scroll-position;
+  }
+
+  .spec-content .table-responsive.active-drag {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .spec-content .table-responsive.active-drag * {
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .spec-table {
+    position: relative;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 100%;
+  }
+
+  .spec-table tbody tr.sec-row .section-fill {
+    left: 179px !important;
+  }
+}
+
+/* =====================================
+   スマホ最適化（576px 以下）
+===================================== */
+@media (max-width: 576px) {
+
+  /* --- 行全体をカード化 --- */
+  .car-table tbody tr {
+    border-radius: 10px !important;
+    padding: 10px 12px !important;
+    margin: 12px 6px !important;
+    background: #fff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    border: 1px solid #dee2e6 !important;
+    display: block;
+    position: relative;
+  }
+
+  /* --- Bootstrapのストライプ背景を完全に無効化 --- */
+  .car-table tbody tr:nth-of-type(odd) {
+    background-color: #fff !important;
+  }
+
+  .car-table tbody tr:nth-of-type(even) {
+    background-color: #fff !important;
+  }
+
+  /* --- table-responsive、container、tab-contentの背景も透明に --- */
+  .table-responsive {
+    background: transparent !important;
+  }
+
+  .container {
+    background: transparent !important;
+  }
+
+  .tab-content {
+    background: transparent !important;
+  }
+
+  .tab-pane {
+    background: transparent !important;
+  }
+
+  /* --- 各セルをブロック化 --- */
+  .car-table td {
+    display: block;
+    width: 100%;
+    padding: 4px 0 !important;
+    white-space: normal !important;
+    text-align: left !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* --- 順位セル（1列目）--- */
+  .car-table td:nth-child(1) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    padding: 6px 12px !important;
+    border-radius: 8px !important;
+    font-size: 1rem !important;
+    font-weight: bold !important;
+    color: #fff !important;
+    background: rgba(13, 110, 253, 0.9) !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+  }
+
+  /* 1位: ゴールド */
+  .car-table tbody tr:nth-child(1) td:nth-child(1) {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+    color: #000 !important;
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.5) !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3) !important;
+  }
+
+  /* 2位: シルバー */
+  .car-table tbody tr:nth-child(2) td:nth-child(1) {
+    background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%) !important;
+    color: #000 !important;
+    box-shadow: 0 4px 12px rgba(192, 192, 192, 0.5) !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5) !important;
+  }
+
+  /* 3位: ブロンズ */
+  .car-table tbody tr:nth-child(3) td:nth-child(1) {
+    background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%) !important;
+    color: #fff !important;
+    box-shadow: 0 4px 12px rgba(205, 127, 50, 0.5) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) !important;
+  }
+
+  /* --- 変動セル（2列目）--- */
+  .car-table td:nth-child(2) {
+    position: absolute !important;
+    top: 8px !important;
+    left: 60px !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+    font-size: 0.85rem !important;
+    font-weight: bold !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+  }
+
+  /* 変動なしの場合は非表示 */
+  .car-table td:nth-child(2):empty {
+    display: none !important;
+  }
+
+  /* 変動が上昇の場合 */
+  .car-table td:nth-child(2):has(.rank-up) {
+    background: rgba(220, 53, 69, 0.95) !important;
+  }
+  .car-table td:nth-child(2) .rank-up {
+    color: #fff !important;
+  }
+
+  /* 変動が下降の場合 */
+  .car-table td:nth-child(2):has(.rank-down) {
+    background: rgba(13, 110, 253, 0.95) !important;
+  }
+  .car-table td:nth-child(2) .rank-down {
+    color: #fff !important;
+  }
+
+  /* 変動なしの場合 */
+  .car-table td:nth-child(2):not(:has(.rank-up)):not(:has(.rank-down)) {
+    background: rgba(108, 117, 125, 0.95) !important;
+    color: #fff !important;
+  }
+
+  /* --- 画像セル --- */
+  .car-table td:nth-child(3) {
+    float: left;
+    width: 120px !important;
+    text-align: center;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    height: 120px !important;
+    padding: 0 !important;
+    margin-top: 30px !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .car-table td:nth-child(3) img.car-thumb {
+    max-height: 100px !important;
+    max-width: 110px !important;
+    object-fit: contain !important;
+  }
+
+  /* --- テキスト部分を右側へ --- */
+  .car-table td:nth-child(4),
+  .car-table td:nth-child(5),
+  .car-table td:nth-child(6),
+  .car-table td:nth-child(7),
+  .car-table td:nth-child(8) {
+    margin-left: 135px !important;
+    display: block;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    font-size: 0.92rem !important;
+  }
+
+  /* 車名を大きく */
+  .car-table td:nth-child(4) {
+    font-weight: 600;
+    font-size: 1rem !important;
+    padding-top: 32px !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* ボタン */
+  .car-table td:nth-child(8) {
+    margin-top: 8px !important;
+  }
+
+  .car-table td:nth-child(8) button {
+    min-width: 70px;
+    padding: 4px 8px !important;
+    margin-right: 6px !important;
+    margin-bottom: 4px !important;
+    font-size: 0.85rem !important;
+  }
+
+  /* --- テーブル自体のボーダーを完全に削除 --- */
+  .car-table {
+    border: none !important;
+  }
+
+  .car-table tbody {
+    border: none !important;
+  }
+}
+
+/* =====================================
+   sticky＋セレクトトグル（スマホ991px以下）
+===================================== */
+@media (max-width: 991px) {
+  .spec-content .table-responsive {
+    max-height: 70vh;
+    overflow: auto !important;
+  }
+
+  #csvModal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #csvModal .modal-title {
+    display: none;
+  }
+
+  #csvModal .section-toggle {
+    flex: 1;
+    order: 1;
+  }
+
+  #csvModal .btn-open-full {
+    order: 2;
+  }
+
+  #csvModal .btn-close {
+    order: 3;
+  }
+
+  .section-toggle {
+    position: static;
+    transform: none;
+    width: auto;
+    padding: 0;
+    pointer-events: auto;
+  }
+
+  .section-toggle select {
+    width: auto;
+    min-width: 200px;
+    max-width: 60vw;
+    margin: 0;
+    display: block;
+    pointer-events: auto;
+    background: #fff;
+  }
+
+  .spec-table thead th.sticky-col,
+  .spec-table tbody th.item-col {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.85rem;
+    padding: 4px 6px !important;
+  }
+
+  .spec-table tbody tr.sec-row .section-col {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.9rem;
+    background: #f8f9fa !important;
+    box-shadow: 150px 0 0 0 #f8f9fa !important;
+  }
+
+  .spec-table tbody tr.sec-row .section-fill {
+    left: 99px !important;
+  }
+
+  .spec-content::after {
+    width: calc(100px + 0.5rem) !important;
+  }
+}
+
+/* =====================================
+   テーブルのボーダーをbox-shadowで実装
+===================================== */
+.spec-table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 100%;
+}
+
+/* 全てのセルにbox-shadowでボーダーを適用 */
+.spec-table td,
+.spec-table th {
+  box-shadow: 
+    inset 0px 0 0 #dee2e6,
+    inset 0 0px 0 #dee2e6;
+}
+
+/* セクション行は下のボーダーのみ（右側の縦線を削除） */
+.spec-table tbody tr.sec-row .section-col {
+  box-shadow: 
+    inset 0 -1px 0 #dee2e6 !important;
+}
+
+.spec-table tbody tr.sec-row .section-fill {
+  box-shadow: 
+    inset 0 -1px 0 #dee2e6 !important;
+}
+
+/* =====================================
+   その他調整
+===================================== */
+.spec-content.p-2 {
+  padding: 0 !important;
+  background: #fff !important;
+}
+
+.spec-table tbody tr:not(.sec-row) td {
+  position: relative;
+  z-index: 10;
+  background: #fff !important;
+}
+
+/* =====================================
+   全画面表示ボタン
+===================================== */
+.btn-open-full {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0 0.5rem 0 0;
+  background: transparent;
+  border: none;
+  opacity: 0.8;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-open-full:hover {
+  opacity: 1;
+}
+.btn-open-full i {
+  pointer-events: none;
+}
+
+/* 引用元ボタン */
+.source-link-btn {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .source-link-btn {
+    display: inline-block;
+    order: 0;
+    margin-right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    background: #0d6efd;
+    color: white !important;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .source-link-btn:hover {
+    background: #0b5ed7;
+    color: white !important;
+  }
+}
+
+/* モーダルヘッダーのボタン配置 */
+#csvModal .modal-header {
+  display: flex;
+  align-items: center;
+}
+
+#csvModal .modal-header .modal-title {
+  flex: 1;
+  margin-right: auto;
+}
+
+#csvModal .modal-header .btn-open-full,
+#csvModal .modal-header .btn-close {
+  order: 10;
+}
+
+@media (min-width: 992px) {
+  #csvModal .modal-title {
+    display: block !important;
+  }
+}
+</style>
 </head>
 <body>
   <header>🚗 China Auto Dashboard</header>
 
   <div class="container mt-3">
-    <div id="status" class="alert alert-info py-2">Autohome CSV 読み込み中...</div>
+    <div id="status" class="alert alert-info py-2">データ読み込み中...</div>
 
-    <div class="table-responsive">
-      <table class="table table-striped table-hover align-middle" id="carTable">
-        <thead>
-          <tr>
-            <th style="width:80px">順位</th>
-            <th style="width:80px">変動</th>
-            <th style="width:100px">画像</th>
-            <th>車名</th>
-            <th>メーカー</th>
-            <th style="width:110px">台数</th>
-            <th style="width:160px">価格</th>
-            <th style="width:100px">情報</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
+    <!-- タブナビゲーション -->
+    <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="autohome-tab" data-bs-toggle="tab" data-bs-target="#autohome-content" type="button" role="tab">Autohome ランキング</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">Hezi ランキング</button>
+      </li>
+    </ul>
+
+    <!-- タブコンテンツ -->
+    <div class="tab-content" id="mainTabsContent">
+      <!-- Autohome タブ -->
+      <div class="tab-pane fade show active" id="autohome-content" role="tabpanel">
+        <div class="table-responsive mt-3">
+          <table class="table table-hover align-middle car-table" id="autohomeTable">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Hezi タブ -->
+      <div class="tab-pane fade" id="hezi-content" role="tabpanel">
+        <div class="table-responsive mt-3">
+          <table class="table table-hover align-middle car-table" id="heziTable">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- モーダル -->
+  <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -58,6 +729,7 @@
     </div>
   </div>
 
+  <!-- モーダル: 口コミ -->
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
@@ -73,115 +745,804 @@
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 
-  <script>
-    const CSV_PATH = "/output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv?v=" + Date.now();
-    const IMG_BASE = "/output/pipeline/autohome-ranking-images/autohome_images/";
-    let cnyToJpy = 20;
+// データソース設定
+const DATA_SOURCES = {
+  autohome: {
+    csvPath: `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
+    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`,
+    seriesUrlsPath: `${RAW_BASE}output/pipeline/autohome-series-urls/series_urls.csv`,
+    configPath: 'output/autohome/',
+    koubeiPath: 'output/koubei/'
+  },
+  hezi: {
+    csvPath: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
+    imgBase: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-images/`,
+    seriesUrlsPath: `${RAW_BASE}output/pipeline/hezi/autohome-series-urls/series_urls.csv`,
+    configPath: 'output/autohome/',
+    koubeiPath: 'output/koubei/'
+  }
+};
 
-    async function fetchRate() {
-      try {
-        const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-        const data = await res.json();
-        if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-      } catch { cnyToJpy = 20; }
+let cnyToJpy = 20;
+let seriesUrlsMaps = {
+  autohome: {},
+  hezi: {}
+};
+let currentSource = 'autohome'; // 現在のデータソース
+
+async function fetchRate() {
+  try {
+    const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+    const data = await res.json();
+    if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
+  } catch {
+    cnyToJpy = 20;
+  }
+}
+
+async function fetchSeriesUrls(source) {
+  try {
+    const path = DATA_SOURCES[source].seriesUrlsPath + `?v=${Date.now()}`;
+    const res = await fetch(path, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    
+    parsed.data.forEach(row => {
+      if (row.series_id && row.config_url) {
+        seriesUrlsMaps[source][row.series_id] = row.config_url;
+      }
+    });
+    console.log(`Series URLs loaded for ${source}:`, Object.keys(seriesUrlsMaps[source]).length);
+  } catch (err) {
+    console.error(`Failed to load series URLs for ${source}:`, err);
+  }
+}
+
+function convertToJPY(priceStr) {
+  if (!priceStr) return "";
+  const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+  if (!m) return "";
+  const low = parseFloat(m[1]) * cnyToJpy * 10000;
+  const high = parseFloat(m[2]) * cnyToJpy * 10000;
+  const fmt = (x) => (x / 10000).toFixed(1);
+  return `（約${fmt(low)}〜${fmt(high)}万円）`;
+}
+
+function imgTag(rankStr, model, imageUrl, source, originalName) {
+  const imgBase = DATA_SOURCES[source].imgBase;
+  // Heziの場合は元の中国語名を使用
+  const fileName = source === 'hezi' ? originalName : model;
+  
+  // Heziの場合は常にファイル名ベースで生成（image_urlを無視）
+  if (source === 'hezi') {
+    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+  
+  // Autohomeの場合：image_urlがある場合の処理
+  if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
+    const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  } else if (imageUrl) {
+    // その他のURLがある場合
+    return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  } else {
+    // デフォルト: ファイル名から生成
+    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+}
+
+async function loadData(source) {
+  currentSource = source;
+  try {
+    const csvPath = DATA_SOURCES[source].csvPath + `?v=${Date.now()}`;
+    const res = await fetch(csvPath, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+    
+    const tableId = source === 'autohome' ? 'autohomeTable' : 'heziTable';
+    renderTable(parsed.data, tableId, source);
+    ok(`✅ ${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込み成功 (${parsed.data.length}件)`);
+  } catch (err) {
+    fail(`${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込みエラー: ` + err.message);
+  }
+}
+
+function renderTable(data, tableId, source) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  tbody.innerHTML = "";
+  data.forEach(r => {
+    const rankStr = String(r.rank).padStart(3, "0");
+    const diff = Number(r.delta_vs_last_month || 0);
+    const diffHtml = diff > 0
+      ? `<span class="rank-up">▲${diff}</span>`
+      : diff < 0
+      ? `<span class="rank-down">▼${-diff}</span>`
+      : "";
+    const link = r.link || "";
+    const carId = link.match(/(\d+)/)?.[1] || "";
+    const globalName = r.global_name || r.name || "";
+    const originalName = r.name || "";
+    
+    // global_nameとnameが異なる場合のみ括弧書きを追加
+    const displayName = (globalName && originalName && globalName !== originalName)
+      ? `${globalName} <span class="original-name">(${originalName})</span>`
+      : globalName;
+    
+    const price = (r.price || "") + "元";
+    const priceJPY = convertToJPY(r.price || "");
+    const maker = r.manufacturer_ja || r.manufacturer || "";
+    const units = r.units ? r.units + "台" : ""; // 台数に「台」を追加
+    const specBtn = carId
+      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','${source}')">仕様</button>`
+      : "";
+    const storyBtn = carId
+      ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','${source}')">口コミ</button>`
+      : "";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank-badge">${r.rank}</td>
+      <td class="diff-badge">${diffHtml}</td>
+      <td>${imgTag(rankStr, globalName, r.image_url, source, originalName)}</td>
+      <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
+      <td>${maker}</td>
+      <td style="white-space: nowrap;">${units}</td>
+      <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+      <td>${specBtn}${storyBtn}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function ok(msg){
+  const s=document.getElementById("status");
+  s.className="alert alert-success py-2";
+  s.textContent=msg;
+}
+function fail(msg){
+  const s=document.getElementById("status");
+  s.className="alert alert-danger py-2";
+  s.textContent=msg;
+}
+
+function openFullSpec() {
+  const html = document.getElementById("csvContent").innerHTML;
+  const title = document.getElementById("csvModalLabel").textContent;
+  
+  const allStyles = document.querySelector('style').textContent;
+  
+  const sectionRows = document.querySelectorAll('.spec-table tbody tr.sec-row');
+  let selectOptions = '';
+  sectionRows.forEach(row => {
+    const sectionName = row.getAttribute('data-section');
+    const sectionId = row.id;
+    if (sectionName && sectionId) {
+      selectOptions += `<option value="#${sectionId}">${sectionName}</option>`;
     }
-
-    function convertToJPY(priceStr) {
-      if (!priceStr) return "";
-      const match = priceStr.match(/([\d.]+)-([\d.]+)万/);
-      if (!match) return "";
-      const low = parseFloat(match[1]) * cnyToJpy * 10000;
-      const high = parseFloat(match[2]) * cnyToJpy * 10000;
-      const fmt = (x) => (x / 10000).toFixed(1);
-      return `（約${fmt(low)}〜${fmt(high)}万円）`;
+  });
+  
+  const fullHTML = `
+    <!DOCTYPE html>
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+        <title>${title}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <style>
+          ${allStyles}
+          
+          * {
+            -webkit-overflow-scrolling: touch !important;
+          }
+          
+          html, body { 
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            background: #f8f9fa !important;
+            position: fixed !important;
+          }
+          
+          .fullscreen-container {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+          }
+          
+          .fullscreen-modal-header {
+            background: #fff !important;
+            padding: 1rem !important;
+            border-bottom: 1px solid #dee2e6 !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            z-index: 2000 !important;
+          }
+          
+          .fullscreen-modal-header h5 {
+            margin: 0 !important;
+            font-size: 1.25rem !important;
+            flex: 1 !important;
+          }
+          
+          .fullscreen-modal-body {
+            flex: 1 !important;
+            overflow: hidden !important;
+            background: #fff !important;
+            position: relative !important;
+          }
+          
+          #specScrollArea,
+          #specScrollArea .table-responsive {
+            height: 100% !important;
+            width: 100% !important;
+            overflow: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            position: relative !important;
+          }
+          
+          .close-fullscreen {
+            background: transparent !important;
+            border: none !important;
+            font-size: 1.5rem !important;
+            opacity: 0.5 !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+            width: 1em !important;
+            height: 1em !important;
+            line-height: 1 !important;
+            flex-shrink: 0 !important;
+          }
+          
+          .close-fullscreen:hover {
+            opacity: 1 !important;
+          }
+          
+          .section-toggle {
+            position: static !important;
+            transform: none !important;
+            width: auto !important;
+            padding: 0 !important;
+            pointer-events: auto !important;
+            flex: 1 !important;
+            order: 1 !important;
+          }
+          
+          .section-toggle select {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            display: block !important;
+            pointer-events: auto !important;
+            background: #fff !important;
+          }
+          
+          .close-fullscreen {
+            order: 2 !important;
+          }
+          
+          .spec-table thead th {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 30 !important;
+            background: #fff !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table thead th.sticky-col {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 31 !important;
+            background: #fff !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table tbody th.item-col {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 12 !important;
+            background: #fff !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table tbody tr.sec-row .section-col {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            top: var(--secOffset, 42px) !important;
+            background: #f8f9fa !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table tbody tr.sec-row .section-fill {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: var(--secOffset, 42px) !important;
+            background: #f8f9fa !important;
+            will-change: transform !important;
+          }
+          
+          @media (max-width: 991px) {
+            .fullscreen-modal-header h5 {
+              display: none !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-fill {
+              left: 99px !important;
+            }
+            
+            .spec-table thead th.sticky-col,
+            .spec-table tbody th.item-col {
+              min-width: 100px !important;
+              max-width: 100px !important;
+              width: 100px !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-col {
+              min-width: 100px !important;
+              max-width: 100px !important;
+              width: 100px !important;
+            }
+          }
+          
+          @media (min-width: 992px) {
+            .section-toggle {
+              display: none !important;
+            }
+            
+            .fullscreen-modal-header h5 {
+              display: block !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-fill {
+              left: 179px !important;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="fullscreen-container">
+          <div class="fullscreen-modal-header" id="modalHeader">
+            <h5 id="modalTitle">${title}</h5>
+            <button type="button" class="close-fullscreen" onclick="window.close()" aria-label="閉じる">×</button>
+          </div>
+          <div class="fullscreen-modal-body">
+            ${html}
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"><\/script>
+        <script>
+          function forceSticky() {
+            const allSticky = document.querySelectorAll('.spec-table thead th, .spec-table tbody th.item-col, .spec-table tbody tr.sec-row .section-col, .spec-table tbody tr.sec-row .section-fill');
+            allSticky.forEach(el => {
+              el.style.setProperty('position', 'sticky', 'important');
+              el.style.setProperty('-webkit-position', 'sticky', 'important');
+            });
+          }
+          
+          function initFullscreen() {
+            const scrollArea = document.querySelector("#specScrollArea .table-responsive") || document.getElementById("specScrollArea");
+            if (!scrollArea) {
+              setTimeout(initFullscreen, 100);
+              return;
+            }
+            
+            const theadEl = scrollArea.querySelector(".spec-table thead");
+            const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+            
+            scrollArea.style.setProperty("--secOffset", theadH + "px");
+            
+            document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+              const baseZ = 100;
+              const colEl = row.querySelector('.section-col');
+              const fillEl = row.querySelector('.section-fill');
+              if (colEl) {
+                colEl.style.setProperty('position', 'sticky', 'important');
+                colEl.style.setProperty('z-index', (baseZ + index * 2 + 1).toString(), 'important');
+              }
+              if (fillEl) {
+                fillEl.style.setProperty('position', 'sticky', 'important');
+                fillEl.style.setProperty('z-index', (baseZ + index * 2).toString(), 'important');
+              }
+            });
+            
+            forceSticky();
+            
+            const modalHeader = document.getElementById('modalHeader');
+            const closeBtn = modalHeader.querySelector('.close-fullscreen');
+            
+            if (window.innerWidth <= 991) {
+              const toggleDiv = document.createElement('div');
+              toggleDiv.className = 'section-toggle';
+              toggleDiv.innerHTML = '<select id="sectionSelect" class="form-select">${selectOptions}</select>';
+              modalHeader.insertBefore(toggleDiv, closeBtn);
+              
+              document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
+                el.style.setProperty('min-width', '100px', 'important');
+                el.style.setProperty('max-width', '100px', 'important');
+                el.style.setProperty('width', '100px', 'important');
+              });
+              
+              document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
+                el.style.setProperty('min-width', '100px', 'important');
+                el.style.setProperty('max-width', '100px', 'important');
+                el.style.setProperty('width', '100px', 'important');
+              });
+              
+              document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
+                el.style.setProperty('left', '99px', 'important');
+              });
+              
+              const select = document.getElementById("sectionSelect");
+              if (select) {
+                select.addEventListener("change", e => {
+                  const id = e.target.value;
+                  const el = document.querySelector(id);
+                  if (el && scrollArea) {
+                    const offset = el.offsetTop - theadH;
+                    scrollArea.scrollTo({top: offset, behavior: "smooth"});
+                  }
+                });
+              }
+            }
+            
+            document.querySelectorAll(".spec-sidebar a").forEach(a => {
+              a.addEventListener("click", ev => {
+                ev.preventDefault();
+                const id = a.getAttribute("href");
+                const el = document.querySelector(id);
+                if (el && scrollArea) {
+                  const offset = el.offsetTop - theadH;
+                  scrollArea.scrollTo({top: offset, behavior: "smooth"});
+                }
+              });
+            });
+          }
+          
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+              setTimeout(initFullscreen, 200);
+              setTimeout(forceSticky, 500);
+            });
+          } else {
+            setTimeout(initFullscreen, 200);
+            setTimeout(forceSticky, 500);
+          }
+        <\/script>
+      </body>
+    </html>
+  `;
+  
+  try {
+    const blob = new Blob([fullHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    
+    if (!w || w.closed || typeof w.closed == 'undefined') {
+      throw new Error('Popup blocked');
     }
-
-    function imgTag(rankStr, model, imageUrl) {
-      let fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-        ? "/output/pipeline/autohome-ranking-images" + imageUrl
-        : (imageUrl || `${IMG_BASE}${rankStr}_${model}.png`);
-      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  } catch (e) {
+    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(fullHTML);
+    const w = window.open(dataUrl, '_blank');
+    
+    if (!w || w.closed || typeof w.closed == 'undefined') {
+      alert('ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。');
     }
+  }
+}
 
-    async function main() {
-      await fetchRate();
-      Papa.parse(CSV_PATH, {
-        download: true,
-        header: true,
-        skipEmptyLines: true,
-        complete: (res) => {
-          if (!res.meta.fields?.includes("rank")) return fail("CSV 読み込み失敗（rank 列が見つかりません）");
-          renderTable(res.data.filter(r => r && r.rank));
-          ok(`Autohome CSV 読み込み成功 ✔ (${res.data.length} 件)`);
-        },
-        error: (err) => fail("CSV 読み込みエラー: " + err.message)
+function showConfigCsv(carId, title, source) {
+  const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+  const target = document.getElementById("csvContent");
+  
+  const configUrl = seriesUrlsMaps[source][carId];
+  window.currentConfigUrl = configUrl;
+  
+  let modalTitle = `車両仕様（${title}`;
+  if (configUrl) {
+    modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
+  } else {
+    modalTitle += ` | ID:${carId}）`;
+  }
+  
+  document.getElementById("csvModalLabel").innerHTML = modalTitle;
+  target.innerHTML = "読込中...";
+  Papa.parse(path, {
+    download: true,
+    header: false,
+    skipEmptyLines: false,
+    complete: (res) => {
+      const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+      if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+
+      const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+      if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+
+      const headerRow = rows[headerIdx];
+      const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+      const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+      const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+      const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+      const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+      const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+      const modelStart = Math.max(secIdx, itemIdx) + 1;
+      const modelHeaders = headerRow.slice(modelStart);
+      const dataRows = rows.slice(headerIdx + 1);
+
+      const grouped = [];
+      let currentSection = "";
+      for (const r of dataRows) {
+        const sec = (r[secIdx] || "").trim();
+        if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+        if (!currentSection) continue;
+        const item = (r[itemIdx] || "").trim();
+        if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+        const cols = r.slice(modelStart);
+        if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+          grouped.push({ section: currentSection, rows: [] });
+        grouped[grouped.length - 1].rows.push([item, ...cols]);
+      }
+
+      let options = "";
+      for (const g of grouped) {
+        options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+      }
+
+      const navHtml = `
+        <div class="spec-sidebar d-none d-lg-block">
+          <ul class="list-unstyled m-0 p-0">
+            ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+          </ul>
+        </div>`;
+
+      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      let tbody="<tbody>";
+      for(const g of grouped){
+        const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+        tbody+=`
+          <tr id="${id}" class="sec-row" data-section="${g.section}">
+            <th class="item-col section-col">▼ ${g.section}</th>
+            <td colspan="${modelHeaders.length}" class="section-fill"></td>
+          </tr>`;
+        for(const row of g.rows){
+          const item=row[0]||"";
+          const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
+          tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
+        }
+      }
+      tbody+="</tbody>";
+
+      const tableHtml=`
+        <div class="spec-table-container d-flex">
+          ${navHtml}
+          <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm spec-table mb-0">
+                ${thead}${tbody}
+              </table>
+            </div>
+          </div>
+        </div>`;
+      target.innerHTML=tableHtml;
+      
+      const modalHeader = document.querySelector('#csvModal .modal-header');
+      const closeBtn = modalHeader.querySelector('.btn-close');
+      
+      const existingToggle = modalHeader.querySelector('.section-toggle');
+      if (existingToggle) existingToggle.remove();
+      const existingFullBtn = modalHeader.querySelector('.btn-open-full');
+      if (existingFullBtn) existingFullBtn.remove();
+      const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
+      if (existingSourceBtn) existingSourceBtn.remove();
+      
+      if (window.innerWidth <= 991) {
+        if (configUrl) {
+          const sourceBtn = document.createElement('a');
+          sourceBtn.className = 'source-link-btn';
+          sourceBtn.href = configUrl;
+          sourceBtn.target = '_blank';
+          sourceBtn.rel = 'noopener';
+          sourceBtn.textContent = '引用元';
+          modalHeader.insertBefore(sourceBtn, closeBtn);
+        }
+        
+        const toggleDiv = document.createElement('div');
+        toggleDiv.className = 'section-toggle';
+        toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
+        modalHeader.insertBefore(toggleDiv, closeBtn);
+      }
+      
+      const fullBtn = document.createElement("button");
+      fullBtn.className = "btn-open-full";
+      fullBtn.setAttribute("title", "全画面表示");
+      fullBtn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+      fullBtn.onclick = () => openFullSpec();
+      modalHeader.insertBefore(fullBtn, closeBtn);
+
+      if (window.innerWidth <= 991) {
+        document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
+          el.style.minWidth = '100px';
+          el.style.maxWidth = '100px';
+          el.style.width = '100px';
+        });
+        
+        document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
+          el.style.minWidth = '200px';
+          el.style.maxWidth = '200px';
+          el.style.width = '200px';
+        });
+        
+        document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
+          el.style.left = '199px';
+        });
+      }
+
+      document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+        const baseZ = 100;
+        const colEl = row.querySelector('.section-col');
+        const fillEl = row.querySelector('.section-fill');
+        if (colEl) colEl.style.zIndex = baseZ + index * 2 + 1;
+        if (fillEl) fillEl.style.zIndex = baseZ + index * 2;
       });
-    }
 
-    function renderTable(data) {
-      const tbody = document.querySelector("#carTable tbody");
-      tbody.innerHTML = "";
-      data.forEach(r => {
-        const rankStr = String(r.rank).padStart(3, "0");
-        const diff = Number(r.delta_vs_last_month || 0);
-        const diffHtml = diff > 0 ? `<span class="rank-up">▲${diff}</span>` : diff < 0 ? `<span class="rank-down">▼${-diff}</span>` : "–";
-        const link = r.link || "";
-        const carId = link.match(/(\d+)/)?.[1] || "";
-        const name = r.global_name || r.name || "";
-        const price = (r.price || "") + " 元";
-        const priceJPY = convertToJPY(r.price || "");
-        const maker = r.manufacturer_ja || r.manufacturer || "";
-        const units = r.units || "";
+      const modal = new bootstrap.Modal(document.getElementById("csvModal"));
+      modal.show();
 
-        const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}');">仕様</button>` : "";
-        const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}');">口コミ</button>` : "";
+      document.getElementById("csvModal").addEventListener('shown.bs.modal', function () {
+        const scrollArea =
+          document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
+            ? document.querySelector("#specScrollArea .table-responsive")
+            : document.getElementById("specScrollArea");
+        const theadEl = scrollArea?.querySelector(".spec-table thead");
+        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+        const headerHeight = theadH;
 
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${r.rank}</td>
-          <td>${diffHtml}</td>
-          <td>${imgTag(rankStr, name, r.image_url)}</td>
-          <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
-          <td>${maker}</td>
-          <td>${units}</td>
-          <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-          <td>${specBtn}${storyBtn}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    }
+        let isDown = false;
+        let startX;
+        let startY;
+        let scrollLeft;
+        let scrollTop;
 
-    function ok(msg){const s=document.getElementById("status");s.className="alert alert-success py-2";s.textContent=msg;}
-    function fail(msg){const s=document.getElementById("status");s.className="alert alert-danger py-2";s.textContent=msg;}
+        scrollArea.addEventListener('mousedown', (e) => {
+          if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON') return;
+          
+          isDown = true;
+          scrollArea.classList.add('active-drag');
+          startX = e.pageX - scrollArea.offsetLeft;
+          startY = e.pageY - scrollArea.offsetTop;
+          scrollLeft = scrollArea.scrollLeft;
+          scrollTop = scrollArea.scrollTop;
+          
+          scrollArea.style.scrollBehavior = 'auto';
+        });
 
-    function showConfigCsv(carId, title){
-      const path=`/output/autohome/${carId}/config_${carId}.ja.csv`;
-      const target=document.getElementById("csvContent");
-      document.getElementById("csvModalLabel").textContent=`車両仕様（${title} | ID:${carId}）`;
-      target.innerHTML="読込中...";
-      Papa.parse(path,{download:true,header:true,complete:(res)=>{
-        if(!res.data?.length){target.innerHTML="<div class='text-danger'>CSVが空、または存在しません。</div>";return;}
-        let html="<table class='table table-bordered table-sm'><thead><tr>";
-        res.meta.fields.forEach(f=>html+=`<th>${f}</th>`);html+="</tr></thead><tbody>";
-        res.data.forEach(row=>{html+="<tr>";res.meta.fields.forEach(f=>html+=`<td>${row[f]??""}</td>`);html+="</tr>";});
-        target.innerHTML=html+"</tbody></table>";
-      },error:(err)=>target.innerHTML=`<div class='text-danger'>読み込み失敗: ${err.message}</div>`});
-      new bootstrap.Modal(document.getElementById("csvModal")).show();
-    }
+        scrollArea.addEventListener('mouseleave', () => {
+          isDown = false;
+          scrollArea.classList.remove('active-drag');
+        });
 
-    function showStory(carId, title){
-      const path=`/output/koubei/${carId}/story.txt`;
-      const target=document.getElementById("storyContent");
-      document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
-      target.textContent="読込中...";
-      fetch(path).then(res=>res.ok?res.text():Promise.reject("Not Found"))
-      .then(text=>target.textContent=text)
-      .catch(()=>target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>");
-      new bootstrap.Modal(document.getElementById("storyModal")).show();
-    }
+        scrollArea.addEventListener('mouseup', () => {
+          isDown = false;
+          scrollArea.classList.remove('active-drag');
+        });
 
-    main();
-  </script>
+        scrollArea.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - scrollArea.offsetLeft;
+          const y = e.pageY - scrollArea.offsetTop;
+          const walkX = (x - startX);
+          const walkY = (y - startY);
+          
+          requestAnimationFrame(() => {
+            scrollArea.scrollLeft = scrollLeft - walkX;
+            scrollArea.scrollTop = scrollTop - walkY;
+          });
+        });
+
+        scrollArea.style.cursor = 'grab';
+
+        document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+          a.addEventListener("click",ev=>{
+            ev.preventDefault();
+            scrollArea.style.scrollBehavior = 'smooth';
+            const id=a.getAttribute("href");
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        });
+
+        const select=document.getElementById("sectionSelect");
+        if(select){
+          select.addEventListener("change",e=>{
+            scrollArea.style.scrollBehavior = 'smooth';
+            const id=e.target.value;
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        }
+      }, { once: true });
+    },
+    error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+  });
+}
+
+async function showStory(carId, title, source){
+  const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+  const target=document.getElementById("storyContent");
+  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+  target.textContent="読込中...";
+  try{
+    const res=await fetch(path,{cache:"no-store"});
+    if(!res.ok)throw new Error("Not found");
+    let text=await res.text();
+    text=text.replace(/```/g,"");
+    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+    text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+    text=text.replace(/\r?\n/g,"<br>");
+    text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+    target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+  }catch{
+    target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
+  }
+  new bootstrap.Modal(document.getElementById("storyModal")).show();
+}
+
+// 初期化処理
+async function init() {
+  await fetchRate();
+  await Promise.all([
+    fetchSeriesUrls('autohome'),
+    fetchSeriesUrls('hezi')
+  ]);
+  
+  // 両方のデータを読み込み
+  await Promise.all([
+    loadData('autohome'),
+    loadData('hezi')
+  ]);
+}
+
+// タブ切り替えイベント
+document.getElementById('autohome-tab').addEventListener('shown.bs.tab', function (e) {
+  currentSource = 'autohome';
+});
+
+document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e) {
+  currentSource = 'hezi';
+});
+
+init();
+</script>
+
 </body>
 </html>

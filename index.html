@@ -866,7 +866,7 @@ function renderTable(data, tableId, source) {
     const maker = r.manufacturer_ja || r.manufacturer || "";
     const units = r.units ? r.units + "台" : ""; // 台数に「台」を追加
     const specBtn = carId
-      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','${source}')">仕様</button>`
+      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','${source}')">仕様表</button>`
       : "";
     const storyBtn = carId
       ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','${source}')">口コミ</button>`

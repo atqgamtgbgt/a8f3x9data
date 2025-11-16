@@ -281,8 +281,20 @@ img.car-thumb {
     background-color: #fff !important;
   }
 
-  /* --- table-responsiveの背景も透明に --- */
+  /* --- table-responsive、container、tab-contentの背景も透明に --- */
   .table-responsive {
+    background: transparent !important;
+  }
+
+  .container {
+    background: transparent !important;
+  }
+
+  .tab-content {
+    background: transparent !important;
+  }
+
+  .tab-pane {
     background: transparent !important;
   }
 
@@ -294,6 +306,7 @@ img.car-thumb {
     white-space: normal !important;
     text-align: left !important;
     border: none !important;
+    background: transparent !important;
   }
 
   /* --- 順位セル（1列目）--- */
@@ -321,7 +334,7 @@ img.car-thumb {
     padding: 4px 8px !important;
     border-radius: 6px !important;
     font-size: 0.85rem !important;
-    color: #fff !important;
+    font-weight: bold !important;
     z-index: 10 !important;
     display: inline-block !important;
     width: auto !important;
@@ -335,17 +348,24 @@ img.car-thumb {
 
   /* 変動が上昇の場合 */
   .car-table td:nth-child(2):has(.rank-up) {
-    background: rgba(220, 53, 69, 0.9) !important;
+    background: rgba(220, 53, 69, 0.95) !important;
+  }
+  .car-table td:nth-child(2) .rank-up {
+    color: #fff !important;
   }
 
   /* 変動が下降の場合 */
   .car-table td:nth-child(2):has(.rank-down) {
-    background: rgba(13, 110, 253, 0.9) !important;
+    background: rgba(13, 110, 253, 0.95) !important;
+  }
+  .car-table td:nth-child(2) .rank-down {
+    color: #fff !important;
   }
 
   /* 変動なしの場合 */
   .car-table td:nth-child(2):not(:has(.rank-up)):not(:has(.rank-down)) {
-    background: rgba(108, 117, 125, 0.9) !important;
+    background: rgba(108, 117, 125, 0.95) !important;
+    color: #fff !important;
   }
 
   /* --- 画像セル --- */
@@ -360,6 +380,8 @@ img.car-thumb {
     height: 120px !important;
     padding: 0 !important;
     margin-top: 30px !important;
+    border: none !important;
+    box-shadow: none !important;
   }
 
   .car-table td:nth-child(3) img.car-thumb {
@@ -400,6 +422,15 @@ img.car-thumb {
     margin-right: 6px !important;
     margin-bottom: 4px !important;
     font-size: 0.85rem !important;
+  }
+
+  /* --- テーブル自体のボーダーを完全に削除 --- */
+  .car-table {
+    border: none !important;
+  }
+
+  .car-table tbody {
+    border: none !important;
   }
 }
 

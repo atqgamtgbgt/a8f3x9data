@@ -345,7 +345,7 @@ img.car-thumb {
   /* --- 変動セル（2列目）--- */
   .car-table td:nth-child(2) {
     position: absolute !important;
-    top: 20px !important;
+    top: 23px !important;
     left: 50px !important;
     padding: 0 !important;
     border-radius: 0 !important;
@@ -501,6 +501,7 @@ img.car-thumb {
     display: block;
     pointer-events: auto;
     background: #fff;
+    border: 1px solid #ced4da !important;
   }
 
   .spec-table thead th.sticky-col,
@@ -508,7 +509,7 @@ img.car-thumb {
     min-width: 100px !important;
     max-width: 100px !important;
     width: 100px !important;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     padding: 4px 6px !important;
   }
 
@@ -516,7 +517,7 @@ img.car-thumb {
     min-width: 100px !important;
     max-width: 100px !important;
     width: 100px !important;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     background: #f8f9fa !important;
     box-shadow: 150px 0 0 0 #f8f9fa !important;
   }
@@ -652,6 +653,15 @@ img.car-thumb {
 
   <div class="container mt-3">
     <div id="status" class="alert alert-info py-2">データ読み込み中...</div>
+
+    <!-- 説明文 -->
+    <div class="alert alert-light border mb-3" style="font-size: 0.9rem; line-height: 1.6;">
+      <strong>データについて</strong>
+      <ul class="mb-0 mt-2" style="padding-left: 1.2rem;">
+        <li>「汽车之家」に掲載されているランキング表および仕様表を、機械翻訳する形で作成</li>
+        <li>「口コミ」は、「汽车之家」に掲載されている口コミを、AIで翻訳＆要約</li>
+      </ul>
+    </div>
 
     <!-- タブナビゲーション -->
     <ul class="nav nav-tabs" id="mainTabs" role="tablist">

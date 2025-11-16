@@ -556,6 +556,13 @@ img.car-thumb {
     display: block !important;
   }
 }
+
+/* 中国語車名のスタイル */
+.original-name {
+  font-size: 0.85em;
+  color: #6c757d;
+  font-weight: normal;
+}
 </style>
 <body>
   <header>🚗 China Auto Dashboard</header>
@@ -695,23 +702,28 @@ function renderTable(data) {
       : "";
     const link = r.link || "";
     const carId = link.match(/(\d+)/)?.[1] || "";
-    const name = r.global_name || r.name || "";
+    const globalName = r.global_name || r.name || "";
+    const originalName = r.name || "";
+    // 日本語名と中国語名が異なる場合のみ括弧書きで追加
+    const displayName = (globalName && originalName && globalName !== originalName) 
+      ? `${globalName} <span class="original-name">(${originalName})</span>` 
+      : globalName;
     const price = (r.price || "") + "元";
     const priceJPY = convertToJPY(r.price || "");
     const maker = r.manufacturer_ja || r.manufacturer || "";
     const units = r.units || "";
     const specBtn = carId
-      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${name}')">仕様</button>`
+      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}')">仕様</button>`
       : "";
     const storyBtn = carId
-      ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${name}')">口コミ</button>`
+      ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}')">口コミ</button>`
       : "";
     const tr = document.createElement("tr");
     tr.innerHTML = `
       <td class="rank-badge">${r.rank}</td>
       <td class="diff-badge">${diffHtml}</td>
-      <td>${imgTag(rankStr, name, r.image_url)}</td>
-      <td><a href="${link}" target="_blank" rel="noopener">${name}</a></td>
+      <td>${imgTag(rankStr, globalName, r.image_url)}</td>
+      <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
       <td>${maker}</td>
       <td>${units}</td>
       <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>

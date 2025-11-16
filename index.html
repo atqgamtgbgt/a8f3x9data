@@ -933,9 +933,7 @@ function openFullSpec() {
             padding: 0 !important;
             width: 100% !important;
             height: 100% !important;
-            overflow: hidden !important;
             background: #f8f9fa !important;
-            position: fixed !important;
           }
           
           .fullscreen-container {
@@ -946,6 +944,7 @@ function openFullSpec() {
             position: fixed !important;
             top: 0 !important;
             left: 0 !important;
+            overflow: hidden !important;
           }
           
           .fullscreen-modal-header {
@@ -968,20 +967,25 @@ function openFullSpec() {
           }
           
           .fullscreen-modal-body {
-            flex: 1 !important;
+            flex: 1 1 auto !important;
             overflow: hidden !important;
             background: #fff !important;
             position: relative !important;
+            min-height: 0 !important;
           }
           
-          #specScrollArea,
-          #specScrollArea .table-responsive {
+          #specScrollArea {
             height: 100% !important;
             width: 100% !important;
             max-height: none !important;
             overflow: auto !important;
             -webkit-overflow-scrolling: touch !important;
             position: relative !important;
+          }
+          
+          #specScrollArea .table-responsive {
+            max-height: none !important;
+            overflow: visible !important;
           }
           
           .close-fullscreen {

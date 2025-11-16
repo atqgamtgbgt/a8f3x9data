@@ -696,7 +696,7 @@ const DATA_SOURCES = {
   },
   hezi: {
     csvPath: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
-    imgBase: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-images/autohome_images/`,
+    imgBase: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-images/`,
     seriesUrlsPath: `${RAW_BASE}output/pipeline/hezi/autohome-series-urls/series_urls.csv`,
     configPath: 'output/autohome/',
     koubeiPath: 'output/koubei/'
@@ -753,10 +753,20 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
   const imgBase = DATA_SOURCES[source].imgBase;
   // Heziの場合は元の中国語名を使用
   const fileName = source === 'hezi' ? originalName : model;
-  const fullPath = imageUrl && imageUrl.startsWith("/autohome_images/")
-    ? `${RAW_BASE}output/pipeline/${source === 'hezi' ? 'hezi/' : ''}autohome-${source === 'hezi' ? 'hezi-' : ''}ranking-images${imageUrl}?v=${Date.now()}`
-    : (imageUrl || `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`);
-  return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  
+  // image_urlがある場合の処理
+  if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
+    // Autohomeの場合
+    const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  } else if (imageUrl) {
+    // その他のURLがある場合
+    return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  } else {
+    // デフォルト: ファイル名から生成
+    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
 }
 
 async function loadData(source) {

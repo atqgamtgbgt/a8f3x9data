@@ -533,6 +533,18 @@ img.car-thumb {
   .spec-content::after {
     width: calc(100px + 0.5rem) !important;
   }
+  
+  /* スマホ用：sticky-colに凡例を追加 */
+  .spec-table thead th.sticky-col::after {
+    content: "●：標準装備\A〇：オプション装備";
+    white-space: pre-line;
+    font-size: 0.7rem;
+    color: #6c757d;
+    font-weight: normal;
+    display: block;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
 }
 
 /* =====================================
@@ -643,6 +655,22 @@ img.car-thumb {
 #csvModal .modal-header .btn-open-full,
 #csvModal .modal-header .btn-close {
   order: 10;
+}
+
+/* 凡例テキスト（PC用） */
+.legend-text {
+  font-size: 0.85rem;
+  color: #6c757d;
+  white-space: nowrap;
+  margin-left: auto;
+  margin-right: 0.5rem;
+  order: 9;
+}
+
+@media (max-width: 991px) {
+  .legend-text {
+    display: none !important;
+  }
 }
 
 @media (min-width: 992px) {
@@ -1254,6 +1282,11 @@ function showConfigCsv(carId, title, source) {
   }
   
   document.getElementById("csvModalLabel").innerHTML = modalTitle;
+  
+  // 既存の凡例を削除
+  const existingLegend = document.querySelector('#csvModal .modal-header .legend-text');
+  if (existingLegend) existingLegend.remove();
+  
   target.innerHTML = "読込中...";
   Papa.parse(path, {
     download: true,
@@ -1358,6 +1391,14 @@ function showConfigCsv(carId, title, source) {
         toggleDiv.className = 'section-toggle';
         toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
         modalHeader.insertBefore(toggleDiv, closeBtn);
+      }
+      
+      // PC用凡例を追加
+      if (window.innerWidth > 991) {
+        const legendSpan = document.createElement('span');
+        legendSpan.className = 'legend-text';
+        legendSpan.textContent = '●：標準装備　〇：オプション装備';
+        modalHeader.insertBefore(legendSpan, closeBtn);
       }
       
       const fullBtn = document.createElement("button");

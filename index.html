@@ -663,7 +663,7 @@ img.car-thumb {
   color: #6c757d;
   white-space: nowrap;
   margin-left: auto;
-  margin-right: 0.5rem;
+  margin-right: 1rem;
   order: 9;
 }
 
@@ -1029,6 +1029,16 @@ function openFullSpec() {
             opacity: 1 !important;
           }
           
+          /* 凡例テキスト（フルスクリーン用） */
+          .legend-text {
+            font-size: 0.85rem !important;
+            color: #6c757d !important;
+            white-space: nowrap !important;
+            margin-left: auto !important;
+            margin-right: 1rem !important;
+            order: 8 !important;
+          }
+          
           .section-toggle {
             position: static !important;
             transform: none !important;
@@ -1101,6 +1111,10 @@ function openFullSpec() {
               display: none !important;
             }
             
+            .legend-text {
+              display: none !important;
+            }
+            
             .spec-table tbody tr.sec-row .section-fill {
               left: 99px !important;
             }
@@ -1122,6 +1136,10 @@ function openFullSpec() {
           @media (min-width: 992px) {
             .section-toggle {
               display: none !important;
+            }
+            
+            .legend-text {
+              display: block !important;
             }
             
             .fullscreen-modal-header h5 {
@@ -1218,6 +1236,12 @@ function openFullSpec() {
                   }
                 });
               }
+            } else {
+              // PC表示時：凡例を追加
+              const legendSpan = document.createElement('span');
+              legendSpan.className = 'legend-text';
+              legendSpan.textContent = '●：標準装備　〇：オプション装備';
+              modalHeader.insertBefore(legendSpan, closeBtn);
             }
             
             document.querySelectorAll(".spec-sidebar a").forEach(a => {

@@ -664,7 +664,6 @@ img.car-thumb {
   white-space: nowrap;
   margin-left: auto;
   margin-right: 1rem;
-  order: 9;
 }
 
 @media (max-width: 991px) {
@@ -1422,7 +1421,7 @@ function showConfigCsv(carId, title, source) {
         const legendSpan = document.createElement('span');
         legendSpan.className = 'legend-text';
         legendSpan.textContent = '●：標準装備　〇：オプション装備';
-        modalHeader.insertBefore(legendSpan, closeBtn);
+        modalHeader.appendChild(legendSpan);
       }
       
       const fullBtn = document.createElement("button");

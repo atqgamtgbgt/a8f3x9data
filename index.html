@@ -662,9 +662,10 @@ img.car-thumb {
   font-size: 0.85rem;
   color: #6c757d;
   white-space: nowrap;
-  margin-left: auto;
-  margin-right: 1rem;
-  order: 9;
+  margin-left: 1rem !important;
+  margin-right: 1rem !important;
+  order: 1 !important;
+  
 }
 
 @media (max-width: 991px) {
@@ -1023,6 +1024,8 @@ function openFullSpec() {
             height: 1em !important;
             line-height: 1 !important;
             flex-shrink: 0 !important;
+            margin-left: auto !important;
+            order: 2 !important;
           }
           
           .close-fullscreen:hover {

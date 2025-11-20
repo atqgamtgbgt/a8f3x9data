@@ -1046,7 +1046,7 @@ function openFullSpec() {
             color: #6c757d !important;
             white-space: nowrap !important;
             margin-left: auto !important;
-            margin-right: 3rem !important;
+            margin-right: 1rem !important;
             order: 8 !important;
           }
           
@@ -1070,7 +1070,7 @@ function openFullSpec() {
           }
           
           .close-fullscreen {
-            order: 2 !important;
+            order: 10 !important;
           }
           
           .spec-table thead th {
@@ -1167,6 +1167,7 @@ function openFullSpec() {
         <div class="fullscreen-container">
           <div class="fullscreen-modal-header" id="modalHeader">
             <h5 id="modalTitle">${title}</h5>
+            <span class="legend-text">●：標準装備　〇：オプション装備</span>
             <button type="button" class="close-fullscreen" onclick="window.close()" aria-label="閉じる">×</button>
           </div>
           <div class="fullscreen-modal-body">
@@ -1213,8 +1214,15 @@ function openFullSpec() {
             
             const modalHeader = document.getElementById('modalHeader');
             const closeBtn = modalHeader.querySelector('.close-fullscreen');
+            const existingLegend = modalHeader.querySelector('.legend-text');
             
             if (window.innerWidth <= 991) {
+              // スマホ表示の場合
+              // 凡例があれば削除
+              if (existingLegend) {
+                existingLegend.remove();
+              }
+              
               const toggleDiv = document.createElement('div');
               toggleDiv.className = 'section-toggle';
               toggleDiv.innerHTML = '<select id="sectionSelect" class="form-select">${selectOptions}</select>';
@@ -1248,11 +1256,8 @@ function openFullSpec() {
                 });
               }
             } else {
-              // PC表示時：凡例を追加
-              const legendSpan = document.createElement('span');
-              legendSpan.className = 'legend-text';
-              legendSpan.textContent = '●：標準装備　〇：オプション装備';
-              modalHeader.insertBefore(legendSpan, closeBtn);
+              // PC表示の場合
+              // 凡例がまだHTMLに直接記述されていない場合、何もしない（既にHTMLに記述済み）
             }
             
             document.querySelectorAll(".spec-sidebar a").forEach(a => {
@@ -1426,10 +1431,8 @@ function showConfigCsv(carId, title, source) {
         toggleDiv.className = 'section-toggle';
         toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
         modalHeader.insertBefore(toggleDiv, closeBtn);
-      }
-      
-      // PC用凡例を追加
-      if (window.innerWidth > 991) {
+      } else {
+        // PC用凡例を追加（全画面ボタンの前）
         const legendSpan = document.createElement('span');
         legendSpan.className = 'legend-text';
         legendSpan.textContent = '●：標準装備　〇：オプション装備';

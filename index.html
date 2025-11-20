@@ -662,10 +662,9 @@ img.car-thumb {
   font-size: 0.85rem;
   color: #6c757d;
   white-space: nowrap;
-  margin-left: 1rem !important;
-  margin-right: 1rem !important;
-  order: 1 !important;
-  
+  margin-left: auto;
+  margin-right: 1rem;
+  order: 9;
 }
 
 @media (max-width: 991px) {
@@ -983,7 +982,7 @@ function openFullSpec() {
             padding: 1rem !important;
             border-bottom: 1px solid #dee2e6 !important;
             display: flex !important;
-              justify-content: flex-start !important;
+            justify-content: space-between !important;
             align-items: center !important;
             gap: 0.5rem !important;
             flex-shrink: 0 !important;
@@ -1024,8 +1023,6 @@ function openFullSpec() {
             height: 1em !important;
             line-height: 1 !important;
             flex-shrink: 0 !important;
-            margin-left: auto !important;
-            order: 2 !important;
           }
           
           .close-fullscreen:hover {

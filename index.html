@@ -53,6 +53,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  text-decoration: none;
 }
 
 .vehicle-name-main {
@@ -63,6 +64,15 @@ header {
   font-size: 0.75em;
   color: #999;
   font-weight: normal;
+}
+
+/* リンク内の車両名表示の下線を削除 */
+a .vehicle-name-wrapper {
+  text-decoration: none;
+}
+
+a:hover .vehicle-name-wrapper {
+  text-decoration: none;
 }
 
 th {

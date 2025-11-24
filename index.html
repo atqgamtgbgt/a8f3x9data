@@ -716,6 +716,11 @@ img.car-thumb {
   #csvModal .modal-title {
     display: block !important;
   }
+  
+  /* PC版では::afterの凡例を非表示 */
+  .spec-table thead th.sticky-col::after {
+    display: none !important;
+  }
 }
 </style>
 </head>

@@ -48,9 +48,20 @@ header {
   background-color: transparent;
 }
 
-.original-name {
-  color: #6c757d;
-  font-size: 0.9em;
+/* 車両名2段表示用 */
+.vehicle-name-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.vehicle-name-main {
+  font-weight: 500;
+}
+
+.vehicle-name-cn {
+  font-size: 0.75em;
+  color: #999;
   font-weight: normal;
 }
 
@@ -895,9 +906,12 @@ function renderTable(data, tableId, source) {
     const globalName = r.global_name || r.name || "";
     const originalName = r.name || "";
     
-    // global_nameとnameが異なる場合のみ括弧書きを追加
+    // global_nameとnameが異なる場合、2段表示にする
     const displayName = (globalName && originalName && globalName !== originalName)
-      ? `${globalName} <span class="original-name">(${originalName})</span>`
+      ? `<div class="vehicle-name-wrapper">
+           <div class="vehicle-name-main">${globalName}</div>
+           <div class="vehicle-name-cn">${originalName}</div>
+         </div>`
       : globalName;
     
     const price = (r.price || "") + "元";

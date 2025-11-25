@@ -524,13 +524,13 @@ img.car-thumb {
     margin-bottom: 2px !important;
   }
 
-  /* スマホで車名リンクを視覚的に分かりやすく */
+  /* スマホでリンクは文字部分だけに制限 */
   .car-table td:nth-child(4) a {
+    display: inline !important;
+    width: auto !important;
+    padding: 0 !important;
     color: #0d6efd !important;
-    padding: 6px 8px !important;
-    margin: -6px -8px !important;
-    border-left: 3px solid #0d6efd !important;
-    padding-left: 12px !important;
+    text-decoration: underline !important;
   }
 
   /* ボタン */

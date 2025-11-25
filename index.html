@@ -85,10 +85,15 @@ a:hover .vehicle-name-cn {
   padding: 8px;
   border-radius: 4px;
   transition: background-color 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .car-table td a:hover {
   text-decoration: none !important;
+  background-color: #f0f7ff;
+}
+
+.car-table td a:active {
   background-color: #f0f7ff;
 }
 
@@ -321,6 +326,7 @@ img.car-thumb {
     border: 1px solid #dee2e6 !important;
     display: block;
     position: relative;
+    -webkit-tap-highlight-color: transparent;
   }
 
   /* --- Bootstrapのストライプ背景を完全に無効化 --- */
@@ -483,10 +489,19 @@ img.car-thumb {
   /* --- テーブル自体のボーダーを完全に削除 --- */
   .car-table {
     border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
   .car-table tbody {
     border: none !important;
+  }
+
+  /* テーブルコンテナも幅を制限 */
+  .table-responsive {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
 }
 

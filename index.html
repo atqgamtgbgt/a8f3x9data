@@ -756,6 +756,18 @@ img.car-thumb {
     background: #0b5ed7;
     color: white !important;
   }
+
+  /* 口コミモーダルのヘッダー調整 */
+  #storyModal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #storyModal .modal-title {
+    display: none;
+  }
 }
 
 /* モーダルヘッダーのボタン配置 */
@@ -929,8 +941,8 @@ img.car-thumb {
   <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="storyModalLabel">口コミ概要</h5>
+        <div class="modal-header" style="display: flex; align-items: center; gap: 0.5rem;">
+          <h5 class="modal-title" id="storyModalLabel" style="flex: 1;">口コミ概要</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
         </div>
         <div class="modal-body">
@@ -1746,7 +1758,29 @@ function showConfigCsv(carId, title, source) {
 async function showStory(carId, title, source){
   const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
   const target=document.getElementById("storyContent");
-  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title}）`;
+  const koubeiUrl = `https://k.autohome.com.cn/${carId}#pvareaid=3454440`;
+  
+  // タイトルに引用元リンクを追加
+  let modalTitle = `口コミ概要（${title}`;
+  modalTitle += ` | <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
+  document.getElementById("storyModalLabel").innerHTML = modalTitle;
+  
+  // モーダルヘッダーの処理（スマホ用引用元ボタン）
+  const modalHeader = document.querySelector('#storyModal .modal-header');
+  const closeBtn = modalHeader.querySelector('.btn-close');
+  const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
+  if (existingSourceBtn) existingSourceBtn.remove();
+  
+  if (window.innerWidth <= 991) {
+    const sourceBtn = document.createElement('a');
+    sourceBtn.className = 'source-link-btn';
+    sourceBtn.href = koubeiUrl;
+    sourceBtn.target = '_blank';
+    sourceBtn.rel = 'noopener';
+    sourceBtn.textContent = '引用元';
+    modalHeader.insertBefore(sourceBtn, closeBtn);
+  }
+  
   target.textContent="読込中...";
   try{
     const res=await fetch(path,{cache:"no-store"});

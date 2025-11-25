@@ -91,13 +91,16 @@ a:hover .vehicle-name-cn {
   user-select: none;
 }
 
-.car-table td a:hover {
-  text-decoration: none !important;
-  background-color: #f0f7ff;
-}
+/* PC版のみホバー効果を適用 */
+@media (min-width: 577px) {
+  .car-table td a:hover {
+    text-decoration: none !important;
+    background-color: #f0f7ff;
+  }
 
-.car-table td a:active {
-  background-color: #f0f7ff;
+  .car-table td a:active {
+    background-color: #f0f7ff;
+  }
 }
 
 /* 全体的なタップハイライト無効化 */
@@ -340,6 +343,13 @@ img.car-thumb {
     display: block;
     position: relative;
     -webkit-tap-highlight-color: transparent;
+  }
+
+  /* スマホではホバー効果を無効化 */
+  .car-table td a:hover,
+  .car-table td a:active,
+  .car-table td a:focus {
+    background-color: transparent !important;
   }
 
   /* --- Bootstrapのストライプ背景を完全に無効化 --- */

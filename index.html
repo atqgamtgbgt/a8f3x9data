@@ -85,21 +85,25 @@ a:hover .vehicle-name-cn {
   padding: 8px;
   border-radius: 4px;
   transition: background-color 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
+  -webkit-tap-highlight-color: transparent !important;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
+  background-color: transparent !important;
+}
+
+.car-table td a:link,
+.car-table td a:visited,
+.car-table td a:focus {
+  background-color: transparent !important;
+  outline: none !important;
 }
 
 /* PC版のみホバー効果を適用 */
 @media (min-width: 577px) {
   .car-table td a:hover {
     text-decoration: none !important;
-    background-color: #f0f7ff;
-  }
-
-  .car-table td a:active {
-    background-color: #f0f7ff;
+    background-color: #f0f7ff !important;
   }
 }
 
@@ -346,10 +350,14 @@ img.car-thumb {
   }
 
   /* スマホではホバー効果を無効化 */
+  .car-table td a,
+  .car-table td a:link,
+  .car-table td a:visited,
   .car-table td a:hover,
   .car-table td a:active,
   .car-table td a:focus {
     background-color: transparent !important;
+    background: transparent !important;
   }
 
   /* --- Bootstrapのストライプ背景を完全に無効化 --- */

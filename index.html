@@ -1615,7 +1615,7 @@ function showConfigCsv(carId, title, source) {
 async function showStory(carId, title, source){
   const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
   const target=document.getElementById("storyContent");
-  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title} | ID:${carId}）`;
+  document.getElementById("storyModalLabel").textContent=`口コミ概要（${title}）`;
   target.textContent="読込中...";
   try{
     const res=await fetch(path,{cache:"no-store"});

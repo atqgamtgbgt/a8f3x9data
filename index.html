@@ -86,6 +86,9 @@ a:hover .vehicle-name-cn {
   border-radius: 4px;
   transition: background-color 0.2s ease;
   -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 
 .car-table td a:hover {
@@ -95,6 +98,16 @@ a:hover .vehicle-name-cn {
 
 .car-table td a:active {
   background-color: #f0f7ff;
+}
+
+/* 全体的なタップハイライト無効化 */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 th {
@@ -364,6 +377,8 @@ img.car-thumb {
     text-align: left !important;
     border: none !important;
     background: transparent !important;
+    -webkit-tap-highlight-color: transparent !important;
+    -webkit-touch-callout: none;
   }
 
   /* --- 順位セル（1列目）--- */
@@ -484,6 +499,7 @@ img.car-thumb {
     margin-right: 6px !important;
     margin-bottom: 4px !important;
     font-size: 0.85rem !important;
+    -webkit-tap-highlight-color: transparent !important;
   }
 
   /* --- テーブル自体のボーダーを完全に削除 --- */

@@ -14,26 +14,12 @@ body {
 }
 
 header {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 24px 12px;
+  background: transparent;
+  color: #333;
+  padding: 16px 12px;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
-}
-
-header h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-}
-
-header .logo-icon {
-  font-size: 2rem;
+  font-size: 1.2rem;
+  font-weight: 500;
 }
 
 /* タブスタイル */
@@ -51,148 +37,14 @@ header .logo-icon {
 }
 
 .nav-tabs .nav-link:hover {
-  border-bottom-color: #667eea;
-  color: #667eea;
+  border-bottom-color: #0d6efd;
+  color: #0d6efd;
 }
 
 .nav-tabs .nav-link.active {
-  color: #667eea;
-  border-bottom-color: #667eea;
+  color: #0d6efd;
+  border-bottom-color: #0d6efd;
   background-color: transparent;
-}
-
-/* メーカー一覧のスタイル */
-.makers-container {
-  padding: 1.5rem 0;
-}
-
-.maker-category {
-  margin-bottom: 2.5rem;
-}
-
-.maker-category-title {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.maker-group {
-  background: white;
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.maker-group-title {
-  color: #667eea;
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e9ecef;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.maker-group-title i {
-  font-size: 1.2rem;
-}
-
-.maker-brands {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-.maker-brand {
-  padding: 8px 12px;
-  background: #f8f9fa;
-  border-radius: 6px;
-  font-size: 0.95rem;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.maker-brand:hover {
-  background: #e9ecef;
-  transform: translateX(4px);
-}
-
-.maker-brand i {
-  color: #667eea;
-  font-size: 0.8rem;
-}
-
-.sub-brands {
-  margin-left: 1.5rem;
-  margin-top: 0.75rem;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 0.5rem;
-}
-
-.sub-brand {
-  padding: 6px 10px;
-  background: #fff;
-  border: 1px solid #e9ecef;
-  border-radius: 4px;
-  font-size: 0.85rem;
-  color: #6c757d;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.sub-brand::before {
-  content: "└";
-  color: #adb5bd;
-}
-
-.huawei-section {
-  background: linear-gradient(135deg, #fff5f5 0%, #ffe5e5 100%);
-  border: 2px solid #ff6b6b;
-}
-
-.huawei-section .maker-group-title {
-  color: #ff6b6b;
-}
-
-.tech-section {
-  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
-  border: 2px solid #3b82f6;
-}
-
-.tech-section .maker-group-title {
-  color: #3b82f6;
-}
-
-@media (max-width: 576px) {
-  .maker-brands {
-    grid-template-columns: 1fr;
-  }
-  
-  .sub-brands {
-    grid-template-columns: 1fr;
-    margin-left: 1rem;
-  }
-  
-  header h1 {
-    font-size: 1.2rem;
-  }
-  
-  header .logo-icon {
-    font-size: 1.5rem;
-  }
 }
 
 /* 車両名2段表示用 */
@@ -976,7 +828,7 @@ img.car-thumb {
   right: 20px;
   width: 50px;
   height: 50px;
-  background: #667eea;
+  background: #0d6efd;
   color: white;
   border: none;
   border-radius: 50%;
@@ -993,7 +845,7 @@ img.car-thumb {
 }
 
 #backToTop:hover {
-  background: #764ba2;
+  background: #0b5ed7;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
@@ -1018,12 +870,7 @@ img.car-thumb {
 </style>
 </head>
 <body>
-  <header>
-    <h1>
-      <span class="logo-icon">🚗</span>
-      中国自動車販売ランキング
-    </h1>
-  </header>
+  <header>中国自動車販売ランキング</header>
 
   <div class="container mt-3">
 
@@ -1058,9 +905,6 @@ img.car-thumb {
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">外資系ランキング</button>
       </li>
-      <li class="nav-item" role="presentation">
-        <button class="nav-link" id="makers-tab" data-bs-toggle="tab" data-bs-target="#makers-content" type="button" role="tab">メーカー一覧</button>
-      </li>
     </ul>
 
     <!-- タブコンテンツ -->
@@ -1080,276 +924,6 @@ img.car-thumb {
           <table class="table table-hover align-middle car-table" id="heziTable">
             <tbody></tbody>
           </table>
-        </div>
-      </div>
-
-      <!-- メーカー一覧タブ -->
-      <div class="tab-pane fade" id="makers-content" role="tabpanel">
-        <div class="makers-container">
-          
-          <!-- 国有企業系 -->
-          <div class="maker-category">
-            <div class="maker-category-title">
-              <i class="fa-solid fa-building"></i> 国有企業系
-            </div>
-            
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 第一汽車集団 (FAW)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 紅旗 (Hongqi)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 奔騰 (Bestune)</div>
-                <div class="maker-brand"><i class="fa-solid fa-truck"></i> 解放 (Jiefang・商用車)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 東風汽車集団 (Dongfeng)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 風神 (Fengshen)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 嵐図 (Voyah・高級EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-mountain"></i> 猛士 (Mengshi・オフロード)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 東風風行 (Dongfeng Fengxing)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 上海汽車集団 (SAIC)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 栄威 (Roewe)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 名爵 (MG)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 飛凡 (FEIFAN・EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 智己 (IM Motors・高級EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-van-shuttle"></i> 大通 (Maxus)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 長安汽車 (Changan)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 長安 (Changan)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 欧尚 (Oshan)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 深藍 (Deepal・NEV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 阿維塔 (Avatr・高級EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 啓源 (Qiyuan)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 北京汽車集団 (BAIC)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 北京 (Beijing)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 極狐 (Arcfox・EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> BAIC新能源</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 広州汽車集団 (GAC)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 伝祺 (Trumpchi)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 埃安 (Aion・EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 昊鉑 (Hyper・高級EV)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 民営企業系 -->
-          <div class="maker-category">
-            <div class="maker-category-title">
-              <i class="fa-solid fa-handshake"></i> 民営企業系
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 吉利汽車集団 (Geely)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 吉利 (Geely)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 帝豪 (Emgrand)</div>
-                <div class="maker-brand"><i class="fa-solid fa-star"></i> 領克 (Lynk & Co)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 極氪 (Zeekr・高級EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 幾何 (Geometry・EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 銀河 (Galaxy・NEV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 楓葉汽車 (Maple・小型EV)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 比亜迪 (BYD)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-crown"></i> 王朝シリーズ (秦/漢/唐/宋/元)</div>
-                <div class="maker-brand"><i class="fa-solid fa-water"></i> 海洋シリーズ (海豹/海鷗/海獅)</div>
-                <div class="maker-brand"><i class="fa-solid fa-gem"></i> 騰勢 (Denza・高級)</div>
-                <div class="maker-brand"><i class="fa-solid fa-crown"></i> 仰望 (YangWang・超高級)</div>
-                <div class="maker-brand"><i class="fa-solid fa-mountain"></i> 方程豹 (Fang Cheng Bao)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 長城汽車 (Great Wall)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car-side"></i> 哈弗 (Haval・SUV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-star"></i> WEY (高級)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 欧拉 (ORA・小型EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-tank-water"></i> 坦克 (Tank・オフロード)</div>
-                <div class="maker-brand"><i class="fa-solid fa-truck-pickup"></i> 長城砲 (Great Wall Cannon)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> 奇瑞汽車 (Chery)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 奇瑞 (Chery)</div>
-                <div class="maker-brand"><i class="fa-solid fa-star"></i> 星途 (Exeed・高級)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 捷途 (Jetour)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> iCAR (オフロードEV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 風雲 (Fengyun)</div>
-              </div>
-            </div>
-
-            <div class="maker-group">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-industry"></i> その他民営
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 江淮汽車 (JAC)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 思皓 (Sihao)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 合創汽車 (Hycan)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 新興EV専業メーカー -->
-          <div class="maker-category">
-            <div class="maker-category-title">
-              <i class="fa-solid fa-bolt"></i> 新興EV専業メーカー
-            </div>
-            
-            <div class="maker-group">
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-lightbulb"></i> 理想汽車 (Li Auto・増程式)</div>
-                <div class="maker-brand"><i class="fa-solid fa-gem"></i> 蔚来 (NIO・高級EV)</div>
-                <div class="maker-brand"><i class="fa-solid fa-robot"></i> 小鵬汽車 (XPeng・スマート)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 零跑汽車 (Leapmotor)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 哪吒汽車 (Neta)</div>
-                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 威馬汽車 (WM Motor)</div>
-                <div class="maker-brand"><i class="fa-solid fa-crown"></i> 高合汽車 (HiPhi・超高級)</div>
-                <div class="maker-brand"><i class="fa-solid fa-robot"></i> 集度 (JIDU・百度系)</div>
-                <div class="maker-brand"><i class="fa-solid fa-tv"></i> 創維汽車 (Skyworth)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- ファーウェイ系 -->
-          <div class="maker-category">
-            <div class="maker-category-title" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
-              <i class="fa-solid fa-microchip"></i> ファーウェイ(華為)系
-            </div>
-
-            <div class="maker-group huawei-section">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-handshake"></i> 賽力斯 (SERES) との共同開発
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-mobile-screen"></i> AITO問界シリーズ</div>
-              </div>
-              <div class="sub-brands">
-                <div class="sub-brand">問界M5</div>
-                <div class="sub-brand">問界M7</div>
-                <div class="sub-brand">問界M9</div>
-                <div class="sub-brand">享界 (MAEXTRO)</div>
-              </div>
-            </div>
-
-            <div class="maker-group huawei-section">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-handshake"></i> 奇瑞 (Chery) との共同開発
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-mobile-screen"></i> 智界 (LUXEED)</div>
-              </div>
-              <div class="sub-brands">
-                <div class="sub-brand">智界S7</div>
-                <div class="sub-brand">智界R7</div>
-              </div>
-            </div>
-
-            <div class="maker-group huawei-section">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-handshake"></i> その他華為技術搭載ブランド
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 極狐阿爾法 (Arcfox Alpha・北汽)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 傲界 (Oujie・江淮)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 阿維塔 (Avatr・長安)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- テック企業系 -->
-          <div class="maker-category">
-            <div class="maker-category-title" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-              <i class="fa-solid fa-laptop-code"></i> テック企業系
-            </div>
-
-            <div class="maker-group tech-section">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-mobile"></i> 小米汽車 (Xiaomi)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> SU7</div>
-                <div class="maker-brand"><i class="fa-solid fa-car-side"></i> YU7</div>
-              </div>
-            </div>
-
-            <div class="maker-group tech-section">
-              <div class="maker-group-title">
-                <i class="fa-solid fa-search"></i> 百度 (Baidu)
-              </div>
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-robot"></i> 集度 (JIDU)</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 商用車・特殊車両系 -->
-          <div class="maker-category">
-            <div class="maker-category-title">
-              <i class="fa-solid fa-truck"></i> 商用車・特殊車両系
-            </div>
-            
-            <div class="maker-group">
-              <div class="maker-brands">
-                <div class="maker-brand"><i class="fa-solid fa-van-shuttle"></i> 上汽大通 (SAIC Maxus)</div>
-                <div class="maker-brand"><i class="fa-solid fa-truck"></i> 福田汽車 (Foton)</div>
-                <div class="maker-brand"><i class="fa-solid fa-truck"></i> 江鈴汽車 (JMC)</div>
-                <div class="maker-brand"><i class="fa-solid fa-car"></i> 五菱汽車 (Wuling)</div>
-              </div>
-              <div class="sub-brands">
-                <div class="sub-brand">宏光MINIEV (超小型EV)</div>
-                <div class="sub-brand">星光 (Starlight)</div>
-              </div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
@@ -1417,7 +991,7 @@ let seriesUrlsMaps = {
   autohome: {},
   hezi: {}
 };
-let currentSource = 'autohome';
+let currentSource = 'autohome'; // 現在のデータソース
 
 async function fetchRate() {
   try {
@@ -1460,19 +1034,24 @@ function convertToJPY(priceStr) {
 
 function imgTag(rankStr, model, imageUrl, source, originalName) {
   const imgBase = DATA_SOURCES[source].imgBase;
+  // Heziの場合は元の中国語名を使用
   const fileName = source === 'hezi' ? originalName : model;
   
+  // Heziの場合は常にファイル名ベースで生成（image_urlを無視）
   if (source === 'hezi') {
     const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
     return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   }
   
+  // Autohomeの場合：image_urlがある場合の処理
   if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
     const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
     return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   } else if (imageUrl) {
+    // その他のURLがある場合
     return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   } else {
+    // デフォルト: ファイル名から生成
     const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
     return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   }
@@ -1490,9 +1069,9 @@ async function loadData(source) {
     
     const tableId = source === 'autohome' ? 'autohomeTable' : 'heziTable';
     renderTable(parsed.data, tableId, source);
-    console.log(`✅ ${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込み成功 (${parsed.data.length}件)`);
+    ok(`✅ ${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込み成功 (${parsed.data.length}件)`);
   } catch (err) {
-    console.error(`${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込みエラー:`, err);
+    fail(`${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込みエラー: ` + err.message);
   }
 }
 
@@ -1512,6 +1091,7 @@ function renderTable(data, tableId, source) {
     const globalName = r.global_name || r.name || "";
     const originalName = r.name || "";
     
+    // global_nameとnameが異なる場合、2段表示にする
     const displayName = (globalName && originalName && globalName !== originalName)
       ? `<div class="vehicle-name-wrapper">
            <div class="vehicle-name-main">${globalName}</div>
@@ -1522,7 +1102,7 @@ function renderTable(data, tableId, source) {
     const price = (r.price || "") + "元";
     const priceJPY = convertToJPY(r.price || "");
     const maker = r.manufacturer_ja || r.manufacturer || "";
-    const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : "";
+    const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : ""; // 台数に3桁カンマ区切りと「台」を追加
     const specBtn = carId
       ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','${source}')">仕様表</button>`
       : "";
@@ -1541,6 +1121,17 @@ function renderTable(data, tableId, source) {
       <td>${specBtn}${storyBtn}</td>`;
     tbody.appendChild(tr);
   });
+}
+
+function ok(msg){
+  const s=document.getElementById("status");
+  s.className="alert alert-success py-2";
+  s.textContent=msg;
+}
+function fail(msg){
+  const s=document.getElementById("status");
+  s.className="alert alert-danger py-2";
+  s.textContent=msg;
 }
 
 function openFullSpec() {
@@ -1650,6 +1241,7 @@ function openFullSpec() {
             opacity: 1 !important;
           }
           
+          /* 凡例テキスト（フルスクリーン用） */
           .legend-text {
             font-size: 0.85rem !important;
             color: #6c757d !important;
@@ -1682,6 +1274,50 @@ function openFullSpec() {
             order: 10 !important;
           }
           
+          .spec-table thead th {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: 0 !important;
+            z-index: 30 !important;
+            background: #fff !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table thead th.sticky-col {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 31 !important;
+            background: #fff !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table tbody th.item-col {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            z-index: 12 !important;
+            background: #fff !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table tbody tr.sec-row .section-col {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            left: 0 !important;
+            top: var(--secOffset, 42px) !important;
+            background: #f8f9fa !important;
+            will-change: transform !important;
+          }
+          
+          .spec-table tbody tr.sec-row .section-fill {
+            position: -webkit-sticky !important;
+            position: sticky !important;
+            top: var(--secOffset, 42px) !important;
+            background: #f8f9fa !important;
+            will-change: transform !important;
+          }
+          
           @media (max-width: 991px) {
             .fullscreen-modal-header h5 {
               display: none !important;
@@ -1693,6 +1329,19 @@ function openFullSpec() {
             
             .spec-table tbody tr.sec-row .section-fill {
               left: 99px !important;
+            }
+            
+            .spec-table thead th.sticky-col,
+            .spec-table tbody th.item-col {
+              min-width: 100px !important;
+              max-width: 100px !important;
+              width: 100px !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-col {
+              min-width: 100px !important;
+              max-width: 100px !important;
+              width: 100px !important;
             }
           }
           
@@ -1728,6 +1377,14 @@ function openFullSpec() {
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"><\/script>
         <script>
+          function forceSticky() {
+            const allSticky = document.querySelectorAll('.spec-table thead th, .spec-table tbody th.item-col, .spec-table tbody tr.sec-row .section-col, .spec-table tbody tr.sec-row .section-fill');
+            allSticky.forEach(el => {
+              el.style.setProperty('position', 'sticky', 'important');
+              el.style.setProperty('-webkit-position', 'sticky', 'important');
+            });
+          }
+          
           function initFullscreen() {
             const scrollArea = document.querySelector("#specScrollArea .table-responsive") || document.getElementById("specScrollArea");
             if (!scrollArea) {
@@ -1737,16 +1394,56 @@ function openFullSpec() {
             
             const theadEl = scrollArea.querySelector(".spec-table thead");
             const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+            
             scrollArea.style.setProperty("--secOffset", theadH + "px");
+            
+            document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+              const baseZ = 100;
+              const colEl = row.querySelector('.section-col');
+              const fillEl = row.querySelector('.section-fill');
+              if (colEl) {
+                colEl.style.setProperty('position', 'sticky', 'important');
+                colEl.style.setProperty('z-index', (baseZ + index * 2 + 1).toString(), 'important');
+              }
+              if (fillEl) {
+                fillEl.style.setProperty('position', 'sticky', 'important');
+                fillEl.style.setProperty('z-index', (baseZ + index * 2).toString(), 'important');
+              }
+            });
+            
+            forceSticky();
             
             const modalHeader = document.getElementById('modalHeader');
             const closeBtn = modalHeader.querySelector('.close-fullscreen');
+            const existingLegend = modalHeader.querySelector('.legend-text');
             
             if (window.innerWidth <= 991) {
+              // スマホ表示の場合
+              // 凡例があれば削除
+              if (existingLegend) {
+                existingLegend.remove();
+              }
+              
               const toggleDiv = document.createElement('div');
               toggleDiv.className = 'section-toggle';
               toggleDiv.innerHTML = '<select id="sectionSelect" class="form-select">${selectOptions}</select>';
               modalHeader.insertBefore(toggleDiv, closeBtn);
+              
+              document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
+                el.style.setProperty('min-width', '100px', 'important');
+                el.style.setProperty('max-width', '100px', 'important');
+                el.style.setProperty('width', '100px', 'important');
+              });
+              
+              document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
+                el.style.setProperty('min-width', '100px', 'important');
+                el.style.setProperty('max-width', '100px', 'important');
+                el.style.setProperty('width', '100px', 'important');
+              });
+              
+              document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
+                el.style.setProperty('left', '99px', 'important');
+              });
               
               const select = document.getElementById("sectionSelect");
               if (select) {
@@ -1759,13 +1456,32 @@ function openFullSpec() {
                   }
                 });
               }
+            } else {
+              // PC表示の場合
+              // 凡例がまだHTMLに直接記述されていない場合、何もしない（既にHTMLに記述済み）
             }
+            
+            document.querySelectorAll(".spec-sidebar a").forEach(a => {
+              a.addEventListener("click", ev => {
+                ev.preventDefault();
+                const id = a.getAttribute("href");
+                const el = document.querySelector(id);
+                if (el && scrollArea) {
+                  const offset = el.offsetTop - theadH;
+                  scrollArea.scrollTo({top: offset, behavior: "smooth"});
+                }
+              });
+            });
           }
           
           if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => setTimeout(initFullscreen, 200));
+            document.addEventListener('DOMContentLoaded', () => {
+              setTimeout(initFullscreen, 200);
+              setTimeout(forceSticky, 500);
+            });
           } else {
             setTimeout(initFullscreen, 200);
+            setTimeout(forceSticky, 500);
           }
         <\/script>
       </body>
@@ -1783,7 +1499,12 @@ function openFullSpec() {
     
     setTimeout(() => URL.revokeObjectURL(url), 10000);
   } catch (e) {
-    alert('ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。');
+    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(fullHTML);
+    const w = window.open(dataUrl, '_blank');
+    
+    if (!w || w.closed || typeof w.closed == 'undefined') {
+      alert('ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。');
+    }
   }
 }
 
@@ -1796,13 +1517,14 @@ function showConfigCsv(carId, title, source) {
   
   let modalTitle = `車両仕様（${title}`;
   if (configUrl) {
-    modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #667eea; text-decoration: none;">引用元ページ</a>）`;
+    modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
   } else {
     modalTitle += ` | ID:${carId}）`;
   }
   
   document.getElementById("csvModalLabel").innerHTML = modalTitle;
   
+  // 既存の凡例を削除
   const existingLegend = document.querySelector('#csvModal .modal-header .legend-text');
   if (existingLegend) existingLegend.remove();
   
@@ -1911,6 +1633,7 @@ function showConfigCsv(carId, title, source) {
         toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
         modalHeader.insertBefore(toggleDiv, closeBtn);
       } else {
+        // PC用凡例を追加（全画面ボタンの前）
         const legendSpan = document.createElement('span');
         legendSpan.className = 'legend-text';
         legendSpan.textContent = '●：標準装備　〇：オプション装備';
@@ -1924,6 +1647,32 @@ function showConfigCsv(carId, title, source) {
       fullBtn.onclick = () => openFullSpec();
       modalHeader.insertBefore(fullBtn, closeBtn);
 
+      if (window.innerWidth <= 991) {
+        document.querySelectorAll('.spec-table tbody th.item-col:not(.section-col)').forEach(el => {
+          el.style.minWidth = '100px';
+          el.style.maxWidth = '100px';
+          el.style.width = '100px';
+        });
+        
+        document.querySelectorAll('.spec-table tbody tr.sec-row th.section-col').forEach(el => {
+          el.style.minWidth = '200px';
+          el.style.maxWidth = '200px';
+          el.style.width = '200px';
+        });
+        
+        document.querySelectorAll('.spec-table tbody tr.sec-row .section-fill').forEach(el => {
+          el.style.left = '199px';
+        });
+      }
+
+      document.querySelectorAll('.spec-table tbody tr.sec-row').forEach((row, index) => {
+        const baseZ = 100;
+        const colEl = row.querySelector('.section-col');
+        const fillEl = row.querySelector('.section-fill');
+        if (colEl) colEl.style.zIndex = baseZ + index * 2 + 1;
+        if (fillEl) fillEl.style.zIndex = baseZ + index * 2;
+      });
+
       const modal = new bootstrap.Modal(document.getElementById("csvModal"));
       modal.show();
 
@@ -1935,14 +1684,74 @@ function showConfigCsv(carId, title, source) {
         const theadEl = scrollArea?.querySelector(".spec-table thead");
         const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
         if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+        const headerHeight = theadH;
+
+        let isDown = false;
+        let startX;
+        let startY;
+        let scrollLeft;
+        let scrollTop;
+
+        scrollArea.addEventListener('mousedown', (e) => {
+          if (e.target.tagName === 'A' || e.target.closest('a') || e.target.tagName === 'BUTTON') return;
+          
+          isDown = true;
+          scrollArea.classList.add('active-drag');
+          startX = e.pageX - scrollArea.offsetLeft;
+          startY = e.pageY - scrollArea.offsetTop;
+          scrollLeft = scrollArea.scrollLeft;
+          scrollTop = scrollArea.scrollTop;
+          
+          scrollArea.style.scrollBehavior = 'auto';
+        });
+
+        scrollArea.addEventListener('mouseleave', () => {
+          isDown = false;
+          scrollArea.classList.remove('active-drag');
+        });
+
+        scrollArea.addEventListener('mouseup', () => {
+          isDown = false;
+          scrollArea.classList.remove('active-drag');
+        });
+
+        scrollArea.addEventListener('mousemove', (e) => {
+          if (!isDown) return;
+          e.preventDefault();
+          const x = e.pageX - scrollArea.offsetLeft;
+          const y = e.pageY - scrollArea.offsetTop;
+          const walkX = (x - startX);
+          const walkY = (y - startY);
+          
+          requestAnimationFrame(() => {
+            scrollArea.scrollLeft = scrollLeft - walkX;
+            scrollArea.scrollTop = scrollTop - walkY;
+          });
+        });
+
+        scrollArea.style.cursor = 'grab';
+
+        document.querySelectorAll(".spec-sidebar a").forEach(a=>{
+          a.addEventListener("click",ev=>{
+            ev.preventDefault();
+            scrollArea.style.scrollBehavior = 'smooth';
+            const id=a.getAttribute("href");
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - headerHeight;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        });
 
         const select=document.getElementById("sectionSelect");
         if(select){
           select.addEventListener("change",e=>{
+            scrollArea.style.scrollBehavior = 'smooth';
             const id=e.target.value;
             const el=document.querySelector(id);
             if(el && scrollArea){
-              const offset = el.offsetTop - theadH;
+              const offset = el.offsetTop - headerHeight;
               scrollArea.scrollTo({top:offset,behavior:"smooth"});
             }
           });
@@ -1958,10 +1767,12 @@ async function showStory(carId, title, source){
   const target=document.getElementById("storyContent");
   const koubeiUrl = `https://k.autohome.com.cn/${carId}#pvareaid=3454440`;
   
+  // タイトルに引用元リンクを追加
   let modalTitle = `口コミ概要（${title}`;
-  modalTitle += ` | <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #667eea; text-decoration: none;">引用元ページ</a>）`;
+  modalTitle += ` | <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
   document.getElementById("storyModalLabel").innerHTML = modalTitle;
   
+  // モーダルヘッダーの処理（スマホ用引用元ボタン）
   const modalHeader = document.querySelector('#storyModal .modal-header');
   const closeBtn = modalHeader.querySelector('.btn-close');
   const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
@@ -1994,6 +1805,7 @@ async function showStory(carId, title, source){
   new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
 
+// 初期化処理
 async function init() {
   await fetchRate();
   await Promise.all([
@@ -2001,12 +1813,14 @@ async function init() {
     fetchSeriesUrls('hezi')
   ]);
   
+  // 両方のデータを読み込み
   await Promise.all([
     loadData('autohome'),
     loadData('hezi')
   ]);
 }
 
+// タブ切り替えイベント
 document.getElementById('autohome-tab').addEventListener('shown.bs.tab', function (e) {
   currentSource = 'autohome';
 });
@@ -2017,8 +1831,10 @@ document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e
 
 init();
 
+// トップへ戻るボタンの機能
 const backToTopBtn = document.getElementById('backToTop');
 
+// スクロールイベントでボタンの表示/非表示を切り替え
 window.addEventListener('scroll', () => {
   if (window.pageYOffset > 300) {
     backToTopBtn.classList.add('show');
@@ -2027,6 +1843,7 @@ window.addEventListener('scroll', () => {
   }
 });
 
+// ボタンクリックでトップへスムーススクロール
 backToTopBtn.addEventListener('click', () => {
   window.scrollTo({
     top: 0,

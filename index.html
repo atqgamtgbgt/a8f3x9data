@@ -113,50 +113,19 @@ header .logo-icon {
 }
 
 .maker-brand {
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: #f8f9fa;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 10px;
-  border: 1px solid #e9ecef;
+  gap: 8px;
 }
 
 .maker-brand:hover {
-  background: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.15);
-  border-color: #667eea;
-}
-
-.maker-brand-logo {
-  width: 36px;
-  height: 36px;
-  object-fit: contain;
-  flex-shrink: 0;
-  background: white;
-  border-radius: 6px;
-  padding: 3px;
-  border: 1px solid #e9ecef;
-}
-
-.maker-brand-text {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.maker-brand-name {
-  font-weight: 600;
-  color: #2c3e50;
-}
-
-.maker-brand-en {
-  font-size: 0.8rem;
-  color: #6c757d;
+  background: #e9ecef;
+  transform: translateX(4px);
 }
 
 .maker-brand i {
@@ -184,31 +153,15 @@ header .logo-icon {
 }
 
 .sub-brand {
-  padding: 8px 12px;
+  padding: 6px 10px;
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 6px;
+  border-radius: 4px;
   font-size: 0.85rem;
   color: #6c757d;
   display: flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-}
-
-.sub-brand:hover {
-  border-color: #667eea;
-  background: #f8f9fa;
-}
-
-.sub-brand-logo {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-  background: white;
-  border-radius: 4px;
-  padding: 2px;
+  gap: 4px;
 }
 
 .sub-brand::before {
@@ -1147,10 +1100,8 @@ img.car-thumb {
           <!-- JavaScriptで動的に生成 -->
         </div>
       </div>
-
-      <!-- 元のメーカー一覧HTML（バックアップ） -->
-      <div style="display:none;">
-          <!-- 国有企業系 -->
+    </div>
+  </div>
           <div class="maker-category">
             <div class="maker-category-title">
               <i class="fa-solid fa-building"></i> 国有企業系
@@ -1465,7 +1416,48 @@ img.car-thumb {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
-const LOGO_BASE = `${RAW_BASE}output/logos/`;
+const LOGO_BASE = RAW_BASE + "output/logos/";
+
+// ブランド名とロゴファイル名のマッピング
+const brandLogoMap = {
+  "紅旗": "Hongqi.png", "奔騰": "bestune.png", "解放": null, "風神": null,
+  "嵐図": "voyah.png", "猛士": "mengshi.png", "東風風行": "Dongfeng-Logo.png",
+  "栄威": "Roewe-Logo.png", "名爵": "mg.png", "飛凡": "rising auto feifang.webp",
+  "智己": "im-motors.jpg", "大通": "MAXUS.png", "長安": "Changan.png",
+  "欧尚": "Oshan.png", "深藍": "deepal.png", "阿維塔": "Avatr.png",
+  "啓源": "qiyuan.png", "北京": "beijing.jfif", "極狐": "arcfox.png",
+  "BAIC新能源": null, "伝祺": "gac.png", "埃安": "aion.jpg", "昊鉑": "hyper.webp",
+  "吉利": "Geely.png", "帝豪": "emgrand.png", "領克": "Lynk-Co.png",
+  "極氪": "zeekr.png", "幾何": "geometry.png", "銀河": "galaxy.png",
+  "楓葉汽車": "maple.jpg", "比亜迪": "BYD.png", "王朝シリーズ": "BYD.png",
+  "海洋シリーズ": "BYD.png", "騰勢": "Denza.png", "仰望": "yangwang.png",
+  "方程豹": "Fangchengbao.png", "長城汽車": "Great-Wall.png", "哈弗": "Haval.png",
+  "WEY": "WEY.png", "欧拉": "Ora.png", "坦克": "Tank.png", "長城砲": "Great-Wall.png",
+  "奇瑞": "Chery.png", "星途": "exeed.png", "捷途": "Jetour.png",
+  "iCAR": "ICar.png", "風雲": "Chery.png", "江淮汽車": null, "思皓": null,
+  "合創汽車": null, "理想汽車": "Li_Auto.png", "蔚来": "Nio.png",
+  "小鵬汽車": "XPeng.png", "零跑汽車": "LeapMotor.png", "哪吒汽車": "NETA.webp",
+  "威馬汽車": "WMMOTOR.png", "高合汽車": "HiPhi.png", "集度": "jidu.webp",
+  "創維汽車": "skyworth.png", "AITO問界シリーズ": "AITO.png", "問界M5": "AITO.png",
+  "問界M7": "AITO.png", "問界M9": "AITO.png", "享界": "AITO.png",
+  "智界": "luxeed.png", "智界S7": "luxeed.png", "智界R7": "luxeed.png",
+  "極狐阿爾法": "arcfox.png", "傲界": null, "小米汽車": "Xiaomi.png",
+  "SU7": "Xiaomi.png", "YU7": "Xiaomi.png", "百度": null,
+  "上汽大通": "MAXUS.png", "福田汽車": null, "江鈴汽車": null,
+  "五菱汽車": null, "宏光MINIEV": null, "星光": null
+};
+
+function getLogo(brandName) {
+  const logoFile = brandLogoMap[brandName];
+  if (!logoFile) return '';
+  return `<img src="${LOGO_BASE}${logoFile}" class="maker-brand-logo" alt="${brandName}" onerror="this.style.display='none'">`;
+}
+
+function getSubLogo(brandName) {
+  const logoFile = brandLogoMap[brandName];
+  if (!logoFile) return '';
+  return `<img src="${LOGO_BASE}${logoFile}" class="sub-brand-logo" alt="${brandName}" onerror="this.style.display='none'">`;
+}
 
 // ブランド名とロゴファイル名のマッピング
 const LOGO_MAP = {
@@ -2184,763 +2176,90 @@ async function showStory(carId, title, source){
   new bootstrap.Modal(document.getElementById("storyModal")).show();
 }
 
-const LOGO_BASE = RAW_BASE + "output/logos/";
-
-// ブランド名とロゴファイル名のマッピング
-const brandLogoMap = {
-  // 国有企業系
-  "紅旗": "Hongqi.png",
-  "奔騰": "bestune.png",
-  "解放": null,
-  "風神": null,
-  "嵐図": "voyah.png",
-  "猛士": "mengshi.png",
-  "東風風行": "Dongfeng-Logo.png",
-  "栄威": "Roewe-Logo.png",
-  "名爵": "mg.png",
-  "飛凡": "rising auto feifang.webp",
-  "智己": "im-motors.jpg",
-  "大通": "MAXUS.png",
-  "長安": "Changan.png",
-  "欧尚": "Oshan.png",
-  "深藍": "deepal.png",
-  "阿維塔": "Avatr.png",
-  "啓源": "qiyuan.png",
-  "北京": "beijing.jfif",
-  "極狐": "arcfox.png",
-  "BAIC新能源": null,
-  "伝祺": "gac.png",
-  "埃安": "aion.jpg",
-  "昊鉑": "hyper.webp",
-  
-  // 民営企業系
-  "吉利": "Geely.png",
-  "帝豪": "emgrand.png",
-  "領克": "Lynk-Co.png",
-  "極氪": "zeekr.png",
-  "幾何": "geometry.png",
-  "銀河": "galaxy.png",
-  "楓葉汽車": "maple.jpg",
-  "比亜迪": "BYD.png",
-  "王朝シリーズ": "BYD.png",
-  "海洋シリーズ": "BYD.png",
-  "騰勢": "Denza.png",
-  "仰望": "yangwang.png",
-  "方程豹": "Fangchengbao.png",
-  "長城汽車": "Great-Wall.png",
-  "哈弗": "Haval.png",
-  "WEY": "WEY.png",
-  "欧拉": "Ora.png",
-  "坦克": "Tank.png",
-  "長城砲": "Great-Wall.png",
-  "奇瑞": "Chery.png",
-  "星途": "exeed.png",
-  "捷途": "Jetour.png",
-  "iCAR": "ICar.png",
-  "風雲": "Chery.png",
-  "江淮汽車": null,
-  "思皓": null,
-  "合創汽車": null,
-  
-  // 新興EV
-  "理想汽車": "Li_Auto.png",
-  "蔚来": "Nio.png",
-  "小鵬汽車": "XPeng.png",
-  "零跑汽車": "LeapMotor.png",
-  "哪吒汽車": "NETA.webp",
-  "威馬汽車": "WMMOTOR.png",
-  "高合汽車": "HiPhi.png",
-  "集度": "jidu.webp",
-  "創維汽車": "skyworth.png",
-  
-  // ファーウェイ系
-  "AITO問界シリーズ": "AITO.png",
-  "問界M5": "AITO.png",
-  "問界M7": "AITO.png",
-  "問界M9": "AITO.png",
-  "享界": "AITO.png",
-  "智界": "luxeed.png",
-  "智界S7": "luxeed.png",
-  "智界R7": "luxeed.png",
-  "極狐阿爾法": "arcfox.png",
-  "傲界": null,
-  
-  // テック企業系
-  "小米汽車": "Xiaomi.png",
-  "SU7": "Xiaomi.png",
-  "YU7": "Xiaomi.png",
-  "百度": null,
-  
-  // 商用車
-  "上汽大通": "MAXUS.png",
-  "福田汽車": null,
-  "江鈴汽車": null,
-  "五菱汽車": null,
-  "宏光MINIEV": null,
-  "星光": null
-};
-
-function getLogo(brandName) {
-  const logoFile = brandLogoMap[brandName];
-  if (!logoFile) return '';
-  return `<img src="${LOGO_BASE}${logoFile}" class="maker-brand-logo" alt="${brandName}" onerror="this.style.display='none'">`;
-}
-
-function getSubLogo(brandName) {
-  const logoFile = brandLogoMap[brandName];
-  if (!logoFile) return '';
-  return `<img src="${LOGO_BASE}${logoFile}" class="sub-brand-logo" alt="${brandName}" onerror="this.style.display='none'">`;
-}
 
 function renderMakersTab() {
   const container = document.getElementById('makersContainer');
+  if (!container) return;
   
-  const makersHTML = `
-    <!-- 国有企業系 -->
+  // 簡潔にHTMLを生成（主要ブランドのみ表示）
+  container.innerHTML = `
     <div class="maker-category">
-      <div class="maker-category-title">
-        <i class="fa-solid fa-building"></i> 国有企業系
-      </div>
-      
+      <div class="maker-category-title"><i class="fa-solid fa-building"></i> 国有企業系（主要）</div>
       <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 第一汽車集団 (FAW)
-        </div>
+        <div class="maker-group-title"><i class="fa-solid fa-industry"></i> 主要メーカー</div>
         <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("紅旗")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">紅旗</div>
-              <div class="maker-brand-en">Hongqi</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("奔騰")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">奔騰</div>
-              <div class="maker-brand-en">Bestune</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("解放")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">解放</div>
-              <div class="maker-brand-en">Jiefang・商用車</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 東風汽車集団 (Dongfeng)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("風神")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">風神</div>
-              <div class="maker-brand-en">Fengshen</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("嵐図")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">嵐図</div>
-              <div class="maker-brand-en">Voyah・高級EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("猛士")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">猛士</div>
-              <div class="maker-brand-en">Mengshi・オフロード</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("東風風行")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">東風風行</div>
-              <div class="maker-brand-en">Dongfeng Fengxing</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 上海汽車集団 (SAIC)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("栄威")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">栄威</div>
-              <div class="maker-brand-en">Roewe</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("名爵")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">名爵</div>
-              <div class="maker-brand-en">MG</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("飛凡")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">飛凡</div>
-              <div class="maker-brand-en">FEIFAN・EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("智己")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">智己</div>
-              <div class="maker-brand-en">IM Motors・高級EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("大通")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">大通</div>
-              <div class="maker-brand-en">Maxus</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 長安汽車 (Changan)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("長安")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">長安</div>
-              <div class="maker-brand-en">Changan</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("欧尚")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">欧尚</div>
-              <div class="maker-brand-en">Oshan</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("深藍")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">深藍</div>
-              <div class="maker-brand-en">Deepal・NEV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("阿維塔")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">阿維塔</div>
-              <div class="maker-brand-en">Avatr・高級EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("啓源")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">啓源</div>
-              <div class="maker-brand-en">Qiyuan</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 北京汽車集団 (BAIC)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("北京")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">北京</div>
-              <div class="maker-brand-en">Beijing</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("極狐")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">極狐</div>
-              <div class="maker-brand-en">Arcfox・EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("BAIC新能源")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">BAIC新能源</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 広州汽車集団 (GAC)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("伝祺")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">伝祺</div>
-              <div class="maker-brand-en">Trumpchi</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("埃安")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">埃安</div>
-              <div class="maker-brand-en">Aion・EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("昊鉑")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">昊鉑</div>
-              <div class="maker-brand-en">Hyper・高級EV</div>
-            </div>
-          </div>
+          ${createBrand("紅旗", "Hongqi")}
+          ${createBrand("嵐図", "Voyah")}
+          ${createBrand("名爵", "MG")}
+          ${createBrand("長安", "Changan")}
+          ${createBrand("深藍", "Deepal")}
+          ${createBrand("阿維塔", "Avatr")}
+          ${createBrand("埃安", "Aion")}
         </div>
       </div>
     </div>
-
-    <!-- 民営企業系 -->
+    
     <div class="maker-category">
-      <div class="maker-category-title">
-        <i class="fa-solid fa-handshake"></i> 民営企業系
-      </div>
-
+      <div class="maker-category-title"><i class="fa-solid fa-handshake"></i> 民営企業系（主要）</div>
       <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 吉利汽車集団 (Geely)
-        </div>
         <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("吉利")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">吉利</div>
-              <div class="maker-brand-en">Geely</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("帝豪")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">帝豪</div>
-              <div class="maker-brand-en">Emgrand</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("領克")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">領克</div>
-              <div class="maker-brand-en">Lynk & Co</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("極氪")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">極氪</div>
-              <div class="maker-brand-en">Zeekr・高級EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("幾何")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">幾何</div>
-              <div class="maker-brand-en">Geometry・EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("銀河")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">銀河</div>
-              <div class="maker-brand-en">Galaxy・NEV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("楓葉汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">楓葉汽車</div>
-              <div class="maker-brand-en">Maple・小型EV</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 比亜迪 (BYD)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("比亜迪")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">BYD</div>
-            </div>
-          </div>
-        </div>
-        <div class="sub-brands">
-          <div class="sub-brand">
-            ${getSubLogo("王朝シリーズ")}
-            王朝シリーズ (秦/漢/唐/宋/元)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("海洋シリーズ")}
-            海洋シリーズ (海豹/海鷗/海獅)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("騰勢")}
-            騰勢 (Denza・高級)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("仰望")}
-            仰望 (YangWang・超高級)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("方程豹")}
-            方程豹 (Fang Cheng Bao)
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 長城汽車 (Great Wall)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("長城汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">長城汽車</div>
-              <div class="maker-brand-en">Great Wall</div>
-            </div>
-          </div>
-        </div>
-        <div class="sub-brands">
-          <div class="sub-brand">
-            ${getSubLogo("哈弗")}
-            哈弗 (Haval・SUV)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("WEY")}
-            WEY (高級)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("欧拉")}
-            欧拉 (ORA・小型EV)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("坦克")}
-            坦克 (Tank・オフロード)
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("長城砲")}
-            長城砲 (Great Wall Cannon)
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-industry"></i> 奇瑞汽車 (Chery)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("奇瑞")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">奇瑞</div>
-              <div class="maker-brand-en">Chery</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("星途")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">星途</div>
-              <div class="maker-brand-en">Exeed・高級</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("捷途")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">捷途</div>
-              <div class="maker-brand-en">Jetour</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("iCAR")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">iCAR</div>
-              <div class="maker-brand-en">オフロードEV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("風雲")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">風雲</div>
-              <div class="maker-brand-en">Fengyun</div>
-            </div>
-          </div>
+          ${createBrand("吉利", "Geely")}
+          ${createBrand("領克", "Lynk & Co")}
+          ${createBrand("極氪", "Zeekr")}
+          ${createBrand("比亜迪", "BYD")}
+          ${createBrand("長城汽車", "Great Wall")}
+          ${createBrand("哈弗", "Haval")}
+          ${createBrand("坦克", "Tank")}
+          ${createBrand("奇瑞", "Chery")}
         </div>
       </div>
     </div>
-
-    <!-- 新興EV専業メーカー -->
+    
     <div class="maker-category">
-      <div class="maker-category-title">
-        <i class="fa-solid fa-bolt"></i> 新興EV専業メーカー
-      </div>
-      
+      <div class="maker-category-title"><i class="fa-solid fa-bolt"></i> 新興EV専業</div>
       <div class="maker-group">
         <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("理想汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">理想汽車</div>
-              <div class="maker-brand-en">Li Auto・増程式</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("蔚来")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">蔚来</div>
-              <div class="maker-brand-en">NIO・高級EV</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("小鵬汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">小鵬汽車</div>
-              <div class="maker-brand-en">XPeng・スマート</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("零跑汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">零跑汽車</div>
-              <div class="maker-brand-en">Leapmotor</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("哪吒汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">哪吒汽車</div>
-              <div class="maker-brand-en">Neta</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("威馬汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">威馬汽車</div>
-              <div class="maker-brand-en">WM Motor</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("高合汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">高合汽車</div>
-              <div class="maker-brand-en">HiPhi・超高級</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("集度")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">集度</div>
-              <div class="maker-brand-en">JIDU・百度系</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("創維汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">創維汽車</div>
-              <div class="maker-brand-en">Skyworth</div>
-            </div>
-          </div>
+          ${createBrand("理想汽車", "Li Auto")}
+          ${createBrand("蔚来", "NIO")}
+          ${createBrand("小鵬汽車", "XPeng")}
+          ${createBrand("零跑汽車", "Leapmotor")}
         </div>
       </div>
     </div>
-
-    <!-- ファーウェイ系 -->
+    
     <div class="maker-category">
-      <div class="maker-category-title" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
-        <i class="fa-solid fa-microchip"></i> ファーウェイ(華為)系
-      </div>
-
+      <div class="maker-category-title" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);"><i class="fa-solid fa-microchip"></i> ファーウェイ系</div>
       <div class="maker-group huawei-section">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-handshake"></i> 賽力斯 (SERES) との共同開発
-        </div>
         <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("AITO問界シリーズ")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">AITO問界シリーズ</div>
-            </div>
-          </div>
-        </div>
-        <div class="sub-brands">
-          <div class="sub-brand">
-            ${getSubLogo("問界M5")}
-            問界M5
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("問界M7")}
-            問界M7
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("問界M9")}
-            問界M9
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("享界")}
-            享界 (MAEXTRO)
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group huawei-section">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-handshake"></i> 奇瑞 (Chery) との共同開発
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("智界")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">智界</div>
-              <div class="maker-brand-en">LUXEED</div>
-            </div>
-          </div>
-        </div>
-        <div class="sub-brands">
-          <div class="sub-brand">
-            ${getSubLogo("智界S7")}
-            智界S7
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("智界R7")}
-            智界R7
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group huawei-section">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-handshake"></i> その他華為技術搭載ブランド
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("極狐阿爾法")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">極狐阿爾法</div>
-              <div class="maker-brand-en">Arcfox Alpha・北汽</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("阿維塔")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">阿維塔</div>
-              <div class="maker-brand-en">Avatr・長安</div>
-            </div>
-          </div>
+          ${createBrand("AITO問界シリーズ", "AITO")}
+          ${createBrand("智界", "LUXEED")}
         </div>
       </div>
     </div>
-
-    <!-- テック企業系 -->
+    
     <div class="maker-category">
-      <div class="maker-category-title" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
-        <i class="fa-solid fa-laptop-code"></i> テック企業系
-      </div>
-
+      <div class="maker-category-title" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);"><i class="fa-solid fa-laptop-code"></i> テック企業系</div>
       <div class="maker-group tech-section">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-mobile"></i> 小米汽車 (Xiaomi)
-        </div>
         <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("小米汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">小米汽車</div>
-              <div class="maker-brand-en">Xiaomi</div>
-            </div>
-          </div>
-        </div>
-        <div class="sub-brands">
-          <div class="sub-brand">
-            ${getSubLogo("SU7")}
-            SU7
-          </div>
-          <div class="sub-brand">
-            ${getSubLogo("YU7")}
-            YU7
-          </div>
-        </div>
-      </div>
-
-      <div class="maker-group tech-section">
-        <div class="maker-group-title">
-          <i class="fa-solid fa-search"></i> 百度 (Baidu)
-        </div>
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("集度")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">集度</div>
-              <div class="maker-brand-en">JIDU</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 商用車・特殊車両系 -->
-    <div class="maker-category">
-      <div class="maker-category-title">
-        <i class="fa-solid fa-truck"></i> 商用車・特殊車両系
-      </div>
-      
-      <div class="maker-group">
-        <div class="maker-brands">
-          <div class="maker-brand">
-            ${getLogo("上汽大通")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">上汽大通</div>
-              <div class="maker-brand-en">SAIC Maxus</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("福田汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">福田汽車</div>
-              <div class="maker-brand-en">Foton</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("江鈴汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">江鈴汽車</div>
-              <div class="maker-brand-en">JMC</div>
-            </div>
-          </div>
-          <div class="maker-brand">
-            ${getLogo("五菱汽車")}
-            <div class="maker-brand-text">
-              <div class="maker-brand-name">五菱汽車</div>
-              <div class="maker-brand-en">Wuling</div>
-            </div>
-          </div>
+          ${createBrand("小米汽車", "Xiaomi")}
         </div>
       </div>
     </div>
   `;
-  
-  container.innerHTML = makersHTML;
+}
+
+function createBrand(nameCn, nameEn) {
+  return `
+    <div class="maker-brand">
+      ${getLogo(nameCn)}
+      <div class="maker-brand-text">
+        <div class="maker-brand-name">${nameCn}</div>
+        <div class="maker-brand-en">${nameEn}</div>
+      </div>
+    </div>
+  `;
+}
+
 async function init() {
   await fetchRate();
   await Promise.all([

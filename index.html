@@ -98,11 +98,24 @@ header .logo-icon {
   border-bottom: 2px solid #e9ecef;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+}
+
+/* グループタイトル用ロゴ */
+.maker-group-title .group-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: #f8f9fa;
+  border-radius: 6px;
+  padding: 4px;
 }
 
 .maker-group-title i {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
+  width: 36px;
+  text-align: center;
 }
 
 .maker-brands {
@@ -131,15 +144,35 @@ header .logo-icon {
   border-color: #667eea;
 }
 
+/* メインブランド用ロゴ - サイズ統一 */
 .maker-brand-logo {
   width: 48px;
   height: 48px;
+  min-width: 48px;
+  min-height: 48px;
+  max-width: 48px;
+  max-height: 48px;
   object-fit: contain;
   flex-shrink: 0;
   background: white;
   border-radius: 6px;
   padding: 4px;
   border: 1px solid #e9ecef;
+  display: block;
+}
+
+/* ロゴ読み込み失敗時のフォールバックアイコン */
+.maker-brand .fallback-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 6px;
+  color: #999;
+  font-size: 1.2rem;
 }
 
 .maker-brand-text {
@@ -171,22 +204,11 @@ header .logo-icon {
   font-size: 0.8rem;
 }
 
-.maker-logo {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-.maker-brand-text {
-  flex: 1;
-}
-
 .sub-brands {
   margin-left: 1.5rem;
   margin-top: 0.75rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.5rem;
 }
 
@@ -196,7 +218,7 @@ header .logo-icon {
   border: 1px solid #e9ecef;
   border-radius: 6px;
   font-size: 0.85rem;
-  color: #6c757d;
+  color: #495057;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -208,19 +230,39 @@ header .logo-icon {
   background: #f8f9fa;
 }
 
+/* サブブランド用ロゴ - サイズ統一 */
 .sub-brand-logo {
   width: 32px;
   height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
   object-fit: contain;
   flex-shrink: 0;
   background: white;
   border-radius: 4px;
   padding: 3px;
+  display: block;
 }
 
-.sub-brand::before {
-  content: "└";
+.sub-brand .sub-prefix {
   color: #adb5bd;
+  font-weight: normal;
+  margin-right: 2px;
+}
+
+.sub-brand .fallback-icon {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f0f0;
+  border-radius: 4px;
+  color: #999;
+  font-size: 0.9rem;
 }
 
 .huawei-section {
@@ -257,6 +299,26 @@ header .logo-icon {
   
   header .logo-icon {
     font-size: 1.5rem;
+  }
+  
+  .maker-group-title .group-logo {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .maker-brand-logo {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    max-width: 40px;
+    max-height: 40px;
+  }
+  
+  .maker-brand .fallback-icon {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
 }
 
@@ -1153,6 +1215,10 @@ img.car-thumb {
         <div class="makers-container" id="makersContainer">
           <!-- JavaScriptで動的に生成 -->
         </div>
+      </div>
+    </div>
+  </div>
+
   <!-- モーダル: 仕様 -->
   <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
@@ -1193,171 +1259,165 @@ img.car-thumb {
 const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 const LOGO_BASE = RAW_BASE + "output/logos/";
 
-// ブランド名とロゴファイル名のマッピング
-const brandLogoMap = {
-  // グループ名
+// ========================================
+// 統合ロゴマップ - ブランド名とファイル名の対応
+// ========================================
+const LOGO_MAP = {
+  // === グループ名（親会社） ===
   "第一汽車集団": "FAW.png",
   "東風汽車集団": "Dongfeng-Logo.png",
   "上海汽車集団": "Roewe-Logo.png",
   "長安汽車": "Changan.png",
   "北京汽車集団": "beijing.jfif",
   "広州汽車集団": "gac.png",
+  "吉利汽車集団": "Geely.png",
+  "比亜迪": "BYD.png",
+  "長城汽車": "Great-Wall.png",
+  "奇瑞汽車": "Chery.png",
+  "小米汽車": "Xiaomi.png",
   
-  // 個別ブランド
-  "紅旗": "Hongqi.png", "奔騰": "bestune.png", "解放": "FAW.png", "風神": "Dongfeng-Logo.png",
-  "嵐図": "voyah.png", "猛士": "mengshi.png", "東風風行": "Dongfeng-Logo.png",
-  "栄威": "Roewe-Logo.png", "名爵": "mg.png", "飛凡": "rising auto feifang.webp",
-  "智己": "im-motors.jpg", "大通": "MAXUS.png", "長安": "Changan.png",
-  "欧尚": "Oshan.png", "深藍": "deepal.png", "阿維塔": "Avatr.png",
-  "啓源": "qiyuan.png", "北京": "beijing.jfif", "極狐": "arcfox.png",
-  "BAIC新能源": "beijing.jfif", "伝祺": "gac.png", "埃安": "aion.jpg", "昊鉑": "hyper.webp",
-  "吉利": "Geely.png", "帝豪": "emgrand.png", "領克": "Lynk-Co.png",
-  "極氪": "zeekr.png", "幾何": "geometry.png", "銀河": "galaxy.png",
-  "楓葉汽車": "maple.jpg", "比亜迪": "BYD.png", "王朝シリーズ": "BYD.png",
-  "海洋シリーズ": "BYD.png", "騰勢": "Denza.png", "仰望": "yangwang.png",
-  "方程豹": "Fangchengbao.png", "長城汽車": "Great-Wall.png", "哈弗": "Haval.png",
-  "WEY": "WEY.png", "欧拉": "Ora.png", "坦克": "Tank.png", "長城砲": "Great-Wall.png",
-  "奇瑞": "Chery.png", "星途": "exeed.png", "捷途": "Jetour.png",
-  "iCAR": "ICar.png", "風雲": "Chery.png", "江淮汽車": null, "思皓": null,
-  "合創汽車": null, "理想汽車": "Li_Auto.png", "蔚来": "Nio.png",
-  "小鵬汽車": "XPeng.png", "零跑汽車": "LeapMotor.png", "哪吒汽車": "NETA.webp",
-  "威馬汽車": "WMMOTOR.png", "高合汽車": "HiPhi.png", "集度": "jidu.webp",
-  "創維汽車": "skyworth.png", "AITO問界シリーズ": "AITO.png", "問界M5": "AITO.png",
-  "問界M7": "AITO.png", "問界M9": "AITO.png", "享界": "AITO.png",
-  "智界": "luxeed.png", "智界S7": "luxeed.png", "智界R7": "luxeed.png",
-  "極狐阿爾法": "arcfox.png", "傲界": null, "小米汽車": "Xiaomi.png",
-  "SU7": "Xiaomi.png", "YU7": "Xiaomi.png", "百度": null,
-  "上汽大通": "MAXUS.png", "福田汽車": null, "江鈴汽車": null,
-  "五菱汽車": null, "宏光MINIEV": null, "星光": null
+  // === 第一汽車集団 ===
+  "紅旗": "Hongqi.png",
+  "奔騰": "bestune.png",
+  "解放": "FAW.png",
+  
+  // === 東風汽車集団 ===
+  "風神": "Dongfeng-Logo.png",
+  "嵐図": "voyah.png",
+  "猛士": "mengshi.png",
+  "東風風行": "Dongfeng-Logo.png",
+  
+  // === 上海汽車集団 ===
+  "栄威": "Roewe-Logo.png",
+  "名爵": "mg.png",
+  "飛凡": "rising auto feifang.webp",
+  "智己": "im-motors.jpg",
+  "大通": "MAXUS.png",
+  "上汽大通": "MAXUS.png",
+  
+  // === 長安汽車 ===
+  "長安": "Changan.png",
+  "欧尚": "Oshan.png",
+  "深藍": "deepal.png",
+  "阿維塔": "Avatr.png",
+  "啓源": "qiyuan.png",
+  
+  // === 北京汽車集団 ===
+  "北京": "beijing.jfif",
+  "極狐": "arcfox.png",
+  "BAIC新能源": "beijing.jfif",
+  "極狐阿爾法": "arcfox.png",
+  
+  // === 広州汽車集団 ===
+  "伝祺": "gac.png",
+  "埃安": "aion.jpg",
+  "昊鉑": "hyper.webp",
+  
+  // === 吉利汽車集団 ===
+  "吉利": "Geely.png",
+  "帝豪": "emgrand.png",
+  "領克": "Lynk-Co.png",
+  "極氪": "zeekr.png",
+  "幾何": "geometry.png",
+  "銀河": "galaxy.png",
+  "楓葉汽車": "maple.jpg",
+  
+  // === 比亜迪 ===
+  "王朝シリーズ": "BYD.png",
+  "海洋シリーズ": "BYD.png",
+  "騰勢": "Denza.png",
+  "仰望": "yangwang.png",
+  "方程豹": "Fangchengbao.png",
+  
+  // === 長城汽車 ===
+  "哈弗": "Haval.png",
+  "WEY": "WEY.png",
+  "欧拉": "Ora.png",
+  "坦克": "Tank.png",
+  "長城砲": "Great-Wall.png",
+  
+  // === 奇瑞汽車 ===
+  "奇瑞": "Chery.png",
+  "星途": "exeed.png",
+  "捷途": "Jetour.png",
+  "iCAR": "ICar.png",
+  "風雲": "Chery.png",
+  
+  // === その他民営 ===
+  "江淮汽車": "JAC.png",
+  "思皓": "sehol.png",
+  "合創汽車": "hycan.png",
+  
+  // === 新興EV ===
+  "理想汽車": "Li_Auto.png",
+  "蔚来": "Nio.png",
+  "小鵬汽車": "XPeng.png",
+  "零跑汽車": "LeapMotor.png",
+  "哪吒汽車": "NETA.webp",
+  "威馬汽車": "WMMOTOR.png",
+  "高合汽車": "HiPhi.png",
+  "集度": "jidu.webp",
+  "創維汽車": "skyworth.png",
+  
+  // === ファーウェイ系 ===
+  "AITO問界シリーズ": "AITO.png",
+  "問界M5": "AITO.png",
+  "問界M7": "AITO.png",
+  "問界M9": "AITO.png",
+  "享界": "AITO.png",
+  "智界": "luxeed.png",
+  "智界S7": "luxeed.png",
+  "智界R7": "luxeed.png",
+  "傲界": "oujie.png",
+  
+  // === テック企業系 ===
+  "SU7": "Xiaomi.png",
+  "YU7": "Xiaomi.png",
+  "百度": "baidu.png",
+  
+  // === 商用車 ===
+  "福田汽車": "foton.png",
+  "江鈴汽車": "jmc.png",
+  "五菱汽車": "wuling.png",
+  "宏光MINIEV": "wuling.png",
+  "星光": "wuling.png"
 };
 
-function getLogo(brandName) {
-  const logoFile = brandLogoMap[brandName];
-  if (!logoFile) return '';
-  return `<img src="${LOGO_BASE}${logoFile}" class="maker-brand-logo" alt="${brandName}" onerror="this.style.display='none'">`;
-}
+// ========================================
+// ロゴ取得関数（統一版）
+// ========================================
 
-function getSubLogo(brandName) {
-  const logoFile = brandLogoMap[brandName];
-  if (!logoFile) return '';
-  return `<img src="${LOGO_BASE}${logoFile}" class="sub-brand-logo" alt="${brandName}" onerror="this.style.display='none'">`;
-}
-
-// ブランド名とロゴファイル名のマッピング
-const LOGO_MAP = {
-  // 国有企業系
-  '紅旗': 'Hongqi',
-  '奔騰': 'Bestune',
-  '解放': 'FAW Jiefang',
-  '風神': 'Dongfeng Fengshen',
-  '嵐図': 'Voyah',
-  '猛士': 'Mengshi',
-  '東風風行': 'Dongfeng Fengxing',
-  '栄威': 'Roewe',
-  '名爵': 'MG',
-  '飛凡': 'IM Motors',
-  '智己': 'IM Motors',
-  '大通': 'Maxus',
-  '長安': 'Changan',
-  '欧尚': 'Changan Oshan',
-  '深藍': 'Deepal',
-  '阿維塔': 'Avatr',
-  '啓源': 'Qiyuan',
-  '北京': 'BAIC',
-  '極狐': 'Arcfox',
-  'BAIC新能源': 'BAIC',
-  '伝祺': 'GAC Trumpchi',
-  '埃安': 'Aion',
-  '昊鉑': 'Hyper',
-  
-  // 民営企業系
-  '吉利': 'Geely',
-  '帝豪': 'Emgrand',
-  '領克': 'Lynk & Co',
-  '極氪': 'Zeekr',
-  '幾何': 'Geometry',
-  '銀河': 'Geely Galaxy',
-  '楓葉汽車': 'Maple',
-  '比亜迪': 'BYD',
-  '王朝シリーズ': 'BYD',
-  '海洋シリーズ': 'BYD',
-  '騰勢': 'Denza',
-  '仰望': 'Yangwang',
-  '方程豹': 'Fangchengbao',
-  '哈弗': 'Haval',
-  'WEY': 'WEY',
-  '欧拉': 'ORA',
-  '坦克': 'Tank',
-  '長城砲': 'Great Wall',
-  '奇瑞': 'Chery',
-  '星途': 'Exeed',
-  '捷途': 'Jetour',
-  'iCAR': 'iCAR',
-  '風雲': 'Chery',
-  '江淮汽車': 'JAC',
-  '思皓': 'Sihao',
-  '合創汽車': 'Hycan',
-  
-  // 新興EV
-  '理想汽車': 'Li Auto',
-  '蔚来': 'NIO',
-  '小鵬汽車': 'XPeng',
-  '零跑汽車': 'Leapmotor',
-  '哪吒汽車': 'Neta',
-  '威馬汽車': 'WM Motor',
-  '高合汽車': 'HiPhi',
-  '集度': 'JIDU',
-  '創維汽車': 'Skyworth',
-  
-  // ファーウェイ系
-  'AITO問界シリーズ': 'AITO',
-  '智界': 'LUXEED',
-  '極狐阿爾法': 'Arcfox',
-  '傲界': 'Oujie',
-  '享界': 'MAEXTRO',
-  
-  // テック企業系
-  '小米汽車': 'Xiaomi',
-  'SU7': 'Xiaomi',
-  'YU7': 'Xiaomi',
-  '百度': 'Baidu',
-  
-  // 商用車
-  '上汽大通': 'Maxus',
-  '福田汽車': 'Foton',
-  '江鈴汽車': 'JMC',
-  '五菱汽車': 'Wuling',
-  '宏光MINIEV': 'Wuling',
-  '星光': 'Wuling'
-};
-
-function getLogoUrl(brandName) {
-  // ブランド名からロゴファイル名を取得
-  const logoName = LOGO_MAP[brandName];
-  if (!logoName) return null;
-  
-  return `${LOGO_BASE}${logoName}.png?v=${Date.now()}`;
-}
-
-function createBrandElement(brandName, iconClass = 'fa-car') {
-  const logoUrl = getLogoUrl(brandName);
-  
-  if (logoUrl) {
-    return `
-      <div class="maker-brand">
-        <img src="${logoUrl}" alt="${brandName}" class="maker-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" />
-        <i class="fa-solid ${iconClass}" style="display: none;"></i>
-        <span class="maker-brand-text">${brandName}</span>
-      </div>
-    `;
-  } else {
-    return `
-      <div class="maker-brand">
-        <i class="fa-solid ${iconClass}"></i>
-        <span class="maker-brand-text">${brandName}</span>
-      </div>
-    `;
+// グループタイトル用ロゴ（大きめ）
+function getGroupLogo(brandName) {
+  const logoFile = LOGO_MAP[brandName];
+  if (!logoFile) {
+    return '<i class="fa-solid fa-industry"></i>';
   }
+  return `<img src="${LOGO_BASE}${logoFile}" class="group-logo" alt="${brandName}" 
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+          <i class="fa-solid fa-industry" style="display:none;"></i>`;
+}
+
+// メインブランド用ロゴ（48x48）
+function getBrandLogo(brandName) {
+  const logoFile = LOGO_MAP[brandName];
+  if (!logoFile) {
+    return `<span class="fallback-icon"><i class="fa-solid fa-car"></i></span>`;
+  }
+  return `<img src="${LOGO_BASE}${logoFile}" class="maker-brand-logo" alt="${brandName}" 
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+          <span class="fallback-icon" style="display:none;"><i class="fa-solid fa-car"></i></span>`;
+}
+
+// サブブランド用ロゴ（32x32）
+function getSubBrandLogo(brandName) {
+  const logoFile = LOGO_MAP[brandName];
+  if (!logoFile) {
+    return `<span class="fallback-icon"><i class="fa-solid fa-car"></i></span>`;
+  }
+  return `<img src="${LOGO_BASE}${logoFile}" class="sub-brand-logo" alt="${brandName}" 
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';">
+          <span class="fallback-icon" style="display:none;"><i class="fa-solid fa-car"></i></span>`;
 }
 
 // データソース設定
@@ -1964,13 +2024,6 @@ async function showStory(carId, title, source){
 function renderMakersTab() {
   const container = document.getElementById('makersContainer');
   
-  // グループタイトル用のロゴ取得関数
-  const getGroupLogo = (groupName) => {
-    const logoFile = brandLogoMap[groupName];
-    if (!logoFile) return '<i class="fa-solid fa-industry"></i>';
-    return `<img src="${LOGO_BASE}${logoFile}" class="maker-brand-logo" alt="${groupName}" onerror="this.style.display='none'" style="width: 32px; height: 32px;">`;
-  };
-  
   const makersHTML = `
     <!-- 国有企業系 -->
     <div class="maker-category">
@@ -1984,14 +2037,14 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("紅旗")}
+            ${getBrandLogo("紅旗")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">紅旗</div>
               <div class="maker-brand-en">Hongqi</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("奔騰")}
+            ${getBrandLogo("奔騰")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">奔騰</div>
               <div class="maker-brand-en">Bestune</div>
@@ -1999,7 +2052,7 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("解放")}解放 (Jiefang・商用車)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("解放")}解放 (Jiefang・商用車)</div>
         </div>
       </div>
 
@@ -2009,14 +2062,14 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("嵐図")}
+            ${getBrandLogo("嵐図")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">嵐図</div>
               <div class="maker-brand-en">Voyah・高級EV</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("猛士")}
+            ${getBrandLogo("猛士")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">猛士</div>
               <div class="maker-brand-en">Mengshi・オフロード</div>
@@ -2024,8 +2077,8 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("風神")}風神 (Fengshen)</div>
-          <div class="sub-brand">${getSubLogo("東風風行")}東風風行 (Fengxing)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("風神")}風神 (Fengshen)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("東風風行")}東風風行 (Fengxing)</div>
         </div>
       </div>
 
@@ -2035,28 +2088,28 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("栄威")}
+            ${getBrandLogo("栄威")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">栄威</div>
               <div class="maker-brand-en">Roewe</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("名爵")}
+            ${getBrandLogo("名爵")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">名爵</div>
               <div class="maker-brand-en">MG</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("飛凡")}
+            ${getBrandLogo("飛凡")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">飛凡</div>
               <div class="maker-brand-en">Rising Auto</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("智己")}
+            ${getBrandLogo("智己")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">智己</div>
               <div class="maker-brand-en">IM Motors</div>
@@ -2064,7 +2117,7 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("大通")}大通 (MAXUS)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("大通")}大通 (MAXUS)</div>
         </div>
       </div>
 
@@ -2074,21 +2127,21 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("深藍")}
+            ${getBrandLogo("深藍")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">深藍</div>
               <div class="maker-brand-en">Deepal</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("阿維塔")}
+            ${getBrandLogo("阿維塔")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">阿維塔</div>
               <div class="maker-brand-en">Avatr</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("啓源")}
+            ${getBrandLogo("啓源")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">啓源</div>
               <div class="maker-brand-en">Qiyuan</div>
@@ -2096,7 +2149,7 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("欧尚")}欧尚 (Oshan)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("欧尚")}欧尚 (Oshan)</div>
         </div>
       </div>
 
@@ -2106,7 +2159,7 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("極狐")}
+            ${getBrandLogo("極狐")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">極狐</div>
               <div class="maker-brand-en">Arcfox</div>
@@ -2114,7 +2167,7 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("BAIC新能源")}BAIC新能源</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("BAIC新能源")}BAIC新能源</div>
         </div>
       </div>
 
@@ -2124,21 +2177,21 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("伝祺")}
+            ${getBrandLogo("伝祺")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">伝祺</div>
               <div class="maker-brand-en">Trumpchi</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("埃安")}
+            ${getBrandLogo("埃安")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">埃安</div>
               <div class="maker-brand-en">Aion</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("昊鉑")}
+            ${getBrandLogo("昊鉑")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">昊鉑</div>
               <div class="maker-brand-en">Hyper</div>
@@ -2156,32 +2209,32 @@ function renderMakersTab() {
       
       <div class="maker-group">
         <div class="maker-group-title">
-          ${getGroupLogo("吉利")} 吉利汽車集団 (Geely)
+          ${getGroupLogo("吉利汽車集団")} 吉利汽車集団 (Geely)
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("領克")}
+            ${getBrandLogo("領克")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">領克</div>
               <div class="maker-brand-en">Lynk & Co</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("極氪")}
+            ${getBrandLogo("極氪")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">極氪</div>
               <div class="maker-brand-en">Zeekr</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("幾何")}
+            ${getBrandLogo("幾何")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">幾何</div>
               <div class="maker-brand-en">Geometry</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("銀河")}
+            ${getBrandLogo("銀河")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">銀河</div>
               <div class="maker-brand-en">Galaxy</div>
@@ -2189,8 +2242,8 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("帝豪")}帝豪 (Emgrand)</div>
-          <div class="sub-brand">${getSubLogo("楓葉汽車")}楓葉汽車 (Maple)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("帝豪")}帝豪 (Emgrand)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("楓葉汽車")}楓葉汽車 (Maple)</div>
         </div>
       </div>
 
@@ -2200,21 +2253,21 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("騰勢")}
+            ${getBrandLogo("騰勢")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">騰勢</div>
               <div class="maker-brand-en">Denza</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("仰望")}
+            ${getBrandLogo("仰望")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">仰望</div>
               <div class="maker-brand-en">Yangwang</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("方程豹")}
+            ${getBrandLogo("方程豹")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">方程豹</div>
               <div class="maker-brand-en">Fangchengbao</div>
@@ -2222,8 +2275,8 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("王朝シリーズ")}王朝シリーズ (秦・漢・唐・宋)</div>
-          <div class="sub-brand">${getSubLogo("海洋シリーズ")}海洋シリーズ (海豹・海獅・海鷗)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("王朝シリーズ")}王朝シリーズ (秦・漢・唐・宋)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("海洋シリーズ")}海洋シリーズ (海豹・海獅・海鷗)</div>
         </div>
       </div>
 
@@ -2233,28 +2286,28 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("哈弗")}
+            ${getBrandLogo("哈弗")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">哈弗</div>
               <div class="maker-brand-en">Haval</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("WEY")}
+            ${getBrandLogo("WEY")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">WEY</div>
               <div class="maker-brand-en">WEY・高級</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("欧拉")}
+            ${getBrandLogo("欧拉")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">欧拉</div>
               <div class="maker-brand-en">Ora・EV</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("坦克")}
+            ${getBrandLogo("坦克")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">坦克</div>
               <div class="maker-brand-en">Tank・オフロード</div>
@@ -2262,31 +2315,31 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("長城砲")}長城砲 (ピックアップトラック)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("長城砲")}長城砲 (ピックアップトラック)</div>
         </div>
       </div>
 
       <div class="maker-group">
         <div class="maker-group-title">
-          ${getGroupLogo("奇瑞")} 奇瑞汽車 (Chery)
+          ${getGroupLogo("奇瑞汽車")} 奇瑞汽車 (Chery)
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("星途")}
+            ${getBrandLogo("星途")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">星途</div>
               <div class="maker-brand-en">Exeed</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("捷途")}
+            ${getBrandLogo("捷途")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">捷途</div>
               <div class="maker-brand-en">Jetour</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("iCAR")}
+            ${getBrandLogo("iCAR")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">iCAR</div>
               <div class="maker-brand-en">iCAR</div>
@@ -2294,7 +2347,7 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("風雲")}風雲 (Fengyun)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("風雲")}風雲 (Fengyun)</div>
         </div>
       </div>
 
@@ -2304,21 +2357,21 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            <i class="fa-solid fa-car"></i>
+            ${getBrandLogo("江淮汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">江淮汽車</div>
               <div class="maker-brand-en">JAC</div>
             </div>
           </div>
           <div class="maker-brand">
-            <i class="fa-solid fa-car"></i>
+            ${getBrandLogo("思皓")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">思皓</div>
               <div class="maker-brand-en">Sehol</div>
             </div>
           </div>
           <div class="maker-brand">
-            <i class="fa-solid fa-car"></i>
+            ${getBrandLogo("合創汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">合創汽車</div>
               <div class="maker-brand-en">Hycan</div>
@@ -2337,63 +2390,63 @@ function renderMakersTab() {
       <div class="maker-group">
         <div class="maker-brands" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
           <div class="maker-brand">
-            ${getLogo("理想汽車")}
+            ${getBrandLogo("理想汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">理想汽車</div>
               <div class="maker-brand-en">Li Auto</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("蔚来")}
+            ${getBrandLogo("蔚来")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">蔚来</div>
               <div class="maker-brand-en">NIO</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("小鵬汽車")}
+            ${getBrandLogo("小鵬汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">小鵬汽車</div>
               <div class="maker-brand-en">XPeng</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("零跑汽車")}
+            ${getBrandLogo("零跑汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">零跑汽車</div>
               <div class="maker-brand-en">Leapmotor</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("哪吒汽車")}
+            ${getBrandLogo("哪吒汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">哪吒汽車</div>
               <div class="maker-brand-en">Neta</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("威馬汽車")}
+            ${getBrandLogo("威馬汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">威馬汽車</div>
               <div class="maker-brand-en">WM Motor</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("高合汽車")}
+            ${getBrandLogo("高合汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">高合汽車</div>
               <div class="maker-brand-en">HiPhi</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("集度")}
+            ${getBrandLogo("集度")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">集度</div>
               <div class="maker-brand-en">Jidu (Baidu)</div>
             </div>
           </div>
           <div class="maker-brand">
-            ${getLogo("創維汽車")}
+            ${getBrandLogo("創維汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">創維汽車</div>
               <div class="maker-brand-en">Skyworth</div>
@@ -2415,7 +2468,7 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("AITO問界シリーズ")}
+            ${getBrandLogo("AITO問界シリーズ")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">AITO問界シリーズ</div>
               <div class="maker-brand-en">AITO (M5/M7/M9)</div>
@@ -2423,7 +2476,7 @@ function renderMakersTab() {
           </div>
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("享界")}享界 (Enjoy)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("享界")}享界 (Enjoy)</div>
         </div>
       </div>
 
@@ -2433,7 +2486,7 @@ function renderMakersTab() {
         </div>
         <div class="maker-brands">
           <div class="maker-brand">
-            ${getLogo("智界")}
+            ${getBrandLogo("智界")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">智界</div>
               <div class="maker-brand-en">LUXEED (S7/R7)</div>
@@ -2447,9 +2500,9 @@ function renderMakersTab() {
           <i class="fa-solid fa-microchip"></i> その他技術搭載
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("極狐阿爾法")}極狐阿爾法 (Arcfox Alpha)</div>
-          <div class="sub-brand"><i class="fa-solid fa-car"></i> 傲界</div>
-          <div class="sub-brand">${getSubLogo("阿維塔")}阿維塔 (Avatr)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("極狐阿爾法")}極狐阿爾法 (Arcfox Alpha)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("傲界")}傲界</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("阿維塔")}阿維塔 (Avatr)</div>
         </div>
       </div>
     </div>
@@ -2465,17 +2518,17 @@ function renderMakersTab() {
           ${getGroupLogo("小米汽車")} 小米汽車 (Xiaomi)
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("SU7")}SU7 (スポーツセダン)</div>
-          <div class="sub-brand">${getSubLogo("YU7")}YU7 (SUV・開発中)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("SU7")}SU7 (スポーツセダン)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("YU7")}YU7 (SUV・開発中)</div>
         </div>
       </div>
 
       <div class="maker-group tech-section">
         <div class="maker-group-title">
-          <i class="fa-solid fa-robot"></i> 百度 (Baidu)
+          ${getGroupLogo("百度")} 百度 (Baidu)
         </div>
         <div class="sub-brands">
-          <div class="sub-brand">${getSubLogo("集度")}集度 (Jidu)</div>
+          <div class="sub-brand"><span class="sub-prefix">└</span>${getSubBrandLogo("集度")}集度 (Jidu)</div>
         </div>
       </div>
     </div>
@@ -2489,28 +2542,28 @@ function renderMakersTab() {
       <div class="maker-group">
         <div class="maker-brands" style="grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));">
           <div class="maker-brand">
-            ${getLogo("上汽大通")}
+            ${getBrandLogo("上汽大通")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">上汽大通</div>
               <div class="maker-brand-en">MAXUS</div>
             </div>
           </div>
           <div class="maker-brand">
-            <i class="fa-solid fa-truck"></i>
+            ${getBrandLogo("福田汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">福田汽車</div>
               <div class="maker-brand-en">Foton</div>
             </div>
           </div>
           <div class="maker-brand">
-            <i class="fa-solid fa-truck"></i>
+            ${getBrandLogo("江鈴汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">江鈴汽車</div>
               <div class="maker-brand-en">JMC</div>
             </div>
           </div>
           <div class="maker-brand">
-            <i class="fa-solid fa-car"></i>
+            ${getBrandLogo("五菱汽車")}
             <div class="maker-brand-text">
               <div class="maker-brand-name">五菱汽車</div>
               <div class="maker-brand-en">Wuling</div>

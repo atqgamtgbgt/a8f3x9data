@@ -107,25 +107,63 @@ header .logo-icon {
 
 .maker-brands {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
   margin-top: 1rem;
 }
 
 .maker-brand {
-  padding: 8px 12px;
+  padding: 10px 14px;
   background: #f8f9fa;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 0.95rem;
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  border: 1px solid #e9ecef;
 }
 
 .maker-brand:hover {
-  background: #e9ecef;
-  transform: translateX(4px);
+  background: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.15);
+  border-color: #667eea;
+}
+
+.maker-brand-logo {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 6px;
+  padding: 3px;
+  border: 1px solid #e9ecef;
+}
+
+.maker-brand-text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.maker-brand-name {
+  font-weight: 600;
+  color: #2c3e50;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.maker-brand-en {
+  font-size: 0.8rem;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .maker-brand i {
@@ -153,15 +191,31 @@ header .logo-icon {
 }
 
 .sub-brand {
-  padding: 6px 10px;
+  padding: 8px 12px;
   background: #fff;
   border: 1px solid #e9ecef;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 0.85rem;
   color: #6c757d;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.sub-brand:hover {
+  border-color: #667eea;
+  background: #f8f9fa;
+}
+
+.sub-brand-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: white;
+  border-radius: 4px;
+  padding: 2px;
 }
 
 .sub-brand::before {

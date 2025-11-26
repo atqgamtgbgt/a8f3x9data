@@ -525,13 +525,23 @@ img.car-thumb {
     margin-bottom: 2px !important;
   }
 
-  /* スマホでリンクは文字部分だけに制限 */
+  /* スマホでリンクは文字部分だけに制限 - 下線なし */
   .car-table td:nth-child(4) a {
     display: inline !important;
     width: auto !important;
     padding: 0 !important;
     color: #0d6efd !important;
+    text-decoration: none !important;
+  }
+
+  /* 車両名本体のみに下線 */
+  .car-table td:nth-child(4) a .vehicle-name-main {
     text-decoration: underline !important;
+  }
+
+  /* 中国語名は下線なし */
+  .car-table td:nth-child(4) a .vehicle-name-cn {
+    text-decoration: none !important;
   }
 
   /* ボタン */

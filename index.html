@@ -906,15 +906,16 @@ img.car-thumb {
   gap: 0.75rem;
   flex-wrap: wrap;
   position: relative;
-  z-index: 10;
 }
 
 .company-row.china-row {
   margin-bottom: 100px;
+  z-index: 20;
 }
 
 .company-row.foreign-row {
   margin-top: 20px;
+  z-index: 10;
 }
 
 /* 企業カード */
@@ -946,6 +947,7 @@ img.car-thumb {
 .company-card.china-card {
   border-color: #ef9a9a;
   background: #ffebee;
+  z-index: 20;
 }
 
 .company-card.china-card:hover,
@@ -957,6 +959,7 @@ img.car-thumb {
 .company-card.foreign-card {
   border-color: #90caf9;
   background: #e3f2fd;
+  z-index: 5;
 }
 
 .company-card.foreign-card:hover,
@@ -1012,12 +1015,17 @@ img.car-thumb {
   min-width: 140px;
   max-width: 220px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 100;
+  z-index: 1000;
   text-align: left;
 }
 
 .brands-list.show {
   display: block;
+}
+
+/* ブランドリストが開いているカードを最前面に */
+.company-card.brands-open {
+  z-index: 100;
 }
 
 .brands-list ul {
@@ -1102,6 +1110,10 @@ img.car-thumb {
 .private-card:hover {
   border-color: #1565c0;
   background: #e3f2fd;
+}
+
+.private-card.brands-open {
+  z-index: 100;
 }
 
 /* Huaweiセクション */
@@ -2636,13 +2648,23 @@ function setupBrandToggle() {
   document.querySelectorAll('.brands-toggle').forEach(toggle => {
     toggle.addEventListener('click', (e) => {
       e.stopPropagation();
+      const card = toggle.closest('.company-card, .private-card');
       const brandsList = toggle.nextElementSibling;
       
+      // 他を閉じる
       document.querySelectorAll('.brands-list.show').forEach(list => {
-        if (list !== brandsList) list.classList.remove('show');
+        if (list !== brandsList) {
+          list.classList.remove('show');
+          list.closest('.company-card, .private-card')?.classList.remove('brands-open');
+        }
       });
       
       brandsList.classList.toggle('show');
+      if (brandsList.classList.contains('show')) {
+        card?.classList.add('brands-open');
+      } else {
+        card?.classList.remove('brands-open');
+      }
     });
   });
   
@@ -2650,6 +2672,7 @@ function setupBrandToggle() {
     if (!e.target.closest('.brands-toggle') && !e.target.closest('.brands-list')) {
       document.querySelectorAll('.brands-list.show').forEach(list => {
         list.classList.remove('show');
+        list.closest('.company-card, .private-card')?.classList.remove('brands-open');
       });
     }
   });

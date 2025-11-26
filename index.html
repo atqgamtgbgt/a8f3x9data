@@ -107,7 +107,7 @@ header .logo-icon {
 
 .maker-brands {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 0.75rem;
   margin-top: 1rem;
 }
@@ -159,11 +159,27 @@ header .logo-icon {
   color: #6c757d;
 }
 
+.maker-brand i {
+  color: #667eea;
+  font-size: 0.8rem;
+}
+
+.maker-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.maker-brand-text {
+  flex: 1;
+}
+
 .sub-brands {
   margin-left: 1.5rem;
   margin-top: 0.75rem;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
   gap: 0.5rem;
 }
 
@@ -237,7 +253,7 @@ header .logo-icon {
   }
 }
 
-/* 以下、既存のランキング表示用CSS（省略） */
+/* 車両名2段表示用 */
 .vehicle-name-wrapper {
   display: flex;
   flex-direction: column;
@@ -254,31 +270,57 @@ header .logo-icon {
   font-weight: normal;
 }
 
+/* リンク内の車両名表示の下線を完全に削除 */
 a .vehicle-name-wrapper,
 a .vehicle-name-main,
 a .vehicle-name-cn {
   text-decoration: none !important;
 }
 
+a:hover .vehicle-name-wrapper,
+a:hover .vehicle-name-main,
+a:hover .vehicle-name-cn {
+  text-decoration: none !important;
+}
+
+/* テーブル内のリンクのスタイル - 下線なし、背景色変化 */
 .car-table td a {
   text-decoration: none !important;
   border-radius: 4px;
   transition: background-color 0.2s ease;
   -webkit-tap-highlight-color: transparent !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  background-color: transparent;
 }
 
+/* PC版のみブロック表示とホバー効果 */
 @media (min-width: 577px) {
   .car-table td a {
     display: block;
     width: 100%;
     padding: 8px;
+    background-color: transparent;
   }
+
   .car-table td a:hover {
+    text-decoration: none !important;
     background-color: #f0f7ff !important;
+  }
+
+  .car-table td a:active {
+    background-color: #e6f2ff !important;
   }
 }
 
+/* 全体的なタップハイライト無効化 */
 * {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -286,12 +328,16 @@ th {
   background-color: #f1f3f5;
 }
 
+/* シンプルな斜体数字ランキング（PC表示用） */
 .car-table tbody td:nth-child(1) {
   background: transparent !important;
   color: #2c3e50 !important;
   font-weight: 300 !important;
   font-style: italic !important;
   font-size: 1.3rem !important;
+  border-radius: 0 !important;
+  padding: 4px 8px !important;
+  box-shadow: none !important;
   font-family: 'Georgia', 'Times New Roman', serif !important;
 }
 
@@ -324,8 +370,180 @@ img.car-thumb {
   padding: 2px 6px;
   margin: 2px;
 }
+.spec-table tbody tr.sec-row .section-col {
+  border-right: none !important;
+  box-shadow: none !important;
+}
+/* section-fill の左側の縦線を消す */
+.spec-table tbody tr.sec-row .section-fill {
+  border-left: none !important;
+  box-shadow: none !important;
+}
+/* 通常の項目行 td（section-row 以外）の左罫線を消す */
+.spec-table tbody tr:not(.sec-row) td {
+  border-left: none !important;
+  box-shadow: inset 0 -1px 0 #dee2e6 !important;  /* 下線だけ残す */
+}
+/* カラム名（thead）の左罫線を消す */
+.spec-table thead th:not(.sticky-col) {
+  border-left: none !important;
+  box-shadow: inset 0 0px 0 #dee2e6 !important; /* 下線だけ残す */
+}
 
+/* =====================================
+   sticky（PC＋スマホ共通）
+===================================== */
+.spec-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  background: #fff;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.08);
+  vertical-align: middle !important;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+.spec-table thead th.sticky-col {
+  position: sticky;
+  left: 0;
+  z-index: 31;
+  background: #fff;
+}
+
+.spec-table tbody th.item-col {
+  position: sticky;
+  left: 0;
+  z-index: 12;
+  background: #fff;
+}
+
+/* =====================================
+   セクション行（z-index は JS で上書き）
+===================================== */
+.spec-table tbody tr.sec-row {
+  height: 2.6em;
+}
+
+.spec-table tbody tr.sec-row .section-col {
+  position: sticky;
+  left: 0;
+  top: var(--secOffset, 42px);
+  z-index: 41;
+  background: #f8f9fa;
+  font-weight: 600;
+}
+
+.spec-table tbody tr.sec-row .section-fill {
+  position: sticky;
+  left: 180px;
+  top: var(--secOffset, 42px);
+  z-index: 39;
+  background: #f8f9fa;
+}
+
+.spec-table tbody tr.sec-row .section-col,
+.spec-table tbody tr.sec-row .section-fill {
+  line-height: 2.6em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+/* =====================================
+   背景透け防止マスク（共通）
+===================================== */
+.spec-content::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--secOffset, 42px);
+  background: #fff;
+  z-index: 25;
+  pointer-events: none;
+}
+
+.spec-content::after {
+  content: "";
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: calc(180px + 0.5rem);
+  height: 100%;
+  background: #fff;
+  z-index: 24;
+  pointer-events: none;
+}
+
+/* =====================================
+   PC レイアウト
+===================================== */
+@media (min-width: 992px) {
+  .spec-table-container {
+    display: flex;
+    align-items: flex-start;
+    height: 80vh;
+    background: #fff;
+  }
+
+  .spec-sidebar {
+    position: sticky;
+    top: 0;
+    flex: 0 0 180px;
+    height: 80vh;
+    overflow-y: auto;
+    background: #fff;
+    border-right: 1px solid #dee2e6;
+    padding: 8px;
+  }
+
+  .spec-content {
+    flex: 1;
+    overflow: hidden !important;
+    height: 80vh;
+    padding: 8px;
+    position: relative;
+    background: #fff;
+    background-clip: padding-box;
+  }
+
+  .spec-content .table-responsive {
+    position: relative;
+    height: 100%;
+    overflow: auto !important;
+    cursor: grab;
+    will-change: scroll-position;
+  }
+
+  .spec-content .table-responsive.active-drag {
+    cursor: grabbing;
+    user-select: none;
+  }
+
+  .spec-content .table-responsive.active-drag * {
+    user-select: none;
+    pointer-events: none;
+  }
+
+  .spec-table {
+    position: relative;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 100%;
+  }
+
+  .spec-table tbody tr.sec-row .section-fill {
+    left: 179px !important;
+  }
+}
+
+/* =====================================
+   スマホ最適化（576px 以下）
+===================================== */
 @media (max-width: 576px) {
+
+  /* --- 行全体をカード化 --- */
   .car-table tbody tr {
     border-radius: 10px !important;
     padding: 10px 12px !important;
@@ -334,45 +552,482 @@ img.car-thumb {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
     border: 1px solid #dee2e6 !important;
     display: block;
+    position: relative;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
   }
-  
+
+  /* カード全体のタップ時の背景変化を防ぐ */
+  .car-table tbody tr:active,
+  .car-table tbody tr:focus {
+    background: #fff !important;
+  }
+
+  /* スマホではタップ時の効果を無効化（hoverは除外してPC版を有効に） */
+  .car-table td a,
+  .car-table td a:link,
+  .car-table td a:visited,
+  .car-table td a:active,
+  .car-table td a:focus {
+    background-color: transparent !important;
+    background: transparent !important;
+    outline: none !important;
+  }
+
+  /* 全ての子要素のタップハイライトを無効化 */
+  .car-table tbody tr *,
+  .car-table tbody tr *:active,
+  .car-table tbody tr *:focus {
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+  }
+
+  /* --- Bootstrapのストライプ背景を完全に無効化 --- */
+  .car-table tbody tr:nth-of-type(odd) {
+    background-color: #fff !important;
+  }
+
+  .car-table tbody tr:nth-of-type(even) {
+    background-color: #fff !important;
+  }
+
+  /* --- table-responsive、container、tab-contentの背景も透明に --- */
+  .table-responsive {
+    background: transparent !important;
+  }
+
+  .container {
+    background: transparent !important;
+  }
+
+  .tab-content {
+    background: transparent !important;
+  }
+
+  .tab-pane {
+    background: transparent !important;
+  }
+
+  /* --- 各セルをブロック化 --- */
   .car-table td {
     display: block;
     width: 100%;
     padding: 4px 0 !important;
+    white-space: normal !important;
+    text-align: left !important;
     border: none !important;
+    background: transparent !important;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0) !important;
+    -webkit-touch-callout: none;
   }
-  
+
+  .car-table td:active,
+  .car-table td:focus {
+    background: transparent !important;
+  }
+
+  /* --- 順位セル（1列目）--- */
   .car-table td:nth-child(1) {
     position: absolute !important;
     top: 8px !important;
     left: 8px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
     font-size: 1.8rem !important;
+    font-weight: 300 !important;
+    font-style: italic !important;
+    color: #2c3e50 !important;
+    background: transparent !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    box-shadow: none !important;
+    font-family: 'Georgia', 'Times New Roman', serif !important;
   }
-  
+
+  /* --- 変動セル（2列目）--- */
   .car-table td:nth-child(2) {
     position: absolute !important;
     top: 23px !important;
     left: 50px !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
     font-size: 1.1rem !important;
+    font-weight: bold !important;
+    z-index: 10 !important;
+    display: inline-block !important;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    line-height: 1 !important;
   }
-  
+
+  /* 変動なしの場合は非表示 */
+  .car-table td:nth-child(2):empty {
+    display: none !important;
+  }
+
+  /* 変動が上昇の場合 */
+  .car-table td:nth-child(2):has(.rank-up) {
+    background: transparent !important;
+  }
+  .car-table td:nth-child(2) .rank-up {
+    color: #dc3545 !important;
+  }
+
+  /* 変動が下降の場合 */
+  .car-table td:nth-child(2):has(.rank-down) {
+    background: transparent !important;
+  }
+  .car-table td:nth-child(2) .rank-down {
+    color: #0d6efd !important;
+  }
+
+  /* 変動なしの場合 */
+  .car-table td:nth-child(2):not(:has(.rank-up)):not(:has(.rank-down)) {
+    background: transparent !important;
+    color: #6c757d !important;
+  }
+
+  /* --- 画像セル --- */
   .car-table td:nth-child(3) {
     float: left;
     width: 120px !important;
+    text-align: center;
+    position: relative !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     height: 120px !important;
+    padding: 0 !important;
     margin-top: 30px !important;
+    border: none !important;
+    box-shadow: none !important;
   }
-  
+
+  .car-table td:nth-child(3) img.car-thumb {
+    max-height: 100px !important;
+    max-width: 110px !important;
+    object-fit: contain !important;
+  }
+
+  /* --- テキスト部分を右側へ --- */
   .car-table td:nth-child(4),
   .car-table td:nth-child(5),
   .car-table td:nth-child(6),
   .car-table td:nth-child(7),
   .car-table td:nth-child(8) {
     margin-left: 135px !important;
+    display: block;
+    padding-top: 2px !important;
+    padding-bottom: 2px !important;
+    font-size: 0.92rem !important;
+  }
+
+  /* 車名を大きく */
+  .car-table td:nth-child(4) {
+    font-weight: 600;
+    font-size: 1rem !important;
+    padding-top: 32px !important;
+    margin-bottom: 2px !important;
+  }
+
+  /* スマホでリンクは文字部分だけに制限 - 下線なし */
+  .car-table td:nth-child(4) a {
+    display: inline !important;
+    width: auto !important;
+    padding: 0 !important;
+    color: #0d6efd !important;
+    text-decoration: none !important;
+  }
+
+  /* 車両名本体のみに下線 */
+  .car-table td:nth-child(4) a .vehicle-name-main {
+    text-decoration: underline !important;
+  }
+
+  /* 中国語名は下線なし */
+  .car-table td:nth-child(4) a .vehicle-name-cn {
+    text-decoration: none !important;
+  }
+
+  /* ボタン */
+  .car-table td:nth-child(8) {
+    margin-top: 8px !important;
+  }
+
+  .car-table td:nth-child(8) button {
+    min-width: 70px;
+    padding: 4px 8px !important;
+    margin-right: 6px !important;
+    margin-bottom: 4px !important;
+    font-size: 0.85rem !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  /* --- テーブル自体のボーダーを完全に削除 --- */
+  .car-table {
+    border: none !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .car-table tbody {
+    border: none !important;
+  }
+
+  /* テーブルコンテナも幅を制限 */
+  .table-responsive {
+    width: 100% !important;
+    max-width: 100vw !important;
+    overflow-x: hidden !important;
   }
 }
 
+/* =====================================
+   sticky＋セレクトトグル（スマホ991px以下）
+===================================== */
+@media (max-width: 991px) {
+  .spec-content .table-responsive {
+    max-height: 70vh;
+    overflow: auto !important;
+  }
+
+  #csvModal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #csvModal .modal-title {
+    display: none;
+  }
+
+  #csvModal .section-toggle {
+    flex: 1;
+    order: 1;
+  }
+
+  #csvModal .btn-open-full {
+    order: 2;
+  }
+
+  #csvModal .btn-close {
+    order: 3;
+  }
+
+  .section-toggle {
+    position: static;
+    transform: none;
+    width: auto;
+    padding: 0;
+    pointer-events: auto;
+  }
+
+  .section-toggle select {
+    width: auto;
+    min-width: 200px;
+    max-width: 60vw;
+    margin: 0;
+    display: block;
+    pointer-events: auto;
+    background: #fff;
+    border: 1px solid #ced4da !important;
+  }
+
+  .spec-table thead th.sticky-col,
+  .spec-table tbody th.item-col {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.85rem;
+    padding: 4px 6px !important;
+  }
+
+  .spec-table thead th:not(.sticky-col) {
+    font-size: 0.7rem !important;
+  }
+
+  .spec-table tbody tr.sec-row .section-col {
+    min-width: 100px !important;
+    max-width: 100px !important;
+    width: 100px !important;
+    font-size: 0.9rem;
+    background: #f8f9fa !important;
+    box-shadow: 150px 0 0 0 #f8f9fa !important;
+  }
+
+  .spec-table tbody tr.sec-row .section-fill {
+    left: 99px !important;
+  }
+
+  .spec-content::after {
+    width: calc(100px + 0.5rem) !important;
+  }
+  
+  /* スマホ用：sticky-colに凡例を追加 */
+  .spec-table thead th.sticky-col::after {
+    content: "●：標準装備\A〇：オプション";
+    white-space: pre-line;
+    font-size: 0.7rem;
+    color: #6c757d;
+    font-weight: normal;
+    display: block;
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+}
+
+/* =====================================
+   テーブルのボーダーをbox-shadowで実装
+===================================== */
+.spec-table {
+  position: relative;
+  border-collapse: separate;
+  border-spacing: 0;
+  min-width: 100%;
+}
+
+/* 全てのセルにbox-shadowでボーダーを適用 */
+.spec-table td,
+.spec-table th {
+  box-shadow: 
+    inset 0px 0 0 #dee2e6,
+    inset 0 0px 0 #dee2e6;
+}
+
+/* セクション行は下のボーダーのみ（右側の縦線を削除） */
+.spec-table tbody tr.sec-row .section-col {
+  box-shadow: 
+    inset 0 -1px 0 #dee2e6 !important;
+}
+
+.spec-table tbody tr.sec-row .section-fill {
+  box-shadow: 
+    inset 0 -1px 0 #dee2e6 !important;
+}
+
+/* =====================================
+   その他調整
+===================================== */
+.spec-content.p-2 {
+  padding: 0 !important;
+  background: #fff !important;
+}
+
+.spec-table tbody tr:not(.sec-row) td {
+  position: relative;
+  z-index: 10;
+  background: #fff !important;
+}
+
+/* =====================================
+   全画面表示ボタン
+===================================== */
+.btn-open-full {
+  width: auto;
+  height: auto;
+  padding: 0;
+  margin: 0 0.5rem 0 0;
+  background: transparent;
+  border: none;
+  opacity: 0.8;
+  cursor: pointer;
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.btn-open-full:hover {
+  opacity: 1;
+}
+.btn-open-full i {
+  pointer-events: none;
+}
+
+/* 引用元ボタン */
+.source-link-btn {
+  display: none;
+}
+
+@media (max-width: 991px) {
+  .source-link-btn {
+    display: inline-block;
+    order: 0;
+    margin-right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    background: #0d6efd;
+    color: white !important;
+    border: none;
+    border-radius: 4px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .source-link-btn:hover {
+    background: #0b5ed7;
+    color: white !important;
+  }
+
+  /* 口コミモーダルのヘッダー調整 */
+  #storyModal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  #storyModal .modal-title {
+    display: none;
+  }
+}
+
+/* モーダルヘッダーのボタン配置 */
+#csvModal .modal-header {
+  display: flex;
+  align-items: center;
+}
+
+#csvModal .modal-header .modal-title {
+  flex: 1;
+  margin-right: auto;
+}
+
+#csvModal .modal-header .btn-open-full,
+#csvModal .modal-header .btn-close {
+  order: 10;
+}
+
+/* 凡例テキスト（PC用） */
+.legend-text {
+  font-size: 0.85rem;
+  color: #6c757d;
+  white-space: nowrap;
+  margin-left: auto;
+  margin-right: 1rem;
+  order: 9;
+}
+
+@media (max-width: 991px) {
+  .legend-text {
+    display: none !important;
+  }
+}
+
+@media (min-width: 992px) {
+  #csvModal .modal-title {
+    display: block !important;
+  }
+  
+  /* PC版では::afterの凡例を非表示 */
+  .spec-table thead th.sticky-col::after {
+    display: none !important;
+  }
+}
+
+/* トップへ戻るボタン */
 #backToTop {
   position: fixed;
   bottom: 20px;
@@ -397,11 +1052,16 @@ img.car-thumb {
 
 #backToTop:hover {
   background: #764ba2;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 
 #backToTop.show {
   opacity: 0.9;
   visibility: visible;
+}
+
+#backToTop:hover {
+  opacity: 1;
 }
 
 @media (max-width: 576px) {
@@ -424,6 +1084,8 @@ img.car-thumb {
   </header>
 
   <div class="container mt-3">
+
+    <!-- 説明文 -->
     <div class="alert alert-light border mb-3" style="font-size: 0.9rem; line-height: 1.6;">
       <strong>本サイトについて</strong>
       <ul class="mb-0 mt-2" style="padding-left: 1.2rem;">
@@ -432,7 +1094,7 @@ img.car-thumb {
       <a href="https://www.autohome.com.cn/rank/1" target="_blank" rel="noopener">
         汽车之家（Autohome）
       </a>
-      に掲載されているランキングを、AIで自動翻訳しています。
+      に掲載されているランキングを、AIで自動翻訳しています。<br>（このランキングですが、乗聯会やCAAMのデータを基にしているそうです）
     </li>
     <li>
       「仕様表」は、同サイトの各車種の仕様表を機械翻訳しています。
@@ -446,6 +1108,7 @@ img.car-thumb {
       </div>
     </div>
 
+    <!-- タブナビゲーション -->
     <ul class="nav nav-tabs" id="mainTabs" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="autohome-tab" data-bs-toggle="tab" data-bs-target="#autohome-content" type="button" role="tab">総合ランキング</button>
@@ -458,6 +1121,7 @@ img.car-thumb {
       </li>
     </ul>
 
+    <!-- タブコンテンツ -->
     <div class="tab-content" id="mainTabsContent">
       <!-- Autohome タブ -->
       <div class="tab-pane fade show active" id="autohome-content" role="tabpanel">
@@ -483,9 +1147,317 @@ img.car-thumb {
           <!-- JavaScriptで動的に生成 -->
         </div>
       </div>
+
+      <!-- 元のメーカー一覧HTML（バックアップ） -->
+      <div style="display:none;">
+          <!-- 国有企業系 -->
+          <div class="maker-category">
+            <div class="maker-category-title">
+              <i class="fa-solid fa-building"></i> 国有企業系
+            </div>
+            
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 第一汽車集団 (FAW)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand">
+                  <img src="https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/logos/Hongqi.png" alt="紅旗" class="maker-logo" onerror="this.style.display='none';" />
+                  <span class="maker-brand-text">紅旗 (Hongqi)</span>
+                </div>
+                <div class="maker-brand">
+                  <img src="https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/logos/Bestune.png" alt="奔騰" class="maker-logo" onerror="this.style.display='none';" />
+                  <span class="maker-brand-text">奔騰 (Bestune)</span>
+                </div>
+                <div class="maker-brand">
+                  <img src="https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/logos/FAW Jiefang.png" alt="解放" class="maker-logo" onerror="this.style.display='none';" />
+                  <span class="maker-brand-text">解放 (Jiefang・商用車)</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 東風汽車集団 (Dongfeng)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 風神 (Fengshen)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 嵐図 (Voyah・高級EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-mountain"></i> 猛士 (Mengshi・オフロード)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 東風風行 (Dongfeng Fengxing)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 上海汽車集団 (SAIC)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 栄威 (Roewe)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 名爵 (MG)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 飛凡 (FEIFAN・EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 智己 (IM Motors・高級EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-van-shuttle"></i> 大通 (Maxus)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 長安汽車 (Changan)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 長安 (Changan)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 欧尚 (Oshan)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 深藍 (Deepal・NEV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 阿維塔 (Avatr・高級EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 啓源 (Qiyuan)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 北京汽車集団 (BAIC)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 北京 (Beijing)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 極狐 (Arcfox・EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> BAIC新能源</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 広州汽車集団 (GAC)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 伝祺 (Trumpchi)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 埃安 (Aion・EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 昊鉑 (Hyper・高級EV)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 民営企業系 -->
+          <div class="maker-category">
+            <div class="maker-category-title">
+              <i class="fa-solid fa-handshake"></i> 民営企業系
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 吉利汽車集団 (Geely)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 吉利 (Geely)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 帝豪 (Emgrand)</div>
+                <div class="maker-brand"><i class="fa-solid fa-star"></i> 領克 (Lynk & Co)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 極氪 (Zeekr・高級EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 幾何 (Geometry・EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 銀河 (Galaxy・NEV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 楓葉汽車 (Maple・小型EV)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 比亜迪 (BYD)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-crown"></i> 王朝シリーズ (秦/漢/唐/宋/元)</div>
+                <div class="maker-brand"><i class="fa-solid fa-water"></i> 海洋シリーズ (海豹/海鷗/海獅)</div>
+                <div class="maker-brand"><i class="fa-solid fa-gem"></i> 騰勢 (Denza・高級)</div>
+                <div class="maker-brand"><i class="fa-solid fa-crown"></i> 仰望 (YangWang・超高級)</div>
+                <div class="maker-brand"><i class="fa-solid fa-mountain"></i> 方程豹 (Fang Cheng Bao)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 長城汽車 (Great Wall)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car-side"></i> 哈弗 (Haval・SUV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-star"></i> WEY (高級)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 欧拉 (ORA・小型EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-tank-water"></i> 坦克 (Tank・オフロード)</div>
+                <div class="maker-brand"><i class="fa-solid fa-truck-pickup"></i> 長城砲 (Great Wall Cannon)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> 奇瑞汽車 (Chery)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 奇瑞 (Chery)</div>
+                <div class="maker-brand"><i class="fa-solid fa-star"></i> 星途 (Exeed・高級)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 捷途 (Jetour)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> iCAR (オフロードEV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 風雲 (Fengyun)</div>
+              </div>
+            </div>
+
+            <div class="maker-group">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-industry"></i> その他民営
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 江淮汽車 (JAC)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 思皓 (Sihao)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 合創汽車 (Hycan)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 新興EV専業メーカー -->
+          <div class="maker-category">
+            <div class="maker-category-title">
+              <i class="fa-solid fa-bolt"></i> 新興EV専業メーカー
+            </div>
+            
+            <div class="maker-group">
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-lightbulb"></i> 理想汽車 (Li Auto・増程式)</div>
+                <div class="maker-brand"><i class="fa-solid fa-gem"></i> 蔚来 (NIO・高級EV)</div>
+                <div class="maker-brand"><i class="fa-solid fa-robot"></i> 小鵬汽車 (XPeng・スマート)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 零跑汽車 (Leapmotor)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 哪吒汽車 (Neta)</div>
+                <div class="maker-brand"><i class="fa-solid fa-bolt"></i> 威馬汽車 (WM Motor)</div>
+                <div class="maker-brand"><i class="fa-solid fa-crown"></i> 高合汽車 (HiPhi・超高級)</div>
+                <div class="maker-brand"><i class="fa-solid fa-robot"></i> 集度 (JIDU・百度系)</div>
+                <div class="maker-brand"><i class="fa-solid fa-tv"></i> 創維汽車 (Skyworth)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ファーウェイ系 -->
+          <div class="maker-category">
+            <div class="maker-category-title" style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);">
+              <i class="fa-solid fa-microchip"></i> ファーウェイ(華為)系
+            </div>
+
+            <div class="maker-group huawei-section">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-handshake"></i> 賽力斯 (SERES) との共同開発
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-mobile-screen"></i> AITO問界シリーズ</div>
+              </div>
+              <div class="sub-brands">
+                <div class="sub-brand">問界M5</div>
+                <div class="sub-brand">問界M7</div>
+                <div class="sub-brand">問界M9</div>
+                <div class="sub-brand">享界 (MAEXTRO)</div>
+              </div>
+            </div>
+
+            <div class="maker-group huawei-section">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-handshake"></i> 奇瑞 (Chery) との共同開発
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-mobile-screen"></i> 智界 (LUXEED)</div>
+              </div>
+              <div class="sub-brands">
+                <div class="sub-brand">智界S7</div>
+                <div class="sub-brand">智界R7</div>
+              </div>
+            </div>
+
+            <div class="maker-group huawei-section">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-handshake"></i> その他華為技術搭載ブランド
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 極狐阿爾法 (Arcfox Alpha・北汽)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 傲界 (Oujie・江淮)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 阿維塔 (Avatr・長安)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- テック企業系 -->
+          <div class="maker-category">
+            <div class="maker-category-title" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);">
+              <i class="fa-solid fa-laptop-code"></i> テック企業系
+            </div>
+
+            <div class="maker-group tech-section">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-mobile"></i> 小米汽車 (Xiaomi)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> SU7</div>
+                <div class="maker-brand"><i class="fa-solid fa-car-side"></i> YU7</div>
+              </div>
+            </div>
+
+            <div class="maker-group tech-section">
+              <div class="maker-group-title">
+                <i class="fa-solid fa-search"></i> 百度 (Baidu)
+              </div>
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-robot"></i> 集度 (JIDU)</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 商用車・特殊車両系 -->
+          <div class="maker-category">
+            <div class="maker-category-title">
+              <i class="fa-solid fa-truck"></i> 商用車・特殊車両系
+            </div>
+            
+            <div class="maker-group">
+              <div class="maker-brands">
+                <div class="maker-brand"><i class="fa-solid fa-van-shuttle"></i> 上汽大通 (SAIC Maxus)</div>
+                <div class="maker-brand"><i class="fa-solid fa-truck"></i> 福田汽車 (Foton)</div>
+                <div class="maker-brand"><i class="fa-solid fa-truck"></i> 江鈴汽車 (JMC)</div>
+                <div class="maker-brand"><i class="fa-solid fa-car"></i> 五菱汽車 (Wuling)</div>
+              </div>
+              <div class="sub-brands">
+                <div class="sub-brand">宏光MINIEV (超小型EV)</div>
+                <div class="sub-brand">星光 (Starlight)</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 
+  <!-- モーダル: 仕様 -->
+  <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <div id="csvContent" class="table-responsive"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- モーダル: 口コミ -->
+  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header" style="display: flex; align-items: center; gap: 0.5rem;">
+          <h5 class="modal-title" id="storyModalLabel" style="flex: 1;">口コミ概要</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <div id="storyContent">読込中...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- トップへ戻るボタン -->
   <button id="backToTop" aria-label="トップへ戻る">
     <i class="fa-solid fa-arrow-up"></i>
   </button>
@@ -493,6 +1465,725 @@ img.car-thumb {
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
+const LOGO_BASE = `${RAW_BASE}output/logos/`;
+
+// ブランド名とロゴファイル名のマッピング
+const LOGO_MAP = {
+  // 国有企業系
+  '紅旗': 'Hongqi',
+  '奔騰': 'Bestune',
+  '解放': 'FAW Jiefang',
+  '風神': 'Dongfeng Fengshen',
+  '嵐図': 'Voyah',
+  '猛士': 'Mengshi',
+  '東風風行': 'Dongfeng Fengxing',
+  '栄威': 'Roewe',
+  '名爵': 'MG',
+  '飛凡': 'IM Motors',
+  '智己': 'IM Motors',
+  '大通': 'Maxus',
+  '長安': 'Changan',
+  '欧尚': 'Changan Oshan',
+  '深藍': 'Deepal',
+  '阿維塔': 'Avatr',
+  '啓源': 'Qiyuan',
+  '北京': 'BAIC',
+  '極狐': 'Arcfox',
+  'BAIC新能源': 'BAIC',
+  '伝祺': 'GAC Trumpchi',
+  '埃安': 'Aion',
+  '昊鉑': 'Hyper',
+  
+  // 民営企業系
+  '吉利': 'Geely',
+  '帝豪': 'Emgrand',
+  '領克': 'Lynk & Co',
+  '極氪': 'Zeekr',
+  '幾何': 'Geometry',
+  '銀河': 'Geely Galaxy',
+  '楓葉汽車': 'Maple',
+  '比亜迪': 'BYD',
+  '王朝シリーズ': 'BYD',
+  '海洋シリーズ': 'BYD',
+  '騰勢': 'Denza',
+  '仰望': 'Yangwang',
+  '方程豹': 'Fangchengbao',
+  '哈弗': 'Haval',
+  'WEY': 'WEY',
+  '欧拉': 'ORA',
+  '坦克': 'Tank',
+  '長城砲': 'Great Wall',
+  '奇瑞': 'Chery',
+  '星途': 'Exeed',
+  '捷途': 'Jetour',
+  'iCAR': 'iCAR',
+  '風雲': 'Chery',
+  '江淮汽車': 'JAC',
+  '思皓': 'Sihao',
+  '合創汽車': 'Hycan',
+  
+  // 新興EV
+  '理想汽車': 'Li Auto',
+  '蔚来': 'NIO',
+  '小鵬汽車': 'XPeng',
+  '零跑汽車': 'Leapmotor',
+  '哪吒汽車': 'Neta',
+  '威馬汽車': 'WM Motor',
+  '高合汽車': 'HiPhi',
+  '集度': 'JIDU',
+  '創維汽車': 'Skyworth',
+  
+  // ファーウェイ系
+  'AITO問界シリーズ': 'AITO',
+  '智界': 'LUXEED',
+  '極狐阿爾法': 'Arcfox',
+  '傲界': 'Oujie',
+  '享界': 'MAEXTRO',
+  
+  // テック企業系
+  '小米汽車': 'Xiaomi',
+  'SU7': 'Xiaomi',
+  'YU7': 'Xiaomi',
+  '百度': 'Baidu',
+  
+  // 商用車
+  '上汽大通': 'Maxus',
+  '福田汽車': 'Foton',
+  '江鈴汽車': 'JMC',
+  '五菱汽車': 'Wuling',
+  '宏光MINIEV': 'Wuling',
+  '星光': 'Wuling'
+};
+
+function getLogoUrl(brandName) {
+  // ブランド名からロゴファイル名を取得
+  const logoName = LOGO_MAP[brandName];
+  if (!logoName) return null;
+  
+  return `${LOGO_BASE}${logoName}.png?v=${Date.now()}`;
+}
+
+function createBrandElement(brandName, iconClass = 'fa-car') {
+  const logoUrl = getLogoUrl(brandName);
+  
+  if (logoUrl) {
+    return `
+      <div class="maker-brand">
+        <img src="${logoUrl}" alt="${brandName}" class="maker-logo" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';" />
+        <i class="fa-solid ${iconClass}" style="display: none;"></i>
+        <span class="maker-brand-text">${brandName}</span>
+      </div>
+    `;
+  } else {
+    return `
+      <div class="maker-brand">
+        <i class="fa-solid ${iconClass}"></i>
+        <span class="maker-brand-text">${brandName}</span>
+      </div>
+    `;
+  }
+}
+
+// データソース設定
+const DATA_SOURCES = {
+  autohome: {
+    csvPath: `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
+    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`,
+    seriesUrlsPath: `${RAW_BASE}output/pipeline/autohome-series-urls/series_urls.csv`,
+    configPath: 'output/autohome/',
+    koubeiPath: 'output/koubei/'
+  },
+  hezi: {
+    csvPath: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
+    imgBase: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-images/`,
+    seriesUrlsPath: `${RAW_BASE}output/pipeline/hezi/autohome-series-urls/series_urls.csv`,
+    configPath: 'output/autohome/',
+    koubeiPath: 'output/koubei/'
+  }
+};
+
+let cnyToJpy = 20;
+let seriesUrlsMaps = {
+  autohome: {},
+  hezi: {}
+};
+let currentSource = 'autohome';
+
+async function fetchRate() {
+  try {
+    const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
+    const data = await res.json();
+    if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
+  } catch {
+    cnyToJpy = 20;
+  }
+}
+
+async function fetchSeriesUrls(source) {
+  try {
+    const path = DATA_SOURCES[source].seriesUrlsPath + `?v=${Date.now()}`;
+    const res = await fetch(path, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    
+    parsed.data.forEach(row => {
+      if (row.series_id && row.config_url) {
+        seriesUrlsMaps[source][row.series_id] = row.config_url;
+      }
+    });
+    console.log(`Series URLs loaded for ${source}:`, Object.keys(seriesUrlsMaps[source]).length);
+  } catch (err) {
+    console.error(`Failed to load series URLs for ${source}:`, err);
+  }
+}
+
+function convertToJPY(priceStr) {
+  if (!priceStr) return "";
+  const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
+  if (!m) return "";
+  const low = parseFloat(m[1]) * cnyToJpy * 10000;
+  const high = parseFloat(m[2]) * cnyToJpy * 10000;
+  const fmt = (x) => (x / 10000).toFixed(1);
+  return `（約${fmt(low)}〜${fmt(high)}万円）`;
+}
+
+function imgTag(rankStr, model, imageUrl, source, originalName) {
+  const imgBase = DATA_SOURCES[source].imgBase;
+  const fileName = source === 'hezi' ? originalName : model;
+  
+  if (source === 'hezi') {
+    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+  
+  if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
+    const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  } else if (imageUrl) {
+    return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  } else {
+    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+}
+
+async function loadData(source) {
+  currentSource = source;
+  try {
+    const csvPath = DATA_SOURCES[source].csvPath + `?v=${Date.now()}`;
+    const res = await fetch(csvPath, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.statusText);
+    const text = await res.text();
+    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+    if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
+    
+    const tableId = source === 'autohome' ? 'autohomeTable' : 'heziTable';
+    renderTable(parsed.data, tableId, source);
+    console.log(`✅ ${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込み成功 (${parsed.data.length}件)`);
+  } catch (err) {
+    console.error(`${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込みエラー:`, err);
+  }
+}
+
+function renderTable(data, tableId, source) {
+  const tbody = document.querySelector(`#${tableId} tbody`);
+  tbody.innerHTML = "";
+  data.forEach(r => {
+    const rankStr = String(r.rank).padStart(3, "0");
+    const diff = Number(r.delta_vs_last_month || 0);
+    const diffHtml = diff > 0
+      ? `<span class="rank-up">▲${diff}</span>`
+      : diff < 0
+      ? `<span class="rank-down">▼${-diff}</span>`
+      : "";
+    const link = r.link || "";
+    const carId = link.match(/(\d+)/)?.[1] || "";
+    const globalName = r.global_name || r.name || "";
+    const originalName = r.name || "";
+    
+    const displayName = (globalName && originalName && globalName !== originalName)
+      ? `<div class="vehicle-name-wrapper">
+           <div class="vehicle-name-main">${globalName}</div>
+           <div class="vehicle-name-cn">${originalName}</div>
+         </div>`
+      : globalName;
+    
+    const price = (r.price || "") + "元";
+    const priceJPY = convertToJPY(r.price || "");
+    const maker = r.manufacturer_ja || r.manufacturer || "";
+    const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : "";
+    const specBtn = carId
+      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','${source}')">仕様表</button>`
+      : "";
+    const storyBtn = carId
+      ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','${source}')">口コミ</button>`
+      : "";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="rank-badge">${r.rank}</td>
+      <td class="diff-badge">${diffHtml}</td>
+      <td>${imgTag(rankStr, globalName, r.image_url, source, originalName)}</td>
+      <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
+      <td>${maker}</td>
+      <td style="white-space: nowrap;">${units}</td>
+      <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+      <td>${specBtn}${storyBtn}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function openFullSpec() {
+  const html = document.getElementById("csvContent").innerHTML;
+  const title = document.getElementById("csvModalLabel").textContent;
+  
+  const allStyles = document.querySelector('style').textContent;
+  
+  const sectionRows = document.querySelectorAll('.spec-table tbody tr.sec-row');
+  let selectOptions = '';
+  sectionRows.forEach(row => {
+    const sectionName = row.getAttribute('data-section');
+    const sectionId = row.id;
+    if (sectionName && sectionId) {
+      selectOptions += `<option value="#${sectionId}">${sectionName}</option>`;
+    }
+  });
+  
+  const fullHTML = `
+    <!DOCTYPE html>
+    <html lang="ja">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes">
+        <title>${title}</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <style>
+          ${allStyles}
+          
+          * {
+            -webkit-overflow-scrolling: touch !important;
+          }
+          
+          html, body { 
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            overflow: hidden !important;
+            background: #f8f9fa !important;
+            position: fixed !important;
+          }
+          
+          .fullscreen-container {
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100vh !important;
+            width: 100vw !important;
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+          }
+          
+          .fullscreen-modal-header {
+            background: #fff !important;
+            padding: 1rem !important;
+            border-bottom: 1px solid #dee2e6 !important;
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            gap: 0.5rem !important;
+            flex-shrink: 0 !important;
+            position: relative !important;
+            z-index: 2000 !important;
+          }
+          
+          .fullscreen-modal-header h5 {
+            margin: 0 !important;
+            font-size: 1.25rem !important;
+            flex: 1 !important;
+          }
+          
+          .fullscreen-modal-body {
+            flex: 1 !important;
+            overflow: hidden !important;
+            background: #fff !important;
+            position: relative !important;
+          }
+          
+          #specScrollArea,
+          #specScrollArea .table-responsive {
+            height: 100% !important;
+            width: 100% !important;
+            overflow: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            position: relative !important;
+          }
+          
+          .close-fullscreen {
+            background: transparent !important;
+            border: none !important;
+            font-size: 1.5rem !important;
+            opacity: 0.5 !important;
+            cursor: pointer !important;
+            padding: 0 !important;
+            width: 1em !important;
+            height: 1em !important;
+            line-height: 1 !important;
+            flex-shrink: 0 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+          }
+          
+          .close-fullscreen:hover {
+            opacity: 1 !important;
+          }
+          
+          .legend-text {
+            font-size: 0.85rem !important;
+            color: #6c757d !important;
+            white-space: nowrap !important;
+            margin-left: auto !important;
+            margin-right: 1rem !important;
+            order: 8 !important;
+          }
+          
+          .section-toggle {
+            position: static !important;
+            transform: none !important;
+            width: auto !important;
+            padding: 0 !important;
+            pointer-events: auto !important;
+            flex: 1 !important;
+            order: 1 !important;
+          }
+          
+          .section-toggle select {
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            display: block !important;
+            pointer-events: auto !important;
+            background: #fff !important;
+          }
+          
+          .close-fullscreen {
+            order: 10 !important;
+          }
+          
+          @media (max-width: 991px) {
+            .fullscreen-modal-header h5 {
+              display: none !important;
+            }
+            
+            .legend-text {
+              display: none !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-fill {
+              left: 99px !important;
+            }
+          }
+          
+          @media (min-width: 992px) {
+            .section-toggle {
+              display: none !important;
+            }
+            
+            .legend-text {
+              display: block !important;
+            }
+            
+            .fullscreen-modal-header h5 {
+              display: block !important;
+            }
+            
+            .spec-table tbody tr.sec-row .section-fill {
+              left: 179px !important;
+            }
+          }
+        </style>
+      </head>
+      <body>
+        <div class="fullscreen-container">
+          <div class="fullscreen-modal-header" id="modalHeader">
+            <h5 id="modalTitle">${title}</h5>
+            <span class="legend-text">●：標準装備　〇：オプション装備</span>
+            <button type="button" class="close-fullscreen" onclick="window.close()" aria-label="閉じる">×</button>
+          </div>
+          <div class="fullscreen-modal-body">
+            ${html}
+          </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"><\/script>
+        <script>
+          function initFullscreen() {
+            const scrollArea = document.querySelector("#specScrollArea .table-responsive") || document.getElementById("specScrollArea");
+            if (!scrollArea) {
+              setTimeout(initFullscreen, 100);
+              return;
+            }
+            
+            const theadEl = scrollArea.querySelector(".spec-table thead");
+            const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+            scrollArea.style.setProperty("--secOffset", theadH + "px");
+            
+            const modalHeader = document.getElementById('modalHeader');
+            const closeBtn = modalHeader.querySelector('.close-fullscreen');
+            
+            if (window.innerWidth <= 991) {
+              const toggleDiv = document.createElement('div');
+              toggleDiv.className = 'section-toggle';
+              toggleDiv.innerHTML = '<select id="sectionSelect" class="form-select">${selectOptions}</select>';
+              modalHeader.insertBefore(toggleDiv, closeBtn);
+              
+              const select = document.getElementById("sectionSelect");
+              if (select) {
+                select.addEventListener("change", e => {
+                  const id = e.target.value;
+                  const el = document.querySelector(id);
+                  if (el && scrollArea) {
+                    const offset = el.offsetTop - theadH;
+                    scrollArea.scrollTo({top: offset, behavior: "smooth"});
+                  }
+                });
+              }
+            }
+          }
+          
+          if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => setTimeout(initFullscreen, 200));
+          } else {
+            setTimeout(initFullscreen, 200);
+          }
+        <\/script>
+      </body>
+    </html>
+  `;
+  
+  try {
+    const blob = new Blob([fullHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const w = window.open(url, '_blank');
+    
+    if (!w || w.closed || typeof w.closed == 'undefined') {
+      throw new Error('Popup blocked');
+    }
+    
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  } catch (e) {
+    alert('ポップアップがブロックされました。ブラウザの設定でポップアップを許可してください。');
+  }
+}
+
+function showConfigCsv(carId, title, source) {
+  const path = `output/autohome/${carId}/config_${carId}.ja.csv?v=${Date.now()}`;
+  const target = document.getElementById("csvContent");
+  
+  const configUrl = seriesUrlsMaps[source][carId];
+  window.currentConfigUrl = configUrl;
+  
+  let modalTitle = `車両仕様（${title}`;
+  if (configUrl) {
+    modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #667eea; text-decoration: none;">引用元ページ</a>）`;
+  } else {
+    modalTitle += ` | ID:${carId}）`;
+  }
+  
+  document.getElementById("csvModalLabel").innerHTML = modalTitle;
+  
+  const existingLegend = document.querySelector('#csvModal .modal-header .legend-text');
+  if (existingLegend) existingLegend.remove();
+  
+  target.innerHTML = "読込中...";
+  Papa.parse(path, {
+    download: true,
+    header: false,
+    skipEmptyLines: false,
+    complete: (res) => {
+      const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
+      if (!rows.length) { target.innerHTML = "<div class='text-danger'>CSVが空です。</div>"; return; }
+
+      const headerIdx = rows.findIndex(r => r.some(v => /^項目(_ja)?$/.test((v || "").trim())));
+      if (headerIdx === -1) { target.innerHTML = "<div class='text-danger'>ヘッダー行が見つかりません。</div>"; return; }
+
+      const headerRow = rows[headerIdx];
+      const idxSecJa  = headerRow.findIndex(v => (v || "").trim() === "セクション_ja");
+      const idxSec    = headerRow.findIndex(v => (v || "").trim() === "セクション");
+      const secIdx    = (idxSecJa !== -1 ? idxSecJa : idxSec);
+      const idxItemJa = headerRow.findIndex(v => (v || "").trim() === "項目_ja");
+      const idxItem   = headerRow.findIndex(v => (v || "").trim() === "項目");
+      const itemIdx   = (idxItemJa !== -1 ? idxItemJa : idxItem);
+      const modelStart = Math.max(secIdx, itemIdx) + 1;
+      const modelHeaders = headerRow.slice(modelStart);
+      const dataRows = rows.slice(headerIdx + 1);
+
+      const grouped = [];
+      let currentSection = "";
+      for (const r of dataRows) {
+        const sec = (r[secIdx] || "").trim();
+        if (sec && sec.toLowerCase() !== "nan") currentSection = sec;
+        if (!currentSection) continue;
+        const item = (r[itemIdx] || "").trim();
+        if (!item || /^(セクション|セクション_ja|項目|項目_ja)$/i.test(item)) continue;
+        const cols = r.slice(modelStart);
+        if (!grouped.length || grouped[grouped.length - 1].section !== currentSection)
+          grouped.push({ section: currentSection, rows: [] });
+        grouped[grouped.length - 1].rows.push([item, ...cols]);
+      }
+
+      let options = "";
+      for (const g of grouped) {
+        options += `<option value="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}">${g.section}</option>`;
+      }
+
+      const navHtml = `
+        <div class="spec-sidebar d-none d-lg-block">
+          <ul class="list-unstyled m-0 p-0">
+            ${grouped.map(g => `<li><a href="#sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}" class="text-decoration-none d-block py-1">${g.section}</a></li>`).join("")}
+          </ul>
+        </div>`;
+
+      const thead = `<thead><tr><th class="sticky-col" style="min-width:180px;"></th>${modelHeaders.map(h=>`<th>${h}</th>`).join("")}</tr></thead>`;
+      let tbody="<tbody>";
+      for(const g of grouped){
+        const id=`sec_${g.section.replace(/[／\/]/g,"_").replace(/\s+/g,"_")}`;
+        tbody+=`
+          <tr id="${id}" class="sec-row" data-section="${g.section}">
+            <th class="item-col section-col">▼ ${g.section}</th>
+            <td colspan="${modelHeaders.length}" class="section-fill"></td>
+          </tr>`;
+        for(const row of g.rows){
+          const item=row[0]||"";
+          const cells=row.slice(1).map(v=>`<td style="white-space:pre-line;">${(v||"").replace(/^nan$/i,"")}</td>`).join("");
+          tbody+=`<tr><th class="item-col">${item}</th>${cells}</tr>`;
+        }
+      }
+      tbody+="</tbody>";
+
+      const tableHtml=`
+        <div class="spec-table-container d-flex">
+          ${navHtml}
+          <div class="spec-content p-2 flex-grow-1 overflow-auto" id="specScrollArea">
+            <div class="table-responsive">
+              <table class="table table-bordered table-sm spec-table mb-0">
+                ${thead}${tbody}
+              </table>
+            </div>
+          </div>
+        </div>`;
+      target.innerHTML=tableHtml;
+      
+      const modalHeader = document.querySelector('#csvModal .modal-header');
+      const closeBtn = modalHeader.querySelector('.btn-close');
+      
+      const existingToggle = modalHeader.querySelector('.section-toggle');
+      if (existingToggle) existingToggle.remove();
+      const existingFullBtn = modalHeader.querySelector('.btn-open-full');
+      if (existingFullBtn) existingFullBtn.remove();
+      const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
+      if (existingSourceBtn) existingSourceBtn.remove();
+      
+      if (window.innerWidth <= 991) {
+        if (configUrl) {
+          const sourceBtn = document.createElement('a');
+          sourceBtn.className = 'source-link-btn';
+          sourceBtn.href = configUrl;
+          sourceBtn.target = '_blank';
+          sourceBtn.rel = 'noopener';
+          sourceBtn.textContent = '引用元';
+          modalHeader.insertBefore(sourceBtn, closeBtn);
+        }
+        
+        const toggleDiv = document.createElement('div');
+        toggleDiv.className = 'section-toggle';
+        toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
+        modalHeader.insertBefore(toggleDiv, closeBtn);
+      } else {
+        const legendSpan = document.createElement('span');
+        legendSpan.className = 'legend-text';
+        legendSpan.textContent = '●：標準装備　〇：オプション装備';
+        modalHeader.insertBefore(legendSpan, closeBtn);
+      }
+      
+      const fullBtn = document.createElement("button");
+      fullBtn.className = "btn-open-full";
+      fullBtn.setAttribute("title", "全画面表示");
+      fullBtn.innerHTML = '<i class="fa-solid fa-expand"></i>';
+      fullBtn.onclick = () => openFullSpec();
+      modalHeader.insertBefore(fullBtn, closeBtn);
+
+      const modal = new bootstrap.Modal(document.getElementById("csvModal"));
+      modal.show();
+
+      document.getElementById("csvModal").addEventListener('shown.bs.modal', function () {
+        const scrollArea =
+          document.querySelector("#specScrollArea .table-responsive")?.scrollHeight > 0
+            ? document.querySelector("#specScrollArea .table-responsive")
+            : document.getElementById("specScrollArea");
+        const theadEl = scrollArea?.querySelector(".spec-table thead");
+        const theadH = theadEl ? Math.ceil(theadEl.getBoundingClientRect().height) : 0;
+        if (scrollArea) scrollArea.style.setProperty("--secOffset", theadH + "px");
+
+        const select=document.getElementById("sectionSelect");
+        if(select){
+          select.addEventListener("change",e=>{
+            const id=e.target.value;
+            const el=document.querySelector(id);
+            if(el && scrollArea){
+              const offset = el.offsetTop - theadH;
+              scrollArea.scrollTo({top:offset,behavior:"smooth"});
+            }
+          });
+        }
+      }, { once: true });
+    },
+    error:(err)=>{target.textContent="読み込み失敗: "+err.message;}
+  });
+}
+
+async function showStory(carId, title, source){
+  const path=`output/koubei/${carId}/story.txt?v=${Date.now()}`;
+  const target=document.getElementById("storyContent");
+  const koubeiUrl = `https://k.autohome.com.cn/${carId}#pvareaid=3454440`;
+  
+  let modalTitle = `口コミ概要（${title}`;
+  modalTitle += ` | <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #667eea; text-decoration: none;">引用元ページ</a>）`;
+  document.getElementById("storyModalLabel").innerHTML = modalTitle;
+  
+  const modalHeader = document.querySelector('#storyModal .modal-header');
+  const closeBtn = modalHeader.querySelector('.btn-close');
+  const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
+  if (existingSourceBtn) existingSourceBtn.remove();
+  
+  if (window.innerWidth <= 991) {
+    const sourceBtn = document.createElement('a');
+    sourceBtn.className = 'source-link-btn';
+    sourceBtn.href = koubeiUrl;
+    sourceBtn.target = '_blank';
+    sourceBtn.rel = 'noopener';
+    sourceBtn.textContent = '引用元';
+    modalHeader.insertBefore(sourceBtn, closeBtn);
+  }
+  
+  target.textContent="読込中...";
+  try{
+    const res=await fetch(path,{cache:"no-store"});
+    if(!res.ok)throw new Error("Not found");
+    let text=await res.text();
+    text=text.replace(/```/g,"");
+    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+    text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+    text=text.replace(/\r?\n/g,"<br>");
+    text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+    target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
+  }catch{
+    target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";
+  }
+  new bootstrap.Modal(document.getElementById("storyModal")).show();
+}
+
 const LOGO_BASE = RAW_BASE + "output/logos/";
 
 // ブランド名とロゴファイル名のマッピング
@@ -1250,145 +2941,6 @@ function renderMakersTab() {
   `;
   
   container.innerHTML = makersHTML;
-}
-
-// データソース設定（既存のコードを継続）
-const DATA_SOURCES = {
-  autohome: {
-    csvPath: `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
-    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`,
-    seriesUrlsPath: `${RAW_BASE}output/pipeline/autohome-series-urls/series_urls.csv`,
-  },
-  hezi: {
-    csvPath: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
-    imgBase: `${RAW_BASE}output/pipeline/hezi/autohome-hezi-ranking-images/`,
-    seriesUrlsPath: `${RAW_BASE}output/pipeline/hezi/autohome-series-urls/series_urls.csv`,
-  }
-};
-
-let cnyToJpy = 20;
-let seriesUrlsMaps = { autohome: {}, hezi: {} };
-let currentSource = 'autohome';
-
-async function fetchRate() {
-  try {
-    const res = await fetch("https://api.exchangerate.host/latest?base=CNY&symbols=JPY");
-    const data = await res.json();
-    if (data?.rates?.JPY) cnyToJpy = data.rates.JPY;
-  } catch { cnyToJpy = 20; }
-}
-
-async function fetchSeriesUrls(source) {
-  try {
-    const path = DATA_SOURCES[source].seriesUrlsPath + `?v=${Date.now()}`;
-    const res = await fetch(path, { cache: "no-store" });
-    if (!res.ok) throw new Error(res.statusText);
-    const text = await res.text();
-    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-    parsed.data.forEach(row => {
-      if (row.series_id && row.config_url) {
-        seriesUrlsMaps[source][row.series_id] = row.config_url;
-      }
-    });
-  } catch (err) {
-    console.error(`Failed to load series URLs for ${source}:`, err);
-  }
-}
-
-function convertToJPY(priceStr) {
-  if (!priceStr) return "";
-  const m = priceStr.match(/([\d.]+)-([\d.]+)万/);
-  if (!m) return "";
-  const low = parseFloat(m[1]) * cnyToJpy * 10000;
-  const high = parseFloat(m[2]) * cnyToJpy * 10000;
-  const fmt = (x) => (x / 10000).toFixed(1);
-  return `（約${fmt(low)}〜${fmt(high)}万円）`;
-}
-
-function imgTag(rankStr, model, imageUrl, source, originalName) {
-  const imgBase = DATA_SOURCES[source].imgBase;
-  const fileName = source === 'hezi' ? originalName : model;
-  
-  if (source === 'hezi') {
-    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  }
-  
-  if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
-    const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  } else if (imageUrl) {
-    return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  } else {
-    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  }
-}
-
-async function loadData(source) {
-  currentSource = source;
-  try {
-    const csvPath = DATA_SOURCES[source].csvPath + `?v=${Date.now()}`;
-    const res = await fetch(csvPath, { cache: "no-store" });
-    if (!res.ok) throw new Error(res.statusText);
-    const text = await res.text();
-    const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-    if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
-    
-    const tableId = source === 'autohome' ? 'autohomeTable' : 'heziTable';
-    renderTable(parsed.data, tableId, source);
-  } catch (err) {
-    console.error(`${source} CSV 読み込みエラー:`, err);
-  }
-}
-
-function renderTable(data, tableId, source) {
-  const tbody = document.querySelector(`#${tableId} tbody`);
-  tbody.innerHTML = "";
-  data.forEach(r => {
-    const rankStr = String(r.rank).padStart(3, "0");
-    const diff = Number(r.delta_vs_last_month || 0);
-    const diffHtml = diff > 0
-      ? `<span class="rank-up">▲${diff}</span>`
-      : diff < 0
-      ? `<span class="rank-down">▼${-diff}</span>`
-      : "";
-    const link = r.link || "";
-    const carId = link.match(/(\d+)/)?.[1] || "";
-    const globalName = r.global_name || r.name || "";
-    const originalName = r.name || "";
-    
-    const displayName = (globalName && originalName && globalName !== originalName)
-      ? `<div class="vehicle-name-wrapper">
-           <div class="vehicle-name-main">${globalName}</div>
-           <div class="vehicle-name-cn">${originalName}</div>
-         </div>`
-      : globalName;
-    
-    const price = (r.price || "") + "元";
-    const priceJPY = convertToJPY(r.price || "");
-    const maker = r.manufacturer_ja || r.manufacturer || "";
-    const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : "";
-    const specBtn = carId
-      ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="alert('仕様表機能は省略')">仕様表</button>`
-      : "";
-    const storyBtn = carId
-      ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="alert('口コミ機能は省略')">口コミ</button>`
-      : "";
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td class="rank-badge">${r.rank}</td>
-      <td class="diff-badge">${diffHtml}</td>
-      <td>${imgTag(rankStr, globalName, r.image_url, source, originalName)}</td>
-      <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
-      <td>${maker}</td>
-      <td style="white-space: nowrap;">${units}</td>
-      <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-      <td>${specBtn}${storyBtn}</td>`;
-    tbody.appendChild(tr);
-  });
-}
-
 async function init() {
   await fetchRate();
   await Promise.all([
@@ -1416,6 +2968,7 @@ document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e
 init();
 
 const backToTopBtn = document.getElementById('backToTop');
+
 window.addEventListener('scroll', () => {
   if (window.pageYOffset > 300) {
     backToTopBtn.classList.add('show');
@@ -1425,7 +2978,10 @@ window.addEventListener('scroll', () => {
 });
 
 backToTopBtn.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
 });
 </script>
 

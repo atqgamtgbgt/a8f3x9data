@@ -1102,7 +1102,7 @@ function renderTable(data, tableId, source) {
     const price = (r.price || "") + "元";
     const priceJPY = convertToJPY(r.price || "");
     const maker = r.manufacturer_ja || r.manufacturer || "";
-    const units = r.units ? r.units + "台" : ""; // 台数に「台」を追加
+    const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : ""; // 台数に3桁カンマ区切りと「台」を追加
     const specBtn = carId
       ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','${source}')">仕様表</button>`
       : "";

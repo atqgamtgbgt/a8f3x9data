@@ -28,6 +28,16 @@ header {
 .nav-tabs {
   border-bottom: 2px solid #dee2e6;
   margin-bottom: 1rem;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.nav-tabs::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-tabs .nav-link {
@@ -36,6 +46,8 @@ header {
   border: none;
   border-bottom: 3px solid transparent;
   padding: 0.75rem 1.5rem;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .nav-tabs .nav-link:hover {
@@ -980,6 +992,18 @@ img.car-thumb {
   font-size: 0.55rem;
   color: #999;
   border: 1px dashed #ccc;
+  overflow: hidden;
+}
+
+.logo-placeholder img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.logo-placeholder.has-logo {
+  border: none;
+  background: transparent;
 }
 
 .company-name {
@@ -1056,6 +1080,20 @@ img.car-thumb {
   background: #f5f5f5;
   border-radius: 3px;
   flex-shrink: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-logo-mini img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.brand-logo-mini.has-logo {
+  background: transparent;
 }
 
 /* SVG線 */
@@ -1178,6 +1216,36 @@ img.car-thumb {
   color: #666;
 }
 
+.huawei-logo {
+  width: 22px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.huawei-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.huawei-center-logo {
+  width: 40px;
+  height: 40px;
+  margin-bottom: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.huawei-center-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
 /* スマホ調整 */
 @media (max-width: 576px) {
   .company-card {
@@ -1282,113 +1350,115 @@ img.car-thumb {
               <!-- 上段：中国国有企業 -->
               <div class="company-row china-row" id="chinaRow">
                 
-                <div class="company-card china-card" data-id="faw" data-partners="toyota,vw,audi">
+                <div class="company-card china-card" data-id="faw" data-partners="toyota,vw,audi" data-logo="红旗.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">一汽集団</div>
                   <div class="company-name-sub">FAW</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>紅旗（Hongqi）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>奔腾（Bestune）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="红旗.png"></span>紅旗（Hongqi）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="奔腾.png"></span>奔腾（Bestune）</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="dongfeng" data-partners="honda,nissan,psa,kia">
+                <div class="company-card china-card" data-id="dongfeng" data-partners="honda,nissan,psa,kia" data-logo="东风风神.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">東風集団</div>
                   <div class="company-name-sub">Dongfeng</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>东风风神</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>岚图（Voyah）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>猛士（M-Hero）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风风神.png"></span>东风风神</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="岚图汽车.png"></span>岚图（Voyah）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="猛士.png"></span>猛士（M-Hero）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风奕派.png"></span>东风奕派（eπ）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风纳米.png"></span>东风纳米</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="saic" data-partners="vw,gm,audi">
+                <div class="company-card china-card" data-id="saic" data-partners="vw,gm,audi" data-logo="荣威.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">上汽集団</div>
                   <div class="company-name-sub">SAIC</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>荣威（Roewe）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>名爵（MG）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>智己（IM）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="荣威.png"></span>荣威（Roewe）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="名爵.png"></span>名爵（MG）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="智己汽车.png"></span>智己（IM）</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="gac" data-partners="toyota,honda">
+                <div class="company-card china-card" data-id="gac" data-partners="toyota,honda" data-logo="广汽传祺.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">広汽集団</div>
                   <div class="company-name-sub">GAC</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>传祺（Trumpchi）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>埃安（AION）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>昊铂（Hyper）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="广汽传祺.png"></span>传祺（Trumpchi）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="埃安.png"></span>埃安（AION）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="广汽昊铂.png"></span>昊铂（Hyper）</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="baic" data-partners="mercedes,hyundai">
+                <div class="company-card china-card" data-id="baic" data-partners="mercedes,hyundai" data-logo="北京汽车.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">北汽集団</div>
                   <div class="company-name-sub">BAIC</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>北京汽车</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>北京越野</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>极狐（ARCFOX）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="北京汽车.png"></span>北京汽车</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="北京越野.png"></span>北京越野</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="ARCFOX极狐.png"></span>极狐（ARCFOX）</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="changan" data-partners="mazda,ford">
+                <div class="company-card china-card" data-id="changan" data-partners="mazda,ford" data-logo="长安.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">長安汽車</div>
                   <div class="company-name-sub">Changan</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>长安</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>深蓝（Deepal）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>阿维塔（Avatr）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>启源（Qiyuan）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="长安.png"></span>长安</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="深蓝汽车.png"></span>深蓝（Deepal）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="阿维塔.png"></span>阿维塔（Avatr）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="长安启源.png"></span>启源（Qiyuan）</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="chery" data-partners="jlr">
+                <div class="company-card china-card" data-id="chery" data-partners="jlr" data-logo="奇瑞.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">奇瑞</div>
                   <div class="company-name-sub">Chery<br><small style="color:#888;font-size:0.55rem;">（地方国有）</small></div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>奇瑞</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>星途（Exeed）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>捷途（Jetour）</div></li>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>iCAR</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="奇瑞.png"></span>奇瑞</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="星途.png"></span>星途（Exeed）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="捷途.png"></span>捷途（Jetour）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="iCAR.png"></span>iCAR</div></li>
                     </ul>
                   </div>
                 </div>
                 
-                <div class="company-card china-card" data-id="brilliance" data-partners="bmw">
+                <div class="company-card china-card" data-id="brilliance" data-partners="bmw" data-logo="金杯.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">華晨</div>
                   <div class="company-name-sub">Brilliance</div>
                   <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                   <div class="brands-list">
                     <ul>
-                      <li><div class="brand-item"><span class="brand-logo-mini"></span>金杯</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="金杯.png"></span>金杯</div></li>
                     </ul>
                   </div>
                 </div>
@@ -1401,85 +1471,85 @@ img.car-thumb {
               <!-- 下段：外資企業 -->
               <div class="company-row foreign-row" id="foreignRow">
                 
-                <div class="company-card foreign-card" data-id="toyota" data-partners="faw,gac">
+                <div class="company-card foreign-card" data-id="toyota" data-partners="faw,gac" data-logo="丰田.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">トヨタ</div>
                   <div class="company-name-sub">Toyota</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="honda" data-partners="dongfeng,gac">
+                <div class="company-card foreign-card" data-id="honda" data-partners="dongfeng,gac" data-logo="本田.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">ホンダ</div>
                   <div class="company-name-sub">Honda</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="nissan" data-partners="dongfeng">
+                <div class="company-card foreign-card" data-id="nissan" data-partners="dongfeng" data-logo="日产.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">日産</div>
                   <div class="company-name-sub">Nissan</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="mazda" data-partners="changan">
+                <div class="company-card foreign-card" data-id="mazda" data-partners="changan" data-logo="马自达.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">マツダ</div>
                   <div class="company-name-sub">Mazda</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="vw" data-partners="faw,saic">
+                <div class="company-card foreign-card" data-id="vw" data-partners="faw,saic" data-logo="大众.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">VW</div>
                   <div class="company-name-sub">Volkswagen</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="audi" data-partners="faw,saic">
+                <div class="company-card foreign-card" data-id="audi" data-partners="faw,saic" data-logo="奥迪.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">アウディ</div>
                   <div class="company-name-sub">Audi</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="mercedes" data-partners="baic">
+                <div class="company-card foreign-card" data-id="mercedes" data-partners="baic" data-logo="奔驰.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">メルセデス</div>
                   <div class="company-name-sub">Mercedes</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="bmw" data-partners="brilliance">
+                <div class="company-card foreign-card" data-id="bmw" data-partners="brilliance" data-logo="宝马.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">BMW</div>
                   <div class="company-name-sub">BMW</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="gm" data-partners="saic">
+                <div class="company-card foreign-card" data-id="gm" data-partners="saic" data-logo="别克.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">GM</div>
                   <div class="company-name-sub">General Motors</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="ford" data-partners="changan">
+                <div class="company-card foreign-card" data-id="ford" data-partners="changan" data-logo="林肯.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">フォード</div>
                   <div class="company-name-sub">Ford/Lincoln</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="psa" data-partners="dongfeng">
+                <div class="company-card foreign-card" data-id="psa" data-partners="dongfeng" data-logo="标致.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">ステランティス</div>
                   <div class="company-name-sub">Stellantis</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="hyundai" data-partners="baic">
+                <div class="company-card foreign-card" data-id="hyundai" data-partners="baic" data-logo="现代.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">現代</div>
                   <div class="company-name-sub">Hyundai</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="kia" data-partners="dongfeng">
+                <div class="company-card foreign-card" data-id="kia" data-partners="dongfeng" data-logo="起亚.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">起亜</div>
                   <div class="company-name-sub">Kia</div>
                 </div>
                 
-                <div class="company-card foreign-card" data-id="jlr" data-partners="chery">
+                <div class="company-card foreign-card" data-id="jlr" data-partners="chery" data-logo="路虎.png">
                   <div class="logo-placeholder">LOGO</div>
                   <div class="company-name">JLR</div>
                   <div class="company-name-sub">Jaguar Land Rover</div>
@@ -1495,139 +1565,137 @@ img.car-thumb {
             
             <div class="private-grid">
               
-              <div class="private-card" data-id="byd">
+              <div class="private-card" data-id="byd" data-logo="BYD.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">BYD</div>
                 <div class="company-name-sub">比亚迪</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>BYD</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>仰望（Yangwang）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>方程豹</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>腾势（Denza）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="BYD.png"></span>BYD</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="仰望.png"></span>仰望（Yangwang）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="方程豹.png"></span>方程豹</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="腾势.png"></span>腾势（Denza）</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="geely">
+              <div class="private-card" data-id="geely" data-logo="吉利汽车.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">吉利</div>
                 <div class="company-name-sub">Geely</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>吉利</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>吉利银河（Galaxy）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>领克（Lynk & Co）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>极氪（Zeekr）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>smart</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>Volvo（出資）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="吉利汽车.png"></span>吉利</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="吉利银河.png"></span>吉利银河（Galaxy）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="领克.png"></span>领克（Lynk & Co）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="极氪.png"></span>极氪（Zeekr）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="smart.png"></span>smart</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="gwm">
+              <div class="private-card" data-id="gwm" data-logo="哈弗.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">長城汽車</div>
                 <div class="company-name-sub">GWM</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>哈弗（Haval）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>坦克（Tank）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>欧拉（Ora）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>魏牌（Wey）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="哈弗.png"></span>哈弗（Haval）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="坦克.png"></span>坦克（Tank）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="欧拉.png"></span>欧拉（Ora）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="魏牌.png"></span>魏牌（Wey）</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="nio">
+              <div class="private-card" data-id="nio" data-logo="蔚来.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">NIO</div>
                 <div class="company-name-sub">蔚来</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>蔚来（NIO）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>乐道（ONVO）</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>萤火虫（Firefly）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="蔚来.png"></span>蔚来（NIO）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="乐道.png"></span>乐道（ONVO）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="firefly萤火虫.png"></span>萤火虫（Firefly）</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="xpeng">
+              <div class="private-card" data-id="xpeng" data-logo="小鹏.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">小鹏</div>
                 <div class="company-name-sub">Xpeng</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>小鹏汽车</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>MONA</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="小鹏.png"></span>小鹏汽车</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="li">
+              <div class="private-card" data-id="li" data-logo="理想汽车.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">理想</div>
                 <div class="company-name-sub">Li Auto</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>理想汽车</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="理想汽车.png"></span>理想汽车</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="leapmotor">
+              <div class="private-card" data-id="leapmotor" data-logo="零跑汽车.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">零跑</div>
                 <div class="company-name-sub">Leapmotor</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>零跑汽车</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="零跑汽车.png"></span>零跑汽车</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="xiaomi">
+              <div class="private-card" data-id="xiaomi" data-logo="小米汽车.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">小米</div>
                 <div class="company-name-sub">Xiaomi</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>小米汽车</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="小米汽车.png"></span>小米汽车</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="seres">
+              <div class="private-card" data-id="seres" data-logo="AITO 问界.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">赛力斯</div>
                 <div class="company-name-sub">Seres</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>AITO 问界</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>蓝电</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="AITO 问界.png"></span>AITO 问界</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="蓝电.png"></span>蓝电</div></li>
                   </ul>
                 </div>
               </div>
               
-              <div class="private-card" data-id="jac">
+              <div class="private-card" data-id="jac" data-logo="江淮瑞风.png">
                 <div class="logo-placeholder">LOGO</div>
                 <div class="company-name">江淮</div>
                 <div class="company-name-sub">JAC</div>
                 <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
                 <div class="brands-list">
                   <ul>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>江淮瑞风</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>钇为</div></li>
-                    <li><div class="brand-item"><span class="brand-logo-mini"></span>尊界</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="江淮瑞风.png"></span>江淮瑞风</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="江淮钇为.png"></span>钇为</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="尊界.png"></span>尊界</div></li>
                   </ul>
                 </div>
               </div>
@@ -1642,23 +1710,27 @@ img.car-thumb {
             <div class="huawei-diagram">
               <div class="huawei-partners">
                 <div class="huawei-partner">
+                  <span class="huawei-logo" data-logo="AITO 问界.png"></span>
                   <span class="huawei-brand">问界 AITO</span>
                   <span class="huawei-arrow">←</span>
                   <span class="huawei-oem">赛力斯</span>
                 </div>
                 <div class="huawei-partner">
+                  <span class="huawei-logo" data-logo="智界.png"></span>
                   <span class="huawei-brand">智界</span>
                   <span class="huawei-arrow">←</span>
                   <span class="huawei-oem">奇瑞</span>
                 </div>
                 <div class="huawei-partner">
+                  <span class="huawei-logo" data-logo="享界.png"></span>
                   <span class="huawei-brand">享界</span>
                   <span class="huawei-arrow">←</span>
                   <span class="huawei-oem">北汽</span>
                 </div>
               </div>
               
-              <div class="huawei-center">
+              <div class="huawei-center" data-logo="鸿蒙智行.webp">
+                <div class="huawei-center-logo"></div>
                 <div>华为</div>
                 <div style="font-size: 0.6rem;">鸿蒙智行</div>
               </div>
@@ -1668,11 +1740,13 @@ img.car-thumb {
                   <span class="huawei-oem">江淮</span>
                   <span class="huawei-arrow">→</span>
                   <span class="huawei-brand">尊界</span>
+                  <span class="huawei-logo" data-logo="尊界.png"></span>
                 </div>
                 <div class="huawei-partner">
                   <span class="huawei-oem">上汽</span>
                   <span class="huawei-arrow">→</span>
                   <span class="huawei-brand">尚界</span>
+                  <span class="huawei-logo" data-logo="尚界.png"></span>
                 </div>
               </div>
             </div>
@@ -2535,6 +2609,67 @@ async function showStory(carId, title, source){
 
 // ===== ブランド概略タブ用 =====
 
+const LOGO_BASE = `${RAW_BASE}output/logo/`;
+
+// ロゴを読み込む
+function loadLogos() {
+  // 企業カードのロゴ
+  document.querySelectorAll('.company-card[data-logo], .private-card[data-logo]').forEach(card => {
+    const logoFile = card.dataset.logo;
+    if (logoFile) {
+      const placeholder = card.querySelector('.logo-placeholder');
+      if (placeholder) {
+        const img = document.createElement('img');
+        img.src = LOGO_BASE + encodeURIComponent(logoFile);
+        img.alt = '';
+        img.onerror = () => { img.style.display = 'none'; };
+        img.onload = () => { placeholder.classList.add('has-logo'); };
+        placeholder.innerHTML = '';
+        placeholder.appendChild(img);
+      }
+    }
+  });
+  
+  // ブランドリスト内のミニロゴ
+  document.querySelectorAll('.brand-logo-mini[data-logo]').forEach(el => {
+    const logoFile = el.dataset.logo;
+    if (logoFile) {
+      const img = document.createElement('img');
+      img.src = LOGO_BASE + encodeURIComponent(logoFile);
+      img.alt = '';
+      img.onerror = () => { img.style.display = 'none'; };
+      img.onload = () => { el.classList.add('has-logo'); };
+      el.appendChild(img);
+    }
+  });
+  
+  // Huaweiセクションのロゴ
+  document.querySelectorAll('.huawei-logo[data-logo]').forEach(el => {
+    const logoFile = el.dataset.logo;
+    if (logoFile) {
+      const img = document.createElement('img');
+      img.src = LOGO_BASE + encodeURIComponent(logoFile);
+      img.alt = '';
+      img.onerror = () => { img.style.display = 'none'; };
+      el.appendChild(img);
+    }
+  });
+  
+  // Huawei中央のロゴ
+  const huaweiCenter = document.querySelector('.huawei-center[data-logo]');
+  if (huaweiCenter) {
+    const logoFile = huaweiCenter.dataset.logo;
+    const logoContainer = huaweiCenter.querySelector('.huawei-center-logo');
+    if (logoFile && logoContainer) {
+      const img = document.createElement('img');
+      img.src = LOGO_BASE + encodeURIComponent(logoFile);
+      img.alt = '';
+      img.onerror = () => { img.style.display = 'none'; };
+      logoContainer.appendChild(img);
+    }
+  }
+}
+
 // 線を描画（ラベルなし）
 function drawJvLines() {
   const svg = document.getElementById('jvLines');
@@ -2697,9 +2832,10 @@ function setupBrandToggle() {
   });
 }
 
-// ブランドタブが表示されたら線を描画
+// ブランドタブが表示されたら線を描画・ロゴ読み込み
 document.getElementById('brands-tab')?.addEventListener('shown.bs.tab', function () {
   setTimeout(() => {
+    loadLogos();
     drawJvLines();
     setupJvHighlight();
     setupBrandToggle();

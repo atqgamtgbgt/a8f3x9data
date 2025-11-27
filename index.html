@@ -1163,87 +1163,125 @@ img.car-thumb {
   box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.huawei-diagram {
+.huawei-header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 1.5rem;
-  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #fff3e0;
 }
 
-.huawei-center {
-  background: linear-gradient(135deg, #ff6f00, #e65100);
-  color: white;
-  border-radius: 50%;
-  width: 90px;
-  height: 90px;
+.huawei-logo-main {
+  width: 60px;
+  height: 60px;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 0.75rem;
-  text-align: center;
-}
-
-.huawei-partners {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.huawei-partner {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: #fff3e0;
-  border: 1px solid #ffcc80;
-  border-radius: 6px;
-  padding: 0.4rem 0.6rem;
-  font-size: 0.75rem;
-}
-
-.huawei-brand {
-  font-weight: 600;
-  color: #e65100;
-}
-
-.huawei-arrow {
-  color: #999;
-}
-
-.huawei-oem {
-  color: #666;
-}
-
-.huawei-logo {
-  width: 22px;
-  height: 22px;
-  display: inline-flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.huawei-logo img {
+.huawei-logo-main img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
 }
 
-.huawei-center-logo {
+.huawei-description {
+  flex: 1;
+}
+
+.huawei-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e65100;
+  margin-bottom: 0.25rem;
+}
+
+.huawei-subtitle {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.huawei-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.75rem;
+}
+
+.huawei-brand-card {
+  background: #fff3e0;
+  border: 2px solid #ffcc80;
+  border-radius: 10px;
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.huawei-brand-card:hover {
+  border-color: #e65100;
+  background: #ffe0b2;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(230, 81, 0, 0.2);
+}
+
+.huawei-brand-logo {
   width: 40px;
   height: 40px;
-  margin-bottom: 4px;
+  margin: 0 auto 0.4rem;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.huawei-center-logo img {
+.huawei-brand-logo img {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+}
+
+.huawei-brand-name {
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #e65100;
+  margin-bottom: 0.5rem;
+}
+
+.huawei-oem-info {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding-top: 0.5rem;
+  border-top: 1px dashed #ffcc80;
+}
+
+.huawei-oem-label {
+  font-size: 0.6rem;
+  color: #999;
+  background: #fff;
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.huawei-oem-logo {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.huawei-oem-logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.huawei-oem-name {
+  font-size: 0.7rem;
+  color: #666;
+  font-weight: 500;
 }
 
 /* スマホ調整 */
@@ -1678,46 +1716,60 @@ img.car-thumb {
           <section class="huawei-section">
             <h5 class="brand-section-title section-huawei"><i class="fa-solid fa-microchip me-2"></i>Huawei 鸿蒙智行エコシステム</h5>
             
-            <div class="huawei-diagram">
-              <div class="huawei-partners">
-                <div class="huawei-partner">
-                  <span class="huawei-logo" data-logo="AITO 问界.png"></span>
-                  <span class="huawei-brand">问界 AITO</span>
-                  <span class="huawei-arrow">←</span>
-                  <span class="huawei-oem">赛力斯</span>
-                </div>
-                <div class="huawei-partner">
-                  <span class="huawei-logo" data-logo="智界.png"></span>
-                  <span class="huawei-brand">智界</span>
-                  <span class="huawei-arrow">←</span>
-                  <span class="huawei-oem">奇瑞</span>
-                </div>
-                <div class="huawei-partner">
-                  <span class="huawei-logo" data-logo="享界.png"></span>
-                  <span class="huawei-brand">享界</span>
-                  <span class="huawei-arrow">←</span>
-                  <span class="huawei-oem">北汽</span>
+            <!-- 説明エリア -->
+            <div class="huawei-header">
+              <div class="huawei-logo-main" data-logo="鸿蒙智行.webp"></div>
+              <div class="huawei-description">
+                <div class="huawei-title">华为 鸿蒙智行</div>
+                <div class="huawei-subtitle">Huaweiがシステム・技術を提供し、自動車メーカーが製造を担当</div>
+              </div>
+            </div>
+            
+            <!-- ブランドグリッド -->
+            <div class="huawei-grid">
+              <div class="huawei-brand-card" data-logo="AITO 问界.png" data-oem-logo="蓝电.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">问界 AITO</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">赛力斯</span>
                 </div>
               </div>
-              
-              <div class="huawei-center" data-logo="鸿蒙智行.png">
-                <div class="huawei-center-logo"></div>
-                <div>华为</div>
-                <div style="font-size: 0.6rem;">鸿蒙智行</div>
-              </div>
-              
-              <div class="huawei-partners">
-                <div class="huawei-partner">
-                  <span class="huawei-oem">江淮</span>
-                  <span class="huawei-arrow">→</span>
-                  <span class="huawei-brand">尊界</span>
-                  <span class="huawei-logo" data-logo="尊界.png"></span>
+              <div class="huawei-brand-card" data-logo="智界.png" data-oem-logo="奇瑞.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">智界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">奇瑞</span>
                 </div>
-                <div class="huawei-partner">
-                  <span class="huawei-oem">上汽</span>
-                  <span class="huawei-arrow">→</span>
-                  <span class="huawei-brand">尚界</span>
-                  <span class="huawei-logo" data-logo="尚界.png"></span>
+              </div>
+              <div class="huawei-brand-card" data-logo="享界.png" data-oem-logo="北京汽车.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">享界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">北汽</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card" data-logo="尊界.png" data-oem-logo="江淮瑞风.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">尊界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">江淮</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card" data-logo="尚界.png" data-oem-logo="荣威.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">尚界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">上汽</span>
                 </div>
               </div>
             </div>
@@ -2617,30 +2669,39 @@ function loadLogos() {
   });
   
   // Huaweiセクションのロゴ
-  document.querySelectorAll('.huawei-logo[data-logo]').forEach(el => {
-    const logoFile = el.dataset.logo;
-    // 既に画像があればスキップ
-    if (logoFile && !el.querySelector('img')) {
-      const img = document.createElement('img');
-      img.src = LOGO_BASE + encodeURIComponent(logoFile);
-      img.alt = '';
-      img.onerror = () => { img.style.display = 'none'; };
-      el.appendChild(img);
-    }
-  });
-  
-  // Huawei中央のロゴ
-  const huaweiCenter = document.querySelector('.huawei-center[data-logo]');
-  if (huaweiCenter) {
-    const logoFile = huaweiCenter.dataset.logo;
-    const logoContainer = huaweiCenter.querySelector('.huawei-center-logo');
-    // 既に画像があればスキップ
+  document.querySelectorAll('.huawei-brand-card[data-logo]').forEach(card => {
+    const logoFile = card.dataset.logo;
+    const logoContainer = card.querySelector('.huawei-brand-logo');
     if (logoFile && logoContainer && !logoContainer.querySelector('img')) {
       const img = document.createElement('img');
       img.src = LOGO_BASE + encodeURIComponent(logoFile);
       img.alt = '';
       img.onerror = () => { img.style.display = 'none'; };
       logoContainer.appendChild(img);
+    }
+    
+    // OEMロゴ
+    const oemLogoFile = card.dataset.oemLogo;
+    const oemLogoContainer = card.querySelector('.huawei-oem-logo');
+    if (oemLogoFile && oemLogoContainer && !oemLogoContainer.querySelector('img')) {
+      const img = document.createElement('img');
+      img.src = LOGO_BASE + encodeURIComponent(oemLogoFile);
+      img.alt = '';
+      img.onerror = () => { img.style.display = 'none'; };
+      oemLogoContainer.appendChild(img);
+    }
+  });
+  
+  // Huaweiメインロゴ
+  const huaweiMain = document.querySelector('.huawei-logo-main[data-logo]');
+  if (huaweiMain) {
+    const logoFile = huaweiMain.dataset.logo;
+    if (logoFile && !huaweiMain.querySelector('img')) {
+      const img = document.createElement('img');
+      img.src = LOGO_BASE + encodeURIComponent(logoFile);
+      img.alt = '';
+      img.onerror = () => { img.style.display = 'none'; };
+      huaweiMain.appendChild(img);
     }
   }
 }

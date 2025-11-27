@@ -2833,12 +2833,19 @@ function setupBrandToggle() {
 }
 
 // ブランドタブが表示されたら線を描画・ロゴ読み込み
+let brandTabInitialized = false;
+
 document.getElementById('brands-tab')?.addEventListener('shown.bs.tab', function () {
   setTimeout(() => {
     loadLogos();
     drawJvLines();
-    setupJvHighlight();
-    setupBrandToggle();
+    
+    // 初回のみセットアップ
+    if (!brandTabInitialized) {
+      setupJvHighlight();
+      setupBrandToggle();
+      brandTabInitialized = true;
+    }
   }, 100);
 });
 

@@ -2611,6 +2611,11 @@ function setupJvHighlight() {
     
     // タッチデバイス対応
     card.addEventListener('touchstart', (e) => {
+      // ブランドトグルへのタッチは無視（別途処理）
+      if (e.target.closest('.brands-toggle') || e.target.closest('.brands-list')) {
+        return;
+      }
+      
       e.preventDefault();
       const cardId = card.dataset.id;
       const partners = card.dataset.partners ? card.dataset.partners.split(',') : [];
@@ -2646,8 +2651,10 @@ function setupJvHighlight() {
 // ブランドリスト展開
 function setupBrandToggle() {
   document.querySelectorAll('.brands-toggle').forEach(toggle => {
-    toggle.addEventListener('click', (e) => {
+    // クリックとタッチ両対応
+    const handleToggle = (e) => {
       e.stopPropagation();
+      e.preventDefault();
       const card = toggle.closest('.company-card, .private-card');
       const brandsList = toggle.nextElementSibling;
       
@@ -2665,11 +2672,23 @@ function setupBrandToggle() {
       } else {
         card?.classList.remove('brands-open');
       }
-    });
+    };
+    
+    toggle.addEventListener('click', handleToggle);
+    toggle.addEventListener('touchend', handleToggle);
   });
   
   document.addEventListener('click', (e) => {
     if (!e.target.closest('.brands-toggle') && !e.target.closest('.brands-list')) {
+      document.querySelectorAll('.brands-list.show').forEach(list => {
+        list.classList.remove('show');
+        list.closest('.company-card, .private-card')?.classList.remove('brands-open');
+      });
+    }
+  });
+  
+  document.addEventListener('touchend', (e) => {
+    if (!e.target.closest('.brands-toggle') && !e.target.closest('.brands-list') && !e.target.closest('.company-card') && !e.target.closest('.private-card')) {
       document.querySelectorAll('.brands-list.show').forEach(list => {
         list.classList.remove('show');
         list.closest('.company-card, .private-card')?.classList.remove('brands-open');

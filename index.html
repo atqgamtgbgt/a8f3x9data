@@ -869,7 +869,7 @@ img.car-thumb {
 }
 
 /* =====================================
-   仕様表データ列の幅設定
+   仕様表データ列の幅・高さ設定
 ===================================== */
 
 /* PC版 */
@@ -878,6 +878,11 @@ img.car-thumb {
   .spec-table tbody td {
     min-width: 160px;
   }
+  
+  .spec-table tbody td,
+  .spec-table tbody th.item-col {
+    padding: 10px 8px;
+  }
 }
 
 /* スマホ版 */
@@ -885,6 +890,11 @@ img.car-thumb {
   .spec-table thead th:not(.sticky-col),
   .spec-table tbody td {
     min-width: 110px;
+  }
+  
+  .spec-table tbody td,
+  .spec-table tbody th.item-col {
+    padding: 8px 6px;
   }
 }
 

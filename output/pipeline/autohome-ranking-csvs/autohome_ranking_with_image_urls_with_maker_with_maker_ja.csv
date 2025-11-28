@@ -1,5 +1,5 @@
 ﻿rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacturer,manufacturer_ja
-1,宏光MINIEV,宏光（ウーリン）ミニEV,61506,,,3.28-9.99万,/autohome_images/001_宏光MINIEV.png,,nan
+1,宏光MINIEV,ウーリンMINIEV,61506,,,3.28-9.99万,/autohome_images/001_宏光MINIEV.png,,nan
 2,星愿,星願,44239,1.0,,6.88-9.88万,/autohome_images/002_星愿.png,,nan
 3,秦PLUS,秦PLUS,35338,1.0,,7.98-17.98万,/autohome_images/003_秦PLUS.png,,nan
 4,轩逸,シルフィ,33903,1.0,,7.99-17.49万,/autohome_images/004_轩逸.png,,nan
@@ -66,7 +66,7 @@
 65,银河星耀8,Galaxy X8,10191,6.0,,12.58-16.58万,/autohome_images/065_银河星耀8.png,,nan
 66,铂智3X,bZ3X,10013,13.0,,10.98-15.98万,/autohome_images/066_铂智3X.png,,nan
 67,银河M9,銀河M9（Galaxy M9）,10006,43.0,,18.38-24.88万,/autohome_images/067_银河M9.png,,nan
-68,魏牌 高山,高山（Gaoshan）,9928,20.0,,28.58-35.38万,/autohome_images/068_魏牌_高山.png,,nan
+68,魏牌 高山,Gaoshan,9928,20.0,,28.58-35.38万,/autohome_images/068_魏牌_高山.png,,nan
 69,零跑C16,C16,9887,8.0,,15.18-18.98万,/autohome_images/069_零跑C16.png,,nan
 70,红旗E-QM5,紅旗E-QM5（Hongqi E-QM5）,9851,33.0,,8.98-23.98万,/autohome_images/070_红旗E-QM5.png,,nan
 71,帝豪,帝豪（Geely Emgrand）,9841,35.0,,6.29-14.98万,/autohome_images/071_帝豪.png,,nan

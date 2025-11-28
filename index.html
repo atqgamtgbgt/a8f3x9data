@@ -869,6 +869,26 @@ img.car-thumb {
 }
 
 /* =====================================
+   仕様表データ列の幅設定
+===================================== */
+
+/* PC版 */
+@media (min-width: 992px) {
+  .spec-table thead th:not(.sticky-col),
+  .spec-table tbody td {
+    min-width: 160px;
+  }
+}
+
+/* スマホ版 */
+@media (max-width: 991px) {
+  .spec-table thead th:not(.sticky-col),
+  .spec-table tbody td {
+    min-width: 110px;
+  }
+}
+
+/* =====================================
    その他調整
 ===================================== */
 .spec-content.p-2 {
@@ -1883,7 +1903,7 @@ img.car-thumb {
               <div class="huawei-logo-main" data-logo="鸿蒙智行.webp"></div>
               <div class="huawei-description">
                 <div class="huawei-title">华为 鸿蒙智行</div>
-                <div class="huawei-subtitle">Huawei主導の統一ブランド方式（智选車）。<br>Huaweiが企画・OS/UX・自動運転を担い、各自動車メーカーが製造を担当。</div>
+                <div class="huawei-subtitle">Huawei主導の統一ブランド方式（智選車）。<br>Huaweiが企画・OS/UX・自動運転を担い、各自動車メーカーが製造を担当。</div>
               </div>
             </div>
             

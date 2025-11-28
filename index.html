@@ -3,7 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="robots" content="noindex, nofollow">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex, nofollow">
   <meta name="googlebot" content="noindex, nofollow">
   <title>中国自動車販売ランキング</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -973,6 +976,25 @@ img.car-thumb {
   #storyModal .modal-title {
     display: none;
   }
+}
+
+/* 口コミモーダルのヘッダー配置（PC用） */
+#storyModal .modal-header {
+  display: flex;
+  align-items: center;
+}
+
+#storyModal .modal-header .modal-title {
+  flex: 1;
+  margin-right: auto;
+}
+
+#storyModal .modal-header .source-link-pc {
+  order: 8;
+}
+
+#storyModal .modal-header .btn-close {
+  order: 10;
 }
 
 /* モーダルヘッダーのボタン配置 */

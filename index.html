@@ -1001,6 +1001,20 @@ img.car-thumb {
   order: 9;
 }
 
+/* 引用元ページリンク（PC用モーダル） */
+.source-link-pc {
+  font-size: 0.85rem;
+  color: #0d6efd;
+  text-decoration: none;
+  white-space: nowrap;
+  margin-right: 1.5rem;
+  order: 8;
+}
+
+.source-link-pc:hover {
+  text-decoration: underline;
+}
+
 @media (max-width: 991px) {
   .legend-text {
     display: none !important;
@@ -2567,12 +2581,7 @@ function showConfigCsv(carId, title, source) {
   const configUrl = seriesUrlsMaps[source][carId];
   window.currentConfigUrl = configUrl;
   
-  let modalTitle = `車両仕様（${title}`;
-  if (configUrl) {
-    modalTitle += ` <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
-  } else {
-    modalTitle += `）`;
-  }
+  let modalTitle = `車両仕様（${title}）`;
   
   document.getElementById("csvModalLabel").innerHTML = modalTitle;
   
@@ -2684,6 +2693,17 @@ function showConfigCsv(carId, title, source) {
         toggleDiv.innerHTML = `<select id="sectionSelect">${options}</select>`;
         modalHeader.insertBefore(toggleDiv, closeBtn);
       } else {
+        // PC版：引用元ページリンクを凡例の左に追加
+        if (configUrl) {
+          const sourceLink = document.createElement('a');
+          sourceLink.href = configUrl;
+          sourceLink.target = '_blank';
+          sourceLink.rel = 'noopener';
+          sourceLink.className = 'source-link-pc';
+          sourceLink.textContent = '引用元ページ';
+          modalHeader.insertBefore(sourceLink, closeBtn);
+        }
+        
         const legendSpan = document.createElement('span');
         legendSpan.className = 'legend-text';
         legendSpan.textContent = '●：標準装備　〇：オプション装備';

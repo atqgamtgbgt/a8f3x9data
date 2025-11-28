@@ -2839,16 +2839,20 @@ async function showStory(carId, title, source){
   const target=document.getElementById("storyContent");
   const koubeiUrl = `https://k.autohome.com.cn/${carId}#pvareaid=3454440`;
   
-  let modalTitle = `口コミ概要（${title}`;
-  modalTitle += ` <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
+  let modalTitle = `口コミ概要（${title}）`;
   document.getElementById("storyModalLabel").innerHTML = modalTitle;
   
   const modalHeader = document.querySelector('#storyModal .modal-header');
   const closeBtn = modalHeader.querySelector('.btn-close');
+  
+  // 既存のリンクを削除
   const existingSourceBtn = modalHeader.querySelector('.source-link-btn');
   if (existingSourceBtn) existingSourceBtn.remove();
+  const existingSourcePc = modalHeader.querySelector('.source-link-pc');
+  if (existingSourcePc) existingSourcePc.remove();
   
   if (window.innerWidth <= 991) {
+    // スマホ版：ボタンスタイル
     const sourceBtn = document.createElement('a');
     sourceBtn.className = 'source-link-btn';
     sourceBtn.href = koubeiUrl;
@@ -2856,6 +2860,15 @@ async function showStory(carId, title, source){
     sourceBtn.rel = 'noopener';
     sourceBtn.textContent = '引用元';
     modalHeader.insertBefore(sourceBtn, closeBtn);
+  } else {
+    // PC版：テキストリンク
+    const sourceLink = document.createElement('a');
+    sourceLink.href = koubeiUrl;
+    sourceLink.target = '_blank';
+    sourceLink.rel = 'noopener';
+    sourceLink.className = 'source-link-pc';
+    sourceLink.textContent = '引用元ページ';
+    modalHeader.insertBefore(sourceLink, closeBtn);
   }
   
   target.textContent="読込中...";

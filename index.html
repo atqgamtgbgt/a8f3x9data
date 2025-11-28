@@ -2164,6 +2164,7 @@ function renderTable(data, tableId, source) {
 function openFullSpec() {
   const html = document.getElementById("csvContent").innerHTML;
   const title = document.getElementById("csvModalLabel").textContent;
+  const configUrl = window.currentConfigUrl || '';
   
   const allStyles = document.querySelector('style').textContent;
   
@@ -2300,6 +2301,35 @@ function openFullSpec() {
             order: 10 !important;
           }
           
+          .source-link-fullscreen {
+            color: #0d6efd !important;
+            text-decoration: none !important;
+            font-size: 0.9rem !important;
+            margin-right: 1rem !important;
+            order: 7 !important;
+            white-space: nowrap !important;
+          }
+          
+          .source-link-fullscreen:hover {
+            text-decoration: underline !important;
+          }
+          
+          @media (max-width: 991px) {
+            .source-link-fullscreen {
+              background: #0d6efd !important;
+              color: white !important;
+              padding: 0.25rem 0.5rem !important;
+              border-radius: 4px !important;
+              font-size: 0.875rem !important;
+              order: 0 !important;
+            }
+            
+            .source-link-fullscreen:hover {
+              background: #0b5ed7 !important;
+              text-decoration: none !important;
+            }
+          }
+          
           .spec-table thead th {
             position: -webkit-sticky !important;
             position: sticky !important;
@@ -2394,6 +2424,7 @@ function openFullSpec() {
         <div class="fullscreen-container">
           <div class="fullscreen-modal-header" id="modalHeader">
             <h5 id="modalTitle">${title}</h5>
+            ${configUrl ? `<a href="${configUrl}" target="_blank" rel="noopener" class="source-link-fullscreen">引用元ページ</a>` : ''}
             <span class="legend-text">●：標準装備　〇：オプション装備</span>
             <button type="button" class="close-fullscreen" onclick="window.close()" aria-label="閉じる">×</button>
           </div>
@@ -2538,9 +2569,9 @@ function showConfigCsv(carId, title, source) {
   
   let modalTitle = `車両仕様（${title}`;
   if (configUrl) {
-    modalTitle += ` | <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
+    modalTitle += ` <a href="${configUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
   } else {
-    modalTitle += ` | ID:${carId}）`;
+    modalTitle += `）`;
   }
   
   document.getElementById("csvModalLabel").innerHTML = modalTitle;
@@ -2787,7 +2818,7 @@ async function showStory(carId, title, source){
   const koubeiUrl = `https://k.autohome.com.cn/${carId}#pvareaid=3454440`;
   
   let modalTitle = `口コミ概要（${title}`;
-  modalTitle += ` | <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
+  modalTitle += ` <a href="${koubeiUrl}" target="_blank" rel="noopener" style="color: #0d6efd; text-decoration: none;">引用元ページ</a>）`;
   document.getElementById("storyModalLabel").innerHTML = modalTitle;
   
   const modalHeader = document.querySelector('#storyModal .modal-header');
@@ -2811,10 +2842,15 @@ async function showStory(carId, title, source){
     if(!res.ok)throw new Error("Not found");
     let text=await res.text();
     text=text.replace(/```/g,"");
-    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 fw-bold'>$1</h6>");
+    text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 mb-2 fw-bold'>$1</h6>");
     text=text.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>");
+    // 箇条書き（- で始まる行）を見やすく整形
+    text=text.replace(/^- (.*)$/gm,"<div style='margin-bottom: 0.5em; padding-left: 1em; text-indent: -1em;'>• $1</div>");
     text=text.replace(/\r?\n/g,"<br>");
     text=text.replace(/(<br>\s*){2,}/g,"<br><br>");
+    // 連続する<br>と<div>の間の<br>を削除
+    text=text.replace(/<br>(<div)/g,"$1");
+    text=text.replace(/(<\/div>)<br>/g,"$1");
     target.innerHTML=`<div style="white-space:normal; line-height:1.7;">${text}</div>`;
   }catch{
     target.innerHTML="<div class='text-danger'>口コミデータが見つかりません。</div>";

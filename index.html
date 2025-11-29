@@ -2120,8 +2120,16 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
   const fileName = source === 'hezi' ? originalName : model;
   
   if (source === 'hezi') {
-    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    // CSVのimage_urlをそのまま使用
+    if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
+      const fullPath = `${imgBase}${imageUrl.replace('/autohome_images/', '')}?v=${Date.now()}`;
+      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    } else if (imageUrl) {
+      return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    } else {
+      const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
+      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    }
   }
   
   if (imageUrl && imageUrl.startsWith("/autohome_images/")) {

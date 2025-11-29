@@ -1215,6 +1215,15 @@ img.car-thumb {
   color: #999;
   border: 1px dashed #ccc;
   overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.logo-placeholder:hover {
+  transform: scale(2);
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  background: white;
 }
 
 .logo-placeholder img {
@@ -1226,6 +1235,11 @@ img.car-thumb {
 .logo-placeholder.has-logo {
   border: none;
   background: transparent;
+}
+
+.logo-placeholder.has-logo:hover {
+  background: white;
+  border-radius: 8px;
 }
 
 .company-name {
@@ -1263,6 +1277,7 @@ img.car-thumb {
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   z-index: 1000;
   text-align: left;
+  overflow: visible;
 }
 
 .brands-list.show {
@@ -1279,11 +1294,13 @@ img.car-thumb {
   margin: 0;
   padding: 0;
   font-size: 0.8rem;
+  overflow: visible;
 }
 
 .brands-list li {
   padding: 0.3rem 0;
   border-bottom: 1px solid #f0f0f0;
+  overflow: visible;
 }
 
 .brands-list li:last-child {
@@ -1294,6 +1311,7 @@ img.car-thumb {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  overflow: visible;
 }
 
 .brand-logo-mini {
@@ -1306,6 +1324,15 @@ img.car-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.brand-logo-mini:hover {
+  transform: scale(2.5);
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  background: white;
 }
 
 .brand-logo-mini img {
@@ -1316,6 +1343,32 @@ img.car-thumb {
 
 .brand-logo-mini.has-logo {
   background: transparent;
+}
+
+.brand-logo-mini.has-logo:hover {
+  background: white;
+  border-radius: 4px;
+}
+
+/* スマホ: タップで拡大 */
+.brand-logo-mini.enlarged {
+  transform: scale(3);
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  background: white;
+  border-radius: 6px;
+}
+
+/* PC以外ではホバー無効化 */
+@media (hover: none) {
+  .brand-logo-mini:hover {
+    transform: none;
+    box-shadow: none;
+    background: #f5f5f5;
+  }
+  .brand-logo-mini.has-logo:hover {
+    background: transparent;
+  }
 }
 
 /* SVG線 */
@@ -1454,6 +1507,16 @@ img.car-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.huawei-brand-logo:hover {
+  transform: scale(2);
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  background: white;
 }
 
 .huawei-brand-logo img {
@@ -1583,7 +1646,7 @@ img.car-thumb {
         <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">外資系ランキング</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="brands-tab" data-bs-toggle="tab" data-bs-target="#brands-content" type="button" role="tab">中国内ブランド一覧（参考）</button>
+        <button class="nav-link" id="brands-tab" data-bs-toggle="tab" data-bs-target="#brands-content" type="button" role="tab">中国内ブランド一覧</button>
       </li>
     </ul>
 
@@ -2963,6 +3026,33 @@ function loadLogos() {
       el.appendChild(img);
     }
   });
+  
+  // スマホ用：ミニロゴのタップで拡大（重複登録防止）
+  document.querySelectorAll('.brand-logo-mini:not([data-tap-ready])').forEach(el => {
+    el.setAttribute('data-tap-ready', 'true');
+    el.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isEnlarged = el.classList.contains('enlarged');
+      // 他の拡大中のロゴを閉じる
+      document.querySelectorAll('.brand-logo-mini.enlarged').forEach(other => {
+        other.classList.remove('enlarged');
+      });
+      // クリックしたロゴをトグル
+      if (!isEnlarged) {
+        el.classList.add('enlarged');
+      }
+    });
+  });
+  
+  // 他の場所をタップで閉じる（一度だけ登録）
+  if (!window._logoCloseListenerAdded) {
+    window._logoCloseListenerAdded = true;
+    document.addEventListener('click', () => {
+      document.querySelectorAll('.brand-logo-mini.enlarged').forEach(el => {
+        el.classList.remove('enlarged');
+      });
+    });
+  }
   
   // Huaweiセクションのロゴ
   document.querySelectorAll('.huawei-brand-card[data-logo]').forEach(card => {

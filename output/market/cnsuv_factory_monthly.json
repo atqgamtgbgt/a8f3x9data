@@ -1,0 +1,8039 @@
+{
+  "metadata": {
+    "source": "cnsuv.com (SUV汽車網)",
+    "data_type": "厂商销量排行榜 (メーカー別販売台数)",
+    "origin": "乗聯会 (CPCA) 批発データ",
+    "last_updated": "2026-03-09T09:56:50.563591"
+  },
+  "months": {
+    "2023-01": {
+      "total_sales": 1295097,
+      "factory_count": 112,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 133317,
+          "share_pct": 10.29
+        },
+        {
+          "rank": 2,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 90067,
+          "share_pct": 6.95
+        },
+        {
+          "rank": 3,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 78000,
+          "share_pct": 6.02
+        },
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 70004,
+          "share_pct": 5.41
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 67479,
+          "share_pct": 5.21
+        },
+        {
+          "rank": 6,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 61105,
+          "share_pct": 4.72
+        },
+        {
+          "rank": 7,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 56765,
+          "share_pct": 4.38
+        },
+        {
+          "rank": 8,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 46922,
+          "share_pct": 3.62
+        },
+        {
+          "rank": 9,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 43787,
+          "share_pct": 3.38
+        },
+        {
+          "rank": 10,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 42357,
+          "share_pct": 3.27
+        },
+        {
+          "rank": 11,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 40259,
+          "share_pct": 3.11
+        },
+        {
+          "rank": 12,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 40243,
+          "share_pct": 3.11
+        },
+        {
+          "rank": 13,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 35007,
+          "share_pct": 2.7
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 30900,
+          "share_pct": 2.39
+        },
+        {
+          "rank": 15,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 28450,
+          "share_pct": 2.2
+        },
+        {
+          "rank": 16,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 26843,
+          "share_pct": 2.07
+        },
+        {
+          "rank": 17,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 23713,
+          "share_pct": 1.83
+        },
+        {
+          "rank": 18,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 22077,
+          "share_pct": 1.7
+        },
+        {
+          "rank": 19,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 21255,
+          "share_pct": 1.64
+        },
+        {
+          "rank": 20,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 20075,
+          "share_pct": 1.55
+        },
+        {
+          "rank": 21,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 19688,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 22,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 18371,
+          "share_pct": 1.42
+        },
+        {
+          "rank": 23,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 15765,
+          "share_pct": 1.22
+        },
+        {
+          "rank": 24,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 15141,
+          "share_pct": 1.17
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 10816,
+          "share_pct": 0.84
+        },
+        {
+          "rank": 26,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 10746,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 27,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 10531,
+          "share_pct": 0.81
+        },
+        {
+          "rank": 28,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 10508,
+          "share_pct": 0.81
+        },
+        {
+          "rank": 29,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 10206,
+          "share_pct": 0.79
+        },
+        {
+          "rank": 30,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 9710,
+          "share_pct": 0.75
+        }
+      ],
+      "scraped_at": "2026-03-09T07:04:07.552240"
+    },
+    "2023-02": {
+      "total_sales": 1396501,
+      "factory_count": 109,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 169337,
+          "share_pct": 12.13
+        },
+        {
+          "rank": 2,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 72241,
+          "share_pct": 5.17
+        },
+        {
+          "rank": 3,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 71450,
+          "share_pct": 5.12
+        },
+        {
+          "rank": 4,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 66936,
+          "share_pct": 4.79
+        },
+        {
+          "rank": 5,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 65513,
+          "share_pct": 4.69
+        },
+        {
+          "rank": 6,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 65140,
+          "share_pct": 4.66
+        },
+        {
+          "rank": 7,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 60710,
+          "share_pct": 4.35
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 49959,
+          "share_pct": 3.58
+        },
+        {
+          "rank": 9,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 49553,
+          "share_pct": 3.55
+        },
+        {
+          "rank": 10,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 49340,
+          "share_pct": 3.53
+        },
+        {
+          "rank": 11,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 46855,
+          "share_pct": 3.36
+        },
+        {
+          "rank": 12,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 38800,
+          "share_pct": 2.78
+        },
+        {
+          "rank": 13,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 37681,
+          "share_pct": 2.7
+        },
+        {
+          "rank": 14,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 35775,
+          "share_pct": 2.56
+        },
+        {
+          "rank": 15,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 33923,
+          "share_pct": 2.43
+        },
+        {
+          "rank": 16,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 33007,
+          "share_pct": 2.36
+        },
+        {
+          "rank": 17,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 30086,
+          "share_pct": 2.15
+        },
+        {
+          "rank": 18,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 28447,
+          "share_pct": 2.04
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 25455,
+          "share_pct": 1.82
+        },
+        {
+          "rank": 20,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 23893,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 21,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 17023,
+          "share_pct": 1.22
+        },
+        {
+          "rank": 22,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 16620,
+          "share_pct": 1.19
+        },
+        {
+          "rank": 23,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 16518,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 24,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 14813,
+          "share_pct": 1.06
+        },
+        {
+          "rank": 25,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 13005,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 26,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 12157,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 11795,
+          "share_pct": 0.84
+        },
+        {
+          "rank": 28,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 11202,
+          "share_pct": 0.8
+        },
+        {
+          "rank": 29,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 11177,
+          "share_pct": 0.8
+        },
+        {
+          "rank": 30,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 11001,
+          "share_pct": 0.79
+        }
+      ],
+      "scraped_at": "2026-03-09T07:04:19.058993"
+    },
+    "2023-03": {
+      "total_sales": 1593454,
+      "factory_count": 113,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 181391,
+          "share_pct": 11.38
+        },
+        {
+          "rank": 2,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 81030,
+          "share_pct": 5.09
+        },
+        {
+          "rank": 3,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 81009,
+          "share_pct": 5.08
+        },
+        {
+          "rank": 4,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 76663,
+          "share_pct": 4.81
+        },
+        {
+          "rank": 5,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 67379,
+          "share_pct": 4.23
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 62347,
+          "share_pct": 3.91
+        },
+        {
+          "rank": 7,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 61714,
+          "share_pct": 3.87
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 60498,
+          "share_pct": 3.8
+        },
+        {
+          "rank": 9,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 58320,
+          "share_pct": 3.66
+        },
+        {
+          "rank": 10,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 56440,
+          "share_pct": 3.54
+        },
+        {
+          "rank": 11,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 51785,
+          "share_pct": 3.25
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 49530,
+          "share_pct": 3.11
+        },
+        {
+          "rank": 13,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 41759,
+          "share_pct": 2.62
+        },
+        {
+          "rank": 14,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 40016,
+          "share_pct": 2.51
+        },
+        {
+          "rank": 15,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 39674,
+          "share_pct": 2.49
+        },
+        {
+          "rank": 16,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 39240,
+          "share_pct": 2.46
+        },
+        {
+          "rank": 17,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 38257,
+          "share_pct": 2.4
+        },
+        {
+          "rank": 18,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 32492,
+          "share_pct": 2.04
+        },
+        {
+          "rank": 19,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 30018,
+          "share_pct": 1.88
+        },
+        {
+          "rank": 20,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 28535,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 21,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 23507,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 21695,
+          "share_pct": 1.36
+        },
+        {
+          "rank": 23,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 20823,
+          "share_pct": 1.31
+        },
+        {
+          "rank": 24,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 14001,
+          "share_pct": 0.88
+        },
+        {
+          "rank": 25,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 13753,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 26,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 13455,
+          "share_pct": 0.84
+        },
+        {
+          "rank": 27,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 13007,
+          "share_pct": 0.82
+        },
+        {
+          "rank": 28,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 12734,
+          "share_pct": 0.8
+        },
+        {
+          "rank": 29,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 11749,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 30,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 11500,
+          "share_pct": 0.72
+        }
+      ],
+      "scraped_at": "2026-03-09T07:04:30.309418"
+    },
+    "2023-04": {
+      "total_sales": 1635995,
+      "factory_count": 112,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 183534,
+          "share_pct": 11.22
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 96203,
+          "share_pct": 5.88
+        },
+        {
+          "rank": 3,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 78011,
+          "share_pct": 4.77
+        },
+        {
+          "rank": 4,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 76925,
+          "share_pct": 4.7
+        },
+        {
+          "rank": 5,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 76455,
+          "share_pct": 4.67
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 71383,
+          "share_pct": 4.36
+        },
+        {
+          "rank": 7,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 60462,
+          "share_pct": 3.7
+        },
+        {
+          "rank": 8,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 59661,
+          "share_pct": 3.65
+        },
+        {
+          "rank": 9,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 58210,
+          "share_pct": 3.56
+        },
+        {
+          "rank": 10,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 53205,
+          "share_pct": 3.25
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 51103,
+          "share_pct": 3.12
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 49500,
+          "share_pct": 3.03
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 49000,
+          "share_pct": 3.0
+        },
+        {
+          "rank": 14,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 44208,
+          "share_pct": 2.7
+        },
+        {
+          "rank": 15,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 41012,
+          "share_pct": 2.51
+        },
+        {
+          "rank": 16,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 39956,
+          "share_pct": 2.44
+        },
+        {
+          "rank": 17,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 36229,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 18,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 34155,
+          "share_pct": 2.09
+        },
+        {
+          "rank": 19,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 27509,
+          "share_pct": 1.68
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 25681,
+          "share_pct": 1.57
+        },
+        {
+          "rank": 21,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 25069,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 24478,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 23,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 20035,
+          "share_pct": 1.22
+        },
+        {
+          "rank": 24,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 19007,
+          "share_pct": 1.16
+        },
+        {
+          "rank": 25,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 16007,
+          "share_pct": 0.98
+        },
+        {
+          "rank": 26,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 15271,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 27,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 14001,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 28,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 12575,
+          "share_pct": 0.77
+        },
+        {
+          "rank": 29,
+          "factory": "合众汽车",
+          "country": "国产",
+          "sales": 10785,
+          "share_pct": 0.66
+        },
+        {
+          "rank": 30,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 10633,
+          "share_pct": 0.65
+        }
+      ],
+      "scraped_at": "2026-03-09T07:04:41.863857"
+    },
+    "2023-05": {
+      "total_sales": 1685966,
+      "factory_count": 111,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 209730,
+          "share_pct": 12.44
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 90193,
+          "share_pct": 5.35
+        },
+        {
+          "rank": 3,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 83610,
+          "share_pct": 4.96
+        },
+        {
+          "rank": 4,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 81209,
+          "share_pct": 4.82
+        },
+        {
+          "rank": 5,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 77513,
+          "share_pct": 4.6
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 70001,
+          "share_pct": 4.15
+        },
+        {
+          "rank": 7,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 67100,
+          "share_pct": 3.98
+        },
+        {
+          "rank": 8,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 63292,
+          "share_pct": 3.75
+        },
+        {
+          "rank": 9,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 56511,
+          "share_pct": 3.35
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 52696,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 11,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 51306,
+          "share_pct": 3.04
+        },
+        {
+          "rank": 12,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 50705,
+          "share_pct": 3.01
+        },
+        {
+          "rank": 13,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 50434,
+          "share_pct": 2.99
+        },
+        {
+          "rank": 14,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 46028,
+          "share_pct": 2.73
+        },
+        {
+          "rank": 15,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 45003,
+          "share_pct": 2.67
+        },
+        {
+          "rank": 16,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 42508,
+          "share_pct": 2.52
+        },
+        {
+          "rank": 17,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 39043,
+          "share_pct": 2.32
+        },
+        {
+          "rank": 18,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 31506,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 19,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 28516,
+          "share_pct": 1.69
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 25575,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 21,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 23107,
+          "share_pct": 1.37
+        },
+        {
+          "rank": 22,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 23024,
+          "share_pct": 1.37
+        },
+        {
+          "rank": 23,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 20007,
+          "share_pct": 1.19
+        },
+        {
+          "rank": 24,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 18823,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 25,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 15002,
+          "share_pct": 0.89
+        },
+        {
+          "rank": 26,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 14001,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 13472,
+          "share_pct": 0.8
+        },
+        {
+          "rank": 28,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 12229,
+          "share_pct": 0.73
+        },
+        {
+          "rank": 29,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 12058,
+          "share_pct": 0.72
+        },
+        {
+          "rank": 30,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 11711,
+          "share_pct": 0.69
+        }
+      ],
+      "scraped_at": "2026-03-09T07:04:53.340648"
+    },
+    "2023-06": {
+      "total_sales": 1894250,
+      "factory_count": 113,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 219856,
+          "share_pct": 11.61
+        },
+        {
+          "rank": 2,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 98052,
+          "share_pct": 5.18
+        },
+        {
+          "rank": 3,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 94018,
+          "share_pct": 4.96
+        },
+        {
+          "rank": 4,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 86345,
+          "share_pct": 4.56
+        },
+        {
+          "rank": 5,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 86189,
+          "share_pct": 4.55
+        },
+        {
+          "rank": 6,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 74212,
+          "share_pct": 3.92
+        },
+        {
+          "rank": 7,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 71726,
+          "share_pct": 3.79
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 70795,
+          "share_pct": 3.74
+        },
+        {
+          "rank": 9,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 65364,
+          "share_pct": 3.45
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 64037,
+          "share_pct": 3.38
+        },
+        {
+          "rank": 11,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 59032,
+          "share_pct": 3.12
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 57700,
+          "share_pct": 3.05
+        },
+        {
+          "rank": 13,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 53938,
+          "share_pct": 2.85
+        },
+        {
+          "rank": 14,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 51669,
+          "share_pct": 2.73
+        },
+        {
+          "rank": 15,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 47327,
+          "share_pct": 2.5
+        },
+        {
+          "rank": 16,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 46008,
+          "share_pct": 2.43
+        },
+        {
+          "rank": 17,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 45013,
+          "share_pct": 2.38
+        },
+        {
+          "rank": 18,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 41854,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 37695,
+          "share_pct": 1.99
+        },
+        {
+          "rank": 20,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 35406,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 21,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 31313,
+          "share_pct": 1.65
+        },
+        {
+          "rank": 22,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 31176,
+          "share_pct": 1.65
+        },
+        {
+          "rank": 23,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 21194,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 24,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 20017,
+          "share_pct": 1.06
+        },
+        {
+          "rank": 25,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 17003,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 26,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 16553,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 27,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 16507,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 28,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 14840,
+          "share_pct": 0.78
+        },
+        {
+          "rank": 29,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 13602,
+          "share_pct": 0.72
+        },
+        {
+          "rank": 30,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 13209,
+          "share_pct": 0.7
+        }
+      ],
+      "scraped_at": "2026-03-09T07:05:04.801909"
+    },
+    "2023-07": {
+      "total_sales": 1781580,
+      "factory_count": 112,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 219736,
+          "share_pct": 12.33
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 96002,
+          "share_pct": 5.39
+        },
+        {
+          "rank": 3,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 84405,
+          "share_pct": 4.74
+        },
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 82743,
+          "share_pct": 4.64
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 73066,
+          "share_pct": 4.1
+        },
+        {
+          "rank": 6,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 71340,
+          "share_pct": 4.0
+        },
+        {
+          "rank": 7,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 64220,
+          "share_pct": 3.6
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 62976,
+          "share_pct": 3.53
+        },
+        {
+          "rank": 9,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 59912,
+          "share_pct": 3.36
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 52766,
+          "share_pct": 2.96
+        },
+        {
+          "rank": 11,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 51200,
+          "share_pct": 2.87
+        },
+        {
+          "rank": 12,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 50186,
+          "share_pct": 2.82
+        },
+        {
+          "rank": 13,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 49959,
+          "share_pct": 2.8
+        },
+        {
+          "rank": 14,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 48706,
+          "share_pct": 2.73
+        },
+        {
+          "rank": 15,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 45025,
+          "share_pct": 2.53
+        },
+        {
+          "rank": 16,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 44891,
+          "share_pct": 2.52
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 40823,
+          "share_pct": 2.29
+        },
+        {
+          "rank": 18,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 35538,
+          "share_pct": 1.99
+        },
+        {
+          "rank": 19,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 34129,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 20,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 31423,
+          "share_pct": 1.76
+        },
+        {
+          "rank": 21,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 29333,
+          "share_pct": 1.65
+        },
+        {
+          "rank": 22,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 28226,
+          "share_pct": 1.58
+        },
+        {
+          "rank": 23,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20444,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 24,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 19522,
+          "share_pct": 1.1
+        },
+        {
+          "rank": 25,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 17006,
+          "share_pct": 0.95
+        },
+        {
+          "rank": 26,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 16553,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 27,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 16174,
+          "share_pct": 0.91
+        },
+        {
+          "rank": 28,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 16007,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 29,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 15214,
+          "share_pct": 0.85
+        },
+        {
+          "rank": 30,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 14335,
+          "share_pct": 0.8
+        }
+      ],
+      "scraped_at": "2026-03-09T07:05:16.453021"
+    },
+    "2023-08": {
+      "total_sales": 1922495,
+      "factory_count": 111,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 230077,
+          "share_pct": 11.97
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 106396,
+          "share_pct": 5.53
+        },
+        {
+          "rank": 3,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 89152,
+          "share_pct": 4.64
+        },
+        {
+          "rank": 4,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 83412,
+          "share_pct": 4.34
+        },
+        {
+          "rank": 5,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 79721,
+          "share_pct": 4.15
+        },
+        {
+          "rank": 6,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 76918,
+          "share_pct": 4.0
+        },
+        {
+          "rank": 7,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 75770,
+          "share_pct": 3.94
+        },
+        {
+          "rank": 8,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 64694,
+          "share_pct": 3.37
+        },
+        {
+          "rank": 9,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 60116,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 10,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 59948,
+          "share_pct": 3.12
+        },
+        {
+          "rank": 11,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 57974,
+          "share_pct": 3.02
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 55100,
+          "share_pct": 2.87
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 55036,
+          "share_pct": 2.86
+        },
+        {
+          "rank": 14,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 54979,
+          "share_pct": 2.86
+        },
+        {
+          "rank": 15,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 52057,
+          "share_pct": 2.71
+        },
+        {
+          "rank": 16,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 49961,
+          "share_pct": 2.6
+        },
+        {
+          "rank": 17,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 44789,
+          "share_pct": 2.33
+        },
+        {
+          "rank": 18,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 42157,
+          "share_pct": 2.19
+        },
+        {
+          "rank": 19,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 36186,
+          "share_pct": 1.88
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 34912,
+          "share_pct": 1.82
+        },
+        {
+          "rank": 21,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 33406,
+          "share_pct": 1.74
+        },
+        {
+          "rank": 22,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 30611,
+          "share_pct": 1.59
+        },
+        {
+          "rank": 23,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 20133,
+          "share_pct": 1.05
+        },
+        {
+          "rank": 24,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 19329,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 25,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 18005,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 26,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 17836,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 27,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 17797,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 28,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 16007,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 29,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 15885,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 14735,
+          "share_pct": 0.77
+        }
+      ],
+      "scraped_at": "2026-03-09T07:05:27.643634"
+    },
+    "2023-09": {
+      "total_sales": 2019445,
+      "factory_count": 110,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 243918,
+          "share_pct": 12.08
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 110006,
+          "share_pct": 5.45
+        },
+        {
+          "rank": 3,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 95155,
+          "share_pct": 4.71
+        },
+        {
+          "rank": 4,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 88547,
+          "share_pct": 4.38
+        },
+        {
+          "rank": 5,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 84976,
+          "share_pct": 4.21
+        },
+        {
+          "rank": 6,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 83027,
+          "share_pct": 4.11
+        },
+        {
+          "rank": 7,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 77818,
+          "share_pct": 3.85
+        },
+        {
+          "rank": 8,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 68624,
+          "share_pct": 3.4
+        },
+        {
+          "rank": 9,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 62607,
+          "share_pct": 3.1
+        },
+        {
+          "rank": 10,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 61330,
+          "share_pct": 3.04
+        },
+        {
+          "rank": 11,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 59354,
+          "share_pct": 2.94
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 55301,
+          "share_pct": 2.74
+        },
+        {
+          "rank": 13,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 53599,
+          "share_pct": 2.65
+        },
+        {
+          "rank": 14,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 51103,
+          "share_pct": 2.53
+        },
+        {
+          "rank": 15,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 50979,
+          "share_pct": 2.52
+        },
+        {
+          "rank": 16,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 50363,
+          "share_pct": 2.49
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 50081,
+          "share_pct": 2.48
+        },
+        {
+          "rank": 18,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 43507,
+          "share_pct": 2.15
+        },
+        {
+          "rank": 19,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 42199,
+          "share_pct": 2.09
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 36059,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 21,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 34808,
+          "share_pct": 1.72
+        },
+        {
+          "rank": 22,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 30670,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 23,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 22317,
+          "share_pct": 1.11
+        },
+        {
+          "rank": 24,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 21622,
+          "share_pct": 1.07
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 20413,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 26,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 17657,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 27,
+          "factory": "上汽通用雪佛兰",
+          "country": "国产",
+          "sales": 16939,
+          "share_pct": 0.84
+        },
+        {
+          "rank": 28,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 15800,
+          "share_pct": 0.78
+        },
+        {
+          "rank": 29,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 15641,
+          "share_pct": 0.77
+        },
+        {
+          "rank": 30,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 15310,
+          "share_pct": 0.76
+        }
+      ],
+      "scraped_at": "2026-03-09T07:05:38.912549"
+    },
+    "2023-10": {
+      "total_sales": 2032470,
+      "factory_count": 110,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 246389,
+          "share_pct": 12.12
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 107006,
+          "share_pct": 5.26
+        },
+        {
+          "rank": 3,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 92770,
+          "share_pct": 4.56
+        },
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 91204,
+          "share_pct": 4.49
+        },
+        {
+          "rank": 5,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 87616,
+          "share_pct": 4.31
+        },
+        {
+          "rank": 6,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 84087,
+          "share_pct": 4.14
+        },
+        {
+          "rank": 7,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 71976,
+          "share_pct": 3.54
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 66916,
+          "share_pct": 3.29
+        },
+        {
+          "rank": 9,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 65163,
+          "share_pct": 3.21
+        },
+        {
+          "rank": 10,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 65058,
+          "share_pct": 3.2
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 64041,
+          "share_pct": 3.15
+        },
+        {
+          "rank": 12,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 60413,
+          "share_pct": 2.97
+        },
+        {
+          "rank": 13,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 53450,
+          "share_pct": 2.63
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 49788,
+          "share_pct": 2.45
+        },
+        {
+          "rank": 15,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 43471,
+          "share_pct": 2.14
+        },
+        {
+          "rank": 16,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 42205,
+          "share_pct": 2.08
+        },
+        {
+          "rank": 17,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 40825,
+          "share_pct": 2.01
+        },
+        {
+          "rank": 18,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 40423,
+          "share_pct": 1.99
+        },
+        {
+          "rank": 19,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 39057,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 20,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 37280,
+          "share_pct": 1.83
+        },
+        {
+          "rank": 21,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 30268,
+          "share_pct": 1.49
+        },
+        {
+          "rank": 22,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 28626,
+          "share_pct": 1.41
+        },
+        {
+          "rank": 23,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 26943,
+          "share_pct": 1.33
+        },
+        {
+          "rank": 24,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 26043,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 23281,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 26,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 20002,
+          "share_pct": 0.98
+        },
+        {
+          "rank": 27,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 19006,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 28,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 18202,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 29,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 17283,
+          "share_pct": 0.85
+        },
+        {
+          "rank": 30,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 17007,
+          "share_pct": 0.84
+        }
+      ],
+      "scraped_at": "2026-03-09T07:05:51.046460"
+    },
+    "2023-11": {
+      "total_sales": 2077155,
+      "factory_count": 113,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 250115,
+          "share_pct": 12.04
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 110418,
+          "share_pct": 5.32
+        },
+        {
+          "rank": 3,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 107557,
+          "share_pct": 5.18
+        },
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 97005,
+          "share_pct": 4.67
+        },
+        {
+          "rank": 5,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 76829,
+          "share_pct": 3.7
+        },
+        {
+          "rank": 6,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 76804,
+          "share_pct": 3.7
+        },
+        {
+          "rank": 7,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 73039,
+          "share_pct": 3.52
+        },
+        {
+          "rank": 8,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 65504,
+          "share_pct": 3.15
+        },
+        {
+          "rank": 9,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 65108,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 10,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 64917,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 11,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 64891,
+          "share_pct": 3.12
+        },
+        {
+          "rank": 12,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 57500,
+          "share_pct": 2.77
+        },
+        {
+          "rank": 13,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 53558,
+          "share_pct": 2.58
+        },
+        {
+          "rank": 14,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 52819,
+          "share_pct": 2.54
+        },
+        {
+          "rank": 15,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 48852,
+          "share_pct": 2.35
+        },
+        {
+          "rank": 16,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 45593,
+          "share_pct": 2.19
+        },
+        {
+          "rank": 17,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 43416,
+          "share_pct": 2.09
+        },
+        {
+          "rank": 18,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 41030,
+          "share_pct": 1.98
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 39650,
+          "share_pct": 1.91
+        },
+        {
+          "rank": 20,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 38804,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 21,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 35400,
+          "share_pct": 1.7
+        },
+        {
+          "rank": 22,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 31391,
+          "share_pct": 1.51
+        },
+        {
+          "rank": 23,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 28621,
+          "share_pct": 1.38
+        },
+        {
+          "rank": 24,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 27167,
+          "share_pct": 1.31
+        },
+        {
+          "rank": 25,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 20114,
+          "share_pct": 0.97
+        },
+        {
+          "rank": 26,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 20041,
+          "share_pct": 0.96
+        },
+        {
+          "rank": 27,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 20018,
+          "share_pct": 0.96
+        },
+        {
+          "rank": 28,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 19687,
+          "share_pct": 0.95
+        },
+        {
+          "rank": 29,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 18508,
+          "share_pct": 0.89
+        },
+        {
+          "rank": 30,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 17007,
+          "share_pct": 0.82
+        }
+      ],
+      "scraped_at": "2026-03-09T07:06:03.236287"
+    },
+    "2023-12": {
+      "total_sales": 2360143,
+      "factory_count": 115,
+      "top_30": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 281556,
+          "share_pct": 11.93
+        },
+        {
+          "rank": 2,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 137375,
+          "share_pct": 5.82
+        },
+        {
+          "rank": 3,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 123461,
+          "share_pct": 5.23
+        },
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 93238,
+          "share_pct": 3.95
+        },
+        {
+          "rank": 5,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 88516,
+          "share_pct": 3.75
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 85404,
+          "share_pct": 3.62
+        },
+        {
+          "rank": 7,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 78626,
+          "share_pct": 3.33
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 76097,
+          "share_pct": 3.22
+        },
+        {
+          "rank": 9,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 75805,
+          "share_pct": 3.21
+        },
+        {
+          "rank": 10,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 73938,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 11,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 71452,
+          "share_pct": 3.03
+        },
+        {
+          "rank": 12,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 69685,
+          "share_pct": 2.95
+        },
+        {
+          "rank": 13,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 62828,
+          "share_pct": 2.66
+        },
+        {
+          "rank": 14,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 62705,
+          "share_pct": 2.66
+        },
+        {
+          "rank": 15,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 53320,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 16,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 51529,
+          "share_pct": 2.18
+        },
+        {
+          "rank": 17,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 50354,
+          "share_pct": 2.13
+        },
+        {
+          "rank": 18,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 45169,
+          "share_pct": 1.91
+        },
+        {
+          "rank": 19,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 44042,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 20,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 41956,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 21,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 35521,
+          "share_pct": 1.51
+        },
+        {
+          "rank": 22,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 33087,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 23,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 30108,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 24,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 29555,
+          "share_pct": 1.25
+        },
+        {
+          "rank": 25,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 27004,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 26,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 24169,
+          "share_pct": 1.02
+        },
+        {
+          "rank": 27,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 20397,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 28,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 20287,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 29,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 19414,
+          "share_pct": 0.82
+        },
+        {
+          "rank": 30,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 18618,
+          "share_pct": 0.79
+        }
+      ],
+      "scraped_at": "2026-03-09T07:06:14.913004"
+    },
+    "2024-01": {
+      "total_sales": 1594123,
+      "factory_count": 107,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 111476,
+          "share_pct": 5.48
+        },
+        {
+          "rank": 5,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 98000,
+          "share_pct": 4.82
+        },
+        {
+          "rank": 6,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 75558,
+          "share_pct": 3.71
+        },
+        {
+          "rank": 7,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 72563,
+          "share_pct": 3.57
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 71873,
+          "share_pct": 3.53
+        },
+        {
+          "rank": 9,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 69814,
+          "share_pct": 3.43
+        },
+        {
+          "rank": 10,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 67929,
+          "share_pct": 3.34
+        },
+        {
+          "rank": 11,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 62178,
+          "share_pct": 3.06
+        },
+        {
+          "rank": 12,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 58206,
+          "share_pct": 2.86
+        },
+        {
+          "rank": 13,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 54080,
+          "share_pct": 2.66
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 51012,
+          "share_pct": 2.51
+        },
+        {
+          "rank": 15,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 43142,
+          "share_pct": 2.12
+        },
+        {
+          "rank": 16,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 40603,
+          "share_pct": 2.0
+        },
+        {
+          "rank": 17,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 40374,
+          "share_pct": 1.98
+        },
+        {
+          "rank": 18,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 40320,
+          "share_pct": 1.98
+        },
+        {
+          "rank": 19,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 39881,
+          "share_pct": 1.96
+        },
+        {
+          "rank": 20,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 31757,
+          "share_pct": 1.56
+        },
+        {
+          "rank": 21,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 31166,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 31011,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 23,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 30854,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 24,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 30006,
+          "share_pct": 1.47
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 27375,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 26,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 22500,
+          "share_pct": 1.11
+        },
+        {
+          "rank": 27,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 21115,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 28,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 19219,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 29,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 17364,
+          "share_pct": 0.85
+        },
+        {
+          "rank": 30,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 16901,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 31,
+          "factory": "上汽通用凯迪拉克",
+          "country": "国产",
+          "sales": 15007,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 32,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 14803,
+          "share_pct": 0.73
+        },
+        {
+          "rank": 33,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 13878,
+          "share_pct": 0.68
+        }
+      ],
+      "scraped_at": "2026-03-09T06:12:23.588925"
+    },
+    "2024-02": {
+      "total_sales": 886490,
+      "factory_count": 109,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 53708,
+          "share_pct": 4.83
+        },
+        {
+          "rank": 5,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 53007,
+          "share_pct": 4.77
+        },
+        {
+          "rank": 6,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 52119,
+          "share_pct": 4.69
+        },
+        {
+          "rank": 7,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 43265,
+          "share_pct": 3.89
+        },
+        {
+          "rank": 8,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 39152,
+          "share_pct": 3.52
+        },
+        {
+          "rank": 9,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 36992,
+          "share_pct": 3.33
+        },
+        {
+          "rank": 10,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 36187,
+          "share_pct": 3.26
+        },
+        {
+          "rank": 11,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 31600,
+          "share_pct": 2.84
+        },
+        {
+          "rank": 12,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 30141,
+          "share_pct": 2.71
+        },
+        {
+          "rank": 13,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 29131,
+          "share_pct": 2.62
+        },
+        {
+          "rank": 14,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 28461,
+          "share_pct": 2.56
+        },
+        {
+          "rank": 15,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 27240,
+          "share_pct": 2.45
+        },
+        {
+          "rank": 16,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 25006,
+          "share_pct": 2.25
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 24162,
+          "share_pct": 2.17
+        },
+        {
+          "rank": 18,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 21458,
+          "share_pct": 1.93
+        },
+        {
+          "rank": 19,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 21178,
+          "share_pct": 1.91
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 20252,
+          "share_pct": 1.82
+        },
+        {
+          "rank": 21,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 19005,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 22,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 18361,
+          "share_pct": 1.65
+        },
+        {
+          "rank": 23,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 16793,
+          "share_pct": 1.51
+        },
+        {
+          "rank": 24,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 15042,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 25,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 12270,
+          "share_pct": 1.1
+        },
+        {
+          "rank": 26,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 12009,
+          "share_pct": 1.08
+        },
+        {
+          "rank": 27,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 11869,
+          "share_pct": 1.07
+        },
+        {
+          "rank": 28,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 11595,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 29,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 9120,
+          "share_pct": 0.82
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 8189,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 31,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 8132,
+          "share_pct": 0.73
+        },
+        {
+          "rank": 32,
+          "factory": "一汽-大众捷达",
+          "country": "国产",
+          "sales": 8050,
+          "share_pct": 0.72
+        },
+        {
+          "rank": 33,
+          "factory": "东风乘用车",
+          "country": "国产",
+          "sales": 7695,
+          "share_pct": 0.69
+        }
+      ],
+      "scraped_at": "2026-03-09T06:12:34.935432"
+    },
+    "2024-03": {
+      "total_sales": 1287327,
+      "factory_count": 109,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 69401,
+          "share_pct": 4.1
+        },
+        {
+          "rank": 5,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 66358,
+          "share_pct": 3.92
+        },
+        {
+          "rank": 6,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 62398,
+          "share_pct": 3.69
+        },
+        {
+          "rank": 7,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 60516,
+          "share_pct": 3.58
+        },
+        {
+          "rank": 8,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 58395,
+          "share_pct": 3.45
+        },
+        {
+          "rank": 9,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 57843,
+          "share_pct": 3.42
+        },
+        {
+          "rank": 10,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 55383,
+          "share_pct": 3.27
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 53036,
+          "share_pct": 3.14
+        },
+        {
+          "rank": 12,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 52821,
+          "share_pct": 3.12
+        },
+        {
+          "rank": 13,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 50606,
+          "share_pct": 2.99
+        },
+        {
+          "rank": 14,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 40838,
+          "share_pct": 2.41
+        },
+        {
+          "rank": 15,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 32975,
+          "share_pct": 1.95
+        },
+        {
+          "rank": 16,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 30680,
+          "share_pct": 1.81
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 30118,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 18,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 29819,
+          "share_pct": 1.76
+        },
+        {
+          "rank": 19,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 29181,
+          "share_pct": 1.73
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 28984,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 21,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 28093,
+          "share_pct": 1.66
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 25000,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 23,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 25000,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 24,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 24353,
+          "share_pct": 1.44
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 17589,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 26,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 17002,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 27,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 14567,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 28,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 14247,
+          "share_pct": 0.84
+        },
+        {
+          "rank": 29,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 14142,
+          "share_pct": 0.84
+        },
+        {
+          "rank": 30,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 13852,
+          "share_pct": 0.82
+        },
+        {
+          "rank": 31,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 13012,
+          "share_pct": 0.77
+        },
+        {
+          "rank": 32,
+          "factory": "沃尔沃亚太",
+          "country": "国产",
+          "sales": 11894,
+          "share_pct": 0.7
+        },
+        {
+          "rank": 33,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 11866,
+          "share_pct": 0.7
+        }
+      ],
+      "scraped_at": "2026-03-09T06:12:45.605479"
+    },
+    "2024-04": {
+      "total_sales": 1162851,
+      "factory_count": 113,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 63011,
+          "share_pct": 4.09
+        },
+        {
+          "rank": 5,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 52248,
+          "share_pct": 3.39
+        },
+        {
+          "rank": 6,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 51998,
+          "share_pct": 3.37
+        },
+        {
+          "rank": 7,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 49031,
+          "share_pct": 3.18
+        },
+        {
+          "rank": 8,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 48901,
+          "share_pct": 3.17
+        },
+        {
+          "rank": 9,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 48017,
+          "share_pct": 3.11
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 47002,
+          "share_pct": 3.05
+        },
+        {
+          "rank": 11,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 44512,
+          "share_pct": 2.89
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 40010,
+          "share_pct": 2.59
+        },
+        {
+          "rank": 13,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 39872,
+          "share_pct": 2.59
+        },
+        {
+          "rank": 14,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 37170,
+          "share_pct": 2.41
+        },
+        {
+          "rank": 15,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 33610,
+          "share_pct": 2.18
+        },
+        {
+          "rank": 16,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 31421,
+          "share_pct": 2.04
+        },
+        {
+          "rank": 17,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 29907,
+          "share_pct": 1.94
+        },
+        {
+          "rank": 18,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 27570,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 19,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 25787,
+          "share_pct": 1.67
+        },
+        {
+          "rank": 20,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 25091,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 21,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 25073,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 23713,
+          "share_pct": 1.54
+        },
+        {
+          "rank": 23,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 22848,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 24,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 21636,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 17045,
+          "share_pct": 1.11
+        },
+        {
+          "rank": 26,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 16210,
+          "share_pct": 1.05
+        },
+        {
+          "rank": 27,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 16089,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 28,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 15620,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 29,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 15005,
+          "share_pct": 0.97
+        },
+        {
+          "rank": 30,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 14267,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 31,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 12725,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 32,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 11723,
+          "share_pct": 0.76
+        },
+        {
+          "rank": 33,
+          "factory": "腾势汽车",
+          "country": "国产",
+          "sales": 11122,
+          "share_pct": 0.72
+        }
+      ],
+      "scraped_at": "2026-03-09T06:12:56.527455"
+    },
+    "2024-05": {
+      "total_sales": 1314191,
+      "factory_count": 112,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 69586,
+          "share_pct": 4.05
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 67107,
+          "share_pct": 3.91
+        },
+        {
+          "rank": 6,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 59975,
+          "share_pct": 3.49
+        },
+        {
+          "rank": 7,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 56009,
+          "share_pct": 3.26
+        },
+        {
+          "rank": 8,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 55286,
+          "share_pct": 3.22
+        },
+        {
+          "rank": 9,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 55222,
+          "share_pct": 3.22
+        },
+        {
+          "rank": 10,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 55215,
+          "share_pct": 3.22
+        },
+        {
+          "rank": 11,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 54646,
+          "share_pct": 3.18
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 50510,
+          "share_pct": 2.94
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 43007,
+          "share_pct": 2.51
+        },
+        {
+          "rank": 14,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 40133,
+          "share_pct": 2.34
+        },
+        {
+          "rank": 15,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 39008,
+          "share_pct": 2.27
+        },
+        {
+          "rank": 16,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 35705,
+          "share_pct": 2.08
+        },
+        {
+          "rank": 17,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 35020,
+          "share_pct": 2.04
+        },
+        {
+          "rank": 18,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 32226,
+          "share_pct": 1.88
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 30714,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 20,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 27086,
+          "share_pct": 1.58
+        },
+        {
+          "rank": 21,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 25812,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 24843,
+          "share_pct": 1.45
+        },
+        {
+          "rank": 23,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 23106,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 24,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 22039,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 25,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20544,
+          "share_pct": 1.2
+        },
+        {
+          "rank": 26,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 20215,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 27,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 18616,
+          "share_pct": 1.08
+        },
+        {
+          "rank": 28,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 18165,
+          "share_pct": 1.06
+        },
+        {
+          "rank": 29,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 16271,
+          "share_pct": 0.95
+        },
+        {
+          "rank": 30,
+          "factory": "北京现代",
+          "country": "国产",
+          "sales": 16005,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 31,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 14190,
+          "share_pct": 0.83
+        },
+        {
+          "rank": 32,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 13193,
+          "share_pct": 0.77
+        },
+        {
+          "rank": 33,
+          "factory": "腾势汽车",
+          "country": "国产",
+          "sales": 12223,
+          "share_pct": 0.71
+        }
+      ],
+      "scraped_at": "2026-03-09T06:13:07.700127"
+    },
+    "2024-06": {
+      "total_sales": 1352849,
+      "factory_count": 110,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 69793,
+          "share_pct": 3.94
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 68017,
+          "share_pct": 3.84
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 63328,
+          "share_pct": 3.58
+        },
+        {
+          "rank": 7,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 59261,
+          "share_pct": 3.35
+        },
+        {
+          "rank": 8,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 55554,
+          "share_pct": 3.14
+        },
+        {
+          "rank": 9,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 50348,
+          "share_pct": 2.85
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 49118,
+          "share_pct": 2.78
+        },
+        {
+          "rank": 11,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 47774,
+          "share_pct": 2.7
+        },
+        {
+          "rank": 12,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 47026,
+          "share_pct": 2.66
+        },
+        {
+          "rank": 13,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 45901,
+          "share_pct": 2.59
+        },
+        {
+          "rank": 14,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 44006,
+          "share_pct": 2.49
+        },
+        {
+          "rank": 15,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 43276,
+          "share_pct": 2.45
+        },
+        {
+          "rank": 16,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 40822,
+          "share_pct": 2.31
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 34526,
+          "share_pct": 1.95
+        },
+        {
+          "rank": 18,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 34191,
+          "share_pct": 1.93
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 34064,
+          "share_pct": 1.93
+        },
+        {
+          "rank": 20,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 32169,
+          "share_pct": 1.82
+        },
+        {
+          "rank": 21,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 26839,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 22,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 24016,
+          "share_pct": 1.36
+        },
+        {
+          "rank": 23,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 23837,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 24,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 22945,
+          "share_pct": 1.3
+        },
+        {
+          "rank": 25,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 22270,
+          "share_pct": 1.26
+        },
+        {
+          "rank": 26,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 21209,
+          "share_pct": 1.2
+        },
+        {
+          "rank": 27,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 20116,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 28,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 20106,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 29,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 19830,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 30,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 15967,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 31,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 15183,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 32,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 14296,
+          "share_pct": 0.81
+        },
+        {
+          "rank": 33,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 13531,
+          "share_pct": 0.76
+        }
+      ],
+      "scraped_at": "2026-03-09T06:13:19.345636"
+    },
+    "2024-07": {
+      "total_sales": 1276364,
+      "factory_count": 111,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 65001,
+          "share_pct": 3.77
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 63458,
+          "share_pct": 3.68
+        },
+        {
+          "rank": 6,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 59480,
+          "share_pct": 3.45
+        },
+        {
+          "rank": 7,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 59116,
+          "share_pct": 3.43
+        },
+        {
+          "rank": 8,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 51000,
+          "share_pct": 2.96
+        },
+        {
+          "rank": 9,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 48938,
+          "share_pct": 2.84
+        },
+        {
+          "rank": 10,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 48844,
+          "share_pct": 2.83
+        },
+        {
+          "rank": 11,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 48291,
+          "share_pct": 2.8
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 47625,
+          "share_pct": 2.76
+        },
+        {
+          "rank": 13,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 46227,
+          "share_pct": 2.68
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 42226,
+          "share_pct": 2.45
+        },
+        {
+          "rank": 15,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 40004,
+          "share_pct": 2.32
+        },
+        {
+          "rank": 16,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 39552,
+          "share_pct": 2.29
+        },
+        {
+          "rank": 17,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 31828,
+          "share_pct": 1.84
+        },
+        {
+          "rank": 18,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 31085,
+          "share_pct": 1.8
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 30773,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 20,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 28519,
+          "share_pct": 1.65
+        },
+        {
+          "rank": 21,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 26426,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 22,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 22790,
+          "share_pct": 1.32
+        },
+        {
+          "rank": 23,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 22093,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 24,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 20708,
+          "share_pct": 1.2
+        },
+        {
+          "rank": 25,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20498,
+          "share_pct": 1.19
+        },
+        {
+          "rank": 26,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 20402,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 19867,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 28,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 16704,
+          "share_pct": 0.97
+        },
+        {
+          "rank": 29,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 15655,
+          "share_pct": 0.91
+        },
+        {
+          "rank": 30,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 14944,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 31,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 13120,
+          "share_pct": 0.76
+        },
+        {
+          "rank": 32,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 12793,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 33,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 11145,
+          "share_pct": 0.65
+        }
+      ],
+      "scraped_at": "2026-03-09T06:13:30.464485"
+    },
+    "2024-08": {
+      "total_sales": 1373555,
+      "factory_count": 109,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 76005,
+          "share_pct": 3.97
+        },
+        {
+          "rank": 5,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 71933,
+          "share_pct": 3.76
+        },
+        {
+          "rank": 6,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 67663,
+          "share_pct": 3.54
+        },
+        {
+          "rank": 7,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 63456,
+          "share_pct": 3.32
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 63026,
+          "share_pct": 3.29
+        },
+        {
+          "rank": 9,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 59651,
+          "share_pct": 3.12
+        },
+        {
+          "rank": 10,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 53387,
+          "share_pct": 2.79
+        },
+        {
+          "rank": 11,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 48122,
+          "share_pct": 2.52
+        },
+        {
+          "rank": 12,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 47477,
+          "share_pct": 2.48
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 44400,
+          "share_pct": 2.32
+        },
+        {
+          "rank": 14,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 42307,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 15,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 37207,
+          "share_pct": 1.94
+        },
+        {
+          "rank": 16,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 34846,
+          "share_pct": 1.82
+        },
+        {
+          "rank": 17,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 34648,
+          "share_pct": 1.81
+        },
+        {
+          "rank": 18,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 33526,
+          "share_pct": 1.75
+        },
+        {
+          "rank": 19,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 32462,
+          "share_pct": 1.7
+        },
+        {
+          "rank": 20,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 31147,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 21,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 28005,
+          "share_pct": 1.46
+        },
+        {
+          "rank": 22,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 26438,
+          "share_pct": 1.38
+        },
+        {
+          "rank": 23,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 25320,
+          "share_pct": 1.32
+        },
+        {
+          "rank": 24,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 24463,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 25,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 22601,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 26,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 21358,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 27,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20176,
+          "share_pct": 1.05
+        },
+        {
+          "rank": 28,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 19938,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 29,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 18015,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 13158,
+          "share_pct": 0.69
+        },
+        {
+          "rank": 31,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 13111,
+          "share_pct": 0.69
+        },
+        {
+          "rank": 32,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 12385,
+          "share_pct": 0.65
+        },
+        {
+          "rank": 33,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 12362,
+          "share_pct": 0.65
+        }
+      ],
+      "scraped_at": "2026-03-09T06:13:42.545561"
+    },
+    "2024-09": {
+      "total_sales": 1553304,
+      "factory_count": 112,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 87010,
+          "share_pct": 4.11
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 85795,
+          "share_pct": 4.05
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 73941,
+          "share_pct": 3.49
+        },
+        {
+          "rank": 7,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 72200,
+          "share_pct": 3.41
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 70560,
+          "share_pct": 3.33
+        },
+        {
+          "rank": 9,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 60738,
+          "share_pct": 2.87
+        },
+        {
+          "rank": 10,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 60219,
+          "share_pct": 2.84
+        },
+        {
+          "rank": 11,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 53709,
+          "share_pct": 2.54
+        },
+        {
+          "rank": 12,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 53017,
+          "share_pct": 2.5
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 49200,
+          "share_pct": 2.32
+        },
+        {
+          "rank": 14,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 48700,
+          "share_pct": 2.3
+        },
+        {
+          "rank": 15,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 43218,
+          "share_pct": 2.04
+        },
+        {
+          "rank": 16,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 41891,
+          "share_pct": 1.98
+        },
+        {
+          "rank": 17,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 40366,
+          "share_pct": 1.91
+        },
+        {
+          "rank": 18,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 35833,
+          "share_pct": 1.69
+        },
+        {
+          "rank": 19,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 35202,
+          "share_pct": 1.66
+        },
+        {
+          "rank": 20,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 32382,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 21,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 31332,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 22,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 30900,
+          "share_pct": 1.46
+        },
+        {
+          "rank": 23,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 29044,
+          "share_pct": 1.37
+        },
+        {
+          "rank": 24,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 27365,
+          "share_pct": 1.29
+        },
+        {
+          "rank": 25,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 26006,
+          "share_pct": 1.23
+        },
+        {
+          "rank": 26,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 22135,
+          "share_pct": 1.05
+        },
+        {
+          "rank": 27,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 21333,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 28,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 21025,
+          "share_pct": 0.99
+        },
+        {
+          "rank": 29,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20349,
+          "share_pct": 0.96
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 19952,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 31,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 18532,
+          "share_pct": 0.88
+        },
+        {
+          "rank": 32,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 17326,
+          "share_pct": 0.82
+        },
+        {
+          "rank": 33,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 13961,
+          "share_pct": 0.66
+        }
+      ],
+      "scraped_at": "2026-03-09T06:13:53.517767"
+    },
+    "2024-10": {
+      "total_sales": 1634042,
+      "factory_count": 113,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 103088,
+          "share_pct": 4.54
+        },
+        {
+          "rank": 5,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 86008,
+          "share_pct": 3.79
+        },
+        {
+          "rank": 6,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 78805,
+          "share_pct": 3.47
+        },
+        {
+          "rank": 7,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 77469,
+          "share_pct": 3.41
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 75892,
+          "share_pct": 3.34
+        },
+        {
+          "rank": 9,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 66680,
+          "share_pct": 2.94
+        },
+        {
+          "rank": 10,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 53020,
+          "share_pct": 2.33
+        },
+        {
+          "rank": 11,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 51602,
+          "share_pct": 2.27
+        },
+        {
+          "rank": 12,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 51443,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 45040,
+          "share_pct": 1.98
+        },
+        {
+          "rank": 14,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 42531,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 15,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 40485,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 16,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 40256,
+          "share_pct": 1.77
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 39882,
+          "share_pct": 1.76
+        },
+        {
+          "rank": 18,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 38757,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 36859,
+          "share_pct": 1.62
+        },
+        {
+          "rank": 20,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 36086,
+          "share_pct": 1.59
+        },
+        {
+          "rank": 21,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 35357,
+          "share_pct": 1.56
+        },
+        {
+          "rank": 22,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 34005,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 23,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 31155,
+          "share_pct": 1.37
+        },
+        {
+          "rank": 24,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 29923,
+          "share_pct": 1.32
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 28521,
+          "share_pct": 1.26
+        },
+        {
+          "rank": 26,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 28066,
+          "share_pct": 1.24
+        },
+        {
+          "rank": 27,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 25049,
+          "share_pct": 1.1
+        },
+        {
+          "rank": 28,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 21728,
+          "share_pct": 0.96
+        },
+        {
+          "rank": 29,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 20897,
+          "share_pct": 0.92
+        },
+        {
+          "rank": 30,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 20726,
+          "share_pct": 0.91
+        },
+        {
+          "rank": 31,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 20314,
+          "share_pct": 0.89
+        },
+        {
+          "rank": 32,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 16868,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 33,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 16657,
+          "share_pct": 0.73
+        }
+      ],
+      "scraped_at": "2026-03-09T06:14:04.410145"
+    },
+    "2024-11": {
+      "total_sales": 1799111,
+      "factory_count": 111,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 111260,
+          "share_pct": 4.56
+        },
+        {
+          "rank": 5,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 89890,
+          "share_pct": 3.69
+        },
+        {
+          "rank": 6,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 86006,
+          "share_pct": 3.53
+        },
+        {
+          "rank": 7,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 79207,
+          "share_pct": 3.25
+        },
+        {
+          "rank": 8,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 73490,
+          "share_pct": 3.01
+        },
+        {
+          "rank": 9,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 69774,
+          "share_pct": 2.86
+        },
+        {
+          "rank": 10,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 67491,
+          "share_pct": 2.77
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 55059,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 12,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 54566,
+          "share_pct": 2.24
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 50000,
+          "share_pct": 2.05
+        },
+        {
+          "rank": 14,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 48743,
+          "share_pct": 2.0
+        },
+        {
+          "rank": 15,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 48100,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 16,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 45351,
+          "share_pct": 1.86
+        },
+        {
+          "rank": 17,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 45047,
+          "share_pct": 1.85
+        },
+        {
+          "rank": 18,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 43229,
+          "share_pct": 1.77
+        },
+        {
+          "rank": 19,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 39660,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 20,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 39510,
+          "share_pct": 1.62
+        },
+        {
+          "rank": 21,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 38850,
+          "share_pct": 1.59
+        },
+        {
+          "rank": 22,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 37050,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 23,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 35851,
+          "share_pct": 1.47
+        },
+        {
+          "rank": 24,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 34841,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 25,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 34010,
+          "share_pct": 1.39
+        },
+        {
+          "rank": 26,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 32327,
+          "share_pct": 1.33
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 31237,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 28,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 27290,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 29,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 27011,
+          "share_pct": 1.11
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 26137,
+          "share_pct": 1.07
+        },
+        {
+          "rank": 31,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 23156,
+          "share_pct": 0.95
+        },
+        {
+          "rank": 32,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 18089,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 33,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 16400,
+          "share_pct": 0.67
+        }
+      ],
+      "scraped_at": "2026-03-09T06:14:16.341910"
+    },
+    "2024-12": {
+      "total_sales": 2004067,
+      "factory_count": 115,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 99750,
+          "share_pct": 3.77
+        },
+        {
+          "rank": 5,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 96718,
+          "share_pct": 3.65
+        },
+        {
+          "rank": 6,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 93174,
+          "share_pct": 3.52
+        },
+        {
+          "rank": 7,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 92693,
+          "share_pct": 3.5
+        },
+        {
+          "rank": 8,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 88100,
+          "share_pct": 3.33
+        },
+        {
+          "rank": 9,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 82927,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 10,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 68893,
+          "share_pct": 2.6
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 66337,
+          "share_pct": 2.5
+        },
+        {
+          "rank": 12,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 65413,
+          "share_pct": 2.47
+        },
+        {
+          "rank": 13,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 58513,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 14,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 57286,
+          "share_pct": 2.16
+        },
+        {
+          "rank": 15,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 55208,
+          "share_pct": 2.08
+        },
+        {
+          "rank": 16,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 55126,
+          "share_pct": 2.08
+        },
+        {
+          "rank": 17,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 52200,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 18,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 50892,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 19,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 49778,
+          "share_pct": 1.88
+        },
+        {
+          "rank": 20,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 46387,
+          "share_pct": 1.75
+        },
+        {
+          "rank": 21,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 45224,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 22,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 40551,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 23,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 40173,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 24,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 34339,
+          "share_pct": 1.3
+        },
+        {
+          "rank": 25,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 34090,
+          "share_pct": 1.29
+        },
+        {
+          "rank": 26,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 31186,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 27,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 30093,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 28,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 27382,
+          "share_pct": 1.03
+        },
+        {
+          "rank": 29,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 27190,
+          "share_pct": 1.03
+        },
+        {
+          "rank": 30,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 25815,
+          "share_pct": 0.97
+        },
+        {
+          "rank": 31,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 23887,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 32,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20610,
+          "share_pct": 0.78
+        },
+        {
+          "rank": 33,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 19446,
+          "share_pct": 0.73
+        }
+      ],
+      "scraped_at": "2026-03-09T06:14:28.727269"
+    },
+    "2025-01": {
+      "total_sales": 1371224,
+      "factory_count": 115,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 77029,
+          "share_pct": 4.28
+        },
+        {
+          "rank": 5,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 72392,
+          "share_pct": 4.02
+        },
+        {
+          "rank": 6,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 66951,
+          "share_pct": 3.72
+        },
+        {
+          "rank": 7,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 63608,
+          "share_pct": 3.53
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 63452,
+          "share_pct": 3.52
+        },
+        {
+          "rank": 9,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 59949,
+          "share_pct": 3.33
+        },
+        {
+          "rank": 10,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 52498,
+          "share_pct": 2.92
+        },
+        {
+          "rank": 11,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 51042,
+          "share_pct": 2.84
+        },
+        {
+          "rank": 12,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 46418,
+          "share_pct": 2.58
+        },
+        {
+          "rank": 13,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 41022,
+          "share_pct": 2.28
+        },
+        {
+          "rank": 14,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 40732,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 15,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 40213,
+          "share_pct": 2.23
+        },
+        {
+          "rank": 16,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 39300,
+          "share_pct": 2.18
+        },
+        {
+          "rank": 17,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 37919,
+          "share_pct": 2.11
+        },
+        {
+          "rank": 18,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 33703,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 19,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 32213,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 20,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 31692,
+          "share_pct": 1.76
+        },
+        {
+          "rank": 21,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 29927,
+          "share_pct": 1.66
+        },
+        {
+          "rank": 22,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 28489,
+          "share_pct": 1.58
+        },
+        {
+          "rank": 23,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 28347,
+          "share_pct": 1.57
+        },
+        {
+          "rank": 24,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 28342,
+          "share_pct": 1.57
+        },
+        {
+          "rank": 25,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 23004,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 26,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 22897,
+          "share_pct": 1.27
+        },
+        {
+          "rank": 27,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 17950,
+          "share_pct": 1.0
+        },
+        {
+          "rank": 28,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 16865,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 29,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 16368,
+          "share_pct": 0.91
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 16122,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 31,
+          "factory": "LUXCEED 智界",
+          "country": "国产",
+          "sales": 13000,
+          "share_pct": 0.72
+        },
+        {
+          "rank": 32,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 12663,
+          "share_pct": 0.7
+        },
+        {
+          "rank": 33,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 11942,
+          "share_pct": 0.66
+        }
+      ],
+      "scraped_at": "2026-03-09T06:14:39.905569"
+    },
+    "2025-02": {
+      "total_sales": 1020739,
+      "factory_count": 111,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 63999,
+          "share_pct": 4.58
+        },
+        {
+          "rank": 5,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 59020,
+          "share_pct": 4.22
+        },
+        {
+          "rank": 6,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 51611,
+          "share_pct": 3.69
+        },
+        {
+          "rank": 7,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 41959,
+          "share_pct": 3.0
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 41315,
+          "share_pct": 2.96
+        },
+        {
+          "rank": 9,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 35097,
+          "share_pct": 2.51
+        },
+        {
+          "rank": 10,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 32424,
+          "share_pct": 2.32
+        },
+        {
+          "rank": 11,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 32236,
+          "share_pct": 2.31
+        },
+        {
+          "rank": 12,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 31680,
+          "share_pct": 2.27
+        },
+        {
+          "rank": 13,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 30261,
+          "share_pct": 2.17
+        },
+        {
+          "rank": 14,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 27951,
+          "share_pct": 2.0
+        },
+        {
+          "rank": 15,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 27037,
+          "share_pct": 1.94
+        },
+        {
+          "rank": 16,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 26995,
+          "share_pct": 1.93
+        },
+        {
+          "rank": 17,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 26777,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 18,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 26421,
+          "share_pct": 1.89
+        },
+        {
+          "rank": 19,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 26264,
+          "share_pct": 1.88
+        },
+        {
+          "rank": 20,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 23728,
+          "share_pct": 1.7
+        },
+        {
+          "rank": 21,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 23603,
+          "share_pct": 1.69
+        },
+        {
+          "rank": 22,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 22064,
+          "share_pct": 1.58
+        },
+        {
+          "rank": 23,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 21648,
+          "share_pct": 1.55
+        },
+        {
+          "rank": 24,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 19091,
+          "share_pct": 1.37
+        },
+        {
+          "rank": 25,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 19080,
+          "share_pct": 1.37
+        },
+        {
+          "rank": 26,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 16584,
+          "share_pct": 1.19
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 15763,
+          "share_pct": 1.13
+        },
+        {
+          "rank": 28,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 15500,
+          "share_pct": 1.11
+        },
+        {
+          "rank": 29,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 14696,
+          "share_pct": 1.05
+        },
+        {
+          "rank": 30,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 14039,
+          "share_pct": 1.0
+        },
+        {
+          "rank": 31,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 11315,
+          "share_pct": 0.81
+        },
+        {
+          "rank": 32,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 10748,
+          "share_pct": 0.77
+        },
+        {
+          "rank": 33,
+          "factory": "LUXCEED 智界",
+          "country": "国产",
+          "sales": 9580,
+          "share_pct": 0.69
+        }
+      ],
+      "scraped_at": "2026-03-09T06:14:50.847367"
+    },
+    "2025-03": {
+      "total_sales": 1502571,
+      "factory_count": 113,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 86001,
+          "share_pct": 4.4
+        },
+        {
+          "rank": 5,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 75001,
+          "share_pct": 3.84
+        },
+        {
+          "rank": 6,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 74127,
+          "share_pct": 3.79
+        },
+        {
+          "rank": 7,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 71041,
+          "share_pct": 3.63
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 70940,
+          "share_pct": 3.63
+        },
+        {
+          "rank": 9,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 69939,
+          "share_pct": 3.58
+        },
+        {
+          "rank": 10,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 66066,
+          "share_pct": 3.38
+        },
+        {
+          "rank": 11,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 50906,
+          "share_pct": 2.6
+        },
+        {
+          "rank": 12,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 46526,
+          "share_pct": 2.38
+        },
+        {
+          "rank": 13,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 44677,
+          "share_pct": 2.29
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 44568,
+          "share_pct": 2.28
+        },
+        {
+          "rank": 15,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 38002,
+          "share_pct": 1.94
+        },
+        {
+          "rank": 16,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 36674,
+          "share_pct": 1.88
+        },
+        {
+          "rank": 17,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 35276,
+          "share_pct": 1.8
+        },
+        {
+          "rank": 18,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 33331,
+          "share_pct": 1.7
+        },
+        {
+          "rank": 19,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 33293,
+          "share_pct": 1.7
+        },
+        {
+          "rank": 20,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 32971,
+          "share_pct": 1.69
+        },
+        {
+          "rank": 21,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 31519,
+          "share_pct": 1.61
+        },
+        {
+          "rank": 22,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 30531,
+          "share_pct": 1.56
+        },
+        {
+          "rank": 23,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 30102,
+          "share_pct": 1.54
+        },
+        {
+          "rank": 24,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 29402,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 25,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 29244,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 26,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 25198,
+          "share_pct": 1.29
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 23494,
+          "share_pct": 1.2
+        },
+        {
+          "rank": 28,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 22532,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 29,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 18238,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 30,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 14657,
+          "share_pct": 0.75
+        },
+        {
+          "rank": 31,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 14385,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 32,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 14111,
+          "share_pct": 0.72
+        },
+        {
+          "rank": 33,
+          "factory": "北汽新能源",
+          "country": "国产",
+          "sales": 13018,
+          "share_pct": 0.67
+        }
+      ],
+      "scraped_at": "2026-03-09T06:15:02.711145"
+    },
+    "2025-04": {
+      "total_sales": 1353433,
+      "factory_count": 115,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 75268,
+          "share_pct": 4.25
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 73235,
+          "share_pct": 4.13
+        },
+        {
+          "rank": 6,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 68001,
+          "share_pct": 3.84
+        },
+        {
+          "rank": 7,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 64912,
+          "share_pct": 3.66
+        },
+        {
+          "rank": 8,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 62611,
+          "share_pct": 3.53
+        },
+        {
+          "rank": 9,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 60039,
+          "share_pct": 3.39
+        },
+        {
+          "rank": 10,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 40048,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 40005,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 12,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 37521,
+          "share_pct": 2.12
+        },
+        {
+          "rank": 13,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 35222,
+          "share_pct": 1.99
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 34000,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 15,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 33939,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 16,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 33473,
+          "share_pct": 1.89
+        },
+        {
+          "rank": 17,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 33132,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 18,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 31343,
+          "share_pct": 1.77
+        },
+        {
+          "rank": 19,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 30999,
+          "share_pct": 1.75
+        },
+        {
+          "rank": 20,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 28731,
+          "share_pct": 1.62
+        },
+        {
+          "rank": 21,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 28585,
+          "share_pct": 1.61
+        },
+        {
+          "rank": 22,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 28317,
+          "share_pct": 1.6
+        },
+        {
+          "rank": 23,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 25546,
+          "share_pct": 1.44
+        },
+        {
+          "rank": 24,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 25398,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 25,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 24872,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 26,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 22639,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 27,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 20560,
+          "share_pct": 1.16
+        },
+        {
+          "rank": 28,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 20431,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 29,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 20002,
+          "share_pct": 1.13
+        },
+        {
+          "rank": 30,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 19269,
+          "share_pct": 1.09
+        },
+        {
+          "rank": 31,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 19099,
+          "share_pct": 1.08
+        },
+        {
+          "rank": 32,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 16100,
+          "share_pct": 0.91
+        },
+        {
+          "rank": 33,
+          "factory": "腾势汽车",
+          "country": "国产",
+          "sales": 15388,
+          "share_pct": 0.87
+        }
+      ],
+      "scraped_at": "2026-03-09T06:15:14.195596"
+    },
+    "2025-05": {
+      "total_sales": 1528540,
+      "factory_count": 114,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 79560,
+          "share_pct": 4.06
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 79289,
+          "share_pct": 4.05
+        },
+        {
+          "rank": 6,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 78989,
+          "share_pct": 4.03
+        },
+        {
+          "rank": 7,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 73001,
+          "share_pct": 3.73
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 67993,
+          "share_pct": 3.47
+        },
+        {
+          "rank": 9,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 64540,
+          "share_pct": 3.3
+        },
+        {
+          "rank": 10,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 51003,
+          "share_pct": 2.6
+        },
+        {
+          "rank": 11,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 47246,
+          "share_pct": 2.41
+        },
+        {
+          "rank": 12,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 43295,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 43000,
+          "share_pct": 2.2
+        },
+        {
+          "rank": 14,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 41409,
+          "share_pct": 2.11
+        },
+        {
+          "rank": 15,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 40856,
+          "share_pct": 2.09
+        },
+        {
+          "rank": 16,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 38588,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 17,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 38057,
+          "share_pct": 1.94
+        },
+        {
+          "rank": 18,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 37600,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 19,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 36625,
+          "share_pct": 1.87
+        },
+        {
+          "rank": 20,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 34977,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 21,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 34049,
+          "share_pct": 1.74
+        },
+        {
+          "rank": 22,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 29439,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 23,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 28566,
+          "share_pct": 1.46
+        },
+        {
+          "rank": 24,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 28013,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 25,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 26451,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 26,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 25572,
+          "share_pct": 1.31
+        },
+        {
+          "rank": 27,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 25000,
+          "share_pct": 1.28
+        },
+        {
+          "rank": 28,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 24586,
+          "share_pct": 1.26
+        },
+        {
+          "rank": 29,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 23550,
+          "share_pct": 1.2
+        },
+        {
+          "rank": 30,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 18415,
+          "share_pct": 0.94
+        },
+        {
+          "rank": 31,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 18146,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 32,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 17348,
+          "share_pct": 0.89
+        },
+        {
+          "rank": 33,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 16247,
+          "share_pct": 0.83
+        }
+      ],
+      "scraped_at": "2026-03-09T06:15:26.231533"
+    },
+    "2025-06": {
+      "total_sales": 1619057,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 84034,
+          "share_pct": 3.97
+        },
+        {
+          "rank": 5,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 73081,
+          "share_pct": 3.45
+        },
+        {
+          "rank": 6,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 72572,
+          "share_pct": 3.43
+        },
+        {
+          "rank": 7,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 72055,
+          "share_pct": 3.4
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 68193,
+          "share_pct": 3.22
+        },
+        {
+          "rank": 9,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 61484,
+          "share_pct": 2.9
+        },
+        {
+          "rank": 10,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 60481,
+          "share_pct": 2.85
+        },
+        {
+          "rank": 11,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 48350,
+          "share_pct": 2.28
+        },
+        {
+          "rank": 12,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 48200,
+          "share_pct": 2.27
+        },
+        {
+          "rank": 13,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 46529,
+          "share_pct": 2.2
+        },
+        {
+          "rank": 14,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 46142,
+          "share_pct": 2.18
+        },
+        {
+          "rank": 15,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 44921,
+          "share_pct": 2.12
+        },
+        {
+          "rank": 16,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 44685,
+          "share_pct": 2.11
+        },
+        {
+          "rank": 17,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 42600,
+          "share_pct": 2.01
+        },
+        {
+          "rank": 18,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 41796,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 19,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 36279,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 20,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 35652,
+          "share_pct": 1.68
+        },
+        {
+          "rank": 21,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 34095,
+          "share_pct": 1.61
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 33718,
+          "share_pct": 1.59
+        },
+        {
+          "rank": 23,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 30753,
+          "share_pct": 1.45
+        },
+        {
+          "rank": 24,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 30250,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 25,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 28095,
+          "share_pct": 1.33
+        },
+        {
+          "rank": 26,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 25459,
+          "share_pct": 1.2
+        },
+        {
+          "rank": 27,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 24369,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 28,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 23722,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 29,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 22713,
+          "share_pct": 1.07
+        },
+        {
+          "rank": 30,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 19570,
+          "share_pct": 0.92
+        },
+        {
+          "rank": 31,
+          "factory": "方程豹",
+          "country": "国产",
+          "sales": 18903,
+          "share_pct": 0.89
+        },
+        {
+          "rank": 32,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 18398,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 33,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 17405,
+          "share_pct": 0.82
+        }
+      ],
+      "scraped_at": "2026-03-09T06:15:36.926879"
+    },
+    "2025-07": {
+      "total_sales": 1446701,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 72355,
+          "share_pct": 3.88
+        },
+        {
+          "rank": 5,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 71747,
+          "share_pct": 3.85
+        },
+        {
+          "rank": 6,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 67913,
+          "share_pct": 3.64
+        },
+        {
+          "rank": 7,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 66806,
+          "share_pct": 3.58
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 66019,
+          "share_pct": 3.54
+        },
+        {
+          "rank": 9,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 59368,
+          "share_pct": 3.18
+        },
+        {
+          "rank": 10,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 51005,
+          "share_pct": 2.73
+        },
+        {
+          "rank": 11,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 45524,
+          "share_pct": 2.44
+        },
+        {
+          "rank": 12,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 42509,
+          "share_pct": 2.28
+        },
+        {
+          "rank": 13,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 40753,
+          "share_pct": 2.18
+        },
+        {
+          "rank": 14,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 40617,
+          "share_pct": 2.18
+        },
+        {
+          "rank": 15,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 40190,
+          "share_pct": 2.15
+        },
+        {
+          "rank": 16,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 37239,
+          "share_pct": 2.0
+        },
+        {
+          "rank": 17,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 35200,
+          "share_pct": 1.89
+        },
+        {
+          "rank": 18,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 33717,
+          "share_pct": 1.81
+        },
+        {
+          "rank": 19,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 33666,
+          "share_pct": 1.8
+        },
+        {
+          "rank": 20,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 30731,
+          "share_pct": 1.65
+        },
+        {
+          "rank": 21,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 30452,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 22,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 27180,
+          "share_pct": 1.46
+        },
+        {
+          "rank": 23,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 26278,
+          "share_pct": 1.41
+        },
+        {
+          "rank": 24,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 24968,
+          "share_pct": 1.34
+        },
+        {
+          "rank": 25,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 23334,
+          "share_pct": 1.25
+        },
+        {
+          "rank": 26,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 23035,
+          "share_pct": 1.23
+        },
+        {
+          "rank": 27,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 22809,
+          "share_pct": 1.22
+        },
+        {
+          "rank": 28,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 22496,
+          "share_pct": 1.21
+        },
+        {
+          "rank": 29,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 21216,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 30,
+          "factory": "一汽奔腾",
+          "country": "国产",
+          "sales": 17405,
+          "share_pct": 0.93
+        },
+        {
+          "rank": 31,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 15030,
+          "share_pct": 0.81
+        },
+        {
+          "rank": 32,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 14835,
+          "share_pct": 0.8
+        },
+        {
+          "rank": 33,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 14703,
+          "share_pct": 0.79
+        }
+      ],
+      "scraped_at": "2026-03-09T06:15:49.759587"
+    },
+    "2025-08": {
+      "total_sales": 1563119,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 80164,
+          "share_pct": 3.94
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 71620,
+          "share_pct": 3.52
+        },
+        {
+          "rank": 6,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 70845,
+          "share_pct": 3.48
+        },
+        {
+          "rank": 7,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 69959,
+          "share_pct": 3.44
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 66060,
+          "share_pct": 3.25
+        },
+        {
+          "rank": 9,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 57152,
+          "share_pct": 2.81
+        },
+        {
+          "rank": 10,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 54990,
+          "share_pct": 2.7
+        },
+        {
+          "rank": 11,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 52807,
+          "share_pct": 2.6
+        },
+        {
+          "rank": 12,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 51162,
+          "share_pct": 2.52
+        },
+        {
+          "rank": 13,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 45397,
+          "share_pct": 2.23
+        },
+        {
+          "rank": 14,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 41637,
+          "share_pct": 2.05
+        },
+        {
+          "rank": 15,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 40012,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 16,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 39365,
+          "share_pct": 1.94
+        },
+        {
+          "rank": 17,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 36396,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 18,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 36205,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 19,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 36172,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 20,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 35716,
+          "share_pct": 1.76
+        },
+        {
+          "rank": 21,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 34691,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 22,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 34303,
+          "share_pct": 1.69
+        },
+        {
+          "rank": 23,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 29863,
+          "share_pct": 1.47
+        },
+        {
+          "rank": 24,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 28529,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 25,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 28204,
+          "share_pct": 1.39
+        },
+        {
+          "rank": 26,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 25309,
+          "share_pct": 1.24
+        },
+        {
+          "rank": 27,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 25037,
+          "share_pct": 1.23
+        },
+        {
+          "rank": 28,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 24800,
+          "share_pct": 1.22
+        },
+        {
+          "rank": 29,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 23331,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 30,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 22035,
+          "share_pct": 1.08
+        },
+        {
+          "rank": 31,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 17704,
+          "share_pct": 0.87
+        },
+        {
+          "rank": 32,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 17468,
+          "share_pct": 0.86
+        },
+        {
+          "rank": 33,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 16434,
+          "share_pct": 0.81
+        }
+      ],
+      "scraped_at": "2026-03-09T06:16:00.983846"
+    },
+    "2025-09": {
+      "total_sales": 1737631,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 84380,
+          "share_pct": 3.73
+        },
+        {
+          "rank": 5,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 76198,
+          "share_pct": 3.37
+        },
+        {
+          "rank": 6,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 75434,
+          "share_pct": 3.34
+        },
+        {
+          "rank": 7,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 71525,
+          "share_pct": 3.17
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 71220,
+          "share_pct": 3.15
+        },
+        {
+          "rank": 9,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 70970,
+          "share_pct": 3.14
+        },
+        {
+          "rank": 10,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 60172,
+          "share_pct": 2.66
+        },
+        {
+          "rank": 11,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 59769,
+          "share_pct": 2.65
+        },
+        {
+          "rank": 12,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 55110,
+          "share_pct": 2.44
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 52000,
+          "share_pct": 2.3
+        },
+        {
+          "rank": 14,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 45949,
+          "share_pct": 2.03
+        },
+        {
+          "rank": 15,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 44503,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 16,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 43351,
+          "share_pct": 1.92
+        },
+        {
+          "rank": 17,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 41948,
+          "share_pct": 1.86
+        },
+        {
+          "rank": 18,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 40619,
+          "share_pct": 1.8
+        },
+        {
+          "rank": 19,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 40005,
+          "share_pct": 1.77
+        },
+        {
+          "rank": 20,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 39805,
+          "share_pct": 1.76
+        },
+        {
+          "rank": 21,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 36577,
+          "share_pct": 1.62
+        },
+        {
+          "rank": 22,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 35611,
+          "share_pct": 1.58
+        },
+        {
+          "rank": 23,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 33951,
+          "share_pct": 1.5
+        },
+        {
+          "rank": 24,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 29838,
+          "share_pct": 1.32
+        },
+        {
+          "rank": 25,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 29710,
+          "share_pct": 1.31
+        },
+        {
+          "rank": 26,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 28278,
+          "share_pct": 1.25
+        },
+        {
+          "rank": 27,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 26062,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 28,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 26046,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 29,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 25799,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 30,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 24194,
+          "share_pct": 1.07
+        },
+        {
+          "rank": 31,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 23188,
+          "share_pct": 1.03
+        },
+        {
+          "rank": 32,
+          "factory": "方程豹",
+          "country": "国产",
+          "sales": 22749,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 33,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 19708,
+          "share_pct": 0.87
+        }
+      ],
+      "scraped_at": "2026-03-09T06:16:11.218899"
+    },
+    "2025-10": {
+      "total_sales": 1767728,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 90304,
+          "share_pct": 3.99
+        },
+        {
+          "rank": 5,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 84500,
+          "share_pct": 3.74
+        },
+        {
+          "rank": 6,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 80671,
+          "share_pct": 3.57
+        },
+        {
+          "rank": 7,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 71604,
+          "share_pct": 3.17
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 71309,
+          "share_pct": 3.15
+        },
+        {
+          "rank": 9,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 63724,
+          "share_pct": 2.82
+        },
+        {
+          "rank": 10,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 61007,
+          "share_pct": 2.7
+        },
+        {
+          "rank": 11,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 51337,
+          "share_pct": 2.27
+        },
+        {
+          "rank": 12,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 48654,
+          "share_pct": 2.15
+        },
+        {
+          "rank": 13,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 47621,
+          "share_pct": 2.11
+        },
+        {
+          "rank": 14,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 44907,
+          "share_pct": 1.99
+        },
+        {
+          "rank": 15,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 44599,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 16,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 44352,
+          "share_pct": 1.96
+        },
+        {
+          "rank": 17,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 43635,
+          "share_pct": 1.93
+        },
+        {
+          "rank": 18,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 43564,
+          "share_pct": 1.93
+        },
+        {
+          "rank": 19,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 37014,
+          "share_pct": 1.64
+        },
+        {
+          "rank": 20,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 36800,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 21,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 34327,
+          "share_pct": 1.52
+        },
+        {
+          "rank": 22,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 32267,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 23,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 31767,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 24,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 31245,
+          "share_pct": 1.38
+        },
+        {
+          "rank": 25,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 31153,
+          "share_pct": 1.38
+        },
+        {
+          "rank": 26,
+          "factory": "方程豹",
+          "country": "国产",
+          "sales": 30648,
+          "share_pct": 1.36
+        },
+        {
+          "rank": 27,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 27644,
+          "share_pct": 1.22
+        },
+        {
+          "rank": 28,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 26372,
+          "share_pct": 1.17
+        },
+        {
+          "rank": 29,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 26006,
+          "share_pct": 1.15
+        },
+        {
+          "rank": 30,
+          "factory": "北汽新能源",
+          "country": "国产",
+          "sales": 23387,
+          "share_pct": 1.03
+        },
+        {
+          "rank": 31,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 22453,
+          "share_pct": 0.99
+        },
+        {
+          "rank": 32,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 20520,
+          "share_pct": 0.91
+        },
+        {
+          "rank": 33,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 20311,
+          "share_pct": 0.9
+        }
+      ],
+      "scraped_at": "2026-03-09T06:16:21.411762"
+    },
+    "2025-11": {
+      "total_sales": 1744195,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 87780,
+          "share_pct": 3.92
+        },
+        {
+          "rank": 5,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 80007,
+          "share_pct": 3.58
+        },
+        {
+          "rank": 6,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 78000,
+          "share_pct": 3.49
+        },
+        {
+          "rank": 7,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 73145,
+          "share_pct": 3.27
+        },
+        {
+          "rank": 8,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 71111,
+          "share_pct": 3.18
+        },
+        {
+          "rank": 9,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 64905,
+          "share_pct": 2.9
+        },
+        {
+          "rank": 10,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 62300,
+          "share_pct": 2.78
+        },
+        {
+          "rank": 11,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 60979,
+          "share_pct": 2.73
+        },
+        {
+          "rank": 12,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 51706,
+          "share_pct": 2.31
+        },
+        {
+          "rank": 13,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 50500,
+          "share_pct": 2.26
+        },
+        {
+          "rank": 14,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 46366,
+          "share_pct": 2.07
+        },
+        {
+          "rank": 15,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 46249,
+          "share_pct": 2.07
+        },
+        {
+          "rank": 16,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 45009,
+          "share_pct": 2.01
+        },
+        {
+          "rank": 17,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 40325,
+          "share_pct": 1.8
+        },
+        {
+          "rank": 18,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 40056,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 19,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 37446,
+          "share_pct": 1.67
+        },
+        {
+          "rank": 20,
+          "factory": "方程豹",
+          "country": "国产",
+          "sales": 35289,
+          "share_pct": 1.58
+        },
+        {
+          "rank": 21,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 33181,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 22,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 33136,
+          "share_pct": 1.48
+        },
+        {
+          "rank": 23,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 31793,
+          "share_pct": 1.42
+        },
+        {
+          "rank": 24,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 31671,
+          "share_pct": 1.42
+        },
+        {
+          "rank": 25,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 31268,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 26,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 27852,
+          "share_pct": 1.24
+        },
+        {
+          "rank": 27,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 25452,
+          "share_pct": 1.14
+        },
+        {
+          "rank": 28,
+          "factory": "北汽新能源",
+          "country": "国产",
+          "sales": 25394,
+          "share_pct": 1.13
+        },
+        {
+          "rank": 29,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 25130,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 30,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 22568,
+          "share_pct": 1.01
+        },
+        {
+          "rank": 31,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 21997,
+          "share_pct": 0.98
+        },
+        {
+          "rank": 32,
+          "factory": "深蓝汽车",
+          "country": "国产",
+          "sales": 20062,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 33,
+          "factory": "岚图汽车",
+          "country": "国产",
+          "sales": 20005,
+          "share_pct": 0.89
+        }
+      ],
+      "scraped_at": "2026-03-09T06:16:31.693893"
+    },
+    "2025-12": {
+      "total_sales": 1801996,
+      "factory_count": 117,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "上汽大众",
+          "country": "国产",
+          "sales": 88758,
+          "share_pct": 3.93
+        },
+        {
+          "rank": 5,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 75234,
+          "share_pct": 3.33
+        },
+        {
+          "rank": 6,
+          "factory": "一汽-大众",
+          "country": "国产",
+          "sales": 73373,
+          "share_pct": 3.25
+        },
+        {
+          "rank": 7,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 68751,
+          "share_pct": 3.04
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 68504,
+          "share_pct": 3.03
+        },
+        {
+          "rank": 9,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 59815,
+          "share_pct": 2.65
+        },
+        {
+          "rank": 10,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 57778,
+          "share_pct": 2.56
+        },
+        {
+          "rank": 11,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 50483,
+          "share_pct": 2.23
+        },
+        {
+          "rank": 12,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 50212,
+          "share_pct": 2.22
+        },
+        {
+          "rank": 13,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 50187,
+          "share_pct": 2.22
+        },
+        {
+          "rank": 14,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 50004,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 15,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 49899,
+          "share_pct": 2.21
+        },
+        {
+          "rank": 16,
+          "factory": "方程豹",
+          "country": "国产",
+          "sales": 48161,
+          "share_pct": 2.13
+        },
+        {
+          "rank": 17,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 47319,
+          "share_pct": 2.09
+        },
+        {
+          "rank": 18,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 47056,
+          "share_pct": 2.08
+        },
+        {
+          "rank": 19,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 44246,
+          "share_pct": 1.96
+        },
+        {
+          "rank": 20,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 41653,
+          "share_pct": 1.84
+        },
+        {
+          "rank": 21,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 38683,
+          "share_pct": 1.71
+        },
+        {
+          "rank": 22,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 36285,
+          "share_pct": 1.61
+        },
+        {
+          "rank": 23,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 36173,
+          "share_pct": 1.6
+        },
+        {
+          "rank": 24,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 34486,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 25,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 32273,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 26,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 31672,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 27,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 30215,
+          "share_pct": 1.34
+        },
+        {
+          "rank": 28,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 29408,
+          "share_pct": 1.3
+        },
+        {
+          "rank": 29,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 26300,
+          "share_pct": 1.16
+        },
+        {
+          "rank": 30,
+          "factory": "北汽新能源",
+          "country": "国产",
+          "sales": 24834,
+          "share_pct": 1.1
+        },
+        {
+          "rank": 31,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 23408,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 32,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 21402,
+          "share_pct": 0.95
+        },
+        {
+          "rank": 33,
+          "factory": "长安启源",
+          "country": "国产",
+          "sales": 21122,
+          "share_pct": 0.94
+        }
+      ],
+      "scraped_at": "2026-03-09T06:16:42.202905"
+    },
+    "2026-01": {
+      "total_sales": 1282680,
+      "factory_count": 116,
+      "top_30": [
+        {
+          "rank": 4,
+          "factory": "比亚迪",
+          "country": "国产",
+          "sales": 68585,
+          "share_pct": 4.43
+        },
+        {
+          "rank": 5,
+          "factory": "一汽丰田",
+          "country": "国产",
+          "sales": 64929,
+          "share_pct": 4.19
+        },
+        {
+          "rank": 6,
+          "factory": "广汽丰田",
+          "country": "国产",
+          "sales": 63648,
+          "share_pct": 4.11
+        },
+        {
+          "rank": 7,
+          "factory": "吉利汽车",
+          "country": "国产",
+          "sales": 59056,
+          "share_pct": 3.81
+        },
+        {
+          "rank": 8,
+          "factory": "华晨宝马",
+          "country": "国产",
+          "sales": 50047,
+          "share_pct": 3.23
+        },
+        {
+          "rank": 9,
+          "factory": "长安汽车",
+          "country": "国产",
+          "sales": 48934,
+          "share_pct": 3.16
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众奥迪",
+          "country": "国产",
+          "sales": 48401,
+          "share_pct": 3.13
+        },
+        {
+          "rank": 11,
+          "factory": "上汽通用五菱",
+          "country": "国产",
+          "sales": 46391,
+          "share_pct": 3.0
+        },
+        {
+          "rank": 12,
+          "factory": "东风日产",
+          "country": "国产",
+          "sales": 44845,
+          "share_pct": 2.9
+        },
+        {
+          "rank": 13,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 43370,
+          "share_pct": 2.8
+        },
+        {
+          "rank": 14,
+          "factory": "AITO 问界",
+          "country": "国产",
+          "sales": 40016,
+          "share_pct": 2.58
+        },
+        {
+          "rank": 15,
+          "factory": "小米汽车",
+          "country": "国产",
+          "sales": 39002,
+          "share_pct": 2.52
+        },
+        {
+          "rank": 16,
+          "factory": "上汽通用别克",
+          "country": "国产",
+          "sales": 35827,
+          "share_pct": 2.31
+        },
+        {
+          "rank": 17,
+          "factory": "一汽红旗",
+          "country": "国产",
+          "sales": 31638,
+          "share_pct": 2.04
+        },
+        {
+          "rank": 18,
+          "factory": "东风本田",
+          "country": "国产",
+          "sales": 30235,
+          "share_pct": 1.95
+        },
+        {
+          "rank": 19,
+          "factory": "理想",
+          "country": "国产",
+          "sales": 27668,
+          "share_pct": 1.79
+        },
+        {
+          "rank": 20,
+          "factory": "北京奔驰",
+          "country": "国产",
+          "sales": 27619,
+          "share_pct": 1.78
+        },
+        {
+          "rank": 21,
+          "factory": "广汽本田",
+          "country": "国产",
+          "sales": 27155,
+          "share_pct": 1.75
+        },
+        {
+          "rank": 22,
+          "factory": "广汽乘用车",
+          "country": "国产",
+          "sales": 26671,
+          "share_pct": 1.72
+        },
+        {
+          "rank": 23,
+          "factory": "领克",
+          "country": "国产",
+          "sales": 25213,
+          "share_pct": 1.63
+        },
+        {
+          "rank": 24,
+          "factory": "长城汽车",
+          "country": "国产",
+          "sales": 21744,
+          "share_pct": 1.4
+        },
+        {
+          "rank": 25,
+          "factory": "广汽埃安",
+          "country": "国产",
+          "sales": 20956,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 26,
+          "factory": "蔚来",
+          "country": "国产",
+          "sales": 20844,
+          "share_pct": 1.35
+        },
+        {
+          "rank": 27,
+          "factory": "方程豹",
+          "country": "国产",
+          "sales": 19735,
+          "share_pct": 1.27
+        },
+        {
+          "rank": 28,
+          "factory": "极氪",
+          "country": "国产",
+          "sales": 19135,
+          "share_pct": 1.24
+        },
+        {
+          "rank": 29,
+          "factory": "特斯拉中国",
+          "country": "国产",
+          "sales": 18485,
+          "share_pct": 1.19
+        },
+        {
+          "rank": 30,
+          "factory": "零跑汽车",
+          "country": "国产",
+          "sales": 17536,
+          "share_pct": 1.13
+        },
+        {
+          "rank": 31,
+          "factory": "奇瑞汽车",
+          "country": "国产",
+          "sales": 17353,
+          "share_pct": 1.12
+        },
+        {
+          "rank": 32,
+          "factory": "小鹏汽车",
+          "country": "国产",
+          "sales": 16807,
+          "share_pct": 1.09
+        },
+        {
+          "rank": 33,
+          "factory": "上汽集团",
+          "country": "国产",
+          "sales": 14999,
+          "share_pct": 0.97
+        }
+      ],
+      "scraped_at": "2026-03-09T06:16:53.336143"
+    }
+  }
+}

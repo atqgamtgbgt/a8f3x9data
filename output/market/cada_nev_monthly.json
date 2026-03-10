@@ -1,0 +1,931 @@
+{
+  "metadata": {
+    "source": "cada.cn (中国汽車流通協会 乗聯会)",
+    "data_type": "NEV BEV/PHEV/EREV 月次批発データ + 市場概況",
+    "extraction": "テキスト正規表現による自動抽出",
+    "last_updated": "2026-03-09T09:57:48.315018"
+  },
+  "months": {
+    "2023-01": {
+      "month": "2023-01",
+      "bev_wan": 27.2,
+      "bev_yoy_pct": -19.8,
+      "phev_wan": 11.7,
+      "phev_yoy_pct": 44.7,
+      "nev_penetration_pct": 26.8,
+      "chinese_share_pct": 49.4,
+      "japanese_share_pct": 16.6,
+      "german_share_pct": 22.9,
+      "source_url": "https://www.cada.cn/Trends/info_91_9505.html",
+      "article_id": 9505
+    },
+    "2023-02": {
+      "month": "2023-02",
+      "bev_wan": 34.7,
+      "bev_yoy_pct": 41.5,
+      "phev_wan": 14.9,
+      "phev_yoy_pct": 105.8,
+      "nev_penetration_pct": 30.6,
+      "chinese_share_pct": 51.1,
+      "japanese_share_pct": 17.6,
+      "german_share_pct": 20.6,
+      "source_url": "https://www.cada.cn/Trends/info_91_9536.html",
+      "article_id": 9536
+    },
+    "2023-04": {
+      "month": "2023-04",
+      "bev_wan": 43.7,
+      "bev_yoy_pct": 104.0,
+      "phev_wan": 17.0,
+      "phev_yoy_pct": 152.3,
+      "nev_penetration_pct": 33.9,
+      "chinese_share_pct": 48.2,
+      "japanese_share_pct": 18.7,
+      "german_share_pct": 21.6,
+      "source_url": "https://www.cada.cn/Trends/info_91_9603.html",
+      "article_id": 9603
+    },
+    "2023-05": {
+      "month": "2023-05",
+      "bev_wan": 48.0,
+      "bev_yoy_pct": 48.0,
+      "phev_wan": 19.4,
+      "phev_yoy_pct": 98.0,
+      "nev_penetration_pct": 33.7,
+      "chinese_share_pct": 50.3,
+      "japanese_share_pct": 18.0,
+      "german_share_pct": 20.6,
+      "source_url": "https://www.cada.cn/Trends/info_91_9639.html",
+      "article_id": 9639
+    },
+    "2023-07": {
+      "month": "2023-07",
+      "retail_wan": 57.7,
+      "retail_yoy_pct": 2.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_9695.html",
+      "article_id": 9695
+    },
+    "2023-09": {
+      "month": "2023-09",
+      "bev_wan": 56.3,
+      "bev_yoy_pct": 11.2,
+      "phev_wan": 26.6,
+      "phev_yoy_pct": 58.7,
+      "nev_penetration_pct": 33.9,
+      "chinese_share_pct": 53.4,
+      "japanese_share_pct": 16.6,
+      "german_share_pct": 20.2,
+      "source_url": "https://www.cada.cn/Trends/info_91_9763.html",
+      "article_id": 9763
+    },
+    "2023-11": {
+      "month": "2023-11",
+      "retail_wan": 53.8,
+      "retail_yoy_pct": 4.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_9812.html",
+      "article_id": 9812
+    },
+    "2023-12": {
+      "month": "2023-12",
+      "bev_wan": 75.1,
+      "bev_yoy_pct": 32.9,
+      "phev_wan": 35.7,
+      "phev_yoy_pct": 91.8,
+      "erev_wan": 11.3,
+      "erev_yoy_pct": 183.0,
+      "nev_penetration_pct": 40.8,
+      "structure": {
+        "bev_pct": 68.0,
+        "phev_pct": 22.0,
+        "erev_pct": 10.0
+      },
+      "hev_wan": 9.5,
+      "chinese_share_pct": 52.9,
+      "japanese_share_pct": 16.5,
+      "german_share_pct": 20.5,
+      "source_url": "https://www.cada.cn/Trends/info_91_9843.html",
+      "article_id": 9843
+    },
+    "2024-06": {
+      "month": "2024-06",
+      "retail_wan": 63.4,
+      "retail_yoy_pct": 4.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_10000.html",
+      "article_id": 10000
+    },
+    "2024-09": {
+      "month": "2024-09",
+      "retail_wan": 112.3,
+      "retail_yoy_pct": 50.9,
+      "bev_wan": 72.3,
+      "bev_yoy_pct": 27.1,
+      "phev_wan": 39.4,
+      "phev_yoy_pct": 102.2,
+      "erev_wan": 11.4,
+      "erev_yoy_pct": 68.4,
+      "nev_penetration_pct": 49.1,
+      "structure": {
+        "bev_pct": 59.0,
+        "phev_pct": 32.0,
+        "erev_pct": 9.0
+      },
+      "hev_wan": 8.9,
+      "chinese_share_pct": 63.5,
+      "japanese_share_pct": 12.6,
+      "german_share_pct": 16.5,
+      "source_url": "https://www.cada.cn/Trends/info_91_10070.html",
+      "article_id": 10070
+    },
+    "2024-10": {
+      "month": "2024-10",
+      "retail_wan": 236.1,
+      "retail_yoy_pct": 4.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_10085.html",
+      "article_id": 10085
+    },
+    "2024-11": {
+      "month": "2024-11",
+      "retail_wan": 242.3,
+      "retail_yoy_pct": 16.5,
+      "bev_wan": 83.2,
+      "bev_yoy_pct": 27.7,
+      "phev_wan": 47.5,
+      "phev_yoy_pct": 112.5,
+      "erev_wan": 13.0,
+      "erev_yoy_pct": 52.3,
+      "nev_penetration_pct": 48.9,
+      "structure": {
+        "bev_pct": 58.0,
+        "phev_pct": 33.0,
+        "erev_pct": 9.0
+      },
+      "hev_wan": 10.3,
+      "chinese_share_pct": 64.1,
+      "japanese_share_pct": 12.4,
+      "german_share_pct": 15.6,
+      "source_url": "https://www.cada.cn/Trends/info_91_10104.html",
+      "article_id": 10104
+    },
+    "2024-12": {
+      "month": "2024-12",
+      "retail_wan": 263.5,
+      "retail_yoy_pct": 12.0,
+      "bev_wan": 88.7,
+      "bev_yoy_pct": 17.5,
+      "phev_wan": 49.9,
+      "phev_yoy_pct": 97.7,
+      "erev_wan": 12.6,
+      "erev_yoy_pct": 17.2,
+      "nev_penetration_pct": 49.2,
+      "structure": {
+        "bev_pct": 59.0,
+        "phev_pct": 33.0,
+        "erev_pct": 8.0
+      },
+      "hev_wan": 11.0,
+      "hev_makers": [
+        {
+          "name": "其中一汽丰田",
+          "sales": 44920
+        },
+        {
+          "name": "广汽丰田",
+          "sales": 38840
+        },
+        {
+          "name": "东风本田",
+          "sales": 6665
+        },
+        {
+          "name": "长安福特",
+          "sales": 6107
+        },
+        {
+          "name": "广汽本田",
+          "sales": 5913
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 2334
+        },
+        {
+          "name": "东风汽车",
+          "sales": 2331
+        },
+        {
+          "name": "东风日产",
+          "sales": 2229
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 607
+        }
+      ],
+      "chinese_share_pct": 60.0,
+      "japanese_share_pct": 13.4,
+      "german_share_pct": 16.2,
+      "source_url": "https://www.cada.cn/Trends/info_91_10118.html",
+      "article_id": 10118
+    },
+    "2025-01": {
+      "month": "2025-01",
+      "retail_wan": 179.4,
+      "retail_yoy_pct": -12.1,
+      "bev_wan": 51.8,
+      "bev_yoy_pct": 23.3,
+      "phev_wan": 29.8,
+      "phev_yoy_pct": 51.3,
+      "erev_wan": 7.3,
+      "erev_yoy_pct": -11.3,
+      "nev_penetration_pct": 42.3,
+      "structure": {
+        "bev_pct": 58.0,
+        "phev_pct": 34.0,
+        "erev_pct": 8.0
+      },
+      "hev_wan": 7.4,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 33208
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 25551
+        },
+        {
+          "name": "长安福特",
+          "sales": 4588
+        },
+        {
+          "name": "东风本田",
+          "sales": 4004
+        },
+        {
+          "name": "广汽本田",
+          "sales": 2280
+        },
+        {
+          "name": "东风汽车",
+          "sales": 1532
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 1245
+        },
+        {
+          "name": "东风日产",
+          "sales": 655
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 505
+        }
+      ],
+      "chinese_share_pct": 61.0,
+      "japanese_share_pct": 13.4,
+      "german_share_pct": 18.4,
+      "source_url": "https://www.cada.cn/Trends/info_91_10129.html",
+      "article_id": 10129
+    },
+    "2025-02": {
+      "month": "2025-02",
+      "retail_wan": 138.6,
+      "retail_yoy_pct": 26.0,
+      "bev_wan": 47.8,
+      "bev_yoy_pct": 69.6,
+      "phev_wan": 28.8,
+      "phev_yoy_pct": 137.7,
+      "erev_wan": 6.3,
+      "erev_yoy_pct": 7.4,
+      "nev_penetration_pct": 47.0,
+      "structure": {
+        "bev_pct": 57.6,
+        "phev_pct": 34.8,
+        "erev_pct": 7.6
+      },
+      "hev_wan": 5.3,
+      "hev_makers": [
+        {
+          "name": "广汽丰田",
+          "sales": 20483
+        },
+        {
+          "name": "长安福特",
+          "sales": 3138
+        },
+        {
+          "name": "东风本田",
+          "sales": 2933
+        },
+        {
+          "name": "广汽本田",
+          "sales": 2202
+        },
+        {
+          "name": "东风汽车",
+          "sales": 1401
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 869
+        },
+        {
+          "name": "东风日产",
+          "sales": 507
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 281
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 28
+        }
+      ],
+      "chinese_share_pct": 65.0,
+      "japanese_share_pct": 10.7,
+      "german_share_pct": 17.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_10212.html",
+      "article_id": 10212
+    },
+    "2025-03": {
+      "month": "2025-03",
+      "retail_wan": 194.0,
+      "retail_yoy_pct": 14.4,
+      "bev_wan": 70.8,
+      "bev_yoy_pct": 35.2,
+      "phev_wan": 33.4,
+      "phev_yoy_pct": 38.9,
+      "erev_wan": 8.6,
+      "erev_yoy_pct": 26.0,
+      "nev_penetration_pct": 46.8,
+      "structure": {
+        "bev_pct": 62.8,
+        "phev_pct": 29.6,
+        "erev_pct": 7.6
+      },
+      "hev_wan": 8.57,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 34014
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 32682
+        },
+        {
+          "name": "东风本田",
+          "sales": 6738
+        },
+        {
+          "name": "长安福特",
+          "sales": 4744
+        },
+        {
+          "name": "广汽本田",
+          "sales": 3183
+        },
+        {
+          "name": "东风汽车",
+          "sales": 1990
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 1552
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 386
+        },
+        {
+          "name": "东风日产",
+          "sales": 360
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 62
+        }
+      ],
+      "chinese_share_pct": 63.0,
+      "japanese_share_pct": 12.2,
+      "german_share_pct": 17.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_10234.html",
+      "article_id": 10234
+    },
+    "2025-04": {
+      "month": "2025-04",
+      "retail_wan": 175.5,
+      "retail_yoy_pct": 14.5,
+      "bev_wan": 71.9,
+      "bev_yoy_pct": 49.2,
+      "phev_wan": 32.2,
+      "phev_yoy_pct": 21.7,
+      "erev_wan": 9.2,
+      "erev_yoy_pct": 49.3,
+      "nev_penetration_pct": 51.7,
+      "structure": {
+        "bev_pct": 63.5,
+        "phev_pct": 28.4,
+        "erev_pct": 8.1
+      },
+      "hev_wan": 6.94,
+      "hev_makers": [
+        {
+          "name": "其中一汽丰田",
+          "sales": 32221
+        },
+        {
+          "name": "广汽丰田",
+          "sales": 24306
+        },
+        {
+          "name": "长安福特",
+          "sales": 3170
+        },
+        {
+          "name": "东风本田",
+          "sales": 2835
+        },
+        {
+          "name": "东风汽车",
+          "sales": 2110
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 1955
+        },
+        {
+          "name": "广汽本田",
+          "sales": 1820
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 652
+        },
+        {
+          "name": "东风日产",
+          "sales": 173
+        }
+      ],
+      "chinese_share_pct": 65.5,
+      "japanese_share_pct": 12.2,
+      "german_share_pct": 15.6,
+      "source_url": "https://www.cada.cn/Trends/info_91_10246.html",
+      "article_id": 10246
+    },
+    "2025-05": {
+      "month": "2025-05",
+      "retail_wan": 193.2,
+      "retail_yoy_pct": 13.3,
+      "bev_wan": 75.4,
+      "bev_yoy_pct": 37.7,
+      "phev_wan": 34.1,
+      "phev_yoy_pct": 20.1,
+      "erev_wan": 12.2,
+      "erev_yoy_pct": 46.7,
+      "nev_penetration_pct": 52.6,
+      "structure": {
+        "bev_pct": 62.5,
+        "phev_pct": 27.7,
+        "erev_pct": 9.8
+      },
+      "hev_wan": 7.2,
+      "hev_makers": [
+        {
+          "name": "其中汽丰田",
+          "sales": 31283
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 29444
+        },
+        {
+          "name": "长安福特",
+          "sales": 4422
+        },
+        {
+          "name": "东风本田",
+          "sales": 2718
+        },
+        {
+          "name": "广汽本田",
+          "sales": 1704
+        },
+        {
+          "name": "东风汽车",
+          "sales": 1517
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 577
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 373
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 147
+        },
+        {
+          "name": "北京现代",
+          "sales": 70
+        }
+      ],
+      "chinese_share_pct": 65.2,
+      "japanese_share_pct": 12.6,
+      "german_share_pct": 15.3,
+      "source_url": "https://www.cada.cn/Trends/info_91_10267.html",
+      "article_id": 10267
+    },
+    "2025-06": {
+      "month": "2025-06",
+      "retail_wan": 208.4,
+      "retail_yoy_pct": 18.1,
+      "bev_wan": 77.1,
+      "bev_yoy_pct": 39.2,
+      "phev_wan": 34.8,
+      "phev_yoy_pct": 10.1,
+      "erev_wan": 12.2,
+      "erev_yoy_pct": 13.6,
+      "nev_penetration_pct": 49.8,
+      "structure": {
+        "bev_pct": 62.1,
+        "phev_pct": 28.0,
+        "erev_pct": 9.8
+      },
+      "hev_wan": 8.6,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 31283
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 29444
+        },
+        {
+          "name": "长安福特",
+          "sales": 4422
+        },
+        {
+          "name": "东风本田",
+          "sales": 2718
+        },
+        {
+          "name": "广汽本田",
+          "sales": 1704
+        },
+        {
+          "name": "东风汽车",
+          "sales": 1517
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 577
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 373
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 147
+        },
+        {
+          "name": "北京现代",
+          "sales": 70
+        }
+      ],
+      "chinese_share_pct": 64.2,
+      "japanese_share_pct": 12.0,
+      "german_share_pct": 16.1,
+      "source_url": "https://www.cada.cn/Trends/info_91_10280.html",
+      "article_id": 10280
+    },
+    "2025-07": {
+      "month": "2025-07",
+      "retail_wan": 182.6,
+      "retail_yoy_pct": 6.3,
+      "bev_wan": 73.6,
+      "bev_yoy_pct": 44.8,
+      "phev_wan": 33.6,
+      "phev_yoy_pct": 3.3,
+      "erev_wan": 10.9,
+      "erev_yoy_pct": -6.2,
+      "nev_penetration_pct": 53.2,
+      "structure": {
+        "bev_pct": 62.3,
+        "phev_pct": 28.4,
+        "erev_pct": 9.2
+      },
+      "hev_wan": 7.0,
+      "hev_makers": [
+        {
+          "name": "其中一汽丰田",
+          "sales": 31926
+        },
+        {
+          "name": "广汽丰田",
+          "sales": 26250
+        },
+        {
+          "name": "东风本田",
+          "sales": 3644
+        },
+        {
+          "name": "东风汽车",
+          "sales": 2175
+        },
+        {
+          "name": "广汽本田",
+          "sales": 1757
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 761
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 120
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 104
+        }
+      ],
+      "chinese_share_pct": 65.9,
+      "japanese_share_pct": 12.9,
+      "german_share_pct": 14.5,
+      "source_url": "https://www.cada.cn/Trends/info_91_10306.html",
+      "article_id": 10306
+    },
+    "2025-09": {
+      "month": "2025-09",
+      "retail_wan": 224.1,
+      "retail_yoy_pct": 6.3,
+      "bev_wan": 94.7,
+      "bev_yoy_pct": 32.4,
+      "phev_wan": 42.4,
+      "phev_yoy_pct": 8.4,
+      "erev_wan": 12.9,
+      "erev_yoy_pct": 8.7,
+      "nev_penetration_pct": 53.5,
+      "structure": {
+        "bev_pct": 63.0,
+        "phev_pct": 28.0,
+        "erev_pct": 9.0
+      },
+      "hev_wan": 8.2,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 38579
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 31308
+        },
+        {
+          "name": "长安福特",
+          "sales": 5041
+        },
+        {
+          "name": "东风本田",
+          "sales": 3002
+        },
+        {
+          "name": "广汽本田",
+          "sales": 2398
+        },
+        {
+          "name": "东风汽车",
+          "sales": 1458
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 257
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 236
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 39
+        },
+        {
+          "name": "长安马自达",
+          "sales": 32
+        }
+      ],
+      "chinese_share_pct": 66.9,
+      "japanese_share_pct": 11.6,
+      "german_share_pct": 14.3,
+      "source_url": "https://www.cada.cn/Trends/info_91_10339.html",
+      "article_id": 10339
+    },
+    "2025-10": {
+      "month": "2025-10",
+      "retail_wan": 224.2,
+      "retail_yoy_pct": -0.8,
+      "bev_wan": 102.0,
+      "bev_yoy_pct": 31.6,
+      "phev_wan": 48.0,
+      "phev_yoy_pct": 2.0,
+      "erev_wan": 12.1,
+      "erev_yoy_pct": -1.9,
+      "nev_penetration_pct": 55.3,
+      "structure": {
+        "bev_pct": 62.9,
+        "phev_pct": 29.6,
+        "erev_pct": 7.5
+      },
+      "hev_wan": 8.9,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 37095
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 35370
+        },
+        {
+          "name": "东风本田",
+          "sales": 5779
+        },
+        {
+          "name": "长安福特",
+          "sales": 4537
+        },
+        {
+          "name": "东风汽车",
+          "sales": 2920
+        },
+        {
+          "name": "广汽本田",
+          "sales": 2770
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 140
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 109
+        }
+      ],
+      "chinese_share_pct": 68.7,
+      "japanese_share_pct": 12.3,
+      "german_share_pct": 13.5,
+      "source_url": "https://www.cada.cn/Trends/info_91_10369.html",
+      "article_id": 10369
+    },
+    "2025-11": {
+      "month": "2025-11",
+      "retail_wan": 222.5,
+      "retail_yoy_pct": -8.1,
+      "bev_wan": 103.8,
+      "bev_yoy_pct": 25.0,
+      "phev_wan": 53.2,
+      "phev_yoy_pct": 12.2,
+      "erev_wan": 13.7,
+      "erev_yoy_pct": 3.0,
+      "nev_penetration_pct": 56.9,
+      "structure": {
+        "bev_pct": 60.8,
+        "phev_pct": 31.2,
+        "erev_pct": 8.0
+      },
+      "hev_wan": 8.7,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 37098
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 36741
+        },
+        {
+          "name": "长安福特",
+          "sales": 3802
+        },
+        {
+          "name": "广汽本田",
+          "sales": 3409
+        },
+        {
+          "name": "东风本田",
+          "sales": 3012
+        },
+        {
+          "name": "东风汽车",
+          "sales": 2706
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 278
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 112
+        }
+      ],
+      "chinese_share_pct": 67.0,
+      "japanese_share_pct": 11.7,
+      "german_share_pct": 14.0,
+      "source_url": "https://www.cada.cn/Trends/info_91_10398.html",
+      "article_id": 10398
+    },
+    "2025-12": {
+      "month": "2025-12",
+      "retail_wan": 226.1,
+      "retail_yoy_pct": -14.0,
+      "bev_wan": 94.0,
+      "bev_yoy_pct": 5.8,
+      "erev_wan": 14.7,
+      "erev_yoy_pct": 13.4,
+      "nev_penetration_pct": 56.0,
+      "structure": {
+        "bev_pct": 60.2,
+        "phev_pct": 30.4,
+        "erev_pct": 9.4
+      },
+      "hev_wan": 9.0,
+      "chinese_share_pct": 64.3,
+      "japanese_share_pct": 12.1,
+      "german_share_pct": 14.9,
+      "source_url": "https://www.cada.cn/Trends/info_91_10424.html",
+      "article_id": 10424
+    },
+    "2026-01": {
+      "month": "2026-01",
+      "retail_wan": 154.4,
+      "retail_yoy_pct": -13.9,
+      "bev_wan": 50.7,
+      "bev_yoy_pct": -3.0,
+      "phev_wan": 27.8,
+      "phev_yoy_pct": -6.3,
+      "erev_wan": 7.9,
+      "erev_yoy_pct": 6.7,
+      "nev_penetration_pct": 43.8,
+      "structure": {
+        "bev_pct": 58.3,
+        "phev_pct": 32.6,
+        "erev_pct": 9.1
+      },
+      "hev_wan": 7.4,
+      "hev_makers": [
+        {
+          "name": "其中广汽丰田",
+          "sales": 39382
+        },
+        {
+          "name": "一汽丰田",
+          "sales": 25963
+        },
+        {
+          "name": "东风汽车",
+          "sales": 3637
+        },
+        {
+          "name": "长安福特",
+          "sales": 2764
+        },
+        {
+          "name": "东风本田",
+          "sales": 1920
+        },
+        {
+          "name": "广汽本田",
+          "sales": 190
+        },
+        {
+          "name": "广汽传祺",
+          "sales": 88
+        },
+        {
+          "name": "吉利汽车",
+          "sales": 73
+        },
+        {
+          "name": "一汽红旗",
+          "sales": 7
+        },
+        {
+          "name": "江苏悦达起亚",
+          "sales": 1
+        }
+      ],
+      "chinese_share_pct": 57.5,
+      "japanese_share_pct": 15.5,
+      "german_share_pct": 19.8,
+      "source_url": "https://www.cada.cn/Trends/info_91_10447.html",
+      "article_id": 10447
+    }
+  }
+}

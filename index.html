@@ -3395,21 +3395,27 @@ document.getElementById('rank-hezi-tab')?.addEventListener('shown.bs.tab', funct
 
 init();
 
-// グラフ大タブ表示時にEChartsを描画（非表示状態で初期化すると崩れやすいため）
+// グラフ大タブ表示時
 document.getElementById('big-graph-tab')?.addEventListener('shown.bs.tab', function(){
+  // ランキングTop10がアクティブならそれを描画
+  const activePane = document.querySelector('#graphPillsContent > .tab-pane.active.show');
+  if (activePane) renderChartForPane(activePane.id);
   renderSalesChart();
   if (chartInstance) chartInstance.resize();
-  initMarketCharts();
+});
+
+// グラフサブpill切替時 → そのpaneのグラフを描画
+document.getElementById('graphPills')?.addEventListener('shown.bs.tab', function(e){
+  const target = e.target.getAttribute('data-bs-target');
+  if (target) {
+    const paneId = target.replace('#','');
+    // 少し遅延を入れてDOM表示完了を待つ
+    setTimeout(() => renderChartForPane(paneId), 80);
+  }
 });
 
 // サブタブ（pill）切替時にも、念のためサイズ再計算
 document.getElementById('rankPills')?.addEventListener('shown.bs.tab', function(){
-  if (chartInstance) chartInstance.resize();
-});
-
-// グラフサブpill切替時にリサイズ
-document.getElementById('graphPills')?.addEventListener('shown.bs.tab', function(){
-  Object.values(marketChartInstances).forEach(c => { if(c) c.resize(); });
   if (chartInstance) chartInstance.resize();
 });
 
@@ -3572,33 +3578,65 @@ function getCADAData() {
   return { passengerMonthly, nevMonthly, nevMix, brandShare, penetrationDetail, nevSegment, nevExportMaker, industryProfit, exportPower, worldShare };
 }
 
-let marketChartsInitialized = false;
+const renderedPanes = {};
 
-function initMarketCharts() {
-  if (marketChartsInitialized) return;
-  marketChartsInitialized = true;
+function renderChartForPane(paneId) {
+  // 既に描画済みならresizeのみ
+  if (renderedPanes[paneId]) {
+    Object.values(marketChartInstances).forEach(c => { if(c) c.resize(); });
+    return;
+  }
   const D = getCADAData();
-  renderMarketMonthly(D.passengerMonthly);
-  renderNevMonthly(D.nevMonthly);
-  renderNevMix(D.nevMix);
-  renderBrandShare(D.brandShare);
-  renderPenetration(D.penetrationDetail);
-  renderSegment(D.nevSegment);
-  renderExportMaker(D.nevExportMaker);
-  renderProfit(D.industryProfit);
-  renderExportPower(D.exportPower);
-  renderWorldShare(D.worldShare);
-  loadCnsuvData();
+  switch(paneId) {
+    case 'graph-ranking-pane':
+      renderSalesChart();
+      break;
+    case 'graph-market-pane':
+      renderMarketMonthly(D.passengerMonthly);
+      break;
+    case 'graph-nev-pane':
+      renderNevMonthly(D.nevMonthly);
+      break;
+    case 'graph-nevmix-pane':
+      renderNevMix(D.nevMix);
+      break;
+    case 'graph-brand-pane':
+      renderBrandShare(D.brandShare);
+      break;
+    case 'graph-penetration-pane':
+      renderPenetration(D.penetrationDetail);
+      break;
+    case 'graph-segment-pane':
+      renderSegment(D.nevSegment);
+      break;
+    case 'graph-export-maker-pane':
+      renderExportMaker(D.nevExportMaker);
+      break;
+    case 'graph-profit-pane':
+      renderProfit(D.industryProfit);
+      break;
+    case 'graph-export-power-pane':
+      renderExportPower(D.exportPower);
+      break;
+    case 'graph-world-pane':
+      renderWorldShare(D.worldShare);
+      break;
+    case 'graph-cnsuv-pane':
+      loadCnsuvData();
+      break;
+    default: return;
+  }
+  renderedPanes[paneId] = true;
 }
 
 function tooltipFmt() {
-  return { trigger: 'axis', axisPointer: { type: 'cross' }, confine: true };
+  return { trigger: 'axis', confine: true };
 }
 function gridDefault() {
   return { left: 20, right: 20, top: 50, bottom: 60, containLabel: true };
 }
 function xAxisMonth(months) {
-  return { type: 'category', data: months, axisLabel: { interval: 'auto', rotate: 45, fontSize: 11 }, boundaryGap: false };
+  return { type: 'category', data: months, axisLabel: { interval: 'auto', rotate: 45, fontSize: 11 } };
 }
 
 // 1. 乗用車月次総合
@@ -3624,9 +3662,8 @@ function renderMarketMonthly(d) {
     tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
     xAxis: xAxisMonth(d.months),
     yAxis: { type: 'value', name: '%', axisLabel: { formatter: '{value}%' } },
-    visualMap: { show: false, pieces: [{ lt: 0, color: CHART_COLORS.red }, { gte: 0, color: CHART_COLORS.green }], dimension: 1, seriesIndex: [0,1] },
     series: [
-      { name: '小売 前年比', type: 'bar', data: d.retailYoY, itemStyle: { color: function(p){ return p.value < 0 ? CHART_COLORS.red : CHART_COLORS.blue; } } },
+      { name: '小売 前年比', type: 'bar', data: d.retailYoY.map(v => ({ value: v, itemStyle: { color: v != null && v < 0 ? CHART_COLORS.red : CHART_COLORS.blue } })) },
       { name: '輸出 前年比', type: 'line', data: d.exportYoY, smooth: true, itemStyle: { color: CHART_COLORS.orange } }
     ]
   }, true);

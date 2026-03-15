@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-
-<html data-bs-theme="auto" lang="ja">
+<html lang="ja" data-bs-theme="auto">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1" name="viewport"/>
-<meta content="no-cache, no-store, must-revalidate" http-equiv="Cache-Control"/>
-<meta content="no-cache" http-equiv="Pragma"/>
-<meta content="0" http-equiv="Expires"/>
-<meta content="noindex, nofollow" name="robots"/>
-<meta content="noindex, nofollow" name="googlebot"/>
-<title>中国自動車販売ランキング</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&amp;family=Noto+Sans+SC:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <title>中国自動車販売ランキング</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
 body {
   background-color: #f8f9fa;
@@ -1594,579 +1593,510 @@ img.car-thumb {
     height: 40px;
   }
 }
-
-
-/* =====================================
- サブタブ（ボタン風）
-===================================== */
-.sub-pills {
-  gap: 0.5rem;
-}
-.sub-pills .nav-link {
-  border: 1px solid #0d6efd;
-  color: #0d6efd;
-  background: #fff;
-  border-radius: 999px;
-  padding: 0.45rem 1.0rem;
-  font-weight: 600;
-}
-.sub-pills .nav-link:hover {
-  background: #f0f7ff;
-}
-.sub-pills .nav-link.active {
-  background: #0d6efd;
-  color: #fff;
-}
-
-/* =====================================
- グラフ
-===================================== */
-.chart-container {
-  width: 100%;
-  height: 420px;
-  background: #fff;
-  border: 1px solid #e9ecef;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-}
-@media (max-width: 576px) {
-  .chart-container { height: 360px; }
-}
 </style>
-</link></link></head>
+</head>
 <body>
-<header>中国自動車販売ランキング</header>
-<div class="container mt-3">
-<!-- 説明文 -->
-<div class="site-description">
-<strong>本サイトについて</strong>
-<ul>
-<li>
+  <header>中国自動車販売ランキング</header>
+
+  <div class="container mt-3">
+
+    <!-- 説明文 -->
+    <div class="site-description">
+      <strong>本サイトについて</strong>
+      <ul>
+       <li>
       本ページは、
-      <a href="https://www.autohome.com.cn/rank/1" rel="noopener" target="_blank">
+      <a href="https://www.autohome.com.cn/rank/1" target="_blank" rel="noopener">
         汽车之家（Autohome）
       </a>
-      の公開データを、単純にAIで翻訳・要約した、非公式の個人作成物です。<br/>（ランキングは、乗聯会やCAAMのデータを基にしているとされています）
+      の公開データを、単純にAIで翻訳・要約した、非公式の個人作成物です。<br>（ランキングは、乗聯会やCAAMのデータを基にしているとされています）
     </li>
-<li>
-      画像・データの著作権はすべて原著作権者に帰属します。<br/>
-      非商用の限定共有を目的としており、正確性・最新性は保証しません。<br/>
-      個人利用や、部署内・会議体など限定された範囲での閲覧・共有であれば問題ありませんが、<br/>
-      不特定多数への公開や広範な拡散はご遠慮ください。<br/>
-</li>
-</ul>
-<div class="mt-2 text-muted">
+    <li>
+      画像・データの著作権はすべて原著作権者に帰属します。<br>
+      非商用の限定共有を目的としており、正確性・最新性は保証しません。<br>
+      個人利用や、部署内・会議体など限定された範囲での閲覧・共有であれば問題ありませんが、<br>
+      不特定多数への公開や広範な拡散はご遠慮ください。<br>
+    </li>
+      </ul>
+      <div class="mt-2 text-muted">
         ※ 素人が作ったものなので、クオリティが低い点があったらご容赦ください・・・
       </div>
-</div>
-<!-- タブナビゲーション -->
-<ul class="nav nav-tabs" id="bigTabs" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" data-bs-target="#big-rank-content" data-bs-toggle="tab" id="big-rank-tab" role="tab" type="button">中国自動車販売ランキング</button></li><li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#big-brands-content" data-bs-toggle="tab" id="big-brands-tab" role="tab" type="button">中国内ブランド一覧（参考）</button></li><li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#big-graph-content" data-bs-toggle="tab" id="big-graph-tab" role="tab" type="button">グラフ</button></li></ul><div class="tab-content" id="bigTabsContent"><div class="tab-pane fade show active" id="big-rank-content" role="tabpanel"><ul class="nav nav-pills sub-pills mt-3" id="rankPills" role="tablist"><li class="nav-item" role="presentation"><button class="nav-link active" data-bs-target="#rank-autohome-pane" data-bs-toggle="pill" id="rank-autohome-tab" role="tab" type="button">総合ランキング</button></li><li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#rank-hezi-pane" data-bs-toggle="pill" id="rank-hezi-tab" role="tab" type="button">外資系ランキング</button></li></ul><div class="tab-content" id="rankPillsContent"><div class="tab-pane fade show active" id="rank-autohome-pane" role="tabpanel">
-<div class="table-responsive mt-3">
-<table class="table table-hover align-middle car-table" id="autohomeTable">
-<tbody></tbody>
-</table>
-</div>
-</div><div class="tab-pane fade" id="rank-hezi-pane" role="tabpanel">
-<div class="table-responsive mt-3">
-<table class="table table-hover align-middle car-table" id="heziTable">
-<tbody></tbody>
-</table>
-</div>
-</div></div></div><div class="tab-pane fade" id="big-brands-content" role="tabpanel"><div class="mt-3">
-<div class="mt-3">
-<!-- 国有企業と外資の合弁関係 -->
-<section class="jv-section">
-<h5 class="brand-section-title section-state"><i class="fa-solid fa-building-columns me-2"></i>国有企業（＆外資企業との合弁関係）</h5>
-<div class="jv-diagram" id="jvDiagram">
-<!-- 上段：中国国有企業 -->
-<div class="company-row china-row" id="chinaRow">
-<div class="company-card china-card" data-id="faw" data-logo="一汽.png" data-partners="toyota,vw,audi">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">一汽集団</div>
-<div class="company-name-sub">FAW</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="红旗.png"></span>紅旗（Hongqi）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="奔腾.png"></span>奔腾（Bestune）</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="dongfeng" data-logo="东风风神.png" data-partners="honda,nissan,psa">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">東風集団</div>
-<div class="company-name-sub">Dongfeng</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风风神.png"></span>东风风神</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="岚图汽车.png"></span>岚图（Voyah）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="猛士.png"></span>猛士（M-Hero）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风奕派.png"></span>东风奕派（eπ）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风纳米.png"></span>东风纳米</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="saic" data-logo="SAIC_resized.png" data-partners="vw,gm">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">上汽集団</div>
-<div class="company-name-sub">SAIC</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="荣威.png"></span>荣威（Roewe）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="名爵.png"></span>名爵（MG）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="智己汽车.png"></span>智己（IM）</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="gac" data-logo="广汽传祺.png" data-partners="toyota,honda">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">広汽集団</div>
-<div class="company-name-sub">GAC<br/><small style="color:#888;font-size:0.55rem;">（広州市国有）</small></div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="广汽传祺.png"></span>传祺（Trumpchi）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="埃安.png"></span>埃安（AION）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="广汽昊铂.png"></span>昊铂（Hyper）</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="baic" data-logo="北京汽车.png" data-partners="mercedes,hyundai">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">北汽集団</div>
-<div class="company-name-sub">BAIC<br/><small style="color:#888;font-size:0.55rem;">（北京市国有）</small></div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="北京汽车.png"></span>北京汽车</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="北京越野.png"></span>北京越野</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="ARCFOX极狐.png"></span>极狐（ARCFOX）</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="changan" data-logo="长安.png" data-partners="mazda,ford">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">長安汽車</div>
-<div class="company-name-sub">Changan<br/><small style="color:#888;font-size:0.55rem;">（重慶市国有）</small></div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="深蓝汽车.png"></span>深蓝（Deepal）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="阿维塔.png"></span>阿维塔（Avatr）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="长安启源.png"></span>启源（Qiyuan）</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="chery" data-logo="奇瑞.png" data-partners="jlr">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">奇瑞</div>
-<div class="company-name-sub">Chery<br/><small style="color:#888;font-size:0.55rem;">（安徽省国有）</small></div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="星途.png"></span>星途（Exeed）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="捷途.png"></span>捷途（Jetour）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="iCAR.png"></span>iCAR</div></li>
-</ul>
-</div>
-</div>
-<div class="company-card china-card" data-id="brilliance" data-logo="金杯.png" data-partners="bmw">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">華晨</div>
-<div class="company-name-sub">Brilliance<br/><small style="color:#888;font-size:0.55rem;">（遼寧省国有）</small></div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="金杯.png"></span>金杯</div></li>
-</ul>
-</div>
-</div>
-</div>
-<!-- SVG線 -->
-<svg class="jv-lines" id="jvLines"></svg>
-<!-- 下段：外資企業 -->
-<div class="company-row foreign-row" id="foreignRow">
-<div class="company-card foreign-card" data-id="toyota" data-logo="丰田.png" data-partners="faw,gac">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">トヨタ</div>
-<div class="company-name-sub">Toyota</div>
-</div>
-<div class="company-card foreign-card" data-id="honda" data-logo="本田.png" data-partners="dongfeng,gac">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">ホンダ</div>
-<div class="company-name-sub">Honda</div>
-</div>
-<div class="company-card foreign-card" data-id="nissan" data-logo="日产.png" data-partners="dongfeng">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">日産</div>
-<div class="company-name-sub">Nissan</div>
-</div>
-<div class="company-card foreign-card" data-id="mazda" data-logo="马自达.png" data-partners="changan">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">マツダ</div>
-<div class="company-name-sub">Mazda</div>
-</div>
-<div class="company-card foreign-card" data-id="vw" data-logo="大众.png" data-partners="faw,saic">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">VW</div>
-<div class="company-name-sub">Volkswagen</div>
-</div>
-<div class="company-card foreign-card" data-id="audi" data-logo="奥迪.png" data-partners="faw">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">アウディ</div>
-<div class="company-name-sub">Audi</div>
-</div>
-<div class="company-card foreign-card" data-id="mercedes" data-logo="奔驰.png" data-partners="baic">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">メルセデス</div>
-<div class="company-name-sub">Mercedes</div>
-</div>
-<div class="company-card foreign-card" data-id="bmw" data-logo="宝马.png" data-partners="brilliance">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">BMW</div>
-<div class="company-name-sub">BMW</div>
-</div>
-<div class="company-card foreign-card" data-id="gm" data-logo="别克.png" data-partners="saic">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">GM</div>
-<div class="company-name-sub">General Motors</div>
-</div>
-<div class="company-card foreign-card" data-id="ford" data-logo="林肯.png" data-partners="changan">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">フォード</div>
-<div class="company-name-sub">Ford/Lincoln</div>
-</div>
-<div class="company-card foreign-card" data-id="psa" data-logo="标致.png" data-partners="dongfeng">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">ステランティス</div>
-<div class="company-name-sub">Stellantis</div>
-</div>
-<div class="company-card foreign-card" data-id="hyundai" data-logo="现代.png" data-partners="baic">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">現代</div>
-<div class="company-name-sub">Hyundai</div>
-</div>
-<div class="company-card foreign-card" data-id="kia" data-logo="起亚.png" data-partners="">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">起亜</div>
-<div class="company-name-sub">Kia</div>
-</div>
-<div class="company-card foreign-card" data-id="jlr" data-logo="路虎.png" data-partners="chery">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">JLR</div>
-<div class="company-name-sub">Jaguar Land Rover</div>
-</div>
-</div>
-</div>
-</section>
-<!-- 民営企業 -->
-<section class="private-section">
-<h5 class="brand-section-title section-private"><i class="fa-solid fa-building me-2"></i>民営企業</h5>
-<div class="private-grid">
-<div class="private-card" data-id="byd" data-logo="比亚迪.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">BYD</div>
-<div class="company-name-sub">比亚迪</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="仰望.png"></span>仰望（Yangwang）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="方程豹.png"></span>方程豹</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="腾势.png"></span>腾势（Denza）</div></li>
-</ul>
-</div>
-</div>
-<div class="private-card" data-id="geely" data-logo="吉利汽车.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">吉利</div>
-<div class="company-name-sub">Geely</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="吉利银河.png"></span>吉利银河（Galaxy）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="领克.png"></span>领克（Lynk &amp; Co）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="极氪.png"></span>极氪（Zeekr）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="smart.png"></span>smart</div></li>
-</ul>
-</div>
-</div>
-<div class="private-card" data-id="gwm" data-logo="哈弗.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">長城汽車</div>
-<div class="company-name-sub">GWM</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="哈弗.png"></span>哈弗（Haval）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="坦克.png"></span>坦克（Tank）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="欧拉.png"></span>欧拉（Ora）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="魏牌.png"></span>魏牌（Wey）</div></li>
-</ul>
-</div>
-</div>
-<div class="private-card" data-id="nio" data-logo="蔚来.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">NIO</div>
-<div class="company-name-sub">蔚来</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="乐道.png"></span>乐道（ONVO）</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="firefly萤火虫.png"></span>萤火虫（Firefly）</div></li>
-</ul>
-</div>
-</div>
-<div class="private-card" data-id="xpeng" data-logo="小鹏.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">小鹏</div>
-<div class="company-name-sub">Xpeng</div>
-</div>
-<div class="private-card" data-id="li" data-logo="理想汽车.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">理想</div>
-<div class="company-name-sub">Li Auto</div>
-</div>
-<div class="private-card" data-id="leapmotor" data-logo="零跑汽车.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">零跑</div>
-<div class="company-name-sub">Leapmotor</div>
-</div>
-<div class="private-card" data-id="xiaomi" data-logo="小米汽车.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">小米</div>
-<div class="company-name-sub">Xiaomi</div>
-</div>
-<div class="private-card" data-id="seres" data-logo="AITO 问界.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">赛力斯</div>
-<div class="company-name-sub">Seres</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="AITO 问界.png"></span>AITO 问界</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="蓝电.png"></span>蓝电</div></li>
-</ul>
-</div>
-</div>
-<div class="private-card" data-id="jac" data-logo="江淮瑞风.png">
-<div class="logo-placeholder">LOGO</div>
-<div class="company-name">江淮</div>
-<div class="company-name-sub">JAC</div>
-<div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
-<div class="brands-list">
-<ul>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="江淮瑞风.png"></span>江淮瑞风</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="江淮钇为.png"></span>钇为</div></li>
-<li><div class="brand-item"><span class="brand-logo-mini" data-logo="尊界.png"></span>尊界</div></li>
-</ul>
-</div>
-</div>
-</div>
-</section>
-<!-- Huaweiエコシステム -->
-<section class="huawei-section">
-<h5 class="brand-section-title section-huawei"><i class="fa-solid fa-microchip me-2"></i>Huawei 鸿蒙智行エコシステム</h5>
-<!-- 説明エリア -->
-<div class="huawei-header">
-<div class="huawei-logo-main" data-logo="鸿蒙智行.webp"></div>
-<div class="huawei-description">
-<div class="huawei-title">华为 鸿蒙智行</div>
-<div class="huawei-subtitle">Huawei主導の統一ブランド方式（智選車）。<br/>Huaweiが企画・OS/UX・自動運転を担い、各自動車メーカーが製造を担当。</div>
-</div>
-</div>
-<!-- ブランドグリッド -->
-<div class="huawei-grid">
-<div class="huawei-brand-card" data-logo="AITO 问界.png" data-oem-logo="蓝电.png">
-<div class="huawei-brand-logo"></div>
-<div class="huawei-brand-name">问界 AITO</div>
-<div class="huawei-oem-info">
-<span class="huawei-oem-label">製造</span>
-<div class="huawei-oem-logo"></div>
-<span class="huawei-oem-name">赛力斯</span>
-</div>
-</div>
-<div class="huawei-brand-card" data-logo="智界.png" data-oem-logo="奇瑞.png">
-<div class="huawei-brand-logo"></div>
-<div class="huawei-brand-name">智界</div>
-<div class="huawei-oem-info">
-<span class="huawei-oem-label">製造</span>
-<div class="huawei-oem-logo"></div>
-<span class="huawei-oem-name">奇瑞</span>
-</div>
-</div>
-<div class="huawei-brand-card" data-logo="享界.png" data-oem-logo="北京汽车.png">
-<div class="huawei-brand-logo"></div>
-<div class="huawei-brand-name">享界</div>
-<div class="huawei-oem-info">
-<span class="huawei-oem-label">製造</span>
-<div class="huawei-oem-logo"></div>
-<span class="huawei-oem-name">北汽</span>
-</div>
-</div>
-<div class="huawei-brand-card" data-logo="尊界.png" data-oem-logo="江淮瑞风.png">
-<div class="huawei-brand-logo"></div>
-<div class="huawei-brand-name">尊界</div>
-<div class="huawei-oem-info">
-<span class="huawei-oem-label">製造</span>
-<div class="huawei-oem-logo"></div>
-<span class="huawei-oem-name">江淮</span>
-</div>
-</div>
-<div class="huawei-brand-card" data-logo="尚界.png" data-oem-logo="SAIC_resized.png.png">
-<div class="huawei-brand-logo"></div>
-<div class="huawei-brand-name">尚界</div>
-<div class="huawei-oem-info">
-<span class="huawei-oem-label">製造</span>
-<div class="huawei-oem-logo"></div>
-<span class="huawei-oem-name">上汽</span>
-</div>
-</div>
-</div>
-</section>
-</div>
-</div></div><div class="tab-pane fade" id="big-graph-content" role="tabpanel"><div class="mt-3">
+    </div>
 
-<!-- Sub-pills for graph sections -->
-<ul class="nav nav-pills sub-pills mb-3" id="graphPills" role="tablist">
-<li class="nav-item" role="presentation"><button class="nav-link active" data-bs-target="#graph-ranking-pane" data-bs-toggle="pill" role="tab" type="button">ランキングTop10</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-market-pane" data-bs-toggle="pill" role="tab" type="button">乗用車月次</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-nev-pane" data-bs-toggle="pill" role="tab" type="button">NEV月次</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-nevmix-pane" data-bs-toggle="pill" role="tab" type="button">NEV構造</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-brand-pane" data-bs-toggle="pill" role="tab" type="button">ブランド別</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-penetration-pane" data-bs-toggle="pill" role="tab" type="button">NEV浸透率</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-segment-pane" data-bs-toggle="pill" role="tab" type="button">NEV車格</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-export-maker-pane" data-bs-toggle="pill" role="tab" type="button">NEV輸出メーカー</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-profit-pane" data-bs-toggle="pill" role="tab" type="button">業界利益</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-export-power-pane" data-bs-toggle="pill" role="tab" type="button">輸出動力構造</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-world-pane" data-bs-toggle="pill" role="tab" type="button">世界シェア</button></li>
-<li class="nav-item" role="presentation"><button class="nav-link" data-bs-target="#graph-cnsuv-pane" data-bs-toggle="pill" role="tab" type="button">メーカー別販売</button></li>
-</ul>
+    <!-- タブナビゲーション -->
+    <ul class="nav nav-tabs" id="mainTabs" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="autohome-tab" data-bs-toggle="tab" data-bs-target="#autohome-content" type="button" role="tab">総合ランキング</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">外資系ランキング</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="brands-tab" data-bs-toggle="tab" data-bs-target="#brands-content" type="button" role="tab">中国内ブランド一覧（参考）</button>
+      </li>
+    </ul>
 
-<div class="tab-content" id="graphPillsContent">
+    <!-- タブコンテンツ -->
+    <div class="tab-content" id="mainTabsContent">
+      <!-- Autohome タブ -->
+      <div class="tab-pane fade show active" id="autohome-content" role="tabpanel">
+        <div class="table-responsive mt-3">
+          <table class="table table-hover align-middle car-table" id="autohomeTable">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
 
-<!-- ランキングTop10 -->
-<div class="tab-pane fade show active" id="graph-ranking-pane" role="tabpanel">
-<div class="d-flex flex-wrap gap-2 align-items-center mb-2">
-<span class="text-muted" style="font-size:0.9rem;">現在のランキング（表示中ソース）上位10の台数を可視化</span>
-<span class="badge text-bg-primary" id="graphSourceBadge">autohome</span>
-</div>
-<div class="chart-container" id="salesChart"></div>
-<div class="text-muted mt-2" style="font-size:0.8rem;">※データは本ページが読み込んだCSV（台数列）から生成します。</div>
-</div>
+      <!-- Hezi タブ -->
+      <div class="tab-pane fade" id="hezi-content" role="tabpanel">
+        <div class="table-responsive mt-3">
+          <table class="table table-hover align-middle car-table" id="heziTable">
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
 
-<!-- 乗用車月次 -->
-<div class="tab-pane fade" id="graph-market-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">出典: CADA / CPCA データ（<code>output/market/</code>）</div>
-<div class="chart-container" id="chartMarketMonthly"></div>
-<div class="chart-container mt-3" id="chartMarketYoY"></div>
-</div>
+      <!-- ブランド概略タブ -->
+      <div class="tab-pane fade" id="brands-content" role="tabpanel">
+        <div class="mt-3">
+          
+          <!-- 国有企業と外資の合弁関係 -->
+          <section class="jv-section">
+            <h5 class="brand-section-title section-state"><i class="fa-solid fa-building-columns me-2"></i>国有企業（＆外資企業との合弁関係）</h5>
+            
+            <div class="jv-diagram" id="jvDiagram">
+              <!-- 上段：中国国有企業 -->
+              <div class="company-row china-row" id="chinaRow">
+                
+                <div class="company-card china-card" data-id="faw" data-partners="toyota,vw,audi" data-logo="一汽.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">一汽集団</div>
+                  <div class="company-name-sub">FAW</div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="红旗.png"></span>紅旗（Hongqi）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="奔腾.png"></span>奔腾（Bestune）</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="dongfeng" data-partners="honda,nissan,psa" data-logo="东风风神.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">東風集団</div>
+                  <div class="company-name-sub">Dongfeng</div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风风神.png"></span>东风风神</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="岚图汽车.png"></span>岚图（Voyah）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="猛士.png"></span>猛士（M-Hero）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风奕派.png"></span>东风奕派（eπ）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="东风纳米.png"></span>东风纳米</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="saic" data-partners="vw,gm" data-logo="SAIC_resized.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">上汽集団</div>
+                  <div class="company-name-sub">SAIC</div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="荣威.png"></span>荣威（Roewe）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="名爵.png"></span>名爵（MG）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="智己汽车.png"></span>智己（IM）</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="gac" data-partners="toyota,honda" data-logo="广汽传祺.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">広汽集団</div>
+                  <div class="company-name-sub">GAC<br><small style="color:#888;font-size:0.55rem;">（広州市国有）</small></div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="广汽传祺.png"></span>传祺（Trumpchi）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="埃安.png"></span>埃安（AION）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="广汽昊铂.png"></span>昊铂（Hyper）</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="baic" data-partners="mercedes,hyundai" data-logo="北京汽车.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">北汽集団</div>
+                 <div class="company-name-sub">BAIC<br><small style="color:#888;font-size:0.55rem;">（北京市国有）</small></div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="北京汽车.png"></span>北京汽车</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="北京越野.png"></span>北京越野</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="ARCFOX极狐.png"></span>极狐（ARCFOX）</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="changan" data-partners="mazda,ford" data-logo="长安.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">長安汽車</div>
+                   <div class="company-name-sub">Changan<br><small style="color:#888;font-size:0.55rem;">（重慶市国有）</small></div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="深蓝汽车.png"></span>深蓝（Deepal）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="阿维塔.png"></span>阿维塔（Avatr）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="长安启源.png"></span>启源（Qiyuan）</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="chery" data-partners="jlr" data-logo="奇瑞.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">奇瑞</div>
+                  <div class="company-name-sub">Chery<br><small style="color:#888;font-size:0.55rem;">（安徽省国有）</small></div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="星途.png"></span>星途（Exeed）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="捷途.png"></span>捷途（Jetour）</div></li>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="iCAR.png"></span>iCAR</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+                <div class="company-card china-card" data-id="brilliance" data-partners="bmw" data-logo="金杯.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">華晨</div>
+                  <div class="company-name-sub">Brilliance<br><small style="color:#888;font-size:0.55rem;">（遼寧省国有）</small></div>
+                  <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                  <div class="brands-list">
+                    <ul>
+                      <li><div class="brand-item"><span class="brand-logo-mini" data-logo="金杯.png"></span>金杯</div></li>
+                    </ul>
+                  </div>
+                </div>
+                
+              </div>
+              
+              <!-- SVG線 -->
+              <svg class="jv-lines" id="jvLines"></svg>
+              
+              <!-- 下段：外資企業 -->
+              <div class="company-row foreign-row" id="foreignRow">
+                
+                <div class="company-card foreign-card" data-id="toyota" data-partners="faw,gac" data-logo="丰田.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">トヨタ</div>
+                  <div class="company-name-sub">Toyota</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="honda" data-partners="dongfeng,gac" data-logo="本田.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">ホンダ</div>
+                  <div class="company-name-sub">Honda</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="nissan" data-partners="dongfeng" data-logo="日产.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">日産</div>
+                  <div class="company-name-sub">Nissan</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="mazda" data-partners="changan" data-logo="马自达.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">マツダ</div>
+                  <div class="company-name-sub">Mazda</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="vw" data-partners="faw,saic" data-logo="大众.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">VW</div>
+                  <div class="company-name-sub">Volkswagen</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="audi" data-partners="faw" data-logo="奥迪.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">アウディ</div>
+                  <div class="company-name-sub">Audi</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="mercedes" data-partners="baic" data-logo="奔驰.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">メルセデス</div>
+                  <div class="company-name-sub">Mercedes</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="bmw" data-partners="brilliance" data-logo="宝马.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">BMW</div>
+                  <div class="company-name-sub">BMW</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="gm" data-partners="saic" data-logo="别克.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">GM</div>
+                  <div class="company-name-sub">General Motors</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="ford" data-partners="changan" data-logo="林肯.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">フォード</div>
+                  <div class="company-name-sub">Ford/Lincoln</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="psa" data-partners="dongfeng" data-logo="标致.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">ステランティス</div>
+                  <div class="company-name-sub">Stellantis</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="hyundai" data-partners="baic" data-logo="现代.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">現代</div>
+                  <div class="company-name-sub">Hyundai</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="kia" data-partners="" data-logo="起亚.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">起亜</div>
+                  <div class="company-name-sub">Kia</div>
+                </div>
+                
+                <div class="company-card foreign-card" data-id="jlr" data-partners="chery" data-logo="路虎.png">
+                  <div class="logo-placeholder">LOGO</div>
+                  <div class="company-name">JLR</div>
+                  <div class="company-name-sub">Jaguar Land Rover</div>
+                </div>
+                
+              </div>
+            </div>
+          </section>
 
-<!-- NEV月次 -->
-<div class="tab-pane fade" id="graph-nev-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">出典: CADA / CPCA データ</div>
-<div class="chart-container" id="chartNevMonthly"></div>
-<div class="chart-container mt-3" id="chartNevPenetration"></div>
-</div>
+          <!-- 民営企業 -->
+          <section class="private-section">
+            <h5 class="brand-section-title section-private"><i class="fa-solid fa-building me-2"></i>民営企業</h5>
+            
+            <div class="private-grid">
+              
+              <div class="private-card" data-id="byd" data-logo="比亚迪.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">BYD</div>
+                <div class="company-name-sub">比亚迪</div>
+                <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                <div class="brands-list">
+                  <ul>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="仰望.png"></span>仰望（Yangwang）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="方程豹.png"></span>方程豹</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="腾势.png"></span>腾势（Denza）</div></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="private-card" data-id="geely" data-logo="吉利汽车.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">吉利</div>
+                <div class="company-name-sub">Geely</div>
+                <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                <div class="brands-list">
+                  <ul>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="吉利银河.png"></span>吉利银河（Galaxy）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="领克.png"></span>领克（Lynk & Co）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="极氪.png"></span>极氪（Zeekr）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="smart.png"></span>smart</div></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="private-card" data-id="gwm" data-logo="哈弗.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">長城汽車</div>
+                <div class="company-name-sub">GWM</div>
+                <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                <div class="brands-list">
+                  <ul>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="哈弗.png"></span>哈弗（Haval）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="坦克.png"></span>坦克（Tank）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="欧拉.png"></span>欧拉（Ora）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="魏牌.png"></span>魏牌（Wey）</div></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="private-card" data-id="nio" data-logo="蔚来.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">NIO</div>
+                <div class="company-name-sub">蔚来</div>
+                <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                <div class="brands-list">
+                  <ul>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="乐道.png"></span>乐道（ONVO）</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="firefly萤火虫.png"></span>萤火虫（Firefly）</div></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="private-card" data-id="xpeng" data-logo="小鹏.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">小鹏</div>
+                <div class="company-name-sub">Xpeng</div>
+              </div>
+              
+              <div class="private-card" data-id="li" data-logo="理想汽车.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">理想</div>
+                <div class="company-name-sub">Li Auto</div>
+              </div>
+              
+              <div class="private-card" data-id="leapmotor" data-logo="零跑汽车.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">零跑</div>
+                <div class="company-name-sub">Leapmotor</div>
+              </div>
+              
+              <div class="private-card" data-id="xiaomi" data-logo="小米汽车.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">小米</div>
+                <div class="company-name-sub">Xiaomi</div>
+              </div>
+              
+              <div class="private-card" data-id="seres" data-logo="AITO 问界.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">赛力斯</div>
+                <div class="company-name-sub">Seres</div>
+                <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                <div class="brands-list">
+                  <ul>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="AITO 问界.png"></span>AITO 问界</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="蓝电.png"></span>蓝电</div></li>
+                  </ul>
+                </div>
+              </div>
+              
+              <div class="private-card" data-id="jac" data-logo="江淮瑞风.png">
+                <div class="logo-placeholder">LOGO</div>
+                <div class="company-name">江淮</div>
+                <div class="company-name-sub">JAC</div>
+                <div class="brands-toggle"><i class="fa-solid fa-chevron-down"></i> ブランド</div>
+                <div class="brands-list">
+                  <ul>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="江淮瑞风.png"></span>江淮瑞风</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="江淮钇为.png"></span>钇为</div></li>
+                    <li><div class="brand-item"><span class="brand-logo-mini" data-logo="尊界.png"></span>尊界</div></li>
+                  </ul>
+                </div>
+              </div>
+              
+            </div>
+          </section>
 
-<!-- NEV構造 -->
-<div class="tab-pane fade" id="graph-nevmix-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">NEV卸売のBEV/PHEV/EREV構成比推移</div>
-<div class="chart-container" id="chartNevMix"></div>
-<div class="chart-container mt-3" id="chartNevMixVolume"></div>
-</div>
+          <!-- Huaweiエコシステム -->
+          <section class="huawei-section">
+            <h5 class="brand-section-title section-huawei"><i class="fa-solid fa-microchip me-2"></i>Huawei 鸿蒙智行エコシステム</h5>
+            
+            <!-- 説明エリア -->
+            <div class="huawei-header">
+              <div class="huawei-logo-main" data-logo="鸿蒙智行.webp"></div>
+              <div class="huawei-description">
+                <div class="huawei-title">华为 鸿蒙智行</div>
+                <div class="huawei-subtitle">Huawei主導の統一ブランド方式（智選車）。<br>Huaweiが企画・OS/UX・自動運転を担い、各自動車メーカーが製造を担当。</div>
+              </div>
+            </div>
+            
+            <!-- ブランドグリッド -->
+            <div class="huawei-grid">
+              <div class="huawei-brand-card" data-logo="AITO 问界.png" data-oem-logo="蓝电.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">问界 AITO</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">赛力斯</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card" data-logo="智界.png" data-oem-logo="奇瑞.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">智界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">奇瑞</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card" data-logo="享界.png" data-oem-logo="北京汽车.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">享界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">北汽</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card" data-logo="尊界.png" data-oem-logo="江淮瑞风.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">尊界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">江淮</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card" data-logo="尚界.png" data-oem-logo="SAIC_resized.png.png">
+                <div class="huawei-brand-logo"></div>
+                <div class="huawei-brand-name">尚界</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">上汽</span>
+                </div>
+              </div>
+            </div>
+          </section>
 
-<!-- ブランド別 -->
-<div class="tab-pane fade" id="graph-brand-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">ブランド国籍別シェア推移</div>
-<div class="chart-container" id="chartBrandShare"></div>
-<div class="chart-container mt-3" id="chartBrandVolume"></div>
-</div>
+        </div>
+      </div>
 
-<!-- NEV浸透率 -->
-<div class="tab-pane fade" id="graph-penetration-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">NEV浸透率の詳細推移（小売/卸売/自主/高級/合弁）</div>
-<div class="chart-container" id="chartPenetration"></div>
-</div>
+    </div>
+  </div>
 
-<!-- NEV車格 -->
-<div class="tab-pane fade" id="graph-segment-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">NEV車格（セグメント）別卸売台数</div>
-<div class="chart-container" id="chartSegment"></div>
-</div>
+  <!-- モーダル: 仕様 -->
+  <div class="modal fade" id="csvModal" tabindex="-1" aria-labelledby="csvModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <div id="csvContent" class="table-responsive"></div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- NEV輸出メーカー -->
-<div class="tab-pane fade" id="graph-export-maker-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">NEV輸出 メーカー別月次推移（Top企業）</div>
-<div class="chart-container" id="chartExportMaker" style="height:500px;"></div>
-</div>
+  <!-- モーダル: 口コミ -->
+  <div class="modal fade" id="storyModal" tabindex="-1" aria-labelledby="storyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header" style="display: flex; align-items: center; gap: 0.5rem;">
+          <h5 class="modal-title" id="storyModalLabel" style="flex: 1;">口コミ概要</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+        </div>
+        <div class="modal-body">
+          <div id="storyContent">読込中...</div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- 業界利益 -->
-<div class="tab-pane fade" id="graph-profit-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">自動車業界 収入・コスト・利益・利益率</div>
-<div class="chart-container" id="chartProfit"></div>
-</div>
+  <!-- トップへ戻るボタン -->
+  <button id="backToTop" aria-label="トップへ戻る">
+    <i class="fa-solid fa-arrow-up"></i>
+  </button>
 
-<!-- 輸出動力構造 -->
-<div class="tab-pane fade" id="graph-export-power-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">輸出に占めるNEV比率 / 動力構造比</div>
-<div class="chart-container" id="chartExportPower"></div>
-</div>
-
-<!-- 世界シェア -->
-<div class="tab-pane fade" id="graph-world-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">中国の世界自動車販売シェア / NEV世界シェア</div>
-<div class="chart-container" id="chartWorldShare"></div>
-</div>
-
-<!-- メーカー別販売 (cnsuv) -->
-<div class="tab-pane fade" id="graph-cnsuv-pane" role="tabpanel">
-<div class="text-muted mb-2" style="font-size:0.85rem;">cnsuv.com（乗聯会批発）メーカー別月次販売台数</div>
-<div class="mb-2" id="cnsuvMakerSelector"></div>
-<div class="chart-container" id="chartCnsuv" style="height:500px;"></div>
-<div class="chart-container mt-3" id="chartCnsuvShare" style="height:500px;"></div>
-</div>
-
-</div><!-- /graphPillsContent -->
-
-</div></div></div>
-<!-- タブコンテンツ -->
-
-</div>
-<!-- モーダル: 仕様 -->
-<div aria-hidden="true" aria-labelledby="csvModalLabel" class="modal fade" id="csvModal" tabindex="-1">
-<div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
-<div class="modal-content">
-<div class="modal-header">
-<h5 class="modal-title" id="csvModalLabel">車両仕様</h5>
-<button aria-label="閉じる" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-</div>
-<div class="modal-body">
-<div class="table-responsive" id="csvContent"></div>
-</div>
-</div>
-</div>
-</div>
-<!-- モーダル: 口コミ -->
-<div aria-hidden="true" aria-labelledby="storyModalLabel" class="modal fade" id="storyModal" tabindex="-1">
-<div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
-<div class="modal-content">
-<div class="modal-header" style="display: flex; align-items: center; gap: 0.5rem;">
-<h5 class="modal-title" id="storyModalLabel" style="flex: 1;">口コミ概要</h5>
-<button aria-label="閉じる" class="btn-close" data-bs-dismiss="modal" type="button"></button>
-</div>
-<div class="modal-body">
-<div id="storyContent">読込中...</div>
-</div>
-</div>
-</div>
-</div>
-<!-- トップへ戻るボタン -->
-<button aria-label="トップへ戻る" id="backToTop">
-<i class="fa-solid fa-arrow-up"></i>
-</button>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script><script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
 const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/";
 
@@ -2194,43 +2124,6 @@ let seriesUrlsMaps = {
   hezi: {}
 };
 let currentSource = 'autohome';
-// グラフ用：直近ロードしたランキングデータを保持
-const latestTableData = { autohome: [], hezi: [] };
-let chartInstance = null;
-
-function buildTop10Series(source){
-  const rows = latestTableData[source] || [];
-  const top = rows
-    .map(r => ({
-      name: (r.global_name || r.name || '').toString(),
-      units: r.units ? Number(String(r.units).replace(/,/g,'')) : 0
-    }))
-    .filter(x => x.name && Number.isFinite(x.units) && x.units > 0)
-    .slice(0, 10);
-  return { labels: top.map(x => x.name), values: top.map(x => x.units) };
-}
-
-function renderSalesChart(){
-  const el = document.getElementById('salesChart');
-  if (!el || typeof echarts === 'undefined') return;
-  const {labels, values} = buildTop10Series(currentSource);
-  const badge = document.getElementById('graphSourceBadge');
-  if (badge) badge.textContent = currentSource;
-  if (!labels.length){
-    el.innerHTML = '<div class="text-muted" style="padding:1rem;">台数データが見つかりません（CSVにunits列が無い/空の可能性）。</div>';
-    return;
-  }
-  if (!chartInstance){ chartInstance = echarts.init(el); }
-  const option = {
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
-    grid: { left: 20, right: 20, top: 30, bottom: 80, containLabel: true },
-    xAxis: { type: 'category', data: labels, axisLabel: { interval: 0, rotate: 35 } },
-    yAxis: { type: 'value' },
-    series: [{ name: '台数', type: 'bar', data: values, itemStyle: { borderRadius: [6,6,0,0] } }]
-  };
-  chartInstance.setOption(option, true);
-}
-
 
 async function fetchRate() {
   try {
@@ -2320,13 +2213,6 @@ async function loadData(source) {
 function renderTable(data, tableId, source) {
   const tbody = document.querySelector(`#${tableId} tbody`);
   tbody.innerHTML = "";
-  // グラフ用に保持
-  latestTableData[source] = data;
-  // グラフ大タブが表示中なら更新
-  if (document.getElementById('big-graph-content')?.classList.contains('show')) {
-    try { renderSalesChart(); } catch(e) {}
-  }
-
   data.forEach(r => {
     const rankStr = String(r.rank).padStart(3, "0");
     const diff = Number(r.delta_vs_last_month || 0);
@@ -3357,7 +3243,7 @@ function setupBrandToggle() {
 // ブランドタブが表示されたら線を描画・ロゴ読み込み
 let brandTabInitialized = false;
 
-document.getElementById('big-brands-tab')?.addEventListener('shown.bs.tab', function () {
+document.getElementById('brands-tab')?.addEventListener('shown.bs.tab', function () {
   setTimeout(() => {
     loadLogos();
     drawJvLines();
@@ -3385,50 +3271,19 @@ async function init() {
   ]);
 }
 
-document.getElementById('rank-autohome-tab')?.addEventListener('shown.bs.tab', function (e) {
+document.getElementById('autohome-tab').addEventListener('shown.bs.tab', function (e) {
   currentSource = 'autohome';
 });
 
-document.getElementById('rank-hezi-tab')?.addEventListener('shown.bs.tab', function (e) {
+document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e) {
   currentSource = 'hezi';
 });
 
 init();
 
-// グラフ大タブ表示時
-document.getElementById('big-graph-tab')?.addEventListener('shown.bs.tab', function(){
-  // ランキングTop10がアクティブならそれを描画
-  const activePane = document.querySelector('#graphPillsContent > .tab-pane.active.show');
-  if (activePane) renderChartForPane(activePane.id);
-  renderSalesChart();
-  if (chartInstance) chartInstance.resize();
-});
-
-// グラフサブpill切替時 → そのpaneのグラフを描画
-document.getElementById('graphPills')?.addEventListener('shown.bs.tab', function(e){
-  const target = e.target.getAttribute('data-bs-target');
-  if (target) {
-    const paneId = target.replace('#','');
-    // 少し遅延を入れてDOM表示完了を待つ
-    setTimeout(() => renderChartForPane(paneId), 80);
-  }
-});
-
-// サブタブ（pill）切替時にも、念のためサイズ再計算
-document.getElementById('rankPills')?.addEventListener('shown.bs.tab', function(){
-  if (chartInstance) chartInstance.resize();
-});
-
-// 画面リサイズ対応
-window.addEventListener('resize', () => {
-  if (chartInstance) chartInstance.resize();
-  Object.values(marketChartInstances).forEach(c => { if(c) c.resize(); });
-});
-
-
 // リサイズ時に線を再描画
 window.addEventListener('resize', () => {
-  if (document.getElementById('big-brands-content')?.classList.contains('show')) {
+  if (document.getElementById('brands-content')?.classList.contains('show')) {
     drawJvLines();
   }
 });
@@ -3450,565 +3305,7 @@ backToTopBtn.addEventListener('click', () => {
     behavior: 'smooth'
   });
 });
-
-// =====================================================
-// 市場データグラフ (CADA Excel + cnsuv JSON)
-// =====================================================
-const MARKET_BASE = RAW_BASE + 'output/market/';
-const marketChartInstances = {};
-let marketDataLoaded = false;
-let cadaXlsxData = null;
-let cnsuvJsonData = null;
-
-function getOrCreateChart(id) {
-  const el = document.getElementById(id);
-  if (!el) return null;
-  if (!marketChartInstances[id]) {
-    marketChartInstances[id] = echarts.init(el);
-  }
-  return marketChartInstances[id];
-}
-
-const CHART_COLORS = {
-  blue: '#3b82f6', red: '#ef4444', green: '#22c55e', amber: '#f59e0b',
-  purple: '#8b5cf6', pink: '#ec4899', cyan: '#06b6d4', indigo: '#6366f1',
-  orange: '#f97316', teal: '#14b8a6', lime: '#84cc16', rose: '#f43f5e'
-};
-const COLOR_ARR = Object.values(CHART_COLORS);
-
-// ---- CADA Excel data (hardcoded from uploaded file) ----
-function getCADAData() {
-  // 乗用車月次総合
-  const passengerMonthly = {
-    months: ['2023/5','2023/6','2023/7','2023/8','2023/9','2023/10','2023/11','2023/12','2024/1','2024/2','2024/3','2024/4','2024/5','2024/6','2024/7','2024/8','2024/9','2024/10','2024/11','2024/12','2025/1','2025/2','2025/3','2025/4','2025/5','2025/6','2025/7','2025/8','2025/9','2025/10','2025/11','2025/12','2026/1'],
-    retail: [174.2,189.4,177.5,192,201.8,203.3,208,235.3,203.5,109.5,168.7,153.2,171,176.7,172,190.5,210.9,226.1,242.3,263.5,179.4,138.6,194,175.5,193.2,208.4,182.6,199.5,224.1,224.2,222.5,226.1,154.4],
-    retailYoY: [28.6,-2.6,-2.3,2.5,5,10.2,26,8.5,57.4,-21,6,-5.7,-1.9,-6.7,-2.8,-1,4.5,11.3,16.5,12,-12.1,26,14.4,14.5,13.3,18.1,6.3,4.6,6.3,-0.8,-8.1,-14,null],
-    wholesale: [199.7,223.6,206.5,223.7,244.9,244.5,254.9,271.4,208.9,129.5,218.9,195.2,203.1,216.9,196.5,215.4,250.4,273.2,294,307.5,210.1,176.7,241.2,219,231,249,222.1,245.8,280.3,293.2,299.8,278.9,197.3],
-    production: [198.5,219.5,210.1,223.7,243.1,245.1,264.5,267.5,202.1,123,219.2,198.8,199.7,213.4,198.2,215.8,241.8,264.5,301.8,294.1,210.7,173.6,248.1,223,227,241.9,222.9,240.6,283.8,295.1,310.6,279.1,200.3],
-    export: [30.2,29,31,33,35.7,39.1,37.8,38.5,35.5,29.8,40.6,41.7,37.8,37.8,37.6,41.3,43.5,44.1,39.6,40.4,38,34.9,39.1,42.3,44.8,48,47.5,49.9,52.8,56.8,60.1,58.8,57.6],
-    exportYoY: [64,56,63,31,50,49,50,49,51,18,39,38,23,28,20,24,22,13,5,6,3,11,-8,-2,13.5,23.8,25,-1,20.7,27.7,52.4,46.2,52]
-  };
-  // NEV月次
-  const nevMonthly = {
-    months: passengerMonthly.months,
-    retail: [58,66.5,64.1,71.6,74.6,76.7,84.1,94.5,66.8,38.8,70.9,67.4,80.4,85.6,87.8,102.7,112.3,119.6,126.8,130.2,74.4,68.6,99.1,90.5,102.1,111.1,98.7,110.1,129.6,128.2,132.1,133.7,59.6],
-    retailYoY: [60.9,25.2,31.9,34.5,22.1,37.5,39.8,47.3,101.8,-11.6,29.5,28.3,38.5,28.6,36.9,43.2,50.9,56.7,50.5,37.5,10.5,79.7,38,33.9,28.2,29.7,12,7.5,15.5,7.3,4.2,2.6,-20],
-    wholesale: [67.3,76.1,73.7,79.8,82.9,88.3,96.2,110.8,68.2,44.7,81,78.5,89.7,98.2,94.5,105.2,123.1,136.9,143.8,151.2,88.9,83,112.8,113.3,121.6,124.1,118.1,128.2,150,162.1,170.6,156.3,86.4],
-    penetration: [33.3,35.1,36.1,37.3,36.9,37.8,40.4,40.2,32.8,35.8,41.6,43.7,47,48.4,51.1,53.9,53.3,52.9,52.3,49.4,41.5,49.5,51.1,51.5,52.9,53.3,54,55.2,57.8,57.2,59.3,59.1,38.6],
-    nevExport: [9.2,7,8.8,7.8,9.1,11.2,8.9,10.2,9.5,7.9,12,11.5,9.4,8,9.2,9.9,10.5,12,8,12.2,13.9,11.8,14.3,18.9,20,19.8,21.3,20.4,21.1,25.1,28.4,27.3,28.6]
-  };
-  // NEV批発構造
-  const nevMix = {
-    months: passengerMonthly.months,
-    bev: [48,52.8,49.6,55.1,56.3,58.5,65.3,75.1,40.4,26.9,50.4,46.2,53.1,55.9,50.5,59.2,72.3,77.6,83.2,88.7,51.8,47.8,70.8,71.9,75.4,77.1,73.6,81.5,94.7,102,103.8,94,50.7],
-    phev: [19.4,23.3,24.2,24.8,26.6,29.8,21.9,24.4,18.8,11.7,22.9,25.5,27.6,30.8,31.8,34.5,39.4,47.2,47.5,49.9,29.8,28.8,33.4,32.2,34.1,34.8,33.6,36.8,42.4,48,53.2,47.6,27.8],
-    erev: [null,11.6,5.5,null,null,null,9,11.3,9.1,6.1,7.6,6.9,9.1,11.6,12.2,11.5,11.4,12.1,13,12.6,7.3,6.3,8.6,9.2,12.2,12.2,10.9,9.9,12.9,12.1,13.7,14.7,7.9],
-    bevPct: [59,57,68,69,68,66,68,68,59,60,62,59,59,57,53,56,59,57,58,59,58,57.6,62.8,63.5,62.5,62.1,62.3,63.6,63,62.9,60.8,60.2,58.3],
-    phevPct: [31,31,25,31,32,34,22,22,28,26,28,32,31,31,34,33,32,34,33,33,34,34.8,29.6,28.4,27.7,28,28.4,28.7,28,29.6,31.2,30.4,32.6],
-    erevPct: [10,12,8,null,null,null,10,10,13,14,10,9,10,12,13,11,9,9,9,8,8,7.6,7.6,8.1,9.8,9.8,9.2,7.7,9,7.5,8,9.4,9.1]
-  };
-  // ブランド国籍別シェア
-  const brandShare = {
-    months: passengerMonthly.months,
-    selfShare: [50.3,49.3,53.2,52.1,53.4,55.6,55.3,52.9,55.1,56.1,54.8,57.4,57.6,58.5,61.8,63.4,63.5,65.7,64.1,62.3,61,65.6,62.7,65.5,65.2,64.2,65.9,65.7,66.9,68.7,67,64.3,57.5],
-    germanShare: [20.6,21.1,20.8,20.1,20.2,18.1,18.7,20.5,19.2,20.5,20.4,19,18.6,18.6,17.6,16.6,16.5,15.8,15.6,16.2,18.4,17,17,15.6,15.3,16.1,14.5,14.2,14.3,13.5,14,14.9,19.8],
-    japanShare: [18,17.8,15.8,16.7,16.6,17.7,15.5,16.5,16.7,14.4,13.8,15.2,14.8,14.3,12.9,12.6,12.6,12.9,12.4,13.4,13.4,10.7,12.2,12.2,12.6,12,12.9,12.5,11.6,12.3,11.7,12.1,15.5],
-    usShare: [8.1,9.2,7.7,8.5,7.3,6.1,7.9,7.3,6.5,6.4,8.2,5.9,6.7,6.3,5.8,5.7,5.7,4,6.4,6.7,5.3,5,6.8,4.8,5.2,5.8,4.7,6,5.8,3.7,5.7,6.8,5],
-    selfVolume: [87,93,94,100,107,113,115,124,112,62,93,88,98,103,106,120,134,148,154,164,109,91,122,115,126,134,121,132,150,155,149,146,89],
-    jvVolume: [62,66,59,65,67,68,66,79,67,33,50,45,49,48,44,48,53,57,60,71,49,33,48,44,47,51,45,47,49,51,49,51,47]
-  };
-  // NEV浸透率詳細
-  const penetrationDetail = {
-    months: passengerMonthly.months,
-    retailPct: [33.3,35.1,36.1,37.3,36.9,37.8,40.4,40.2,32.8,35.8,41.6,43.7,47,48.4,51.1,53.9,53.3,52.9,52.3,49.4,41.5,49.5,51.1,51.5,52.9,53.3,54,55.2,57.8,57.2,59.3,59.1,38.6],
-    wholesalePct: [33.7,null,35.7,35.7,33.9,36.2,37.7,40.8,32.6,34.5,37,39.9,44.2,45.3,48.1,48.9,49.1,50.1,48.9,49.2,42.3,47,46.8,51.7,52.6,49.8,53.2,52.2,53.5,55.3,56.9,56,43.8],
-    selfBrandPct: [57.1,58.8,59.7,60.2,59.4,60.4,62.1,64.6,51.8,55.3,63.3,66.8,71.2,72.5,73.9,75.9,74.9,74.6,73.2,71.3,60.6,70,72,72.8,74.6,75.4,74.9,76,78.1,77.9,79.6,80.9,61.7],
-    luxuryPct: [23,30.9,20.3,30,24,19.6,30.9,29.5,22.3,24,28.4,22.6,28.4,29.8,27,33.5,33.5,24.9,32.9,33.9,20,23,35,23.5,25,30.3,30,31.9,34.5,22.2,38.8,39.1,16.1],
-    jvPct: [4.3,3.7,5.1,5.2,6.2,6.5,6.6,6,5.1,4.9,7.4,7.5,7.5,7.4,8.3,8,7,6.2,6.8,4.8,3,4,6,6.8,6.4,5.3,6.7,6.6,7.4,7,8,8.2,4.3]
-  };
-  // NEV車格構造
-  const nevSegment = {
-    months: ['2023/5','2023/6','2023/7','2023/8','2023/9','2023/10','2023/11','2023/12','2024/1','2024/2','2024/3','2024/4','2024/5','2024/6'],
-    a00: [7.3,8.2,8.5,8.5,9.4,10.7,13.2,16.1,8.6,4.5,7.3,7.8,8.1,9.4],
-    a0: [15.5,16.1,15.6,17.1,17.2,20.1,21.5,22.8,8.8,6.3,13.9,11.2,12.7,11.8],
-    a: [10,10.7,9.5,11,11.4,9.8,11.2,14.3,8.2,5,11.1,9.8,10.9,10.8],
-    b: [13.7,16.4,14.5,17,16.6,16.4,17.9,20.2,13.6,10.2,16.1,15.7,19.4,21.8]
-  };
-  // NEV出口メーカー月次
-  const nevExportMaker = {
-    '2023/6':  [{m:'上汽乗用車',v:20645},{m:'テスラ中国',v:19468},{m:'比亜迪',v:10536},{m:'易捷特',v:4472},{m:'上汽通用五菱',v:2933}],
-    '2023/7':  [{m:'テスラ中国',v:32862},{m:'比亜迪',v:18169},{m:'上汽乗用車',v:17724},{m:'上汽通用五菱',v:6674},{m:'東風易捷特',v:6119}],
-    '2023/8':  [{m:'比亜迪',v:25023},{m:'テスラ中国',v:19465},{m:'上汽乗用車',v:18677}],
-    '2023/9':  [{m:'テスラ中国',v:30566},{m:'比亜迪',v:28039},{m:'上汽乗用車',v:12678},{m:'吉利汽車',v:5026}],
-    '2023/10': [{m:'テスラ中国',v:43489},{m:'比亜迪',v:30521},{m:'上汽乗用車',v:14550},{m:'智馬達汽車',v:4750}],
-    '2023/11': [{m:'比亜迪',v:30629},{m:'上汽乗用車',v:17841},{m:'テスラ中国',v:16928},{m:'智馬達汽車',v:4800}],
-    '2023/12': [{m:'比亜迪',v:36095},{m:'上汽乗用車',v:19427},{m:'テスラ中国',v:18334},{m:'上汽通用五菱',v:4898}],
-    '2024/2':  [{m:'テスラ中国',v:30224},{m:'比亜迪',v:23291},{m:'上汽通用五菱',v:2872},{m:'上汽乗用車',v:2407},{m:'奇瑞汽車',v:2387}],
-    '2024/3':  [{m:'比亜迪',v:38434},{m:'テスラ中国',v:26666},{m:'上汽乗用車',v:18612},{m:'奇瑞汽車',v:5403}],
-    '2024/4':  [{m:'比亜迪',v:41011},{m:'テスラ中国',v:30746},{m:'上汽乗用車',v:6048},{m:'哪吒汽車',v:4990},{m:'奇瑞汽車',v:4310}],
-    '2024/5':  [{m:'比亜迪',v:37499},{m:'テスラ中国',v:17358},{m:'奇瑞汽車',v:7198},{m:'上汽乗用車',v:6487}],
-    '2024/6':  [{m:'比亜迪',v:26995},{m:'テスラ中国',v:11746},{m:'上汽乗用車',v:6718},{m:'長城汽車',v:3299}]
-  };
-  // 自動車業界利益
-  const industryProfit = {
-    periods: ['2023年通年','2024年1-2月','2024年1-3月','2024年1-4月','2024年1-5月','2024年通年','2025年1-2月','2025年1-3月','2025年1-4月','2025年1-5月','2025年1-6月','2025年1-7月','2025年1-8月','2025年1-9月','2025年1-10月','2025年1-11月','2025年通年'],
-    revenue: [100976,13715,22483,30742,38966,106470,14808,24022,32552,41283,50917,59193,68049,78235,88778,100223,111796],
-    cost: [87627,11991,19642,26882,34099,93301,12977,21119,28636,36351,44780,52056,59889,68867,78243,88405,98498],
-    profit: [5086,587,1040,1428,2047,4623,620,947,1326,1781,2444,2737,3035,3483,3895,4403,4610],
-    profitMargin: [5,4.3,4.6,4.6,5.3,4.3,4.3,3.9,4.1,4.3,4.8,4.6,4.5,4.5,4.4,4.4,4.1]
-  };
-  // 出口動力構造比
-  const exportPower = {
-    months: ['2023/5','2023/6','2023/7','2023/8','2023/9','2023/10','2023/11','2023/12','2024/1','2024/2','2024/3','2024/4','2024/5','2024/6'],
-    nevRatio: [30,28,28,24,25.4,28.6,23.5,26.6,26.8,26.4,29.3,27.1,24.8,21],
-    months2: ['2025/10','2025/11','2025/12','2025年通年'],
-    bev: [26,26,25,28],
-    phev: [14,17,17,13],
-    hev: [6,6,7,6],
-    gasoline: [44,40,40,43]
-  };
-  // 中国世界シェア
-  const worldShare = {
-    periods: ['2023年通年','2024年1-2月','2024年1-3月','2024年1-4月','2024年通年','2025年1-5月','2025年1-6月','2025年1-7月','2025年1-8月','2025年1-9月','2025年1-10月','2025年1-11月','2025年通年'],
-    chinaShare: [null,32,null,null,34.2,34,36,34,34,34.5,34.9,35.4,35.6],
-    nevWorldShare: [64,62,62.5,64,70.4,68.3,68.3,67.6,67.6,68,68,68.4,68.4],
-    selfNevOverseas: [null,null,null,null,9.5,12.7,13,15,18.8,null,13.8,15.4,15.3]
-  };
-
-  return { passengerMonthly, nevMonthly, nevMix, brandShare, penetrationDetail, nevSegment, nevExportMaker, industryProfit, exportPower, worldShare };
-}
-
-const renderedPanes = {};
-
-function renderChartForPane(paneId) {
-  // 既に描画済みならresizeのみ
-  if (renderedPanes[paneId]) {
-    Object.values(marketChartInstances).forEach(c => { if(c) c.resize(); });
-    return;
-  }
-  const D = getCADAData();
-  switch(paneId) {
-    case 'graph-ranking-pane':
-      renderSalesChart();
-      break;
-    case 'graph-market-pane':
-      renderMarketMonthly(D.passengerMonthly);
-      break;
-    case 'graph-nev-pane':
-      renderNevMonthly(D.nevMonthly);
-      break;
-    case 'graph-nevmix-pane':
-      renderNevMix(D.nevMix);
-      break;
-    case 'graph-brand-pane':
-      renderBrandShare(D.brandShare);
-      break;
-    case 'graph-penetration-pane':
-      renderPenetration(D.penetrationDetail);
-      break;
-    case 'graph-segment-pane':
-      renderSegment(D.nevSegment);
-      break;
-    case 'graph-export-maker-pane':
-      renderExportMaker(D.nevExportMaker);
-      break;
-    case 'graph-profit-pane':
-      renderProfit(D.industryProfit);
-      break;
-    case 'graph-export-power-pane':
-      renderExportPower(D.exportPower);
-      break;
-    case 'graph-world-pane':
-      renderWorldShare(D.worldShare);
-      break;
-    case 'graph-cnsuv-pane':
-      loadCnsuvData();
-      break;
-    default: return;
-  }
-  renderedPanes[paneId] = true;
-}
-
-function tooltipFmt() {
-  return { trigger: 'axis', confine: true };
-}
-function gridDefault() {
-  return { left: 20, right: 20, top: 50, bottom: 60, containLabel: true };
-}
-function xAxisMonth(months) {
-  return { type: 'category', data: months, axisLabel: { interval: 'auto', rotate: 45, fontSize: 11 } };
-}
-
-// 1. 乗用車月次総合
-function renderMarketMonthly(d) {
-  const c1 = getOrCreateChart('chartMarketMonthly');
-  if(!c1) return;
-  c1.setOption({
-    title: { text: '乗用車月次 小売・卸売・生産・輸出 (万台)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30, type: 'scroll' }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '万台' },
-    series: [
-      { name: '小売', type: 'line', data: d.retail, smooth: true, itemStyle: { color: CHART_COLORS.blue } },
-      { name: '卸売', type: 'line', data: d.wholesale, smooth: true, itemStyle: { color: CHART_COLORS.green } },
-      { name: '生産', type: 'line', data: d.production, smooth: true, lineStyle: { type: 'dashed' }, itemStyle: { color: CHART_COLORS.amber } },
-      { name: '輸出', type: 'line', data: d.export, smooth: true, itemStyle: { color: CHART_COLORS.red }, yAxisIndex: 0 }
-    ]
-  }, true);
-  const c2 = getOrCreateChart('chartMarketYoY');
-  if(!c2) return;
-  c2.setOption({
-    title: { text: '小売・輸出 前年比% 推移', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '%', axisLabel: { formatter: '{value}%' } },
-    series: [
-      { name: '小売 前年比', type: 'bar', data: d.retailYoY.map(v => ({ value: v, itemStyle: { color: v != null && v < 0 ? CHART_COLORS.red : CHART_COLORS.blue } })) },
-      { name: '輸出 前年比', type: 'line', data: d.exportYoY, smooth: true, itemStyle: { color: CHART_COLORS.orange } }
-    ]
-  }, true);
-}
-
-// 2. NEV月次
-function renderNevMonthly(d) {
-  const c1 = getOrCreateChart('chartNevMonthly');
-  if(!c1) return;
-  c1.setOption({
-    title: { text: 'NEV月次 小売・卸売 (万台)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: [{ type: 'value', name: '万台' }, { type: 'value', name: '万台(輸出)', splitLine: { show: false } }],
-    series: [
-      { name: 'NEV小売', type: 'bar', data: d.retail, itemStyle: { color: CHART_COLORS.blue, borderRadius: [4,4,0,0] } },
-      { name: 'NEV卸売', type: 'line', data: d.wholesale, smooth: true, itemStyle: { color: CHART_COLORS.green } },
-      { name: 'NEV輸出', type: 'line', data: d.nevExport, smooth: true, yAxisIndex: 1, itemStyle: { color: CHART_COLORS.red } }
-    ]
-  }, true);
-  const c2 = getOrCreateChart('chartNevPenetration');
-  if(!c2) return;
-  c2.setOption({
-    title: { text: 'NEV小売浸透率 (%)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), grid: { left: 20, right: 20, top: 55, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '%', min: 20, axisLabel: { formatter: '{value}%' } },
-    series: [{
-      name: 'NEV浸透率', type: 'line', data: d.penetration, smooth: true,
-      areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(59,130,246,0.3)'},{offset:1,color:'rgba(59,130,246,0.02)'}]) },
-      itemStyle: { color: CHART_COLORS.blue },
-      markLine: { data: [{ yAxis: 50, label: { formatter: '50%' }, lineStyle: { color: '#999', type: 'dashed' } }] }
-    }]
-  }, true);
-}
-
-// 3. NEV構造
-function renderNevMix(d) {
-  const c1 = getOrCreateChart('chartNevMix');
-  if(!c1) return;
-  c1.setOption({
-    title: { text: 'NEV卸売 BEV/PHEV/EREV 構成比 (%)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, confine: true }, legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '%', max: 100 },
-    series: [
-      { name: 'BEV%', type: 'bar', stack: 'mix', data: d.bevPct, itemStyle: { color: CHART_COLORS.blue } },
-      { name: 'PHEV%', type: 'bar', stack: 'mix', data: d.phevPct, itemStyle: { color: CHART_COLORS.green } },
-      { name: 'EREV%', type: 'bar', stack: 'mix', data: d.erevPct, itemStyle: { color: CHART_COLORS.amber } }
-    ]
-  }, true);
-  const c2 = getOrCreateChart('chartNevMixVolume');
-  if(!c2) return;
-  c2.setOption({
-    title: { text: 'NEV卸売 BEV/PHEV/EREV 台数 (万台)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '万台' },
-    series: [
-      { name: 'BEV', type: 'bar', stack: 'vol', data: d.bev, itemStyle: { color: CHART_COLORS.blue, borderRadius: [0,0,0,0] } },
-      { name: 'PHEV', type: 'bar', stack: 'vol', data: d.phev, itemStyle: { color: CHART_COLORS.green } },
-      { name: 'EREV', type: 'bar', stack: 'vol', data: d.erev, itemStyle: { color: CHART_COLORS.amber } }
-    ]
-  }, true);
-}
-
-// 4. ブランド別
-function renderBrandShare(d) {
-  const c1 = getOrCreateChart('chartBrandShare');
-  if(!c1) return;
-  c1.setOption({
-    title: { text: 'ブランド国籍別シェア推移 (%)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30, type: 'scroll' }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '%' },
-    series: [
-      { name: '自主ブランド', type: 'line', data: d.selfShare, smooth: true, itemStyle: { color: CHART_COLORS.red }, lineStyle: { width: 3 },
-        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(239,68,68,0.15)'},{offset:1,color:'rgba(239,68,68,0.01)'}]) } },
-      { name: 'ドイツ系', type: 'line', data: d.germanShare, smooth: true, itemStyle: { color: CHART_COLORS.blue } },
-      { name: '日系', type: 'line', data: d.japanShare, smooth: true, itemStyle: { color: CHART_COLORS.green } },
-      { name: '米系', type: 'line', data: d.usShare, smooth: true, itemStyle: { color: CHART_COLORS.amber } }
-    ]
-  }, true);
-  const c2 = getOrCreateChart('chartBrandVolume');
-  if(!c2) return;
-  c2.setOption({
-    title: { text: '自主 vs 主流合弁 小売台数 (万台)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '万台' },
-    series: [
-      { name: '自主ブランド', type: 'bar', data: d.selfVolume, itemStyle: { color: CHART_COLORS.red, borderRadius: [4,4,0,0] } },
-      { name: '主流合弁', type: 'bar', data: d.jvVolume, itemStyle: { color: CHART_COLORS.blue, borderRadius: [4,4,0,0] } }
-    ]
-  }, true);
-}
-
-// 5. NEV浸透率詳細
-function renderPenetration(d) {
-  const c = getOrCreateChart('chartPenetration');
-  if(!c) return;
-  c.setOption({
-    title: { text: 'NEV浸透率 詳細推移 (%)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30, type: 'scroll' }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '%', axisLabel: { formatter: '{value}%' } },
-    series: [
-      { name: '小売浸透率', type: 'line', data: d.retailPct, smooth: true, lineStyle: { width: 3 }, itemStyle: { color: CHART_COLORS.blue } },
-      { name: '卸売浸透率', type: 'line', data: d.wholesalePct, smooth: true, itemStyle: { color: CHART_COLORS.cyan } },
-      { name: '自主ブランド', type: 'line', data: d.selfBrandPct, smooth: true, lineStyle: { width: 2.5 }, itemStyle: { color: CHART_COLORS.red } },
-      { name: '高級車', type: 'line', data: d.luxuryPct, smooth: true, itemStyle: { color: CHART_COLORS.purple } },
-      { name: '合弁', type: 'line', data: d.jvPct, smooth: true, itemStyle: { color: CHART_COLORS.green } }
-    ]
-  }, true);
-}
-
-// 6. NEV車格
-function renderSegment(d) {
-  const c = getOrCreateChart('chartSegment');
-  if(!c) return;
-  c.setOption({
-    title: { text: 'NEV 車格別卸売 (万台)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: xAxisMonth(d.months),
-    yAxis: { type: 'value', name: '万台' },
-    series: [
-      { name: 'A00級', type: 'bar', stack: 'seg', data: d.a00, itemStyle: { color: CHART_COLORS.cyan } },
-      { name: 'A0級', type: 'bar', stack: 'seg', data: d.a0, itemStyle: { color: CHART_COLORS.blue } },
-      { name: 'A級', type: 'bar', stack: 'seg', data: d.a, itemStyle: { color: CHART_COLORS.green } },
-      { name: 'B級', type: 'bar', stack: 'seg', data: d.b, itemStyle: { color: CHART_COLORS.amber } }
-    ]
-  }, true);
-}
-
-// 7. NEV輸出メーカー
-function renderExportMaker(d) {
-  const c = getOrCreateChart('chartExportMaker');
-  if(!c) return;
-  // Collect all makers and build time series
-  const allMakers = new Set();
-  const monthKeys = Object.keys(d).sort();
-  monthKeys.forEach(m => d[m].forEach(x => allMakers.add(x.m)));
-  const makerArr = [...allMakers];
-  const series = makerArr.map((maker, i) => ({
-    name: maker, type: 'bar', stack: 'exp',
-    data: monthKeys.map(m => { const found = d[m].find(x => x.m === maker); return found ? found.v : 0; }),
-    itemStyle: { color: COLOR_ARR[i % COLOR_ARR.length] }
-  }));
-  c.setOption({
-    title: { text: 'NEV輸出 メーカー別月次 (台)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' }, confine: true },
-    legend: { top: 30, type: 'scroll' }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: { type: 'category', data: monthKeys, axisLabel: { rotate: 45 } },
-    yAxis: { type: 'value' },
-    series: series
-  }, true);
-}
-
-// 8. 業界利益
-function renderProfit(d) {
-  const c = getOrCreateChart('chartProfit');
-  if(!c) return;
-  c.setOption({
-    title: { text: '自動車業界 収入・利益・利益率', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 50, top: 75, bottom: 100, containLabel: true },
-    xAxis: { type: 'category', data: d.periods, axisLabel: { rotate: 55, fontSize: 10 } },
-    yAxis: [
-      { type: 'value', name: '億元', position: 'left' },
-      { type: 'value', name: '%', position: 'right', min: 0, max: 8, splitLine: { show: false }, axisLabel: { formatter: '{value}%' } }
-    ],
-    series: [
-      { name: '収入', type: 'bar', data: d.revenue, itemStyle: { color: CHART_COLORS.blue, borderRadius: [4,4,0,0] } },
-      { name: '利益', type: 'bar', data: d.profit, itemStyle: { color: CHART_COLORS.green, borderRadius: [4,4,0,0] } },
-      { name: '利益率', type: 'line', yAxisIndex: 1, data: d.profitMargin, smooth: true, itemStyle: { color: CHART_COLORS.red }, lineStyle: { width: 3 } }
-    ]
-  }, true);
-}
-
-// 9. 輸出動力構造
-function renderExportPower(d) {
-  const c = getOrCreateChart('chartExportPower');
-  if(!c) return;
-  // Combine: NEV ratio (monthly) + power mix (2025 data)
-  c.setOption({
-    title: { text: '輸出NEV比率 (%) / 2025年動力構造', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: [
-      { left: 20, right: '55%', top: 75, bottom: 60, containLabel: true },
-      { left: '55%', right: 20, top: 75, bottom: 60, containLabel: true }
-    ],
-    xAxis: [
-      { type: 'category', data: d.months, gridIndex: 0, axisLabel: { rotate: 45, fontSize: 10 } },
-      { type: 'category', data: d.months2, gridIndex: 1, axisLabel: { rotate: 45, fontSize: 10 } }
-    ],
-    yAxis: [
-      { type: 'value', name: '%', gridIndex: 0 },
-      { type: 'value', name: '%', gridIndex: 1, max: 100 }
-    ],
-    series: [
-      { name: 'NEV輸出比率', type: 'line', data: d.nevRatio, xAxisIndex: 0, yAxisIndex: 0, smooth: true, itemStyle: { color: CHART_COLORS.blue },
-        areaStyle: { color: new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(59,130,246,0.2)'},{offset:1,color:'rgba(59,130,246,0)'}]) } },
-      { name: 'BEV%', type: 'bar', stack: 'pw', data: d.bev, xAxisIndex: 1, yAxisIndex: 1, itemStyle: { color: CHART_COLORS.blue } },
-      { name: 'PHEV%', type: 'bar', stack: 'pw', data: d.phev, xAxisIndex: 1, yAxisIndex: 1, itemStyle: { color: CHART_COLORS.green } },
-      { name: 'HEV%', type: 'bar', stack: 'pw', data: d.hev, xAxisIndex: 1, yAxisIndex: 1, itemStyle: { color: CHART_COLORS.cyan } },
-      { name: 'ガソリン%', type: 'bar', stack: 'pw', data: d.gasoline, xAxisIndex: 1, yAxisIndex: 1, itemStyle: { color: CHART_COLORS.amber } }
-    ]
-  }, true);
-}
-
-// 10. 世界シェア
-function renderWorldShare(d) {
-  const c = getOrCreateChart('chartWorldShare');
-  if(!c) return;
-  c.setOption({
-    title: { text: '中国 世界自動車シェア / NEV世界シェア (%)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: tooltipFmt(), legend: { top: 30 }, grid: { left: 20, right: 20, top: 75, bottom: 100, containLabel: true },
-    xAxis: { type: 'category', data: d.periods, axisLabel: { rotate: 55, fontSize: 10 } },
-    yAxis: { type: 'value', name: '%', axisLabel: { formatter: '{value}%' } },
-    series: [
-      { name: '中国世界シェア', type: 'line', data: d.chinaShare, smooth: true, itemStyle: { color: CHART_COLORS.red }, lineStyle: { width: 3 }, connectNulls: true },
-      { name: 'NEV世界シェア', type: 'line', data: d.nevWorldShare, smooth: true, itemStyle: { color: CHART_COLORS.blue }, lineStyle: { width: 3 } },
-      { name: '自主NEV海外シェア', type: 'line', data: d.selfNevOverseas, smooth: true, itemStyle: { color: CHART_COLORS.green }, connectNulls: true }
-    ]
-  }, true);
-}
-
-// 11. cnsuv メーカー別 (JSONから読み込み)
-async function loadCnsuvData() {
-  try {
-    const url = MARKET_BASE + 'cnsuv_factory_monthly.json?v=' + Date.now();
-    const res = await fetch(url, { cache: 'no-store' });
-    if (!res.ok) throw new Error(res.statusText);
-    cnsuvJsonData = await res.json();
-    renderCnsuvCharts();
-  } catch(e) {
-    console.warn('cnsuv JSON load failed from GitHub, trying local fallback:', e.message);
-    // Data will be rendered only if loaded
-    const el = document.getElementById('chartCnsuv');
-    if(el) el.innerHTML = '<div class="text-muted p-3">cnsuv_factory_monthly.json の読み込みに失敗しました。<br>GitHub output/market/ にファイルがあるか確認してください。</div>';
-  }
-}
-
-function renderCnsuvCharts() {
-  if (!cnsuvJsonData || !cnsuvJsonData.months) return;
-  const months = cnsuvJsonData.months;
-  const monthKeys = Object.keys(months).sort();
-
-  // Collect top makers across all months
-  const makerTotals = {};
-  monthKeys.forEach(mk => {
-    (months[mk].top_30 || []).forEach(item => {
-      makerTotals[item.factory] = (makerTotals[item.factory] || 0) + (item.sales || 0);
-    });
-  });
-  const topMakers = Object.entries(makerTotals).sort((a,b) => b[1] - a[1]).slice(0, 15).map(x => x[0]);
-
-  // Build selector
-  const selectorEl = document.getElementById('cnsuvMakerSelector');
-  if (selectorEl) {
-    let html = '<div class="d-flex flex-wrap gap-1">';
-    topMakers.forEach((m, i) => {
-      const checked = i < 8 ? 'checked' : '';
-      html += `<label class="badge" style="cursor:pointer;background:${checked ? COLOR_ARR[i % COLOR_ARR.length] : '#dee2e6'};color:${checked ? '#fff' : '#333'};font-size:0.75rem;padding:4px 8px;">
-        <input type="checkbox" value="${m}" ${checked} style="display:none;" onchange="toggleCnsuvMaker(this)"> ${m}
-      </label>`;
-    });
-    html += '</div>';
-    selectorEl.innerHTML = html;
-  }
-
-  updateCnsuvChart(monthKeys, months, topMakers.slice(0, 8));
-}
-
-function toggleCnsuvMaker(cb) {
-  const label = cb.parentElement;
-  const idx = [...document.querySelectorAll('#cnsuvMakerSelector input')].indexOf(cb);
-  if (cb.checked) {
-    label.style.background = COLOR_ARR[idx % COLOR_ARR.length];
-    label.style.color = '#fff';
-  } else {
-    label.style.background = '#dee2e6';
-    label.style.color = '#333';
-  }
-  const selected = [...document.querySelectorAll('#cnsuvMakerSelector input:checked')].map(x => x.value);
-  const months = cnsuvJsonData.months;
-  const monthKeys = Object.keys(months).sort();
-  updateCnsuvChart(monthKeys, months, selected);
-}
-
-function updateCnsuvChart(monthKeys, months, selectedMakers) {
-  const c1 = getOrCreateChart('chartCnsuv');
-  if (!c1) return;
-
-  const series = selectedMakers.map((maker, i) => {
-    const data = monthKeys.map(mk => {
-      const found = (months[mk].top_30 || []).find(x => x.factory === maker);
-      return found ? found.sales : null;
-    });
-    const cbIdx = [...document.querySelectorAll('#cnsuvMakerSelector input')].findIndex(x => x.value === maker);
-    return {
-      name: maker, type: 'line', data: data, smooth: true, connectNulls: true,
-      itemStyle: { color: COLOR_ARR[(cbIdx >= 0 ? cbIdx : i) % COLOR_ARR.length] },
-      emphasis: { lineStyle: { width: 4 } }
-    };
-  });
-
-  c1.setOption({
-    title: { text: 'メーカー別月次販売台数（批発）', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: { trigger: 'axis', confine: true, formatter: function(params) {
-      let html = '<b>' + params[0].axisValue + '</b><br>';
-      params.sort((a,b) => (b.value||0) - (a.value||0));
-      params.forEach(p => {
-        if (p.value != null) html += p.marker + ' ' + p.seriesName + ': ' + Number(p.value).toLocaleString() + '台<br>';
-      });
-      return html;
-    }},
-    legend: { top: 30, type: 'scroll' }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: { type: 'category', data: monthKeys, axisLabel: { rotate: 45 } },
-    yAxis: { type: 'value', axisLabel: { formatter: function(v){ return (v/10000).toFixed(0) + '万'; } } },
-    series: series
-  }, true);
-
-  // Market share chart
-  const c2 = getOrCreateChart('chartCnsuvShare');
-  if (!c2) return;
-  const shareSeries = selectedMakers.map((maker, i) => {
-    const data = monthKeys.map(mk => {
-      const found = (months[mk].top_30 || []).find(x => x.factory === maker);
-      return found ? found.share_pct : null;
-    });
-    const cbIdx = [...document.querySelectorAll('#cnsuvMakerSelector input')].findIndex(x => x.value === maker);
-    return {
-      name: maker, type: 'line', data: data, smooth: true, connectNulls: true,
-      itemStyle: { color: COLOR_ARR[(cbIdx >= 0 ? cbIdx : i) % COLOR_ARR.length] }
-    };
-  });
-
-  c2.setOption({
-    title: { text: 'メーカー別シェア推移 (%)', left: 'center', textStyle: { fontSize: 14 } },
-    tooltip: { trigger: 'axis', confine: true },
-    legend: { top: 30, type: 'scroll' }, grid: { left: 20, right: 20, top: 75, bottom: 60, containLabel: true },
-    xAxis: { type: 'category', data: monthKeys, axisLabel: { rotate: 45 } },
-    yAxis: { type: 'value', name: '%', axisLabel: { formatter: '{value}%' } },
-    series: shareSeries
-  }, true);
-}
 </script>
+
 </body>
 </html>

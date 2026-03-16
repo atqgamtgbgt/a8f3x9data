@@ -4726,18 +4726,54 @@ function cnsuvRefresh() {
 function cnsuvBuildCheckboxes() {
   var container = document.getElementById('cnsuvMakerCheckboxes');
   if (!container || container.children.length > 0) return;
-  CNSUV_ALL_MAKERS.forEach(function(maker) {
-    var label = document.createElement('label');
-    label.style.cssText = 'cursor:pointer;padding:2px 7px;border-radius:12px;border:1px solid #ddd;font-size:0.78rem;background:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;';
-    var cb = document.createElement('input');
-    cb.type = 'checkbox'; cb.value = maker; cb.className = 'form-check-input m-0';
-    cb.checked = CNSUV_DEFAULT.indexOf(maker) >= 0;
-    cb.addEventListener('change', cnsuvRefresh);
-    var dot = document.createElement('span');
-    dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:'+cnsuvColor(maker)+';display:inline-block;flex-shrink:0;';
-    var txt = document.createTextNode(cnsuvJa(maker));
-    label.appendChild(cb); label.appendChild(dot); label.appendChild(txt);
-    container.appendChild(label);
+
+  var JV_MAKERS = [
+    "上汽大众","一汽-大众","一汽-大众奥迪","上汽通用别克","上汽通用凯迪拉克","上汽通用雪佛兰",
+    "广汽丰田","一汽丰田","广汽本田","东风本田","东风日产",
+    "华晨宝马","北京奔驰","北京现代","沃尔沃亚太","特斯拉中国","一汽-大众捷达"
+  ];
+  var JV_PRESENT  = JV_MAKERS.filter(function(m){ return CNSUV_ALL_MAKERS.indexOf(m) >= 0; });
+  var CN_MAKERS   = CNSUV_ALL_MAKERS.filter(function(m){ return JV_MAKERS.indexOf(m) < 0; });
+
+  var groups = [
+    { label: '🤝 外資合弁・外資系', makers: JV_PRESENT },
+    { label: '🇨🇳 中国系',          makers: CN_MAKERS  }
+  ];
+
+  function makeRow(makers) {
+    var row = document.createElement('div');
+    row.style.cssText = 'display:flex;flex-wrap:wrap;gap:3px;margin-bottom:4px;';
+    makers.forEach(function(maker) {
+      var lbl = document.createElement('label');
+      lbl.style.cssText = 'cursor:pointer;padding:2px 7px;border-radius:12px;border:1px solid #ddd;font-size:0.78rem;background:#fff;white-space:nowrap;display:inline-flex;align-items:center;gap:3px;';
+      var cb = document.createElement('input');
+      cb.type = 'checkbox'; cb.value = maker; cb.className = 'form-check-input m-0';
+      cb.checked = CNSUV_DEFAULT.indexOf(maker) >= 0;
+      cb.addEventListener('change', cnsuvRefresh);
+      var dot = document.createElement('span');
+      dot.style.cssText = 'width:8px;height:8px;border-radius:50%;background:'+cnsuvColor(maker)+';display:inline-block;flex-shrink:0;';
+      lbl.appendChild(cb); lbl.appendChild(dot); lbl.appendChild(document.createTextNode(cnsuvJa(maker)));
+      row.appendChild(lbl);
+    });
+    return row;
+  }
+
+  groups.forEach(function(g) {
+    var row = makeRow(g.makers);
+    var header = document.createElement('div');
+    header.style.cssText = 'width:100%;display:flex;align-items:center;gap:5px;margin-top:7px;margin-bottom:2px;';
+    var title = document.createElement('span');
+    title.style.cssText = 'font-size:0.78rem;font-weight:700;color:#444;white-space:nowrap;';
+    title.textContent = g.label;
+    var btnOn = document.createElement('button');
+    btnOn.className = 'btn btn-outline-secondary btn-sm py-0'; btnOn.style.fontSize='0.7rem'; btnOn.textContent='全ON';
+    btnOn.addEventListener('click', function(){ row.querySelectorAll('input').forEach(function(cb){cb.checked=true;}); cnsuvRefresh(); });
+    var btnOff = document.createElement('button');
+    btnOff.className = 'btn btn-outline-secondary btn-sm py-0'; btnOff.style.fontSize='0.7rem'; btnOff.textContent='全OFF';
+    btnOff.addEventListener('click', function(){ row.querySelectorAll('input').forEach(function(cb){cb.checked=false;}); cnsuvRefresh(); });
+    header.appendChild(title); header.appendChild(btnOn); header.appendChild(btnOff);
+    container.appendChild(header);
+    container.appendChild(row);
   });
 }
 

@@ -4617,6 +4617,24 @@ async function loadCnsuvRaw() {
     Object.assign(CNSUV_RAW, months);
     CNSUV_RAW_LOADED = true;
     console.log('cnsuv JSON 読み込み成功:', Object.keys(CNSUV_RAW).length + '件');
+    // データに含まれる年の範囲を検出してセレクトボックスを最新年に更新
+    const allYears = [...new Set(Object.keys(CNSUV_RAW).map(m => parseInt(m.split('-')[0])))].sort();
+    const minYear = allYears[0];
+    const maxYear = allYears[allYears.length - 1];
+    const startSel = document.getElementById('cnsuvStartYear');
+    const endSel   = document.getElementById('cnsuvEndYear');
+    if (startSel && endSel) {
+      [startSel, endSel].forEach(sel => {
+        sel.innerHTML = '';
+        allYears.forEach(y => {
+          const opt = document.createElement('option');
+          opt.value = y; opt.textContent = y + '年';
+          sel.appendChild(opt);
+        });
+      });
+      startSel.value = minYear;
+      endSel.value   = maxYear;
+    }
   } catch (err) {
     console.error('cnsuv JSON 読み込み失敗:', err);
   }

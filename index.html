@@ -1714,6 +1714,187 @@ img.car-thumb {
 .seg-item b {
   color: #444;
 }
+
+/* ========================================
+   印刷用スタイル
+   ======================================== */
+@media print {
+  /* --- 基本リセット --- */
+  *,
+  *::before,
+  *::after {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* --- 非表示にするUI要素 --- */
+  header,
+  .site-description,
+  .nav-tabs,
+  .nav-tabs-main,
+  .nav-tabs-sub,
+  .charts-pills,
+  .print-btn-wrap,
+  a[href]:after,
+  abbr[title]:after {
+    display: none !important;
+  }
+
+  /* --- タブペインを全て表示 --- */
+  .tab-content,
+  .tab-pane {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* 各タブに見出しを付与（data-print-title属性で制御） */
+  .tab-pane[data-print-title]::before {
+    content: attr(data-print-title);
+    display: block;
+    font-size: 13pt;
+    font-weight: 700;
+    border-bottom: 2px solid #333;
+    margin-bottom: 0.6rem;
+    padding-bottom: 0.3rem;
+    page-break-before: always;
+  }
+
+  /* 最初のタブペインはページブレーク不要 */
+  .tab-pane[data-print-title]:first-of-type::before {
+    page-break-before: avoid;
+  }
+
+  /* --- コンテナ --- */
+  .container {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* --- テーブル --- */
+  .table-responsive {
+    overflow: visible !important;
+  }
+
+  table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+    font-size: 8pt;
+    page-break-inside: auto;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr {
+    page-break-inside: avoid;
+    page-break-after: auto;
+  }
+
+  th, td {
+    border: 1px solid #ccc !important;
+    padding: 3px 5px !important;
+    background: #fff !important;
+    color: #000 !important;
+    white-space: normal !important;
+  }
+
+  th {
+    background: #f0f0f0 !important;
+    font-weight: 700 !important;
+  }
+
+  /* sticky thを通常に戻す */
+  th.sticky-top,
+  th[style*="position"] {
+    position: static !important;
+  }
+
+  /* --- カードやチャートカード --- */
+  .chart-card {
+    border: 1px solid #ccc !important;
+    page-break-inside: avoid;
+    margin-bottom: 0.8rem !important;
+    padding: 0.5rem !important;
+    background: #fff !important;
+  }
+
+  .chart-title {
+    font-size: 10pt !important;
+    font-weight: 700 !important;
+    color: #000 !important;
+  }
+
+  .chart-subtitle {
+    font-size: 8pt !important;
+    color: #555 !important;
+  }
+
+  /* --- EChartsキャンバスをそのまま印刷 --- */
+  .echart-box {
+    height: 280px !important;
+    page-break-inside: avoid;
+  }
+
+  canvas {
+    max-width: 100% !important;
+  }
+
+  /* --- リンク --- */
+  a {
+    color: #000 !important;
+    text-decoration: underline;
+  }
+
+  /* --- バッジ・ラベル類 --- */
+  .badge {
+    border: 1px solid #999 !important;
+    color: #000 !important;
+    background: #eee !important;
+  }
+
+  /* --- モーダルは非表示 --- */
+  .modal,
+  .modal-backdrop {
+    display: none !important;
+  }
+
+  /* --- フッター余白 --- */
+  .print-footer {
+    display: block !important;
+    text-align: center;
+    font-size: 8pt;
+    color: #888;
+    margin-top: 1rem;
+    border-top: 1px solid #ccc;
+    padding-top: 0.5rem;
+  }
+}
+
+/* 印刷ボタン（画面表示のみ） */
+.print-btn-wrap {
+  text-align: right;
+  margin-bottom: 0.75rem;
+}
+.print-btn-wrap button {
+  font-size: 0.85rem;
+}
+/* 印刷フッターは画面では非表示 */
+.print-footer {
+  display: none;
+}
 </style>
 </head>
 <body>
@@ -1745,6 +1926,13 @@ img.car-thumb {
       </ul>
     </div>
 
+    <!-- 印刷ボタン -->
+    <div class="print-btn-wrap">
+      <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+        <i class="fa-solid fa-print me-1"></i>印刷 / PDF保存
+      </button>
+    </div>
+
     <!-- 大タブナビゲーション -->
     <ul class="nav nav-tabs nav-tabs-main" id="mainTabs" role="tablist">
       <li class="nav-item" role="presentation">
@@ -1768,7 +1956,7 @@ img.car-thumb {
     <div class="tab-content" id="mainTabsContent">
 
       <!-- ===== 販売ランキング 大タブ ===== -->
-      <div class="tab-pane fade show active" id="ranking-super-content" role="tabpanel">
+      <div class="tab-pane fade show active" id="ranking-super-content" role="tabpanel" data-print-title="販売ランキング">
         <!-- 小タブ -->
         <ul class="nav nav-tabs nav-tabs-sub mt-3" id="rankingSubTabs" role="tablist">
           <li class="nav-item" role="presentation">
@@ -2242,7 +2430,7 @@ img.car-thumb {
       </div><!-- end ranking-super-content -->
 
 <!-- ===== グラフ 大タブ ===== -->
-      <div class="tab-pane fade" id="charts-super-content" role="tabpanel">
+      <div class="tab-pane fade" id="charts-super-content" role="tabpanel" data-print-title="CAAM統計グラフ">
         <div class="charts-container mt-3">
 
           <!-- グラフサブタブ (pill style) -->
@@ -2341,7 +2529,7 @@ img.car-thumb {
       </div><!-- end charts-super-content -->
 
       <!-- ===== CCCM統計グラフ 大タブ ===== -->
-      <div class="tab-pane fade" id="cccm-super-content" role="tabpanel">
+      <div class="tab-pane fade" id="cccm-super-content" role="tabpanel" data-print-title="CCCM統計グラフ（二輪車）">
         <div class="mt-3">
           <ul class="nav charts-pills mb-3" id="cccmPills" role="tablist">
             <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cccm-overview" type="button" role="tab">📊 総合概要</button></li>
@@ -4850,9 +5038,59 @@ window.addEventListener('resize', function() {
   Object.values(CNSUV_EC).forEach(function(c){ try{c&&c.resize();}catch(e){} });
 });
 
+/* ========================================
+   印刷前処理：EChartsを全て強制リサイズして
+   キャンバスが正しく描画された状態で印刷する
+   ======================================== */
+window.addEventListener('beforeprint', function() {
+  // Bootstrap の tab-pane を一時的に全表示
+  document.querySelectorAll('.tab-pane').forEach(function(el) {
+    el.classList.add('_print-visible');
+    el.style.display = 'block';
+    el.style.opacity = '1';
+    el.style.visibility = 'visible';
+  });
+
+  // ECharts インスタンスを全てリサイズ
+  var allInstances = [];
+  try {
+    // グローバル変数にあるEChartsインスタンスを収集
+    if (typeof CNSUV_EC === 'object') Object.values(CNSUV_EC).forEach(function(c){ if(c) allInstances.push(c); });
+  } catch(e) {}
+  // echarts.getInstanceByDom で全 echart-box を走査
+  document.querySelectorAll('.echart-box').forEach(function(el) {
+    try {
+      var inst = echarts.getInstanceByDom(el);
+      if (inst) { inst.resize(); allInstances.push(inst); }
+    } catch(e) {}
+  });
+});
+
+window.addEventListener('afterprint', function() {
+  // 印刷後は元のBootstrap制御に戻す
+  document.querySelectorAll('.tab-pane._print-visible').forEach(function(el) {
+    el.classList.remove('_print-visible');
+    el.style.display = '';
+    el.style.opacity = '';
+    el.style.visibility = '';
+  });
+});
+
+// 印刷フッターの日付
+(function() {
+  var el = document.getElementById('print-date');
+  if (el) {
+    var d = new Date();
+    el.textContent = d.getFullYear() + '/' + ('0'+(d.getMonth()+1)).slice(-2) + '/' + ('0'+d.getDate()).slice(-2);
+  }
+})();
 
 
 </script>
+  <!-- 印刷フッター（画面では非表示、印刷時のみ表示） -->
+  <div class="print-footer container">
+    中国自動車販売ランキングや関連データ &nbsp;|&nbsp; 非公式・個人作成 &nbsp;|&nbsp; 印刷日: <span id="print-date"></span>
+  </div>
 
 </body>
 </html>

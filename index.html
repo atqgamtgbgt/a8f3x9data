@@ -4081,27 +4081,38 @@ function parseMonthSheet(rows) {
   if (d.bev_sales != null && d.bev_exp != null)   d.bev_dom  = +(d.bev_sales  - d.bev_exp).toFixed(2);
   if (d.phev_sales != null && d.phev_exp != null) d.phev_dom = +(d.phev_sales - d.phev_exp).toFixed(2);
 
-  // brand (CADA) - col[3]=月次シェア or 1-N月累計, col[4 or 5]=通年シェア（12月シートのみ）
+  // ---- brand (CADA) ----
+  // ヘッダ行で各列の意味を確認
+  // col[3] = 月次シェア
+  // col[4] = 2023年5〜11月: 1-N月累計シェア / 2023年12月: 通年シェア / 2024年1月: 備考 / 2024年2月〜: 累計販売台数
+  // col[5] = 2024年2月〜: 累計シェア or 通年シェア（12月） / 2023年: なし / 2026年: なし
   const bmap = {'中国ブランド':'cn','独系':'de','日系':'jp','米系':'us','韓系':'kr','その他':'other'};
-  d.brand = {};
-  d.brand_annual = {};  // 通年シェア（12月シートのみ存在）
-  // ブランドヘッダ行で通年シェアが何列目かを判定
-  let brandAnnualCol = null;
+  d.brand = {};        // グラフ用: 累計/通年シェア（できれば）、なければ月次シェア
+  d.brand_monthly = {}; // 月次シェア（col[3]）
+  
+  // ヘッダ行を解析して累計シェアの列番号を特定
+  let brandCumulCol = null;
   for (const r of rows) {
     if (r[0] === 'ブランド系') {
-      // '通年シェア' を含む列を探す
-      for (let ci = 3; ci < r.length; ci++) {
-        if (r[ci] && r[ci].includes('通年シェア')) { brandAnnualCol = ci; break; }
+      // col[5]が「累計シェア」「通年シェア」を含む → 使う
+      if (r[5] && (r[5].includes('累計シェア') || r[5].includes('通年シェア'))) {
+        brandCumulCol = 5;
       }
+      // col[4]が「1-N月シェア」「通年シェア」を含む（2023年形式）→ 使う
+      else if (r[4] && (r[4].includes('シェア') && !r[4].includes('備考') && !r[4].includes('販売'))) {
+        brandCumulCol = 4;
+      }
+      // それ以外（2024年1月、2026年等）→ col[3]をフォールバックで使う
       break;
     }
   }
   for (const r of rows) {
     if (bmap[r[0]]) {
-      const v = toF(r[3]); if (v != null) d.brand[bmap[r[0]]] = v;
-      if (brandAnnualCol != null) {
-        const va = toF(r[brandAnnualCol]); if (va != null) d.brand_annual[bmap[r[0]]] = va;
-      }
+      const monthly = toF(r[3]);
+      const cumul   = brandCumulCol != null ? toF(r[brandCumulCol]) : null;
+      // 累計/通年シェアがあればそれを、なければ月次シェア
+      d.brand[bmap[r[0]]] = cumul ?? monthly;
+      d.brand_monthly[bmap[r[0]]] = monthly;
     }
   }
   // enterprise ranking
@@ -4441,25 +4452,17 @@ function buildCdSd(monthly) {
   // ---- brand_series（CADA） ----
   const brand_keys = ['cn','de','jp','us','kr','other'];
   const brand_names = {'cn':'中国ブランド','de':'独系','jp':'日系','us':'米系','kr':'韓系','other':'その他'};
-  // brand: col[3]の月次/累計シェア
-  // brand_annual: 12月シートのみ存在する通年シェア（年末グラフ用）
-  for (const k of brand_keys) {
-    // brand_series は月次/累計値（既存グラフ用）
-  }
 
-  // 年末グラフ用: 通年シェアがあればそれを、なければ月次シェアをフォールバック
-  // brand_series_normed は全月の正規化済み累計シェア（既存の面グラフ用は不要になったが互換維持）
+  // brand_series_normed: 各月の累計/通年シェアを正規化（合計100%に）
   const brand_series_normed = {};
   for (const k of brand_keys) brand_series_normed[brand_names[k]] = [];
   for (let i = 0; i < sorted.length; i++) {
-    // 通年シェアがあればそれを使い、なければ月次シェア
-    const vals = brand_keys.map(k => {
-      const annual = monthly[sorted[i]]?.brand_annual?.[k];
-      return annual != null ? annual : (monthly[sorted[i]]?.brand?.[k] ?? null);
-    });
+    const vals = brand_keys.map(k => monthly[sorted[i]]?.brand?.[k] ?? null);
     const total = vals.reduce((s,v) => s + (v??0), 0);
     brand_keys.forEach((k,j) => {
-      brand_series_normed[brand_names[k]].push(vals[j] != null ? +(vals[j]/total*100).toFixed(1) : null);
+      brand_series_normed[brand_names[k]].push(
+        vals[j] != null && total > 0 ? +(vals[j]/total*100).toFixed(1) : null
+      );
     });
   }
 
@@ -4501,7 +4504,6 @@ function buildCdSd(monthly) {
     // CADA出所
     nev_pen:    arr(sorted,'nev_pen'),
     pax_pen:    arr(sorted,'pax_pen'),
-    brand_series,
     brand_series_normed,
 
     ent_series: Object.fromEntries(ent_companies.map(co => [co, ent_months.map(ym => monthly[ym]?.ent?.[co] ?? null)])),

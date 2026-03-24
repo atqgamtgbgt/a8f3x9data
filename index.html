@@ -1943,12 +1943,12 @@ img.car-thumb {
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="charts-super-tab" data-bs-toggle="tab" data-bs-target="#charts-super-content" type="button" role="tab">
-          <i class="fa-solid fa-chart-line me-1"></i>CAAMグラフ（一部CADA）
+          <i class="fa-solid fa-chart-line me-1"></i>CAAMグラフ（一部CADA）<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="cccm-super-tab" data-bs-toggle="tab" data-bs-target="#cccm-super-content" type="button" role="tab">
-          <i class="fa-solid fa-motorcycle me-1"></i>CCCM統計グラフ
+          <i class="fa-solid fa-motorcycle me-1"></i>CCCM統計グラフ<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
         </button>
       </li>
     </ul>
@@ -2530,7 +2530,7 @@ img.car-thumb {
             <!-- 商用車詳細 -->
             <div class="tab-pane fade" id="cp-commercial">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">商用車　貨車細分類別販売推移</div><div class="chart-subtitle">重型 / 中型 / 軽型 / 微型</div><div id="ec-truck-type" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">商用車　貨車細分類別販売推移</div><div class="chart-subtitle">重型 / 中型 / 軽型 / 微型（2025年4月〜 ※以前はデータなし）</div><div id="ec-truck-type" class="echart-box"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　客車細分類別販売</div><div class="chart-subtitle">大中型客車 / 軽型客車</div><div id="ec-bus-type" class="echart-box" style="height:340px"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　天然ガス車販売</div><div class="chart-subtitle">月次推移</div><div id="ec-lng" class="echart-box" style="height:340px"></div></div></div>
               </div>
@@ -5119,7 +5119,17 @@ function initCommercial() {
     initEC('ec-truck-type', chart => {
     const t = gt();
     const opt = baseOpt(t);
-    opt.xAxis.data = CD.labels_all;
+    // 2025年4月以降のデータしかないため、有効月のみ表示
+    const truckMonths = CD.labels_all.filter((_,i) =>
+      CD.truck_heavy[i] != null || CD.truck_mid[i] != null ||
+      CD.truck_light[i] != null || CD.truck_micro[i] != null
+    );
+    const truckIdx = CD.labels_all.reduce((acc,_,i) => {
+      if (CD.truck_heavy[i] != null || CD.truck_mid[i] != null ||
+          CD.truck_light[i] != null || CD.truck_micro[i] != null) acc.push(i);
+      return acc;
+    }, []);
+    opt.xAxis.data = truckMonths;
     opt.tooltip.axisPointer = {type:'shadow'};
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
@@ -5129,10 +5139,10 @@ function initCommercial() {
       return s;
     };
     opt.series = [
-      { name:'重型貨車', type:'bar', stack:'s', data:CD.truck_heavy, itemStyle:{color:PAL[0]} },
-      { name:'中型貨車', type:'bar', stack:'s', data:CD.truck_mid,   itemStyle:{color:PAL[1]} },
-      { name:'軽型貨車', type:'bar', stack:'s', data:CD.truck_light, itemStyle:{color:PAL[2]} },
-      { name:'微型貨車', type:'bar', stack:'s', data:CD.truck_micro, itemStyle:{color:PAL[3]} },
+      { name:'重型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_heavy[i]), itemStyle:{color:PAL[0]} },
+      { name:'中型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_mid[i]),   itemStyle:{color:PAL[1]} },
+      { name:'軽型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_light[i]), itemStyle:{color:PAL[2]} },
+      { name:'微型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_micro[i]), itemStyle:{color:PAL[3]} },
     ];
     chart.setOption(opt);
   });

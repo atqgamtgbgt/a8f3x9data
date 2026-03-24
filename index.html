@@ -2466,22 +2466,22 @@ img.car-thumb {
           </ul>
 
           <div class="tab-content" id="chartsPillsContent">
-            <div class="tab-pane fade show active" id="cp-overview"><div class="chart-card"><div class="chart-title">総販売台数推移</div><div class="chart-subtitle">CAAM/CADA 2023年5月〜2026年2月</div><div id="ec-overview" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div class="chart-subtitle">積み上げ棒グラフ</div><div id="ec-domestic-export" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / 従来車</div><div class="chart-subtitle">積み上げ棒グラフ</div><div id="ec-nev" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-penetration"><div class="chart-card"><div class="chart-title">NEV浸透率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div><div class="chart-subtitle">全体浸透率・乗用車浸透率</div><div id="ec-penetration" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-segment"><div class="chart-card"><div class="chart-title">乗用車・商用車　販売推移</div><div class="chart-subtitle">セグメント別月次推移</div><div id="ec-segment" class="echart-box"></div></div></div>
+            <div class="tab-pane fade show active" id="cp-overview"><div class="chart-card"><div class="chart-title">総販売台数推移</div><div class="chart-subtitle">CAAM/CADA 2023年5月〜2026年2月　<span class="text-muted" style="font-size:10px">📋 総販売:B7 / 国内:B8 / 輸出:B10</span></div><div id="ec-overview" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 乗用ICE国内:B19 / 乗用NEV国内:B107※ / 商用国内:B78 / ICE輸出:B12 / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-domestic-export" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / 従来車</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 BEV販売:D100※ / PHEV販売:D101※ / NEV合計:D103※　（※行番号は月により変動）</span></div><div id="ec-nev" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-penetration"><div class="chart-card"><div class="chart-title">NEV浸透率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div><div class="chart-subtitle">全体浸透率・乗用車浸透率　<span class="text-muted" style="font-size:10px">📋 全体普及率:F106備考※ / 乗用車普及率:F107備考※　（※行番号・列は月により変動、正規表現で抽出）</span></div><div id="ec-penetration" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-segment"><div class="chart-card"><div class="chart-title">乗用車・商用車　販売推移</div><div class="chart-subtitle">セグメント別月次推移　<span class="text-muted" style="font-size:10px">📋 乗用車販売:B17 / 国内:B18 / 輸出:B20 / 商用車販売:B77 / 国内:B78 / 輸出:B81</span></div><div id="ec-segment" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-brand">
               <div class="chart-card">
                 <div class="chart-title">乗用車　ブランド系シェア年次推移（年末累計）（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                <div class="chart-subtitle">各年12月末（データ途中年は最終取得月）の1-N月累計シェア比較</div>
+                <div class="chart-subtitle">各年12月末（データ途中年は最終取得月）の1-N月累計シェア比較　<span class="text-muted" style="font-size:10px">📋 中国:D24→F24 / 独:D25→F25 / 日:D26→F26 / 米:D27→F27 / 韓:D28→F28 / 他:D29→F29　（D列=月次、F列=累計/通年、列は月により変動）</span></div>
                 <div id="ec-brand" class="echart-box" style="height:420px"></div>
               </div>
             </div>
-            <div class="tab-pane fade" id="cp-ent"><div class="chart-card"><div class="chart-title">重点企業　月次総合販売推移</div><div class="chart-subtitle">上位11社</div><div id="ec-ent" class="echart-box" style="height:500px"></div></div></div>
-            <div class="tab-pane fade" id="cp-nev-ent"><div class="chart-card"><div class="chart-title">NEV重点企業　月次販売推移</div><div class="chart-subtitle">上位15社</div><div id="ec-nev-ent" class="echart-box" style="height:520px"></div></div></div>
-            <div class="tab-pane fade" id="cp-export-ent"><div class="chart-card"><div class="chart-title">輸出ランキング企業　月次推移</div><div class="chart-subtitle">上位10社</div><div id="ec-export-ent" class="echart-box" style="height:500px"></div></div></div>
-            <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（伝統燃料車）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）</div>
+            <div class="tab-pane fade" id="cp-ent"><div class="chart-card"><div class="chart-title">重点企業　月次総合販売推移</div><div class="chart-subtitle">上位11社　<span class="text-muted" style="font-size:10px">📋 集団名:B列 / 販売台数:C列（行番号は月により変動、2026/2月基準: 行114〜128）</span></div><div id="ec-ent" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cp-nev-ent"><div class="chart-card"><div class="chart-title">NEV重点企業　月次販売推移</div><div class="chart-subtitle">上位15社　<span class="text-muted" style="font-size:10px">📋 集団名:B列 / NEV販売:C列（行番号は月により変動、2026/2月基準: 行134〜148）</span></div><div id="ec-nev-ent" class="echart-box" style="height:520px"></div></div></div>
+            <div class="tab-pane fade" id="cp-export-ent"><div class="chart-card"><div class="chart-title">輸出ランキング企業　月次推移</div><div class="chart-subtitle">上位10社　<span class="text-muted" style="font-size:10px">📋 企業名:B列 / 輸出台数:C列（行番号は月により変動、2026/2月基準: 行154〜163）</span></div><div id="ec-export-ent" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（伝統燃料車）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）　<span class="text-muted" style="font-size:10px">📋 シート「単月計算（セグメント・価格帯）」/ ICEセグメント: 行6〜11 / B列=23年6月〜 各列が1ヶ月</span></div>
                 <div class="seg-definition">
                   <span class="seg-item"><b>A00</b> 軽小型（〜3.4m）</span>
                   <span class="seg-item"><b>A0</b> 小型（3.4〜4.1m）</span>
@@ -2490,7 +2490,7 @@ img.car-thumb {
                   <span class="seg-item"><b>C</b> 大型（4.9〜5.2m）</span>
                   <span class="seg-item"><b>D</b> 高級大型（5.2m〜）</span>
                 </div><div id="ec-trad-seg" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-nev-seg"><div class="chart-card"><div class="chart-title">乗用車（NEV）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）</div>
+            <div class="tab-pane fade" id="cp-nev-seg"><div class="chart-card"><div class="chart-title">乗用車（NEV）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）　<span class="text-muted" style="font-size:10px">📋 シート「単月計算（セグメント・価格帯）」/ NEVセグメント: 行15〜20 / B列=23年6月〜</span></div>
                 <div class="seg-definition">
                   <span class="seg-item"><b>A00</b> 軽小型（〜3.4m）</span>
                   <span class="seg-item"><b>A0</b> 小型（3.4〜4.1m）</span>
@@ -2501,38 +2501,38 @@ img.car-thumb {
                 </div><div id="ec-nev-seg" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-price">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（伝統燃料車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-trad-price" class="echart-box" style="height:400px"></div></div></div>
-                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（NEV乗用車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-nev-price" class="echart-box" style="height:400px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（伝統燃料車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）　<span class="text-muted" style="font-size:10px">📋 シート「単月計算（セグメント・価格帯）」/ ICE価格帯: 行24〜33 / B列=23年6月〜 各列が1ヶ月</span></div><div id="ec-trad-price" class="echart-box" style="height:400px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（NEV乗用車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）　<span class="text-muted" style="font-size:10px">📋 シート「単月計算（セグメント・価格帯）」/ NEV価格帯: 行37〜46 / B列=23年6月〜 各列が1ヶ月</span></div><div id="ec-nev-price" class="echart-box" style="height:400px"></div></div></div>
               </div>
             </div>
             <div class="tab-pane fade" id="cp-nev-detail">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV 生産・販売推移（BEV / PHEV）</div><div class="chart-subtitle">生産（棒）vs 販売（折れ線）</div><div id="ec-nev-prod" class="echart-box"></div></div></div>
-                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV国内販売　乗用車・商用車内訳</div><div class="chart-subtitle">NEV全体国内 ＝ 乗用車国内 ＋ 商用車国内</div><div id="ec-nev-seg-dom" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV 生産・販売推移（BEV / PHEV）</div><div class="chart-subtitle">生産（棒）vs 販売（折れ線）　<span class="text-muted" style="font-size:10px">📋 BEV生産:B100※ / PHEV生産:B101※ / BEV販売:D100※ / PHEV販売:D101※　（※行番号は月により変動）</span></div><div id="ec-nev-prod" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV国内販売　乗用車・商用車内訳</div><div class="chart-subtitle">NEV全体国内 ＝ 乗用車国内 ＋ 商用車国内　<span class="text-muted" style="font-size:10px">📋 NEV国内全体:B106※ / 乗用車:B107※ / 商用車:B108※　（※行番号は月により変動）</span></div><div id="ec-nev-seg-dom" class="echart-box"></div></div></div>
               </div>
             </div>
 
             <!-- 産販推移 -->
             <div class="tab-pane fade" id="cp-production">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">汽車全体・乗用車・商用車　生産 vs 販売</div><div class="chart-subtitle">棒グラフ＝生産、折れ線＝販売</div><div id="ec-prod-total" class="echart-box" style="height:460px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">汽車全体・乗用車・商用車　生産 vs 販売</div><div class="chart-subtitle">棒グラフ＝生産、折れ線＝販売　<span class="text-muted" style="font-size:10px">📋 総生産:B6 / 総販売:B7 / 乗用車生産:B16 / 乗用車販売:B17 / 商用車生産:B76 / 商用車販売:B77</span></div><div id="ec-prod-total" class="echart-box" style="height:460px"></div></div></div>
               </div>
             </div>
 
             <!-- BEV/PHEV詳細 -->
             <div class="tab-pane fade" id="cp-bev-phev">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">BEV / PHEV　国内販売 vs 輸出</div><div class="chart-subtitle">動力別の国内・輸出内訳推移</div><div id="ec-bev-phev-dom-exp" class="echart-box"></div></div></div>
-                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV輸出内訳：乗用車 vs 商用車、BEV vs PHEV</div><div class="chart-subtitle">輸出の2軸分類</div><div id="ec-nev-exp-breakdown" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">BEV / PHEV　国内販売 vs 輸出</div><div class="chart-subtitle">動力別の国内・輸出内訳推移　<span class="text-muted" style="font-size:10px">📋 BEV販売:D100※ - BEV輸出:E109※ = BEV国内 / PHEV販売:D101※ - PHEV輸出:E110※ = PHEV国内　（※行番号・列は月により変動）</span></div><div id="ec-bev-phev-dom-exp" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV輸出内訳：乗用車 vs 商用車、BEV vs PHEV</div><div class="chart-subtitle">輸出の2軸分類　<span class="text-muted" style="font-size:10px">📋 NEV輸出:E106※ / 乗用NEV輸出:E107※ / 商用NEV輸出:E108※ / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-nev-exp-breakdown" class="echart-box"></div></div></div>
               </div>
             </div>
 
             <!-- 商用車詳細 -->
             <div class="tab-pane fade" id="cp-commercial">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">商用車　貨車細分類別販売推移</div><div class="chart-subtitle">重型 / 中型 / 軽型 / 微型（2025年4月〜 ※以前はデータなし）</div><div id="ec-truck-type" class="echart-box"></div></div></div>
-                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　客車細分類別販売</div><div class="chart-subtitle">大中型客車 / 軽型客車</div><div id="ec-bus-type" class="echart-box" style="height:340px"></div></div></div>
-                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　天然ガス車販売</div><div class="chart-subtitle">月次推移</div><div id="ec-lng" class="echart-box" style="height:340px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">商用車　貨車細分類別販売推移</div><div class="chart-subtitle">重型 / 中型 / 軽型 / 微型（2025年4月〜）　<span class="text-muted" style="font-size:10px">📋 重型:B88 / 中型:B89 / 軽型:B90 / 微型:B91　（行番号固定）</span></div><div id="ec-truck-type" class="echart-box"></div></div></div>
+                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　客車細分類別販売</div><div class="chart-subtitle">大中型客車 / 軽型客車　<span class="text-muted" style="font-size:10px">📋 大中型:B95 / 小型:B96　（行番号固定）</span></div><div id="ec-bus-type" class="echart-box" style="height:340px"></div></div></div>
+                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　天然ガス車販売</div><div class="chart-subtitle">月次推移　<span class="text-muted" style="font-size:10px">📋 天然ガス車販売:B84　（行番号固定）</span></div><div id="ec-lng" class="echart-box" style="height:340px"></div></div></div>
               </div>
             </div>
 
@@ -2542,14 +2542,14 @@ img.car-thumb {
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">輸出先国ランキング（CAAM・海関総署ベース）</div>
-                    <div class="chart-subtitle">整車輸出 月次台数推移（2023年5〜12月 万台）※2024年以降はCADA口径に移行</div>
+                    <div class="chart-subtitle">整車輸出 月次台数推移（2023年5〜12月）　<span class="text-muted" style="font-size:10px">📋 国名:B列 / 台数(万台):C列 / 行161〜170（2023年5月シート基準）　※CAAM口径・万台単位</span></div>
                     <div id="ec-country-caam" class="echart-box" style="height:480px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">輸出先国ランキング（CADA乗聯分会ベース）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">整車+CKD 上位10カ国 月次台数推移（2024年4月〜 万台）※2024年前半は上位5カ国のみ</div>
+                    <div class="chart-subtitle">整車+CKD 上位10カ国 月次台数推移（2024年4月〜）　<span class="text-muted" style="font-size:10px">📋 国名:B列 / 台数(輌→万台換算):C列 / 行番号は月により変動（2026/2月基準: 行175〜185）</span></div>
                     <div id="ec-country-cada" class="echart-box" style="height:480px"></div>
                   </div>
                 </div>
@@ -2562,7 +2562,7 @@ img.car-thumb {
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">輸入国ランキング 月次推移<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">上位10カ国（2024年2月〜 万台）※一部累計月含む</div>
+                    <div class="chart-subtitle">上位10カ国（2024年2月〜）　<span class="text-muted" style="font-size:10px">📋 国名:B列 / 台数(輌→万台換算):C列 / 行番号は月により変動（2026/2月基準: 行241〜250）</span></div>
                     <div id="ec-import" class="echart-box" style="height:500px"></div>
                   </div>
                 </div>
@@ -2575,21 +2575,21 @@ img.car-thumb {
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">CADA乗用車出口サマリー<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">乗用車出口合計・NEV出口・自主ブランド出口・JV出口（月次）</div>
+                    <div class="chart-subtitle">乗用車出口合計・NEV出口・自主ブランド出口・JV出口（月次）　<span class="text-muted" style="font-size:10px">📋 B169:出口合計 / B170:NEV出口 / B171:BEV / B172:PHEV / B173:自主 / B174:JV　（行番号は月により変動）</span></div>
                     <div id="ec-cada-summary" class="echart-box" style="height:400px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">CADA出口 NEV普及率（輸出版）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">輸出に占めるNEVの割合（%）</div>
+                    <div class="chart-subtitle">輸出に占めるNEVの割合（%）　<span class="text-muted" style="font-size:10px">📋 B177: 乗用車出口NEV普及率　（行番号は月により変動）</span></div>
                     <div id="ec-cada-nev-pen" class="echart-box" style="height:300px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">BEV / PHEV・EREV 出口内訳<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">CADA口径 NEV出口の動力別内訳（万台）</div>
+                    <div class="chart-subtitle">CADA口径 NEV出口の動力別内訳（万台）　<span class="text-muted" style="font-size:10px">📋 B171:BEV / B172:PHEV/EREV　（行番号は月により変動）</span></div>
                     <div id="ec-cada-bev-phev" class="echart-box" style="height:300px"></div>
                   </div>
                 </div>
@@ -2602,21 +2602,21 @@ img.car-thumb {
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">中国NEV世界シェア・世界NEV普及率<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">中国のNEV世界シェア（%）・世界NEV普及率（%）</div>
+                    <div class="chart-subtitle">中国のNEV世界シェア（%）・世界NEV普及率（%）　<span class="text-muted" style="font-size:10px">📋 中国NEV世界シェア:B185 / 世界NEV普及率:B184　（行番号は月により変動）</span></div>
                     <div id="ec-world-nev" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">中国の世界自動車シェア・自主NEV海外シェア<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">中国乗用車の世界販売シェア・自主NEV海外市場シェア（%）</div>
+                    <div class="chart-subtitle">中国乗用車の世界販売シェア・自主NEV海外市場シェア（%）　<span class="text-muted" style="font-size:10px">📋 中国世界シェア:B182 / 自主NEV海外シェア:B183　（行番号は月により変動）</span></div>
                     <div id="ec-world-share" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">世界NEV月間販売台数<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">世界全体のNEV月間販売台数（万台）※レポート掲載月のみ</div>
+                    <div class="chart-subtitle">世界全体のNEV月間販売台数（万台）　<span class="text-muted" style="font-size:10px">📋 B186: 世界NEV月間販売台数　（行番号は月により変動）</span></div>
                     <div id="ec-world-vol" class="echart-box" style="height:280px"></div>
                   </div>
                 </div>
@@ -2629,21 +2629,21 @@ img.car-thumb {
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">業界月次利益率（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">2024年・2025年 月次利益率比較</div>
+                    <div class="chart-subtitle">2024年・2025年 月次利益率比較　<span class="text-muted" style="font-size:10px">📋 シート「業界利益率推移」/ 利益率: D列(2024) / H列(2025) / 行10〜20（1-2月累計〜12月）</span></div>
                     <div id="ec-profit-rate" class="echart-box" style="height:340px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">業界月次収入・利益（億元）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">2024年・2025年 月次収入・利益比較</div>
+                    <div class="chart-subtitle">2024年・2025年 月次収入・利益比較（通年除く）　<span class="text-muted" style="font-size:10px">📋 シート「業界利益率推移」/ 収入: B列(2024)/F列(2025) / 利益: C列(2024)/G列(2025) / 行10〜20</span></div>
                     <div id="ec-profit-abs" class="echart-box" style="height:340px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">業界通年利益率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">2020〜2025年 通年利益率推移</div>
+                    <div class="chart-subtitle">2020〜2025年 通年利益率推移　<span class="text-muted" style="font-size:10px">📋 シート「業界利益率推移」/ 行6: 業界全体利益率 / B〜G列(2020〜2025年)</span></div>
                     <div id="ec-profit-annual" class="echart-box" style="height:250px"></div>
                   </div>
                 </div>
@@ -4339,7 +4339,8 @@ function parseSingleSheet(sheet) {
 }
 
 // ---- Excel fetch & 全データ組み立て ----
-const CAAM_EXCEL_PATH = `${RAW_BASE}output/market/CAAM_2026年産販月報_v33.xlsx`;
+const CAAM_EXCEL_PATH    = `${RAW_BASE}output/market/${encodeURIComponent('CAAM_2026年産販月報_v33.xlsx')}`;
+const CAAM_EXCEL_PATH_EN = `${RAW_BASE}output/market/caam_monthly.xlsx`;  // 英語名フォールバック
 
 async function loadCaamExcel() {
   const loadingEl = document.getElementById('caam-loading');
@@ -4349,8 +4350,13 @@ async function loadCaamExcel() {
   if (pillsEl)   pillsEl.style.display   = 'none';
   if (contentEl) contentEl.style.display = 'none';
   try {
-    const res = await fetch(CAAM_EXCEL_PATH + `?v=${Date.now()}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    // 日本語ファイル名→英語名の順でフォールバック
+    let res = await fetch(CAAM_EXCEL_PATH + `?v=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) {
+      console.warn('日本語ファイル名でのfetch失敗、英語名フォールバックを試みます:', res.status);
+      res = await fetch(CAAM_EXCEL_PATH_EN + `?v=${Date.now()}`, { cache: 'no-store' });
+    }
+    if (!res.ok) throw new Error(`HTTP ${res.status} — GitHubの output/market/ にExcelファイル（日本語名 or caam_monthly.xlsx）が配置されているか確認してください`);
     const buf = await res.arrayBuffer();
     const wb  = XLSX.read(buf, { type: 'array' });
 
@@ -5367,7 +5373,7 @@ function initWorld() {
 function initProfit() {
   if (!CAAM_EXCEL_LOADED) return;
   const PD = window.PROFIT_DATA || {annual:{}, monthly:{}};
-  const monthOrder = ['1-2月累計','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','通年'];
+  const monthOrder = ['1-2月累計','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const mlabels = monthOrder.filter(m => PD.monthly[`2024-${m}`] || PD.monthly[`2025-${m}`]);
   const rate24 = mlabels.map(m => PD.monthly[`2024-${m}`]?.rate  ?? null);
   const rate25 = mlabels.map(m => PD.monthly[`2025-${m}`]?.rate  ?? null);

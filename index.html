@@ -2458,6 +2458,11 @@ img.car-thumb {
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-production" type="button" role="tab">🏭 産販推移</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-bev-phev" type="button" role="tab">⚡ BEV/PHEV詳細</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-commercial" type="button" role="tab">🚛 商用車詳細</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-country" type="button" role="tab">🌍 輸出先国（CAAM/CADA）</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-import" type="button" role="tab">📥 輸入国ランキング</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-cada-summary" type="button" role="tab">📦 CADA出口サマリー</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-world" type="button" role="tab">🌐 世界NEV指標</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-profit" type="button" role="tab">💴 業界収益</button></li>
           </ul>
 
           <div class="tab-content" id="chartsPillsContent">
@@ -2527,6 +2532,120 @@ img.car-thumb {
                 <div class="col-12"><div class="chart-card"><div class="chart-title">商用車　貨車細分類別販売推移</div><div class="chart-subtitle">重型 / 中型 / 軽型 / 微型</div><div id="ec-truck-type" class="echart-box"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　客車細分類別販売</div><div class="chart-subtitle">大中型客車 / 軽型客車</div><div id="ec-bus-type" class="echart-box" style="height:340px"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　天然ガス車販売</div><div class="chart-subtitle">月次推移</div><div id="ec-lng" class="echart-box" style="height:340px"></div></div></div>
+              </div>
+            </div>
+
+            <!-- ===== 輸出先国ランキング ===== -->
+            <div class="tab-pane fade" id="cp-country">
+              <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">輸出先国ランキング（CAAM・海関総署ベース）</div>
+                    <div class="chart-subtitle">整車輸出 上位10カ国 月次推移（2023年5月〜12月 万台）</div>
+                    <div id="ec-country-caam" class="echart-box" style="height:500px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">輸出先国ランキング（CADA乗聯分会ベース）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">整車+CKD 上位10カ国 月次推移（2024年〜 万台）</div>
+                    <div id="ec-country-cada" class="echart-box" style="height:500px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 輸入国ランキング ===== -->
+            <div class="tab-pane fade" id="cp-import">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">輸入国ランキング 月次推移<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">上位10カ国（2024年2月〜 万台）※一部累計月含む</div>
+                    <div id="ec-import" class="echart-box" style="height:500px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== CADA出口サマリー ===== -->
+            <div class="tab-pane fade" id="cp-cada-summary">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">CADA乗用車出口サマリー<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">乗用車出口合計・NEV出口・自主ブランド出口・JV出口（月次）</div>
+                    <div id="ec-cada-summary" class="echart-box" style="height:400px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">CADA出口 NEV普及率（輸出版）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">輸出に占めるNEVの割合（%）</div>
+                    <div id="ec-cada-nev-pen" class="echart-box" style="height:300px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">BEV / PHEV・EREV 出口内訳<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">CADA口径 NEV出口の動力別内訳（万台）</div>
+                    <div id="ec-cada-bev-phev" class="echart-box" style="height:300px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 世界NEV指標 ===== -->
+            <div class="tab-pane fade" id="cp-world">
+              <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">中国NEV世界シェア・世界NEV普及率<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">中国のNEV世界シェア（%）・世界NEV普及率（%）</div>
+                    <div id="ec-world-nev" class="echart-box" style="height:360px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">中国の世界自動車シェア・自主NEV海外シェア<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">中国乗用車の世界販売シェア・自主NEV海外市場シェア（%）</div>
+                    <div id="ec-world-share" class="echart-box" style="height:360px"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">世界NEV月間販売台数<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">世界全体のNEV月間販売台数（万台）※レポート掲載月のみ</div>
+                    <div id="ec-world-vol" class="echart-box" style="height:280px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== 業界収益 ===== -->
+            <div class="tab-pane fade" id="cp-profit">
+              <div class="row g-3">
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">業界月次利益率（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">2024年・2025年 月次利益率比較</div>
+                    <div id="ec-profit-rate" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">業界月次収入・利益（億元）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">2024年・2025年 月次収入・利益比較</div>
+                    <div id="ec-profit-abs" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">業界通年利益率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">2020〜2025年 通年利益率推移</div>
+                    <div id="ec-profit-annual" class="echart-box" style="height:250px"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -3992,10 +4111,137 @@ function parseMonthSheet(rows) {
     if (h === 'うち天然ガス車 販売') d.lng_sales = toF(r[1]);
     if (/^FCEV（/.test(h)) d.fcev_sales = toF(r[3]);
   }
+
+  // ---- CAAM輸出国別（2023年: 万台単位、見出し「輸出量上位」） ----
+  d.caam_exp_countries = [];
+  { let inC = false;
+    for (const r of rows) {
+      const h = r[0];
+      if (h && (('輸出量上位' in h || (h.includes('整車輸出') && h.includes('カ国'))) &&
+          !h.includes('累計') && !h.includes('NEV') && !h.includes('乗聯') && !h.includes('CADA')))
+        { inC = true; continue; }
+      if (inC) {
+        if (/^\d+$/.test(h) && r[1]) {
+          const v = toF(r[2]); if (v != null) d.caam_exp_countries.push({rank:+h, country:r[1], units:v});
+        }
+        if (d.caam_exp_countries.length >= 10) break;
+      }
+    }
+  }
+
+  // ---- CADA輸出国別（2024年〜: 輌単位→万台換算, 見出し「整車出口　前10カ国」単月） ----
+  d.cada_exp_countries = [];
+  { let inC = false;
+    for (const r of rows) {
+      const h = r[0];
+      if (h && h.includes('整車出口') && h.includes('前10カ国') && !h.includes('累計') && !h.includes('NEV'))
+        { inC = true; d.cada_exp_countries = []; continue; }
+      if (h && h.includes('累計') && h.includes('前10カ国')) { inC = false; }
+      if (inC) {
+        if (/^\d+$/.test(h) && r[1]) {
+          const v = toF(r[2]); if (v != null) d.cada_exp_countries.push({rank:+h, country:r[1], units:+(v/10000).toFixed(4)});
+        }
+        if (d.cada_exp_countries.length >= 10) break;
+      }
+    }
+  }
+
+  // ---- 輸入国別（単月優先、なければ累計） ----
+  d.import_countries = [];
+  { let inI = false; let hasSingle = false;
+    for (const r of rows) {
+      const h = r[0];
+      if (h && h.includes('【輸入】') && h.includes('輸入量上位')) {
+        const isCumul = h.includes('累計') || h.includes('通年');
+        if (!isCumul) { inI = true; hasSingle = true; d.import_countries = []; continue; }
+        if (!hasSingle) { inI = true; d.import_countries = []; continue; }
+      }
+      if (inI) {
+        if (/^\d+$/.test(h) && r[1]) {
+          const v = toF(r[2]); if (v != null) d.import_countries.push({rank:+h, country:r[1], units:+(v/10000).toFixed(4)});
+        }
+        if (d.import_countries.length >= 10) break;
+      }
+    }
+  }
+
+  // ---- CADAサマリー（最新月のみ詳細あり） ----
+  d.cada_summary = {};
+  { let inS = false;
+    for (const r of rows) {
+      const h = r[0];
+      if (h && h.includes('CADA乗聯分会') && (h.includes('出口サマリー') || h.includes('乗用車出口')))
+        { inS = true; continue; }
+      if (inS && (h.includes('世界シェア') || h.includes('７．') || h.includes('６－２'))) break;
+      if (inS && h) {
+        const raw = r[1] || '';
+        const numWan = (()=>{ const m=raw.split('（')[0].match(/([\d.]+)万台/); return m?+m[1]:null; })();
+        const numPct = (()=>{ const m=raw.match(/([\d.]+)%/); return m?+m[1]:null; })();
+        const map = {
+          '乗用車出口合計（整車+CKD）':'cada_exp_total', 'うちNEV出口':'cada_nev_exp',
+          'うちBEV':'cada_bev_exp', 'うちPHEV/EREV':'cada_phev_exp',
+          '自主ブランド出口':'cada_zizhu_exp', '合弁・外資ブランド出口':'cada_jv_exp',
+          '中国ブランドICE車輸出':'cada_ice_exp', '自主NEV乗用車出口':'cada_nev_zizhu',
+          '乗用車出口 NEV普及率':'cada_nev_pen_exp',
+        };
+        if (map[h]) { const v = h.includes('普及率') ? numPct : numWan; if (v!=null) d.cada_summary[map[h]]=v; }
+      }
+    }
+  }
+
+  // ---- 世界指標 ----
+  d.world = {};
+  for (const r of rows) {
+    const h = r[0]; const raw = r[1]||'';
+    const pct = (s=>{ const m=String(s).match(/([\d.]+)%/); return m?+m[1]:null; });
+    const wan = (s=>{ const m=String(s).split('（')[0].match(/([\d.]+)万台/); return m?+m[1]:null; });
+    if (h==='中国の世界自動車販売シェア') d.world.cn_world_share = pct(raw);
+    if (h==='自主ブランドNEV 海外市場シェア')  d.world.zizhu_nev_overseas = pct(raw);
+    if (h==='世界NEV普及率')              d.world.world_nev_pen = pct(raw);
+    if (h==='中国NEV 世界シェア')          d.world.cn_nev_world_share = pct(raw);
+    if (h==='世界NEV月間販売台数')         d.world.world_nev_monthly = wan(raw);
+  }
+
   return d;
 }
 
-// ---- 単月計算シートのパース ----
+// ---- 業界利益率シートのパース ----
+function parseProfitSheet(sheet) {
+  const rows = sheetToRows(sheet);
+  const result = { annual: {}, monthly: {} };
+  let inAnnual = false, inMonthly = false;
+  let yrCols = {};
+  for (const r of rows) {
+    const h = r[0]||'';
+    if (h.includes('通年利益率推移')) { inAnnual = true; inMonthly = false; continue; }
+    if (h.includes('月次データ'))     { inMonthly = true; inAnnual = false; continue; }
+    if (h.includes('凡例') || h.startsWith('直接記載')) { inMonthly = false; continue; }
+    if (inAnnual) {
+      if (h === '年') { /* next is data */ continue; }
+      if (h === '業界全体利益率') {
+        const years = ['2020','2021','2022','2023','2024','2025'];
+        years.forEach((y,i) => { const v=r[i+1]; const m=String(v).match(/([\d.]+)%/); if(m) result.annual[y]=+m[1]; });
+      }
+    }
+    if (inMonthly) {
+      if (r[1]==='2024年') { yrCols={'2024':1,'2025':5}; continue; }
+      if (r[1]==='収入(億元)') continue;
+      if (h && h!=='月' && Object.keys(yrCols).length > 0) {
+        for (const [yr,c] of Object.entries(yrCols)) {
+          if (c+2 >= r.length) continue;
+          const rm = String(r[c+2]||'').match(/([\d.]+)%/);
+          const rate = rm ? +rm[1] : null;
+          const rev  = toF(r[c]);
+          const pft  = toF(r[c+1]);
+          if (rate!=null || rev!=null || pft!=null)
+            result.monthly[`${yr}-${h}`] = {rev, profit:pft, rate};
+        }
+      }
+    }
+  }
+  return result;
+}
+
 function parseSingleSheet(sheet) {
   const rows = sheetToRows(sheet);
   // row index 4 (0-based) has column headers with year/month
@@ -4080,6 +4326,10 @@ async function loadCaamExcel() {
         }
       }
     }
+
+    // 業界利益率シートをパース
+    const profitSheetName = wb.SheetNames.find(n => n.includes('業界利益率'));
+    window.PROFIT_DATA = profitSheetName ? parseProfitSheet(wb.Sheets[profitSheetName]) : {annual:{}, monthly:{}};
 
     // CD / SD オブジェクトを組み立て
     buildCdSd(allMonthly);
@@ -4229,6 +4479,48 @@ function buildCdSd(monthly) {
   CD.trad_sales    = CD.total_sales.map((t,i) => CD.nev_total[i]  != null ? +(t - CD.nev_total[i]).toFixed(1)  : null);
   CD.com_sales_calc= CD.total_sales.map((t,i) => CD.pax_sales[i]  != null ? +(t - CD.pax_sales[i]).toFixed(1)  : null);
   CD.total_prod_sales_gap = CD.total_prod.map((p,i) => CD.total_sales[i] != null ? +((p??0) - CD.total_sales[i]).toFixed(1) : null);
+
+  // ---- 輸出国別（CAAM）2023年5月〜 ----
+  const caaMExpMonths = sorted.filter(ym => (monthly[ym]?.caam_exp_countries||[]).length > 0);
+  const caamExpAllCo  = [...new Set(caaMExpMonths.flatMap(ym => (monthly[ym].caam_exp_countries||[]).map(e=>e.country)))];
+  CD.caam_exp_months    = caaMExpMonths.map(lbl);
+  CD.caam_exp_countries = caamExpAllCo;
+  CD.caam_exp_series    = Object.fromEntries(caamExpAllCo.map(co => [co,
+    caaMExpMonths.map(ym => { const e=(monthly[ym].caam_exp_countries||[]).find(x=>x.country===co); return e?e.units:null; })
+  ]));
+
+  // ---- 輸出国別（CADA）2024年〜 ----
+  const cadaExpMonths = sorted.filter(ym => (monthly[ym]?.cada_exp_countries||[]).length > 0);
+  const cadaExpAllCo  = [...new Set(cadaExpMonths.flatMap(ym => (monthly[ym].cada_exp_countries||[]).map(e=>e.country)))];
+  CD.cada_exp_months    = cadaExpMonths.map(lbl);
+  CD.cada_exp_countries = cadaExpAllCo;
+  CD.cada_exp_series    = Object.fromEntries(cadaExpAllCo.map(co => [co,
+    cadaExpMonths.map(ym => { const e=(monthly[ym].cada_exp_countries||[]).find(x=>x.country===co); return e?e.units:null; })
+  ]));
+
+  // ---- 輸入国別 ----
+  const impMonths    = sorted.filter(ym => (monthly[ym]?.import_countries||[]).length > 0);
+  const impAllCo     = [...new Set(impMonths.flatMap(ym => (monthly[ym].import_countries||[]).map(e=>e.country)))];
+  CD.import_months    = impMonths.map(lbl);
+  CD.import_countries = impAllCo;
+  CD.import_series    = Object.fromEntries(impAllCo.map(co => [co,
+    impMonths.map(ym => { const e=(monthly[ym].import_countries||[]).find(x=>x.country===co); return e?e.units:null; })
+  ]));
+
+  // ---- CADAサマリー ----
+  const cadaSumMonths = sorted.filter(ym => Object.keys(monthly[ym]?.cada_summary||{}).length > 0);
+  CD.cada_sum_months = cadaSumMonths.map(lbl);
+  ['cada_exp_total','cada_nev_exp','cada_bev_exp','cada_phev_exp',
+   'cada_zizhu_exp','cada_jv_exp','cada_ice_exp','cada_nev_zizhu','cada_nev_pen_exp'].forEach(f => {
+    CD[f] = cadaSumMonths.map(ym => monthly[ym]?.cada_summary?.[f] ?? null);
+  });
+
+  // ---- 世界指標 ----
+  const worldMonths = sorted.filter(ym => Object.keys(monthly[ym]?.world||{}).length > 0);
+  CD.world_months = worldMonths.map(lbl);
+  ['cn_world_share','zizhu_nev_overseas','world_nev_pen','cn_nev_world_share','world_nev_monthly'].forEach(f => {
+    CD[f] = worldMonths.map(ym => monthly[ym]?.world?.[f] ?? null);
+  });
 
   // ---- SD 組み立て（単月計算シートから） ----
   const ice_segs  = ['A00','A0','A','B','C','D'];
@@ -4776,6 +5068,253 @@ function initCommercial() {
   });
 }
 
+// ===== 新規グラフ関数群 =====
+
+// 輸出先国（CAAM・海関総署ベース）
+function initCountryCaam() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-country-caam', chart => {
+    const t = gt(); const opt = baseOpt(t);
+    if (!CD.caam_exp_months?.length) { chart.setOption({title:{text:'データなし（2023年5〜12月のみ）',left:'center',top:'middle'}}); return; }
+    opt.xAxis.data = CD.caam_exp_months;
+    opt.grid.right = 145; opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical'; opt.legend.type = 'scroll';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      let tot = 0;
+      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; tot+=p.value; } });
+      s += `<hr style="margin:3px 0">合計：<b>${tot.toFixed(2)}</b> 万台`;
+      return s;
+    };
+    opt.series = CD.caam_exp_countries.map((co,i) => ({
+      name:co, type:'bar', stack:'s', data:CD.caam_exp_series[co], itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
+
+// 輸出先国（CADA・乗聯分会ベース）
+function initCountryCada() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-country-cada', chart => {
+    const t = gt(); const opt = baseOpt(t);
+    if (!CD.cada_exp_months?.length) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    opt.xAxis.data = CD.cada_exp_months;
+    opt.grid.right = 145; opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical'; opt.legend.type = 'scroll';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      let tot = 0;
+      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; tot+=p.value; } });
+      s += `<hr style="margin:3px 0">合計：<b>${tot.toFixed(2)}</b> 万台`;
+      return s;
+    };
+    opt.series = CD.cada_exp_countries.map((co,i) => ({
+      name:co, type:'bar', stack:'s', data:CD.cada_exp_series[co], itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
+function initCountry() { initCountryCaam(); initCountryCada(); }
+
+// 輸入国ランキング
+function initImport() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-import', chart => {
+    const t = gt(); const opt = baseOpt(t);
+    if (!CD.import_months?.length) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    opt.xAxis.data = CD.import_months;
+    opt.grid.right = 145; opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical'; opt.legend.type = 'scroll';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      let tot = 0;
+      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; tot+=p.value; } });
+      s += `<hr style="margin:3px 0">合計：<b>${tot.toFixed(2)}</b> 万台`;
+      return s;
+    };
+    opt.series = CD.import_countries.map((co,i) => ({
+      name:co, type:'bar', stack:'s', data:CD.import_series[co], itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
+
+// CADAサマリー
+function initCadaSummary() {
+  if (!CAAM_EXCEL_LOADED) return;
+  const noData = !CD.cada_sum_months?.length;
+  // 出口内訳積み上げ棒
+  initEC('ec-cada-summary', chart => {
+    if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    const t = gt(); const opt = baseOpt(t);
+    opt.xAxis.data = CD.cada_sum_months;
+    opt.tooltip.axisPointer = {type:'shadow'};
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; });
+      return s;
+    };
+    opt.series = [
+      { name:'中国ブランドICE輸出', type:'bar', stack:'s', data:CD.cada_ice_exp,   itemStyle:{color:'#adb5bd'} },
+      { name:'自主NEV輸出',         type:'bar', stack:'s', data:CD.cada_nev_zizhu, itemStyle:{color:'#4e79a7'} },
+      { name:'JV・外資輸出',        type:'bar', stack:'s', data:CD.cada_jv_exp,    itemStyle:{color:'#f28e2b'} },
+      { name:'CADA出口合計',        type:'line', data:CD.cada_exp_total,
+        symbol:'circle', symbolSize:7, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'} },
+    ];
+    chart.setOption(opt);
+  });
+  // NEV普及率（輸出版）
+  initEC('ec-cada-nev-pen', chart => {
+    if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    const t = gt(); const opt = baseOpt(t, '%');
+    opt.xAxis.data = CD.cada_sum_months;
+    opt.yAxis.min = 0; opt.yAxis.max = 70;
+    opt.yAxis.axisLabel.formatter = '{value}%';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      return s;
+    };
+    opt.series = [{ name:'輸出NEV普及率', type:'line', data:CD.cada_nev_pen_exp,
+      symbol:'circle', symbolSize:7, lineStyle:{width:3,color:'#4e79a7'}, itemStyle:{color:'#4e79a7'},
+      areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(78,121,167,0.3)'},{offset:1,color:'rgba(78,121,167,0.02)'}])}
+    }];
+    chart.setOption(opt);
+  });
+  // BEV/PHEV内訳
+  initEC('ec-cada-bev-phev', chart => {
+    if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    const t = gt(); const opt = baseOpt(t);
+    opt.xAxis.data = CD.cada_sum_months;
+    opt.tooltip.axisPointer = {type:'shadow'};
+    opt.series = [
+      { name:'BEV輸出',       type:'bar', stack:'s', data:CD.cada_bev_exp,  itemStyle:{color:'#4e79a7'} },
+      { name:'PHEV/EREV輸出', type:'bar', stack:'s', data:CD.cada_phev_exp, itemStyle:{color:'#59a14f'} },
+    ];
+    chart.setOption(opt);
+  });
+}
+
+// 世界NEV指標
+function initWorld() {
+  if (!CAAM_EXCEL_LOADED) return;
+  const noData = !CD.world_months?.length;
+  initEC('ec-world-nev', chart => {
+    if (noData) { chart.setOption({title:{text:'データなし（2024年以降）',left:'center',top:'middle'}}); return; }
+    const t = gt(); const opt = baseOpt(t, '%');
+    opt.xAxis.data = CD.world_months;
+    opt.yAxis.max = 80; opt.yAxis.min = 0; opt.yAxis.axisLabel.formatter = '{value}%';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      return s;
+    };
+    opt.series = [
+      { name:'中国NEV世界シェア', type:'line', data:CD.cn_nev_world_share,
+        symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#c9184a'}, itemStyle:{color:'#c9184a'} },
+      { name:'世界NEV普及率',     type:'line', data:CD.world_nev_pen,
+        symbol:'diamond', symbolSize:6, lineStyle:{width:2,color:'#4e79a7',type:'dashed'}, itemStyle:{color:'#4e79a7'} },
+    ];
+    chart.setOption(opt);
+  });
+  initEC('ec-world-share', chart => {
+    if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    const t = gt(); const opt = baseOpt(t, '%');
+    opt.xAxis.data = CD.world_months;
+    opt.yAxis.max = 45; opt.yAxis.min = 0; opt.yAxis.axisLabel.formatter = '{value}%';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      return s;
+    };
+    opt.series = [
+      { name:'中国乗用車世界シェア', type:'line', data:CD.cn_world_share,
+        symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'} },
+      { name:'自主NEV海外市場シェア', type:'line', data:CD.zizhu_nev_overseas,
+        symbol:'diamond', symbolSize:6, lineStyle:{width:2,color:'#59a14f',type:'dashed'}, itemStyle:{color:'#59a14f'} },
+    ];
+    chart.setOption(opt);
+  });
+  initEC('ec-world-vol', chart => {
+    if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    const t = gt(); const opt = baseOpt(t);
+    opt.xAxis.data = CD.world_months;
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; });
+      return s;
+    };
+    opt.series = [{ name:'世界NEV月間販売', type:'bar', data:CD.world_nev_monthly,
+      itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#4e79a7'},{offset:1,color:'#2c5282'}])} }];
+    chart.setOption(opt);
+  });
+}
+
+// 業界収益
+function initProfit() {
+  if (!CAAM_EXCEL_LOADED) return;
+  const PD = window.PROFIT_DATA || {annual:{}, monthly:{}};
+  const monthOrder = ['1-2月累計','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','通年'];
+  const mlabels = monthOrder.filter(m => PD.monthly[`2024-${m}`] || PD.monthly[`2025-${m}`]);
+  const rate24 = mlabels.map(m => PD.monthly[`2024-${m}`]?.rate  ?? null);
+  const rate25 = mlabels.map(m => PD.monthly[`2025-${m}`]?.rate  ?? null);
+  const rev24  = mlabels.map(m => PD.monthly[`2024-${m}`]?.rev   ?? null);
+  const rev25  = mlabels.map(m => PD.monthly[`2025-${m}`]?.rev   ?? null);
+  const pft24  = mlabels.map(m => PD.monthly[`2024-${m}`]?.profit ?? null);
+  const pft25  = mlabels.map(m => PD.monthly[`2025-${m}`]?.profit ?? null);
+
+  // 利益率折れ線
+  initEC('ec-profit-rate', chart => {
+    const t = gt(); const opt = baseOpt(t, '%');
+    opt.xAxis.data = mlabels; opt.yAxis.max = 10; opt.yAxis.min = 0; opt.yAxis.axisLabel.formatter = '{value}%';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      return s;
+    };
+    opt.series = [
+      { name:'2024年', type:'line', data:rate24, symbol:'circle', symbolSize:6,
+        lineStyle:{width:2,color:'#adb5bd',type:'dashed'}, itemStyle:{color:'#adb5bd'} },
+      { name:'2025年', type:'line', data:rate25, symbol:'circle', symbolSize:7,
+        lineStyle:{width:3,color:'#4e79a7'}, itemStyle:{color:'#4e79a7'},
+        areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(78,121,167,0.25)'},{offset:1,color:'rgba(78,121,167,0.02)'}])} },
+    ];
+    chart.setOption(opt);
+  });
+  // 収入・利益棒グラフ
+  initEC('ec-profit-abs', chart => {
+    const t = gt(); const opt = baseOpt(t, '億元');
+    opt.xAxis.data = mlabels; opt.legend.top = 8;
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${Number(p.value).toLocaleString()}</b> 億元<br>`; });
+      return s;
+    };
+    opt.series = [
+      { name:'収入 2024年', type:'bar', data:rev24, itemStyle:{color:'#adb5bd'} },
+      { name:'収入 2025年', type:'bar', data:rev25, itemStyle:{color:'#4e79a7'} },
+      { name:'利益 2024年', type:'bar', data:pft24, itemStyle:{color:'#f4a261'} },
+      { name:'利益 2025年', type:'bar', data:pft25, itemStyle:{color:'#e15759'} },
+    ];
+    chart.setOption(opt);
+  });
+  // 通年利益率
+  initEC('ec-profit-annual', chart => {
+    const t = gt();
+    const years = Object.keys(PD.annual).sort();
+    const opt = baseOpt(t, '%');
+    opt.xAxis.data = years; opt.yAxis.max = 8; opt.yAxis.min = 3; opt.yAxis.axisLabel.formatter = '{value}%';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}年</b><br>`;
+      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      return s;
+    };
+    opt.series = [{ name:'業界利益率', type:'bar',
+      data: years.map(y => ({ value:PD.annual[y], itemStyle:{color: PD.annual[y]>=5?'#59a14f':PD.annual[y]>=4?'#f28e2b':'#e15759'} })),
+      label:{show:true, position:'top', formatter:'{c}%', fontSize:11, color:t.text}
+    }];
+    chart.setOption(opt);
+  });
+}
+
 // ---- 初期化マップ ----
 const CHART_FNS = {
   'cp-overview':       initOverview,
@@ -4794,6 +5333,11 @@ const CHART_FNS = {
   'cp-production':     initProduction,
   'cp-bev-phev':       initBevPhev,
   'cp-commercial':     initCommercial,
+  'cp-country':        initCountry,
+  'cp-import':         initImport,
+  'cp-cada-summary':   initCadaSummary,
+  'cp-world':          initWorld,
+  'cp-profit':         initProfit,
 };
 
 // 大タブ「グラフ」表示時に最初のグラフを初期化

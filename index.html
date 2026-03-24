@@ -2541,14 +2541,14 @@ img.car-thumb {
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">輸出先国ランキング（CAAM・海関総署ベース）</div>
-                    <div class="chart-subtitle">整車輸出 上位10カ国 月次推移（2023年5月〜12月 万台）</div>
+                    <div class="chart-subtitle">整車輸出 上位10カ国 月次台数推移（2023年5〜12月 万台）</div>
                     <div id="ec-country-caam" class="echart-box" style="height:500px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">輸出先国ランキング（CADA乗聯分会ベース）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">整車+CKD 上位10カ国 月次推移（2024年〜 万台）</div>
+                    <div class="chart-subtitle">整車+CKD 上位10カ国 月次台数推移（2024年4月〜 万台）※2024年前半は上位5カ国のみ</div>
                     <div id="ec-country-cada" class="echart-box" style="height:500px"></div>
                   </div>
                 </div>
@@ -4112,7 +4112,19 @@ function parseMonthSheet(rows) {
     if (/^FCEV（/.test(h)) d.fcev_sales = toF(r[3]);
   }
 
-  // ---- CAAM輸出国別（2023年: 万台単位、見出し「輸出量上位」） ----
+  // ---- CAAM輸出国別（2023年: 万台単位） ----
+  // 国名の名寄せ辞書
+  const COUNTRY_NORM = {
+    '俄罗斯（ロシア）':'ロシア', '墨西哥（メキシコ）':'メキシコ', '巴西（ブラジル）':'ブラジル',
+    '泰国（タイ）':'タイ', '菲律宾（フィリピン）':'フィリピン', '土耳其（トルコ）':'トルコ',
+    '阿联酋（UAE）':'アラブ首長国連邦（UAE）', 'UAE':'アラブ首長国連邦（UAE）',
+    'ベラルーシ（白俄羅斯）':'ベラルーシ', '韩国（韓国）':'韓国',
+    '德国（ドイツ）':'ドイツ', '美国（米国）':'米国', '荷兰（オランダ）':'オランダ',
+    '斯洛伐克（スロバキア）':'スロバキア', '韩国（韓国）':'韓国',
+    'キルギスタン':'キルギス',
+  };
+  const normCountry = n => COUNTRY_NORM[n] || n;
+
   d.caam_exp_countries = [];
   { let inC = false;
     for (const r of rows) {
@@ -4122,7 +4134,7 @@ function parseMonthSheet(rows) {
         { inC = true; continue; }
       if (inC) {
         if (/^\d+$/.test(h) && r[1]) {
-          const v = toF(r[2]); if (v != null) d.caam_exp_countries.push({rank:+h, country:r[1], units:v});
+          const v = toF(r[2]); if (v != null) d.caam_exp_countries.push({rank:+h, country:normCountry(r[1]), units:v});
         }
         if (d.caam_exp_countries.length >= 10) break;
       }
@@ -4134,12 +4146,15 @@ function parseMonthSheet(rows) {
   { let inC = false;
     for (const r of rows) {
       const h = r[0];
-      if (h && h.includes('整車出口') && h.includes('前10カ国') && !h.includes('累計') && !h.includes('NEV'))
+      // 「前10カ国」「前5カ国」どちらも対象、単月のみ（累計除外）
+      if (h && h.includes('整車出口') && (h.includes('前10カ国') || h.includes('前5カ国')) && !h.includes('累計') && !h.includes('NEV'))
         { inC = true; d.cada_exp_countries = []; continue; }
-      if (h && h.includes('累計') && h.includes('前10カ国')) { inC = false; }
+      if (h && h.includes('累計') && (h.includes('前10カ国') || h.includes('前5カ国')) && inC) { inC = false; }
+      // 「前年比増加上位」「NEV出口」セクション開始で終了
+      if (inC && h && (h.includes('前年比') || h.includes('NEV出口') || h.includes('輸入'))) { inC = false; }
       if (inC) {
         if (/^\d+$/.test(h) && r[1]) {
-          const v = toF(r[2]); if (v != null) d.cada_exp_countries.push({rank:+h, country:r[1], units:+(v/10000).toFixed(4)});
+          const v = toF(r[2]); if (v != null) d.cada_exp_countries.push({rank:+h, country:normCountry(r[1]), units:+(v/10000).toFixed(4)});
         }
         if (d.cada_exp_countries.length >= 10) break;
       }
@@ -4481,30 +4496,39 @@ function buildCdSd(monthly) {
   CD.total_prod_sales_gap = CD.total_prod.map((p,i) => CD.total_sales[i] != null ? +((p??0) - CD.total_sales[i]).toFixed(1) : null);
 
   // ---- 輸出国別（CAAM）2023年5月〜 ----
+  const CNORM = {
+    '俄罗斯（ロシア）':'ロシア','墨西哥（メキシコ）':'メキシコ','巴西（ブラジル）':'ブラジル',
+    '泰国（タイ）':'タイ','菲律宾（フィリピン）':'フィリピン','土耳其（トルコ）':'トルコ',
+    '阿联酋（UAE）':'アラブ首長国連邦（UAE）','UAE':'アラブ首長国連邦（UAE）',
+    'ベラルーシ（白俄羅斯）':'ベラルーシ','キルギスタン':'キルギス',
+  };
+  const cn = s => CNORM[s] || s;
+
   const caaMExpMonths = sorted.filter(ym => (monthly[ym]?.caam_exp_countries||[]).length > 0);
-  const caamExpAllCo  = [...new Set(caaMExpMonths.flatMap(ym => (monthly[ym].caam_exp_countries||[]).map(e=>e.country)))];
+  // 名寄せしてユニーク国名
+  const caamExpAllCo  = [...new Set(caaMExpMonths.flatMap(ym => (monthly[ym].caam_exp_countries||[]).map(e=>cn(e.country))))];
   CD.caam_exp_months    = caaMExpMonths.map(lbl);
   CD.caam_exp_countries = caamExpAllCo;
   CD.caam_exp_series    = Object.fromEntries(caamExpAllCo.map(co => [co,
-    caaMExpMonths.map(ym => { const e=(monthly[ym].caam_exp_countries||[]).find(x=>x.country===co); return e?e.units:null; })
+    caaMExpMonths.map(ym => { const e=(monthly[ym].caam_exp_countries||[]).find(x=>cn(x.country)===co); return e?e.units:null; })
   ]));
 
   // ---- 輸出国別（CADA）2024年〜 ----
   const cadaExpMonths = sorted.filter(ym => (monthly[ym]?.cada_exp_countries||[]).length > 0);
-  const cadaExpAllCo  = [...new Set(cadaExpMonths.flatMap(ym => (monthly[ym].cada_exp_countries||[]).map(e=>e.country)))];
+  const cadaExpAllCo  = [...new Set(cadaExpMonths.flatMap(ym => (monthly[ym].cada_exp_countries||[]).map(e=>cn(e.country))))];
   CD.cada_exp_months    = cadaExpMonths.map(lbl);
   CD.cada_exp_countries = cadaExpAllCo;
   CD.cada_exp_series    = Object.fromEntries(cadaExpAllCo.map(co => [co,
-    cadaExpMonths.map(ym => { const e=(monthly[ym].cada_exp_countries||[]).find(x=>x.country===co); return e?e.units:null; })
+    cadaExpMonths.map(ym => { const e=(monthly[ym].cada_exp_countries||[]).find(x=>cn(x.country)===co); return e?e.units:null; })
   ]));
 
   // ---- 輸入国別 ----
   const impMonths    = sorted.filter(ym => (monthly[ym]?.import_countries||[]).length > 0);
-  const impAllCo     = [...new Set(impMonths.flatMap(ym => (monthly[ym].import_countries||[]).map(e=>e.country)))];
+  const impAllCo     = [...new Set(impMonths.flatMap(ym => (monthly[ym].import_countries||[]).map(e=>cn(e.country))))];
   CD.import_months    = impMonths.map(lbl);
   CD.import_countries = impAllCo;
   CD.import_series    = Object.fromEntries(impAllCo.map(co => [co,
-    impMonths.map(ym => { const e=(monthly[ym].import_countries||[]).find(x=>x.country===co); return e?e.units:null; })
+    impMonths.map(ym => { const e=(monthly[ym].import_countries||[]).find(x=>cn(x.country)===co); return e?e.units:null; })
   ]));
 
   // ---- CADAサマリー ----
@@ -5080,13 +5104,14 @@ function initCountryCaam() {
     opt.grid.right = 145; opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical'; opt.legend.type = 'scroll';
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
-      let tot = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; tot+=p.value; } });
-      s += `<hr style="margin:3px 0">合計：<b>${tot.toFixed(2)}</b> 万台`;
+      params.filter(p=>p.value!=null).sort((a,b)=>b.value-a.value)
+        .forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`);
       return s;
     };
     opt.series = CD.caam_exp_countries.map((co,i) => ({
-      name:co, type:'bar', stack:'s', data:CD.caam_exp_series[co], itemStyle:{color:PAL[i%12]}
+      name:co, type:'line', data:CD.caam_exp_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:false,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
     }));
     chart.setOption(opt);
   });
@@ -5102,13 +5127,15 @@ function initCountryCada() {
     opt.grid.right = 145; opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical'; opt.legend.type = 'scroll';
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
-      let tot = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; tot+=p.value; } });
-      s += `<hr style="margin:3px 0">合計：<b>${tot.toFixed(2)}</b> 万台`;
+      params.filter(p=>p.value!=null).sort((a,b)=>b.value-a.value)
+        .forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`);
+      s += `<br><span style="font-size:10px;color:#888">※2024年前半は上位5カ国のみ掲載</span>`;
       return s;
     };
     opt.series = CD.cada_exp_countries.map((co,i) => ({
-      name:co, type:'bar', stack:'s', data:CD.cada_exp_series[co], itemStyle:{color:PAL[i%12]}
+      name:co, type:'line', data:CD.cada_exp_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:false,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
     }));
     chart.setOption(opt);
   });
@@ -5125,13 +5152,15 @@ function initImport() {
     opt.grid.right = 145; opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical'; opt.legend.type = 'scroll';
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
-      let tot = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; tot+=p.value; } });
-      s += `<hr style="margin:3px 0">合計：<b>${tot.toFixed(2)}</b> 万台`;
+      params.filter(p=>p.value!=null).sort((a,b)=>b.value-a.value)
+        .forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`);
+      s += `<br><span style="font-size:10px;color:#888">※一部月は累計値</span>`;
       return s;
     };
     opt.series = CD.import_countries.map((co,i) => ({
-      name:co, type:'bar', stack:'s', data:CD.import_series[co], itemStyle:{color:PAL[i%12]}
+      name:co, type:'line', data:CD.import_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:false,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
     }));
     chart.setOption(opt);
   });

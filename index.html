@@ -15,7 +15,8 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <style>
 body {
   background-color: #f8f9fa;
@@ -1942,7 +1943,7 @@ img.car-thumb {
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="charts-super-tab" data-bs-toggle="tab" data-bs-target="#charts-super-content" type="button" role="tab">
-          <i class="fa-solid fa-chart-line me-1"></i>CAAM統計グラフ
+          <i class="fa-solid fa-chart-line me-1"></i>CAAMグラフ（一部CADA）
         </button>
       </li>
       <li class="nav-item" role="presentation">
@@ -2433,6 +2434,12 @@ img.car-thumb {
       <div class="tab-pane fade" id="charts-super-content" role="tabpanel" data-print-title="CAAM統計グラフ">
         <div class="charts-container mt-3">
 
+          <!-- データ読み込み中オーバーレイ -->
+          <div id="caam-loading" style="display:none;align-items:center;justify-content:center;padding:80px 20px;flex-direction:column;gap:12px">
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="text-muted" style="font-size:13px">Excelデータを読み込み中…</div>
+          </div>
+
           <!-- グラフサブタブ (pill style) -->
           <ul class="nav charts-pills mb-3" id="chartsPills" role="tablist">
             <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cp-overview" type="button" role="tab">📊 総合概要</button></li>
@@ -2454,21 +2461,21 @@ img.car-thumb {
           </ul>
 
           <div class="tab-content" id="chartsPillsContent">
-            <div class="tab-pane fade show active" id="cp-overview"><div class="chart-card"><div class="chart-title">総販売台数推移</div><div class="chart-subtitle">CAAM 2025年2月〜2026年2月</div><div id="ec-overview" class="echart-box"></div></div></div>
+            <div class="tab-pane fade show active" id="cp-overview"><div class="chart-card"><div class="chart-title">総販売台数推移</div><div class="chart-subtitle">CAAM/CADA 2023年5月〜2026年2月</div><div id="ec-overview" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div class="chart-subtitle">積み上げ棒グラフ</div><div id="ec-domestic-export" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / 従来車</div><div class="chart-subtitle">積み上げ棒グラフ</div><div id="ec-nev" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-penetration"><div class="chart-card"><div class="chart-title">NEV浸透率推移（%）</div><div class="chart-subtitle">全体浸透率・乗用車浸透率</div><div id="ec-penetration" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-penetration"><div class="chart-card"><div class="chart-title">NEV浸透率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div><div class="chart-subtitle">全体浸透率・乗用車浸透率</div><div id="ec-penetration" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-segment"><div class="chart-card"><div class="chart-title">乗用車・商用車　販売推移</div><div class="chart-subtitle">セグメント別月次推移</div><div id="ec-segment" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-brand">
               <div class="chart-card">
-                <div class="chart-title">乗用車　ブランド系シェア推移（1-N月累計）（%）</div>
+                <div class="chart-title">乗用車　ブランド系シェア推移（1-N月累計）（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div>
                 <div id="ec-brand" class="echart-box" style="height:420px"></div>
               </div>
             </div>
             <div class="tab-pane fade" id="cp-ent"><div class="chart-card"><div class="chart-title">重点企業　月次総合販売推移</div><div class="chart-subtitle">上位11社</div><div id="ec-ent" class="echart-box" style="height:500px"></div></div></div>
             <div class="tab-pane fade" id="cp-nev-ent"><div class="chart-card"><div class="chart-title">NEV重点企業　月次販売推移</div><div class="chart-subtitle">上位15社</div><div id="ec-nev-ent" class="echart-box" style="height:520px"></div></div></div>
             <div class="tab-pane fade" id="cp-export-ent"><div class="chart-card"><div class="chart-title">輸出ランキング企業　月次推移</div><div class="chart-subtitle">上位10社</div><div id="ec-export-ent" class="echart-box" style="height:500px"></div></div></div>
-            <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（伝統燃料車）セグメント別販売</div><div class="chart-subtitle">単月値（25年3月〜26年2月　※25年2月は1-2月累計のため除外）</div>
+            <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（伝統燃料車）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）</div>
                 <div class="seg-definition">
                   <span class="seg-item"><b>A00</b> 軽小型（〜3.4m）</span>
                   <span class="seg-item"><b>A0</b> 小型（3.4〜4.1m）</span>
@@ -2477,7 +2484,7 @@ img.car-thumb {
                   <span class="seg-item"><b>C</b> 大型（4.9〜5.2m）</span>
                   <span class="seg-item"><b>D</b> 高級大型（5.2m〜）</span>
                 </div><div id="ec-trad-seg" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-nev-seg"><div class="chart-card"><div class="chart-title">乗用車（NEV）セグメント別販売</div><div class="chart-subtitle">単月値（25年3月〜26年2月　※25年2月は1-2月累計のため除外）</div>
+            <div class="tab-pane fade" id="cp-nev-seg"><div class="chart-card"><div class="chart-title">乗用車（NEV）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）</div>
                 <div class="seg-definition">
                   <span class="seg-item"><b>A00</b> 軽小型（〜3.4m）</span>
                   <span class="seg-item"><b>A0</b> 小型（3.4〜4.1m）</span>
@@ -2488,8 +2495,8 @@ img.car-thumb {
                 </div><div id="ec-nev-seg" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-price">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（伝統燃料車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（25年3月〜26年2月　※25年2月は1-2月累計のため除外）</div><div id="ec-trad-price" class="echart-box" style="height:400px"></div></div></div>
-                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（NEV乗用車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（25年3月〜26年2月　※25年2月は1-2月累計のため除外）</div><div id="ec-nev-price" class="echart-box" style="height:400px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（伝統燃料車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-trad-price" class="echart-box" style="height:400px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別販売　月次推移（NEV乗用車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-nev-price" class="echart-box" style="height:400px"></div></div></div>
               </div>
             </div>
             <div class="tab-pane fade" id="cp-nev-detail">
@@ -3845,13 +3852,410 @@ backToTopBtn.addEventListener('click', () => {
 
 
 
-// ===== グラフタブ用 ECharts (全データ版) =====
-const CD = {"labels_all": ["25年2月", "25年3月", "25年4月", "25年5月", "25年6月", "25年7月", "25年8月", "25年9月", "25年10月", "25年11月", "25年12月", "26年1月", "26年2月"], "labels_ent": ["25年4月", "25年5月", "25年6月", "25年7月", "25年8月", "25年9月", "25年10月", "25年11月", "25年12月", "26年1月", "26年2月"], "labels_nev_ent": ["25年4月", "25年5月", "25年6月", "25年7月", "25年8月", "25年9月", "25年10月", "25年11月", "25年12月", "26年1月", "26年2月"], "labels_exp_ent": ["25年2月", "25年3月", "25年4月", "25年5月", "25年6月", "25年7月", "25年8月", "25年9月", "25年10月", "25年11月", "25年12月", "26年1月", "26年2月"], "total_prod": [210.3, 300.6, 261.9, 264.9, 279.4, 259.1, 281.5, 327.6, 335.9, 353.2, 329.6, 245.0, 167.2], "total_sales": [212.9, 291.5, 259.0, 268.6, 290.4, 259.3, 285.7, 322.6, 332.2, 342.9, 327.2, 234.6, 180.5], "domestic_sales": [168.8, 240.9, 207.3, 213.5, 231.2, 201.8, 224.5, 257.4, 265.7, 270.1, 251.9, 166.5, 113.3], "export_total": [44.1, 50.7, 51.7, 55.1, 59.2, 57.5, 61.1, 65.2, 66.6, 72.8, 75.3, 68.1, 67.2], "nev_exp": [13.1, 15.8, 20.0, 21.2, 20.5, 22.5, 22.4, 22.2, 25.6, 30.0, 30.0, 30.2, 28.2], "trad_export": [31.0, 34.9, 31.7, 33.9, 38.7, 35.0, 38.7, 43.0, 41.0, 42.8, 45.3, 37.9, 39.0], "pax_prod": [178.5, 257.4, 225.7, 231.3, 244.1, 229.3, 250.0, 290.0, 299.5, 314.4, 287.9, 206.2, 140.0], "pax_sales": [181.5, 246.8, 222.3, 235.2, 253.6, 228.7, 254.0, 285.9, 296.1, 303.7, 284.7, 198.8, 153.6], "pax_domestic": [144.5, 205.8, 179.2, 188.4, 203.4, 178.8, 200.7, 229.9, 239.0, 241.4, 220.6, 139.9, 95.0], "pax_trad_dom": [72.6, 104.9, 83.6, 85.4, 98.0, 81.3, 90.2, 100.0, 101.3, 98.9, 91.6, 81.6, 50.5], "pax_export": [37.1, 41.0, 43.1, 46.8, 50.2, 49.9, 53.3, 56.0, 57.1, 62.4, 64.1, 58.9, 58.6], "com_prod": [31.8, 43.1, 36.2, 33.6, 35.4, 29.8, 31.5, 37.6, 36.4, 38.8, 41.6, 38.8, 27.3], "com_sales": [31.3, 44.7, 36.7, 33.5, 36.9, 30.6, 31.6, 36.8, 36.1, 39.2, 42.5, 35.9, 26.9], "com_domestic": [24.3, 35.1, 28.1, 25.1, 27.9, 23.0, 23.8, 27.5, 26.7, 28.8, 31.3, 26.6, 18.3], "com_export": [7.0, 9.6, 8.6, 8.3, 9.0, 7.6, 7.8, 9.3, 9.4, 10.4, 11.2, 9.3, 8.7], "bev_prod": [54.6, 83.8, 85.3, 82.0, 82.3, 80.7, 89.8, 105.9, 113.7, 119.4, 112.0, 65.9, 45.8], "phev_prod": [34.1, 43.9, 39.8, 44.9, 44.5, 43.6, 49.3, 55.8, 63.4, 68.4, 59.5, 38.2, 23.6], "nev_prod": [88.8, 127.7, 125.1, 127.0, 126.8, 124.3, 139.1, 161.7, 177.2, 188.0, 171.8, 104.1, 69.4], "bev_sales": [54.4, 80.6, 82.2, 83.4, 85.9, 81.1, 90.8, 105.8, 110.9, 117.0, 110.8, 59.7, 48.4], "phev_sales": [34.8, 43.1, 40.3, 47.3, 47.0, 45.1, 48.7, 54.6, 60.5, 65.2, 59.9, 34.8, 28.0], "nev_total": [89.2, 123.7, 122.6, 130.7, 132.9, 126.2, 139.5, 160.4, 171.5, 182.3, 171.0, 94.5, 76.5], "nev_domestic": [76.0, 107.9, 102.5, 109.5, 112.4, 103.7, 117.1, 138.2, 145.9, 152.2, 141.0, 64.3, 48.3], "nev_pax_dom": [71.9, 100.9, 95.6, 103.0, 105.4, 97.5, 110.6, 129.9, 137.7, 142.5, 129.0, 58.3, 44.5], "nev_com_dom": [4.2, 7.0, 7.0, 6.5, 7.0, 6.2, 6.6, 8.3, 8.2, 9.7, 12.0, 6.0, 3.9], "nev_pax_exp": [12.4, 14.9, 19.0, 20.4, 19.7, 22.0, 22.0, 21.7, 25.0, 29.4, 29.4, 29.5, 27.6], "nev_com_exp": [0.7, 0.9, 1.0, 0.8, 0.8, 0.5, 0.4, 0.5, 0.6, 0.7, 0.6, 0.6, 0.5], "bev_exp": [8.1, 10.3, 14.0, 13.8, 13.0, 14.1, 14.3, 15.3, 16.6, 17.7, 17.3, 20.2, 17.4], "phev_exp": [5.0, 5.5, 6.0, 7.4, 7.5, 8.5, 8.1, 6.9, 9.0, 12.4, 12.7, 9.9, 10.7], "bev_dom": [46.3, 70.3, 68.2, 69.6, 72.9, 67.0, 76.5, 90.5, 94.3, 99.3, 93.5, 39.5, 31.0], "phev_dom": [29.8, 37.6, 34.3, 39.9, 39.5, 36.6, 40.6, 47.7, 51.5, 52.8, 47.2, 24.9, 17.3], "trad_exp_calc": [31.0, 34.9, 31.7, 33.9, 38.7, 35.0, 38.7, 43.0, 41.0, 42.8, 45.3, 37.9, 39.0], "total_prod_sales_gap": [-2.6, 9.1, 2.9, -3.7, -11.0, -0.2, -4.2, 5.0, 3.7, 10.3, 2.4, 10.4, -13.3], "nev_pen": [45.1, 44.8, 49.5, 51.3, 48.6, 51.4, 52.2, 53.7, 54.9, 56.3, 56.0, 38.6, 42.7], "pax_pen": [49.7, 49.0, 53.3, 54.7, 51.8, 54.5, 55.1, 56.5, 57.6, 59.0, 58.5, 41.7, 46.8], "brand_series": {"中国ブランド": [69.4, 68.1, 68.7, 68.8, 68.5, 68.6, 68.8, 69.0, 69.4, 69.6, 69.5, 66.9, 68.3], "独系": [13.3, 13.7, 13.2, 13.0, 13.1, 12.8, 12.7, 12.6, 12.3, 12.1, 12.1, 13.7, 12.4], "日系": [9.0, 9.7, 9.4, 9.5, 9.6, 9.6, 9.6, 9.6, 9.6, 9.6, 9.7, 9.2, 8.8], "米系": [5.5, 5.7, 5.8, 5.8, 5.9, 5.9, 6.0, 6.0, 5.9, 5.9, 5.9, 7.2, 7.3], "韓系": [1.6, 1.7, 1.7, 1.7, 1.7, 1.6, 1.6, 1.6, 1.6, 1.5, 1.5, 1.6, 1.8], "その他": [1.1, 1.2, 1.2, 1.2, 1.2, 1.4, 1.3, 1.3, 1.3, 1.3, 1.2, 1.4, 1.4]}, "brand_series_normed": {"中国ブランド": [69.5, 68.0, 68.7, 68.8, 68.5, 68.7, 68.8, 68.9, 69.3, 69.6, 69.6, 66.9, 68.3], "独系": [13.3, 13.7, 13.2, 13.0, 13.1, 12.8, 12.7, 12.6, 12.3, 12.1, 12.1, 13.7, 12.4], "日系": [9.0, 9.7, 9.4, 9.5, 9.6, 9.6, 9.6, 9.6, 9.6, 9.6, 9.7, 9.2, 8.8], "米系": [5.5, 5.7, 5.8, 5.8, 5.9, 5.9, 6.0, 6.0, 5.9, 5.9, 5.9, 7.2, 7.3], "韓系": [1.6, 1.7, 1.7, 1.7, 1.7, 1.6, 1.6, 1.6, 1.6, 1.5, 1.5, 1.6, 1.8], "その他": [1.1, 1.2, 1.2, 1.2, 1.2, 1.4, 1.3, 1.3, 1.3, 1.3, 1.2, 1.4, 1.4]}, "ent_series": {"上汽": [36.6, 35.4, 35.6, 32.7, 35.4, 43.0, 44.3, 45.0, 38.7, 32.0, 26.1], "吉利": [27.5, 27.9, 28.2, 28.8, 30.1, 32.4, 35.7, 36.1, 30.3, 30.9, 23.7], "一汽": [22.6, 24.5, 33.8, 23.2, 27.8, 30.2, 30.5, 30.6, 30.7, 27.5, 16.0], "比亜迪": [38.0, 38.2, 38.3, 34.4, 37.4, 39.6, 44.2, 48.0, 42.0, 21.0, 19.0], "奇瑞": [20.1, 20.6, 23.3, 22.4, 24.0, 28.0, 28.1, 27.2, 24.5, 20.0, 16.1], "東風": [18.1, 19.5, 20.8, 20.5, 21.2, 23.1, 24.1, 25.9, 26.8, 18.9, 10.9], "長安": [19.1, 22.4, 23.5, 21.1, 23.4, 26.6, 27.8, 28.4, 25.5, 13.5, 15.2], "北汽": [12.6, 13.5, 15.5, 11.7, 13.6, 15.8, 15.9, 16.7, 19.6, 11.8, 9.2], "広汽": [11.6, 11.8, 15.0, 11.9, 13.6, 17.3, 17.1, 18.0, 18.7, 11.7, 8.6], "長城": [10.0, 10.2, 11.1, 10.4, 11.6, 13.4, 14.3, 13.3, 12.4, 9.0, 7.3], "テスラ": [5.8, 6.2, 7.2, 6.8, 8.3, 9.1, 6.1, 8.7, 9.7, 6.9, 5.9]}, "ent_companies": ["上汽", "吉利", "一汽", "比亜迪", "奇瑞", "東風", "長安", "北汽", "広汽", "長城", "テスラ"], "nev_ent_series": {"比亜迪": [38.0, 38.2, 38.3, 34.4, 37.4, 39.6, 44.2, 48.0, 42.0, 21.0, 19.0], "吉利": [15.3, 16.6, 15.0, 16.1, 17.8, 20.0, 21.2, 22.1, 20.5, 15.2, 13.9], "上汽": [12.1, 11.7, 11.3, 10.8, 12.1, 18.1, 19.8, 20.1, 13.4, 8.0, 6.5], "テスラ": [5.8, 6.2, 7.2, 6.8, 8.3, 9.1, 6.1, 8.7, 9.7, 6.9, 5.9], "東風": [7.5, 8.2, 9.2, 9.1, 10.1, 10.3, 11.2, 12.5, 13.5, 8.3, 4.1], "一汽": [2.8, 3.7, 4.2, 3.4, 4.1, 4.7, 4.5, 4.2, 5.4, 5.1, 4.1], "奇瑞": [6.1, 6.6, 7.2, 7.1, 7.1, 9.0, 10.9, 11.6, 8.9, 5.1, 3.8], "長安": [6.2, 9.5, 10.1, 8.0, 8.9, 10.4, 11.9, 12.6, 11.5, 3.7, 4.2], "小米": [2.9, 2.8, 2.5, 3.0, 3.6, 4.2, 4.9, 4.6, 5.0, 3.9, 2.0], "理想": [3.4, 4.1, 3.6, 3.1, 2.9, 3.4, 3.2, 3.3, 4.4, 2.8, 2.6], "蔚来": [null, null, null, null, null, null, null, null, null, 2.7, 2.1], "小鵬": [3.5, 3.4, 3.5, 3.7, 3.8, 4.2, 4.2, 3.7, 3.8, 2.0, 1.5], "長城": [2.9, 3.3, 3.6, 3.5, 3.7, 4.6, 4.6, 4.0, 3.9, null, null], "北汽": [2.3, 3.1, 2.6, 2.5, 2.9, 3.8, 4.6, 5.4, 5.3, 1.8, 1.4], "広汽": [3.5, 2.7, 3.0, 3.4, 3.9, 4.3, 4.7, 5.7, 6.3, 2.6, 1.7]}, "nev_companies": ["比亜迪", "吉利", "上汽", "テスラ", "東風", "一汽", "奇瑞", "長安", "小米", "理想", "蔚来", "小鵬", "長城", "北汽", "広汽"], "exp_ent_series": {"奇瑞": [8.6, 8.6, 8.8, 10.1, 10.6, 11.9, 12.8, 14.1, 12.6, 13.7, 14.4, 11.9, 12.4], "比亜迪": [7.1, 7.3, 7.9, 8.9, 9.0, 8.1, 8.1, 7.1, 8.4, 13.2, 13.3, 10.0, 10.1], "上汽": [6.0, 7.2, 7.7, 8.6, 8.1, 7.2, 7.9, 9.1, 8.6, 9.6, 8.8, 9.7, 9.1], "吉利": [3.1, 4.3, 3.3, 4.0, 5.2, 5.4, 5.5, 5.6, 5.8, 5.8, 6.7, 7.7, 7.9], "長安": [4.8, 5.0, 4.2, 4.5, 5.3, 4.9, 5.6, 6.0, 5.8, 5.6, 5.3, 4.4, 6.5], "長城": [3.1, 3.2, 3.2, 3.5, 4.0, 4.1, 4.5, 5.0, 5.7, 5.7, 5.7, 4.0, 4.3], "北汽": [2.0, 2.5, 2.1, 1.9, 3.8, 2.3, 2.6, 2.7, 2.5, 2.8, 3.9, 2.6, 2.9], "東風": [1.8, 2.2, 2.2, null, 2.3, 2.2, 1.9, 2.5, 2.8, 3.1, 3.9, 2.9, 2.5], "テスラ": [null, null, 3.0, 2.3, null, 2.7, 2.6, 1.9, 3.5, null, null, 5.1, 2.0], "広汽": [null, null, null, null, null, null, null, null, null, 1.7, null, null, 1.7]}, "exp_companies": ["奇瑞", "比亜迪", "上汽", "吉利", "長安", "長城", "北汽", "東風", "テスラ", "広汽"], "truck_heavy": [null, null, 8.8, 8.9, 9.8, 8.5, 9.2, 10.6, 10.6, 11.3, 10.3, 10.5, 7.4], "truck_mid": [null, null, 1.2, 0.8, 1.0, 0.9, 0.9, 1.1, 1.3, 1.0, 1.3, 1.4, 0.8], "truck_light": [null, null, 18.2, 16.0, 16.8, 13.8, 14.0, 16.1, 16.2, 18.0, 20.0, 16.0, 11.7], "truck_micro": [null, null, 4.1, 3.5, 4.0, 3.3, 3.1, 3.4, 3.1, 3.6, 4.5, 4.5, 4.2], "bus_large": [null, null, 0.8, 0.9, 1.2, 0.9, 1.0, 1.2, 1.1, 1.3, 1.9, 0.8, 0.7], "bus_light": [null, null, 3.6, 3.4, 4.1, 3.3, 3.5, 4.4, 3.9, 4.1, 4.4, 2.7, 2.2], "lng_sales": [2.2, 2.9, 1.9, 1.8, 1.7, 1.6, 2.0, 2.6, 2.6, 2.3, 1.6, 2.3, 1.3], "fcev_sales": [0.012, 0.0377, 0.0328, 0.0165, 0.0251, 0.0284, 0.0133, 0.0408, 0.0956, 0.1, 0.4, 0.007, 0.03], "fcev_prod": [0.016, 0.0365, 0.0342, 0.025, 0.0188, 0.0229, 0.0195, 0.0441, 0.0921, 0.1, 0.3, 0.0051, 0.008]};
+// ===== グラフタブ用 ECharts（Excelから動的ロード版） =====
 
-// 従来車 = 総販売 - NEV
-CD.trad_sales = CD.total_sales.map((t,i) => CD.nev_total[i] != null ? +(t - CD.nev_total[i]).toFixed(1) : null);
-CD.com_sales_calc = CD.total_sales.map((t,i) => CD.pax_sales[i] != null ? +(t - CD.pax_sales[i]).toFixed(1) : null);
+// CD / SD はロード後にセットされるグローバル変数
+let CD = null;
+let SD = null;
+let CAAM_EXCEL_LOADED = false;
 
+// ---- Excel パース ユーティリティ ----
+function toF(v) {
+  if (v == null) return null;
+  const s = String(v).trim().replace(/[−—－]/g, '');
+  if (!s) return null;
+  const n = parseFloat(s);
+  return isNaN(n) ? null : n;
+}
+
+function sheetToRows(sheet) {
+  const range = XLSX.utils.decode_range(sheet['!ref'] || 'A1');
+  const rows = [];
+  for (let r = range.s.r; r <= range.e.r; r++) {
+    const row = [];
+    for (let c = range.s.c; c <= range.e.c; c++) {
+      const cell = sheet[XLSX.utils.encode_cell({r, c})];
+      row.push(cell ? (cell.v != null ? String(cell.v).trim() : '') : '');
+    }
+    rows.push(row);
+  }
+  return rows;
+}
+
+// ---- 月次シートのパース ----
+function parseMonthSheet(rows) {
+  const d = { brand: {}, ent: {}, nev_ent: {}, exp_ent: {} };
+
+  // section1: 汽車総体
+  let inTotal = false;
+  for (const r of rows) {
+    const h = r[0];
+    if (/１．汽車総体/.test(h)) { inTotal = true; continue; }
+    if (inTotal) {
+      if (h === '生産台数' && d.total_prod == null)   d.total_prod   = toF(r[1]);
+      if (h === '販売台数' && d.total_sales == null)  d.total_sales  = toF(r[1]);
+      if (h === '国内販売' && d.domestic_sales == null) d.domestic_sales = toF(r[1]);
+      if (h === '輸出'    && d.export_total == null)  d.export_total = toF(r[1]);
+      if (h === 'うちNEV輸出' && d.nev_exp == null)   d.nev_exp      = toF(r[1]);
+      if (h === 'うちICE車輸出' && d.trad_export == null) d.trad_export = toF(r[1]);
+      if (/２．乗用車/.test(h)) { inTotal = false; }
+    }
+  }
+  // section2: 乗用車
+  let inPax = false;
+  for (const r of rows) {
+    const h = r[0];
+    if (/２．乗用車.*産販/.test(h)) { inPax = true; continue; }
+    if (inPax) {
+      if (h === '生産台数' && d.pax_prod == null)     d.pax_prod     = toF(r[1]);
+      if (h === '販売台数' && d.pax_sales == null)    d.pax_sales    = toF(r[1]);
+      if (h === '国内販売' && d.pax_domestic == null) d.pax_domestic = toF(r[1]);
+      if (h === 'うちICE車 国内' && d.pax_trad_dom == null) d.pax_trad_dom = toF(r[1]);
+      if (h === '輸出' && d.pax_export == null)       d.pax_export   = toF(r[1]);
+      if (/３．商用車/.test(h)) { inPax = false; }
+    }
+  }
+  // section3: 商用車
+  let inCom = false;
+  for (const r of rows) {
+    const h = r[0];
+    if (/３．商用車.*産販/.test(h)) { inCom = true; continue; }
+    if (inCom) {
+      if (h === '生産台数' && d.com_prod == null)     d.com_prod     = toF(r[1]);
+      if (h === '販売台数' && d.com_sales == null)    d.com_sales    = toF(r[1]);
+      if (h === '国内販売' && d.com_domestic == null) d.com_domestic = toF(r[1]);
+      if (h === '輸出' && d.com_export == null)       d.com_export   = toF(r[1]);
+      if (/４．NEV/.test(h)) { inCom = false; }
+    }
+  }
+  // section4: NEV
+  let inNev = false;
+  for (const r of rows) {
+    const h = r[0];
+    if (/４．NEV/.test(h)) { inNev = true; continue; }
+    if (inNev) {
+      if (/^BEV（/.test(h)) { d.bev_prod = toF(r[1]); d.bev_sales = toF(r[3]); }
+      if (/^PHEV（/.test(h)) { d.phev_prod = toF(r[1]); d.phev_sales = toF(r[3]); }
+      if (h === '合計' && d.nev_prod == null) { d.nev_prod = toF(r[1]); d.nev_total = toF(r[3]); inNev = false; }
+    }
+  }
+  // NEV domestic/export + penetration (CADA)
+  for (const r of rows) {
+    const h = r[0];
+    if (h === 'NEV全体') {
+      d.nev_domestic = toF(r[1]);
+      const allText = r.join('');
+      const pm = allText.match(/普及率([\d.]+)%/);
+      if (pm) d.nev_pen = parseFloat(pm[1]);
+    }
+    if (h === 'うちNEV乗用車') {
+      d.nev_pax_dom = toF(r[1]); d.nev_pax_exp = toF(r[4]);
+      const allText = r.join('');
+      const pm = allText.match(/普及率([\d.]+)%/);
+      if (pm) d.pax_pen = parseFloat(pm[1]);
+    }
+    if (h === 'うちNEV商用車') { d.nev_com_dom = toF(r[1]); d.nev_com_exp = toF(r[4]); }
+    if (h === 'BEV輸出')  d.bev_exp  = toF(r[4]);
+    if (h === 'PHEV輸出') d.phev_exp = toF(r[4]);
+  }
+  if (d.bev_sales != null && d.bev_exp != null)   d.bev_dom  = +(d.bev_sales  - d.bev_exp).toFixed(2);
+  if (d.phev_sales != null && d.phev_exp != null) d.phev_dom = +(d.phev_sales - d.phev_exp).toFixed(2);
+
+  // brand (CADA)
+  const bmap = {'中国ブランド':'cn','独系':'de','日系':'jp','米系':'us','韓系':'kr','その他':'other'};
+  for (const r of rows) {
+    if (bmap[r[0]]) { const v = toF(r[3]); if (v != null) d.brand[bmap[r[0]]] = v; }
+  }
+  // enterprise ranking
+  let inEnt = false, inNevEnt = false, inExpEnt = false;
+  for (const r of rows) {
+    const h = r[0];
+    if (/重点企業（集団）総合販売/.test(h)) { inEnt = true; inNevEnt = false; inExpEnt = false; continue; }
+    if (/NEV重点企業/.test(h))             { inNevEnt = true; inEnt = false; inExpEnt = false; continue; }
+    if (/輸出ランキング（整車）/.test(h))  { inExpEnt = true; inEnt = false; inNevEnt = false; continue; }
+    if (/CADA|６\./.test(h))               { inExpEnt = false; }
+    const name = r[1]; const val = toF(r[2]);
+    if (!name || val == null) continue;
+    if (inEnt    && !h.startsWith('上位')) d.ent[name]     = val;
+    if (inNevEnt && !h.startsWith('上位')) d.nev_ent[name] = val;
+    if (inExpEnt && !h.startsWith('上位')) d.exp_ent[name] = val;
+  }
+  // commercial detail
+  for (const r of rows) {
+    const h = r[0];
+    if (h === '重型貨車') d.truck_heavy = toF(r[1]);
+    if (h === '中型貨車') d.truck_mid   = toF(r[1]);
+    if (h === '軽型貨車') d.truck_light = toF(r[1]);
+    if (h === '微型貨車') d.truck_micro = toF(r[1]);
+    if (h === '大中型バス') d.bus_large = toF(r[1]);
+    if (h === '小型バス')   d.bus_light = toF(r[1]);
+    if (h === 'うち天然ガス車 販売') d.lng_sales = toF(r[1]);
+    if (/^FCEV（/.test(h)) d.fcev_sales = toF(r[3]);
+  }
+  return d;
+}
+
+// ---- 単月計算シートのパース ----
+function parseSingleSheet(sheet) {
+  const rows = sheetToRows(sheet);
+  // row index 4 (0-based) has column headers with year/month
+  const headerRow = rows[4] || [];
+  const colToYm = {};
+  for (let ci = 1; ci < headerRow.length; ci++) {
+    const m = headerRow[ci].match(/(\d{4})年(\d{1,2})月/);
+    if (m) colToYm[ci] = `${m[1]}-${String(parseInt(m[2])).padStart(2,'0')}`;
+  }
+
+  // find section start rows
+  let tradSegStart=-1, nevSegStart=-1, tradPriceStart=-1, nevPriceStart=-1;
+  for (let ri = 0; ri < rows.length; ri++) {
+    const h = rows[ri][0] || '';
+    if (/セグメント別販売（伝統燃料車）/.test(h)) tradSegStart = ri;
+    else if (/セグメント別販売（NEV乗用車）/.test(h)) nevSegStart = ri;
+    else if (/価格帯別販売（伝統燃料車）/.test(h)) tradPriceStart = ri;
+    else if (/価格帯別販売（NEV乗用車）/.test(h)) nevPriceStart = ri;
+  }
+
+  const result = {};
+  Object.values(colToYm).forEach(ym => {
+    result[ym] = { trad_seg:{}, nev_seg:{}, trad_price:{}, nev_price:{} };
+  });
+
+  function extractSection(startRow, endRow, key) {
+    for (let ri = startRow+1; ri < rows.length; ri++) {
+      if (endRow > 0 && ri >= endRow) break;
+      const label = (rows[ri][0]||'').trim();
+      if (!label || label === 'セグメント' || label === '価格帯（万元）') continue;
+      const normLabel = label.replace('（主力）','');
+      for (const [ci, ym] of Object.entries(colToYm)) {
+        const v = toF(rows[ri][ci]);
+        if (v != null && result[ym]) result[ym][key][normLabel] = v;
+      }
+    }
+  }
+  extractSection(tradSegStart, nevSegStart, 'trad_seg');
+  extractSection(nevSegStart, tradPriceStart, 'nev_seg');
+  extractSection(tradPriceStart, nevPriceStart, 'trad_price');
+  extractSection(nevPriceStart, -1, 'nev_price');
+  return result;
+}
+
+// ---- Excel fetch & 全データ組み立て ----
+const CAAM_EXCEL_PATH = `${RAW_BASE}output/market/CAAM_2026年産販月報_v33.xlsx`;
+
+async function loadCaamExcel() {
+  const loadingEl = document.getElementById('caam-loading');
+  const pillsEl   = document.getElementById('chartsPills');
+  const contentEl = document.getElementById('chartsPillsContent');
+  if (loadingEl) loadingEl.style.display = 'flex';
+  if (pillsEl)   pillsEl.style.display   = 'none';
+  if (contentEl) contentEl.style.display = 'none';
+  try {
+    const res = await fetch(CAAM_EXCEL_PATH + `?v=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const buf = await res.arrayBuffer();
+    const wb  = XLSX.read(buf, { type: 'array' });
+
+    // 月次シートをパース（"データ"を含むシート）
+    const allMonthly = {};
+    for (const sname of wb.SheetNames) {
+      if (!sname.includes('データ') || sname.includes('単月計算')) continue;
+      const m = sname.match(/(\d{4})年(\d{1,2})月/);
+      if (!m) continue;
+      const ym = `${m[1]}-${String(parseInt(m[2])).padStart(2,'0')}`;
+      const rows = sheetToRows(wb.Sheets[sname]);
+      allMonthly[ym] = parseMonthSheet(rows);
+    }
+
+    // 単月計算シートをパースしてセグメント・価格帯を上書き
+    const singleSheetName = wb.SheetNames.find(n => n.includes('単月計算'));
+    if (singleSheetName) {
+      const segData = parseSingleSheet(wb.Sheets[singleSheetName]);
+      for (const [ym, sd] of Object.entries(segData)) {
+        if (allMonthly[ym]) {
+          allMonthly[ym].trad_seg   = sd.trad_seg;
+          allMonthly[ym].nev_seg    = sd.nev_seg;
+          allMonthly[ym].trad_price = sd.trad_price;
+          allMonthly[ym].nev_price  = sd.nev_price;
+        }
+      }
+    }
+
+    // CD / SD オブジェクトを組み立て
+    buildCdSd(allMonthly);
+    CAAM_EXCEL_LOADED = true;
+    // INITEDキャッシュをクリア（ロード前に空描画された可能性があるため）
+    Object.keys(INITED).forEach(k => delete INITED[k]);
+    if (loadingEl) loadingEl.style.display = 'none';
+    if (pillsEl)   pillsEl.style.display   = '';
+    if (contentEl) contentEl.style.display = '';
+
+    // 現在表示中のサブタブがあれば描画
+    const activeBtn = document.querySelector('#chartsPills .nav-link.active');
+    if (activeBtn) {
+      const id = activeBtn.getAttribute('data-bs-target').replace('#','');
+      if (CHART_FNS[id]) CHART_FNS[id]();
+    }
+    console.log('✅ CAAM Excel loaded:', Object.keys(allMonthly).sort().join(', '));
+  } catch(err) {
+    console.error('CAAM Excel 読み込みエラー:', err);
+    if (pillsEl)   pillsEl.style.display   = '';
+    if (contentEl) contentEl.style.display = '';
+    if (loadingEl) {
+      loadingEl.innerHTML = `<div class="text-danger p-3 text-center">⚠️ データ読み込み失敗: ${err.message}<br><small class="text-muted">GitHubの output/market/ にExcelファイルが配置されているか確認してください。</small></div>`;
+      loadingEl.style.display = 'flex';
+    }
+  }
+}
+
+function buildCdSd(monthly) {
+  const sorted = Object.keys(monthly).sort();  // "2023-05" … "2026-02"
+
+  function lbl(ym) {
+    const [y,m] = ym.split('-');
+    return `${y.slice(2)}年${parseInt(m)}月`;
+  }
+  function arr(ym_list, field) {
+    return ym_list.map(ym => monthly[ym]?.[field] ?? null);
+  }
+  function arrNested(ym_list, field, key) {
+    return ym_list.map(ym => monthly[ym]?.[field]?.[key] ?? null);
+  }
+
+  // ---- labels ----
+  // labels_all: 全月
+  const labels_all = sorted.map(lbl);
+  // labels_ent / nev_ent: 企業ランキングが存在する月
+  const ent_months     = sorted.filter(ym => Object.keys(monthly[ym]?.ent     || {}).length > 0);
+  const nev_ent_months = sorted.filter(ym => Object.keys(monthly[ym]?.nev_ent || {}).length > 0);
+  const exp_ent_months = sorted.filter(ym => Object.keys(monthly[ym]?.exp_ent || {}).length > 0);
+
+  // セグメント・価格帯は単月計算シートのある月
+  const seg_months = sorted.filter(ym => Object.keys(monthly[ym]?.trad_seg || {}).length > 0);
+
+  // ---- 企業名の統合（全月のユニオン、多い順） ----
+  function topCompanies(field, limit) {
+    const cnt = {};
+    for (const ym of sorted) {
+      for (const [co, v] of Object.entries(monthly[ym]?.[field] || {})) {
+        if (v != null) cnt[co] = (cnt[co]||0) + 1;
+      }
+    }
+    return Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,limit).map(e=>e[0]);
+  }
+  const ent_companies     = topCompanies('ent',     15);
+  const nev_companies     = topCompanies('nev_ent', 15);
+  const exp_companies     = topCompanies('exp_ent', 10);
+
+  // ---- brand_series（CADA） ----
+  const brand_keys = ['cn','de','jp','us','kr','other'];
+  const brand_names = {'cn':'中国ブランド','de':'独系','jp':'日系','us':'米系','kr':'韓系','other':'その他'};
+  const brand_series = {};
+  for (const k of brand_keys) {
+    brand_series[brand_names[k]] = arr(sorted, '_brand_'+k);
+  }
+  // workaround: brand is stored as d.brand.cn etc.
+  for (const k of brand_keys) {
+    brand_series[brand_names[k]] = sorted.map(ym => monthly[ym]?.brand?.[k] ?? null);
+  }
+
+  // normalize brand to 100%
+  const brand_series_normed = {};
+  for (const k of brand_keys) brand_series_normed[brand_names[k]] = [];
+  for (let i = 0; i < sorted.length; i++) {
+    const vals = brand_keys.map(k => monthly[sorted[i]]?.brand?.[k] ?? null);
+    const total = vals.reduce((s,v) => s + (v??0), 0);
+    brand_keys.forEach((k,j) => {
+      brand_series_normed[brand_names[k]].push(vals[j] != null ? +(vals[j]/total*100).toFixed(1) : null);
+    });
+  }
+
+  // ---- CD 組み立て ----
+  CD = {
+    labels_all,
+    labels_ent:     ent_months.map(lbl),
+    labels_nev_ent: nev_ent_months.map(lbl),
+    labels_exp_ent: exp_ent_months.map(lbl),
+
+    total_prod:     arr(sorted,'total_prod'),
+    total_sales:    arr(sorted,'total_sales'),
+    domestic_sales: arr(sorted,'domestic_sales'),
+    export_total:   arr(sorted,'export_total'),
+    nev_exp:        arr(sorted,'nev_exp'),
+    trad_export:    arr(sorted,'trad_export'),
+
+    pax_prod:       arr(sorted,'pax_prod'),
+    pax_sales:      arr(sorted,'pax_sales'),
+    pax_domestic:   arr(sorted,'pax_domestic'),
+    pax_trad_dom:   arr(sorted,'pax_trad_dom'),
+    pax_export:     arr(sorted,'pax_export'),
+
+    com_prod:       arr(sorted,'com_prod'),
+    com_sales:      arr(sorted,'com_sales'),
+    com_domestic:   arr(sorted,'com_domestic'),
+    com_export:     arr(sorted,'com_export'),
+
+    bev_prod:   arr(sorted,'bev_prod'),   phev_prod:  arr(sorted,'phev_prod'),
+    nev_prod:   arr(sorted,'nev_prod'),
+    bev_sales:  arr(sorted,'bev_sales'),  phev_sales: arr(sorted,'phev_sales'),
+    nev_total:  arr(sorted,'nev_total'),
+    nev_domestic: arr(sorted,'nev_domestic'),
+    nev_pax_dom:  arr(sorted,'nev_pax_dom'), nev_pax_exp: arr(sorted,'nev_pax_exp'),
+    nev_com_dom:  arr(sorted,'nev_com_dom'), nev_com_exp: arr(sorted,'nev_com_exp'),
+    bev_exp:    arr(sorted,'bev_exp'),    phev_exp:   arr(sorted,'phev_exp'),
+    bev_dom:    arr(sorted,'bev_dom'),    phev_dom:   arr(sorted,'phev_dom'),
+
+    // CADA出所
+    nev_pen:    arr(sorted,'nev_pen'),
+    pax_pen:    arr(sorted,'pax_pen'),
+    brand_series,
+    brand_series_normed,
+
+    ent_series: Object.fromEntries(ent_companies.map(co => [co, ent_months.map(ym => monthly[ym]?.ent?.[co] ?? null)])),
+    ent_companies,
+    nev_ent_series: Object.fromEntries(nev_companies.map(co => [co, nev_ent_months.map(ym => monthly[ym]?.nev_ent?.[co] ?? null)])),
+    nev_companies,
+    exp_ent_series: Object.fromEntries(exp_companies.map(co => [co, exp_ent_months.map(ym => monthly[ym]?.exp_ent?.[co] ?? null)])),
+    exp_companies,
+
+    truck_heavy: arr(sorted,'truck_heavy'), truck_mid:   arr(sorted,'truck_mid'),
+    truck_light: arr(sorted,'truck_light'), truck_micro: arr(sorted,'truck_micro'),
+    bus_large:   arr(sorted,'bus_large'),   bus_light:   arr(sorted,'bus_light'),
+    lng_sales:   arr(sorted,'lng_sales'),   fcev_sales:  arr(sorted,'fcev_sales'),
+    fcev_prod:   arr(sorted,'fcev_prod'),
+  };
+
+  // 派生フィールド
+  CD.trad_sales    = CD.total_sales.map((t,i) => CD.nev_total[i]  != null ? +(t - CD.nev_total[i]).toFixed(1)  : null);
+  CD.com_sales_calc= CD.total_sales.map((t,i) => CD.pax_sales[i]  != null ? +(t - CD.pax_sales[i]).toFixed(1)  : null);
+  CD.total_prod_sales_gap = CD.total_prod.map((p,i) => CD.total_sales[i] != null ? +((p??0) - CD.total_sales[i]).toFixed(1) : null);
+
+  // ---- SD 組み立て（単月計算シートから） ----
+  const ice_segs  = ['A00','A0','A','B','C','D'];
+  const nev_segs  = ['A00','A0','A','B','C','D'];
+  const ice_prices= ['8万以下','8-10万','10-15万','15-20万','20-25万','25-30万','30-35万','35-40万','40-50万','50万以上'];
+  const nev_prices= ['8万以下','8-10万','10-15万','15-20万','20-25万','25-30万','30-35万','35-40万','40-50万','50万以上'];
+
+  SD = {
+    months: seg_months.map(lbl),
+    trad_seg:   Object.fromEntries(ice_segs.map(s  => [s,  seg_months.map(ym => monthly[ym]?.trad_seg?.[s]  ?? null)])),
+    nev_seg:    Object.fromEntries(nev_segs.map(s  => [s,  seg_months.map(ym => monthly[ym]?.nev_seg?.[s]   ?? null)])),
+    trad_price: Object.fromEntries(ice_prices.map(p => [p, seg_months.map(ym => monthly[ym]?.trad_price?.[p]?? null)])),
+    nev_price:  Object.fromEntries(nev_prices.map(p => [p, seg_months.map(ym => monthly[ym]?.nev_price?.[p] ?? null)])),
+  };
+  // NEVセグメントのラベル名をHTMLに合わせる（B→B（主力）、A→A（主力））
+  SD.trad_seg['A（主力）'] = SD.trad_seg['A']; delete SD.trad_seg['A'];
+  SD.nev_seg['B（主力）']  = SD.nev_seg['B'];  delete SD.nev_seg['B'];
+}
+
+// ロード済みチェック付きの安全なグラフ初期化ラッパー
+function safeInit(fn) {
+  if (!CAAM_EXCEL_LOADED) return;
+  fn();
+}
+
+// ダミー CD 定義（ロード前にエラーにならないよう）
+// 実際の値は loadCaamExcel() 完了後にセットされる
 const PAL = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948','#b07aa1','#ff9da7','#9c755f','#bab0ac','#d37295','#a0cbe8'];
 
 function gt() {
@@ -3883,13 +4287,13 @@ function initEC(id, fn) {
   const el = document.getElementById(id);
   if (!el) return;
   INITED[id] = true;
-  // 既存インスタンスがあれば再利用、なければ新規作成（hidden tab対策）
   EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
   fn(EC[id]);
 }
 
 // ① 総合概要
 function initOverview() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-overview', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -3910,6 +4314,7 @@ function initOverview() {
 
 // ② 国内・輸出内訳（正しい分解 + FCEV注記）
 function initDomExp() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-domestic-export', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -3923,7 +4328,6 @@ function initDomExp() {
       s += `<br><span style="font-size:10px;color:#888">※FCEV(燃料電池)は国内NEVに含む（最大0.4万台/月）</span>`;
       return s;
     };
-    // 総販売 = 乗用ICE国内 + 乗用NEV国内(FCEV含む) + 商用国内 + 伝統車輸出 + BEV輸出 + PHEV輸出
     opt.series = [
       { name:'国内（乗用ICE）', type:'bar', stack:'s', data:CD.pax_trad_dom, itemStyle:{color:'#adb5bd'} },
       { name:'国内（乗用NEV）', type:'bar', stack:'s', data:CD.nev_pax_dom,  itemStyle:{color:'#4e79a7'} },
@@ -3938,6 +4342,7 @@ function initDomExp() {
 
 // ③ NEV内訳
 function initNev() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-nev', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -3951,8 +4356,9 @@ function initNev() {
   });
 }
 
-// ④ NEV浸透率（ラベルなし）
+// ④ NEV浸透率（出所：CADA乗聯分会）
 function initPen() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-penetration', chart => {
     const t = gt();
     const opt = baseOpt(t, '%');
@@ -3983,6 +4389,7 @@ function initPen() {
 
 // ⑤ 乗用車・商用車
 function initSeg() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-segment', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -3999,8 +4406,9 @@ function initSeg() {
   });
 }
 
-// ⑥ ブランド系シェア（積み上げ面グラフ）
+// ⑥ ブランド系シェア（積み上げ面グラフ）（出所：CADA乗聯分会）
 function initBrand() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-brand', chart => {
     const t = gt();
     const opt = baseOpt(t, '%');
@@ -4017,7 +4425,6 @@ function initBrand() {
       s += `<span style="font-size:10px;color:#888">※元データの丸め誤差を正規化済み</span>`;
       return s;
     };
-    // 下から積む順。itemStyle.colorを明示することで凡例アイコンと面の色を一致させる
     const series_def = [
       { name:'中国ブランド', color:'#c9184a' },
       { name:'独系',         color:'#4e79a7' },
@@ -4032,10 +4439,9 @@ function initBrand() {
       data: CD.brand_series_normed[s.name],
       symbol: 'none',
       lineStyle: {width: 0},
-      itemStyle: {color: s.color},      // ← 凡例アイコンの色を決める
+      itemStyle: {color: s.color},
       areaStyle: {color: s.color, opacity: 0.88},
     }));
-    // 凡例はseries定義順（中国ブランドが最初）と一致させる
     opt.legend.data = series_def.map(s => s.name);
     chart.setOption(opt);
   });
@@ -4043,6 +4449,7 @@ function initBrand() {
 
 // ⑦ 企業別総合販売
 function initEnt() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-ent', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -4065,6 +4472,7 @@ function initEnt() {
 
 // ⑧ NEV企業
 function initNevEnt() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-nev-ent', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -4087,6 +4495,7 @@ function initNevEnt() {
 
 // ⑨ 輸出企業
 function initExpEnt() {
+  if (!CAAM_EXCEL_LOADED) return;
   initEC('ec-export-ent', chart => {
     const t = gt();
     const opt = baseOpt(t);
@@ -4108,16 +4517,9 @@ function initExpEnt() {
 }
 
 
-
-// ===== セグメント・価格帯データ（修正版：6月累計除外、26年2月は差分計算で補完） =====
-const SD = {"months": ["25年2月", "25年3月", "25年4月", "25年5月", "25年6月", "25年7月", "25年8月", "25年9月", "25年10月", "25年11月", "25年12月", "26年1月", "26年2月"], "trad_seg": {"A00": [null, 0.0, 0.0, null, null, 0.0, 0.0, 0.0, 0.0, 0.0, -0.0025, 0.0, 0.0], "A0": [null, 11.2, 10.4, null, null, 10.0, 12.2, 11.9, 11.9, 11.0, 11.0, 10.9, 9.5], "A（主力）": [null, 70.0, 58.2, 60.8, 67.8, 62.2, 66.4, 73.5, 74.4, 72.6, 65.2, 61.7, 46.2], "B": [null, 37.4, 28.3, 30.3, 36.9, 27.5, 33.1, 37.1, 35.3, 37.7, 37.7, 29.8, 19.4], "C": [null, 10.1, 8.6, 8.6, 10.7, 8.0, 7.8, 10.2, 10.7, 9.0, 10.7, 7.4, 5.2], "D": [null, 0.0043, 0.0022, 0.0017, 0.0011, 0.0008, 0.0007, 0.0025, 0.0021, 0.0701, 0.0072, 0.02, 0.01]}, "nev_seg": {"A00": [null, 9.4, 9.3, 9.3, 8.4, 7.3, 8.1, 11.7, 12.6, 11.8, 6.9, 2.0, 2.5], "A0": [null, 15.6, 17.6, 17.6, 18.2, 19.8, 17.8, 20.3, 22.9, 24.7, 22.8, 12.3, 10.8], "A（主力）": [null, 36.2, 33.5, 35.4, 35.8, 33.7, 35.2, 38.3, 40.0, 40.7, 37.9, 20.3, 17.5], "B（主力）": [null, 32.3, 28.1, 30.7, 32.7, 31.7, 39.3, 45.7, 47.2, 54.3, 49.0, 28.1, 22.5], "C": [null, 19.6, 21.8, 24.9, 24.1, 23.3, 24.6, 27.7, 33.0, 32.3, 34.3, 20.5, 15.9], "D": [null, 1.4, 3.0, 4.7, 5.3, 4.9, 6.3, 6.3, 6.0, 8.0, 7.1, 3.9, 2.2]}, "trad_price": {"8万以下": [null, 12.2, 11.9, 10.4, 12.6, 10.4, 12.4, 12.8, 10.9, 11.6, 10.1, 7.8, 6.3], "8-10万": [null, 15.2, 13.3, 13.6, 14.7, 12.4, 15.4, 16.3, 16.1, 16.1, 14.4, 16.5, 14.8], "10-15万": [null, 37.8, 32.3, 33.2, 35.0, 35.4, 34.5, 50.1, 41.2, 42.5, 41.2, 35.6, 26.8], "15-20万": [null, 20.9, 19.6, 21.7, 25.8, 20.2, 24.3, 25.9, 27.1, 27.8, 20.7, 23.1, 14.1], "20-25万": [null, 10.5, 8.1, 8.8, 10.9, 8.9, 9.7, 10.9, 11.4, 36.5, 15.0, 8.9, 7.4], "25-30万": [null, 4.1, 3.8, 4.8, 5.0, 4.5, 5.0, 5.6, 5.6, 7.1, 6.5, 6.0, 3.3], "30-35万": [null, 5.9, 4.9, 5.8, 6.1, 4.3, 5.1, 5.8, 5.6, 6.6, 5.1, 3.7, 2.2], "35-40万": [null, 4.5, 2.9, 3.6, 3.8, 2.9, 3.3, 3.8, 3.5, 3.2, 2.8, 2.2, 1.6], "40-50万": [null, 7.8, 5.7, 5.9, 8.0, 5.3, 6.3, 7.4, 5.8, 7.0, 8.2, 5.9, 3.8], "50万以上": [null, 1.8, 1.7, 1.6, 2.0, 1.3, 1.2, 1.8, 1.6, 2.0, 2.0, 1.4, 1.2]}, "nev_price": {"8万以下": [null, 12.5, 13.3, 11.8, 11.4, 9.8, 10.7, 16.0, 17.4, 21.2, 11.9, null, null], "8-10万": [null, 9.7, 11.0, 12.2, 11.9, 11.7, 12.8, 13.8, 14.7, 17.2, 16.2, 9.9, 8.9], "10-15万": [null, 24.2, 22.1, 25.4, 27.8, 28.0, 31.9, 42.1, 38.8, 44.5, 36.5, 18.4, 15.9], "15-20万": [null, 28.2, 25.5, 28.0, 27.2, 25.0, 27.1, 30.2, 37.4, 36.3, 32.2, null, null], "20-25万": [null, 9.7, 10.5, 11.0, 10.5, 9.3, 9.3, 20.3, 13.7, 14.7, 12.3, null, null], "25-30万": [null, 9.9, 11.6, 12.9, 11.2, 11.4, 11.8, 16.2, 16.1, 15.3, 15.2, 6.9, 7.4], "30-35万": [null, 7.3, 6.9, 6.5, 7.0, 6.3, 7.1, 8.5, 8.0, 9.5, 10.8, 10.3, 7.6], "35-40万": [null, 9.3, 8.2, 8.5, 9.8, 8.8, 10.5, 12.2, 11.2, 11.3, 14.8, 7.4, 4.5], "40-50万": [null, 1.6, 1.9, 3.4, 4.0, 3.6, 3.5, 3.1, 2.2, 2.5, 2.6, 8.2, 6.8], "50万以上": [null, 1.8, 2.5, 2.6, 2.6, 2.4, 2.7, 3.0, 3.3, 4.5, 5.8, 3.9, 2.5], "15-25万（統合）": [null, null, null, null, null, null, null, null, null, null, null, null, 13.2]}};
-// ※ 25年6月は1-6月累計のため除外
-// ※ 26年2月は「2月累計(2月シート) - 1月単月(1月シート)」で計算補完
-// ※ NEV価格帯「15-25万（統合）」は26年2月のみ（15-20万・20-25万が統合表記のため）
-
-// ⑩ ICEセグメント
 function initTradSeg() {
-  initEC('ec-trad-seg', chart => {
+  if (!CAAM_EXCEL_LOADED) return;
+    initEC('ec-trad-seg', chart => {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = SD.months;
@@ -4140,7 +4542,8 @@ function initTradSeg() {
 
 // ⑪ NEVセグメント
 function initNevSeg() {
-  initEC('ec-nev-seg', chart => {
+  if (!CAAM_EXCEL_LOADED) return;
+    initEC('ec-nev-seg', chart => {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = SD.months;
@@ -4162,10 +4565,11 @@ function initNevSeg() {
 
 // ⑫ 価格帯　月次推移（折れ線）
 function initPrice() {
-  // ICE価格帯の表示バンド（全10帯）
+  if (!CAAM_EXCEL_LOADED) return;
+    // ICE価格帯の表示バンド（全10帯）
   const iceBands = ['8万以下','8-10万','10-15万','15-20万','20-25万','25-30万','30-35万','35-40万','40-50万','50万以上'];
-  // NEV価格帯（15-25万統合を追加、15-20万/20-25万は2月のみNull）
-  const nevBands = ['8万以下','8-10万','10-15万','15-20万','20-25万','15-25万（統合）','25-30万','30-35万','35-40万','40-50万','50万以上'];
+  // NEV価格帯（26年2月のみ15-20万に15-25万合算値が入り、20-25万はnull）
+  const nevBands = ['8万以下','8-10万','10-15万','15-20万','20-25万','25-30万','30-35万','35-40万','40-50万','50万以上'];
 
   initEC('ec-trad-price', chart => {
     const t = gt();
@@ -4194,7 +4598,7 @@ function initPrice() {
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
       params.filter(p=>p.value!=null).forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`);
-      s += `<br><span style="font-size:10px;color:#888">※15-25万は26年2月のみ統合表記</span>`;
+      s += `<br><span style="font-size:10px;color:#888">※26年2月は15-20万に15-25万の合算値を表示</span>`;
       return s;
     };
     opt.series = nevBands.map((b,i) => {
@@ -4202,7 +4606,7 @@ function initPrice() {
       return {
         name: b, type:'line', data,
         symbol:'circle', symbolSize:5, connectNulls:false,
-        lineStyle:{width: b==='15-25万（統合）'?2.5:2, color:PAL[i%12], type: b==='15-25万（統合）'?'dashed':'solid'},
+        lineStyle:{width:2, color:PAL[i%12]},
         itemStyle:{color:PAL[i%12]}
       };
     });
@@ -4213,7 +4617,8 @@ function initPrice() {
 
 // NEV詳細グラフ
 function initNevDetail() {
-  initEC('ec-nev-prod', chart => {
+  if (!CAAM_EXCEL_LOADED) return;
+    initEC('ec-nev-prod', chart => {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
@@ -4257,7 +4662,8 @@ function initNevDetail() {
 
 // 産販推移（生産 vs 販売 + ギャップ）
 function initProduction() {
-  initEC('ec-prod-total', chart => {
+  if (!CAAM_EXCEL_LOADED) return;
+    initEC('ec-prod-total', chart => {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
@@ -4281,7 +4687,8 @@ function initProduction() {
 
 // BEV/PHEV 国内vs輸出詳細
 function initBevPhev() {
-  initEC('ec-bev-phev-dom-exp', chart => {
+  if (!CAAM_EXCEL_LOADED) return;
+    initEC('ec-bev-phev-dom-exp', chart => {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
@@ -4322,7 +4729,8 @@ function initBevPhev() {
 
 // 商用車詳細
 function initCommercial() {
-  initEC('ec-truck-type', chart => {
+  if (!CAAM_EXCEL_LOADED) return;
+    initEC('ec-truck-type', chart => {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
@@ -4390,7 +4798,11 @@ const CHART_FNS = {
 
 // 大タブ「グラフ」表示時に最初のグラフを初期化
 document.getElementById('charts-super-tab').addEventListener('shown.bs.tab', () => {
-  initOverview();
+  if (!CAAM_EXCEL_LOADED) {
+    loadCaamExcel();
+  } else {
+    initOverview();
+  }
 });
 
 // サブタブ切替時に初期化＋リサイズ（hidden→shown時にサイズが0になるバグ対策）
@@ -4409,6 +4821,11 @@ document.querySelectorAll('#chartsPills .nav-link').forEach(btn => {
 window.addEventListener('resize', () => {
   Object.values(EC).forEach(c => c && c.resize());
 });
+
+// ページロード時にグラフタブが既にアクティブなら即座にロード開始
+if (document.getElementById('charts-super-tab')?.classList.contains('active')) {
+  loadCaamExcel();
+}
 
 // ===== CCCM統計グラフ =====
 const CCCM_RAW = {"meta":{"source":"CCCM 月次統計","months":["2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12"],"generated":"2026-03-16"},"prod_sales":{"2025-04":{"gas_prod":174.83,"gas_prod_mom":8.83,"gas_prod_yoy":19.36,"gas_sales":171.51,"gas_sales_mom":8.72,"gas_sales_yoy":19.08,"ev_prod":27.71,"ev_prod_yoy":-7.1,"ev_sales":26.6,"ev_sales_yoy":-15.36,"total_prod":202.54,"total_prod_yoy":14.89,"total_sales":198.12,"total_sales_yoy":12.91,"bike_sales":174.66,"bike_sales_yoy":14.14,"large_sales":9.3,"large_sales_yoy":27.75,"trike_sales":23.46,"trike_sales_yoy":4.52},"2025-05":{"gas_prod":158.61,"gas_prod_mom":-9.27,"gas_prod_yoy":8.54,"gas_sales":160.91,"gas_sales_mom":-6.18,"gas_sales_yoy":11.12,"ev_prod":26.15,"ev_prod_yoy":-14.88,"ev_sales":26.72,"ev_sales_yoy":-19.33,"total_prod":184.76,"total_prod_yoy":4.47,"total_sales":187.63,"total_sales_yoy":5.45,"bike_sales":165.68,"bike_sales_yoy":5.52,"large_sales":10.12,"large_sales_yoy":31.09,"trike_sales":21.95,"trike_sales_yoy":4.91},"2025-06":{"gas_prod":161.47,"gas_prod_mom":1.77,"gas_prod_yoy":8.83,"gas_sales":161.83,"gas_sales_mom":0.53,"gas_sales_yoy":8.61,"ev_prod":25.18,"ev_prod_yoy":-15.37,"ev_sales":24.03,"ev_sales_yoy":-22.53,"total_prod":186.66,"total_prod_yoy":4.79,"total_sales":185.86,"total_sales_yoy":3.24,"bike_sales":165.49,"bike_sales_yoy":2.85,"large_sales":10.12,"large_sales_yoy":14.32,"trike_sales":20.37,"trike_sales_yoy":6.52},"2025-07":{"gas_prod":158.47,"gas_prod_mom":-2.14,"gas_prod_yoy":5.32,"gas_sales":159.83,"gas_sales_mom":-1.45,"gas_sales_yoy":7.51,"ev_prod":28.63,"ev_prod_yoy":-11.92,"ev_sales":27.96,"ev_sales_yoy":-19.04,"total_prod":187.1,"total_prod_yoy":2.25,"total_sales":187.79,"total_sales_yoy":2.51,"bike_sales":166.74,"bike_sales_yoy":3.08,"large_sales":8.83,"large_sales_yoy":21.66,"trike_sales":21.05,"trike_sales_yoy":-1.83},"2025-08":{"gas_prod":159.06,"gas_prod_mom":0.37,"gas_prod_yoy":11.24,"gas_sales":156.35,"gas_sales_mom":-2.18,"gas_sales_yoy":12.04,"ev_prod":29.0,"ev_prod_yoy":-14.6,"ev_sales":28.53,"ev_sales_yoy":-17.44,"total_prod":188.06,"total_prod_yoy":6.28,"total_sales":184.88,"total_sales_yoy":6.19,"bike_sales":162.88,"bike_sales_yoy":7.03,"large_sales":8.45,"large_sales_yoy":23.6,"trike_sales":22.0,"trike_sales_yoy":0.39},"2025-09":{"gas_prod":166.66,"gas_prod_mom":4.78,"gas_prod_yoy":14.1,"gas_sales":168.2,"gas_sales_mom":7.58,"gas_sales_yoy":11.74,"ev_prod":32.57,"ev_prod_yoy":-4.79,"ev_sales":30.62,"ev_sales_yoy":-12.38,"total_prod":199.23,"total_prod_yoy":10.51,"total_sales":198.82,"total_sales_yoy":7.19,"bike_sales":175.01,"bike_sales_yoy":7.69,"large_sales":8.66,"large_sales_yoy":13.05,"trike_sales":23.8,"trike_sales_yoy":3.72},"2025-10":{"gas_prod":144.73,"gas_prod_mom":-13.15,"gas_prod_yoy":8.2,"gas_sales":145.24,"gas_sales_mom":-13.64,"gas_sales_yoy":10.3,"ev_prod":30.69,"ev_prod_yoy":16.22,"ev_sales":30.12,"ev_sales_yoy":16.23,"total_prod":175.43,"total_prod_yoy":9.53,"total_sales":175.36,"total_sales_yoy":11.27,"bike_sales":150.06,"bike_sales_yoy":12.39,"large_sales":6.09,"large_sales_yoy":-0.16,"trike_sales":25.3,"trike_sales_yoy":5.07},"2025-11":{"gas_prod":152.96,"gas_prod_mom":5.68,"gas_prod_yoy":9.61,"gas_sales":148.07,"gas_sales_mom":1.95,"gas_sales_yoy":7.43,"ev_prod":31.69,"ev_prod_yoy":18.49,"ev_sales":30.94,"ev_sales_yoy":14.98,"total_prod":184.65,"total_prod_yoy":11.04,"total_sales":179.01,"total_sales_yoy":8.67,"bike_sales":155.41,"bike_sales_yoy":10.4,"large_sales":6.1,"large_sales_yoy":11.31,"trike_sales":23.6,"trike_sales_yoy":-1.5},"2025-12":{"gas_prod":166.72,"gas_prod_mom":9.65,"gas_prod_yoy":8.07,"gas_sales":164.71,"gas_sales_mom":11.94,"gas_sales_yoy":10.3,"ev_prod":33.91,"ev_prod_yoy":24.24,"ev_sales":30.42,"ev_sales_yoy":14.74,"total_prod":200.63,"total_prod_yoy":10.51,"total_sales":195.13,"total_sales_yoy":10.97,"bike_sales":169.36,"bike_sales_yoy":11.47,"large_sales":6.89,"large_sales_yoy":1.92,"trike_sales":25.78,"trike_sales_yoy":7.76}},"bike_type":{"2025-04":{"cross":107.45,"scooter":48.75,"underbone":18.47},"2025-05":{"cross":99.91,"scooter":46.36,"underbone":19.4},"2025-06":{"cross":98.72,"scooter":47.05,"underbone":19.89},"2025-07":{"cross":94.51,"scooter":52.36,"underbone":20.59},"2025-08":{"cross":95.88,"scooter":48.31,"underbone":18.68},"2025-09":{"cross":104.91,"scooter":49.37,"underbone":20.74},"2025-10":{"cross":89.67,"scooter":43.77,"underbone":16.63},"2025-11":{"cross":92.33,"scooter":45.04,"underbone":17.98},"2025-12":{"cross":null,"scooter":null,"underbone":null}},"trike":{"2025-04":{"freight":19.84,"freight_yoy":1.43,"passenger":3.59,"passenger_yoy":26.73},"2025-05":{"freight":18.29,"freight_yoy":-0.67,"passenger":3.25,"passenger_yoy":31.0},"2025-06":{"freight":17.32,"freight_yoy":1.83,"passenger":2.87,"passenger_yoy":37.62},"2025-07":{},"2025-08":{},"2025-09":{},"2025-10":{},"2025-11":{},"2025-12":{}},"export":{"2025-04":{"total":120.09,"total_mom":9.39,"total_yoy":30.15,"amount":8.12},"2025-05":{"total":115.21,"total_mom":-4.07,"total_yoy":22.15,"amount":7.71},"2025-06":{"total":118.07,"total_mom":2.49,"total_yoy":19.18,"amount":8.12},"2025-07":{"total":114.71,"total_mom":-3.14,"total_yoy":13.08,"amount":7.67},"2025-08":{"total":112.42,"total_mom":-1.99,"total_yoy":20.69,"amount":7.59},"2025-09":{"total":122.67,"total_mom":9.14,"total_yoy":20.16,"amount":8.0},"2025-10":{"total":105.1,"total_mom":-14.32,"total_yoy":17.66,"amount":6.82},"2025-11":{"total":106.37,"total_mom":1.21,"total_yoy":11.74,"amount":7.15},"2025-12":{"total":123.81,"total_mom":12.34,"total_yoy":17.52,"amount":8.19}},"export_cc":{"2025-04":{},"2025-05":{"125cc":38.87,"150cc":30.33,"110cc":14.75,"200cc":11.27,"50cc":3.23,"250cc":2.87},"2025-06":{"6月は通常通り125/150/110/200/50/250ccの6（7・8月と異なり400ccなし）":null,"125cc":38.05,"150cc":31.39,"110cc":13.21,"200cc":11.46,"50cc":4.23,"250cc":3.24},"2025-07":{"▶ 2-1b. 月次（7月）排気量別輸出　※上位6に400ccが入り250ccは圏外":null,"★7月も上位6に400ccが入り、250ccは圏外（累計では250ccが6位）":null,"125cc":38.73,"150cc":30.52,"110cc":15.84,"200cc":10.07,"50cc":3.47,"400cc":2.84},"2025-08":{"★8月のみ上位6に400ccが入り、50ccは圏外（累計では50ccが6位）":null,"125cc":37.94,"150cc":29.84,"110cc":15.47,"200cc":12.26,"250cc":3.6,"400cc":2.96},"2025-09":{"125cc":39.77,"150cc":36.14,"110cc":15.81,"200cc":13.68,"50cc":1.88,"250cc":2.89},"2025-10":{},"2025-11":{},"2025-12":{}},"econ_cumul":{"2025-04":{"工業総産値":322.34,"工業販売産値":327.03,"工業増加値":61.75,"営業収入":347.6,"利益総額":19.63,"利税総額":30.2,"営業コスト":295.91,"税金及付加":4.17,"販売費用":8.48,"管理費用":12.95,"研究開発費用":10.56,"財務費用":-0.86,"四費用合計":31.14},"2025-05":{"工業総産値":457.43,"工業販売産値":462.44,"工業増加値":95.06,"営業収入":495.57,"利益総額":30.74,"利税総額":45.1,"営業コスト":421.32,"税金及付加":6.54,"販売費用":11.58,"管理費用":17.3,"研究開発費用":14.37,"財務費用":-2.02,"四費用合計":41.24},"2025-06":{"工業総産値":583.53,"工業販売産値":591.24,"工業増加値":121.31,"営業収入":635.54,"利益総額":49.24,"利税総額":66.85,"営業コスト":537.89,"税金及付加":8.25,"販売費用":14.76,"管理費用":21.91,"研究開発費用":17.85,"財務費用":-1.39,"四費用合計":53.12},"2025-07":{"工業総産値":719.86,"工業販売産値":727.63,"工業増加値":148.92,"営業収入":777.43,"利益総額":59.17,"利税総額":79.56,"営業コスト":655.0,"税金及付加":10.05,"販売費用":18.85,"管理費用":27.91,"研究開発費用":22.18,"財務費用":-1.43,"四費用合計":67.51},"2025-08":{"工業総産値":854.73,"工業販売産値":867.49,"工業増加値":180.06,"営業収入":931.37,"利益総額":72.02,"利税総額":95.48,"営業コスト":783.65,"税金及付加":11.68,"販売費用":22.45,"管理費用":33.07,"研究開発費用":26.32,"財務費用":-1.11,"四費用合計":80.72},"2025-09":{"工業総産値":986.59,"工業販売産値":994.34,"工業増加値":195.12,"営業収入":1070.55,"利益総額":81.94,"利税総額":107.67,"営業コスト":899.08,"税金及付加":13.18,"販売費用":25.82,"管理費用":37.89,"研究開発費用":30.78,"財務費用":0.0831,"四費用合計":94.58},"2025-10":{"工業総産値":1121.03,"工業販売産値":1125.69,"工業増加値":220.38,"営業収入":1205.53,"利益総額":89.73,"利税総額":118.41,"営業コスト":1012.06,"税金及付加":14.75,"販売費用":29.37,"管理費用":44.08,"研究開発費用":35.3,"財務費用":-1.08,"四費用合計":107.68},"2025-11":{"工業総産値":1236.85,"工業販売産値":1240.91,"工業増加値":244.83,"営業収入":1330.97,"利益総額":97.18,"利税総額":129.13,"営業コスト":1119.27,"税金及付加":16.28,"販売費用":32.25,"管理費用":48.69,"研究開発費用":39.35,"財務費用":-0.81,"四費用合計":119.49},"2025-12":{"工業総産値":1361.29,"工業販売産値":1366.66,"工業増加値":265.17,"営業収入":1462.09,"利益総額":114.18,"利税総額":148.12,"営業コスト":1230.84,"税金及付加":17.39,"販売費用":35.49,"管理費用":52.29,"研究開発費用":43.42,"財務費用":-0.73,"四費用合計":130.46}},"econ_monthly":{"2025-03":{"label":"2025-03","note":"1〜3月合計","工業総産値":322.34,"工業販売産値":327.03,"工業増加値":61.75,"営業収入":347.6,"利益総額":19.63,"利税総額":30.2,"営業コスト":295.91,"税金及付加":4.17,"販売費用":8.48,"管理費用":12.95,"研究開発費用":10.56,"財務費用":-0.86,"四費用合計":31.14,"利益率%":5.65},"2025-04":{"label":"2025-04","note":"単月逆算","工業総産値":135.09,"工業販売産値":135.41,"工業増加値":33.31,"営業収入":147.97,"利益総額":11.11,"利税総額":14.9,"営業コスト":125.41,"税金及付加":2.37,"販売費用":3.1,"管理費用":4.35,"研究開発費用":3.81,"財務費用":-1.16,"四費用合計":10.1,"利益率%":7.51},"2025-05":{"label":"2025-05","note":"単月逆算","工業総産値":126.1,"工業販売産値":128.8,"工業増加値":26.25,"営業収入":139.97,"利益総額":18.5,"利税総額":21.75,"営業コスト":116.57,"税金及付加":1.71,"販売費用":3.18,"管理費用":4.61,"研究開発費用":3.48,"財務費用":0.63,"四費用合計":11.88,"利益率%":13.22},"2025-06":{"label":"2025-06","note":"単月逆算","工業総産値":136.33,"工業販売産値":136.39,"工業増加値":27.61,"営業収入":141.89,"利益総額":9.93,"利税総額":12.71,"営業コスト":117.11,"税金及付加":1.8,"販売費用":4.09,"管理費用":6.0,"研究開発費用":4.33,"財務費用":-0.04,"四費用合計":14.39,"利益率%":7.0},"2025-07":{"label":"2025-07","note":"単月逆算","工業総産値":134.87,"工業販売産値":139.86,"工業増加値":31.14,"営業収入":153.94,"利益総額":12.85,"利税総額":15.92,"営業コスト":128.65,"税金及付加":1.63,"販売費用":3.6,"管理費用":5.16,"研究開発費用":4.14,"財務費用":0.32,"四費用合計":13.21,"利益率%":8.35},"2025-08":{"label":"2025-08","note":"単月逆算","工業総産値":131.86,"工業販売産値":126.85,"工業増加値":15.06,"営業収入":139.18,"利益総額":9.92,"利税総額":12.19,"営業コスト":115.43,"税金及付加":1.5,"販売費用":3.37,"管理費用":4.82,"研究開発費用":4.46,"財務費用":1.19,"四費用合計":13.86,"利益率%":7.13},"2025-09":{"label":"2025-09","note":"単月逆算","工業総産値":134.44,"工業販売産値":131.35,"工業増加値":25.26,"営業収入":134.98,"利益総額":7.79,"利税総額":10.74,"営業コスト":112.98,"税金及付加":1.57,"販売費用":3.55,"管理費用":6.19,"研究開発費用":4.52,"財務費用":-1.16,"四費用合計":13.1,"利益率%":5.77},"2025-10":{"label":"2025-10","note":"単月逆算","工業総産値":115.82,"工業販売産値":115.22,"工業増加値":24.45,"営業収入":125.44,"利益総額":7.45,"利税総額":10.72,"営業コスト":107.21,"税金及付加":1.53,"販売費用":2.88,"管理費用":4.61,"研究開発費用":4.05,"財務費用":0.27,"四費用合計":11.81,"利益率%":5.94},"2025-11":{"label":"2025-11","note":"単月逆算","工業総産値":124.44,"工業販売産値":125.75,"工業増加値":20.34,"営業収入":131.12,"利益総額":17.0,"利税総額":18.99,"営業コスト":111.57,"税金及付加":1.11,"販売費用":3.24,"管理費用":3.6,"研究開発費用":4.07,"財務費用":0.08,"四費用合計":10.97,"利益率%":12.97}},"fuel_makers_cumul":{"2025-04":{"大長江集団":74.96,"隆鑫通用動力":60.05,"宗申産業集団":35.74,"廣東大冶摩托車":34.35,"新大洲本田":25.91,"重慶銀翔実業":22.38,"廣州豪進摩托車":21.98,"洛陽北方易初":20.46,"江門市珠峰":20.06,"五羊-本田":17.34},"2025-05":{"大長江集団":99.69,"隆鑫通用動力":74.0,"宗申産業集団":46.32,"廣東大冶摩托車":41.01,"新大洲本田":34.85,"重慶銀翔実業":29.04,"廣州豪進摩托車":27.99,"洛阳北方易初":25.99,"江門市珠峰":24.5,"五羊-本田":22.25},"2025-06":{"大長江集団":121.34,"隆鑫通用動力":88.16,"宗申産業集団":56.48,"廣東大冶摩托車":50.2,"新大洲本田":45.01,"重慶銀翔実業":35.31,"廣州豪進摩托車":33.16,"洛陽北方易初":31.74,"江門市珠峰":28.71,"五羊-本田":27.28},"2025-07":{"大長江集団":145.94,"隆鑫通用動力":98.53,"宗申産業集団":64.81,"廣東大冶摩托車":60.42,"新大洲本田":56.43,"重慶銀翔実業":40.65,"廣州豪進摩托車":39.19,"洛陽北方易初":36.97,"江門市珠峰":33.9,"五羊-本田":32.9},"2025-08":{"大長江集団":172.24,"隆鑫通用動力":110.32,"宗申産業集団":75.68,"廣東大冶摩托車":70.47,"新大洲本田":65.77,"重慶銀翔実業":45.97,"廣州豪進摩托車":45.26,"洛陽北方易初":42.39,"五羊-本田":38.37,"江門市珠峰":37.48},"2025-09":{"大長江集団":198.15,"隆鑫通用動力":122.86,"宗申産業集団":85.47,"廣東大冶摩托車":81.46,"新大洲本田":76.08,"廣州豪進摩托車":53.63,"重慶銀翔実業":51.89,"洛陽北方易初":47.36,"五羊-本田":42.94,"江門市珠峰":41.0},"2025-10":{"大長江集団":221.63,"隆鑫通用動力":133.75,"宗申産業集団":94.58,"廣東大冶摩托車":89.96,"新大洲本田":83.36,"廣州豪進摩托車":61.36,"重慶銀翔実業":57.48,"洛陽北方易初":52.06,"五羊-本田":47.89,"江門市珠峰":44.74},"2025-11":{"大長江集団":244.56,"隆鑫通用動力":143.99,"宗申産業集団":103.87,"廣東大冶摩托車":99.65,"新大洲本田":91.02,"廣州豪進摩托車":67.22,"重慶銀翔実業":64.49,"洛陽北方易初":56.49,"五羊-本田":52.98,"江門市珠峰":48.41},"2025-12":{"大長江集団":268.67,"隆鑫通用動力":157.83,"宗申産業集団":113.92,"廣東大冶摩托車":110.91,"新大洲本田":100.31,"廣州豪進摩托車":73.66,"重慶銀翔実業":72.91,"洛陽北方易初":61.02,"五羊-本田":59.48,"江門市珠峰":52.91}},"fuel_makers_monthly":{"2025-04":{"大長江集団":null,"隆鑫通用動力":null,"宗申産業集団":null,"廣東大冶摩托車":null,"新大洲本田":null,"重慶銀翔実業":null,"廣州豪進摩托車":null,"洛陽北方易初":null,"江門市珠峰":null,"五羊-本田":null},"2025-05":{"大長江集団":24.73,"隆鑫通用動力":13.95,"宗申産業集団":10.58,"廣東大冶摩托車":6.66,"新大洲本田":8.94,"重慶銀翔実業":6.66,"廣州豪進摩托車":6.01,"洛阳北方易初":null,"江門市珠峰":4.44,"五羊-本田":4.91},"2025-06":{"大長江集団":21.65,"隆鑫通用動力":14.16,"宗申産業集団":10.16,"廣東大冶摩托車":9.19,"新大洲本田":10.16,"重慶銀翔実業":6.27,"廣州豪進摩托車":5.17,"洛陽北方易初":null,"江門市珠峰":4.21,"五羊-本田":5.03},"2025-07":{"大長江集団":24.6,"隆鑫通用動力":10.37,"宗申産業集団":8.33,"廣東大冶摩托車":10.22,"新大洲本田":11.42,"重慶銀翔実業":5.34,"廣州豪進摩托車":6.03,"洛陽北方易初":5.23,"江門市珠峰":5.19,"五羊-本田":5.62},"2025-08":{"大長江集団":26.3,"隆鑫通用動力":11.79,"宗申産業集団":10.87,"廣東大冶摩托車":10.05,"新大洲本田":9.34,"重慶銀翔実業":5.32,"廣州豪進摩托車":6.07,"洛陽北方易初":5.42,"五羊-本田":5.47,"江門市珠峰":3.58},"2025-09":{"大長江集団":25.91,"隆鑫通用動力":12.54,"宗申産業集団":9.79,"廣東大冶摩托車":10.99,"新大洲本田":10.31,"廣州豪進摩托車":8.37,"重慶銀翔実業":5.92,"洛陽北方易初":4.97,"五羊-本田":4.57,"江門市珠峰":3.52},"2025-10":{"大長江集団":23.48,"隆鑫通用動力":10.89,"宗申産業集団":9.11,"廣東大冶摩托車":8.5,"新大洲本田":7.28,"廣州豪進摩托車":7.73,"重慶銀翔実業":5.59,"洛陽北方易初":4.7,"五羊-本田":4.95,"江門市珠峰":3.74},"2025-11":{"大長江集団":22.93,"隆鑫通用動力":10.24,"宗申産業集団":9.29,"廣東大冶摩托車":9.69,"新大洲本田":7.66,"廣州豪進摩托車":5.86,"重慶銀翔実業":7.01,"洛陽北方易初":4.43,"五羊-本田":5.09,"江門市珠峰":3.67},"2025-12":{"大長江集団":24.11,"隆鑫通用動力":13.84,"宗申産業集団":10.05,"廣東大冶摩托車":11.26,"新大洲本田":9.29,"廣州豪進摩托車":6.44,"重慶銀翔実業":8.42,"洛陽北方易初":4.53,"五羊-本田":6.5,"江門市珠峰":4.5}},"ev_makers_cumul":{"2025-04":{"雅迪科技集団（YADEA）":36.69,"浙江緑源電動車":16.07,"宗申産業集団":15.3,"江蘇新日電動車":8.96,"春風動力（CFMOTO）":5.84,"江蘇淮海新能源":5.54,"巴士新能源":5.27,"五星車輌":2.7,"隆鑫通用動力":2.17,"金翌":1.98},"2025-05":{"雅迪科技集団（YADEA）":44.65,"浙江緑源電動車":19.89,"宗申産業集団":19.08,"江蘇新日電動車":10.44,"春風動力（CFMOTO）":9.33,"江蘇淮海新能源":6.89,"巴士新能源":6.29,"五星車輌":3.47,"隆鑫通用動力":3.04,"台鈴科技（TAILG）":2.52},"2025-06":{"雅迪科技集団（YADEA）":52.88,"宗申産業集団":22.78,"浙江緑源電動車":22.52,"春風動力（CFMOTO）":12.39,"江蘇新日電動車":11.93,"江蘇淮海新能源":8.1,"巴士新能源":6.95,"五星車輌":4.07,"隆鑫通用動力":3.82,"台鈴科技（TAILG）":3.02},"2025-07":{"雅迪科技集団（YADEA）":61.4,"浙江緑源電動車":26.57,"宗申産業集団":26.13,"春風動力（CFMOTO）":16.09,"江蘇新日電動車":14.08,"江蘇淮海新能源":9.28,"巴士新能源":9.07,"五星車輌":4.63,"隆鑫通用動力":4.4,"台鈴科技（TAILG）":3.4},"2025-08":{"雅迪科技集団（YADEA）":70.23,"浙江緑源電動車":30.19,"宗申産業集団":29.57,"春風動力（CFMOTO）":19.35,"江蘇新日電動車":16.68,"巴士新能源":11.58,"江蘇淮海新能源":10.41,"五星車輌":5.32,"隆鑫通用動力":4.87,"台鈴科技（TAILG）":3.98},"2025-09":{"雅迪科技集団（YADEA）":75.73,"浙江緑源電動車":37.6,"宗申産業集団":33.95,"春風動力（CFMOTO）":22.52,"江蘇新日電動車":19.49,"巴士新能源":13.89,"江蘇淮海新能源":11.7,"五星車輌":5.97,"隆鑫通用動力":5.36,"台鈴科技（TAILG）":4.47},"2025-10":{"雅迪科技集団（YADEA）":80.8,"浙江緑源電動車":43.77,"宗申産業集団":38.32,"江蘇淮海新能源":29.03,"春風動力（CFMOTO）":25.32,"江蘇新日電動車":21.73,"巴士新能源":16.09,"五星車輌":6.56,"隆鑫通用動力":5.86,"台鈴科技（TAILG）":5.68},"2025-11":{"雅迪科技集団（YADEA）":86.38,"浙江緑源電動車":51.32,"宗申産業集団":42.35,"江蘇淮海新能源":31.62,"春風動力（CFMOTO）":25.33,"江蘇新日電動車":24.09,"巴士新能源":18.54,"五星車輌":7.07,"隆鑫通用動力":6.28,"台鈴科技（TAILG）":5.69},"2025-12":{"雅迪科技集団（YADEA）":92.11,"浙江緑源電動車":59.15,"宗申産業集団":46.51,"江蘇淮海新能源":34.49,"春風動力（CFMOTO）":30.03,"江蘇新日電動車":26.29,"巴士新能源":20.69,"五星車輌":7.55,"隆鑫通用動力":6.69,"台鈴科技（TAILG）":5.78}},"ev_makers_monthly":{"2025-04":{"雅迪科技集団（YADEA）":null,"浙江緑源電動車":null,"宗申産業集団":null,"江蘇新日電動車":null,"春風動力（CFMOTO）":null,"江蘇淮海新能源":null,"巴士新能源":null,"五星車輌":null,"隆鑫通用動力":null,"金翌":null},"2025-05":{"雅迪科技集団（YADEA）":7.96,"浙江緑源電動車":3.82,"宗申産業集団":3.78,"江蘇新日電動車":1.48,"春風動力（CFMOTO）":3.49,"江蘇淮海新能源":1.35,"巴士新能源":1.02,"五星車輌":0.77,"隆鑫通用動力":0.87,"台鈴科技（TAILG）":null},"2025-06":{"雅迪科技集団（YADEA）":8.23,"宗申産業集団":3.7,"浙江緑源電動車":2.63,"春風動力（CFMOTO）":3.06,"江蘇新日電動車":1.49,"江蘇淮海新能源":1.21,"巴士新能源":0.66,"五星車輌":0.6,"隆鑫通用動力":0.78,"台鈴科技（TAILG）":0.5},"2025-07":{"雅迪科技集団（YADEA）":8.52,"浙江緑源電動車":4.05,"宗申産業集団":3.35,"春風動力（CFMOTO）":3.7,"江蘇新日電動車":2.15,"江蘇淮海新能源":1.18,"巴士新能源":2.12,"五星車輌":0.56,"隆鑫通用動力":0.58,"台鈴科技（TAILG）":0.38},"2025-08":{"雅迪科技集団（YADEA）":8.83,"浙江緑源電動車":3.62,"宗申産業集団":3.44,"春風動力（CFMOTO）":3.26,"江蘇新日電動車":2.6,"巴士新能源":2.51,"江蘇淮海新能源":1.13,"五星車輌":0.69,"隆鑫通用動力":0.47,"台鈴科技（TAILG）":0.58},"2025-09":{"雅迪科技集団（YADEA）":5.5,"浙江緑源電動車":7.41,"宗申産業集団":4.38,"春風動力（CFMOTO）":3.17,"江蘇新日電動車":2.81,"巴士新能源":2.31,"江蘇淮海新能源":1.29,"五星車輌":0.65,"隆鑫通用動力":0.49,"台鈴科技（TAILG）":0.49},"2025-10":{"雅迪科技集団（YADEA）":5.07,"浙江緑源電動車":6.17,"宗申産業集団":4.37,"江蘇淮海新能源":17.33,"春風動力（CFMOTO）":2.8,"江蘇新日電動車":2.24,"巴士新能源":2.2,"五星車輌":0.59,"隆鑫通用動力":0.5,"台鈴科技（TAILG）":1.21},"2025-11":{"雅迪科技集団（YADEA）":5.58,"浙江緑源電動車":7.55,"宗申産業集団":4.03,"江蘇淮海新能源":2.59,"春風動力（CFMOTO）":0.01,"江蘇新日電動車":2.36,"巴士新能源":2.45,"五星車輌":0.51,"隆鑫通用動力":0.42,"台鈴科技（TAILG）":0.01},"2025-12":{"雅迪科技集団（YADEA）":5.73,"浙江緑源電動車":7.83,"宗申産業集団":4.16,"江蘇淮海新能源":2.87,"春風動力（CFMOTO）":4.7,"江蘇新日電動車":2.2,"巴士新能源":2.15,"五星車輌":0.48,"隆鑫通用動力":0.41,"台鈴科技（TAILG）":0.09}},"balance":{"2025-04":{"receivable":242.33,"receivable_yoy":20.12,"inventory":51.67,"inventory_yoy":8.82},"2025-05":{"receivable":253.88,"receivable_yoy":17.77,"inventory":54.61,"inventory_yoy":4.73},"2025-06":{"receivable":255.11,"receivable_yoy":14.3,"inventory":52.69,"inventory_yoy":4.54},"2025-07":{"receivable":251.35,"receivable_yoy":6.99,"inventory":53.52,"inventory_yoy":6.93},"2025-08":{"receivable":249.47,"receivable_yoy":4.8,"inventory":52.65,"inventory_yoy":-1.75},"2025-09":{"receivable":256.48,"receivable_yoy":4.08,"inventory":53.2,"inventory_yoy":-3.94},"2025-10":{"receivable":245.09,"receivable_yoy":-4.2,"inventory":48.32,"inventory_yoy":-10.54},"2025-11":{"receivable":244.52,"receivable_yoy":0.48,"inventory":52.44,"inventory_yoy":-3.72},"2025-12":{"receivable":257.37,"receivable_yoy":2.65,"inventory":53.03,"inventory_yoy":-6.14}}};

@@ -4081,10 +4081,28 @@ function parseMonthSheet(rows) {
   if (d.bev_sales != null && d.bev_exp != null)   d.bev_dom  = +(d.bev_sales  - d.bev_exp).toFixed(2);
   if (d.phev_sales != null && d.phev_exp != null) d.phev_dom = +(d.phev_sales - d.phev_exp).toFixed(2);
 
-  // brand (CADA)
+  // brand (CADA) - col[3]=月次シェア or 1-N月累計, col[4 or 5]=通年シェア（12月シートのみ）
   const bmap = {'中国ブランド':'cn','独系':'de','日系':'jp','米系':'us','韓系':'kr','その他':'other'};
+  d.brand = {};
+  d.brand_annual = {};  // 通年シェア（12月シートのみ存在）
+  // ブランドヘッダ行で通年シェアが何列目かを判定
+  let brandAnnualCol = null;
   for (const r of rows) {
-    if (bmap[r[0]]) { const v = toF(r[3]); if (v != null) d.brand[bmap[r[0]]] = v; }
+    if (r[0] === 'ブランド系') {
+      // '通年シェア' を含む列を探す
+      for (let ci = 3; ci < r.length; ci++) {
+        if (r[ci] && r[ci].includes('通年シェア')) { brandAnnualCol = ci; break; }
+      }
+      break;
+    }
+  }
+  for (const r of rows) {
+    if (bmap[r[0]]) {
+      const v = toF(r[3]); if (v != null) d.brand[bmap[r[0]]] = v;
+      if (brandAnnualCol != null) {
+        const va = toF(r[brandAnnualCol]); if (va != null) d.brand_annual[bmap[r[0]]] = va;
+      }
+    }
   }
   // enterprise ranking
   let inEnt = false, inNevEnt = false, inExpEnt = false;
@@ -4423,20 +4441,22 @@ function buildCdSd(monthly) {
   // ---- brand_series（CADA） ----
   const brand_keys = ['cn','de','jp','us','kr','other'];
   const brand_names = {'cn':'中国ブランド','de':'独系','jp':'日系','us':'米系','kr':'韓系','other':'その他'};
-  const brand_series = {};
+  // brand: col[3]の月次/累計シェア
+  // brand_annual: 12月シートのみ存在する通年シェア（年末グラフ用）
   for (const k of brand_keys) {
-    brand_series[brand_names[k]] = arr(sorted, '_brand_'+k);
-  }
-  // workaround: brand is stored as d.brand.cn etc.
-  for (const k of brand_keys) {
-    brand_series[brand_names[k]] = sorted.map(ym => monthly[ym]?.brand?.[k] ?? null);
+    // brand_series は月次/累計値（既存グラフ用）
   }
 
-  // normalize brand to 100%
+  // 年末グラフ用: 通年シェアがあればそれを、なければ月次シェアをフォールバック
+  // brand_series_normed は全月の正規化済み累計シェア（既存の面グラフ用は不要になったが互換維持）
   const brand_series_normed = {};
   for (const k of brand_keys) brand_series_normed[brand_names[k]] = [];
   for (let i = 0; i < sorted.length; i++) {
-    const vals = brand_keys.map(k => monthly[sorted[i]]?.brand?.[k] ?? null);
+    // 通年シェアがあればそれを使い、なければ月次シェア
+    const vals = brand_keys.map(k => {
+      const annual = monthly[sorted[i]]?.brand_annual?.[k];
+      return annual != null ? annual : (monthly[sorted[i]]?.brand?.[k] ?? null);
+    });
     const total = vals.reduce((s,v) => s + (v??0), 0);
     brand_keys.forEach((k,j) => {
       brand_series_normed[brand_names[k]].push(vals[j] != null ? +(vals[j]/total*100).toFixed(1) : null);
@@ -4745,7 +4765,7 @@ function initBrand() {
       { name:'その他',       color:'#adb5bd' },
     ];
 
-    // 各年の「最終月」のインデックスを取得（12月 or その年の最大月）
+    // 各年の「最終月」インデックスを取得（12月優先）
     const years = [...new Set(CD.labels_all.map(l => '20' + l.slice(0,2)))].sort();
     const yearLabels = [];
     const yearIndices = [];
@@ -4756,10 +4776,9 @@ function initBrand() {
         return acc;
       }, []);
       if (!idxList.length) return;
-      // 12月を優先、なければ最終月
       const dec = idxList.find(i => CD.labels_all[i].includes('12月'));
       const useIdx = dec !== undefined ? dec : idxList[idxList.length - 1];
-      yearLabels.push(yr + '年（' + CD.labels_all[useIdx] + '末）');
+      yearLabels.push(CD.labels_all[useIdx].replace('月', '月末'));
       yearIndices.push(useIdx);
     });
 
@@ -4769,16 +4788,16 @@ function initBrand() {
         trigger: 'axis',
         axisPointer: { type: 'shadow' },
         formatter: params => {
-          let s = `<b>${params[0].axisValue}</b><br>`;
+          let s = `<b>${params[0].axisValue}</b>（年末累計シェア）<br>`;
           [...params].reverse().forEach(p => {
             if (p.value != null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`;
           });
-          s += `<span style="font-size:10px;color:#888">※元データの丸め誤差を正規化済み</span>`;
+          s += `<span style="font-size:10px;color:#888">※通年シェアあり月はそれを使用、なければ月次累計値</span>`;
           return s;
         }
       },
       legend: { data: series_def.map(s => s.name), top: 8, textStyle: { color: t.text }, type: 'scroll' },
-      grid: { top: 48, bottom: 60, left: 56, right: 24 },
+      grid: { top: 48, bottom: 48, left: 56, right: 24 },
       xAxis: {
         type: 'category',
         data: yearLabels,
@@ -4792,10 +4811,13 @@ function initBrand() {
       },
       series: series_def.map(s => ({
         name: s.name,
-        type: 'bar',
+        type: 'line',
         stack: 'brand',
         data: yearIndices.map(i => CD.brand_series_normed[s.name]?.[i] ?? null),
+        symbol: 'none',
+        lineStyle: { width: 0 },
         itemStyle: { color: s.color },
+        areaStyle: { color: s.color, opacity: 0.88 },
         label: {
           show: true,
           position: 'inside',

@@ -3982,7 +3982,7 @@ let CAAM_EXCEL_LOADED = false;
 // ---- Excel パース ユーティリティ ----
 function toF(v) {
   if (v == null) return null;
-  const s = String(v).trim().replace(/[−—－]/g, '');
+  const s = String(v).trim().replace(/[−—－]/g, '').replace(/,/g, '');
   if (!s) return null;
   const n = parseFloat(s);
   return isNaN(n) ? null : n;

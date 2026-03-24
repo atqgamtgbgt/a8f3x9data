@@ -4117,7 +4117,7 @@ function parseMonthSheet(rows) {
   { let inC = false;
     for (const r of rows) {
       const h = r[0];
-      if (h && (('輸出量上位' in h || (h.includes('整車輸出') && h.includes('カ国'))) &&
+      if (h && ((h.includes('輸出量上位') || (h.includes('整車輸出') && h.includes('カ国'))) &&
           !h.includes('累計') && !h.includes('NEV') && !h.includes('乗聯') && !h.includes('CADA')))
         { inC = true; continue; }
       if (inC) {

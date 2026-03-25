@@ -4245,8 +4245,32 @@ function parseMonthSheet(rows) {
   d.world = {};
   for (const r of rows) {
     const h = r[0]; const raw = r[1]||'';
-    const pct = (s=>{ const m=String(s).match(/([\d.]+)%/); return m?+m[1]:null; });
-    const wan = (s=>{ const m=String(s).split('（')[0].match(/([\d.]+)万台/); return m?+m[1]:null; });
+    // pct: 単月・直近値を優先。累計先行パターンも安全に処理
+    const pct = (s => {
+      const str = String(s);
+      if (!str || str === 'null' || str === 'undefined') return null;
+      const slashIdx = str.indexOf('/');
+      if (slashIdx > 0) {
+        const prefix = str.slice(0, slashIdx);
+        // 前半が累計（「1-X月」「累計」「通年」）なら後半から取る
+        if (/\d+-\d+月|累計|通年/.test(prefix)) {
+          const m2 = str.slice(slashIdx).match(/([\d.]+)%/);
+          return m2 ? +m2[1] : null;
+        }
+      }
+      // スラッシュなしで累計のみ（例: 「1-9月13.8%」）→ null
+      if (/^\d+-\d+月/.test(str) && slashIdx < 0) return null;
+      const m = str.match(/([\d.]+)%/);
+      return m ? +m[1] : null;
+    });
+    // wan: 月間単月値のみ抽出。累計・通年は除外
+    const wan = (s => {
+      const str = String(s);
+      if (/^\d+-\d+月累計/.test(str)) return null;  // 「1-8月累計」形式
+      if (/^通年/.test(str)) return null;             // 「通年XXXX万台」形式
+      const m = str.split('（')[0].match(/^([\d.]+)万台/);
+      return m ? +m[1] : null;
+    });
     if (h==='中国の世界自動車販売シェア') d.world.cn_world_share = pct(raw);
     if (h==='自主ブランドNEV 海外市場シェア')  d.world.zizhu_nev_overseas = pct(raw);
     if (h==='世界NEV普及率')              d.world.world_nev_pen = pct(raw);

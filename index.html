@@ -2467,7 +2467,7 @@ img.car-thumb {
 
           <div class="tab-content" id="chartsPillsContent">
             <div class="tab-pane fade show active" id="cp-overview"><div class="chart-card"><div class="chart-title">総販売台数推移</div><div class="chart-subtitle">CAAM/CADA 2023年5月〜2026年2月　<span class="text-muted" style="font-size:10px">📋 総販売:B7 / 国内:B8 / 輸出:B10</span></div><div id="ec-overview" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 乗用ICE国内:B19 / 乗用NEV国内:B107※ / 商用国内:B78 / ICE輸出:B12 / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-domestic-export" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 乗用ICE国内:B19 / 乗用NEV国内:B107※ / 商用国内:B78 / ICE乗用輸出:(B20-BEV輸出-PHEV輸出) / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-domestic-export" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / 従来車</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 BEV販売:D100※ / PHEV販売:D101※ / NEV合計:D103※　（※行番号は月により変動）</span></div><div id="ec-nev" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-penetration"><div class="chart-card"><div class="chart-title">NEV浸透率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div><div class="chart-subtitle">全体浸透率・乗用車浸透率　<span class="text-muted" style="font-size:10px">📋 全体普及率:F106備考※ / 乗用車普及率:F107備考※　（※行番号・列は月により変動、正規表現で抽出）</span></div><div id="ec-penetration" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-segment"><div class="chart-card"><div class="chart-title">乗用車・商用車　販売推移</div><div class="chart-subtitle">セグメント別月次推移　<span class="text-muted" style="font-size:10px">📋 乗用車販売:B17 / 国内:B18 / 輸出:B20 / 商用車販売:B77 / 国内:B78 / 輸出:B81</span></div><div id="ec-segment" class="echart-box"></div></div></div>
@@ -4017,7 +4017,7 @@ function parseMonthSheet(rows) {
       if (h === '国内販売' && d.domestic_sales == null) d.domestic_sales = toF(r[1]);
       if (h === '輸出'    && d.export_total == null)  d.export_total = toF(r[1]);
       if (h === 'うちNEV輸出' && d.nev_exp == null)   d.nev_exp      = toF(r[1]);
-      if (h === 'うちICE車輸出' && d.trad_export == null) d.trad_export = toF(r[1]);
+      // うちICE車輸出(B12)は乗用+商用の合計のため直接使用しない
       if (/２．乗用車/.test(h)) { inTotal = false; }
     }
   }
@@ -4080,6 +4080,9 @@ function parseMonthSheet(rows) {
   }
   if (d.bev_sales != null && d.bev_exp != null)   d.bev_dom  = +(d.bev_sales  - d.bev_exp).toFixed(2);
   if (d.phev_sales != null && d.phev_exp != null) d.phev_dom = +(d.phev_sales - d.phev_exp).toFixed(2);
+  // ICE乗用輸出 = 乗用輸出(B20) - BEV輸出 - PHEV輸出
+  if (d.pax_export != null && d.bev_exp != null && d.phev_exp != null)
+    d.pax_ice_exp = +(d.pax_export - d.bev_exp - d.phev_exp).toFixed(1);
 
   // ---- brand (CADA) ----
   // ヘッダ行で各列の意味を確認
@@ -4508,7 +4511,8 @@ function buildCdSd(monthly) {
     domestic_sales: arr(sorted,'domestic_sales'),
     export_total:   arr(sorted,'export_total'),
     nev_exp:        arr(sorted,'nev_exp'),
-    trad_export:    arr(sorted,'trad_export'),
+    trad_export:    arr(sorted,'trad_export'),  // 参照のみ残す（他チャートで使用の可能性）
+    pax_ice_exp:    arr(sorted,'pax_ice_exp'),
 
     pax_prod:       arr(sorted,'pax_prod'),
     pax_sales:      arr(sorted,'pax_sales'),
@@ -4708,7 +4712,7 @@ function initDomExp() {
       { name:'国内（乗用ICE）', type:'bar', stack:'s', data:CD.pax_trad_dom, itemStyle:{color:'#adb5bd'} },
       { name:'国内（乗用NEV）', type:'bar', stack:'s', data:CD.nev_pax_dom,  itemStyle:{color:'#4e79a7'} },
       { name:'国内（商用）',   type:'bar', stack:'s', data:CD.com_domestic,  itemStyle:{color:'#9dc6e0'} },
-      { name:'輸出（従来車）', type:'bar', stack:'s', data:CD.trad_export,   itemStyle:{color:'#ffd6a5'} },
+      { name:'輸出（ICE乗用）', type:'bar', stack:'s', data:CD.pax_ice_exp,   itemStyle:{color:'#ffd6a5'} },
       { name:'輸出（BEV）',   type:'bar', stack:'s', data:CD.bev_exp,       itemStyle:{color:'#f28e2b'} },
       { name:'輸出（PHEV）',  type:'bar', stack:'s', data:CD.phev_exp,      itemStyle:{color:'#e15759'} },
     ];

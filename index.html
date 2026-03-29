@@ -4244,34 +4244,30 @@ function parseMonthSheet(rows) {
   { let inN = false; let hasSingle = false;
     for (const r of rows) {
       const h = r[0];
-      if (!h) continue;
-      // 形式1: 【NEV輸出】
-      const isForm1 = h.includes('【NEV輸出】') && (h.includes('輸出量上位10カ国') || h.includes('輸出量上位5カ国'));
-      // 形式2: NEV出口　前Xカ国（乗聯スタイル）
-      const isForm2 = h.includes('NEV') && h.includes('出口') && (h.includes('前10カ国') || h.includes('前5カ国') || h.includes('前10カ國'));
-      if (!isForm1 && !isForm2) continue;
-      if (h.includes('前年比') || h.includes('増加')) continue;
+      // ヘッダチェック
+      const isHeader = h && (
+        (h.includes('【NEV輸出】') && (h.includes('輸出量上位10カ国') || h.includes('輸出量上位5カ国'))) ||
+        (h.includes('NEV') && h.includes('出口') && (h.includes('前10カ国') || h.includes('前5カ国') || h.includes('前10カ國')))
+      ) && !h.includes('前年比') && !h.includes('増加');
 
-      const isCumul = h.includes('累計') || h.includes('通年') || /1-\d+月/.test(h) || h.includes('1月〜') || h.includes('通年');
-      if (!isCumul) {
-        inN = true; hasSingle = true; d.nev_exp_countries = [];
-        d.nev_exp_is_cumul = false;
-        const m = h.match(/(\d{4})年(\d+)月/);
-        d.nev_exp_period = m ? `${m[1].slice(2)}年${+m[2]}月` : null;
-        continue;
-      }
-      if (!hasSingle) {
-        inN = true; d.nev_exp_countries = [];
-        d.nev_exp_is_cumul = true;
-        const m = h.match(/1-(\d+)月/) || h.match(/1月〜(\d+)月/);
-        d.nev_exp_period = m ? `1-${m[1]}月累計` : '累計';
-        continue;
-      }
-      if (inN) {
-        if (/^\d+$/.test(h) && r[1]) {
-          const v = toF(r[2]); if (v != null) d.nev_exp_countries.push({rank:+h, country:normCountry(r[1]), units:+(v/10000).toFixed(4)});
+      if (isHeader) {
+        const isCumul = h.includes('累計') || h.includes('通年') || /1-\d+月/.test(h) || h.includes('1月〜');
+        if (!isCumul) {
+          inN = true; hasSingle = true; d.nev_exp_countries = [];
+          d.nev_exp_is_cumul = false;
+          const m = h.match(/(\d{4})年(\d+)月/);
+          d.nev_exp_period = m ? `${m[1].slice(2)}年${+m[2]}月` : null;
+        } else if (!hasSingle) {
+          inN = true; d.nev_exp_countries = [];
+          d.nev_exp_is_cumul = true;
+          const m = h.match(/1-(\d+)月/) || h.match(/1月〜(\d+)月/);
+          d.nev_exp_period = m ? `1-${m[1]}月累計` : '累計';
         }
-        // 累計を一時的に使っている場合は単月が後から来る可能性があるため10件でも続ける
+        continue;
+      }
+      // データ行
+      if (inN && h && /^\d+$/.test(h) && r[1]) {
+        const v = toF(r[2]); if (v != null) d.nev_exp_countries.push({rank:+h, country:normCountry(r[1]), units:+(v/10000).toFixed(4)});
         if (d.nev_exp_countries.length >= 10 && hasSingle) break;
       }
     }

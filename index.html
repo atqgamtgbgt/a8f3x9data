@@ -2553,10 +2553,15 @@ img.car-thumb {
                     <div id="ec-country-cada" class="echart-box" style="height:480px"></div>
                   </div>
                 </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">NEV輸出先国ランキング 月次推移<span class="badge ms-2" style="background:#10b981;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">NEV輸出 上位10カ国 月次台数推移　<span class="text-muted" style="font-size:10px">📋 国名:B列 / 台数(輌→万台換算):C列 / 行番号は月により変動（【NEV輸出】ヘッダ）</span></div>
+                    <div id="ec-country-nev-exp" class="echart-box" style="height:480px"></div>
+                  </div>
+                </div>
               </div>
             </div>
-
-            <!-- ===== 輸入国ランキング ===== -->
             <div class="tab-pane fade" id="cp-import">
               <div class="row g-3">
                 <div class="col-12">
@@ -4202,20 +4207,65 @@ function parseMonthSheet(rows) {
   }
 
   // ---- 輸入国別（単月優先、なければ累計） ----
-  d.import_countries = [];
+  d.import_countries = []; d.import_is_cumul = false; d.import_period = null;
   { let inI = false; let hasSingle = false;
     for (const r of rows) {
       const h = r[0];
       if (h && h.includes('【輸入】') && h.includes('輸入量上位')) {
         const isCumul = h.includes('累計') || h.includes('通年');
-        if (!isCumul) { inI = true; hasSingle = true; d.import_countries = []; continue; }
-        if (!hasSingle) { inI = true; d.import_countries = []; continue; }
+        if (!isCumul) {
+          inI = true; hasSingle = true; d.import_countries = [];
+          d.import_is_cumul = false;
+          const m = h.match(/(\d{4})年(\d+)月/);
+          d.import_period = m ? `${m[1].slice(2)}年${+m[2]}月` : null;
+          continue;
+        }
+        if (!hasSingle) {
+          inI = true; d.import_countries = [];
+          d.import_is_cumul = true;
+          const m = h.match(/1-(\d+)月/);
+          d.import_period = m ? `1-${m[1]}月累計` : '累計';
+          continue;
+        }
       }
       if (inI) {
         if (/^\d+$/.test(h) && r[1]) {
           const v = toF(r[2]); if (v != null) d.import_countries.push({rank:+h, country:r[1], units:+(v/10000).toFixed(4)});
         }
         if (d.import_countries.length >= 10) break;
+      }
+    }
+  }
+
+  // ---- NEV輸出国別（単月優先、なければ累計） ----
+  d.nev_exp_countries = []; d.nev_exp_is_cumul = false; d.nev_exp_period = null;
+  { let inN = false; let hasSingle = false;
+    for (const r of rows) {
+      const h = r[0];
+      if (h && h.includes('【NEV輸出】') && (h.includes('輸出量上位10カ国') || h.includes('輸出量上位5カ国'))) {
+        const isCumul = h.includes('累計') || h.includes('通年') || /1-\d+月/.test(h);
+        if (!isCumul) {
+          inN = true; hasSingle = true; d.nev_exp_countries = [];
+          d.nev_exp_is_cumul = false;
+          // 期間ラベル抽出（例: 「2025年7月」）
+          const m = h.match(/(\d{4})年(\d+)月/);
+          d.nev_exp_period = m ? `${m[1].slice(2)}年${+m[2]}月` : null;
+          continue;
+        }
+        if (!hasSingle) {
+          inN = true; d.nev_exp_countries = [];
+          d.nev_exp_is_cumul = true;
+          // 累計の期間ラベル（例: 「1-2月累計」）
+          const m = h.match(/1-(\d+)月/);
+          d.nev_exp_period = m ? `1-${m[1]}月累計` : '累計';
+          continue;
+        }
+      }
+      if (inN) {
+        if (/^\d+$/.test(h) && r[1]) {
+          const v = toF(r[2]); if (v != null) d.nev_exp_countries.push({rank:+h, country:normCountry(r[1]), units:+(v/10000).toFixed(4)});
+        }
+        if (d.nev_exp_countries.length >= 10) break;
       }
     }
   }
@@ -4590,9 +4640,25 @@ function buildCdSd(monthly) {
   ]));
 
   // ---- 輸入国別 ----
+  // ---- NEV輸出国別シリーズ ----
+  const nevExpMonths  = sorted.filter(ym => (monthly[ym]?.nev_exp_countries||[]).length > 0);
+  const nevExpAllCo   = [...new Set(nevExpMonths.flatMap(ym => (monthly[ym].nev_exp_countries||[]).map(e=>cn(e.country))))];
+  // X軸ラベル: 累計月は「25年1-2月累計」のように表示
+  CD.nev_exp_months   = nevExpMonths.map(ym => {
+    const d = monthly[ym];
+    return d.nev_exp_period || lbl(ym);
+  });
+  CD.nev_exp_months_raw = nevExpMonths; // ツールチップ用
+  CD.nev_exp_cumul_flags = nevExpMonths.map(ym => monthly[ym]?.nev_exp_is_cumul || false);
+  CD.nev_exp_countries= nevExpAllCo;
+  CD.nev_exp_series   = Object.fromEntries(nevExpAllCo.map(co => [co,
+    nevExpMonths.map(ym => { const e=(monthly[ym].nev_exp_countries||[]).find(x=>cn(x.country)===co); return e?e.units:null; })
+  ]));
+
   const impMonths    = sorted.filter(ym => (monthly[ym]?.import_countries||[]).length > 0);
   const impAllCo     = [...new Set(impMonths.flatMap(ym => (monthly[ym].import_countries||[]).map(e=>cn(e.country))))];
-  CD.import_months    = impMonths.map(lbl);
+  CD.import_months    = impMonths.map(ym => monthly[ym]?.import_period || lbl(ym));
+  CD.import_cumul_flags = impMonths.map(ym => monthly[ym]?.import_is_cumul || false);
   CD.import_countries = impAllCo;
   CD.import_series    = Object.fromEntries(impAllCo.map(co => [co,
     impMonths.map(ym => { const e=(monthly[ym].import_countries||[]).find(x=>cn(x.country)===co); return e?e.units:null; })
@@ -5261,7 +5327,33 @@ function initCountryCada() {
     chart.setOption(opt);
   });
 }
-function initCountry() { initCountryCaam(); initCountryCada(); }
+function initNevExp() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-country-nev-exp', chart => {
+    const t = gt(); const opt = baseOpt(t);
+    if (!CD.nev_exp_months?.length) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
+    opt.xAxis.data = CD.nev_exp_months;
+    opt.grid.bottom = 80; opt.grid.right = 165;
+    opt.legend = { orient:'vertical', right:0, top:40, width:160, textStyle:{color:t.sub,fontSize:11}, type:'scroll', pageTextStyle:{color:t.sub} };
+    opt.xAxis.axisLabel.rotate = 35;
+    opt.tooltip.formatter = params => {
+      const idx = params[0]?.dataIndex;
+      const isCumul = CD.nev_exp_cumul_flags?.[idx];
+      let s = `<b>${params[0].axisValue}</b>${isCumul ? ' <span style="color:#f59e0b;font-size:10px">※累計</span>' : ''}<br>`;
+      params.filter(p=>p.value!=null).sort((a,b)=>b.value-a.value)
+        .forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`);
+      if (isCumul) s += `<br><span style="font-size:10px;color:#888">※月次単月でなく累計値です</span>`;
+      return s;
+    };
+    opt.series = CD.nev_exp_countries.map((co,i) => ({
+      name:co, type:'line', data:CD.nev_exp_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:false,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
+function initCountry() { initCountryCaam(); initCountryCada(); initNevExp(); }
 
 // 輸入国ランキング
 function initImport() {

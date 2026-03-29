@@ -4258,7 +4258,10 @@ function parseMonthSheet(rows) {
         // 前半が累計（「1-X月」「累計」「通年」）なら後半から取る
         if (/\d+-\d+月|累計|通年/.test(prefix)) {
           const m2 = str.slice(slashIdx).match(/([\d.]+)%/);
-          return m2 ? +m2[1] : null;
+          // 後半に%がない場合（例:「/ 3月128万台」）は前半の%を使う
+          if (m2) return +m2[1];
+          const m1 = prefix.match(/([\d.]+)%/);
+          return m1 ? +m1[1] : null;
         }
       }
       // スラッシュなしで累計のみ（例: 「1-9月13.8%」）→ null

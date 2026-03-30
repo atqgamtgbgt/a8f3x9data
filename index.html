@@ -4219,12 +4219,8 @@ function parseMonthSheet(rows) {
           const m = h.match(/(\d{4})年(\d+)月/);
           d.import_period = m ? `${m[1].slice(2)}年${+m[2]}月` : null;
           continue;
-        }
-        if (!hasSingle) {
-          inI = true; d.import_countries = [];
-          d.import_is_cumul = true;
-          const m = h.match(/1-(\d+)月/);
-          d.import_period = m ? `1-${m[1]}月累計` : '累計';
+        } else {
+          inI = false; // 累計は使わない
           continue;
         }
       }
@@ -4257,11 +4253,8 @@ function parseMonthSheet(rows) {
           d.nev_exp_is_cumul = false;
           const m = h.match(/(\d{4})年(\d+)月/);
           d.nev_exp_period = m ? `${m[1].slice(2)}年${+m[2]}月` : null;
-        } else if (!hasSingle) {
-          inN = true; d.nev_exp_countries = [];
-          d.nev_exp_is_cumul = true;
-          const m = h.match(/1-(\d+)月/) || h.match(/1月〜(\d+)月/);
-          d.nev_exp_period = m ? `1-${m[1]}月累計` : '累計';
+        } else {
+          inN = false; // 累計は使わない
         }
         continue;
       }

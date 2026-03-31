@@ -2604,18 +2604,54 @@ img.car-thumb {
             <!-- ===== 世界NEV指標 ===== -->
             <div class="tab-pane fade" id="cp-world">
               <div class="row g-3">
+                <!-- 指標説明カード -->
+                <div class="col-12">
+                  <div class="alert alert-light border" style="font-size:13px;line-height:1.7;margin-bottom:0">
+                    <div class="row g-2">
+                      <div class="col-12 col-md-6">
+                        <span class="badge me-1" style="background:#c9184a">●</span>
+                        <strong>中国NEV世界シェア</strong>：世界で売れたNEVのうち、<u>中国市場（国内販売）が占める割合</u>。<br>
+                        <span class="text-muted ms-3">例：75% → 世界のNEV販売の¾が中国市場。国内市場の巨大さが主因。</span>
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <span class="badge me-1" style="background:#4e79a7">●</span>
+                        <strong>世界NEV普及率</strong>：世界全体の自動車販売（NEV＋燃油車）に占めるNEVの割合。<br>
+                        <span class="text-muted ms-3">例：25% → 世界で売れた車の4台に1台がNEV。</span>
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <span class="badge me-1" style="background:#e15759">●</span>
+                        <strong>中国の世界自動車シェア</strong>：世界全体の自動車販売（NEV＋燃油車）に占める<u>中国市場全体</u>の割合。<br>
+                        <span class="text-muted ms-3">例：38% → 世界で売れた車の約4割が中国市場。</span>
+                      </div>
+                      <div class="col-12 col-md-6">
+                        <span class="badge me-1" style="background:#59a14f">●</span>
+                        <strong>自主NEV海外市場シェア</strong>：世界で売れたNEVのうち、<u>中国自主ブランドが海外市場で</u>販売した分の割合。<br>
+                        <span class="text-muted ms-3">例：17.7% → 輸出競争力の指標。中国国内販売は含まない。</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">中国NEV世界シェア・世界NEV普及率<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">中国のNEV世界シェア（%）・世界NEV普及率（%）　<span class="text-muted" style="font-size:10px">📋 中国NEV世界シェア:B185 / 世界NEV普及率:B184　（行番号は月により変動）</span></div>
+                    <div class="chart-subtitle">
+                      <span style="color:#c9184a;font-weight:600">中国NEV世界シェア</span>：世界NEV販売に占める中国市場の割合　／　
+                      <span style="color:#4e79a7;font-weight:600">世界NEV普及率</span>：世界の全自動車販売に占めるNEVの割合
+                      <span class="text-muted ms-1" style="font-size:10px">📋 中国NEV世界シェア:B185 / 世界NEV普及率:B184</span>
+                    </div>
                     <div id="ec-world-nev" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">中国の世界自動車シェア・自主NEV海外シェア<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">中国乗用車の世界販売シェア・自主NEV海外市場シェア（%）　<span class="text-muted" style="font-size:10px">📋 中国世界シェア:B182 / 自主NEV海外シェア:B183　（行番号は月により変動）</span></div>
+                    <div class="chart-title">中国の世界自動車シェア・自主NEV海外市場シェア<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
+                    <div class="chart-subtitle">
+                      <span style="color:#e15759;font-weight:600">中国の世界自動車シェア</span>：全自動車販売（NEV＋燃油車）に占める中国市場の割合　／　
+                      <span style="color:#59a14f;font-weight:600">自主NEV海外市場シェア</span>：世界NEV販売に占める中国自主ブランドの<u>海外販売</u>の割合
+                      <span class="text-muted ms-1" style="font-size:10px">📋 中国世界シェア:B182 / 自主NEV海外シェア:B183</span>
+                    </div>
                     <div id="ec-world-share" class="echart-box" style="height:360px"></div>
+                    <div class="text-muted mt-1" style="font-size:11px;padding:0 4px">※ 中国の世界自動車シェアは2025年1月以前のCADAレポートに月次単月値の記載なし（2024年通年:34.2%）</div>
                   </div>
                 </div>
                 <div class="col-12">
@@ -5455,13 +5491,19 @@ function initWorld() {
     opt.yAxis.max = 80; opt.yAxis.min = 0; opt.yAxis.axisLabel.formatter = '{value}%';
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      const desc = {
+        '中国NEV世界シェア': '世界NEV販売に占める中国市場の割合',
+        '世界NEV普及率':     '全自動車販売に占めるNEVの割合',
+      };
+      params.forEach(p => {
+        if(p.value!=null) s += `${p.marker}<b>${p.value}%</b>　<span style="color:#666;font-size:11px">${p.seriesName}（${desc[p.seriesName]||''}）</span><br>`;
+      });
       return s;
     };
     opt.series = [
       { name:'中国NEV世界シェア', type:'line', data:CD.cn_nev_world_share,
         symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#c9184a'}, itemStyle:{color:'#c9184a'} },
-      { name:'世界NEV普及率',     type:'line', data:CD.world_nev_pen,
+      { name:'世界NEV普及率', type:'line', data:CD.world_nev_pen,
         symbol:'diamond', symbolSize:6, lineStyle:{width:2,color:'#4e79a7',type:'dashed'}, itemStyle:{color:'#4e79a7'} },
     ];
     chart.setOption(opt);
@@ -5473,12 +5515,27 @@ function initWorld() {
     opt.yAxis.max = 45; opt.yAxis.min = 0; opt.yAxis.axisLabel.formatter = '{value}%';
     opt.tooltip.formatter = params => {
       let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
+      const desc = {
+        '中国の世界自動車シェア': '全自動車販売（NEV＋燃油車）に占める中国市場の割合',
+        '自主NEV海外市場シェア':  '世界NEV販売に占める中国自主ブランドの海外販売割合（国内除く）',
+      };
+      params.forEach(p => {
+        if(p.value!=null) s += `${p.marker}<b>${p.value}%</b>　<span style="color:#666;font-size:11px">${p.seriesName}（${desc[p.seriesName]||''}）</span><br>`;
+        else if(p.seriesName==='中国の世界自動車シェア') s += `${p.marker}<span style="color:#aaa">データなし</span>　<span style="color:#999;font-size:11px">中国の世界自動車シェア（2024年通年:34.2%）</span><br>`;
+      });
       return s;
     };
+    // 「中国の世界自動車シェア」がnullの期間（2024年5〜12月相当）をグレーゾーンで表示
+    const noShareMonths = CD.world_months.filter((m,i) => CD.cn_world_share[i]==null);
+    const markAreas = [];
+    if (noShareMonths.length > 0) {
+      markAreas.push([{xAxis: noShareMonths[0], itemStyle:{color:'rgba(200,200,200,0.18)'}}, {xAxis: noShareMonths[noShareMonths.length-1]}]);
+    }
     opt.series = [
-      { name:'中国乗用車世界シェア', type:'line', data:CD.cn_world_share,
-        symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'} },
+      { name:'中国の世界自動車シェア', type:'line', data:CD.cn_world_share,
+        symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'},
+        markArea: markAreas.length ? { silent:true, data:markAreas,
+          label:{show:true, position:'insideTop', fontSize:10, color:'#999', formatter:'月次単月値\nデータなし'} } : undefined },
       { name:'自主NEV海外市場シェア', type:'line', data:CD.zizhu_nev_overseas,
         symbol:'diamond', symbolSize:6, lineStyle:{width:2,color:'#59a14f',type:'dashed'}, itemStyle:{color:'#59a14f'} },
     ];

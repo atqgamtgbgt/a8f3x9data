@@ -4352,8 +4352,8 @@ function parseMonthSheet(rows, sheetYm) {
     const worldOk = (raw => {
       if (!sheetYm) return true; // ymが不明なら無条件採用
       const period = extractPeriodYm(raw);
-      if (!period) return true;  // 通年など期間特定できない場合は採用
-      return period === sheetYm; // 期間がシートymと一致する場合のみ採用
+      if (!period) return true;  // 通年・Q表記など期間特定できない場合は採用
+      return period <= sheetYm;  // シートymより未来の日付のみ除外（遅行公表を許容）
     });
     if (h==='中国の世界自動車販売シェア') d.world.cn_world_share    = worldOk(raw) ? pct(raw) : null;
     if (h==='自主ブランドNEV 海外市場シェア')  d.world.zizhu_nev_overseas = worldOk(raw) ? pct(raw) : null;

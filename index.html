@@ -4163,6 +4163,19 @@ function parseMonthSheet(rows, sheetYm) {
   };
   const normCountry = n => COUNTRY_NORM[n] || n;
 
+  // ヘッダ文字列から「YYYY年M月」を抽出してYYYY-MM形式で返す
+  const headerYm = (h => {
+    const m = h && h.match(/(\d{4})年(\d{1,2})月/);
+    return m ? `${m[1]}-${String(parseInt(m[2])).padStart(2,'0')}` : null;
+  });
+  // ヘッダのymがシートymと一致するか（年月不明のヘッダは採用しない）
+  const countryOk = (h => {
+    if (!sheetYm) return true;
+    const hym = headerYm(h);
+    if (!hym) return false;  // 年月不明（「単月」等）はスキップ
+    return hym === sheetYm;
+  });
+
   d.caam_exp_countries = [];
   { let inC = false; let isWan = true;
     for (const r of rows) {
@@ -4170,7 +4183,7 @@ function parseMonthSheet(rows, sheetYm) {
       if (h && ((h.includes('輸出量上位') || (h.includes('整車輸出') && h.includes('カ国'))) &&
           !h.includes('累計') && !h.includes('NEV') && !h.includes('乗聯') && !h.includes('CADA') &&
           !h.includes('前年比')))
-        { inC = true; isWan = h.includes('万台'); continue; }
+        { inC = countryOk(h); isWan = h.includes('万台'); continue; }
       // 前年比増加セクション等で終了
       if (inC && h && (h.includes('前年比') || h.includes('NEV') || h.includes('CADA') || h.includes('累計'))) { inC = false; }
       if (inC) {
@@ -4214,6 +4227,7 @@ function parseMonthSheet(rows, sheetYm) {
       if (h && h.includes('【輸入】') && h.includes('輸入量上位')) {
         const isCumul = h.includes('累計') || h.includes('通年');
         if (!isCumul) {
+          if (!countryOk(h)) { inI = false; continue; }
           inI = true; hasSingle = true; d.import_countries = [];
           d.import_is_cumul = false;
           const m = h.match(/(\d{4})年(\d+)月/);
@@ -4249,6 +4263,7 @@ function parseMonthSheet(rows, sheetYm) {
       if (isHeader) {
         const isCumul = h.includes('累計') || h.includes('通年') || /1-\d+月/.test(h) || h.includes('1月〜');
         if (!isCumul) {
+          if (!countryOk(h)) { inN = false; continue; }
           inN = true; hasSingle = true; d.nev_exp_countries = [];
           d.nev_exp_is_cumul = false;
           const m = h.match(/(\d{4})年(\d+)月/);
@@ -4693,7 +4708,7 @@ function buildCdSd(monthly) {
   });
 
   // ---- 世界指標 ----
-  const worldMonths = sorted.filter(ym => Object.keys(monthly[ym]?.world||{}).length > 0);
+  const worldMonths = sorted.filter(ym => Object.keys(monthly[ym]?.world||{}).length > 0 && Object.values(monthly[ym]?.world||{}).some(v => v !== null));
   CD.world_months = worldMonths.map(lbl);
   ['cn_world_share','zizhu_nev_overseas','world_nev_pen','cn_nev_world_share','world_nev_monthly'].forEach(f => {
     CD[f] = worldMonths.map(ym => monthly[ym]?.world?.[f] ?? null);

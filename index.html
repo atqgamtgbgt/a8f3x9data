@@ -1693,12 +1693,6 @@ img.car-thumb {
 /* カスタムタブペイン */
 .cds-pane { display: none; }
 .cds-pane.cds-active { display: block; }
-/* 比較バー */
-#cds-compare-bar {
-  background: #f0f9ff;
-  border: 1px solid #bae6fd;
-  border-radius: 8px;
-}
 .chart-card {
   background: #fff;
   border: 1px solid #e9ecef;
@@ -2771,58 +2765,6 @@ body.tray-open { padding-bottom: 105px; }
             </div>
 
           </div><!-- end cdsPills -->
-          <!-- 比較ビューレイアウト -->
-          <div id="cds-compare-bar" style="display:none" class="d-flex align-items-center gap-2 mb-2 p-2 rounded" style="background:#f0f9ff;border:1px solid #bae6fd">
-            <span style="font-size:13px;color:#0369a1">📌 比較中：</span>
-            <span id="cds-compare-label" style="font-size:13px;font-weight:600;color:#0369a1"></span>
-            <button id="cds-compare-clear" class="btn btn-sm btn-outline-secondary ms-auto" style="font-size:11px">✕ 比較解除</button>
-          </div>
-          <div id="cds-layout" class="row g-3">
-            <div id="cds-main-col" class="col-12">
-              <div id="cdsPillsContent" style="display:none">
-            <div class="cds-pane cds-active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-annual"><div class="chart-card"><div class="chart-title">歴年出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑭シート　2007〜2025年</div><div id="ec-cds-annual" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev"><div class="chart-card"><div class="chart-title">NEV出口 vs 総出口（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ②シート　月次単月</div><div id="ec-cds-nev" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-annual"><div class="chart-card"><div class="chart-title">NEV出口 歴年推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉕シート　2020〜2025年</div><div id="ec-cds-nev-annual" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-trend"><div class="chart-card"><div class="chart-title">NEV出口 走勢グラフ（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉖シート　2017〜2025年</div><div id="ec-cds-nev-trend" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-powertype"><div class="chart-card"><div class="chart-title">乗用車 動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑰シート　2022〜2025年</div><div id="ec-cds-powertype" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-bodytype"><div class="chart-card"><div class="chart-title">車型別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑯シート　2022〜2025年</div><div id="ec-cds-bodytype" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-power"><div class="chart-card"><div class="chart-title">新能源 動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉓シート　2022〜2025年</div><div id="ec-cds-nev-power" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-body"><div class="chart-card"><div class="chart-title">新能源 車型別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉔シート　2022〜2025年</div><div id="ec-cds-nev-body" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-region"><div class="chart-card"><div class="chart-title">地域別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑲シート　2019〜2025年</div><div id="ec-cds-region" class="echart-box" style="height:460px"></div></div></div>
-            <div class="cds-pane" id="cds-country"><div class="chart-card"><div class="chart-title">主要国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑳シート　2024年・2025年比較</div><div id="ec-cds-country" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-ctry"><div class="chart-card"><div class="chart-title">NEV 国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉑シート　2024年・2025年比較</div><div id="ec-cds-nev-ctry" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-prov"><div class="chart-card"><div class="chart-title">省別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑱シート　2019〜2025年</div><div id="ec-cds-prov" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-prov"><div class="chart-card"><div class="chart-title">NEV省別出口量 Top12（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉒シート　2019〜2025年</div><div id="ec-cds-nev-prov" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-rank"><div class="chart-card"><div class="chart-title">歴年 主力市場ランキング推移</div><div class="chart-subtitle">崔東树/乗聯会 ⑬シート　2020〜2026.1-2月</div><div id="ec-cds-rank" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-russia"><div class="chart-card"><div class="chart-title">対ロシア月次出口量推移（台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉗シート　2021〜2025年</div><div id="ec-cds-russia" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-displace"><div class="chart-card"><div class="chart-title">乗用車 排量別×動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉘シート　2020〜2025年</div><div id="ec-cds-displace" class="echart-box" style="height:480px"></div></div></div>
-            <!-- ランキング系タブ：Top10棒グラフ＋国別推移の2ビュー構成 -->
-            <div class="cds-pane" id="cds-r3">  <div id="rk-wrap-r3"></div></div>
-            <div class="cds-pane" id="cds-r4">  <div id="rk-wrap-r4"></div></div>
-            <div class="cds-pane" id="cds-r5">  <div id="rk-wrap-r5"></div></div>
-            <div class="cds-pane" id="cds-r6">  <div id="rk-wrap-r6"></div></div>
-            <div class="cds-pane" id="cds-r7">  <div id="rk-wrap-r7"></div></div>
-            <div class="cds-pane" id="cds-r6b"> <div id="rk-wrap-r6b"></div></div>
-            <div class="cds-pane" id="cds-r8">  <div id="rk-wrap-r8"></div></div>
-            <div class="cds-pane" id="cds-r9">  <div id="rk-wrap-r9"></div></div>
-            <div class="cds-pane" id="cds-r10"> <div id="rk-wrap-r10"></div></div>
-            <div class="cds-pane" id="cds-r9b"> <div id="rk-wrap-r9b"></div></div>
-            <div class="cds-pane" id="cds-r11"> <div id="rk-wrap-r11"></div></div>
-            <div class="cds-pane" id="cds-r12"> <div id="rk-wrap-r12"></div></div>
-            <div class="cds-pane" id="cds-r12b"><div id="rk-wrap-r12b"></div></div>
-          </div><!-- end cdsPillsContent -->
-            </div><!-- end cds-main-col -->
-            <!-- 比較ペイン（右側） -->
-            <div id="cds-compare-col" class="col-12 col-lg-6" style="display:none">
-              <div class="chart-card" style="border:2px solid #0ea5e9;position:relative">
-                <div style="position:absolute;top:8px;right:8px;z-index:10">
-                  <button id="cds-compare-close" class="btn btn-sm btn-outline-secondary" style="font-size:11px">✕</button>
-                </div>
-                <div id="cds-compare-content" style="min-height:400px"></div>
-              </div>
-            </div>
-          </div><!-- end cds-layout row -->
         </div>
       </div><!-- end cds-super-content -->
 
@@ -7170,72 +7112,6 @@ function cdsShowPane(id) {
 }
 
 // 比較ペインにグラフをクローン表示
-function cdsSetCompare(id) {
-  const src = document.getElementById(id);
-  if (!src) return;
-
-  CDS_COMPARE_ID = id;
-  const mainCol = document.getElementById('cds-main-col');
-  const compareCol = document.getElementById('cds-compare-col');
-  const compareContent = document.getElementById('cds-compare-content');
-  const compareBar = document.getElementById('cds-compare-bar');
-  const compareLabel = document.getElementById('cds-compare-label');
-
-  // メインを6カラムに
-  mainCol.className = 'col-12 col-lg-6';
-  compareCol.style.display = '';
-
-  // タイトルを取得してラベルに表示
-  const titleEl = src.querySelector('.chart-title');
-  compareLabel.textContent = titleEl ? titleEl.textContent : id;
-  compareBar.style.display = '';
-
-  // 比較コンテンツ：タイトル＋ECharts再描画用のdiv
-  const ecId = `ec-compare-${id}`;
-  const title = src.querySelector('.chart-title')?.innerHTML || '';
-  const subtitle = src.querySelector('.chart-subtitle')?.innerHTML || '';
-  compareContent.innerHTML = `
-    <div class="chart-title">${title} <span style="font-size:11px;color:#0ea5e9">📌 比較</span></div>
-    <div class="chart-subtitle">${subtitle}</div>
-    <div id="${ecId}" class="echart-box" style="height:420px"></div>`;
-
-  // 元グラフのoptionをコピーして比較ペインに描画
-  const srcEcId = src.querySelector('.echart-box')?.id;
-  if (srcEcId && CDS_EC[srcEcId]) {
-    const compareChart = echarts.init(document.getElementById(ecId));
-    CDS_EC[ecId] = compareChart;
-    const option = CDS_EC[srcEcId].getOption();
-    compareChart.setOption(option);
-    setTimeout(() => { try { compareChart.resize(); } catch(e){} }, 80);
-  } else {
-    // ランキング系（rk-wrap）はHTMLごとコピー
-    const rkWrap = src.querySelector('[id^="rk-wrap-"]');
-    if (rkWrap) {
-      compareContent.innerHTML = `
-        <div class="chart-title">${title} <span style="font-size:11px;color:#0ea5e9">📌 比較</span></div>
-        <div class="text-muted small p-3">※ 国別ランキングの比較表示は元タブを参照してください</div>`;
-    }
-  }
-
-  // メインエリアのグラフをリサイズ
-  setTimeout(() => {
-    Object.values(CDS_EC).forEach(c => { try { c && c.resize(); } catch(e){} });
-  }, 100);
-}
-
-function cdsClearCompare() {
-  CDS_COMPARE_ID = null;
-  const mainCol = document.getElementById('cds-main-col');
-  const compareCol = document.getElementById('cds-compare-col');
-  const compareBar = document.getElementById('cds-compare-bar');
-  mainCol.className = 'col-12';
-  compareCol.style.display = 'none';
-  compareBar.style.display = 'none';
-  document.getElementById('cds-compare-content').innerHTML = '';
-  setTimeout(() => {
-    Object.values(CDS_EC).forEach(c => { try { c && c.resize(); } catch(e){} });
-  }, 80);
-}
 
 
 // タブナビゲーション：カスタム制御
@@ -7252,8 +7128,6 @@ document.querySelectorAll('#cdsPills [data-cds-target]').forEach(btn => {
 });
 
 // 比較解除ボタン
-document.getElementById('cds-compare-clear')?.addEventListener('click', cdsClearCompare);
-document.getElementById('cds-compare-close')?.addEventListener('click', cdsClearCompare);
 
 window.addEventListener('resize', () => {
   Object.values(CDS_EC).forEach(c => { try { c && c.resize(); } catch(e){} });

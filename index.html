@@ -6682,7 +6682,6 @@ async function loadCdsExcel() {
     // 初期タブを表示
     cdsShowPane('cds-monthly');
     // 比較ボタンを各グラフに追加（少し遅延して描画後に）
-    setTimeout(addCompareBtns, 300);
     console.log('✅ CDS Excel loaded');
   } catch(err) {
     console.error('CDS Excel error:', err);
@@ -7238,22 +7237,6 @@ function cdsClearCompare() {
   }, 80);
 }
 
-// 「📌 比較に追加」ボタンを各chart-cardに動的追加
-function addCompareBtns() {
-  document.querySelectorAll('.cds-pane .chart-card').forEach(card => {
-    if (card.querySelector('.cds-compare-pin')) return;
-    const pane = card.closest('.cds-pane');
-    if (!pane) return;
-    const paneId = pane.id;
-    const btn = document.createElement('button');
-    btn.className = 'btn btn-sm btn-outline-primary cds-compare-pin';
-    btn.style.cssText = 'font-size:11px;position:absolute;top:8px;right:8px;z-index:10';
-    btn.textContent = '📌 比較に追加';
-    btn.addEventListener('click', () => cdsSetCompare(paneId));
-    card.style.position = 'relative';
-    card.appendChild(btn);
-  });
-}
 
 // タブナビゲーション：カスタム制御
 document.getElementById('cds-super-tab').addEventListener('shown.bs.tab', () => {
@@ -7277,203 +7260,211 @@ window.addEventListener('resize', () => {
 });
 
 if (document.getElementById('cds-super-tab')?.classList.contains('active')) loadCdsExcel();
-// =============================================
-// 全タブ横断 比較トレイ
-// =============================================
-(function() {
-  const TRAY = [];
-  const MAX_TRAY = 4;
 
-  const trayEl      = document.getElementById('compare-tray');
-  const trayItems   = document.getElementById('compare-tray-items');
-  const trayCompare = document.getElementById('compare-tray-compare');
-  const trayClearAll= document.getElementById('compare-tray-clear-all');
-  const trayToggle  = document.getElementById('compare-tray-toggle');
-  const modalEl     = document.getElementById('compare-modal');
-  const modalBody   = document.getElementById('compare-modal-body');
-  const modalClose  = document.getElementById('compare-modal-close');
-  let trayCollapsed = false;
+</script>
 
-  function getAllEC() {
-    return Object.assign({},
-      typeof EC !== 'undefined' ? EC : {},
-      typeof CCCM_EC !== 'undefined' ? CCCM_EC : {},
-      typeof CDS_EC !== 'undefined' ? CDS_EC : {}
-    );
+<!-- ========== 比較トレイ（全タブ横断） ========== -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  var TRAY = [];
+  var MAX  = 4;
+  var collapsed = false;
+
+  var trayEl    = document.getElementById('compare-tray');
+  var trayItems = document.getElementById('compare-tray-items');
+  var trayHint  = document.getElementById('compare-tray-hint');
+  var btnCompare= document.getElementById('compare-tray-compare');
+  var btnClear  = document.getElementById('compare-tray-clear-all');
+  var btnToggle = document.getElementById('compare-tray-toggle');
+  var modalEl   = document.getElementById('compare-modal');
+  var modalBody = document.getElementById('compare-modal-body');
+  var modalClose= document.getElementById('compare-modal-close');
+
+  function findChart(ecId) {
+    var maps = [
+      (typeof EC      !== 'undefined') ? EC      : {},
+      (typeof CCCM_EC !== 'undefined') ? CCCM_EC : {},
+      (typeof CDS_EC  !== 'undefined') ? CDS_EC  : {}
+    ];
+    for (var i = 0; i < maps.length; i++) {
+      if (maps[i][ecId]) return maps[i][ecId];
+    }
+    var dom = document.getElementById(ecId);
+    if (dom) return echarts.getInstanceByDom(dom) || null;
+    return null;
   }
 
   function renderTray() {
     if (TRAY.length === 0) {
       trayEl.style.display = 'none';
-      document.body.classList.remove('tray-open');
+      document.body.style.paddingBottom = '';
       return;
     }
     trayEl.style.display = '';
-    document.body.classList.add('tray-open');
-    trayCompare.disabled = TRAY.length < 2;
-    const hint = document.getElementById('compare-tray-hint');
-    if (hint) hint.textContent = TRAY.length < MAX_TRAY
-      ? `${TRAY.length}個選択中（最大${MAX_TRAY}個）`
-      : `${MAX_TRAY}個 — 「🔍 比較表示」をクリック`;
+    if (!collapsed) document.body.style.paddingBottom = '110px';
+    if (trayHint) trayHint.textContent = TRAY.length + '個選択中（最大' + MAX + '個）';
+    btnCompare.disabled = (TRAY.length < 2);
+    btnCompare.style.opacity = TRAY.length < 2 ? '0.5' : '1';
 
-    trayItems.innerHTML = TRAY.map((item, i) => `
-      <div class="compare-thumb">
-        <span>${item.icon || '📊'}</span>
-        <span class="compare-thumb-label">${item.label}</span>
-        <span class="compare-thumb-remove" data-remove="${i}" title="削除">✕</span>
-      </div>
-    `).join('');
-
-    trayItems.querySelectorAll('.compare-thumb-remove').forEach(btn => {
-      btn.addEventListener('click', e => {
+    trayItems.innerHTML = '';
+    TRAY.forEach(function(item, idx) {
+      var div = document.createElement('div');
+      div.className = 'compare-thumb';
+      div.innerHTML =
+        '<span>' + item.icon + '</span>' +
+        '<span class="compare-thumb-label">' + item.label + '</span>' +
+        '<span class="compare-thumb-remove">✕</span>';
+      div.querySelector('.compare-thumb-remove').addEventListener('click', function(e) {
         e.stopPropagation();
-        TRAY.splice(parseInt(btn.dataset.remove), 1);
+        TRAY.splice(idx, 1);
         renderTray();
       });
+      trayItems.appendChild(div);
     });
+    if (TRAY.length < MAX) {
+      var sp = document.createElement('span');
+      sp.style.cssText = 'font-size:11px;color:#64748b;white-space:nowrap;padding:0 4px';
+      sp.textContent = '← グラフの 📌 で追加';
+      trayItems.appendChild(sp);
+    }
   }
 
-  function openCompareModal() {
+  btnCompare.addEventListener('click', function() {
     if (TRAY.length < 2) return;
-    const cols = Math.min(TRAY.length, 2);
-    modalBody.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
-    modalBody.innerHTML = TRAY.map((item, i) => `
-      <div class="compare-cell">
-        <div style="padding:10px 14px 2px;font-weight:700;font-size:13px;color:#1e293b;border-bottom:1px solid #f1f5f9">${item.icon} ${item.label}</div>
-        <div style="font-size:11px;color:#94a3b8;padding:4px 14px 6px">${item.source || ''}</div>
-        <div id="cm-ec-${i}" style="height:400px;padding:0 4px 8px"></div>
-      </div>
-    `).join('');
+    var cols = TRAY.length <= 2 ? 2 : 3;
+    modalBody.style.gridTemplateColumns = 'repeat(' + cols + ', 1fr)';
+    modalBody.innerHTML = '';
+    TRAY.forEach(function(item, i) {
+      var cell = document.createElement('div');
+      cell.className = 'compare-cell';
+      cell.innerHTML =
+        '<div style="padding:10px 14px 2px;font-weight:700;font-size:13px;border-bottom:1px solid #f1f5f9">' +
+          item.icon + ' ' + item.label + '</div>' +
+        '<div style="font-size:11px;color:#94a3b8;padding:4px 14px 6px">' + (item.source||'') + '</div>' +
+        '<div id="cmp-' + i + '" style="height:400px"></div>';
+      modalBody.appendChild(cell);
+    });
     modalEl.style.display = '';
 
-    setTimeout(() => {
-      const allEC = getAllEC();
-      TRAY.forEach((item, i) => {
-        const el = document.getElementById('cm-ec-' + i);
+    setTimeout(function() {
+      TRAY.forEach(function(item, i) {
+        var el = document.getElementById('cmp-' + i);
         if (!el) return;
-
-        // EChartsインスタンスを複数の方法で取得（保存済み > DOM > ECマップ の順）
-        let srcChart = item.instance || null;
-        if (!srcChart) srcChart = allEC[item.ecId];
-        if (!srcChart) {
-          const srcDom = document.getElementById(item.ecId);
-          if (srcDom) srcChart = echarts.getInstanceByDom(srcDom);
+        var src = findChart(item.ecId);
+        if (!src) {
+          el.innerHTML = '<div style="padding:40px;text-align:center;color:#94a3b8;font-size:13px">' +
+            '⚠️ グラフを先に表示してから 📌 を押してください</div>';
+          return;
         }
-
-        if (srcChart) {
-          try {
-            const option = srcChart.getOption();
-            const ch = echarts.init(el);
-            ch.setOption(option);
-            new ResizeObserver(() => { try { ch.resize(); } catch(e){} }).observe(el);
-          } catch(err) {
-            el.innerHTML = '<div style="padding:40px;color:#94a3b8;text-align:center;font-size:13px">描画エラー: ' + err.message + '</div>';
-          }
-        } else {
-          el.innerHTML = '<div style="padding:40px;color:#94a3b8;text-align:center;font-size:13px">⚠️ グラフデータを取得できませんでした<br><small style=\'color:#64748b\'>先にそのタブを開いてグラフを表示してから 📌 を押してください</small></div>';
+        try {
+          var ch = echarts.init(el);
+          ch.setOption(src.getOption());
+          new ResizeObserver(function() { try { ch.resize(); } catch(e){} }).observe(el);
+        } catch(e) {
+          el.innerHTML = '<div style="padding:20px;color:#ef4444;font-size:12px">エラー: ' + e.message + '</div>';
         }
       });
-    }, 120);
-  }
-
-  trayCompare?.addEventListener('click', openCompareModal);
-  trayClearAll?.addEventListener('click', () => { TRAY.length = 0; renderTray(); });
-  modalClose?.addEventListener('click', () => { modalEl.style.display = 'none'; });
-  modalEl?.addEventListener('click', e => { if (e.target === modalEl) modalEl.style.display = 'none'; });
-  trayToggle?.addEventListener('click', () => {
-    trayCollapsed = !trayCollapsed;
-    trayItems.style.display = trayCollapsed ? 'none' : '';
-    trayToggle.textContent = trayCollapsed ? '▲ 展開' : '▼ 折りたたむ';
-    document.body.classList.toggle('tray-open', !trayCollapsed && TRAY.length > 0);
+    }, 150);
   });
 
-  // 📌ボタンをグラフに追加（グローバル公開）
-  window.addComparePinToCards = function(containerSel, iconChar) {
-    const container = typeof containerSel === 'string'
-      ? document.querySelector(containerSel) : containerSel;
+  modalClose.addEventListener('click', function() { modalEl.style.display = 'none'; });
+  modalEl.addEventListener('click', function(e) {
+    if (e.target === modalEl) modalEl.style.display = 'none';
+  });
+  btnClear.addEventListener('click', function() { TRAY = []; renderTray(); });
+  btnToggle.addEventListener('click', function() {
+    collapsed = !collapsed;
+    trayItems.style.display = collapsed ? 'none' : '';
+    btnToggle.textContent   = collapsed ? '▲ 展開' : '▼ 折りたたむ';
+    document.body.style.paddingBottom = collapsed ? '' : (TRAY.length > 0 ? '110px' : '');
+  });
+
+  window.addComparePins = function(container, icon) {
     if (!container) return;
-    container.querySelectorAll('.chart-card').forEach(card => {
-      if (card.querySelector('.glbl-compare-pin')) return;
-      const ecEl = card.querySelector('.echart-box');
+    container.querySelectorAll('.chart-card').forEach(function(card) {
+      if (card.querySelector('.cmp-pin-btn')) return;
+      var ecEl = card.querySelector('.echart-box');
       if (!ecEl) return;
       card.style.position = 'relative';
-      const btn = document.createElement('button');
-      btn.className = 'glbl-compare-pin';
-      btn.style.cssText = 'position:absolute;top:8px;right:8px;z-index:10;background:#1e293b;color:#fff;border:none;border-radius:6px;padding:3px 8px;font-size:11px;cursor:pointer;opacity:0.8;transition:background 0.2s';
-      btn.innerHTML = '📌';
+      var btn = document.createElement('button');
+      btn.className = 'cmp-pin-btn';
       btn.title = '比較トレイに追加';
-      btn.addEventListener('mouseenter', () => { btn.style.opacity = '1'; });
-      btn.addEventListener('mouseleave', () => { btn.style.opacity = '0.8'; });
-      btn.addEventListener('click', e => {
+      btn.style.cssText =
+        'position:absolute;top:8px;right:8px;z-index:20;' +
+        'background:#1e293b;color:#fff;border:none;border-radius:6px;' +
+        'padding:3px 8px;font-size:12px;cursor:pointer;opacity:0.75;transition:all 0.15s';
+      btn.textContent = '📌';
+      btn.addEventListener('mouseenter', function() { btn.style.opacity = '1'; });
+      btn.addEventListener('mouseleave', function() { btn.style.opacity = '0.75'; });
+      btn.addEventListener('click', function(e) {
         e.stopPropagation();
-        if (TRAY.length >= MAX_TRAY) {
+        if (TRAY.length >= MAX) {
           btn.style.background = '#ef4444';
-          setTimeout(() => btn.style.background = '#1e293b', 900);
+          setTimeout(function() { btn.style.background = '#1e293b'; }, 900);
           return;
         }
-        if (TRAY.some(t => t.ecId === ecEl.id)) {
+        var ecId = ecEl.id;
+        if (TRAY.some(function(t) { return t.ecId === ecId; })) {
           btn.style.background = '#f59e0b';
-          setTimeout(() => btn.style.background = '#0ea5e9', 500);
+          setTimeout(function() { btn.style.background = '#0ea5e9'; }, 700);
           return;
         }
-        const label = (card.querySelector('.chart-title')?.textContent || ecEl.id).trim().slice(0, 28);
-        const source = (card.querySelector('.chart-subtitle')?.textContent || '').trim().slice(0, 40);
-        // ボタンを押した時点でECインスタンスを取得して保存（後から取れなくなるケースに対応）
-        const instanceNow = echarts.getInstanceByDom(ecEl) || getAllEC()[ecEl.id] || null;
-        TRAY.push({ label, source, ecId: ecEl.id, icon: iconChar || '📊', instance: instanceNow });
+        var label  = ((card.querySelector('.chart-title')  ||{}).textContent||ecId).trim().replace(/📌.*/,'').trim().slice(0,30);
+        var source = ((card.querySelector('.chart-subtitle')||{}).textContent||'').trim().slice(0,40);
+        TRAY.push({ label:label, source:source, icon:icon||'📊', ecId:ecId });
         renderTray();
         btn.style.background = '#0ea5e9';
-        btn.innerHTML = '📌✓';
-        setTimeout(() => { btn.style.background = '#1e293b'; btn.innerHTML = '📌'; }, 800);
+        btn.textContent = '📌✓';
+        setTimeout(function() { btn.style.background='#1e293b'; btn.textContent='📌'; }, 700);
       });
       card.appendChild(btn);
     });
   };
 
-  // CAAM: サブタブ切替時
-  document.querySelectorAll('#chartsPills .nav-link').forEach(btn => {
-    btn.addEventListener('shown.bs.tab', e => {
-      const id = e.target.getAttribute('data-bs-target').replace('#','');
-      setTimeout(() => addComparePinToCards('#' + id, '📊'), 120);
+  // CAAM
+  document.querySelectorAll('#chartsPills .nav-link').forEach(function(btn) {
+    btn.addEventListener('shown.bs.tab', function(e) {
+      var id = e.target.getAttribute('data-bs-target').replace('#','');
+      setTimeout(function() { addComparePins(document.getElementById(id), '📊'); }, 150);
     });
   });
-  document.getElementById('charts-super-tab')?.addEventListener('shown.bs.tab', () => {
-    setTimeout(() => {
-      const a = document.querySelector('#chartsPillsContent .tab-pane.show.active');
-      if (a) addComparePinToCards(a, '📊');
-    }, 600);
+  document.getElementById('charts-super-tab').addEventListener('shown.bs.tab', function() {
+    setTimeout(function() {
+      var a = document.querySelector('#chartsPillsContent .tab-pane.active');
+      if (a) addComparePins(a, '📊');
+    }, 700);
   });
 
-  // CCCM: サブタブ切替時
-  document.querySelectorAll('#cccmPills .nav-link').forEach(btn => {
-    btn.addEventListener('shown.bs.tab', e => {
-      const id = e.target.getAttribute('data-bs-target').replace('#','');
-      setTimeout(() => addComparePinToCards('#' + id, '🏍️'), 120);
+  // CCCM
+  document.querySelectorAll('#cccmPills .nav-link').forEach(function(btn) {
+    btn.addEventListener('shown.bs.tab', function(e) {
+      var id = e.target.getAttribute('data-bs-target').replace('#','');
+      setTimeout(function() { addComparePins(document.getElementById(id), '🏍️'); }, 150);
     });
   });
-  document.getElementById('cccm-super-tab')?.addEventListener('shown.bs.tab', () => {
-    setTimeout(() => {
-      const a = document.querySelector('#cccmPillsContent .tab-pane.show.active');
-      if (a) addComparePinToCards(a, '🏍️');
+  document.getElementById('cccm-super-tab').addEventListener('shown.bs.tab', function() {
+    setTimeout(function() {
+      var a = document.querySelector('#cccmPillsContent .tab-pane.active');
+      if (a) addComparePins(a, '🏍️');
     }, 400);
   });
 
-  // CDS: cdsShowPane をラップ（工事中ペイン＝cdsPillsContentの外は対象外）
-  const _origShowPane = window.cdsShowPane;
-  if (typeof _origShowPane === 'function') {
+  // 崔東树
+  var _orig = window.cdsShowPane;
+  if (typeof _orig === 'function') {
     window.cdsShowPane = function(id) {
-      _origShowPane(id);
-      // cdsPillsContent 内のペインのみピンを付ける（工事中UIは除外）
-      const pane = document.getElementById(id);
+      _orig(id);
+      var pane = document.getElementById(id);
       if (pane && pane.closest('#cdsPillsContent')) {
-        setTimeout(() => addComparePinToCards('#' + id, '🚢'), 180);
+        setTimeout(function() { addComparePins(pane, '🚢'); }, 180);
       }
     };
   }
 
-})();
-
+});
 </script>
+
   <!-- 印刷フッター（画面では非表示、印刷時のみ表示） -->
   <div class="print-footer container">
     中国自動車販売ランキングや関連データ &nbsp;|&nbsp; 非公式・個人作成 &nbsp;|&nbsp; 印刷日: <span id="print-date"></span>

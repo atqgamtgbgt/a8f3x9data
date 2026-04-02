@@ -1952,8 +1952,8 @@ img.car-thumb {
         </button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="cuidongshu-super-tab" data-bs-toggle="tab" data-bs-target="#cuidongshu-super-content" type="button" role="tab">
-          <i class="fa-solid fa-car-side me-1"></i>崔東树（輸出分析）<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
+        <button class="nav-link" id="cds-super-tab" data-bs-toggle="tab" data-bs-target="#cds-super-content" type="button" role="tab">
+          <i class="fa-solid fa-ship me-1"></i>崔東树（輸出分析）<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
         </button>
       </li>
     </ul>
@@ -2650,17 +2650,78 @@ img.car-thumb {
       </div><!-- end cccm-super-content -->
 
       <!-- ===== 崔東树（輸出分析） 大タブ ===== -->
-      <div class="tab-pane fade" id="cuidongshu-super-content" role="tabpanel" data-print-title="崔東树（輸出分析）">
-        <div class="container-fluid py-4">
-          <div class="row justify-content-center">
-            <div class="col-12 col-lg-8 text-center py-5">
-              <div style="font-size:3rem; margin-bottom:1rem;">🚧</div>
-              <h3 style="font-weight:700; color:var(--bs-secondary);">工事中</h3>
-              <p class="text-muted mt-2">崔東树（乗聯会）データによる中国自動車輸出分析グラフを準備中です。</p>
-            </div>
+      <div class="tab-pane fade" id="cds-super-content" role="tabpanel" data-print-title="崔東树（輸出分析）">
+        <div class="container-fluid py-3">
+          <div id="cds-loading" style="display:flex;align-items:center;justify-content:center;min-height:220px;flex-direction:column;gap:12px;">
+            <div class="spinner-border text-primary" role="status"></div>
+            <div class="text-muted small">Excelデータ読み込み中…</div>
+          </div>
+          <ul class="nav nav-pills flex-wrap gap-1 mb-3 charts-pills" id="cdsPills" style="display:none!important">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cds-monthly"    type="button">📈 月次出口推移</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-annual"     type="button">📊 歴年出口量</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev"        type="button">⚡ NEV出口月次</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-annual" type="button">⚡ NEV歴年推移</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-trend"  type="button">⚡ NEV走勢グラフ</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-powertype"  type="button">🔋 動力別構成</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-bodytype"   type="button">🚗 車型別構成</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-power"  type="button">🔋 NEV動力別月次</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-body"   type="button">🚗 NEV車型別月次</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-region"     type="button">🌍 地域別出口</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-country"    type="button">🏳️ 国別出口</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-ctry"   type="button">⚡ NEV国別均価</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-prov"       type="button">🏭 省別出口</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-prov"   type="button">🏭 NEV省別均価</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-rank"       type="button">🏆 主力市場ランキング</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-russia"     type="button">🇷🇺 対ロシア推移</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-displace"   type="button">🔧 乗用車排量別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r3"         type="button">🚘 整車出口 国別ランキング</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r4"         type="button">⚡ NEV出口 国別ランキング</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r5"         type="button">⛽ 燃油乗用車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r6"         type="button">🔌 BEV乗用車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r7"         type="button">🔋 PHEV乗用車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r6b"        type="button">🔀 HEV乗用車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r8"         type="button">🚛 燃油货車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r9"         type="button">🔋 PHEV货車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r10"        type="button">🔌 BEV货車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r9b"        type="button">⚡ NEV货車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r11"        type="button">🚌 燃油客車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r12"        type="button">🚌 新能源客車 国別</button></li>
+            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r12b"       type="button">⚡ NEV客車 国別</button></li>
+          </ul>
+          <div class="tab-content" id="cdsPillsContent" style="display:none">
+            <div class="tab-pane fade show active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-annual"><div class="chart-card"><div class="chart-title">歴年出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑭シート　2007〜2025年</div><div id="ec-cds-annual" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev"><div class="chart-card"><div class="chart-title">NEV出口 vs 総出口（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ②シート　月次単月</div><div id="ec-cds-nev" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev-annual"><div class="chart-card"><div class="chart-title">NEV出口 歴年推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉕シート　2020〜2025年</div><div id="ec-cds-nev-annual" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev-trend"><div class="chart-card"><div class="chart-title">NEV出口 走勢グラフ（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉖シート　2017〜2025年</div><div id="ec-cds-nev-trend" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-powertype"><div class="chart-card"><div class="chart-title">乗用車 動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑰シート　2022〜2025年</div><div id="ec-cds-powertype" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-bodytype"><div class="chart-card"><div class="chart-title">車型別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑯シート　2022〜2025年</div><div id="ec-cds-bodytype" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev-power"><div class="chart-card"><div class="chart-title">新能源 動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉓シート　2022〜2025年</div><div id="ec-cds-nev-power" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev-body"><div class="chart-card"><div class="chart-title">新能源 車型別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉔シート　2022〜2025年</div><div id="ec-cds-nev-body" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-region"><div class="chart-card"><div class="chart-title">地域別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑲シート　2019〜2025年</div><div id="ec-cds-region" class="echart-box" style="height:460px"></div></div></div>
+            <div class="tab-pane fade" id="cds-country"><div class="chart-card"><div class="chart-title">主要国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑳シート　2024年・2025年比較</div><div id="ec-cds-country" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev-ctry"><div class="chart-card"><div class="chart-title">NEV 国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉑シート　2024年・2025年比較</div><div id="ec-cds-nev-ctry" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cds-prov"><div class="chart-card"><div class="chart-title">省別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑱シート　2019〜2025年</div><div id="ec-cds-prov" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cds-nev-prov"><div class="chart-card"><div class="chart-title">NEV省別出口量 Top12（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉒シート　2019〜2025年</div><div id="ec-cds-nev-prov" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cds-rank"><div class="chart-card"><div class="chart-title">歴年 主力市場ランキング推移</div><div class="chart-subtitle">崔東树/乗聯会 ⑬シート　2020〜2026.1-2月</div><div id="ec-cds-rank" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cds-russia"><div class="chart-card"><div class="chart-title">対ロシア月次出口量推移（台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉗シート　2021〜2025年</div><div id="ec-cds-russia" class="echart-box" style="height:420px"></div></div></div>
+            <div class="tab-pane fade" id="cds-displace"><div class="chart-card"><div class="chart-title">乗用車 排量別×動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉘シート　2020〜2025年</div><div id="ec-cds-displace" class="echart-box" style="height:480px"></div></div></div>
+            <div class="tab-pane fade" id="cds-r3"><div class="chart-card"><div class="chart-title">整車出口 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ③シート</div><div id="ec-cds-r3" class="echart-box" style="height:420px"></div><div id="cds-r3-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r4"><div class="chart-card"><div class="chart-title">NEV出口 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ④シート</div><div id="ec-cds-r4" class="echart-box" style="height:420px"></div><div id="cds-r4-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r5"><div class="chart-card"><div class="chart-title">燃油乗用車 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ⑤シート</div><div id="ec-cds-r5" class="echart-box" style="height:420px"></div><div id="cds-r5-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r6"><div class="chart-card"><div class="chart-title">BEV乗用車 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ⑥シート</div><div id="ec-cds-r6" class="echart-box" style="height:420px"></div><div id="cds-r6-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r7"><div class="chart-card"><div class="chart-title">PHEV乗用車 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ⑦シート</div><div id="ec-cds-r7" class="echart-box" style="height:420px"></div><div id="cds-r7-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r6b"><div class="chart-card"><div class="chart-title">HEV（混合動力）乗用車 国別ランキング</div><div class="chart-subtitle">崔東树/乗聯会 ⑥bシート</div><div id="ec-cds-r6b" class="echart-box" style="height:420px"></div><div id="cds-r6b-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r8"><div class="chart-card"><div class="chart-title">燃油货車 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ⑧シート</div><div id="ec-cds-r8" class="echart-box" style="height:420px"></div><div id="cds-r8-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r9"><div class="chart-card"><div class="chart-title">PHEV货車（皮卡）国別ランキング</div><div class="chart-subtitle">崔東树/乗聯会 ⑨シート</div><div id="ec-cds-r9" class="echart-box" style="height:420px"></div><div id="cds-r9-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r10"><div class="chart-card"><div class="chart-title">BEV货車 国別ランキング</div><div class="chart-subtitle">崔東树/乗聯会 ⑩シート</div><div id="ec-cds-r10" class="echart-box" style="height:420px"></div><div id="cds-r10-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r9b"><div class="chart-card"><div class="chart-title">新能源货車 国別ランキング</div><div class="chart-subtitle">崔東树/乗聯会 ⑨bシート</div><div id="ec-cds-r9b" class="echart-box" style="height:420px"></div><div id="cds-r9b-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r11"><div class="chart-card"><div class="chart-title">燃油客車 国別ランキング（最新月 Top10）</div><div class="chart-subtitle">崔東树/乗聯会 ⑪シート</div><div id="ec-cds-r11" class="echart-box" style="height:420px"></div><div id="cds-r11-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r12"><div class="chart-card"><div class="chart-title">新能源客車 国別ランキング</div><div class="chart-subtitle">崔東树/乗聯会 ⑫シート</div><div id="ec-cds-r12" class="echart-box" style="height:420px"></div><div id="cds-r12-sel" class="mt-2"></div></div></div>
+            <div class="tab-pane fade" id="cds-r12b"><div class="chart-card"><div class="chart-title">新能源客車 国別ランキング（詳細）</div><div class="chart-subtitle">崔東树/乗聯会 ⑫bシート</div><div id="ec-cds-r12b" class="echart-box" style="height:420px"></div><div id="cds-r12b-sel" class="mt-2"></div></div></div>
           </div>
         </div>
-      </div><!-- end cuidongshu-super-content -->
+      </div><!-- end cds-super-content -->
 
     </div><!-- end mainTabsContent -->
   </div>
@@ -6260,6 +6321,515 @@ window.addEventListener('afterprint', function() {
     el.textContent = d.getFullYear() + '/' + ('0'+(d.getMonth()+1)).slice(-2) + '/' + ('0'+d.getDate()).slice(-2);
   }
 })();
+
+// =============================================
+// 崔東树（輸出分析）タブ — 全シート対応
+// =============================================
+const CDS_EXCEL_PATH = `${RAW_BASE}output/market/${encodeURIComponent('中国自動車輸出市場分析_完全版v8.xlsx')}`;
+let CDS_LOADED = false;
+let CDS = {};          // 全データ格納
+const CDS_EC = {};
+const CDS_DONE = {};
+
+function cdsEc(id) {
+  if (!CDS_EC[id]) {
+    const el = document.getElementById(id);
+    if (!el) return null;
+    CDS_EC[id] = echarts.init(el, null, { renderer: 'canvas' });
+  }
+  return CDS_EC[id];
+}
+
+function n(v) {
+  if (v === null || v === undefined) return null;
+  if (typeof v === 'number') return v;
+  const s = String(v).replace(/[+＋%％]/g,'').replace('▲','-').replace('#####','').trim();
+  const r = parseFloat(s);
+  return isNaN(r) ? null : r;
+}
+
+// 月次比較表パーサー：各◆ブロックからTop10抽出
+function parseRankingSheet(ws_data) {
+  const blocks = [];
+  let i = 0;
+  while (i < ws_data.length) {
+    const r = ws_data[i];
+    const c0 = r[0];
+    if (c0 && typeof c0 === 'string' && c0.includes('◆')) {
+      const title = c0;
+      let j = i + 1;
+      // ヘッダー行スキップ
+      while (j < ws_data.length) {
+        const rj = ws_data[j];
+        if (!rj[0]) { j++; continue; }
+        if (typeof rj[0] === 'string' && (rj[0].includes('単月') || rj[0].includes('国名'))) { j++; continue; }
+        break;
+      }
+      const data = [];
+      while (j < ws_data.length && data.length < 10) {
+        const dr = ws_data[j];
+        if (dr[0] && typeof dr[0] === 'string' && typeof dr[1] === 'number' && dr[1] > 0) {
+          data.push({ country: dr[0], value: dr[1] });
+        } else if (dr[0] && typeof dr[0] === 'number') break;
+        j++;
+      }
+      if (data.length > 0) blocks.push({ title, data });
+    }
+    i++;
+  }
+  return blocks;
+}
+
+async function loadCdsExcel() {
+  const loadEl = document.getElementById('cds-loading');
+  const pillEl = document.getElementById('cdsPills');
+  const contEl = document.getElementById('cdsPillsContent');
+  try {
+    const res = await fetch(CDS_EXCEL_PATH + `?v=${Date.now()}`, { cache: 'no-store' });
+    if (!res.ok) throw new Error(`HTTP ${res.status} — GitHubのoutput/market/にExcelファイルが配置されているか確認してください`);
+    const buf = await res.arrayBuffer();
+    const wb  = XLSX.read(buf, { type: 'array' });
+    const S   = name => XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: null });
+
+    // ── ⑮ 月次出口量推移 ──
+    CDS.monthly = {};
+    S('⑮月次出口量推移').forEach((r,i) => {
+      if (i < 3 || !r[0] || typeof r[0] !== 'string') return;
+      const yr = r[0].replace('年','');
+      CDS.monthly[yr] = Array.from({length:12}, (_,m) => n(r[m+1]));
+    });
+
+    // ── ⑭ 歴年出口量（走勢部分 row14〜） ──
+    CDS.annual = [];
+    S('⑭歴年出口量_年別サマリー').forEach((r,i) => {
+      if (i < 13 || !r[0] || typeof r[0] !== 'string' || !r[0].includes('年')) return;
+      const v = n(r[1]);
+      if (v !== null) CDS.annual.push({ year: r[0].replace('年',''), vol: v,
+        yoy: r[2] ? parseFloat(String(r[2]).replace(/[+＋%]/g,'').replace('▲','-')) : null });
+    });
+
+    // ── ② 総括サマリー ──
+    {
+      const rows = S('②総括サマリー');
+      const hdr = rows[1] || [];
+      CDS.summaryLabels = hdr.slice(2).map(h => h ? String(h).split('\n')[0].trim() : '');
+      CDS.summaryTotal  = (rows[3]  || []).slice(2);
+      CDS.summaryNev    = (rows[7]  || []).slice(2);
+      CDS.summaryBEV    = (rows[19] || []).slice(2);
+      CDS.summaryPHEV   = (rows[12] || []).slice(2); // 插混
+    }
+
+    // ── ㉕ NEV歴年推移 ──
+    CDS.nevAnnual = [];
+    S('㉕新能源出口_歴年推移').forEach((r,i) => {
+      if (i < 3 || !r[0] || typeof r[0] !== 'string') return;
+      CDS.nevAnnual.push({ year: r[0], q1: n(r[6]), q2: n(r[8]), q3: n(r[10]), q4: n(r[12]), total: n(r[14]) });
+    });
+
+    // ── ㉖ NEV走勢グラフ ──
+    CDS.nevTrend = [];
+    S('㉖新能源出口_走勢グラフ').forEach((r,i) => {
+      if (i < 3 || typeof r[0] !== 'number') return;
+      CDS.nevTrend.push({ year: String(r[0]), vol: n(r[1]),
+        yoy: r[2] ? parseFloat(String(r[2]).replace(/[+＋%]/g,'').replace('▲','-').replace('-','_NEG_').replace(/_NEG_/,'-')) : null });
+    });
+
+    // ── ⑰ 動力別 ──
+    {
+      const rows = S('⑰動力別出口量・構成比');
+      const hdr = rows[2] || [];
+      const ci = {}; hdr.forEach((h,i) => { const s = h ? String(h).replace(/\n/,' ').trim() : ''; if(s.includes('2022'))ci['2022']=i; if(s.includes('2023'))ci['2023']=i; if(s.includes('2024')&&s.includes('累計'))ci['2024']=i; if(s.includes('2025')&&s.includes('累計'))ci['2025']=i; });
+      CDS.powerCars = {};
+      rows.forEach((r,i) => { if(i<3||r[0]!=='乗用車') return; const pt=r[1]?String(r[1]).trim():''; CDS.powerCars[pt]=CDS.powerCars[pt]||{}; Object.entries(ci).forEach(([yr,c])=>CDS.powerCars[pt][yr]=n(r[c])); });
+    }
+
+    // ── ⑯ 車型別 ──
+    {
+      const rows = S('⑯車型別出口量・構成比');
+      const hdr = rows[2] || [];
+      const ci = {}; hdr.forEach((h,i) => { const s = h ? String(h).replace(/\n/,' ').trim() : ''; if(s.includes('2022'))ci['2022']=i; if(s.includes('2023'))ci['2023']=i; if(s.includes('2024')&&s.includes('累計'))ci['2024']=i; if(s.includes('2025')&&s.includes('累計'))ci['2025']=i; });
+      CDS.bodyTypes = {};
+      rows.forEach((r,i) => { if(i<3) return; const bt=r[1]?String(r[1]).trim():''; if(!bt.includes('汇総')) return; CDS.bodyTypes[bt]=CDS.bodyTypes[bt]||{}; Object.entries(ci).forEach(([yr,c])=>CDS.bodyTypes[bt][yr]=n(r[c])); });
+    }
+
+    // ── ㉓ NEV動力別月次 ──
+    {
+      const rows = S('㉓新能源出口_動力別月次');
+      const hdr = rows[3] || [];
+      const ci = {}; hdr.forEach((h,i) => { const s = h ? String(h).replace(/\n/,' ').trim() : ''; if(s==='2022年')ci['2022']=i; if(s==='2023年')ci['2023']=i; if(s.includes('2024')&&s.includes('累計'))ci['2024']=i; if(s.includes('2025')&&s.includes('累計'))ci['2025']=i; });
+      CDS.nevPower = {};
+      rows.forEach((r,i) => { if(i<4||i>11) return; const pt=r[0]?String(r[0]).trim():''; if(!pt||pt.includes('総計')) return; CDS.nevPower[pt]={}; Object.entries(ci).forEach(([yr,c])=>CDS.nevPower[pt][yr]=n(r[c])); });
+    }
+
+    // ── ㉔ NEV車型別月次 ──
+    {
+      const rows = S('㉔新能源出口_車型別月次');
+      const hdr = rows[2] || [];
+      const ci = {}; hdr.forEach((h,i) => { const s = h ? String(h).replace(/\n/,' ').trim() : ''; if(s==='2022年')ci['2022']=i; if(s==='2023年')ci['2023']=i; if(s.includes('2024')&&s.includes('累計'))ci['2024']=i; if(s.includes('2025')&&s.includes('累計'))ci['2025']=i; });
+      CDS.nevBody = {};
+      rows.forEach((r,i) => { if(i<3) return; const bt=r[1]?String(r[1]).trim():''; if(!bt||!bt.includes('汇総')) return; CDS.nevBody[bt]=CDS.nevBody[bt]||{}; Object.entries(ci).forEach(([yr,c])=>CDS.nevBody[bt][yr]=n(r[c])); });
+    }
+
+    // ── ⑲ 地域別 ──
+    CDS.regions = [];
+    S('⑲地域別出口量・均価').forEach((r,i) => { if(i<3||!r[0]||r[0]==='総計') return; CDS.regions.push({name:r[0],v:[n(r[1]),n(r[2]),n(r[3]),n(r[4]),n(r[5]),n(r[6]),n(r[9])]}); });
+
+    // ── ⑳ 国別 ──
+    CDS.countries = [];
+    S('⑳国別出口量・均価').forEach((r,i) => { if(i<3||!r[0]||r[0]==='総計') return; CDS.countries.push({name:r[0],v2024:n(r[6]),v2025:n(r[9])}); });
+
+    // ── ㉑ NEV国別均価 ──
+    CDS.nevCtry = [];
+    S('㉑新能源出口_国別均価').forEach((r,i) => { if(i<3||!r[0]||r[0]==='総計') return; CDS.nevCtry.push({name:r[0],v2024:n(r[6]),v2025:n(r[9])}); });
+
+    // ── ⑱ 省別 ──
+    CDS.provs = [];
+    S('⑱省別出口量・均価').forEach((r,i) => { if(i<3||!r[0]||r[0]==='全国') return; CDS.provs.push({name:r[0],v:[n(r[1]),n(r[2]),n(r[3]),n(r[4]),n(r[5]),n(r[6]),n(r[9])]}); });
+
+    // ── ㉒ NEV省別 ──
+    CDS.nevProvs = [];
+    S('㉒新能源出口_省別均価').forEach((r,i) => { if(i<3||!r[0]||r[0]==='総計') return; CDS.nevProvs.push({name:r[0],v:[n(r[1]),n(r[2]),n(r[3]),n(r[4]),n(r[5]),n(r[6]),n(r[9])]}); });
+
+    // ── ⑬ 歴年主力市場ランキング ──
+    {
+      const rows = S('⑬歴年主力市場ランキング');
+      const years = rows[1] ? rows[1].slice(1).filter(Boolean) : [];
+      CDS.rankYears = years;
+      CDS.rankData  = [];
+      rows.forEach((r,i) => { if(i<2||typeof r[0]!=='number') return; CDS.rankData.push({rank:r[0], vals:r.slice(1,years.length+1)}); });
+    }
+
+    // ── ㉗ 対ロシア ──
+    CDS.russia = {};
+    S('㉗対ロシア月度出口推移').forEach((r,i) => { if(i<3||typeof r[0]!=='number') return; CDS.russia[String(r[0])]=Array.from({length:12},(_,m)=>n(r[m+1])); });
+
+    // ── ㉘ 排量別 ──
+    {
+      const rows = S('㉘乗用車排量別_動力別');
+      const hdr = rows[2] || [];
+      const ci = {}; hdr.forEach((h,i)=>{ const s=h?String(h).replace(/\n/,' ').trim():''; if(s==='2022年')ci['2022']=i; if(s==='2023年')ci['2023']=i; if(s.includes('2024'))ci['2024']=i; if(s.includes('2025')&&s.includes('汇總'))ci['2025']=i; });
+      CDS.displace = [];
+      rows.forEach((r,i) => {
+        if(i<3) return;
+        const pt=r[0]?String(r[0]).trim():'', rng=r[1]?String(r[1]).trim():'';
+        if(!pt||!rng||pt==='動力') return;
+        const vals={}; Object.entries(ci).forEach(([yr,c])=>vals[yr]=n(r[c]));
+        if(Object.values(vals).some(v=>v!==null)) CDS.displace.push({power:pt,range:rng,vals});
+      });
+    }
+
+    // ── 月次比較シート（ランキング棒グラフ用） ──
+    const rankSheets = {
+      r3:'③整車出口_月次比較表', r4:'④新能源出口_月次比較表',
+      r5:'⑤燃油乗用車_月次比較表', r6:'⑥BEV乗用車_月次比較表',
+      r7:'⑦PHEV乗用車_月次比較表', r8:'⑧燃油货車_月次比較表',
+      r9:'⑨PHEV货車_月次比較表', r10:'⑩BEV货車_月次比較表',
+      r11:'⑪燃油客車_月次比較表', r12:'⑫新能源客車_月次比較表',
+      r6b:'⑥b混合動力乗用車_月次比較表', r9b:'⑨b新能源货車_月次比較表', r12b:'⑫b新能源客車_月次比較表',
+    };
+    CDS.rankings = {};
+    for (const [key, sname] of Object.entries(rankSheets)) {
+      if (wb.Sheets[sname]) CDS.rankings[key] = parseRankingSheet(S(sname));
+    }
+
+    CDS_LOADED = true;
+    if (loadEl) loadEl.style.display = 'none';
+    if (pillEl) pillEl.style.removeProperty('display');
+    if (contEl) contEl.style.removeProperty('display');
+    const ab = document.querySelector('#cdsPills .nav-link.active');
+    if (ab) { const id = ab.getAttribute('data-bs-target').replace('#',''); if(CDS_FNS[id]) CDS_FNS[id](); }
+    console.log('✅ CDS Excel loaded');
+  } catch(err) {
+    console.error('CDS Excel error:', err);
+    if (loadEl) { loadEl.innerHTML = `<div class="text-danger p-3 text-center">⚠️ データ読み込み失敗: ${err.message}<br><small class="text-muted">GitHubのoutput/market/に「中国自動車輸出市場分析_完全版v8.xlsx」が配置されているか確認してください。</small></div>`; loadEl.style.display='flex'; }
+  }
+}
+
+// ---- 共通グラフ関数 ----
+const YRCOLORS = ['#cbd5e1','#94a3b8','#64748b','#3b82f6','#f59e0b','#10b981','#ef4444'];
+
+function drawBar(id, title, subtitle, categories, series, opts={}) {
+  if (CDS_DONE[id]) return; CDS_DONE[id]=true;
+  const chart = cdsEc(id); if(!chart) return;
+  chart.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    legend:{data:series.map(s=>s.name),bottom:0,type:'scroll'},
+    grid:{left:opts.left||55,right:opts.right||20,top:30,bottom:opts.bottom||55},
+    xAxis:opts.horizontal?{type:'value',name:opts.xname||'万台'}:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
+    yAxis:opts.horizontal?{type:'category',data:categories}:{type:'value',name:opts.yname||'万台'},
+    series:series.map(s=>({...s,type:'bar',stack:opts.stack?'total':undefined,label:{show:!!opts.label,position:opts.horizontal?'right':'top',fontSize:10,formatter:p=>p.value&&Math.abs(p.value)>=opts.labelMin?p.value:''}})),
+  });
+}
+
+function drawLine(id, categories, series, opts={}) {
+  if (CDS_DONE[id]) return; CDS_DONE[id]=true;
+  const chart = cdsEc(id); if(!chart) return;
+  chart.setOption({
+    tooltip:{trigger:'axis'},
+    legend:{data:series.map(s=>s.name),bottom:0,type:'scroll'},
+    grid:{left:60,right:opts.r2?55:20,top:20,bottom:55},
+    xAxis:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
+    yAxis:opts.yAxis||[{type:'value',name:opts.yname||'万台'}],
+    series:series.map(s=>({smooth:true,symbol:'circle',symbolSize:5,...s})),
+  });
+}
+
+// ---- 各グラフ描画 ----
+function cdsDrawMonthly() {
+  if (CDS_DONE['cds-monthly']||!CDS_LOADED) return; CDS_DONE['cds-monthly']=true;
+  const chart=cdsEc('ec-cds-monthly'); if(!chart) return;
+  const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const yrs=['2021','2022','2023','2024','2025','2026'];
+  chart.setOption({tooltip:{trigger:'axis'},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:50,right:20,top:20,bottom:50},
+    xAxis:{type:'category',data:months},yAxis:{type:'value',name:'万台'},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:yr==='2024'?2.5:1.5,type:yr==='2026'?'dashed':'solid'},itemStyle:{color:YRCOLORS[i]},data:(CDS.monthly[yr]||[])}))});
+}
+
+function cdsDrawAnnual() {
+  if (CDS_DONE['cds-annual']||!CDS_LOADED) return; CDS_DONE['cds-annual']=true;
+  const chart=cdsEc('ec-cds-annual'); if(!chart) return;
+  const d=CDS.annual;
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:55,right:55,top:20,bottom:55},
+    xAxis:{type:'category',data:d.map(x=>x.year),axisLabel:{rotate:45}},
+    yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
+    series:[{name:'出口量',type:'bar',data:d.map(x=>x.vol),itemStyle:{color:p=>p.data>=500?'#10b981':p.data>=300?'#3b82f6':p.data>=150?'#f59e0b':'#94a3b8'},label:{show:true,position:'top',fontSize:9,formatter:p=>p.value>=100?p.value:''}},
+      {name:'前年比',type:'line',yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:5,lineStyle:{color:'#ef4444',width:2},itemStyle:{color:'#ef4444'}}]});
+}
+
+function cdsDrawNev() {
+  if (CDS_DONE['cds-nev']||!CDS_LOADED) return; CDS_DONE['cds-nev']=true;
+  const chart=cdsEc('ec-cds-nev'); if(!chart) return;
+  const lbls=CDS.summaryLabels||[], tot=CDS.summaryTotal||[], nev=CDS.summaryNev||[];
+  const labels=[],tv=[],nv=[],iv=[];
+  for(let i=0;i<lbls.length;i++){
+    const h=lbls[i]; if(!h||h.includes('累計')||h.includes('全年')||h.includes('1-')) continue;
+    const t=n(tot[i]),ne=n(nev[i]); if(t===null) continue;
+    labels.push(h.replace('年','年\n')); tv.push(t); nv.push(ne); iv.push(t!==null&&ne!==null?Math.round((t-ne)*10)/10:null);
+  }
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:55,right:20,top:20,bottom:65},
+    xAxis:{type:'category',data:labels,axisLabel:{fontSize:10}},yAxis:{type:'value',name:'万台'},
+    series:[{name:'燃油車等',type:'bar',stack:'t',data:iv,itemStyle:{color:'#94a3b8'}},{name:'NEV',type:'bar',stack:'t',data:nv,itemStyle:{color:'#10b981'},label:{show:true,position:'top',fontSize:10,formatter:(_,i2)=>tv[i2]||''}}]});
+}
+
+function cdsDrawNevAnnual() {
+  if (CDS_DONE['cds-nev-annual']||!CDS_LOADED) return; CDS_DONE['cds-nev-annual']=true;
+  const d=CDS.nevAnnual||[];
+  drawBar('ec-cds-nev-annual','','',d.map(x=>x.year),
+    [{name:'1Q',data:d.map(x=>x.q1),itemStyle:{color:'#93c5fd'}},{name:'2Q',data:d.map(x=>x.q2),itemStyle:{color:'#3b82f6'}},{name:'3Q',data:d.map(x=>x.q3),itemStyle:{color:'#1d4ed8'}},{name:'4Q',data:d.map(x=>x.q4),itemStyle:{color:'#1e3a8a'}}],
+    {stack:true,label:true,labelMin:5});
+}
+
+function cdsDrawNevTrend() {
+  if (CDS_DONE['cds-nev-trend']||!CDS_LOADED) return; CDS_DONE['cds-nev-trend']=true;
+  const d=CDS.nevTrend||[];
+  const chart=cdsEc('ec-cds-nev-trend'); if(!chart) return;
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:55,right:55,top:20,bottom:40},
+    xAxis:{type:'category',data:d.map(x=>x.year)},
+    yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
+    series:[{name:'出口量',type:'bar',data:d.map(x=>x.vol),itemStyle:{color:'#10b981'},label:{show:true,position:'top',fontSize:11}},
+      {name:'前年比',type:'line',yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:6,lineStyle:{color:'#f59e0b',width:2.5},itemStyle:{color:'#f59e0b'}}]});
+}
+
+function cdsDrawPowertype() {
+  if (CDS_DONE['cds-powertype']||!CDS_LOADED) return; CDS_DONE['cds-powertype']=true;
+  const yrs=['2022','2023','2024','2025'], pts=['汽油','純電動','插混','混合動力'], cols=['#94a3b8','#3b82f6','#10b981','#f59e0b'], d=CDS.powerCars||{};
+  drawBar('ec-cds-powertype','','',yrs.map(y=>y+'年'),pts.map((pt,i)=>({name:pt,data:yrs.map(yr=>d[pt]?d[pt][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:15});
+}
+
+function cdsDrawBodytype() {
+  if (CDS_DONE['cds-bodytype']||!CDS_LOADED) return; CDS_DONE['cds-bodytype']=true;
+  const yrs=['2022','2023','2024','2025'], bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'], d=CDS.bodyTypes||{};
+  drawBar('ec-cds-bodytype','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:20});
+}
+
+function cdsDrawNevPower() {
+  if (CDS_DONE['cds-nev-power']||!CDS_LOADED) return; CDS_DONE['cds-nev-power']=true;
+  const yrs=['2022','2023','2024','2025'], d=CDS.nevPower||{};
+  const pts=Object.keys(d), cols=['#94a3b8','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444'];
+  drawBar('ec-cds-nev-power','','',yrs.map(y=>y+'年'),pts.map((pt,i)=>({name:pt,data:yrs.map(yr=>d[pt]?d[pt][yr]:null),itemStyle:{color:cols[i%cols.length]}})),{stack:true,label:true,labelMin:10});
+}
+
+function cdsDrawNevBody() {
+  if (CDS_DONE['cds-nev-body']||!CDS_LOADED) return; CDS_DONE['cds-nev-body']=true;
+  const yrs=['2022','2023','2024','2025'], d=CDS.nevBody||{};
+  const bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'];
+  drawBar('ec-cds-nev-body','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:5});
+}
+
+function cdsDrawRegion() {
+  if (CDS_DONE['cds-region']||!CDS_LOADED) return; CDS_DONE['cds-region']=true;
+  const chart=cdsEc('ec-cds-region'); if(!chart) return;
+  const yrs=['2019','2020','2021','2022','2023','2024','2025'], rs=(CDS.regions||[]).filter(r=>r.name!=='総計');
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:rs.map(r=>r.name),bottom:0,type:'scroll'},grid:{left:55,right:20,top:30,bottom:70},
+    xAxis:{type:'category',data:yrs.map(y=>y+'年')},yAxis:{type:'value',name:'万台'},
+    series:rs.map((r,ri)=>({name:r.name,type:'bar',stack:'t',data:r.v,label:{show:true,fontSize:9,formatter:p=>p.value&&p.value>=20?p.value:''}}))});
+}
+
+function cdsDrawCountry() {
+  if (CDS_DONE['cds-country']||!CDS_LOADED) return; CDS_DONE['cds-country']=true;
+  const d=(CDS.countries||[]).filter(c=>c.v2025!=null).sort((a,b)=>(b.v2025||0)-(a.v2025||0)).slice(0,15);
+  drawBar('ec-cds-country','','',d.map(c=>c.name).reverse(),
+    [{name:'2024年',data:d.map(c=>c.v2024).reverse(),itemStyle:{color:'#94a3b8'}},{name:'2025年',data:d.map(c=>c.v2025).reverse(),itemStyle:{color:'#3b82f6'}}],
+    {horizontal:true,label:true,labelMin:1,left:90,bottom:40});
+}
+
+function cdsDrawNevCtry() {
+  if (CDS_DONE['cds-nev-ctry']||!CDS_LOADED) return; CDS_DONE['cds-nev-ctry']=true;
+  const d=(CDS.nevCtry||[]).filter(c=>c.v2025!=null).sort((a,b)=>(b.v2025||0)-(a.v2025||0)).slice(0,15);
+  drawBar('ec-cds-nev-ctry','','',d.map(c=>c.name).reverse(),
+    [{name:'2024年',data:d.map(c=>c.v2024).reverse(),itemStyle:{color:'#94a3b8'}},{name:'2025年',data:d.map(c=>c.v2025).reverse(),itemStyle:{color:'#10b981'}}],
+    {horizontal:true,label:true,labelMin:0.5,left:160,bottom:40});
+}
+
+function cdsDrawProv() {
+  if (CDS_DONE['cds-prov']||!CDS_LOADED) return; CDS_DONE['cds-prov']=true;
+  const yrs=['2019','2020','2021','2022','2023','2024','2025'];
+  const ps=(CDS.provs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,15);
+  const chart=cdsEc('ec-cds-prov'); if(!chart) return;
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
+    xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))});
+}
+
+function cdsDrawNevProv() {
+  if (CDS_DONE['cds-nev-prov']||!CDS_LOADED) return; CDS_DONE['cds-nev-prov']=true;
+  const yrs=['2019','2020','2021','2022','2023','2024','2025'];
+  const ps=(CDS.nevProvs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,12);
+  const chart=cdsEc('ec-cds-nev-prov'); if(!chart) return;
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
+    xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))});
+}
+
+function cdsDrawRank() {
+  if (CDS_DONE['cds-rank']||!CDS_LOADED) return; CDS_DONE['cds-rank']=true;
+  const chart=cdsEc('ec-cds-rank'); if(!chart) return;
+  const yrs=CDS.rankYears||[], rd=CDS.rankData||[];
+  // ランキング逆表示（1位が上）
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>`+p.map(s=>`${s.marker}${s.seriesName}: <b>${s.value!=null?s.value+'位':'—'}</b>`).join('<br/>')},
+    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:55,right:20,top:20,bottom:60},
+    xAxis:{type:'category',data:yrs},
+    yAxis:{type:'value',name:'順位',inverse:true,min:1,max:rd.length,interval:1,axisLabel:{formatter:v=>v+'位'}},
+    series:rd.map((row,i)=>({name:`${row.rank}位グループ`,type:'line',smooth:false,symbol:'circle',symbolSize:8,data:row.vals.map((v,j)=>{
+      // 国名→順位に変換（同じ国が何位か）
+      const country=v;
+      if(!country) return null;
+      const pos=rd.findIndex(r=>r.vals[j]===country);
+      return pos>=0?pos+1:null;
+    }),label:{show:true,formatter:p=>{const row2=rd.find(r=>r.vals[yrs.indexOf(yrs[p.dataIndex])]===r.vals[yrs.indexOf(yrs[p.dataIndex])]); return v?String(v):'';}}}))[0]||[]});
+  // 代わりにヒートマップ形式で表示
+  const countries=[...new Set(rd.flatMap(r=>r.vals).filter(Boolean))];
+  chart.setOption({tooltip:{trigger:'item',formatter:p=>`${p.name}<br/>${p.seriesName}: <b>${p.value}位</b>`},
+    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:100,right:20,top:20,bottom:60},
+    xAxis:{type:'category',data:yrs},
+    yAxis:{type:'category',data:countries.slice(0,15)},
+    series:[{type:'heatmap',data:rd.flatMap(r=>r.vals.map((country,j)=>country?[j,countries.indexOf(country),r.rank]:null)).filter(Boolean),label:{show:true,formatter:p=>`${p.data[2]}位`},itemStyle:{borderWidth:1,borderColor:'#fff'},emphasis:{itemStyle:{shadowBlur:5}}}],
+    visualMap:{min:1,max:rd.length,calculable:true,orient:'horizontal',left:'center',top:'top',inRange:{color:['#10b981','#f59e0b','#ef4444']}}});
+}
+
+function cdsDrawRussia() {
+  if (CDS_DONE['cds-russia']||!CDS_LOADED) return; CDS_DONE['cds-russia']=true;
+  const chart=cdsEc('ec-cds-russia'); if(!chart) return;
+  const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  const yrs=Object.keys(CDS.russia||{}).sort(), cols=['#cbd5e1','#94a3b8','#3b82f6','#f59e0b','#ef4444'];
+  chart.setOption({tooltip:{trigger:'axis',formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>`+p.map(s=>`${s.marker}${s.seriesName}: <b>${s.value!=null?s.value.toLocaleString()+'台':'—'}</b>`).join('<br/>')},
+    legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:50},
+    xAxis:{type:'category',data:months},yAxis:{type:'value',name:'台',axisLabel:{formatter:v=>v>=10000?(v/10000).toFixed(0)+'万':v}},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:2,color:cols[i]},itemStyle:{color:cols[i]},data:CDS.russia[yr]}))});
+}
+
+function cdsDrawDisplace() {
+  if (CDS_DONE['cds-displace']||!CDS_LOADED) return; CDS_DONE['cds-displace']=true;
+  const chart=cdsEc('ec-cds-displace'); if(!chart) return;
+  const yrs=['2022','2023','2024','2025'], d=(CDS.displace||[]).filter(x=>x.power!=='動力'&&!x.range.includes('汇総'));
+  const labels=d.map(x=>`${x.power}\n${x.range}`);
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:80},
+    xAxis:{type:'category',data:labels,axisLabel:{fontSize:9,rotate:30}},yAxis:{type:'value',name:'万台'},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:d.map(x=>x.vals[yr]),itemStyle:{color:YRCOLORS[i+1]},label:{show:i===3,position:'top',fontSize:9,formatter:p=>p.value&&p.value>=1?p.value:''}}))});
+}
+
+// 月次ランキングシート共通描画（期間セレクター付き）
+function makeRankingDrawer(key, ecId, selId) {
+  return function() {
+    if (CDS_DONE[ecId]||!CDS_LOADED) return; CDS_DONE[ecId]=true;
+    const blocks = CDS.rankings[key]||[];
+    if (!blocks.length) return;
+    const chart = cdsEc(ecId); if(!chart) return;
+    const selEl = document.getElementById(selId);
+
+    function draw(idx) {
+      const blk = blocks[idx]||blocks[0];
+      const d = blk.data.slice(0,10).reverse();
+      chart.setOption({
+        tooltip:{trigger:'axis',axisPointer:{type:'shadow'},formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>${p[0].marker}<b>${p[0].value!=null?p[0].value.toLocaleString()+'台':'—'}</b>`},
+        grid:{left:110,right:20,top:10,bottom:40},
+        xAxis:{type:'value',name:'台'},
+        yAxis:{type:'category',data:d.map(x=>x.country)},
+        series:[{type:'bar',data:d.map(x=>x.value),itemStyle:{color:p=>['#10b981','#3b82f6','#f59e0b','#ef4444','#8b5cf6','#ec4899','#14b8a6','#f97316','#6366f1','#84cc16'][p.dataIndex%10]},label:{show:true,position:'right',fontSize:11,formatter:p=>p.value?p.value.toLocaleString():''}}],
+      });
+    }
+
+    draw(0);
+    if (selEl && blocks.length > 1) {
+      selEl.innerHTML = '<div class="d-flex flex-wrap gap-1 mt-1">' +
+        blocks.map((b,i)=>`<button class="btn btn-sm ${i===0?'btn-primary':'btn-outline-secondary'} cds-rank-btn" data-idx="${i}" style="font-size:11px">${b.title.replace('◆','').replace(/（.*）/,'').trim().slice(0,20)}</button>`).join('') + '</div>';
+      selEl.querySelectorAll('.cds-rank-btn').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          selEl.querySelectorAll('.cds-rank-btn').forEach(b=>{b.classList.remove('btn-primary');b.classList.add('btn-outline-secondary');});
+          btn.classList.add('btn-primary'); btn.classList.remove('btn-outline-secondary');
+          draw(parseInt(btn.dataset.idx));
+        });
+      });
+    }
+  };
+}
+
+const CDS_FNS = {
+  'cds-monthly':   cdsDrawMonthly,
+  'cds-annual':    cdsDrawAnnual,
+  'cds-nev':       cdsDrawNev,
+  'cds-nev-annual':cdsDrawNevAnnual,
+  'cds-nev-trend': cdsDrawNevTrend,
+  'cds-powertype': cdsDrawPowertype,
+  'cds-bodytype':  cdsDrawBodytype,
+  'cds-nev-power': cdsDrawNevPower,
+  'cds-nev-body':  cdsDrawNevBody,
+  'cds-region':    cdsDrawRegion,
+  'cds-country':   cdsDrawCountry,
+  'cds-nev-ctry':  cdsDrawNevCtry,
+  'cds-prov':      cdsDrawProv,
+  'cds-nev-prov':  cdsDrawNevProv,
+  'cds-rank':      cdsDrawRank,
+  'cds-russia':    cdsDrawRussia,
+  'cds-displace':  cdsDrawDisplace,
+  'cds-r3':   makeRankingDrawer('r3',  'ec-cds-r3',  'cds-r3-sel'),
+  'cds-r4':   makeRankingDrawer('r4',  'ec-cds-r4',  'cds-r4-sel'),
+  'cds-r5':   makeRankingDrawer('r5',  'ec-cds-r5',  'cds-r5-sel'),
+  'cds-r6':   makeRankingDrawer('r6',  'ec-cds-r6',  'cds-r6-sel'),
+  'cds-r7':   makeRankingDrawer('r7',  'ec-cds-r7',  'cds-r7-sel'),
+  'cds-r6b':  makeRankingDrawer('r6b', 'ec-cds-r6b', 'cds-r6b-sel'),
+  'cds-r8':   makeRankingDrawer('r8',  'ec-cds-r8',  'cds-r8-sel'),
+  'cds-r9':   makeRankingDrawer('r9',  'ec-cds-r9',  'cds-r9-sel'),
+  'cds-r10':  makeRankingDrawer('r10', 'ec-cds-r10', 'cds-r10-sel'),
+  'cds-r9b':  makeRankingDrawer('r9b', 'ec-cds-r9b', 'cds-r9b-sel'),
+  'cds-r11':  makeRankingDrawer('r11', 'ec-cds-r11', 'cds-r11-sel'),
+  'cds-r12':  makeRankingDrawer('r12', 'ec-cds-r12', 'cds-r12-sel'),
+  'cds-r12b': makeRankingDrawer('r12b','ec-cds-r12b','cds-r12b-sel'),
+};
+
+document.getElementById('cds-super-tab').addEventListener('shown.bs.tab', () => {
+  if (!CDS_LOADED) { loadCdsExcel(); } else { cdsDrawMonthly(); }
+});
+document.querySelectorAll('#cdsPills .nav-link').forEach(btn => {
+  btn.addEventListener('shown.bs.tab', e => {
+    const id = e.target.getAttribute('data-bs-target').replace('#','');
+    if (CDS_FNS[id]) CDS_FNS[id]();
+    setTimeout(()=>{ Object.values(CDS_EC).forEach(c=>{try{c&&c.resize();}catch(e){}}); }, 50);
+  });
+});
+window.addEventListener('resize', ()=>{ Object.values(CDS_EC).forEach(c=>{try{c&&c.resize();}catch(e){}}); });
+if (document.getElementById('cds-super-tab')?.classList.contains('active')) loadCdsExcel();
+
 
 
 </script>

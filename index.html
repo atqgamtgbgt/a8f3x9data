@@ -1675,7 +1675,7 @@ img.car-thumb {
   background: #e2e8f0;
   color: #333;
 }
-/* グループラベル */
+/* グループラベル（旧） */
 .cds-group {
   background: #f8fafc;
   border: 1px solid #e2e8f0;
@@ -1690,6 +1690,66 @@ img.car-thumb {
   letter-spacing: 0.05em;
   margin-bottom: 0.4rem;
 }
+/* コンパクト横並びナビ */
+.cds-nav-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.cds-gc {
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  overflow: hidden;
+  min-width: 0;
+}
+.cds-gc-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #475569;
+  background: none;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-align: left;
+  width: 100%;
+  transition: background 0.15s;
+}
+.cds-gc-label:hover { background: #f1f5f9; }
+.cds-gc-label.has-active { color: #0d6efd; }
+.cds-gc-arrow { font-size: 10px; margin-left: auto; color: #94a3b8; transition: transform 0.2s; }
+.cds-gc.collapsed .cds-gc-arrow { transform: rotate(-90deg); }
+.cds-gc-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+  padding: 4px 6px 6px;
+  border-top: 1px solid #e2e8f0;
+}
+.cds-gc.collapsed .cds-gc-items { display: none; }
+.cds-gc-items .nav-link {
+  border-radius: 16px;
+  padding: 3px 9px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #555;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  line-height: 1.5;
+}
+.cds-gc-items .nav-link:hover { background: #e2e8f0; color: #333; }
+.cds-gc-items .nav-link.active { background: #0d6efd; border-color: #0d6efd; color: #fff; }
 /* カスタムタブペイン */
 .cds-pane { display: none; }
 .cds-pane.cds-active { display: block; }
@@ -2696,74 +2756,71 @@ body.tray-open { padding-bottom: 105px; }
             <div class="spinner-border text-primary" role="status"></div>
             <div class="text-muted small">Excelデータ読み込み中…</div>
           </div>
-          <!-- グループ化ナビゲーション -->
+          <!-- グループ化ナビゲーション（コンパクト版） -->
           <div id="cdsPills" style="display:none!important">
+            <div class="cds-nav-compact">
 
-            <!-- グループ①：全体トレンド -->
-            <div class="cds-group mb-2">
-              <div class="cds-group-label">📊 全体トレンド</div>
-              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
-                <li class="nav-item"><button class="nav-link active" data-cds-target="#cds-monthly"    type="button">📈 月次出口推移</button></li>
-                <li class="nav-item"><button class="nav-link"        data-cds-target="#cds-annual"     type="button">📊 歴年出口量</button></li>
-                <li class="nav-item"><button class="nav-link"        data-cds-target="#cds-nev"        type="button">⚡ NEV出口月次</button></li>
-                <li class="nav-item"><button class="nav-link"        data-cds-target="#cds-nev-annual" type="button">⚡ NEV歴年推移</button></li>
-                <li class="nav-item"><button class="nav-link"        data-cds-target="#cds-nev-trend"  type="button">⚡ NEV走勢グラフ</button></li>
-                <li class="nav-item"><button class="nav-link"        data-cds-target="#cds-russia"     type="button">🇷🇺 対ロシア推移</button></li>
+              <div class="cds-gc" data-group="g1">
+                <button class="cds-gc-label" onclick="cdsToggleGroup('g1')">📊 全体トレンド <span class="cds-gc-arrow">▾</span></button>
+                <div class="cds-gc-items" id="cds-gc-g1">
+                  <button class="nav-link active" data-cds-target="#cds-monthly">📈 月次推移</button>
+                  <button class="nav-link" data-cds-target="#cds-annual">📊 歴年出口</button>
+                  <button class="nav-link" data-cds-target="#cds-nev">⚡ NEV月次</button>
+                  <button class="nav-link" data-cds-target="#cds-nev-annual">⚡ NEV歴年</button>
+                  <button class="nav-link" data-cds-target="#cds-nev-trend">⚡ NEV走勢</button>
+                  <button class="nav-link" data-cds-target="#cds-russia">🇷🇺 対ロシア</button>
+                </div>
               </div>
-            </div>
 
-            <!-- グループ②：動力・車型・構成 -->
-            <div class="cds-group mb-2">
-              <div class="cds-group-label">🔋 動力・車型・構成</div>
-              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-powertype"  type="button">🔋 動力別構成</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-bodytype"   type="button">🚗 車型別構成</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-nev-power"  type="button">🔋 NEV動力別月次</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-nev-body"   type="button">🚗 NEV車型別月次</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-displace"   type="button">🔧 乗用車排量別</button></li>
+              <div class="cds-gc" data-group="g2">
+                <button class="cds-gc-label" onclick="cdsToggleGroup('g2')">🔋 動力・車型 <span class="cds-gc-arrow">▾</span></button>
+                <div class="cds-gc-items" id="cds-gc-g2">
+                  <button class="nav-link" data-cds-target="#cds-powertype">🔋 動力別</button>
+                  <button class="nav-link" data-cds-target="#cds-bodytype">🚗 車型別</button>
+                  <button class="nav-link" data-cds-target="#cds-nev-power">🔋 NEV動力</button>
+                  <button class="nav-link" data-cds-target="#cds-nev-body">🚗 NEV車型</button>
+                  <button class="nav-link" data-cds-target="#cds-displace">🔧 排量別</button>
+                </div>
               </div>
-            </div>
 
-            <!-- グループ③：地域・国・省 -->
-            <div class="cds-group mb-2">
-              <div class="cds-group-label">🌍 地域・国・省</div>
-              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-region"   type="button">🌍 地域別出口</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-country"  type="button">🏳️ 国別出口</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-nev-ctry" type="button">⚡ NEV国別均価</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-prov"     type="button">🏭 省別出口</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-nev-prov" type="button">🏭 NEV省別均価</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-rank"     type="button">🏆 主力市場ランキング</button></li>
+              <div class="cds-gc" data-group="g3">
+                <button class="cds-gc-label" onclick="cdsToggleGroup('g3')">🌍 地域・国・省 <span class="cds-gc-arrow">▾</span></button>
+                <div class="cds-gc-items" id="cds-gc-g3">
+                  <button class="nav-link" data-cds-target="#cds-region">🌍 地域別</button>
+                  <button class="nav-link" data-cds-target="#cds-country">🏳️ 国別</button>
+                  <button class="nav-link" data-cds-target="#cds-nev-ctry">⚡ NEV国別</button>
+                  <button class="nav-link" data-cds-target="#cds-prov">🏭 省別</button>
+                  <button class="nav-link" data-cds-target="#cds-nev-prov">🏭 NEV省別</button>
+                  <button class="nav-link" data-cds-target="#cds-rank">🏆 主力市場</button>
+                </div>
               </div>
-            </div>
 
-            <!-- グループ④：乗用車 国別推移 -->
-            <div class="cds-group mb-2">
-              <div class="cds-group-label">🚗 乗用車 国別推移</div>
-              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r3"  type="button">🚘 整車（全体）</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r4"  type="button">⚡ NEV全体</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r5"  type="button">⛽ 燃油乗用車</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r6"  type="button">🔌 BEV乗用車</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r7"  type="button">🔋 PHEV乗用車</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r6b" type="button">🔀 HEV乗用車</button></li>
+              <div class="cds-gc" data-group="g4">
+                <button class="cds-gc-label" onclick="cdsToggleGroup('g4')">🚗 乗用車 国別 <span class="cds-gc-arrow">▾</span></button>
+                <div class="cds-gc-items" id="cds-gc-g4">
+                  <button class="nav-link" data-cds-target="#cds-r3">🚘 整車</button>
+                  <button class="nav-link" data-cds-target="#cds-r4">⚡ NEV</button>
+                  <button class="nav-link" data-cds-target="#cds-r5">⛽ 燃油</button>
+                  <button class="nav-link" data-cds-target="#cds-r6">🔌 BEV</button>
+                  <button class="nav-link" data-cds-target="#cds-r7">🔋 PHEV</button>
+                  <button class="nav-link" data-cds-target="#cds-r6b">🔀 HEV</button>
+                </div>
               </div>
-            </div>
 
-            <!-- グループ⑤：商用車 国別推移 -->
-            <div class="cds-group mb-2">
-              <div class="cds-group-label">🚛 商用車 国別推移</div>
-              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r8"   type="button">⛽ 燃油トラック</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r9"   type="button">🔋 PHEVトラック（ピックアップ）</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r10"  type="button">🔌 BEVトラック</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r9b"  type="button">⚡ NEVトラック</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r11"  type="button">⛽ 燃油バス</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r12"  type="button">⚡ NEVバス</button></li>
-                <li class="nav-item"><button class="nav-link" data-cds-target="#cds-r12b" type="button">⚡ NEVバス（詳細）</button></li>
+              <div class="cds-gc" data-group="g5">
+                <button class="cds-gc-label" onclick="cdsToggleGroup('g5')">🚛 商用車 国別 <span class="cds-gc-arrow">▾</span></button>
+                <div class="cds-gc-items" id="cds-gc-g5">
+                  <button class="nav-link" data-cds-target="#cds-r8">⛽ 燃油TR</button>
+                  <button class="nav-link" data-cds-target="#cds-r9">🔋 PHEV-TR</button>
+                  <button class="nav-link" data-cds-target="#cds-r10">🔌 BEV-TR</button>
+                  <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEV-TR</button>
+                  <button class="nav-link" data-cds-target="#cds-r11">⛽ 燃油BS</button>
+                  <button class="nav-link" data-cds-target="#cds-r12">⚡ NEV-BS</button>
+                  <button class="nav-link" data-cds-target="#cds-r12b">⚡ NEV-BS+</button>
+                </div>
               </div>
-            </div>
 
+            </div><!-- end cds-nav-compact -->
           </div><!-- end cdsPills -->
           <div id="cdsPillsContent" style="display:none">
             <div class="cds-pane cds-active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
@@ -6650,7 +6707,6 @@ async function loadCdsExcel() {
 
     CDS_LOADED = true;
     if (loadEl) loadEl.style.display = 'none';
-    // グループ構造：divなので display:block で表示
     if (pillEl) { pillEl.style.display = 'block'; }
     if (contEl) contEl.style.removeProperty('display');
     // 初期タブを表示
@@ -7121,6 +7177,12 @@ const CDS_FNS = {
 // CDS カスタムタブ制御 ＋ 比較機能
 // =============================================
 
+// グループ折りたたみ
+function cdsToggleGroup(gid) {
+  const gc = document.querySelector(`.cds-gc[data-group="${gid}"]`);
+  if (gc) gc.classList.toggle('collapsed');
+}
+
 let CDS_CURRENT_ID = 'cds-monthly';  // 現在表示中のID
 
 function cdsShowPane(id) {
@@ -7135,6 +7197,18 @@ function cdsShowPane(id) {
   document.querySelectorAll('#cdsPills [data-cds-target]').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-cds-target') === `#${id}`);
   });
+
+  // アクティブなボタンを含むグループラベルを強調
+  document.querySelectorAll('.cds-gc-label').forEach(lbl => lbl.classList.remove('has-active'));
+  const activeBtn = document.querySelector(`#cdsPills [data-cds-target="#${id}"]`);
+  if (activeBtn) {
+    const gc = activeBtn.closest('.cds-gc');
+    if (gc) {
+      gc.querySelector('.cds-gc-label')?.classList.add('has-active');
+      // 折りたたまれていたら開く
+      gc.classList.remove('collapsed');
+    }
+  }
 
   // グラフ描画
   if (CDS_FNS[id]) CDS_FNS[id]();

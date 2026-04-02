@@ -7351,16 +7351,29 @@ if (document.getElementById('cds-super-tab')?.classList.contains('active')) load
       TRAY.forEach((item, i) => {
         const el = document.getElementById('cm-ec-' + i);
         if (!el) return;
-        const srcChart = allEC[item.ecId];
+
+        // EChartsインスタンスを複数の方法で取得（保存済み > DOM > ECマップ の順）
+        let srcChart = item.instance || null;
+        if (!srcChart) srcChart = allEC[item.ecId];
+        if (!srcChart) {
+          const srcDom = document.getElementById(item.ecId);
+          if (srcDom) srcChart = echarts.getInstanceByDom(srcDom);
+        }
+
         if (srcChart) {
-          const ch = echarts.init(el);
-          ch.setOption(srcChart.getOption());
-          new ResizeObserver(() => { try { ch.resize(); } catch(e){} }).observe(el);
+          try {
+            const option = srcChart.getOption();
+            const ch = echarts.init(el);
+            ch.setOption(option);
+            new ResizeObserver(() => { try { ch.resize(); } catch(e){} }).observe(el);
+          } catch(err) {
+            el.innerHTML = '<div style="padding:40px;color:#94a3b8;text-align:center;font-size:13px">描画エラー: ' + err.message + '</div>';
+          }
         } else {
-          el.innerHTML = '<div style="padding:40px;color:#94a3b8;text-align:center;font-size:13px">グラフデータを取得できませんでした<br><small>先にそのタブを開いてグラフを表示してから追加してください</small></div>';
+          el.innerHTML = '<div style="padding:40px;color:#94a3b8;text-align:center;font-size:13px">⚠️ グラフデータを取得できませんでした<br><small style=\'color:#64748b\'>先にそのタブを開いてグラフを表示してから 📌 を押してください</small></div>';
         }
       });
-    }, 80);
+    }, 120);
   }
 
   trayCompare?.addEventListener('click', openCompareModal);
@@ -7405,7 +7418,9 @@ if (document.getElementById('cds-super-tab')?.classList.contains('active')) load
         }
         const label = (card.querySelector('.chart-title')?.textContent || ecEl.id).trim().slice(0, 28);
         const source = (card.querySelector('.chart-subtitle')?.textContent || '').trim().slice(0, 40);
-        TRAY.push({ label, source, ecId: ecEl.id, icon: iconChar || '📊' });
+        // ボタンを押した時点でECインスタンスを取得して保存（後から取れなくなるケースに対応）
+        const instanceNow = echarts.getInstanceByDom(ecEl) || getAllEC()[ecEl.id] || null;
+        TRAY.push({ label, source, ecId: ecEl.id, icon: iconChar || '📊', instance: instanceNow });
         renderTray();
         btn.style.background = '#0ea5e9';
         btn.innerHTML = '📌✓';
@@ -7443,12 +7458,16 @@ if (document.getElementById('cds-super-tab')?.classList.contains('active')) load
     }, 400);
   });
 
-  // CDS: cdsShowPane をラップ
+  // CDS: cdsShowPane をラップ（工事中ペイン＝cdsPillsContentの外は対象外）
   const _origShowPane = window.cdsShowPane;
   if (typeof _origShowPane === 'function') {
     window.cdsShowPane = function(id) {
       _origShowPane(id);
-      setTimeout(() => addComparePinToCards('#' + id, '🚢'), 180);
+      // cdsPillsContent 内のペインのみピンを付ける（工事中UIは除外）
+      const pane = document.getElementById(id);
+      if (pane && pane.closest('#cdsPillsContent')) {
+        setTimeout(() => addComparePinToCards('#' + id, '🚢'), 180);
+      }
     };
   }
 

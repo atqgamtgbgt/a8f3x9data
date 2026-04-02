@@ -6382,7 +6382,6 @@ const CDS_EXCEL_PATH = `${RAW_BASE}output/market/${encodeURIComponent('中国自
 let CDS_LOADED = false;
 let CDS = {};          // 全データ格納
 const CDS_EC = {};
-const CDS_DONE = {};
 
 function cdsEc(id) {
   if (!CDS_EC[id]) {
@@ -6613,7 +6612,6 @@ async function loadCdsExcel() {
 const YRCOLORS = ['#cbd5e1','#94a3b8','#64748b','#3b82f6','#f59e0b','#10b981','#ef4444'];
 
 function drawBar(id, title, subtitle, categories, series, opts={}) {
-  if (CDS_DONE[id]) return; CDS_DONE[id]=true;
   const chart = cdsEc(id); if(!chart) return;
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
@@ -6623,10 +6621,10 @@ function drawBar(id, title, subtitle, categories, series, opts={}) {
     yAxis:opts.horizontal?{type:'category',data:categories}:{type:'value',name:opts.yname||'万台'},
     series:series.map(s=>({...s,type:'bar',stack:opts.stack?'total':undefined,label:{show:!!opts.label,position:opts.horizontal?'right':'top',fontSize:10,formatter:p=>p.value&&Math.abs(p.value)>=opts.labelMin?p.value:''}})),
   });
+  setTimeout(()=>{ try{chart.resize();}catch(e){} }, 80);
 }
 
 function drawLine(id, categories, series, opts={}) {
-  if (CDS_DONE[id]) return; CDS_DONE[id]=true;
   const chart = cdsEc(id); if(!chart) return;
   chart.setOption({
     tooltip:{trigger:'axis'},
@@ -6636,21 +6634,23 @@ function drawLine(id, categories, series, opts={}) {
     yAxis:opts.yAxis||[{type:'value',name:opts.yname||'万台'}],
     series:series.map(s=>({smooth:true,symbol:'circle',symbolSize:5,...s})),
   });
+  setTimeout(()=>{ try{chart.resize();}catch(e){} }, 80);
 }
 
 // ---- 各グラフ描画 ----
 function cdsDrawMonthly() {
-  if (CDS_DONE['cds-monthly']||!CDS_LOADED) return; CDS_DONE['cds-monthly']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-monthly'); if(!chart) return;
   const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const yrs=['2021','2022','2023','2024','2025','2026'];
   chart.setOption({tooltip:{trigger:'axis'},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:50,right:20,top:20,bottom:50},
     xAxis:{type:'category',data:months},yAxis:{type:'value',name:'万台'},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'line',smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:yr==='2024'?2.5:1.5,type:yr==='2026'?'dashed':'solid'},itemStyle:{color:YRCOLORS[i]},data:(CDS.monthly[yr]||[])}))});
+  setTimeout(()=>{try{cdsEc('ec-cds-monthly')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawAnnual() {
-  if (CDS_DONE['cds-annual']||!CDS_LOADED) return; CDS_DONE['cds-annual']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-annual'); if(!chart) return;
   const d=CDS.annual;
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:55,right:55,top:20,bottom:55},
@@ -6658,10 +6658,11 @@ function cdsDrawAnnual() {
     yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
     series:[{name:'出口量',type:'bar',data:d.map(x=>x.vol),itemStyle:{color:p=>p.data>=500?'#10b981':p.data>=300?'#3b82f6':p.data>=150?'#f59e0b':'#94a3b8'},label:{show:true,position:'top',fontSize:9,formatter:p=>p.value>=100?p.value:''}},
       {name:'前年比',type:'line',yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:5,lineStyle:{color:'#ef4444',width:2},itemStyle:{color:'#ef4444'}}]});
+  setTimeout(()=>{try{cdsEc('ec-cds-annual')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawNev() {
-  if (CDS_DONE['cds-nev']||!CDS_LOADED) return; CDS_DONE['cds-nev']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-nev'); if(!chart) return;
   const lbls=CDS.summaryLabels||[], tot=CDS.summaryTotal||[], nev=CDS.summaryNev||[];
   const labels=[],tv=[],nv=[],iv=[];
@@ -6673,10 +6674,11 @@ function cdsDrawNev() {
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:55,right:20,top:20,bottom:65},
     xAxis:{type:'category',data:labels,axisLabel:{fontSize:10}},yAxis:{type:'value',name:'万台'},
     series:[{name:'燃油車等',type:'bar',stack:'t',data:iv,itemStyle:{color:'#94a3b8'}},{name:'NEV',type:'bar',stack:'t',data:nv,itemStyle:{color:'#10b981'},label:{show:true,position:'top',fontSize:10,formatter:(_,i2)=>tv[i2]||''}}]});
+  setTimeout(()=>{try{cdsEc('ec-cds-nev')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawNevAnnual() {
-  if (CDS_DONE['cds-nev-annual']||!CDS_LOADED) return; CDS_DONE['cds-nev-annual']=true;
+  if (!CDS_LOADED) return;
   const d=CDS.nevAnnual||[];
   drawBar('ec-cds-nev-annual','','',d.map(x=>x.year),
     [{name:'1Q',data:d.map(x=>x.q1),itemStyle:{color:'#93c5fd'}},{name:'2Q',data:d.map(x=>x.q2),itemStyle:{color:'#3b82f6'}},{name:'3Q',data:d.map(x=>x.q3),itemStyle:{color:'#1d4ed8'}},{name:'4Q',data:d.map(x=>x.q4),itemStyle:{color:'#1e3a8a'}}],
@@ -6684,7 +6686,7 @@ function cdsDrawNevAnnual() {
 }
 
 function cdsDrawNevTrend() {
-  if (CDS_DONE['cds-nev-trend']||!CDS_LOADED) return; CDS_DONE['cds-nev-trend']=true;
+  if (!CDS_LOADED) return;
   const d=CDS.nevTrend||[];
   const chart=cdsEc('ec-cds-nev-trend'); if(!chart) return;
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:55,right:55,top:20,bottom:40},
@@ -6692,45 +6694,47 @@ function cdsDrawNevTrend() {
     yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
     series:[{name:'出口量',type:'bar',data:d.map(x=>x.vol),itemStyle:{color:'#10b981'},label:{show:true,position:'top',fontSize:11}},
       {name:'前年比',type:'line',yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:6,lineStyle:{color:'#f59e0b',width:2.5},itemStyle:{color:'#f59e0b'}}]});
+  setTimeout(()=>{try{cdsEc('ec-cds-nev-trend')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawPowertype() {
-  if (CDS_DONE['cds-powertype']||!CDS_LOADED) return; CDS_DONE['cds-powertype']=true;
+  if (!CDS_LOADED) return;
   const yrs=['2022','2023','2024','2025'], pts=['汽油','純電動','插混','混合動力'], cols=['#94a3b8','#3b82f6','#10b981','#f59e0b'], d=CDS.powerCars||{};
   drawBar('ec-cds-powertype','','',yrs.map(y=>y+'年'),pts.map((pt,i)=>({name:pt,data:yrs.map(yr=>d[pt]?d[pt][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:15});
 }
 
 function cdsDrawBodytype() {
-  if (CDS_DONE['cds-bodytype']||!CDS_LOADED) return; CDS_DONE['cds-bodytype']=true;
+  if (!CDS_LOADED) return;
   const yrs=['2022','2023','2024','2025'], bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'], d=CDS.bodyTypes||{};
   drawBar('ec-cds-bodytype','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:20});
 }
 
 function cdsDrawNevPower() {
-  if (CDS_DONE['cds-nev-power']||!CDS_LOADED) return; CDS_DONE['cds-nev-power']=true;
+  if (!CDS_LOADED) return;
   const yrs=['2022','2023','2024','2025'], d=CDS.nevPower||{};
   const pts=Object.keys(d), cols=['#94a3b8','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ef4444'];
   drawBar('ec-cds-nev-power','','',yrs.map(y=>y+'年'),pts.map((pt,i)=>({name:pt,data:yrs.map(yr=>d[pt]?d[pt][yr]:null),itemStyle:{color:cols[i%cols.length]}})),{stack:true,label:true,labelMin:10});
 }
 
 function cdsDrawNevBody() {
-  if (CDS_DONE['cds-nev-body']||!CDS_LOADED) return; CDS_DONE['cds-nev-body']=true;
+  if (!CDS_LOADED) return;
   const yrs=['2022','2023','2024','2025'], d=CDS.nevBody||{};
   const bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'];
   drawBar('ec-cds-nev-body','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:5});
 }
 
 function cdsDrawRegion() {
-  if (CDS_DONE['cds-region']||!CDS_LOADED) return; CDS_DONE['cds-region']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-region'); if(!chart) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025'], rs=(CDS.regions||[]).filter(r=>r.name!=='総計');
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:rs.map(r=>r.name),bottom:0,type:'scroll'},grid:{left:55,right:20,top:30,bottom:70},
     xAxis:{type:'category',data:yrs.map(y=>y+'年')},yAxis:{type:'value',name:'万台'},
     series:rs.map((r,ri)=>({name:r.name,type:'bar',stack:'t',data:r.v,label:{show:true,fontSize:9,formatter:p=>p.value&&p.value>=20?p.value:''}}))});
+  setTimeout(()=>{try{cdsEc('ec-cds-region')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawCountry() {
-  if (CDS_DONE['cds-country']||!CDS_LOADED) return; CDS_DONE['cds-country']=true;
+  if (!CDS_LOADED) return;
   const d=(CDS.countries||[]).filter(c=>c.v2025!=null).sort((a,b)=>(b.v2025||0)-(a.v2025||0)).slice(0,15);
   drawBar('ec-cds-country','','',d.map(c=>c.name).reverse(),
     [{name:'2024年',data:d.map(c=>c.v2024).reverse(),itemStyle:{color:'#94a3b8'}},{name:'2025年',data:d.map(c=>c.v2025).reverse(),itemStyle:{color:'#3b82f6'}}],
@@ -6738,7 +6742,7 @@ function cdsDrawCountry() {
 }
 
 function cdsDrawNevCtry() {
-  if (CDS_DONE['cds-nev-ctry']||!CDS_LOADED) return; CDS_DONE['cds-nev-ctry']=true;
+  if (!CDS_LOADED) return;
   const d=(CDS.nevCtry||[]).filter(c=>c.v2025!=null).sort((a,b)=>(b.v2025||0)-(a.v2025||0)).slice(0,15);
   drawBar('ec-cds-nev-ctry','','',d.map(c=>c.name).reverse(),
     [{name:'2024年',data:d.map(c=>c.v2024).reverse(),itemStyle:{color:'#94a3b8'}},{name:'2025年',data:d.map(c=>c.v2025).reverse(),itemStyle:{color:'#10b981'}}],
@@ -6746,27 +6750,29 @@ function cdsDrawNevCtry() {
 }
 
 function cdsDrawProv() {
-  if (CDS_DONE['cds-prov']||!CDS_LOADED) return; CDS_DONE['cds-prov']=true;
+  if (!CDS_LOADED) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025'];
   const ps=(CDS.provs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,15);
   const chart=cdsEc('ec-cds-prov'); if(!chart) return;
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
     xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))});
+  setTimeout(()=>{try{cdsEc('ec-cds-prov')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawNevProv() {
-  if (CDS_DONE['cds-nev-prov']||!CDS_LOADED) return; CDS_DONE['cds-nev-prov']=true;
+  if (!CDS_LOADED) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025'];
   const ps=(CDS.nevProvs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,12);
   const chart=cdsEc('ec-cds-nev-prov'); if(!chart) return;
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
     xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))});
+  setTimeout(()=>{try{cdsEc('ec-cds-nev-prov')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawRank() {
-  if (CDS_DONE['cds-rank']||!CDS_LOADED) return; CDS_DONE['cds-rank']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-rank'); if(!chart) return;
   const yrs=CDS.rankYears||[], rd=CDS.rankData||[];
   // ランキング逆表示（1位が上）
@@ -6792,7 +6798,7 @@ function cdsDrawRank() {
 }
 
 function cdsDrawRussia() {
-  if (CDS_DONE['cds-russia']||!CDS_LOADED) return; CDS_DONE['cds-russia']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-russia'); if(!chart) return;
   const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const yrs=Object.keys(CDS.russia||{}).sort(), cols=['#cbd5e1','#94a3b8','#3b82f6','#f59e0b','#ef4444'];
@@ -6800,16 +6806,18 @@ function cdsDrawRussia() {
     legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:50},
     xAxis:{type:'category',data:months},yAxis:{type:'value',name:'台',axisLabel:{formatter:v=>v>=10000?(v/10000).toFixed(0)+'万':v}},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'line',smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:2,color:cols[i]},itemStyle:{color:cols[i]},data:CDS.russia[yr]}))});
+  setTimeout(()=>{try{cdsEc('ec-cds-russia')?.resize();}catch(e){}},80);
 }
 
 function cdsDrawDisplace() {
-  if (CDS_DONE['cds-displace']||!CDS_LOADED) return; CDS_DONE['cds-displace']=true;
+  if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-displace'); if(!chart) return;
   const yrs=['2022','2023','2024','2025'], d=(CDS.displace||[]).filter(x=>x.power!=='動力'&&!x.range.includes('汇総'));
   const labels=d.map(x=>`${x.power}\n${x.range}`);
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:80},
     xAxis:{type:'category',data:labels,axisLabel:{fontSize:9,rotate:30}},yAxis:{type:'value',name:'万台'},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:d.map(x=>x.vals[yr]),itemStyle:{color:YRCOLORS[i+1]},label:{show:i===3,position:'top',fontSize:9,formatter:p=>p.value&&p.value>=1?p.value:''}}))});
+  setTimeout(()=>{try{cdsEc('ec-cds-displace')?.resize();}catch(e){}},80);
 }
 
 // =============================================
@@ -7065,7 +7073,8 @@ document.querySelectorAll('#cdsPills .nav-link').forEach(btn => {
   btn.addEventListener('shown.bs.tab', e => {
     const id = e.target.getAttribute('data-bs-target').replace('#','');
     if (CDS_FNS[id]) CDS_FNS[id]();
-    setTimeout(()=>{ Object.values(CDS_EC).forEach(c=>{try{c&&c.resize();}catch(e){}}); }, 50);
+    // 表示後に必ずresizeして高さを正しく反映
+    setTimeout(()=>{ Object.values(CDS_EC).forEach(c=>{try{c&&c.resize();}catch(e){}}); }, 80);
   });
   // pill切替時に他グループのアクティブも解除
   btn.addEventListener('click', () => {

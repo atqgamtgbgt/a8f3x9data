@@ -6348,21 +6348,31 @@ function n(v) {
   return isNaN(r) ? null : r;
 }
 
-// 月次比較表パーサー：各◆ブロックからTop10抽出
+// 月次比較表パーサー：「〇年〇月」タイトル行からTop10抽出
+// v9以降は◆が消えて「2025年3月」形式になっているため、年月パターンで検出
 function parseRankingSheet(ws_data) {
   const blocks = [];
+  // 「〇年〇月」または「〇年〇〜〇月累計」にマッチするか
+  const YM_RE = /^\d{4}年\d{1,2}(月|〜\d{1,2}月累計)/;
+  // 旧形式（◆付き）も念のため対応
+  const isBlockTitle = (v) => {
+    if (!v || typeof v !== 'string') return false;
+    return YM_RE.test(v) || v.includes('◆');
+  };
+
   let i = 0;
   while (i < ws_data.length) {
     const r = ws_data[i];
     const c0 = r[0];
-    if (c0 && typeof c0 === 'string' && c0.includes('◆')) {
-      const title = c0;
+    if (isBlockTitle(c0) && (r[1] === null || r[1] === undefined)) {
+      // タイトルから◆を除去して整形
+      const title = c0.replace('◆', '').trim();
       let j = i + 1;
-      // ヘッダー行スキップ
+      // ヘッダー行・空行をスキップ
       while (j < ws_data.length) {
         const rj = ws_data[j];
-        if (!rj[0]) { j++; continue; }
-        if (typeof rj[0] === 'string' && (rj[0].includes('単月') || rj[0].includes('国名'))) { j++; continue; }
+        if (!rj || !rj[0]) { j++; continue; }
+        if (typeof rj[0] === 'string' && (rj[0].includes('単月') || rj[0].includes('国名') || rj[0].includes('Top10'))) { j++; continue; }
         break;
       }
       const data = [];

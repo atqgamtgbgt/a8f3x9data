@@ -1675,6 +1675,21 @@ img.car-thumb {
   background: #e2e8f0;
   color: #333;
 }
+/* グループラベル */
+.cds-group {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem 0.6rem;
+}
+.cds-group-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
+}
 .chart-card {
   background: #fff;
   border: 1px solid #e9ecef;
@@ -2656,38 +2671,75 @@ img.car-thumb {
             <div class="spinner-border text-primary" role="status"></div>
             <div class="text-muted small">Excelデータ読み込み中…</div>
           </div>
-          <ul class="nav nav-pills flex-wrap gap-1 mb-3 charts-pills" id="cdsPills" style="display:none!important">
-            <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cds-monthly"    type="button">📈 月次出口推移</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-annual"     type="button">📊 歴年出口量</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev"        type="button">⚡ NEV出口月次</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-annual" type="button">⚡ NEV歴年推移</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-trend"  type="button">⚡ NEV走勢グラフ</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-powertype"  type="button">🔋 動力別構成</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-bodytype"   type="button">🚗 車型別構成</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-power"  type="button">🔋 NEV動力別月次</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-body"   type="button">🚗 NEV車型別月次</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-region"     type="button">🌍 地域別出口</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-country"    type="button">🏳️ 国別出口</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-ctry"   type="button">⚡ NEV国別均価</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-prov"       type="button">🏭 省別出口</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-prov"   type="button">🏭 NEV省別均価</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-rank"       type="button">🏆 主力市場ランキング</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-russia"     type="button">🇷🇺 対ロシア推移</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-displace"   type="button">🔧 乗用車排量別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r3"         type="button">🚘 整車出口 国別ランキング</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r4"         type="button">⚡ NEV出口 国別ランキング</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r5"         type="button">⛽ 燃油乗用車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r6"         type="button">🔌 BEV乗用車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r7"         type="button">🔋 PHEV乗用車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r6b"        type="button">🔀 HEV乗用車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r8"         type="button">🚛 燃油货車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r9"         type="button">🔋 PHEV货車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r10"        type="button">🔌 BEV货車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r9b"        type="button">⚡ NEV货車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r11"        type="button">🚌 燃油客車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r12"        type="button">🚌 新能源客車 国別</button></li>
-            <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-r12b"       type="button">⚡ NEV客車 国別</button></li>
-          </ul>
+          <!-- グループ化ナビゲーション -->
+          <div id="cdsPills" style="display:none!important">
+
+            <!-- グループ①：全体トレンド -->
+            <div class="cds-group mb-2">
+              <div class="cds-group-label">📊 全体トレンド</div>
+              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
+                <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cds-monthly"    type="button">📈 月次出口推移</button></li>
+                <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-annual"     type="button">📊 歴年出口量</button></li>
+                <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev"        type="button">⚡ NEV出口月次</button></li>
+                <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-annual" type="button">⚡ NEV歴年推移</button></li>
+                <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-nev-trend"  type="button">⚡ NEV走勢グラフ</button></li>
+                <li class="nav-item"><button class="nav-link"        data-bs-toggle="pill" data-bs-target="#cds-russia"     type="button">🇷🇺 対ロシア推移</button></li>
+              </div>
+            </div>
+
+            <!-- グループ②：動力・車型・構成 -->
+            <div class="cds-group mb-2">
+              <div class="cds-group-label">🔋 動力・車型・構成</div>
+              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-powertype"  type="button">🔋 動力別構成</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-bodytype"   type="button">🚗 車型別構成</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-nev-power"  type="button">🔋 NEV動力別月次</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-nev-body"   type="button">🚗 NEV車型別月次</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-displace"   type="button">🔧 乗用車排量別</button></li>
+              </div>
+            </div>
+
+            <!-- グループ③：地域・国・省 -->
+            <div class="cds-group mb-2">
+              <div class="cds-group-label">🌍 地域・国・省</div>
+              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-region"   type="button">🌍 地域別出口</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-country"  type="button">🏳️ 国別出口</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-nev-ctry" type="button">⚡ NEV国別均価</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-prov"     type="button">🏭 省別出口</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-nev-prov" type="button">🏭 NEV省別均価</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-rank"     type="button">🏆 主力市場ランキング</button></li>
+              </div>
+            </div>
+
+            <!-- グループ④：乗用車 国別推移 -->
+            <div class="cds-group mb-2">
+              <div class="cds-group-label">🚗 乗用車 国別推移</div>
+              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r3"  type="button">🚘 整車（全体）</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r4"  type="button">⚡ NEV全体</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r5"  type="button">⛽ 燃油乗用車</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r6"  type="button">🔌 BEV乗用車</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r7"  type="button">🔋 PHEV乗用車</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r6b" type="button">🔀 HEV乗用車</button></li>
+              </div>
+            </div>
+
+            <!-- グループ⑤：商用車 国別推移 -->
+            <div class="cds-group mb-2">
+              <div class="cds-group-label">🚛 商用車 国別推移</div>
+              <div class="nav nav-pills flex-wrap gap-1 charts-pills">
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r8"   type="button">⛽ 燃油トラック</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r9"   type="button">🔋 PHEVトラック（ピックアップ）</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r10"  type="button">🔌 BEVトラック</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r9b"  type="button">⚡ NEVトラック</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r11"  type="button">⛽ 燃油バス</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r12"  type="button">⚡ NEVバス</button></li>
+                <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cds-r12b" type="button">⚡ NEVバス（詳細）</button></li>
+              </div>
+            </div>
+
+          </div><!-- end cdsPills -->
           <div class="tab-content" id="cdsPillsContent" style="display:none">
             <div class="tab-pane fade show active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
             <div class="tab-pane fade" id="cds-annual"><div class="chart-card"><div class="chart-title">歴年出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑭シート　2007〜2025年</div><div id="ec-cds-annual" class="echart-box" style="height:420px"></div></div></div>
@@ -6545,7 +6597,8 @@ async function loadCdsExcel() {
 
     CDS_LOADED = true;
     if (loadEl) loadEl.style.display = 'none';
-    if (pillEl) pillEl.style.removeProperty('display');
+    // グループ構造：divなので display:block で表示
+    if (pillEl) { pillEl.style.display = 'block'; }
     if (contEl) contEl.style.removeProperty('display');
     const ab = document.querySelector('#cdsPills .nav-link.active');
     if (ab) { const id = ab.getAttribute('data-bs-target').replace('#',''); if(CDS_FNS[id]) CDS_FNS[id](); }
@@ -7006,13 +7059,22 @@ const CDS_FNS = {
 document.getElementById('cds-super-tab').addEventListener('shown.bs.tab', () => {
   if (!CDS_LOADED) { loadCdsExcel(); } else { cdsDrawMonthly(); }
 });
+
+// グループ構造対応：全グループ内のpillボタンにイベントを付与
 document.querySelectorAll('#cdsPills .nav-link').forEach(btn => {
   btn.addEventListener('shown.bs.tab', e => {
     const id = e.target.getAttribute('data-bs-target').replace('#','');
     if (CDS_FNS[id]) CDS_FNS[id]();
     setTimeout(()=>{ Object.values(CDS_EC).forEach(c=>{try{c&&c.resize();}catch(e){}}); }, 50);
   });
+  // pill切替時に他グループのアクティブも解除
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('#cdsPills .nav-link.active').forEach(b => {
+      if (b !== btn) { b.classList.remove('active'); }
+    });
+  });
 });
+
 window.addEventListener('resize', ()=>{ Object.values(CDS_EC).forEach(c=>{try{c&&c.resize();}catch(e){}}); });
 if (document.getElementById('cds-super-tab')?.classList.contains('active')) loadCdsExcel();
 

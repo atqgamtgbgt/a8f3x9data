@@ -7634,11 +7634,28 @@ window.cpcaInitMap = function() {
   });
 };
 
+// 省別ラベルオフセット（[x, y] ピクセル調整）
+var LABEL_OFFSETS = {
+  '甘肃': [0, -12],
+  '河北': [-8, 10],
+  '宁夏': [0, 0],
+  '北京': [0, 0],
+  '天津': [6, 6],
+};
+
 function mapDataArr() {
-  return Object.keys(CPCA.prov).map(ja=>({
-    name: CPCA.ja2zh[ja] || ja,
-    value: metricVal(ja),
-  }));
+  return Object.keys(CPCA.prov).map(ja=>{
+    var zh = CPCA.ja2zh[ja] || ja;
+    var off = LABEL_OFFSETS[zh];
+    var item = {
+      name: zh,
+      value: metricVal(ja),
+    };
+    if (off) {
+      item.label = { offset: off };
+    }
+    return item;
+  });
 }
 
 function getVisualMap() {

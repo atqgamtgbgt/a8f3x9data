@@ -1752,6 +1752,11 @@ img.car-thumb {
 .cds-gc-items .nav-link.active { background: #0d6efd; border-color: #0d6efd; color: #fff; }
 /* カスタムタブペイン */
 .cds-pane { display: none; }
+.cds-pane.cds-active { animation: cdsFadeIn 0.22s ease forwards; }
+@keyframes cdsFadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .cds-mid-tab{padding:8px 22px;font-size:13px;font-weight:600;border:none;border-bottom:3px solid transparent;background:transparent;color:#666;cursor:pointer;transition:all .18s;margin-bottom:-2px}
 .cds-mid-tab:hover{color:#0d6efd;background:#f0f4ff}
 .cds-mid-tab.active{color:#0d6efd;border-bottom-color:#0d6efd;background:#f8f9ff}
@@ -2760,7 +2765,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="spinner-border text-primary" role="status"></div>
             <div class="text-muted small">Excelデータ読み込み中…</div>
           </div>
-          <div id="cdsPills" style="display:none!important">
+          <div id="cdsPills" style="display:none">
             <div id="cds-mid-tabs" style="display:flex;gap:0;margin-bottom:0;border-bottom:2px solid #dee2e6">
               <button id="cds-mid-btn-export" class="cds-mid-tab active" onclick="cdsSetMidTab('export')">🚢 輸出分析</button>
               <button id="cds-mid-btn-china"  class="cds-mid-tab"        onclick="cdsSetMidTab('china')">🗺️ 中国地域別</button>
@@ -7287,14 +7292,23 @@ function cdsSetMidTab(tab) {
   document.querySelectorAll('.cds-mid-tab').forEach(function(b){ b.classList.remove('active'); });
   var btn = document.getElementById('cds-mid-btn-' + tab);
   if (btn) btn.classList.add('active');
-  document.getElementById('cds-sub-export').style.display = tab === 'export' ? '' : 'none';
-  document.getElementById('cds-sub-china').style.display  = tab === 'china'  ? '' : 'none';
+  // サブナビ切替
+  var expNav = document.getElementById('cds-sub-export');
+  var chnNav = document.getElementById('cds-sub-china');
+  if (expNav) expNav.style.display = tab === 'export' ? '' : 'none';
+  if (chnNav) chnNav.style.display = tab === 'china'  ? '' : 'none';
   if (tab === 'china') {
-    cdsShowPane('cds-china-map');
+    // ペインとナビを確実に表示状態にする
+    var pillEl = document.getElementById('cdsPills');
+    var contEl = document.getElementById('cdsPillsContent');
+    if (pillEl) pillEl.style.setProperty('display','block');
+    if (contEl) contEl.style.removeProperty('display');
+    // chinaサブナビのボタンをアクティブに
     document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-target') === '#cds-china-map');
     });
-    setTimeout(cpcaInitMap, 80);
+    cdsShowPane('cds-china-map');
+    setTimeout(cpcaInitMap, 100);
   } else {
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
   }
@@ -7311,10 +7325,20 @@ document.addEventListener('DOMContentLoaded', function() {
   window.cdsShowPane = function(id) {
     _base(id);
     if (EXPORT_IDS.indexOf(id) !== -1) CDS_CURRENT_EXPORT_ID = id;
-    if (id === 'cds-china-map')    setTimeout(cpcaInitMap, 60);
+    if (id === 'cds-china-map')    setTimeout(cpcaInitMap, 100);
     if (id === 'cds-region-trend') setTimeout(cpcaRenderRegion, 60);
     if (id === 'cds-prov-sales')   setTimeout(cpcaRenderProv, 60);
   };
+  // 中国地域別サブナビのボタンにクリックイベント登録
+  document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-cds-target').replace('#','');
+      document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(function(b){
+        b.classList.toggle('active', b === btn);
+      });
+      cdsShowPane(id);
+    });
+  });
 });
 
 // ===== CPCA データ =====

@@ -2911,8 +2911,8 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- 中国地域別 ペイン群 -->
             <div class="cds-pane" id="cds-china-map">
-              <div class="chart-card" style="padding:0;overflow:hidden;min-height:740px">
-                <div id="cpca-map-root" style="height:740px"></div>
+              <div class="chart-card" style="padding:0;overflow:hidden;min-height:760px">
+                <div id="cpca-map-root" style="height:760px"></div>
               </div>
             </div>
             <div class="cds-pane" id="cds-region-trend">
@@ -7599,7 +7599,7 @@ window.cpcaInitMap = function() {
         <div id="cpca-map-ec" style="width:100%;height:100%"></div>
       </div>
       <!-- 右：詳細チャート -->
-      <div id="cpca-detail-panel" style="flex:0 0 300px;background:#131f35;overflow-y:auto;padding:14px;color:#d0e4f8">
+      <div id="cpca-detail-panel" style="flex:0 0 280px;background:#131f35;overflow-y:auto;padding:14px;color:#d0e4f8">
         <div style="color:#3a5070;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px">
           <div style="font-size:36px">🗺️</div>
           <div style="text-align:center;line-height:1.8;font-size:12px">地図の省をクリックすると<br>詳細チャートが表示されます</div>
@@ -7682,11 +7682,28 @@ function renderMapChart() {
       data: mapDataArr(),
       selectedMode:'single',
       emphasis:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2},
-        label:{show:true,color:'#fff',fontWeight:700,fontSize:10}},
+        label:{show:true,color:'#fff',fontWeight:700,fontSize:13,
+          textShadowColor:'rgba(0,0,0,0.9)',textShadowBlur:5}},
       select:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2}},
       itemStyle:{borderColor:'rgba(255,255,255,0.35)',borderWidth:0.7},
-      label:{show:true,color:'rgba(255,255,255,0.65)',fontSize:7.5,
-        formatter:p=>{ const ja=CPCA.zh2ja[p.name]; return ja?ja.slice(0,2):p.name.slice(0,2); }},
+      label:{
+        show:true,
+        color:'#fff',
+        fontSize:13,
+        fontWeight:'bold',
+        textShadowColor:'rgba(0,0,0,0.95)',
+        textShadowBlur:5,
+        textBorderColor:'rgba(0,0,0,0.6)',
+        textBorderWidth:2,
+        formatter:p=>{
+          const ja = CPCA.zh2ja[p.name] || p.name;
+          return ja;
+        },
+      },
+      labelLayout:{
+        hideOverlap:true,
+        moveOverlap:'shiftY',
+      },
     }]
   });
 }

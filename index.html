@@ -2820,6 +2820,15 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
               </div>
 
+              <div class="cds-gc" data-group="g6">
+                <button class="cds-gc-label" onclick="cdsToggleGroup('g6')">🗺️ 中国地域別 <span class="cds-gc-arrow">▾</span></button>
+                <div class="cds-gc-items" id="cds-gc-g6">
+                  <button class="nav-link" data-cds-target="#cds-china-map">🗺️ 地図インタラクティブ</button>
+                  <button class="nav-link" data-cds-target="#cds-region-trend">📈 大区域トレンド</button>
+                  <button class="nav-link" data-cds-target="#cds-prov-sales">🏙️ 省別販売量</button>
+                </div>
+              </div>
+
             </div><!-- end cds-nav-compact -->
           </div><!-- end cdsPills -->
           <div id="cdsPillsContent" style="display:none">
@@ -2853,6 +2862,36 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-r11"> <div id="rk-wrap-r11"></div></div>
             <div class="cds-pane" id="cds-r12"> <div id="rk-wrap-r12"></div></div>
             <div class="cds-pane" id="cds-r12b"><div id="rk-wrap-r12b"></div></div>
+            <!-- ===== 中国地域別 セクション ===== -->
+            <div class="cds-pane" id="cds-china-map">
+              <div class="chart-card" style="padding:0;overflow:hidden">
+                <div style="padding:16px 20px 8px">
+                  <div class="chart-title">🗺️ 中国省別市場インタラクティブマップ</div>
+                  <div class="chart-subtitle">CPCA区域市場分析 — 省をクリックして詳細データを表示</div>
+                </div>
+                <div id="cpca-map-container" style="min-height:720px;position:relative"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="cds-region-trend">
+              <div class="chart-card">
+                <div class="chart-title">📈 大区域別販売量・シェア推移</div>
+                <div class="chart-subtitle">CPCA①シート — 2017〜2026年（東北/华北/华東/华南/西北/西南/中部）</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px" id="cpca-region-tabs">
+                  <button class="btn btn-sm btn-primary active" data-rt="volume" onclick="cpcaSetRegionView('volume',this)">販売量（万台）</button>
+                  <button class="btn btn-sm btn-outline-secondary" data-rt="share" onclick="cpcaSetRegionView('share',this)">シェア（%）</button>
+                  <button class="btn btn-sm btn-outline-secondary" data-rt="growth" onclick="cpcaSetRegionView('growth',this)">前年比増速（%）</button>
+                </div>
+                <div id="ec-cpca-region" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="cds-prov-sales">
+              <div class="chart-card">
+                <div class="chart-title">🏙️ 省別乗用車販売量ランキング</div>
+                <div class="chart-subtitle">CPCA②シート — 2024年・2025年年間累計 + 2026年1-2月累計</div>
+                <div id="ec-cpca-prov" class="echart-box" style="height:560px"></div>
+              </div>
+            </div>
+
           </div><!-- end cdsPillsContent -->
         </div>
       </div><!-- end cds-super-content -->
@@ -7241,6 +7280,634 @@ window.addEventListener('resize', () => {
 
 if (document.getElementById('cds-super-tab')?.classList.contains('active')) loadCdsExcel();
 
+// ========== CPCA 中国地域別マップ ==========
+(function() {
+
+// ---- データ定義 ----
+const CPCA_DATA = {
+  regionVolume: {
+    regions: ['東北','東部-华北','東部-华東','東部-华南','西北','西南','中部-黄河','中部-長江'],
+    years: ['2017','2019','2022','2023','2024','2025'],
+    data: {
+      '東北':     [143,109,101,122,134,138],
+      '東部-华北': [423,361,332,370,420,406],
+      '東部-华東': [419,385,429,424,440,422],
+      '東部-华南': [325,317,328,314,332,336],
+      '西北':     [192,168,147,187,201,201],
+      '西南':     [355,322,286,294,315,317],
+      '中部-黄河': [225,191,157,183,193,205],
+      '中部-長江': [325,286,270,275,302,302],
+    }
+  },
+  regionShare: {
+    regions: ['東北','東部-华北','東部-华東','東部-华南','西北','西南','中部-黄河','中部-長江'],
+    years: ['2017','2019','2022','2023','2024','2025'],
+    data: {
+      '東北':     [5.9,5.1,4.9,5.6,5.7,5.9],
+      '東部-华北': [17.6,16.9,16.2,17.1,18.0,17.4],
+      '東部-华東': [17.4,18.0,20.9,19.6,18.8,18.1],
+      '東部-华南': [13.5,14.8,16.0,14.5,14.2,14.4],
+      '西北':     [8.0,7.9,7.2,8.6,8.6,8.7],
+      '西南':     [14.7,15.0,14.0,13.6,13.5,13.6],
+      '中部-黄河': [9.3,8.9,7.7,8.4,8.3,8.8],
+      '中部-長江': [13.5,13.4,13.2,12.7,12.9,13.0],
+    }
+  },
+  regionGrowth: {
+    regions: ['東北','東部-华北','東部-华東','東部-华南','西北','西南','中部-黄河','中部-長江'],
+    months: ['25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','25年汇总'],
+    data: {
+      '東北':     [-2,9,2,-23,-31,-23,3],
+      '東部-华北': [5,-5,1,-22,-23,-22,-3],
+      '東部-华東': [-6,-5,7,-14,-13,-14,-4],
+      '東部-华南': [-5,3,4,-2,-7,-2,1],
+      '西北':     [2,2,-3,-22,-16,-22,0],
+      '西南':     [5,9,6,-16,-11,-16,0],
+      '中部-黄河': [7,3,21,-23,-24,-23,6],
+      '中部-長江': [10,0,-4,-18,-11,-18,0],
+    }
+  },
+  provSales: [
+    {prov:'広東',y24:253.4,y25:256,yoy:'1%',total26:29.4,yoy26:'-16%'},
+    {prov:'浙江',y24:184.6,y25:185.8,yoy:'1%',total26:20.2,yoy26:'-16%'},
+    {prov:'江蘇',y24:193.7,y25:175.7,yoy:'-9%',total26:19.6,yoy26:'-24%'},
+    {prov:'山東',y24:186.6,y25:183.6,yoy:'-2%',total26:18.7,yoy26:'-20%'},
+    {prov:'河南',y24:138.9,y25:145.7,yoy:'5%',total26:17,yoy26:'-2%'},
+    {prov:'四川',y24:116.8,y25:116.6,yoy:'0%',total26:14.7,yoy26:'-4%'},
+    {prov:'河北',y24:126.5,y25:121.5,yoy:'-4%',total26:13,yoy26:'-20%'},
+    {prov:'湖北',y24:81,y25:83.6,yoy:'3%',total26:10,yoy26:'2%'},
+    {prov:'安徽',y24:89.7,y25:89.3,yoy:'0%',total26:10.3,yoy26:'-1%'},
+    {prov:'湖南',y24:75.9,y25:74.7,yoy:'-2%',total26:9.4,yoy26:'7%'},
+    {prov:'上海',y24:61.6,y25:60.6,yoy:'-2%',total26:7.6,yoy26:'23%'},
+    {prov:'北京',y24:65,y25:63.1,yoy:'-3%',total26:6,yoy26:'-20%'},
+    {prov:'陝西',y24:67.6,y25:65.7,yoy:'-3%',total26:7.5,yoy26:'-13%'},
+    {prov:'雲南',y24:55.3,y25:52.8,yoy:'-5%',total26:7.5,yoy26:'10%'},
+    {prov:'福建',y24:59.3,y25:61.6,yoy:'4%',total26:6.6,yoy26:'-24%'},
+    {prov:'貴州',y24:47.7,y25:49.6,yoy:'4%',total26:6.8,yoy26:'24%'},
+    {prov:'遼寧',y24:63.6,y25:64.6,yoy:'2%',total26:6,yoy26:'-38%'},
+    {prov:'江西',y24:55.2,y25:54.4,yoy:'-2%',total26:7.1,yoy26:'13%'},
+    {prov:'広西',y24:51.4,y25:50.2,yoy:'-2%',total26:5.7,yoy26:'-6%'},
+    {prov:'重慶',y24:44.3,y25:47.5,yoy:'7%',total26:6,yoy26:'-1%'},
+    {prov:'新疆',y24:42,y25:42.3,yoy:'1%',total26:4.1,yoy26:'-25%'},
+    {prov:'天津',y24:42,y25:37.5,yoy:'-11%',total26:3.8,yoy26:'-30%'},
+    {prov:'山西',y24:54.2,y25:58.9,yoy:'9%',total26:5.2,yoy26:'-34%'},
+    {prov:'内蒙古',y24:39.7,y25:42,yoy:'6%',total26:4.5,yoy26:'-33%'},
+    {prov:'黑龙江',y24:35.1,y25:40,yoy:'14%',total26:3.6,yoy26:'-33%'},
+    {prov:'吉林',y24:35.3,y25:33.2,yoy:'-6%',total26:3.5,yoy26:'-35%'},
+    {prov:'甘肃',y24:26.8,y25:26.6,yoy:'-1%',total26:3.9,yoy26:'10%'},
+    {prov:'海南',y24:18.8,y25:18.2,yoy:'-3%',total26:1.9,yoy26:'-42%'},
+    {prov:'宁夏',y24:12.4,y25:13.9,yoy:'12%',total26:1.5,yoy26:'-32%'},
+    {prov:'青海',y24:8.1,y25:7.4,yoy:'-8%',total26:0.9,yoy26:'-3%'},
+    {prov:'西藏',y24:4.2,y25:3.5,yoy:'-16%',total26:0.6,yoy26:'-21%'},
+  ],
+  // EChartsのGeoJSON名称に合わせた省データ (簡体字マッピング)
+  nevPenetration: {
+    '北京':{nev:57.3,bev:38.0,phev:19.4,hev:5.7,ice:37.0},
+    '上海':{nev:59.0,bev:49.2,phev:9.8,hev:3.1,ice:37.9},
+    '广东':{nev:55.9,bev:32.2,phev:23.7,hev:7.2,ice:37.0},
+    '浙江':{nev:59.1,bev:41.6,phev:17.5,hev:3.8,ice:37.1},
+    '江苏':{nev:53.0,bev:38.8,phev:14.2,hev:3.6,ice:43.4},
+    '山东':{nev:54.6,bev:38.4,phev:16.2,hev:4.1,ice:41.3},
+    '河南':{nev:58.5,bev:40.2,phev:18.4,hev:2.9,ice:38.5},
+    '四川':{nev:49.9,bev:30.2,phev:19.7,hev:2.4,ice:47.7},
+    '河北':{nev:49.0,bev:27.8,phev:21.3,hev:3.7,ice:47.2},
+    '湖北':{nev:56.9,bev:36.4,phev:20.6,hev:2.9,ice:40.2},
+    '安徽':{nev:53.9,bev:37.5,phev:16.4,hev:2.2,ice:43.9},
+    '湖南':{nev:46.9,bev:28.6,phev:18.3,hev:4.1,ice:49.0},
+    '陕西':{nev:55.0,bev:25.1,phev:29.9,hev:2.6,ice:42.4},
+    '重庆':{nev:59.4,bev:35.9,phev:23.5,hev:1.8,ice:38.8},
+    '福建':{nev:55.3,bev:35.1,phev:20.2,hev:3.9,ice:40.8},
+    '辽宁':{nev:43.6,bev:19.0,phev:24.6,hev:7.6,ice:48.8},
+    '江西':{nev:50.4,bev:33.1,phev:17.3,hev:3.1,ice:46.5},
+    '广西':{nev:63.2,bev:46.0,phev:17.2,hev:2.9,ice:33.9},
+    '云南':{nev:41.0,bev:29.7,phev:11.4,hev:2.8,ice:56.2},
+    '贵州':{nev:47.9,bev:29.4,phev:18.5,hev:1.8,ice:50.3},
+    '山西':{nev:50.8,bev:31.7,phev:19.1,hev:3.9,ice:45.3},
+    '内蒙古':{nev:48.4,bev:17.1,phev:31.3,hev:5.3,ice:46.3},
+    '黑龙江':{nev:39.3,bev:11.5,phev:27.8,hev:6.3,ice:54.3},
+    '吉林':{nev:42.5,bev:15.9,phev:26.5,hev:4.5,ice:53.0},
+    '新疆':{nev:46.7,bev:11.8,phev:34.9,hev:6.3,ice:47.1},
+    '甘肃':{nev:38.7,bev:14.7,phev:24.0,hev:2.8,ice:58.5},
+    '海南':{nev:68.3,bev:51.6,phev:16.7,hev:3.6,ice:28.1},
+    '宁夏':{nev:54.3,bev:18.5,phev:35.9,hev:2.8,ice:42.9},
+    '天津':{nev:57.9,bev:26.6,phev:31.3,hev:5.1,ice:36.9},
+    '青海':{nev:38.8,bev:18.8,phev:20.1,hev:3.8,ice:57.3},
+    '西藏':{nev:null,bev:null,phev:null,hev:null,ice:null},
+  },
+  bodyStruct: {
+    '西藏':{CAR:15.8,MPV:2.7,SUV:81.5},'青海':{CAR:26.8,MPV:3.0,SUV:70.2},'新疆':{CAR:28.0,MPV:3.5,SUV:68.5},
+    '宁夏':{CAR:28.7,MPV:2.9,SUV:68.3},'甘肃':{CAR:29.8,MPV:3.1,SUV:67.0},'海南':{CAR:31.4,MPV:4.7,SUV:63.9},
+    '内蒙古':{CAR:30.6,MPV:5.5,SUV:63.8},'重庆':{CAR:38.8,MPV:2.6,SUV:58.6},'陕西':{CAR:36.6,MPV:4.9,SUV:58.5},
+    '黑龙江':{CAR:38.0,MPV:5.6,SUV:56.4},'四川':{CAR:40.9,MPV:2.9,SUV:56.1},'湖北':{CAR:40.4,MPV:3.9,SUV:55.7},
+    '辽宁':{CAR:38.0,MPV:6.7,SUV:55.3},'上海':{CAR:39.0,MPV:5.9,SUV:55.0},'北京':{CAR:36.9,MPV:8.6,SUV:54.5},
+    '福建':{CAR:42.9,MPV:3.2,SUV:53.9},'山西':{CAR:40.3,MPV:5.9,SUV:53.8},'浙江':{CAR:42.6,MPV:4.2,SUV:53.2},
+    '云南':{CAR:42.4,MPV:4.9,SUV:52.8},'广东':{CAR:43.1,MPV:4.5,SUV:52.4},'湖南':{CAR:45.1,MPV:3.3,SUV:51.6},
+    '贵州':{CAR:45.7,MPV:2.9,SUV:51.5},'安徽':{CAR:45.8,MPV:3.8,SUV:50.4},'天津':{CAR:43.2,MPV:6.4,SUV:50.4},
+    '吉林':{CAR:44.8,MPV:5.5,SUV:49.7},'江苏':{CAR:45.7,MPV:4.8,SUV:49.5},'江西':{CAR:49.0,MPV:3.4,SUV:47.5},
+    '山东':{CAR:47.5,MPV:6.1,SUV:46.4},'河北':{CAR:48.1,MPV:6.0,SUV:45.9},'河南':{CAR:51.8,MPV:4.8,SUV:43.4},
+    '广西':{CAR:54.4,MPV:3.0,SUV:42.6}
+  },
+  brandShare: {
+    '上海':{luxury:26.2,jv:19.5,domestic:54.2},'北京':{luxury:21.1,jv:21.9,domestic:57.0},
+    '福建':{luxury:14.5,jv:23.3,domestic:62.2},'宁夏':{luxury:6.9,jv:18.1,domestic:75.0},
+    '湖北':{luxury:11.4,jv:22.3,domestic:66.4},'新疆':{luxury:4.7,jv:26.0,domestic:69.3},
+    '江西':{luxury:12.1,jv:23.4,domestic:64.4},'黑龙江':{luxury:6.5,jv:32.5,domestic:61.0},
+    '河南':{luxury:7.6,jv:22.4,domestic:70.0},'贵州':{luxury:7.7,jv:21.9,domestic:70.4},
+    '海南':{luxury:8.1,jv:21.0,domestic:70.9},'重庆':{luxury:10.5,jv:14.9,domestic:74.5},
+    '山西':{luxury:6.0,jv:27.4,domestic:66.6},'浙江':{luxury:18.3,jv:18.5,domestic:63.2},
+    '湖南':{luxury:12.5,jv:27.5,domestic:60.0},'山东':{luxury:11.0,jv:26.4,domestic:62.6},
+    '广东':{luxury:13.1,jv:25.4,domestic:61.5},'四川':{luxury:14.4,jv:20.5,domestic:65.1},
+    '陕西':{luxury:10.3,jv:19.4,domestic:70.3},'广西':{luxury:6.1,jv:19.8,domestic:74.2},
+    '辽宁':{luxury:12.2,jv:31.3,domestic:56.5},'内蒙古':{luxury:6.6,jv:24.4,domestic:69.1},
+    '甘肃':{luxury:7.1,jv:23.6,domestic:69.3},'安徽':{luxury:12.6,jv:19.3,domestic:68.1},
+    '江苏':{luxury:21.6,jv:21.2,domestic:57.2},'青海':{luxury:11.8,jv:26.9,domestic:61.3},
+    '天津':{luxury:11.6,jv:25.7,domestic:62.6},'云南':{luxury:10.5,jv:25.5,domestic:64.0},
+    '河北':{luxury:9.8,jv:26.9,domestic:63.4},'西藏':{luxury:14.3,jv:28.8,domestic:56.9},
+    '吉林':{luxury:11.7,jv:26.9,domestic:61.3},
+  },
+  // 日本語表示名 ↔ ECharts省名(簡体字) マッピング
+  jaToZh: {
+    '広東':'广东','浙江':'浙江','江蘇':'江苏','山東':'山东','河南':'河南',
+    '四川':'四川','河北':'河北','湖北':'湖北','安徽':'安徽','湖南':'湖南',
+    '上海':'上海','北京':'北京','陝西':'陕西','雲南':'云南','福建':'福建',
+    '貴州':'贵州','遼寧':'辽宁','江西':'江西','広西':'广西','重慶':'重庆',
+    '新疆':'新疆','天津':'天津','山西':'山西','内蒙':'内蒙古','黒龍江':'黑龙江',
+    '吉林':'吉林','甘粛':'甘肃','海南':'海南','寧夏':'宁夏','青海':'青海','西蔵':'西藏',
+  },
+  zhToJa: {},
+};
+// zhToJa 逆引きを構築
+Object.entries(CPCA_DATA.jaToZh).forEach(([ja,zh])=>{ CPCA_DATA.zhToJa[zh]=ja; });
+
+const PROV_REGION = {
+  '黒龍江':'東北','吉林':'東北','遼寧':'東北',
+  '北京':'東部-华北','天津':'東部-华北','河北':'東部-华北','山西':'東部-华北','内蒙':'東部-华北',
+  '上海':'東部-华東','江蘇':'東部-华東','浙江':'東部-华東','安徽':'東部-华東','福建':'東部-华東','江西':'東部-华東','山東':'東部-华東',
+  '広東':'東部-华南','広西':'東部-华南','海南':'東部-华南',
+  '陝西':'西北','甘粛':'西北','青海':'西北','寧夏':'西北','新疆':'西北',
+  '四川':'西南','重慶':'西南','雲南':'西南','貴州':'西南','西蔵':'西南',
+  '河南':'中部-黄河','湖北':'中部-長江','湖南':'中部-長江',
+};
+
+const REGION_COLORS = {
+  '東北':'#5470C6','東部-华北':'#91CC75','東部-华東':'#FAC858','東部-华南':'#EE6666',
+  '西北':'#73C0DE','西南':'#3BA272','中部-黄河':'#FC8452','中部-長江':'#9A60B4'
+};
+
+let selectedProvZh = null;
+let currentMapMetric = 'sales25';
+let mapChart = null;
+let mapRegistered = false;
+
+// ---- 指標ごとの値取得 ----
+function getMetricValue(zh) {
+  const ja = CPCA_DATA.zhToJa[zh] || zh;
+  const ps = CPCA_DATA.provSales.find(p => {
+    const pzh = CPCA_DATA.jaToZh[p.prov] || p.prov;
+    return pzh === zh;
+  });
+  const nev = CPCA_DATA.nevPenetration[zh];
+  const body = CPCA_DATA.bodyStruct[zh];
+  const brand = CPCA_DATA.brandShare[zh];
+  
+  switch (currentMapMetric) {
+    case 'sales25': return ps ? ps.y25 : null;
+    case 'sales24': return ps ? ps.y24 : null;
+    case 'yoy': {
+      if (!ps) return null;
+      const v = parseFloat(ps.yoy);
+      return isNaN(v) ? null : v;
+    }
+    case 'nev': return nev ? nev.nev : null;
+    case 'suv': return body ? body.SUV : null;
+    case 'domestic': return brand ? brand.domestic : null;
+    default: return null;
+  }
+}
+
+// ---- GeoJSON読み込み＆地図初期化 ----
+function initChinaMap() {
+  const container = document.getElementById('cpca-map-container');
+  if (!container) return;
+  if (container.dataset.initialized === '1') return;
+  container.dataset.initialized = '1';
+
+  container.innerHTML = `
+    <div style="display:flex;height:720px;font-family:inherit;background:#0d1b2a">
+      <!-- 左：コントロール -->
+      <div style="flex:0 0 200px;padding:14px;background:#1a2744;overflow-y:auto;color:#e0e6f0">
+        <div style="font-weight:700;font-size:12px;margin-bottom:10px;color:#7eb3ff;letter-spacing:.5px">📊 表示指標</div>
+        <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:14px" id="cpca-metric-btns">
+          <button style="font-size:11px;padding:5px 8px;border-radius:5px;border:none;cursor:pointer;background:#2563eb;color:#fff;font-weight:600" data-metric="sales25" onclick="cpcaSetMetric('sales25',this)">📦 2025年販売量</button>
+          <button style="font-size:11px;padding:5px 8px;border-radius:5px;border:1px solid #3b5a8a;cursor:pointer;background:transparent;color:#a0b8d8" data-metric="sales24" onclick="cpcaSetMetric('sales24',this)">📦 2024年販売量</button>
+          <button style="font-size:11px;padding:5px 8px;border-radius:5px;border:1px solid #3b5a8a;cursor:pointer;background:transparent;color:#a0b8d8" data-metric="yoy" onclick="cpcaSetMetric('yoy',this)">📈 前年比（%）</button>
+          <button style="font-size:11px;padding:5px 8px;border-radius:5px;border:1px solid #3b5a8a;cursor:pointer;background:transparent;color:#a0b8d8" data-metric="nev" onclick="cpcaSetMetric('nev',this)">⚡ NEV浸透率</button>
+          <button style="font-size:11px;padding:5px 8px;border-radius:5px;border:1px solid #3b5a8a;cursor:pointer;background:transparent;color:#a0b8d8" data-metric="suv" onclick="cpcaSetMetric('suv',this)">🚙 SUV比率</button>
+          <button style="font-size:11px;padding:5px 8px;border-radius:5px;border:1px solid #3b5a8a;cursor:pointer;background:transparent;color:#a0b8d8" data-metric="domestic" onclick="cpcaSetMetric('domestic',this)">🏷️ 自主ブランド比率</button>
+        </div>
+        <div id="cpca-legend" style="margin-bottom:12px"></div>
+        <div style="font-size:10px;color:#4a6080;margin-top:auto;line-height:1.4">省をクリックすると<br>詳細データを表示</div>
+      </div>
+      <!-- 中央：地図 -->
+      <div style="flex:1;position:relative;overflow:hidden">
+        <div id="cpca-echarts-map" style="width:100%;height:100%"></div>
+        <div style="position:absolute;bottom:8px;right:8px;font-size:9px;color:#445;background:rgba(255,255,255,0.6);padding:2px 6px;border-radius:3px">Source: CPCA区域市場分析</div>
+      </div>
+      <!-- 右：詳細 -->
+      <div style="flex:0 0 310px;background:#131e30;overflow-y:auto;padding:14px">
+        <div id="cpca-chart-area">
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:400px;color:#3a5070;font-size:13px;gap:12px">
+            <div style="font-size:40px">🗺️</div>
+            <div style="text-align:center;line-height:1.6">地図の省をクリックすると<br>詳細チャートが表示されます</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // ECharts地図を作成 (GeoJSONはCDN)
+  const mapEl = document.getElementById('cpca-echarts-map');
+  mapChart = echarts.init(mapEl, 'dark');
+
+  fetch('https://geo.datav.aliyun.com/areas_v3/bound/100000_full.json')
+    .then(r => r.json())
+    .then(geoJSON => {
+      echarts.registerMap('china', geoJSON);
+      mapRegistered = true;
+      renderMapChart();
+    })
+    .catch(() => {
+      // フォールバック: 簡易バックアップURL
+      fetch('https://raw.githubusercontent.com/echarts-maps/echarts-china-provinces-js/master/china.json')
+        .then(r => r.json())
+        .then(geoJSON => {
+          echarts.registerMap('china', geoJSON);
+          mapRegistered = true;
+          renderMapChart();
+        })
+        .catch(() => {
+          mapEl.innerHTML = '<div style="color:#e74;padding:20px;text-align:center">地図データの読み込みに失敗しました。ネットワーク接続を確認してください。</div>';
+        });
+    });
+}
+
+function buildMapData() {
+  const allZh = Object.values(CPCA_DATA.jaToZh);
+  return allZh.map(zh => ({ name: zh, value: getMetricValue(zh) }));
+}
+
+function getMapVisualMap() {
+  const vals = Object.values(CPCA_DATA.jaToZh)
+    .map(zh => getMetricValue(zh)).filter(v => v !== null && !isNaN(v));
+  const min = Math.min(...vals);
+  const max = Math.max(...vals);
+  
+  if (currentMapMetric === 'yoy') {
+    return {
+      type:'continuous', min, max, splitNumber:6,
+      inRange:{color:['#c0392b','#e8735a','#f5cba7','#a9dfbf','#27ae60']},
+      text:['高',`${max.toFixed(0)}%`],
+      textStyle:{color:'#8ab0d0',fontSize:10},
+      calculable:true, orient:'vertical', right:10, top:'middle',
+      formatter: v => v.toFixed(0)+'%',
+    };
+  }
+  
+  const labels = {
+    sales25:'万台', sales24:'万台', nev:'%', suv:'%', domestic:'%'
+  };
+  return {
+    type:'continuous', min, max, splitNumber:6,
+    inRange:{color:['#1a3a5c','#1565c0','#42a5f5','#80deea','#a5d6a7','#ffcc02','#ff6f00','#b71c1c']},
+    text:[`${max.toFixed(0)}${labels[currentMapMetric]||''}`,`${min.toFixed(0)}${labels[currentMapMetric]||''}`],
+    textStyle:{color:'#8ab0d0',fontSize:10},
+    calculable:true, orient:'vertical', right:10, top:'middle',
+    formatter: v => v.toFixed(1)+(labels[currentMapMetric]||''),
+  };
+}
+
+function renderMapChart() {
+  if (!mapChart || !mapRegistered) return;
+  const metricLabels = {
+    sales25:'2025年販売量（万台）', sales24:'2024年販売量（万台）',
+    yoy:'前年比（%）', nev:'NEV浸透率（%）', suv:'SUV比率（%）', domestic:'自主ブランド比率（%）'
+  };
+  
+  mapChart.setOption({
+    backgroundColor:'#0d1b2a',
+    title:{
+      text:'中国省別乗用車市場',
+      subtext: metricLabels[currentMapMetric] || '',
+      left:'center', top:8,
+      textStyle:{color:'#c8dcf0',fontSize:14,fontWeight:700},
+      subtextStyle:{color:'#6a8aaa',fontSize:11}
+    },
+    tooltip:{
+      trigger:'item',
+      backgroundColor:'rgba(10,20,40,0.92)',
+      borderColor:'#2a4a7a',
+      borderWidth:1,
+      textStyle:{color:'#d0e4f8',fontSize:12},
+      formatter: p => {
+        const zh = p.name;
+        const ja = CPCA_DATA.zhToJa[zh] || zh;
+        const v = p.value;
+        const vStr = v == null || isNaN(v) ? 'N/A' :
+          (currentMapMetric==='sales25'||currentMapMetric==='sales24') ? v.toFixed(1)+'万台' : v.toFixed(1)+'%';
+        const region = PROV_REGION[ja] || '';
+        return `<strong style="font-size:14px">${ja}</strong> <span style="color:#6a8aaa;font-size:10px">(${zh})</span><br>
+                <span style="color:#6a8aaa;font-size:10px">${region}</span><br>
+                ${metricLabels[currentMapMetric]}: <strong style="color:#7eb3ff">${vStr}</strong>`;
+      }
+    },
+    visualMap: getMapVisualMap(),
+    series:[{
+      name:'省別データ',
+      type:'map',
+      map:'china',
+      roam:true,
+      scaleLimit:{min:0.8,max:5},
+      data: buildMapData(),
+      emphasis:{
+        itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2},
+        label:{show:true,color:'#fff',fontWeight:700,fontSize:11}
+      },
+      select:{
+        itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2},
+        label:{show:true,color:'#fff'}
+      },
+      selectedMode:'single',
+      itemStyle:{
+        borderColor:'rgba(255,255,255,0.4)',
+        borderWidth:0.8,
+      },
+      label:{
+        show:true,
+        color:'rgba(255,255,255,0.7)',
+        fontSize:8,
+        formatter: p => {
+          const ja = CPCA_DATA.zhToJa[p.name];
+          return ja ? (ja.length>2 ? ja.substring(0,2) : ja) : p.name.substring(0,2);
+        }
+      }
+    }]
+  });
+
+  mapChart.off('click');
+  mapChart.on('click', p => {
+    if (p.componentType !== 'series') return;
+    const zh = p.name;
+    const ja = CPCA_DATA.zhToJa[zh] || zh;
+    selectedProvZh = zh;
+    showProvDetail(ja, zh);
+  });
+}
+
+function cpcaSetMetric(metric, btn) {
+  currentMapMetric = metric;
+  document.querySelectorAll('#cpca-metric-btns button').forEach(b => {
+    const isActive = b === btn;
+    b.style.background = isActive ? '#2563eb' : 'transparent';
+    b.style.color = isActive ? '#fff' : '#a0b8d8';
+    b.style.fontWeight = isActive ? '600' : '400';
+    b.style.border = isActive ? 'none' : '1px solid #3b5a8a';
+  });
+  renderMapChart();
+  renderLegend();
+}
+
+function renderLegend() {
+  const el = document.getElementById('cpca-legend');
+  if (!el) return;
+  // visualMapがECharts内に表示されるので最小限に
+  const labels = {
+    sales25:'万台', sales24:'万台', yoy:'%', nev:'%', suv:'%', domestic:'%'
+  };
+  el.innerHTML = `<div style="font-size:9px;color:#3a5070">単位: ${labels[currentMapMetric]||''}</div>`;
+}
+
+// ---- 省詳細表示 ----
+function showProvDetail(ja, zh) {
+  const area = document.getElementById('cpca-chart-area');
+  if (!area) return;
+  
+  const ps = CPCA_DATA.provSales.find(p => {
+    const pzh = CPCA_DATA.jaToZh[p.prov] || p.prov;
+    return pzh === zh;
+  });
+  const nev = CPCA_DATA.nevPenetration[zh];
+  const body = CPCA_DATA.bodyStruct[zh];
+  const brand = CPCA_DATA.brandShare[zh];
+  const region = PROV_REGION[ja] || '';
+
+  area.innerHTML = `
+    <div style="color:#7eb3ff;font-weight:700;font-size:16px;padding-bottom:8px;border-bottom:2px solid #2563eb;margin-bottom:12px">
+      ${ja} <span style="font-size:11px;color:#4a6a9a;font-weight:400">${zh} ／ ${region}</span>
+    </div>
+    ${ps ? `
+    <div style="background:#1a2f50;border-radius:8px;padding:10px;margin-bottom:10px">
+      <div style="font-size:10px;color:#5a8abc;font-weight:700;margin-bottom:8px;letter-spacing:.5px">📦 販売量（万台）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:11px;color:#c0d8f0">
+        <div>2024年: <strong style="color:#fff">${ps.y24}</strong></div>
+        <div>2025年: <strong style="color:#7eb3ff">${ps.y25}</strong></div>
+        <div>前年比: <strong style="color:${ps.yoy.startsWith('-')?'#ef5350':'#66bb6a'}">${ps.yoy}</strong></div>
+        <div>26年1-2月: <strong style="color:#ffcc02">${ps.total26}</strong></div>
+      </div>
+    </div>` : ''}
+    <div id="ec-prov-nev-pie" style="height:185px;margin-bottom:6px"></div>
+    <div id="ec-prov-body-bar" style="height:115px;margin-bottom:6px"></div>
+    <div id="ec-prov-brand-bar" style="height:115px;margin-bottom:6px"></div>
+    ${ps ? `<div id="ec-prov-sales-bar" style="height:130px"></div>` : ''}
+  `;
+
+  // NEV Pie
+  if (nev && nev.nev !== null) {
+    const c = echarts.init(document.getElementById('ec-prov-nev-pie'), 'dark');
+    c.setOption({
+      backgroundColor:'transparent',
+      title:{text:'動力構成 2025年',textStyle:{fontSize:10,color:'#7eb3ff'},top:0,left:0},
+      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
+      legend:{show:false},
+      series:[{
+        type:'pie', radius:['32%','58%'], center:['50%','58%'],
+        data:[
+          {name:'BEV(純電動)',value:nev.bev,itemStyle:{color:'#1565c0'}},
+          {name:'PHEV(插混)',value:nev.phev,itemStyle:{color:'#42a5f5'}},
+          {name:'HEV(混合動力)',value:nev.hev,itemStyle:{color:'#80cbc4'}},
+          {name:'ICE(常規)',value:nev.ice,itemStyle:{color:'#455a64'}},
+        ],
+        label:{show:true,formatter:'{b}\n{d}%',fontSize:8.5,color:'#c0d8f0'},
+        emphasis:{scale:true,scaleSize:6}
+      }]
+    });
+    // NEV浸透率バッジ
+    const pie = document.getElementById('ec-prov-nev-pie');
+    const badge = document.createElement('div');
+    badge.style.cssText = 'position:absolute;top:2px;right:4px;background:#1565c0;color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px';
+    badge.textContent = `NEV ${nev.nev.toFixed(1)}%`;
+    pie.style.position = 'relative';
+    pie.appendChild(badge);
+  }
+  
+  // Body bar
+  if (body) {
+    const c = echarts.init(document.getElementById('ec-prov-body-bar'), 'dark');
+    c.setOption({
+      backgroundColor:'transparent',
+      title:{text:'車身構造 2025年',textStyle:{fontSize:10,color:'#7eb3ff'},top:0},
+      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
+      grid:{left:50,right:8,top:26,bottom:16},
+      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
+      yAxis:{type:'category',data:['構造'],axisLabel:{fontSize:9,color:'#7eb3ff'}},
+      series:[
+        {name:'SUV',type:'bar',stack:'s',data:[body.SUV],itemStyle:{color:'#ef6c00'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9,color:'#fff'}},
+        {name:'セダン',type:'bar',stack:'s',data:[body.CAR],itemStyle:{color:'#5e35b1'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9,color:'#fff'}},
+        {name:'MPV',type:'bar',stack:'s',data:[body.MPV],itemStyle:{color:'#00897b'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9,color:'#fff'}},
+      ]
+    });
+  }
+  
+  // Brand bar
+  if (brand) {
+    const c = echarts.init(document.getElementById('ec-prov-brand-bar'), 'dark');
+    c.setOption({
+      backgroundColor:'transparent',
+      title:{text:'ブランド構成 2025年',textStyle:{fontSize:10,color:'#7eb3ff'},top:0},
+      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
+      grid:{left:50,right:8,top:26,bottom:16},
+      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
+      yAxis:{type:'category',data:['ブランド'],axisLabel:{fontSize:9,color:'#7eb3ff'}},
+      series:[
+        {name:'自主',type:'bar',stack:'s',data:[brand.domestic],itemStyle:{color:'#c62828'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9,color:'#fff'}},
+        {name:'合資',type:'bar',stack:'s',data:[brand.jv],itemStyle:{color:'#1565c0'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9,color:'#fff'}},
+        {name:'豪華',type:'bar',stack:'s',data:[brand.luxury],itemStyle:{color:'#f9a825'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9,color:'#fff'}},
+      ]
+    });
+  }
+  
+  // Sales bars
+  if (ps && document.getElementById('ec-prov-sales-bar')) {
+    const c = echarts.init(document.getElementById('ec-prov-sales-bar'), 'dark');
+    c.setOption({
+      backgroundColor:'transparent',
+      title:{text:'販売量推移（万台）',textStyle:{fontSize:10,color:'#7eb3ff'},top:0},
+      tooltip:{},
+      grid:{left:35,right:10,top:26,bottom:20},
+      xAxis:{type:'category',data:['2024年','2025年','26年1-2月'],axisLabel:{fontSize:9,color:'#6a8aaa'}},
+      yAxis:{type:'value',axisLabel:{fontSize:8,color:'#6a8aaa'},splitLine:{lineStyle:{color:'#1e3555'}}},
+      series:[{
+        type:'bar',
+        data:[
+          {value:ps.y24,itemStyle:{color:'#4a7ab8'}},
+          {value:ps.y25,itemStyle:{color:'#2563eb'}},
+          {value:ps.total26,itemStyle:{color:'#f59e0b'}},
+        ],
+        label:{show:true,position:'top',formatter:p=>p.value,fontSize:9,color:'#c0d8f0'},
+        barMaxWidth:36,
+      }]
+    });
+  }
+}
+
+// ---- 大区域トレンドチャート ----
+let cpcaRegionView = 'volume';
+let cpcaRegionChart = null;
+
+function cpcaSetRegionView(view, btn) {
+  cpcaRegionView = view;
+  document.querySelectorAll('#cpca-region-tabs .btn').forEach(b => {
+    const active = b === btn;
+    b.className = active ? 'btn btn-sm btn-primary active' : 'btn btn-sm btn-outline-secondary';
+  });
+  renderRegionChart();
+}
+
+function renderRegionChart() {
+  const el = document.getElementById('ec-cpca-region');
+  if (!el) return;
+  if (!cpcaRegionChart) cpcaRegionChart = echarts.init(el, 'dark');
+  const d = cpcaRegionView === 'growth' ? CPCA_DATA.regionGrowth : 
+            cpcaRegionView === 'share' ? CPCA_DATA.regionShare : CPCA_DATA.regionVolume;
+  const xData = cpcaRegionView === 'growth' ? d.months : d.years;
+  const isGrowth = cpcaRegionView === 'growth';
+  const isShare = cpcaRegionView === 'share';
+  
+  const series = d.regions.map(r => ({
+    name: r, type: isGrowth ? 'line' : 'bar',
+    stack: isGrowth ? undefined : 'total',
+    data: d.data[r],
+    itemStyle:{color: REGION_COLORS[r]},
+    lineStyle: isGrowth ? {width:2.5} : undefined,
+    smooth: isGrowth,
+    symbol: isGrowth ? 'circle' : undefined,
+    symbolSize: isGrowth ? 5 : undefined,
+  }));
+
+  cpcaRegionChart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{
+      trigger:'axis',
+      axisPointer:{type: isGrowth ? 'cross' : 'shadow'},
+      formatter: isShare ? (ps)=>ps.map(p=>`${p.marker}${p.seriesName}: ${Number(p.value).toFixed(1)}%`).join('<br>') : undefined,
+    },
+    legend:{type:'scroll',bottom:0,textStyle:{fontSize:10,color:'#8ab0d0'},pageTextStyle:{color:'#8ab0d0'}},
+    grid:{left:60,right:50,top:20,bottom:60},
+    xAxis:{type:'category',data:xData,axisLabel:{fontSize:10,rotate:isGrowth?25:0,color:'#7eb3ff'}},
+    yAxis:{
+      type:'value',
+      name: isShare ? 'シェア(%)' : isGrowth ? '前年比(%)' : '万台',
+      nameTextStyle:{color:'#6a8aaa',fontSize:9},
+      max: isShare ? 100 : undefined,
+      axisLabel:{fontSize:10,color:'#6a8aaa',formatter: isShare||isGrowth ? v=>v+'%' : undefined},
+      splitLine:{lineStyle:{color:'#1e3555'}},
+      axisLine:{show:true},
+    },
+    series,
+    ...(isGrowth ? {
+      markLine:{data:[{yAxis:0,lineStyle:{color:'#fff',type:'dashed'}}]}
+    } : {}),
+  });
+}
+
+// ---- 省別販売量チャート ----
+let cpcaProvChart = null;
+
+function renderProvSalesChart() {
+  const el = document.getElementById('ec-cpca-prov');
+  if (!el) return;
+  if (!cpcaProvChart) cpcaProvChart = echarts.init(el, 'dark');
+  const sorted = [...CPCA_DATA.provSales].filter(p=>p.prov!=='総計').sort((a,b)=>b.y25-a.y25);
+  const provs = sorted.map(p=>p.prov);
+  cpcaProvChart.setOption({
+    backgroundColor:'transparent',
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    legend:{data:['2024年','2025年','26年1-2月'],bottom:0,textStyle:{fontSize:10,color:'#8ab0d0'}},
+    grid:{left:65,right:25,top:10,bottom:55},
+    yAxis:{type:'category',data:provs,axisLabel:{fontSize:9,color:'#7eb3ff'}},
+    xAxis:{type:'value',name:'万台',nameTextStyle:{color:'#6a8aaa',fontSize:9},axisLabel:{fontSize:9,color:'#6a8aaa'},splitLine:{lineStyle:{color:'#1e3555'}}},
+    series:[
+      {name:'2024年',type:'bar',data:sorted.map(p=>p.y24),itemStyle:{color:'#3b6ea8'},barMaxWidth:12},
+      {name:'2025年',type:'bar',data:sorted.map(p=>p.y25),itemStyle:{color:'#2563eb'},barMaxWidth:12},
+      {name:'26年1-2月',type:'bar',data:sorted.map(p=>p.total26),itemStyle:{color:'#f59e0b'},barMaxWidth:12},
+    ]
+  });
+}
+
+// ---- タブ切り替え連動 ----
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('[data-cds-target]');
+  if (!btn) return;
+  const target = btn.getAttribute('data-cds-target');
+  if (target === '#cds-china-map') setTimeout(() => initChinaMap(), 60);
+  else if (target === '#cds-region-trend') setTimeout(() => renderRegionChart(), 60);
+  else if (target === '#cds-prov-sales') setTimeout(() => renderProvSalesChart(), 60);
+});
+
+// expose
+window.cpcaSetMetric = cpcaSetMetric;
+window.cpcaSetRegionView = cpcaSetRegionView;
+
+})(); // end CPCA module
 </script>
 
 <!-- ========== 比較トレイ（全タブ横断） ========== -->

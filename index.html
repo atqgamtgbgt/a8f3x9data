@@ -2911,8 +2911,8 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- 中国地域別 ペイン群 -->
             <div class="cds-pane" id="cds-china-map">
-              <div class="chart-card" style="padding:0;overflow:hidden;min-height:760px">
-                <div id="cpca-map-root" style="height:760px"></div>
+              <div class="chart-card" style="padding:0;overflow:hidden;min-height:740px">
+                <div id="cpca-map-root" style="height:740px"></div>
               </div>
             </div>
             <div class="cds-pane" id="cds-region-trend">
@@ -7483,49 +7483,70 @@ const CPCA = {
     '西蔵': {nev:null},
   },
   body: {
-    '西蔵': {CAR:15.8,MPV:2.7,SUV:81.5},'青海': {CAR:26.8,MPV:3.0,SUV:70.2},
-    '新疆': {CAR:28.0,MPV:3.5,SUV:68.5},'寧夏': {CAR:28.7,MPV:2.9,SUV:68.3},
-    '甘粛': {CAR:29.8,MPV:3.1,SUV:67.0},'海南': {CAR:31.4,MPV:4.7,SUV:63.9},
-    '内蒙古':{CAR:30.6,MPV:5.5,SUV:63.8},'重慶': {CAR:38.8,MPV:2.6,SUV:58.6},
-    '陝西': {CAR:36.6,MPV:4.9,SUV:58.5},'黒龍江':{CAR:38.0,MPV:5.6,SUV:56.4},
-    '四川': {CAR:40.9,MPV:2.9,SUV:56.1},'湖北': {CAR:40.4,MPV:3.9,SUV:55.7},
-    '遼寧': {CAR:38.0,MPV:6.7,SUV:55.3},'上海': {CAR:39.0,MPV:5.9,SUV:55.0},
-    '北京': {CAR:36.9,MPV:8.6,SUV:54.5},'福建': {CAR:42.9,MPV:3.2,SUV:53.9},
-    '山西': {CAR:40.3,MPV:5.9,SUV:53.8},'浙江': {CAR:42.6,MPV:4.2,SUV:53.2},
-    '雲南': {CAR:42.4,MPV:4.9,SUV:52.8},'広東': {CAR:43.1,MPV:4.5,SUV:52.4},
-    '湖南': {CAR:45.1,MPV:3.3,SUV:51.6},'貴州': {CAR:45.7,MPV:2.9,SUV:51.5},
-    '安徽': {CAR:45.8,MPV:3.8,SUV:50.4},'天津': {CAR:43.2,MPV:6.4,SUV:50.4},
-    '吉林': {CAR:44.8,MPV:5.5,SUV:49.7},'江蘇': {CAR:45.7,MPV:4.8,SUV:49.5},
-    '江西': {CAR:49.0,MPV:3.4,SUV:47.5},'山東': {CAR:47.5,MPV:6.1,SUV:46.4},
-    '河北': {CAR:48.1,MPV:6.0,SUV:45.9},'河南': {CAR:51.8,MPV:4.8,SUV:43.4},
-    '広西': {CAR:54.4,MPV:3.0,SUV:42.6},
+    '西蔵': {CAR:15.8,MPV:2.7,SUV:81.5,CAR24:17.0,MPV24:3.5,SUV24:79.5},
+    '青海': {CAR:26.8,MPV:3.0,SUV:70.2,CAR24:27.0,MPV24:2.6,SUV24:70.4},
+    '新疆': {CAR:28.0,MPV:3.5,SUV:68.5,CAR24:31.2,MPV24:3.3,SUV24:65.4},
+    '寧夏': {CAR:28.7,MPV:2.9,SUV:68.3,CAR24:29.8,MPV24:2.7,SUV24:67.3},
+    '甘粛': {CAR:29.8,MPV:3.1,SUV:67.0,CAR24:29.7,MPV24:3.0,SUV24:67.1},
+    '海南': {CAR:31.4,MPV:4.7,SUV:63.9,CAR24:35.5,MPV24:4.5,SUV24:60.0},
+    '内蒙古': {CAR:30.6,MPV:5.5,SUV:63.8,CAR24:31.2,MPV24:4.9,SUV24:63.8},
+    '重慶': {CAR:38.8,MPV:2.6,SUV:58.6,CAR24:39.4,MPV24:2.7,SUV24:57.9},
+    '陝西': {CAR:36.6,MPV:4.9,SUV:58.5,CAR24:37.3,MPV24:4.6,SUV24:58.1},
+    '黒龍江': {CAR:38.0,MPV:5.6,SUV:56.4,CAR24:38.4,MPV24:5.6,SUV24:55.9},
+    '四川': {CAR:40.9,MPV:2.9,SUV:56.1,CAR24:43.4,MPV24:3.0,SUV24:53.5},
+    '湖北': {CAR:40.4,MPV:3.9,SUV:55.7,CAR24:41.2,MPV24:3.7,SUV24:55.1},
+    '遼寧': {CAR:38.0,MPV:6.7,SUV:55.3,CAR24:39.7,MPV24:6.3,SUV24:54.0},
+    '上海': {CAR:39.0,MPV:5.9,SUV:55.0,CAR24:39.6,MPV24:5.7,SUV24:54.5},
+    '北京': {CAR:36.9,MPV:8.6,SUV:54.5,CAR24:40.5,MPV24:8.4,SUV24:51.2},
+    '福建': {CAR:42.9,MPV:3.2,SUV:53.9,CAR24:45.4,MPV24:3.2,SUV24:51.4},
+    '山西': {CAR:40.3,MPV:5.9,SUV:53.8,CAR24:41.8,MPV24:5.8,SUV24:52.4},
+    '浙江': {CAR:42.6,MPV:4.2,SUV:53.2,CAR24:44.7,MPV24:4.0,SUV24:51.4},
+    '雲南': {CAR:42.4,MPV:4.9,SUV:52.8,CAR24:42.7,MPV24:4.6,SUV24:52.8},
+    '広東': {CAR:43.1,MPV:4.5,SUV:52.4,CAR24:43.6,MPV24:4.6,SUV24:51.8},
+    '湖南': {CAR:45.1,MPV:3.3,SUV:51.6,CAR24:46.0,MPV24:3.1,SUV24:50.9},
+    '貴州': {CAR:45.7,MPV:2.9,SUV:51.5,CAR24:49.2,MPV24:2.8,SUV24:48.1},
+    '安徽': {CAR:45.8,MPV:3.8,SUV:50.4,CAR24:48.5,MPV24:3.6,SUV24:47.8},
+    '天津': {CAR:43.2,MPV:6.4,SUV:50.4,CAR24:46.9,MPV24:5.5,SUV24:47.7},
+    '吉林': {CAR:44.8,MPV:5.5,SUV:49.7,CAR24:48.6,MPV24:6.1,SUV24:45.3},
+    '江蘇': {CAR:45.7,MPV:4.8,SUV:49.5,CAR24:47.4,MPV24:4.2,SUV24:48.3},
+    '江西': {CAR:49.0,MPV:3.4,SUV:47.5,CAR24:51.7,MPV24:2.9,SUV24:45.3},
+    '山東': {CAR:47.5,MPV:6.1,SUV:46.4,CAR24:50.6,MPV24:5.8,SUV24:43.5},
+    '河北': {CAR:48.1,MPV:6.0,SUV:45.9,CAR24:49.1,MPV24:5.8,SUV24:45.1},
+    '河南': {CAR:51.8,MPV:4.8,SUV:43.4,CAR24:54.8,MPV24:4.8,SUV24:40.4},
+    '広西': {CAR:54.4,MPV:3.0,SUV:42.6,CAR24:58.7,MPV24:2.9,SUV24:38.4},
   },
   brand: {
-    '上海': {lux:26.2,jv:19.5,dom:54.2},'北京': {lux:21.1,jv:21.9,dom:57.0},
-    '福建': {lux:14.5,jv:23.3,dom:62.2},'寧夏': {lux:6.9, jv:18.1,dom:75.0},
-    '湖北': {lux:11.4,jv:22.3,dom:66.4},'新疆': {lux:4.7, jv:26.0,dom:69.3},
-    '江西': {lux:12.1,jv:23.4,dom:64.4},'黒龍江':{lux:6.5, jv:32.5,dom:61.0},
-    '河南': {lux:7.6, jv:22.4,dom:70.0},'貴州': {lux:7.7, jv:21.9,dom:70.4},
-    '海南': {lux:8.1, jv:21.0,dom:70.9},'重慶': {lux:10.5,jv:14.9,dom:74.5},
-    '山西': {lux:6.0, jv:27.4,dom:66.6},'浙江': {lux:18.3,jv:18.5,dom:63.2},
-    '湖南': {lux:12.5,jv:27.5,dom:60.0},'山東': {lux:11.0,jv:26.4,dom:62.6},
-    '広東': {lux:13.1,jv:25.4,dom:61.5},'四川': {lux:14.4,jv:20.5,dom:65.1},
-    '陝西': {lux:10.3,jv:19.4,dom:70.3},'広西': {lux:6.1, jv:19.8,dom:74.2},
-    '遼寧': {lux:12.2,jv:31.3,dom:56.5},'内蒙古':{lux:6.6, jv:24.4,dom:69.1},
-    '甘粛': {lux:7.1, jv:23.6,dom:69.3},'安徽': {lux:12.6,jv:19.3,dom:68.1},
-    '江蘇': {lux:21.6,jv:21.2,dom:57.2},'青海': {lux:11.8,jv:26.9,dom:61.3},
-    '天津': {lux:11.6,jv:25.7,dom:62.6},'雲南': {lux:10.5,jv:25.5,dom:64.0},
-    '河北': {lux:9.8, jv:26.9,dom:63.4},'西蔵': {lux:14.3,jv:28.8,dom:56.9},
-    '吉林': {lux:11.7,jv:26.9,dom:61.3},
-  },
-  // 日本語 → ECharts簡体字マッピング
-  ja2zh: {
-    '広東':'广东','浙江':'浙江','江蘇':'江苏','山東':'山东','河南':'河南',
-    '四川':'四川','河北':'河北','湖北':'湖北','安徽':'安徽','湖南':'湖南',
-    '上海':'上海','北京':'北京','陝西':'陕西','雲南':'云南','福建':'福建',
-    '貴州':'贵州','遼寧':'辽宁','江西':'江西','広西':'广西','重慶':'重庆',
-    '新疆':'新疆','天津':'天津','山西':'山西','内蒙古':'内蒙古','黒龍江':'黑龙江',
-    '吉林':'吉林','甘粛':'甘肃','海南':'海南','寧夏':'宁夏','青海':'青海','西蔵':'西藏',
+    '上海': {lux:26.2,jv:19.5,dom:54.2,lux24:29.5,jv24:25.4,dom24:45.0},
+    '北京': {lux:21.1,jv:21.9,dom:57.0,lux24:23.2,jv24:29.1,dom24:47.8},
+    '福建': {lux:14.5,jv:23.3,dom:62.2,lux24:17.3,jv24:29.7,dom24:53.0},
+    '寧夏': {lux:6.9,jv:18.1,dom:75.0,lux24:10.0,jv24:23.0,dom24:67.0},
+    '湖北': {lux:11.4,jv:22.3,dom:66.4,lux24:13.7,jv24:27.1,dom24:59.3},
+    '新疆': {lux:4.7,jv:26.0,dom:69.3,lux24:5.7,jv24:32.1,dom24:62.2},
+    '江西': {lux:12.1,jv:23.4,dom:64.4,lux24:14.0,jv24:28.4,dom24:57.5},
+    '黒龍江': {lux:6.5,jv:32.5,dom:61.0,lux24:7.9,jv24:37.9,dom24:54.3},
+    '河南': {lux:7.6,jv:22.4,dom:70.0,lux24:9.1,jv24:27.6,dom24:63.3},
+    '貴州': {lux:7.7,jv:21.9,dom:70.4,lux24:10.3,jv24:25.9,dom24:63.8},
+    '海南': {lux:8.1,jv:21.0,dom:70.9,lux24:9.2,jv24:26.3,dom24:64.5},
+    '重慶': {lux:10.5,jv:14.9,dom:74.5,lux24:13.8,jv24:17.9,dom24:68.2},
+    '山西': {lux:6.0,jv:27.4,dom:66.6,lux24:7.7,jv24:32.0,dom24:60.3},
+    '浙江': {lux:18.3,jv:18.5,dom:63.2,lux24:21.7,jv24:21.0,dom24:57.3},
+    '湖南': {lux:12.5,jv:27.5,dom:60.0,lux24:14.4,jv24:31.4,dom24:54.2},
+    '山東': {lux:11.0,jv:26.4,dom:62.6,lux24:12.2,jv24:30.7,dom24:57.0},
+    '広東': {lux:13.1,jv:25.4,dom:61.5,lux24:14.7,jv24:29.2,dom24:56.1},
+    '四川': {lux:14.4,jv:20.5,dom:65.1,lux24:15.9,jv24:24.3,dom24:59.8},
+    '陝西': {lux:10.3,jv:19.4,dom:70.3,lux24:12.6,jv24:22.3,dom24:65.1},
+    '広西': {lux:6.1,jv:19.8,dom:74.2,lux24:6.9,jv24:24.2,dom24:69.0},
+    '遼寧': {lux:12.2,jv:31.3,dom:56.5,lux24:13.9,jv24:34.6,dom24:51.5},
+    '内蒙古': {lux:6.6,jv:24.4,dom:69.1,lux24:7.6,jv24:28.3,dom24:64.1},
+    '甘粛': {lux:7.1,jv:23.6,dom:69.3,lux24:7.8,jv24:27.4,dom24:64.9},
+    '安徽': {lux:12.6,jv:19.3,dom:68.1,lux24:14.3,jv24:21.9,dom24:63.8},
+    '江蘇': {lux:21.6,jv:21.2,dom:57.2,lux24:23.6,jv24:23.5,dom24:52.9},
+    '青海': {lux:11.8,jv:26.9,dom:61.3,lux24:11.7,jv24:30.8,dom24:57.5},
+    '天津': {lux:11.6,jv:25.7,dom:62.6,lux24:12.6,jv24:28.2,dom24:59.1},
+    '雲南': {lux:10.5,jv:25.5,dom:64.0,lux24:11.0,jv24:27.8,dom24:61.1},
+    '河北': {lux:9.8,jv:26.9,dom:63.4,lux24:10.1,jv24:29.1,dom24:60.9},
+    '西蔵': {lux:14.3,jv:28.8,dom:56.9,lux24:13.5,jv24:30.4,dom24:56.1},
+    '吉林': {lux:11.7,jv:26.9,dom:61.3,lux24:11.2,jv24:26.6,dom24:62.0},
   },
   regionOf: {
     '黒龍江':'東北','吉林':'東北','遼寧':'東北',
@@ -7546,7 +7567,7 @@ const CPCA = {
 CPCA.zh2ja = Object.fromEntries(Object.entries(CPCA.ja2zh).map(([ja,zh])=>[zh,ja]));
 
 // ---- 指標値取得 ----
-var curMetric = 'sales25';
+var curMetric = 'sales26';
 
 function metricVal(ja) {
   const p = CPCA.prov[ja];
@@ -7554,11 +7575,13 @@ function metricVal(ja) {
   const b = CPCA.body[ja];
   const br= CPCA.brand[ja];
   switch(curMetric) {
-    case 'sales25': return p ? p.y25 : null;
-    case 'sales24': return p ? p.y24 : null;
-    case 'yoy':     return p ? p.yoy : null;
+    case 'sales26': return p ? p.t26  : null;
+    case 'sales25': return p ? p.y25  : null;
+    case 'sales24': return p ? p.y24  : null;
+    case 'yoy':     return p ? p.yoy  : null;
+    case 'yoy26':   return p ? p.yoy26: null;
     case 'nev':     return n && n.nev != null ? n.nev : null;
-    case 'suv':     return b ? b.SUV : null;
+    case 'suv':     return b ? b.SUV  : null;
     case 'dom':     return br ? br.dom : null;
   }
   return null;
@@ -7583,10 +7606,10 @@ window.cpcaInitMap = function() {
         <div style="font-size:11px;font-weight:700;color:#7eb3ff;letter-spacing:.5px">📊 表示指標</div>
         <div id="cpca-btns" style="display:flex;flex-direction:column;gap:4px">
           ${[
-            ['sales25','📦 2025年販売量'],['sales24','📦 2024年販売量'],
-            ['yoy','📈 前年比（%）'],['nev','⚡ NEV浸透率'],
-            ['suv','🚙 SUV比率'],['dom','🏷️ 自主ブランド比率'],
-          ].map(([m,lbl],i)=>`<button onclick="cpcaMetric('${m}',this)" style="font-size:11px;padding:5px 8px;border-radius:5px;cursor:pointer;text-align:left;border:${i===0?'none':'1px solid #2a3f60'};background:${i===0?'#2563eb':'transparent'};color:${i===0?'#fff':'#8ab0d0'}">${lbl}</button>`).join('')}
+            ['sales26','📦 26年1-2月販売量'],['sales25','📦 2025年通年'],['sales24','📦 2024年通年'],
+            ['yoy','📈 25vs24前年比'],['yoy26','📈 26vs25前年比'],
+            ['nev','⚡ NEV浸透率'],['suv','🚙 SUV比率'],['dom','🏷️ 自主ブランド比率'],
+          ].map(([m,lbl],i)=>`<button onclick="cpcaMetric('${m}',this)" style="font-size:11px;padding:5px 8px;border-radius:5px;cursor:pointer;text-align:left;border:${i===0?'none':'1px solid #2a3f60'};background:${m===curMetric?'#2563eb':'transparent'};color:${m===curMetric?'#fff':'#8ab0d0'}">${lbl}</button>`).join('')}
         </div>
         <div id="cpca-vmap-legend" style="margin-top:4px"></div>
         <hr style="border-color:#1e3555;margin:4px 0">
@@ -7599,7 +7622,7 @@ window.cpcaInitMap = function() {
         <div id="cpca-map-ec" style="width:100%;height:100%"></div>
       </div>
       <!-- 右：詳細チャート -->
-      <div id="cpca-detail-panel" style="flex:0 0 280px;background:#131f35;overflow-y:auto;padding:14px;color:#d0e4f8">
+      <div id="cpca-detail-panel" style="flex:0 0 300px;background:#131f35;overflow-y:auto;padding:14px;color:#d0e4f8">
         <div style="color:#3a5070;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px">
           <div style="font-size:36px">🗺️</div>
           <div style="text-align:center;line-height:1.8;font-size:12px">地図の省をクリックすると<br>詳細チャートが表示されます</div>
@@ -7645,7 +7668,7 @@ function getVisualMap() {
   const unit = (curMetric==='sales25'||curMetric==='sales24') ? '万台' : '%';
   return {
     type:'continuous', min:mn, max:mx,
-    inRange:{color: curMetric==='yoy'
+    inRange:{color: (curMetric==='yoy'||curMetric==='yoy26')
       ? ['#c0392b','#e8735a','#f5e4cb','#a9dfbf','#1e8449']
       : ['#1a3a5c','#1565c0','#42a5f5','#80deea','#a5d6a7','#ffcc02','#ff6f00','#b71c1c']},
     formatter: v=>v.toFixed(1)+unit,
@@ -7657,8 +7680,8 @@ function getVisualMap() {
 
 function renderMapChart() {
   if(!mapChart||!mapReady) return;
-  const titles = {sales25:'2025年販売量（万台）',sales24:'2024年販売量（万台）',
-    yoy:'前年比（%）',nev:'NEV浸透率（%）',suv:'SUV比率（%）',dom:'自主ブランド比率（%）'};
+  const titles = {sales26:'26年1-2月販売量（万台）',sales25:'2025年通年販売量（万台）',sales24:'2024年通年販売量（万台）',
+    yoy:'25年/24年前年比（%）',yoy26:'26年1-2月/25年同期前年比（%）',nev:'NEV浸透率 2025年（%）',suv:'SUV比率 2025年（%）',dom:'自主ブランド比率 2025年（%）'};
   mapChart.setOption({
     backgroundColor:'#0d1b2a',
     title:{text:'中国省別乗用車市場',subtext:titles[curMetric],left:'center',top:6,
@@ -7671,7 +7694,7 @@ function renderMapChart() {
       formatter:p=>{
         const ja=CPCA.zh2ja[p.name]||p.name;
         const v=p.value;
-        const unit=(curMetric==='sales25'||curMetric==='sales24')?'万台':'%';
+        const unit=(curMetric==='sales26'||curMetric==='sales25'||curMetric==='sales24')?'万台':'%';
         const vs=(v==null||isNaN(v))?'N/A':v.toFixed(1)+unit;
         return `<strong>${ja}</strong><br>${titles[curMetric]}: <strong style="color:#7eb3ff">${vs}</strong>`;
       }
@@ -7682,28 +7705,11 @@ function renderMapChart() {
       data: mapDataArr(),
       selectedMode:'single',
       emphasis:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2},
-        label:{show:true,color:'#fff',fontWeight:700,fontSize:13,
-          textShadowColor:'rgba(0,0,0,0.9)',textShadowBlur:5}},
+        label:{show:true,color:'#fff',fontWeight:700,fontSize:10}},
       select:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2}},
       itemStyle:{borderColor:'rgba(255,255,255,0.35)',borderWidth:0.7},
-      label:{
-        show:true,
-        color:'#fff',
-        fontSize:13,
-        fontWeight:'bold',
-        textShadowColor:'rgba(0,0,0,0.95)',
-        textShadowBlur:5,
-        textBorderColor:'rgba(0,0,0,0.6)',
-        textBorderWidth:2,
-        formatter:p=>{
-          const ja = CPCA.zh2ja[p.name] || p.name;
-          return ja;
-        },
-      },
-      labelLayout:{
-        hideOverlap:true,
-        moveOverlap:'shiftY',
-      },
+      label:{show:true,color:'rgba(255,255,255,0.65)',fontSize:7.5,
+        formatter:p=>{ const ja=CPCA.zh2ja[p.name]; return ja?ja.slice(0,2):p.name.slice(0,2); }},
     }]
   });
 }
@@ -7724,103 +7730,150 @@ function showProvDetail(ja) {
   const n  = CPCA.nev[ja];
   const b  = CPCA.body[ja];
   const br = CPCA.brand[ja];
-  const reg= CPCA.regionOf[ja]||'';
+  const reg = CPCA.regionOf[ja] || '';
 
-  // 左サイドパネルに数値サマリー
+  // 左サイドパネル
   const side = document.getElementById('cpca-side-detail');
-  if(side) side.innerHTML = `
-    <div style="font-weight:700;color:#7eb3ff;font-size:13px;margin-bottom:6px">${ja}</div>
-    <div style="font-size:9px;color:#4a6a9a;margin-bottom:8px">${reg}</div>
-    ${p?`<div style="background:#1a2f50;border-radius:6px;padding:8px;margin-bottom:6px">
-      <div style="font-size:9px;color:#5a8abc;margin-bottom:4px;font-weight:700">📦 販売量</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px;font-size:10px">
-        <div>2024: <strong style="color:#fff">${p.y24}</strong></div>
-        <div>2025: <strong style="color:#7eb3ff">${p.y25}</strong></div>
+  if (side) side.innerHTML = `
+    <div style="font-weight:700;color:#7eb3ff;font-size:14px;margin-bottom:4px">${ja}</div>
+    <div style="font-size:11px;color:#4a6a9a;margin-bottom:10px">${reg}</div>
+    ${p ? `
+    <div style="background:#1a2f50;border-radius:6px;padding:10px;margin-bottom:8px">
+      <div style="font-size:11px;color:#5a8abc;font-weight:700;margin-bottom:6px">📦 販売量（万台）</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:12px">
+        <div>2024年: <strong style="color:#aac4f0">${p.y24}</strong></div>
+        <div>2025年: <strong style="color:#7eb3ff">${p.y25}</strong></div>
         <div>前年比: <strong style="color:${p.yoy<0?'#ef5350':'#66bb6a'}">${p.yoy>0?'+':''}${p.yoy}%</strong></div>
-        <div>26/1-2: <strong style="color:#ffcc02">${p.t26}</strong></div>
-      </div></div>`:''}
-    ${n&&n.nev?`<div style="font-size:10px;margin-bottom:2px">⚡ NEV浸透率: <strong style="color:#42a5f5">${n.nev.toFixed(1)}%</strong></div>`:''}
-    ${b?`<div style="font-size:10px;margin-bottom:2px">🚙 SUV比率: <strong style="color:#ef6c00">${b.SUV.toFixed(1)}%</strong></div>`:''}
-    ${br?`<div style="font-size:10px">🏷️ 自主: <strong style="color:#ef5350">${br.dom.toFixed(1)}%</strong></div>`:''}
+        <div>26年1-2月: <strong style="color:#ffcc02">${p.t26}</strong></div>
+      </div>
+    </div>` : ''}
+    ${n && n.nev ? `<div style="font-size:12px;margin-bottom:4px">⚡ NEV浸透率: <strong style="color:#42a5f5">${n.nev.toFixed(1)}%</strong></div>` : ''}
+    ${b ? `<div style="font-size:12px;margin-bottom:4px">🚙 SUV比率: <strong style="color:#ef6c00">${b.SUV.toFixed(1)}%</strong></div>` : ''}
+    ${br ? `<div style="font-size:12px">🏷️ 自主ブランド: <strong style="color:#ef5350">${br.dom.toFixed(1)}%</strong></div>` : ''}
   `;
 
-  // 右パネルにチャート
+  // 右パネル
   const panel = document.getElementById('cpca-detail-panel');
-  if(!panel) return;
+  if (!panel) return;
+
   panel.innerHTML = `
-    <div style="font-weight:700;font-size:15px;color:#7eb3ff;border-bottom:2px solid #2563eb;padding-bottom:8px;margin-bottom:12px">
-      ${ja} <span style="font-size:10px;color:#3a5a80;font-weight:400">${reg}</span>
+    <div style="font-weight:700;font-size:16px;color:#7eb3ff;border-bottom:2px solid #2563eb;padding-bottom:8px;margin-bottom:14px">
+      ${ja} <span style="font-size:12px;color:#3a5a80;font-weight:400">${reg}</span>
     </div>
-    ${p?`<div style="background:#1a2f50;border-radius:7px;padding:10px;margin-bottom:10px;font-size:11px">
-      <div style="color:#5a8abc;font-size:9px;font-weight:700;margin-bottom:6px">📦 販売量（万台）</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
-        <div>2024年<br><strong style="color:#fff;font-size:16px">${p.y24}</strong></div>
-        <div>2025年<br><strong style="color:#7eb3ff;font-size:16px">${p.y25}</strong></div>
-        <div>前年比<br><strong style="font-size:14px;color:${p.yoy<0?'#ef5350':'#66bb6a'}">${p.yoy>0?'+':''}${p.yoy}%</strong></div>
-        <div>26年1-2月<br><strong style="color:#ffcc02;font-size:14px">${p.t26}</strong></div>
-      </div></div>`:''}
-    <div id="cp-nev" style="height:170px;margin-bottom:6px"></div>
-    <div id="cp-body" style="height:105px;margin-bottom:6px"></div>
-    <div id="cp-brand" style="height:105px"></div>
+    <div id="cp-sales" style="height:165px;margin-bottom:10px"></div>
+    <div id="cp-nev"   style="height:180px;margin-bottom:10px"></div>
+    <div id="cp-body"  style="height:155px;margin-bottom:10px"></div>
+    <div id="cp-brand" style="height:140px;padding-bottom:4px"></div>
   `;
 
-  if(n && n.nev) {
-    const c=echarts.init(document.getElementById('cp-nev'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'動力構成 2025年',textStyle:{fontSize:10,color:'#7eb3ff'},top:0},
-      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
-      series:[{type:'pie',radius:['30%','58%'],center:['50%','60%'],
-        data:[
-          {name:'BEV',value:n.bev,itemStyle:{color:'#1565c0'}},
-          {name:'PHEV',value:n.phev,itemStyle:{color:'#42a5f5'}},
-          {name:'HEV',value:n.hev,itemStyle:{color:'#80cbc4'}},
-          {name:'ICE',value:n.ice,itemStyle:{color:'#455a64'}},
+  // 販売量推移棒グラフ
+  if (p) {
+    const sc = echarts.init(document.getElementById('cp-sales'), 'dark');
+    sc.setOption({
+      backgroundColor: 'transparent',
+      title: { text: '販売量推移（万台）', textStyle: { fontSize: 12, color: '#7eb3ff', fontWeight: 'bold' }, top: 0 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' } },
+      grid: { left: 38, right: 12, top: 28, bottom: 28 },
+      xAxis: { type: 'category', data: ['2024年通年', '2025年通年', '26年1-2月'],
+        axisLabel: { fontSize: 11, color: '#8ab0d0' } },
+      yAxis: { type: 'value', name: '万台', nameTextStyle: { color: '#6a8aaa', fontSize: 10 },
+        axisLabel: { fontSize: 10, color: '#6a8aaa' }, splitLine: { lineStyle: { color: '#1e3555' } } },
+      series: [{ type: 'bar', barMaxWidth: 40,
+        data: [
+          { value: p.y24, itemStyle: { color: '#3b6ea8' } },
+          { value: p.y25, itemStyle: { color: '#2563eb' } },
+          { value: p.t26, itemStyle: { color: '#f59e0b' } },
         ],
-        label:{formatter:'{b} {d}%',fontSize:8.5,color:'#c0d8f0'},
-      }]
+        label: { show: true, position: 'top', fontSize: 11, color: '#d0e4f8', formatter: pp => pp.value },
+      }],
     });
   }
-  if(b){
-    const c=echarts.init(document.getElementById('cp-body'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'車身構造 2025年',textStyle:{fontSize:10,color:'#7eb3ff'},top:0},
-      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
-      grid:{left:55,right:8,top:26,bottom:14},
-      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
-      yAxis:{type:'category',data:[''],axisLabel:{fontSize:9,color:'#7eb3ff'}},
-      series:[
-        {name:'SUV',type:'bar',stack:'s',data:[b.SUV],itemStyle:{color:'#ef6c00'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9}},
-        {name:'CAR',type:'bar',stack:'s',data:[b.CAR],itemStyle:{color:'#5e35b1'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9}},
-        {name:'MPV',type:'bar',stack:'s',data:[b.MPV],itemStyle:{color:'#00897b'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9}},
-      ]
-    });
-  }
-  if(br){
-    const c=echarts.init(document.getElementById('cp-brand'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'ブランド構成 2025年',textStyle:{fontSize:10,color:'#7eb3ff'},top:0},
-      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
-      grid:{left:55,right:8,top:26,bottom:14},
-      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
-      yAxis:{type:'category',data:[''],axisLabel:{fontSize:9,color:'#7eb3ff'}},
-      series:[
-        {name:'自主',type:'bar',stack:'s',data:[br.dom],itemStyle:{color:'#c62828'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9}},
-        {name:'合資',type:'bar',stack:'s',data:[br.jv], itemStyle:{color:'#1565c0'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9}},
-        {name:'豪華',type:'bar',stack:'s',data:[br.lux],itemStyle:{color:'#f9a825'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:9}},
-      ]
-    });
-  }
-}
 
-// ---- 大区域トレンドチャート ----
-var cpcaRegView='volume', cpcaRegChart=null;
-window.cpcaSetRegionView = function(v,btn){
-  cpcaRegView=v;
-  document.querySelectorAll('#cpca-region-tabs .btn').forEach(b=>{
-    b.className=b===btn?'btn btn-sm btn-primary active':'btn btn-sm btn-outline-secondary';
-  });
-  renderRegionChart();
-};
+  // 動力構成パイ（2025年）
+  if (n && n.nev) {
+    const nc = echarts.init(document.getElementById('cp-nev'), 'dark');
+    nc.setOption({
+      backgroundColor: 'transparent',
+      title: { text: '動力構成（2025年）', textStyle: { fontSize: 12, color: '#7eb3ff', fontWeight: 'bold' }, top: 0 },
+      tooltip: { formatter: pp => `${pp.name}: ${pp.value.toFixed(1)}%` },
+      legend: { orient: 'vertical', right: 2, top: 'middle',
+        textStyle: { fontSize: 11, color: '#c0d8f0' },
+        data: ['BEV(純電動)', 'PHEV(插混)', 'HEV(混合動力)', 'ICE(常規)'] },
+      series: [{ type: 'pie', radius: ['30%', '56%'], center: ['38%', '58%'],
+        data: [
+          { name: 'BEV(純電動)',   value: n.bev,  itemStyle: { color: '#1565c0' } },
+          { name: 'PHEV(插混)',    value: n.phev, itemStyle: { color: '#42a5f5' } },
+          { name: 'HEV(混合動力)', value: n.hev,  itemStyle: { color: '#80cbc4' } },
+          { name: 'ICE(常規)',     value: n.ice,  itemStyle: { color: '#455a64' } },
+        ],
+        label: { show: false },
+        emphasis: { scale: true, scaleSize: 6 },
+      }],
+    });
+  }
+
+  // 車身構造（2024 vs 2025 比較）
+  if (b) {
+    const bc = echarts.init(document.getElementById('cp-body'), 'dark');
+    bc.setOption({
+      backgroundColor: 'transparent',
+      title: { text: '車身構造（2024年 vs 2025年）', textStyle: { fontSize: 12, color: '#7eb3ff', fontWeight: 'bold' }, top: 0 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
+        formatter: ps => ps.map(p2 => `${p2.marker}${p2.seriesName}: ${Number(p2.value).toFixed(1)}%`).join('<br>') },
+      legend: { bottom: 0, textStyle: { fontSize: 11, color: '#c0d8f0' } },
+      grid: { left: 52, right: 10, top: 30, bottom: 38 },
+      xAxis: { type: 'value', max: 100,
+        axisLabel: { fontSize: 10, color: '#6a8aaa', formatter: v => v + '%' },
+        splitLine: { lineStyle: { color: '#1e3555' } } },
+      yAxis: { type: 'category', data: ['2024年', '2025年'], axisLabel: { fontSize: 12, color: '#7eb3ff' } },
+      series: [
+        { name: 'SUV', type: 'bar', stack: 's', barMaxWidth: 24,
+          data: [b.SUV24 != null ? b.SUV24 : b.SUV, b.SUV],
+          itemStyle: { color: '#ef6c00' },
+          label: { show: true, formatter: pp => Number(pp.value).toFixed(0) + '%', fontSize: 11, color: '#fff' } },
+        { name: 'セダン(CAR)', type: 'bar', stack: 's', barMaxWidth: 24,
+          data: [b.CAR24 != null ? b.CAR24 : b.CAR, b.CAR],
+          itemStyle: { color: '#5e35b1' },
+          label: { show: true, formatter: pp => Number(pp.value).toFixed(0) + '%', fontSize: 11, color: '#fff' } },
+        { name: 'MPV', type: 'bar', stack: 's', barMaxWidth: 24,
+          data: [b.MPV24 != null ? b.MPV24 : b.MPV, b.MPV],
+          itemStyle: { color: '#00897b' },
+          label: { show: true, formatter: pp => Number(pp.value).toFixed(0) + '%', fontSize: 11, color: '#fff' } },
+      ],
+    });
+  }
+
+  // ブランド構成（2024 vs 2025 比較）
+  if (br) {
+    const brc = echarts.init(document.getElementById('cp-brand'), 'dark');
+    brc.setOption({
+      backgroundColor: 'transparent',
+      title: { text: 'ブランド構成（2024年 vs 2025年）', textStyle: { fontSize: 12, color: '#7eb3ff', fontWeight: 'bold' }, top: 0 },
+      tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
+        formatter: ps => ps.map(p2 => `${p2.marker}${p2.seriesName}: ${Number(p2.value).toFixed(1)}%`).join('<br>') },
+      legend: { bottom: 0, textStyle: { fontSize: 11, color: '#c0d8f0' } },
+      grid: { left: 52, right: 10, top: 30, bottom: 38 },
+      xAxis: { type: 'value', max: 100,
+        axisLabel: { fontSize: 10, color: '#6a8aaa', formatter: v => v + '%' },
+        splitLine: { lineStyle: { color: '#1e3555' } } },
+      yAxis: { type: 'category', data: ['2024年', '2025年'], axisLabel: { fontSize: 12, color: '#7eb3ff' } },
+      series: [
+        { name: '自主(国内)', type: 'bar', stack: 's', barMaxWidth: 24,
+          data: [br.dom24 != null ? br.dom24 : br.dom, br.dom],
+          itemStyle: { color: '#c62828' },
+          label: { show: true, formatter: pp => Number(pp.value).toFixed(0) + '%', fontSize: 11, color: '#fff' } },
+        { name: '合資(JV)', type: 'bar', stack: 's', barMaxWidth: 24,
+          data: [br.jv24 != null ? br.jv24 : br.jv, br.jv],
+          itemStyle: { color: '#1565c0' },
+          label: { show: true, formatter: pp => Number(pp.value).toFixed(0) + '%', fontSize: 11, color: '#fff' } },
+        { name: '豪華(Luxury)', type: 'bar', stack: 's', barMaxWidth: 24,
+          data: [br.lux24 != null ? br.lux24 : br.lux, br.lux],
+          itemStyle: { color: '#f9a825' },
+          label: { show: true, formatter: pp => Number(pp.value).toFixed(0) + '%', fontSize: 11, color: '#fff' } },
+      ],
+    });
+  }
+
 
 function renderRegionChart(){
   const el=document.getElementById('ec-cpca-region');

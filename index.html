@@ -1752,7 +1752,7 @@ img.car-thumb {
 .cds-gc-items .nav-link.active { background: #0d6efd; border-color: #0d6efd; color: #fff; }
 /* カスタムタブペイン */
 .cds-pane { display: none; }
-.cds-pane.cds-active { animation: cdsFadeIn 0.22s ease forwards; }
+.cds-pane.cds-active { display: block; animation: cdsFadeIn 0.22s ease forwards; }
 @keyframes cdsFadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -7289,31 +7289,52 @@ if (document.getElementById('cds-super-tab')?.classList.contains('active')) load
 var CDS_CURRENT_EXPORT_ID = 'cds-monthly';
 
 function cdsSetMidTab(tab) {
+  // ExcelロードがまだならロードしてからリトライU
+  if (!window.CDS_LOADED) {
+    if (!window.CDS_LOADING_STARTED) {
+      window.CDS_LOADING_STARTED = true;
+      loadCdsExcel().then && loadCdsExcel();
+    }
+    setTimeout(function(){ cdsSetMidTab(tab); }, 500);
+    return;
+  }
+  // 中タブボタンのアクティブ切替
   document.querySelectorAll('.cds-mid-tab').forEach(function(b){ b.classList.remove('active'); });
   var btn = document.getElementById('cds-mid-btn-' + tab);
   if (btn) btn.classList.add('active');
+
   // サブナビ切替
   var expNav = document.getElementById('cds-sub-export');
   var chnNav = document.getElementById('cds-sub-china');
   if (expNav) expNav.style.display = tab === 'export' ? '' : 'none';
   if (chnNav) chnNav.style.display = tab === 'china'  ? '' : 'none';
+
   if (tab === 'china') {
-    // ペインとナビを確実に表示状態にする
+    // cdsPills・cdsPillsContent を強制表示（Excelロード済みなら既に表示済みのはず）
     var pillEl = document.getElementById('cdsPills');
     var contEl = document.getElementById('cdsPillsContent');
-    if (pillEl) pillEl.style.setProperty('display','block');
-    if (contEl) contEl.style.removeProperty('display');
+    if (pillEl) { pillEl.style.cssText = 'display:block'; }
+    if (contEl) { contEl.style.cssText = ''; }
+
+    // 全paneを非表示にして cds-china-map だけ表示
+    document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+    var target = document.getElementById('cds-china-map');
+    if (target) target.classList.add('cds-active');
+    CDS_CURRENT_ID = 'cds-china-map';
+
     // chinaサブナビのボタンをアクティブに
     document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-target') === '#cds-china-map');
     });
-    cdsShowPane('cds-china-map');
-    setTimeout(cpcaInitMap, 100);
+
+    // 地図初期化
+    setTimeout(cpcaInitMap, 120);
+
   } else {
+    // 輸出分析タブ: 最後に見ていたペインへ
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
   }
 }
-
 // cdsShowPane フック（1回だけ、DOMContentLoaded後に実行）
 document.addEventListener('DOMContentLoaded', function() {
   var EXPORT_IDS = ['cds-monthly','cds-annual','cds-nev','cds-nev-annual','cds-nev-trend',
@@ -7333,10 +7354,19 @@ document.addEventListener('DOMContentLoaded', function() {
   document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(function(btn){
     btn.addEventListener('click', function(){
       var id = btn.getAttribute('data-cds-target').replace('#','');
+      // アクティブ切替
       document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(function(b){
         b.classList.toggle('active', b === btn);
       });
-      cdsShowPane(id);
+      // ペイン切替（cdsShowPane経由でOK、この時点では表示済み）
+      document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+      var target = document.getElementById(id);
+      if (target) target.classList.add('cds-active');
+      CDS_CURRENT_ID = id;
+      // 必要なら初期化
+      if (id === 'cds-china-map')    setTimeout(cpcaInitMap, 80);
+      if (id === 'cds-region-trend') setTimeout(cpcaRenderRegion, 60);
+      if (id === 'cds-prov-sales')   setTimeout(cpcaRenderProv, 60);
     });
   });
 });

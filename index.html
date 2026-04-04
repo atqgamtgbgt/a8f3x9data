@@ -3178,12 +3178,41 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <!-- 2: 装車占比推移 -->
+            <!-- 2: 装車占比推移（4チャート） -->
             <div class="cds-pane" id="bat-install">
-              <div class="chart-card">
-                <div class="chart-title">🚗 動力電池 装車量推移（GWh）</div>
-                <div class="chart-subtitle">内販合格証ベース　三元 vs LFP　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート 2026年2月</span></div>
-                <div id="ec-bat-install" class="echart-box" style="height:420px"></div>
+              <div class="row g-3">
+                <!-- 2-1: 装車量GWh（三元+LFP積み上げ） -->
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🔋 動力電池 装車量推移（GWh）</div>
+                    <div class="chart-subtitle">内販合格証ベース　三元 + LFP　2019〜2026年　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート 画像②</span></div>
+                    <div id="ec-bat-install" class="echart-box" style="height:360px"></div>
+                  </div>
+                </div>
+                <!-- 2-2: 動力電池装車率（NEV装着率）-->
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📊 動力電池装車率（新エネ車への装着率）</div>
+                    <div class="chart-subtitle">累計ベース　2021〜2026年　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート 画像①</span></div>
+                    <div id="ec-bat-install-rate" class="echart-box" style="height:300px"></div>
+                  </div>
+                </div>
+                <!-- 2-3: 三元・LFP装車率 -->
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">⚡ 三元 / LFP 装車率推移</div>
+                    <div class="chart-subtitle">新エネ車全体に占める各電池の装着率　累計ベース　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート 画像①</span></div>
+                    <div id="ec-bat-type-rate" class="echart-box" style="height:300px"></div>
+                  </div>
+                </div>
+                <!-- 2-4: 前年比増速 -->
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">📈 前年比増速（累計ベース）</div>
+                    <div class="chart-subtitle">動力電池産量増速 / 装車増速 / 三元増速 / LFP増速　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート 画像①②</span></div>
+                    <div id="ec-bat-growth" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -8728,11 +8757,11 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================================
   function renderInstall(){
     var ec = initOrGet('ec-bat-install'); if(!ec) return;
-    // 出所: Sheet2「内販合格証電池装車」三元/LFP累計列
+    // 出所: 画像2（内販合格証電池装車 累計列）
     var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var nmcData  = [42,  39,  74,  110, 88,  139, 144.1, 9.4,  15.1];
-    var lfpData  = [20,  24,  80,  184, 295, 409, 625.3, 32.7, 53.3];
-    var totalData= [62,  64,  155, 295, 388, 548, 769.7, 42.0, 68.3];
+    var nmcData  = [42,   39,    74,    110,   126,   139,   144.1, 9.4,   15.1];
+    var lfpData  = [20,   24,    80,    184,   261,   409,   625.3, 32.7,  53.3];
+    var totalData= [62,   64,    154.5, 294.6, 387.7, 548.4, 769.7, 42.0,  68.3];
     ec.setOption({
       tooltip: baseTooltip(),
       legend: baseLegend(),
@@ -8750,6 +8779,112 @@ document.addEventListener('DOMContentLoaded', function() {
           lineStyle:{width:2, color:'#E74C3C'} }
       ]
     });
+    renderInstallRate();
+    renderTypeRate();
+    renderGrowth();
+  }
+
+  // ============================================================
+  //  2-2. 動力電池装車率（NEV装着率）累計
+  // ============================================================
+  function renderInstallRate(){
+    var ec = initOrGet('ec-bat-install-rate'); if(!ec) return;
+    // 出所: 画像1「動力電池装車率」累計列
+    var labels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
+    var rate   = [70, 54, 50, 50, 44, 25, 22];
+    ec.setOption({
+      tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>装車率: '+p[0].value+'%'; }}),
+      grid: Object.assign(baseGrid(),{top:30, bottom:60}),
+      xAxis: baseXAxis(labels),
+      yAxis: Object.assign(baseYAxis('%'),{min:0, max:100}),
+      series:[{
+        name:'動力電池装車率', type:'bar',
+        data: rate,
+        itemStyle:{ color: new echarts.graphic.LinearGradient(0,0,0,1,[
+          {offset:0, color:'#42A5F5'},{offset:1, color:'#1565C0'}
+        ])},
+        label:{show:true, position:'top', formatter:'{c}%', fontFamily:FONT, fontSize:11, color:'#1565C0'}
+      },{
+        name:'トレンド', type:'line', data:rate, smooth:true,
+        symbol:'circle', symbolSize:5,
+        itemStyle:{color:'#E74C3C'}, lineStyle:{width:2, color:'#E74C3C', type:'dashed'}
+      }]
+    });
+  }
+
+  // ============================================================
+  //  2-3. 三元・LFP装車率（累計）
+  // ============================================================
+  function renderTypeRate(){
+    var ec = initOrGet('ec-bat-type-rate'); if(!ec) return;
+    // 出所: 画像1「三元電池装車率」「磷酸鉄锂装車率」累計列
+    var labels  = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
+    var nmcRate = [79, 52, 51, 50, 41, 30, 26];
+    var lfpRate = [64, 55, 49, 50, 45, 24, 21];
+    ec.setOption({
+      tooltip: baseTooltip(),
+      legend: baseLegend({top:5}),
+      grid: Object.assign(baseGrid(),{top:35, bottom:60}),
+      xAxis: baseXAxis(labels),
+      yAxis: Object.assign(baseYAxis('%'),{min:0, max:100}),
+      series:[
+        { name:'三元電池装車率', type:'line', data:nmcRate, smooth:true,
+          symbol:'circle', symbolSize:7, itemStyle:{color:C.nmc},
+          lineStyle:{width:2.5, color:C.nmc},
+          label:{show:true, position:'top', formatter:'{c}%', fontFamily:FONT, fontSize:10, color:C.nmc} },
+        { name:'LFP装車率', type:'line', data:lfpRate, smooth:true,
+          symbol:'circle', symbolSize:7, itemStyle:{color:C.lfp},
+          lineStyle:{width:2.5, color:C.lfp},
+          label:{show:true, position:'bottom', formatter:'{c}%', fontFamily:FONT, fontSize:10, color:C.lfp} }
+      ]
+    });
+  }
+
+  // ============================================================
+  //  2-4. 前年比増速（累計）
+  // ============================================================
+  function renderGrowth(){
+    var ec = initOrGet('ec-bat-growth'); if(!ec) return;
+    // 出所: 画像1「動力電池産量増速」「動力電池装車増速」累計
+    //       画像2「電池総増速」「三元増速」「鉄锂増速」累計
+    var labels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
+
+    // 画像1より（累計）
+    var prodGrowth    = [163, 148, 43, 41, 60, 56, 49]; // 動力電池産量増速
+    var installGrowth = [143,  91, 32, 41, 40,  8, -7]; // 動力電池装車増速
+    // 画像2より（累計）
+    var totalGrowth   = [143,  91, 32, 41, 40,  8, -7]; // 電池総増速（装車増速と同値）
+    var nmcGrowth     = [ 91, 49, 14, 10,  4, 11,  1]; // 三元増速
+    var lfpGrowth     = [227, 130, 42, 57, 53,  8, -9]; // LFP増速
+
+    function mkBar(name, data, color){
+      return { name:name, type:'bar', data:data, itemStyle:{color:color},
+               barMaxWidth:18,
+               label:{show:false} };
+    }
+
+    ec.setOption({
+      tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){return v+'%';}}),
+      legend: baseLegend({type:'scroll'}),
+      grid: Object.assign(baseGrid(),{bottom:65}),
+      xAxis: baseXAxis(labels),
+      yAxis: [
+        Object.assign(baseYAxis('%'),{
+          axisLine:{onZero:true},
+          splitLine:{lineStyle:{color:C.grid}},
+          axisLabel:{formatter:function(v){return v+'%';}, fontFamily:FONT, fontSize:10, color:C.axis}
+        })
+      ],
+      series:[
+        mkBar('産量増速（画像①）',   prodGrowth,    '#7986CB'),
+        mkBar('装車増速（画像①）',   installGrowth, '#1565C0'),
+        mkBar('三元増速（画像②）',   nmcGrowth,     C.nmc),
+        mkBar('LFP増速（画像②）',   lfpGrowth,     C.lfp),
+        // ゼロライン強調
+        { name:'', type:'line', data:labels.map(function(){return 0;}),
+          symbol:'none', lineStyle:{color:'#999', width:1}, silent:true, legendHoverLink:false }
+      ]
+    });
   }
 
   // ============================================================
@@ -8758,9 +8893,9 @@ document.addEventListener('DOMContentLoaded', function() {
   function renderLfpShare(){
     var ec = initOrGet('ec-bat-lfp-share'); if(!ec) return;
     // 出所: Sheet2「リン酸鉄占比」累計列
-    // 2019:33%, 2020:38%, 2021:52%, 2022:62%, 2023:65%, 2024:75%, 2025:81%, 26/1月:78%, 26/2月:78%
+    // 2019:33%, 2020:38%, 2021:52%, 2022:62%, 2023:67%, 2024:75%, 2025:81%, 26/1月:78%, 26/2月:78%
     var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var lfpShare = [33, 38, 52, 62, 65, 75, 81, 78, 78];
+    var lfpShare = [33, 38, 52, 62, 67, 75, 81, 78, 78];
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>LFP占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
@@ -8854,17 +8989,13 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================================
   function renderEnergyDensity(){
     var ec = initOrGet('ec-bat-energy'); if(!ec) return;
-    // 出所: PDFのSheet7「純電動合格証 Wh/kg別」
-    // 年次は通年、25年はQ別も追加、26年1Qまで
-    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年',
-                    '25年\n1Q','25年\n2Q','25年\n3Q','25年\n4Q','26年\n1Q'];
-    var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    1.9, 2.0, 2.4, 1.6, 0.0];
-    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  97.2,121.2,118.7,145.7,28.1];
-    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  42.2,63.7,79.6,95.8,25.1];
-    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   14.8,11.6,15.8,26.3,9.2];
-
-    // 合計ラベル用
-    var totals = labels.map(function(_,i){
+    // 出所: PDFのSheet7「純電動合格証 Wh/kg別」（年次＋26年1Qのみ）
+    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年\n1Q'];
+    var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    0.0];
+    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  28.1];
+    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  25.1];
+    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   9.2];
+    var totals   = labels.map(function(_,i){
       var v = [d125m,d125_140,d140_160,d160p].reduce(function(s,a){ return s+(a[i]||0); },0);
       return Math.round(v*10)/10;
     });
@@ -9046,7 +9177,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================================
   var renderMap = {
     'bat-production'    : renderProduction,
-    'bat-install'       : renderInstall,
+    'bat-install'       : renderInstall,  // 内部でrenderInstallRate/TypeRate/Growthも呼ぶ
     'bat-lfp-nmc'       : function(){ renderLfpShare(); renderNmcShare(); },
     'bat-vehicle-demand': renderVehicleDemand,
     'bat-energy-density': renderEnergyDensity,

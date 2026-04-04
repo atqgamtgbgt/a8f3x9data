@@ -2746,6 +2746,9 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-export" class="cds-mid-tab active" onclick="cdsSetMidTab('export')">
                 🚢 輸出分析
               </button>
+              <button id="cds-mid-btn-import" class="cds-mid-tab" onclick="cdsSetMidTab('import')">
+                📦 輸入分析
+              </button>
               <button id="cds-mid-btn-china" class="cds-mid-tab" onclick="cdsSetMidTab('china')">
                 🗺️ 中国地域別
               </button>
@@ -2821,6 +2824,38 @@ body.tray-open { padding-bottom: 105px; }
               </div><!-- end cds-nav-compact -->
             </div><!-- end cds-sub-export -->
 
+            <!-- 中タブ輸入: 輸入分析 サブナビ -->
+            <div id="cds-sub-import" class="cds-sub-nav" style="display:none">
+              <div class="cds-nav-compact">
+                <div class="cds-gc cds-gc-open" data-group="gi1">
+                  <button class="cds-gc-label" onclick="cdsToggleGroup('gi1')">📊 全体トレンド <span class="cds-gc-arrow">▾</span></button>
+                  <div class="cds-gc-items" id="cds-gc-gi1" style="display:flex">
+                    <button class="nav-link active" data-cds-import-target="#imp-trend">📈 輸入量推移</button>
+                    <button class="nav-link" data-cds-import-target="#imp-monthly">📅 月別推移</button>
+                    <button class="nav-link" data-cds-import-target="#imp-sales">🛒 販売台数</button>
+                  </div>
+                </div>
+                <div class="cds-gc cds-gc-open" data-group="gi2">
+                  <button class="cds-gc-label" onclick="cdsToggleGroup('gi2')">🔧 車種・燃料別 <span class="cds-gc-arrow">▾</span></button>
+                  <div class="cds-gc-items" id="cds-gc-gi2" style="display:flex">
+                    <button class="nav-link" data-cds-import-target="#imp-type">🚗 車種別構成</button>
+                    <button class="nav-link" data-cds-import-target="#imp-fuel">⛽ 燃料種別</button>
+                    <button class="nav-link" data-cds-import-target="#imp-displace">🔧 排気量別</button>
+                  </div>
+                </div>
+                <div class="cds-gc cds-gc-open" data-group="gi3">
+                  <button class="cds-gc-label" onclick="cdsToggleGroup('gi3')">🌍 国別・ブランド <span class="cds-gc-arrow">▾</span></button>
+                  <div class="cds-gc-items" id="cds-gc-gi3" style="display:flex">
+                    <button class="nav-link" data-cds-import-target="#imp-country">🌍 国別輸入</button>
+                    <button class="nav-link" data-cds-import-target="#imp-nev-country">⚡ 新エネ国別</button>
+                    <button class="nav-link" data-cds-import-target="#imp-brand">🏷️ ブランド別</button>
+                    <button class="nav-link" data-cds-import-target="#imp-luxury">💎 超高級車</button>
+                    <button class="nav-link" data-cds-import-target="#imp-lexus">🚘 レクサス</button>
+                  </div>
+                </div>
+              </div>
+            </div><!-- end cds-sub-import -->
+
             <!-- 中タブB: 中国地域別 サブナビ -->
             <div id="cds-sub-china" class="cds-sub-nav" style="display:none">
               <div class="cds-nav-compact">
@@ -2856,6 +2891,86 @@ body.tray-open { padding-bottom: 105px; }
 
           <!-- ========== コンテンツペイン ========== -->
           <div id="cdsPillsContent" style="display:none">
+
+
+            <!-- ===== 輸入分析 ペイン群 ===== -->
+            <div class="cds-pane" id="imp-trend">
+              <div class="chart-card">
+                <div class="chart-title">全国自動車輸入量推移（万台）</div>
+                <div class="chart-subtitle">崔東树レポート ①シート　2019〜2026年1-2月累計</div>
+                <div id="ec-imp-trend" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-monthly">
+              <div class="chart-card">
+                <div class="chart-title">近年自動車輸入月別推移（万台）</div>
+                <div class="chart-subtitle">崔東树レポート ①シート　2022〜2026年月別</div>
+                <div id="ec-imp-monthly" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-sales">
+              <div class="chart-card">
+                <div class="chart-title">輸入車 販売台数推移（万台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑧シート　国家金融局保険データ 2022〜2026年</div>
+                <div id="ec-imp-sales" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-type">
+              <div class="chart-card">
+                <div class="chart-title">車種別輸入構成（台）</div>
+                <div class="chart-subtitle">崔東树レポート ③シート　乗用車・貨車・バス別 2021〜2026年</div>
+                <div id="ec-imp-type" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-fuel">
+              <div class="chart-card">
+                <div class="chart-title">燃料種別 輸入構成（乗用車・万台）</div>
+                <div class="chart-subtitle">崔東树レポート ④シート　ガソリン・HEV・PHEV・BEV 2021〜2026年</div>
+                <div id="ec-imp-fuel" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-displace">
+              <div class="chart-card">
+                <div class="chart-title">排気量別 輸入構成（乗用車・万台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑤シート　2021〜2026年</div>
+                <div id="ec-imp-displace" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-country">
+              <div class="chart-card">
+                <div class="chart-title">国別輸入量 Top10（台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑥シート　2024年・2025年・2026年1-2月比較</div>
+                <div id="ec-imp-country" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-nev-country">
+              <div class="chart-card">
+                <div class="chart-title">新エネルギー車 国別輸入量（台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑦シート　2021〜2026年</div>
+                <div id="ec-imp-nev-country" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-brand">
+              <div class="chart-card">
+                <div class="chart-title">輸入車ブランド別販売（台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑨シート　国家金融局保険データ 2020〜2026年</div>
+                <div id="ec-imp-brand" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-luxury">
+              <div class="chart-card">
+                <div class="chart-title">超高級車ブランド別販売（台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑩シート　マセラティ・ベントレー・ロールスロイス等 2020〜2026年</div>
+                <div id="ec-imp-luxury" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="imp-lexus">
+              <div class="chart-card">
+                <div class="chart-title">レクサス 車種別販売（台）</div>
+                <div class="chart-subtitle">崔東树レポート ⑪シート　ES・RX・NX・LM等 2022〜2026年</div>
+                <div id="ec-imp-lexus" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
 
             <!-- 輸出分析 ペイン群 -->
             <div class="cds-pane cds-active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
@@ -7320,10 +7435,17 @@ function cdsSetMidTab(tab) {
 
   // サブナビ
   document.getElementById('cds-sub-export').style.display = (tab === 'export') ? '' : 'none';
+  document.getElementById('cds-sub-import').style.display = (tab === 'import') ? '' : 'none';
   document.getElementById('cds-sub-china').style.display  = (tab === 'china')  ? '' : 'none';
   document.getElementById('cds-sub-profit').style.display = (tab === 'profit') ? '' : 'none';
 
-  if (tab === 'china') {
+  if (tab === 'import') {
+    cdsShowImportPane(IMP_CURRENT_ID || 'imp-trend');
+    document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-cds-import-target') === ('#' + (IMP_CURRENT_ID || 'imp-trend')));
+    });
+    setTimeout(function(){ initImportCharts(IMP_CURRENT_ID || 'imp-trend'); }, 80);
+  } else if (tab === 'china') {
     // 中国地域別タブ初回表示時：地図パネルをデフォルト表示
     cdsShowPane('cds-china-map');
     // 地図を（遅延して）初期化
@@ -7911,6 +8033,14 @@ function renderProvSalesChart(){
   };
 })();
 
+// ---- 輸入分析 ペイン切替フック ----
+(function(){
+  var _origI = window.cdsShowPane;
+  window.cdsShowPane = function(id) {
+    _origI(id);
+  };
+})();
+
 // ========== 利益率グラフ データ & 描画 ==========
 (function(){
 
@@ -8335,6 +8465,423 @@ document.addEventListener('DOMContentLoaded', function() {
 // ---- 比較トレイ: profitペインにも📌ピンを付ける ----
 </script>
 
+
+<script>
+// ========== 輸入分析 モジュール ==========
+(function(){
+
+// ---------- データ ----------
+const IMP = {
+
+  // ①輸入量推移（万台）
+  trend: {
+    years: ['2019','2020','2021','2022','2023','2024','2025','2026累計'],
+    total: [113, 93, 93, 88, 80, 71, 48, 7],
+    yoy:   [-8, -18, 0, -5, -10, -12, -32, 25]
+  },
+
+  // ①月別推移（万台）
+  monthly: {
+    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    series: {
+      '2022年': [8.1,7.1,7.9,9.2,7.1,5.8,7.0,7.6,7.8,7.5,6.9,6.4],
+      '2023年': [6.1,4.5,5.7,6.2,5.8,6.3,6.6,7.5,6.9,8.0,8.3,8.0],
+      '2024年': [5.6,4.7,5.3,5.1,6.3,6.1,7.0,7.6,5.5,4.4,6.0,6.8],
+      '2025年': [2.0,3.6,3.9,4.0,4.7,4.3,5.0,4.6,4.1,4.3,4.3,3.0],
+      '2026年': [3.8,3.2,null,null,null,null,null,null,null,null,null,null]
+    }
+  },
+
+  // ⑧販売台数（万台）
+  sales: {
+    years: ['2022年','2023年','2024年','2025年','2026年'],
+    jan:   [8.9, 6.8, 9.3, 5.3, 4.5],
+    feb:   [4.3, 6.6, 3.9, 3.1, 2.6],
+    cumul: [13,  13,  13,  8,   7],
+    yoy:   [-14, 1,  -1, -37, -15]
+  },
+
+  // ③車種別輸入（万台、2026年1-2月計）
+  typeComp: {
+    cats: ['セダン','小型MPV','四駆SUV','その他乗用','大型TR','小型TR','中型TR','トレーラー','ダンプ他','小型バス'],
+    y2024: [30.5, 14.4, 22.7, 1.7,  2.0, 0.5, 0.1, 0.1, 0.1, 0.1],
+    y2025: [21.9, 11.0, 13.6, 0.3,  0.1, 0.3, 0.0, 0.1, 0.1, 0.1],
+    y2026: [ 3.2,  2.0,  1.7, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+  },
+
+  // ④燃料種別（乗用車・万台、年計）
+  fuel: {
+    years: ['2021','2022','2023','2024','2025','2026累計'],
+    gasoline: [78.4, 72.9, 62.8, 56.3, 38.2, 6.1],
+    hybrid:   [11.0,  9.7,  9.7, 10.0,  7.5, 0.8],
+    phev:      [2.2,  2.5,  2.3,  1.0,  0.5, 0.0],
+    diesel:    [0.1,  0.3,  0.4,  0.4,  0.4, 0.1],
+    bev:       [0.8,  1.8,  3.0,  1.7,  0.3, 0.0]
+  },
+
+  // ⑤排気量別（乗用車・万台、年計）
+  displace: {
+    years: ['2021','2022','2023','2024','2025','2026累計'],
+    gt4:    [0.5, 1.0, 0.6, 0.5, 0.1, 0.0],
+    d3to4:  [2.5, 3.6, 2.6, 2.6, 1.5, 0.3],
+    d25to3: [24.9,21.1,22.1,17.8,11.5, 1.7],
+    d2to25: [3.6, 6.6, 6.8, 5.7, 2.4, 0.2],
+    d15to2: [42.2,36.9,29.1,28.6,21.8, 3.8],
+    d1to15: [4.7, 3.7, 1.6, 1.1, 1.0, 0.1]
+  },
+
+  // ⑥国別輸入（台、2025年合計・2026年1-2月計）
+  country: {
+    names: ['日本','ドイツ','アメリカ','イギリス','スロバキア','タイ','オーストリア','メキシコ','スウェーデン','フィンランド'],
+    y2024: [227836,192597,109338,45073,62412,1384,10764,8018,21542,177],
+    y2025: [203107,104436,48549,36393,51226,390,3031,5001,13693,1215],
+    y2026: [34221,14511,7859,5056,4363,832,737,677,453,285]
+  },
+
+  // ⑦新エネ国別（台、2025年合計・2026年1-2月計）
+  nevCountry: {
+    names: ['ドイツ','アメリカ','スウェーデン','日本','イタリア','韓国','イギリス','タイ','ベトナム'],
+    y2024: [8618,7202,1257,4845,722,240,962,7,68],
+    y2025: [3136,1133,1779,914,717,41,61,33,100],
+    y2026: [46,44,68,25,46,3,null,8,2]
+  },
+
+  // ⑨ブランド別販売（台）
+  brand: {
+    names: ['レクサス','BMW','ベンツ','ポルシェ','アウディ','ランドローバー','ボルボ','ジャガー','キャデラック'],
+    y2022: [183971,152841,156750,94656,44089,37277,21098,1375,42],
+    y2023: [180792,187261,174273,80860,62212,53357,22251,2393,149],
+    y2024: [180472,171019,151277,54519,51049,49683,18229,2489,205],
+    y2025: [184069,64371,94777,41798,29927,42088,12640,252,191],
+    y2026: [25192,8436,13485,3914,3514,4918,1224,2,28]
+  },
+
+  // ⑩超高級車（台）
+  luxury: {
+    names: ['マセラティ','ベントレー','ロールスロイス','フェラーリ','ランボルギーニ','アストンマーティン','マクラーレン'],
+    y2022: [4855,4106,1507,1223,886,774,154],
+    y2023: [4264,3480,1324,1196,837,532,219],
+    y2024: [1228,2608,789,881,608,297,38],
+    y2025: [1374,2030,675,664,512,300,46],
+    y2026: [137,258,83,105,44,48,2]
+  },
+
+  // ⑪レクサス車種別（台）
+  lexus: {
+    models: ['ES','RX','NX','LM','LX','GX','LS','RZ','LC'],
+    y2024: [112036,33204,20531,3775,2639,2906,511,2965,25],
+    y2025: [96320,34051,18435,4021,4097,3711,335,547,25],
+    y2026: [14125,4398,2920,626,622,412,29,29,6]
+  }
+};
+
+// ---------- ユーティリティ ----------
+var IMP_CURRENT_ID = 'imp-trend';
+var IMP_EC = {};
+
+function mkImpChart(id) {
+  var dom = document.getElementById(id);
+  if (!dom) return null;
+  if (IMP_EC[id]) { try { IMP_EC[id].dispose(); } catch(e){} }
+  IMP_EC[id] = echarts.init(dom, null, {renderer:'canvas'});
+  new ResizeObserver(function(){ try{ IMP_EC[id].resize(); }catch(e){} }).observe(dom);
+  return IMP_EC[id];
+}
+
+function impBase(extra) {
+  return Object.assign({
+    backgroundColor: 'transparent',
+    textStyle: { fontFamily: 'Noto Sans JP, sans-serif', fontSize: 12 },
+    tooltip: { trigger:'axis', confine:true },
+    animation: true
+  }, extra);
+}
+
+var COLORS = ['#3b82f6','#f59e0b','#10b981','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16','#f97316'];
+
+// ---------- 各グラフ描画 ----------
+
+function renderImpTrend() {
+  var c = mkImpChart('ec-imp-trend'); if(!c) return;
+  var d = IMP.trend;
+  c.setOption(impBase({
+    legend: { data:['輸入量(万台)','前年比(%)'], bottom:0 },
+    grid: { left:55, right:60, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.years, axisLabel:{rotate:0} },
+    yAxis: [
+      { type:'value', name:'万台', nameTextStyle:{color:'#3b82f6'}, axisLabel:{color:'#3b82f6'} },
+      { type:'value', name:'前年比(%)', nameTextStyle:{color:'#f59e0b'}, axisLabel:{color:'#f59e0b'},
+        position:'right', splitLine:{show:false},
+        axisLabel:{ formatter:function(v){ return v+'%'; } } }
+    ],
+    series:[
+      { name:'輸入量(万台)', type:'bar', data:d.total,
+        itemStyle:{ color:function(p){ return p.data>=0?'#3b82f6':'#ef4444'; } }, barMaxWidth:40,
+        label:{ show:true, position:'top', fontSize:11, formatter:function(p){ return p.data; } } },
+      { name:'前年比(%)', type:'line', yAxisIndex:1, data:d.yoy,
+        smooth:true, symbol:'circle', symbolSize:6,
+        lineStyle:{width:2.5,color:'#f59e0b'}, itemStyle:{color:'#f59e0b'},
+        label:{ show:true, position:'top', fontSize:10, formatter:function(p){ return p.data+'%'; } } }
+    ]
+  }));
+}
+
+function renderImpMonthly() {
+  var c = mkImpChart('ec-imp-monthly'); if(!c) return;
+  var d = IMP.monthly;
+  var seriesArr = Object.keys(d.series).map(function(yr, i){
+    return {
+      name: yr, type:'line', data: d.series[yr],
+      smooth:true, symbol:'circle', symbolSize:5,
+      lineStyle:{ width: yr==='2026年'?3:2, color:COLORS[i], type: yr==='2026年'?'solid':'solid' },
+      itemStyle:{ color:COLORS[i] },
+      connectNulls: false
+    };
+  });
+  c.setOption(impBase({
+    legend: { data:Object.keys(d.series), bottom:0 },
+    grid: { left:50, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.months },
+    yAxis: { type:'value', name:'万台', min:0 },
+    series: seriesArr
+  }));
+}
+
+function renderImpSales() {
+  var c = mkImpChart('ec-imp-sales'); if(!c) return;
+  var d = IMP.sales;
+  c.setOption(impBase({
+    legend: { data:['1月販売','2月販売','1-2月合計'], bottom:0 },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.years },
+    yAxis: { type:'value', name:'万台', min:0 },
+    series:[
+      { name:'1月販売', type:'bar', data:d.jan, itemStyle:{color:'#3b82f6'}, barMaxWidth:30,
+        label:{show:true,position:'top',fontSize:10} },
+      { name:'2月販売', type:'bar', data:d.feb, itemStyle:{color:'#93c5fd'}, barMaxWidth:30,
+        label:{show:true,position:'top',fontSize:10} },
+      { name:'1-2月合計', type:'line', data:d.cumul,
+        smooth:true, symbol:'circle', symbolSize:7,
+        lineStyle:{width:2.5,color:'#f59e0b'}, itemStyle:{color:'#f59e0b'},
+        label:{show:true,position:'top',fontSize:11, formatter:function(p){return p.data+'万台';}} }
+    ]
+  }));
+}
+
+function renderImpType() {
+  var c = mkImpChart('ec-imp-type'); if(!c) return;
+  var d = IMP.typeComp;
+  c.setOption(impBase({
+    legend: { data:['2024年','2025年','2026年1-2月'], bottom:0 },
+    grid: { left:110, right:20, top:20, bottom:55 },
+    xAxis: { type:'value', name:'万台' },
+    yAxis: { type:'category', data:d.cats.slice().reverse(), axisLabel:{fontSize:11} },
+    series:[
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#93c5fd'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:10} },
+      { name:'2025年', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:10} },
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:10} }
+    ]
+  }));
+}
+
+function renderImpFuel() {
+  var c = mkImpChart('ec-imp-fuel'); if(!c) return;
+  var d = IMP.fuel;
+  var fuelNames = ['ガソリン','ハイブリッド','PHEV','ディーゼル','BEV'];
+  var fuelKeys  = ['gasoline','hybrid','phev','diesel','bev'];
+  var fc = ['#3b82f6','#10b981','#f59e0b','#6b7280','#ef4444'];
+  c.setOption(impBase({
+    legend: { data:fuelNames, bottom:0 },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.years },
+    yAxis: { type:'value', name:'万台' },
+    series: fuelNames.map(function(nm,i){
+      return { name:nm, type:'bar', stack:'fuel', data:d[fuelKeys[i]],
+               itemStyle:{color:fc[i]}, barMaxWidth:50,
+               label:{show:false} };
+    })
+  }));
+}
+
+function renderImpDisplace() {
+  var c = mkImpChart('ec-imp-displace'); if(!c) return;
+  var d = IMP.displace;
+  var bands = [
+    {name:'4L超',    key:'gt4',    color:'#1d4ed8'},
+    {name:'3〜4L',   key:'d3to4',  color:'#3b82f6'},
+    {name:'2.5〜3L', key:'d25to3', color:'#60a5fa'},
+    {name:'2〜2.5L', key:'d2to25', color:'#93c5fd'},
+    {name:'1.5〜2L', key:'d15to2', color:'#10b981'},
+    {name:'1〜1.5L', key:'d1to15', color:'#6ee7b7'}
+  ];
+  c.setOption(impBase({
+    legend: { data:bands.map(function(b){return b.name;}), bottom:0 },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.years },
+    yAxis: { type:'value', name:'万台' },
+    series: bands.map(function(b){
+      return { name:b.name, type:'bar', stack:'disp', data:d[b.key],
+               itemStyle:{color:b.color}, barMaxWidth:55 };
+    })
+  }));
+}
+
+function renderImpCountry() {
+  var c = mkImpChart('ec-imp-country'); if(!c) return;
+  var d = IMP.country;
+  var rev = d.names.slice().reverse();
+  c.setOption(impBase({
+    legend: { data:['2024年','2025年合計','2026年1-2月'], bottom:0 },
+    grid: { left:100, right:20, top:20, bottom:55 },
+    xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
+    yAxis: { type:'category', data:rev, axisLabel:{fontSize:11} },
+    tooltip: { formatter:function(params){
+      return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
+    }},
+    series:[
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
+      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} }
+    ]
+  }));
+}
+
+function renderImpNevCountry() {
+  var c = mkImpChart('ec-imp-nev-country'); if(!c) return;
+  var d = IMP.nevCountry;
+  var rev = d.names.slice().reverse();
+  c.setOption(impBase({
+    legend: { data:['2024年','2025年合計','2026年1-2月'], bottom:0 },
+    grid: { left:110, right:20, top:20, bottom:55 },
+    xAxis: { type:'value', name:'台' },
+    yAxis: { type:'category', data:rev, axisLabel:{fontSize:11} },
+    tooltip: { formatter:function(params){
+      return params.map(function(p){return p.seriesName+': '+(p.value||0).toLocaleString()+'台';}).join('<br>');
+    }},
+    series:[
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:10} },
+      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#10b981'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:10} },
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'}, barMaxWidth:18,
+        label:{show:true,position:'right',fontSize:10} }
+    ]
+  }));
+}
+
+function renderImpBrand() {
+  var c = mkImpChart('ec-imp-brand'); if(!c) return;
+  var d = IMP.brand;
+  var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
+  var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
+  c.setOption(impBase({
+    legend: { data:years, bottom:0 },
+    grid: { left:105, right:20, top:20, bottom:55 },
+    xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
+    yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
+    tooltip: { formatter:function(params){
+      return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
+    }},
+    series: years.map(function(yr,i){
+      return { name:yr, type:'bar', data:allData[i].slice().reverse(),
+               itemStyle:{color:COLORS[i]}, barMaxWidth:16,
+               label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} };
+    })
+  }));
+}
+
+function renderImpLuxury() {
+  var c = mkImpChart('ec-imp-luxury'); if(!c) return;
+  var d = IMP.luxury;
+  var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
+  var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
+  c.setOption(impBase({
+    legend: { data:years, bottom:0 },
+    grid: { left:130, right:20, top:20, bottom:55 },
+    xAxis: { type:'value', name:'台' },
+    yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
+    tooltip: { formatter:function(params){
+      return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
+    }},
+    series: years.map(function(yr,i){
+      return { name:yr, type:'bar', data:allData[i].slice().reverse(),
+               itemStyle:{color:COLORS[i]}, barMaxWidth:16,
+               label:{show:true,position:'right',fontSize:10} };
+    })
+  }));
+}
+
+function renderImpLexus() {
+  var c = mkImpChart('ec-imp-lexus'); if(!c) return;
+  var d = IMP.lexus;
+  c.setOption(impBase({
+    legend: { data:['2024年','2025年合計','2026年1-2月'], bottom:0 },
+    grid: { left:50, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.models },
+    yAxis: { type:'value', name:'台' },
+    series:[
+      { name:'2024年', type:'bar', data:d.y2024, itemStyle:{color:'#bfdbfe'}, barMaxWidth:30,
+        label:{show:true,position:'top',fontSize:10,formatter:function(p){return p.value.toLocaleString();}} },
+      { name:'2025年合計', type:'bar', data:d.y2025, itemStyle:{color:'#3b82f6'}, barMaxWidth:30,
+        label:{show:true,position:'top',fontSize:10,formatter:function(p){return p.value.toLocaleString();}} },
+      { name:'2026年1-2月', type:'bar', data:d.y2026, itemStyle:{color:'#1d4ed8'}, barMaxWidth:30,
+        label:{show:true,position:'top',fontSize:10,formatter:function(p){return p.value.toLocaleString();}} }
+    ]
+  }));
+}
+
+// ---------- 公開 API ----------
+var IMP_RENDER = {
+  'imp-trend':       renderImpTrend,
+  'imp-monthly':     renderImpMonthly,
+  'imp-sales':       renderImpSales,
+  'imp-type':        renderImpType,
+  'imp-fuel':        renderImpFuel,
+  'imp-displace':    renderImpDisplace,
+  'imp-country':     renderImpCountry,
+  'imp-nev-country': renderImpNevCountry,
+  'imp-brand':       renderImpBrand,
+  'imp-luxury':      renderImpLuxury,
+  'imp-lexus':       renderImpLexus
+};
+
+window.initImportCharts = function(id) {
+  var fn = IMP_RENDER[id || 'imp-trend'];
+  if (fn) fn();
+};
+
+// ペイン表示
+window.cdsShowImportPane = function(id) {
+  IMP_CURRENT_ID = id;
+  document.querySelectorAll('.cds-pane[id^="imp-"]').forEach(function(p){
+    p.classList.toggle('cds-active', p.id === id);
+  });
+  // ボタンのactive状態更新
+  document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-cds-import-target') === '#'+id);
+  });
+};
+
+// サブナビのクリック処理
+document.addEventListener('DOMContentLoaded', function(){
+  document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var id = btn.getAttribute('data-cds-import-target').replace('#','');
+      cdsShowImportPane(id);
+      setTimeout(function(){ initImportCharts(id); }, 60);
+    });
+  });
+});
+
+})(); // end import module
+</script>
+
 <!-- ========== 比較トレイ（全タブ横断） ========== -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -8529,7 +9076,8 @@ document.addEventListener('DOMContentLoaded', function() {
       _orig(id);
       var pane = document.getElementById(id);
       if (pane && pane.closest('#cdsPillsContent')) {
-        setTimeout(function() { addComparePins(pane, '🚢'); }, 180);
+        var icon = (id && id.indexOf('imp-') === 0) ? '📦' : '🚢';
+        setTimeout(function() { addComparePins(pane, icon); }, 180);
       }
     };
   }

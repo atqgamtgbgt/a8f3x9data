@@ -3240,7 +3240,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-vehicle-demand">
               <div class="chart-card">
                 <div class="chart-title">🚗 車種別 電池需要（MWh）</div>
-                <div class="chart-subtitle">純電動乗用車 / プラグイン乗用車 / 純電動貨車 等　2020〜2026年</div>
+                <div class="chart-subtitle">※装車ベース（合格証ベースではない）　2020〜2026年　プラグイン貨車は2025年〜集計</div>
                 <div id="ec-bat-vehicle" class="echart-box" style="height:460px"></div>
               </div>
             </div>
@@ -3249,7 +3249,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-energy-density">
               <div class="chart-card">
                 <div class="chart-title">🔬 純電動乗用車　エネルギー密度分布（万台）</div>
-                <div class="chart-subtitle">125以下 / 125–140 / 140–160 / 160以上　2018〜2026年1Q</div>
+                <div class="chart-subtitle">※合格証ベース　125以下 / 125–140 / 140–160 / 160以上　2018〜2026年1Q</div>
                 <div id="ec-bat-energy" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -8942,44 +8942,48 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================================
   function renderVehicleDemand(){
     var ec = initOrGet('ec-bat-vehicle'); if(!ec) return;
-    // 出所: PDFのSheet3「装車電池MWh」
-    // 純電動貨車は2025年から統計に登場（136,237MWh）
-    // 610100は合格証産量表(台数)の数字であり、MWh表には存在しない
+    // 出所: PDFのp3「装車電池MWh」表 ← 装車ベース（合格証ベースではない）
+    // 全車種をPDF実値で収録。2026年は1-2月累計値
     var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-2月累計'];
 
-    // 各車種の年間累計MWh（PDFのSheet3より）
-    var bev_pass  = [43114,  121734, 230092, 286841, 362178, 467978, 40775];
-    var phev_pass = [4151,   10434,  31148,  65328,  118911, 139316, 12875];
-    var bev_truck = [null,   null,   null,   null,   null,   136237, 12854]; // 2020-2024はPDFに記載なし
-    var bev_sv    = [4252,   12169,  21404,  28039,  56454,  12315,  956];
-    var bev_bus   = [11749,  9699,   11376,  6534,   9565,   10776,  546];
-    // その他（プラグイン専用車・プラグイン貨車・燃料電池車等）
-    var others_raw= [
-      63638  - 43114 - 4151  - 4252  - 11749,
-      154495 - 121734- 10434 - 12169 - 9699,
-      294648 - 230092- 31148 - 21404 - 11376,
-      387638 - 286841- 65328 - 28039 - 6534,
-      548431 - 362178- 118911- 56454 - 9565,
-      768869 - 467978- 139316- 136237- 12315 - 10776,
-      68315  - 40775 - 12875 - 12854 - 956   - 546
+    // ── PDF実値（MWh）──
+    var bev_pass   = [43114,  121734, 230092, 286841, 362178, 467978, 40775];  // 純電動乗用車
+    var phev_pass  = [4151,   10434,  31148,  65328,  118911, 139316, 12909];  // 插混乗用車 ※PDF実値
+    var bev_truck  = [null,   null,   null,   null,   null,   136237, 12840];  // 純電動貨車（2025年〜）
+    var phev_truck = [null,   null,   null,   null,   null,   770,    273];    // 插混貨車（2025年〜・+284%急成長）
+    var bev_sv     = [4252,   12169,  21404,  28039,  56454,  12315,  956];    // 純電動専用車
+    var bev_bus    = [11749,  9699,   11376,  6534,   9565,   10776,  546];    // 純電動客車
+
+    // その他: 合計 - 上記6車種（插混客車/燃料電池客車/燃料電池貨車/插混専用車/燃料電池専用車）
+    // PDF合計値から逆算（全て実値）
+    var others_raw = [
+      63638  - 43114 - 4151  - 0     - 0    - 4252  - 11749,  // 2020: 372
+      154495 - 121734- 10434 - 0     - 0    - 12169 - 9699,   // 2021: 459
+      294648 - 230092- 31148 - 0     - 0    - 21404 - 11376,  // 2022: 628
+      387638 - 286841- 65328 - 0     - 0    - 28039 - 6534,   // 2023: 896
+      548431 - 362178- 118911- 0     - 0    - 56454 - 9565,   // 2024: 1323（燃料電池貨車1001含む）
+      768869 - 467978- 139316- 136237- 770  - 12315 - 10776,  // 2025: 1477
+      68315  - 40775 - 12909 - 12840 - 273  - 956   - 546     // 26年1-2月: 16
     ];
 
-    // GWhに変換（÷1000、小数1桁）
     function toGWh(arr){ return arr.map(function(v){ return v===null ? null : Math.round(v/100)/10; }); }
 
     ec.setOption({
-      tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){ return v===null?'データなし': v+'GWh'; }}),
+      tooltip: Object.assign(baseTooltip(),{
+        valueFormatter:function(v){ return v===null ? 'データなし' : v+'GWh'; }
+      }),
       legend: baseLegend({type:'scroll'}),
-      grid: Object.assign(baseGrid(),{bottom:70}),
+      grid: Object.assign(baseGrid(),{bottom:80}),
       xAxis: baseXAxis(labels),
       yAxis: baseYAxis('GWh'),
       series:[
-        {name:'純電動乗用車',    type:'bar', stack:'s', data:toGWh(bev_pass),  itemStyle:{color:'#1565C0'}},
-        {name:'プラグイン乗用車', type:'bar', stack:'s', data:toGWh(phev_pass), itemStyle:{color:'#5BA4CF'}},
-        {name:'純電動貨車（※2025年〜）', type:'bar', stack:'s', data:toGWh(bev_truck), itemStyle:{color:'#F39C12'}},
-        {name:'純電動専用車',    type:'bar', stack:'s', data:toGWh(bev_sv),    itemStyle:{color:'#1ABC9C'}},
-        {name:'純電動バス',      type:'bar', stack:'s', data:toGWh(bev_bus),   itemStyle:{color:'#9B59B6'}},
-        {name:'その他',          type:'bar', stack:'s', data:toGWh(others_raw),itemStyle:{color:'#CFD8DC'}}
+        {name:'純電動乗用車',             type:'bar', stack:'s', data:toGWh(bev_pass),   itemStyle:{color:'#1565C0'}},
+        {name:'プラグイン乗用車',          type:'bar', stack:'s', data:toGWh(phev_pass),  itemStyle:{color:'#5BA4CF'}},
+        {name:'純電動貨車（2025年〜）',    type:'bar', stack:'s', data:toGWh(bev_truck),  itemStyle:{color:'#F39C12'}},
+        {name:'プラグイン貨車（2025年〜）',type:'bar', stack:'s', data:toGWh(phev_truck), itemStyle:{color:'#FF8F00'}},
+        {name:'純電動専用車',              type:'bar', stack:'s', data:toGWh(bev_sv),     itemStyle:{color:'#1ABC9C'}},
+        {name:'純電動客車',                type:'bar', stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
+        {name:'その他',                    type:'bar', stack:'s', data:toGWh(others_raw), itemStyle:{color:'#CFD8DC'}}
       ]
     });
   }

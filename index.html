@@ -7440,22 +7440,32 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-profit').style.display = (tab === 'profit') ? '' : 'none';
 
   if (tab === 'import') {
-    // cdsPills の !important を解除して確実に表示
+    var targetId = window.IMP_CURRENT_ID || 'imp-trend';
+    // 1) cdsPills / cdsPillsContent を確実に表示（!important を setAttribute で上書き）
     var pillEl2 = document.getElementById('cdsPills');
-    if (pillEl2) { pillEl2.setAttribute('style','display:block'); }
-    var targetId = IMP_CURRENT_ID || 'imp-trend';
-    cdsShowImportPane(targetId);
-    document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(b => {
+    var contEl2 = document.getElementById('cdsPillsContent');
+    if (pillEl2) pillEl2.setAttribute('style', 'display:block');
+    if (contEl2) contEl2.setAttribute('style', 'display:block');
+    // 2) 全ペインを非表示 → 対象ペインだけ表示
+    document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+    var targetPane = document.getElementById(targetId);
+    if (targetPane) targetPane.classList.add('cds-active');
+    // 3) サブナビのactive状態
+    document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-import-target') === ('#' + targetId));
     });
-    // DOM が完全に表示されてからグラフを描画・リサイズ
-    setTimeout(function(){
-      initImportCharts(targetId);
-      // ECharts インスタンスが存在すれば resize も呼ぶ
-      if (typeof IMP_EC !== 'undefined' && IMP_EC[targetId.replace('imp-','ec-imp-')]) {
-        try { IMP_EC[targetId.replace('imp-','ec-imp-')].resize(); } catch(e) {}
-      }
-    }, 120);
+    // 4) グラフ描画：requestAnimationFrame → setTimeout の2段階でDOMが確実に描画された後に実行
+    requestAnimationFrame(function(){
+      setTimeout(function(){
+        var ecId = 'ec-' + targetId;
+        var fn = window.IMP_RENDER && window.IMP_RENDER[targetId];
+        if (fn) fn();
+        setTimeout(function(){
+          var ec = window.IMP_EC && window.IMP_EC[ecId];
+          if (ec) { try { ec.resize(); } catch(e){} }
+        }, 100);
+      }, 50);
+    });
   } else if (tab === 'china') {
     // 中国地域別タブ初回表示時：地図パネルをデフォルト表示
     cdsShowPane('cds-china-map');
@@ -8587,8 +8597,9 @@ const IMP = {
 };
 
 // ---------- ユーティリティ ----------
-var IMP_CURRENT_ID = 'imp-trend';
+window.IMP_CURRENT_ID = 'imp-trend';
 var IMP_EC = {};
+window.IMP_EC = IMP_EC;
 
 function mkImpChart(id) {
   var dom = document.getElementById(id);
@@ -8863,6 +8874,7 @@ var IMP_RENDER = {
   'imp-luxury':      renderImpLuxury,
   'imp-lexus':       renderImpLexus
 };
+window.IMP_RENDER = IMP_RENDER;
 
 window.initImportCharts = function(id) {
   var fn = IMP_RENDER[id || 'imp-trend'];
@@ -8878,7 +8890,7 @@ window.initImportCharts = function(id) {
 
 // ペイン表示
 window.cdsShowImportPane = function(id) {
-  IMP_CURRENT_ID = id;
+  window.IMP_CURRENT_ID = id;
   // 全ペイン（輸出・利益率・地域含む）を一旦非表示にしてから輸入ペインを表示
   document.querySelectorAll('.cds-pane').forEach(function(p){
     p.classList.remove('cds-active');

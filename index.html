@@ -2579,8 +2579,7 @@ body.tray-open { padding-bottom: 105px; }
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-production" type="button" role="tab">🏭 産販推移</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-bev-phev" type="button" role="tab">⚡ BEV/PHEV詳細</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-commercial" type="button" role="tab">🚛 商用車詳細</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-import" type="button" role="tab">📥 輸入国ランキング</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-profit" type="button" role="tab">💴 業界収益</button></li>
+
           </ul>
 
           <div class="tab-content" id="chartsPillsContent">
@@ -2654,44 +2653,7 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <div class="tab-pane fade" id="cp-import">
-              <div class="row g-3">
-                <div class="col-12">
-                  <div class="chart-card">
-                    <div class="chart-title">輸入国ランキング 月次推移<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">上位10カ国（2024年2月〜）　<span class="text-muted" style="font-size:10px">📋 国名:B列 / 台数(輌→万台換算):C列 / 行番号は月により変動（2026/2月基準: 行241〜250）</span></div>
-                    <div id="ec-import" class="echart-box" style="height:500px"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <!-- ===== 業界収益 ===== -->
-            <div class="tab-pane fade" id="cp-profit">
-              <div class="row g-3">
-                <div class="col-12 col-lg-6">
-                  <div class="chart-card">
-                    <div class="chart-title">業界月次利益率（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">2024年・2025年 月次利益率比較　<span class="text-muted" style="font-size:10px">📋 シート「業界利益率推移」/ 利益率: D列(2024) / H列(2025) / 行10〜20（1-2月累計〜12月）</span></div>
-                    <div id="ec-profit-rate" class="echart-box" style="height:340px"></div>
-                  </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                  <div class="chart-card">
-                    <div class="chart-title">業界月次収入・利益（億元）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">2024年・2025年 月次収入・利益比較（通年除く）　<span class="text-muted" style="font-size:10px">📋 シート「業界利益率推移」/ 収入: B列(2024)/F列(2025) / 利益: C列(2024)/G列(2025) / 行10〜20</span></div>
-                    <div id="ec-profit-abs" class="echart-box" style="height:340px"></div>
-                  </div>
-                </div>
-                <div class="col-12">
-                  <div class="chart-card">
-                    <div class="chart-title">業界通年利益率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;vertical-align:middle">出所：CADA乗聯分会</span></div>
-                    <div class="chart-subtitle">2020〜2025年 通年利益率推移　<span class="text-muted" style="font-size:10px">📋 シート「業界利益率推移」/ 行6: 業界全体利益率 / B〜G列(2020〜2025年)</span></div>
-                    <div id="ec-profit-annual" class="echart-box" style="height:250px"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
 
           </div><!-- end chartsPillsContent -->
 
@@ -5753,36 +5715,6 @@ function initNevExp() {
 }
 function initCountry() { initCountryCaam(); initCountryCada(); initNevExp(); }
 
-// 輸入国ランキング
-function initImport() {
-  if (!CAAM_EXCEL_LOADED) return;
-  initEC('ec-import', chart => {
-    const t = gt(); const opt = baseOpt(t);
-    if (!CD.import_months?.length) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
-    opt.xAxis.data = CD.import_months;
-    opt.grid.bottom = 80; opt.grid.right = 165;
-    opt.legend = { orient:'vertical', right:0, top:40, width:160, textStyle:{color:t.sub,fontSize:11}, type:'scroll', pageTextStyle:{color:t.sub} };
-    opt.xAxis.axisLabel.rotate = 35;
-    opt.tooltip.formatter = params => {
-      const idx = params[0]?.dataIndex;
-      const isCumul = CD.import_cumul_flags?.[idx];
-      const hasData = params.some(p => p.value != null);
-      if (!hasData) return `<b>${params[0].axisValue}</b><br><span style="color:#888;font-size:11px">データなし</span>`;
-      let s = `<b>${params[0].axisValue}</b>${isCumul ? ' <span style="color:#f59e0b;font-size:10px">※累計</span>' : ''}<br>`;
-      params.filter(p=>p.value!=null).sort((a,b)=>b.value-a.value)
-        .forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`);
-      if (isCumul) s += `<br><span style="font-size:10px;color:#888">※月次単月でなく累計値です</span>`;
-      return s;
-    };
-    opt.series = CD.import_countries.map((co,i) => ({
-      name:co, type:'line', data:CD.import_series[co],
-      symbol:'circle', symbolSize:5, connectNulls:true,
-      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
-    }));
-    chart.setOption(opt);
-  });
-}
-
 // CADAサマリー
 function initCadaSummary() {
   if (!CAAM_EXCEL_LOADED) return;
@@ -5894,73 +5826,6 @@ function initWorld() {
   });
 }
 
-// 業界収益
-function initProfit() {
-  if (!CAAM_EXCEL_LOADED) return;
-  const PD = window.PROFIT_DATA || {annual:{}, monthly:{}};
-  const monthOrder = ['1-2月累計','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const mlabels = monthOrder.filter(m => PD.monthly[`2024-${m}`] || PD.monthly[`2025-${m}`]);
-  const rate24 = mlabels.map(m => PD.monthly[`2024-${m}`]?.rate  ?? null);
-  const rate25 = mlabels.map(m => PD.monthly[`2025-${m}`]?.rate  ?? null);
-  const rev24  = mlabels.map(m => PD.monthly[`2024-${m}`]?.rev   ?? null);
-  const rev25  = mlabels.map(m => PD.monthly[`2025-${m}`]?.rev   ?? null);
-  const pft24  = mlabels.map(m => PD.monthly[`2024-${m}`]?.profit ?? null);
-  const pft25  = mlabels.map(m => PD.monthly[`2025-${m}`]?.profit ?? null);
-
-  // 利益率折れ線
-  initEC('ec-profit-rate', chart => {
-    const t = gt(); const opt = baseOpt(t, '%');
-    opt.xAxis.data = mlabels; opt.yAxis.max = 10; opt.yAxis.min = 0; opt.yAxis.axisLabel.formatter = '{value}%';
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
-      return s;
-    };
-    opt.series = [
-      { name:'2024年', type:'line', data:rate24, symbol:'circle', symbolSize:6,
-        lineStyle:{width:2,color:'#adb5bd',type:'dashed'}, itemStyle:{color:'#adb5bd'} },
-      { name:'2025年', type:'line', data:rate25, symbol:'circle', symbolSize:7,
-        lineStyle:{width:3,color:'#4e79a7'}, itemStyle:{color:'#4e79a7'},
-        areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(78,121,167,0.25)'},{offset:1,color:'rgba(78,121,167,0.02)'}])} },
-    ];
-    chart.setOption(opt);
-  });
-  // 収入・利益棒グラフ
-  initEC('ec-profit-abs', chart => {
-    const t = gt(); const opt = baseOpt(t, '億元');
-    opt.xAxis.data = mlabels; opt.legend.top = 8;
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${Number(p.value).toLocaleString()}</b> 億元<br>`; });
-      return s;
-    };
-    opt.series = [
-      { name:'収入 2024年', type:'bar', data:rev24, itemStyle:{color:'#adb5bd'} },
-      { name:'収入 2025年', type:'bar', data:rev25, itemStyle:{color:'#4e79a7'} },
-      { name:'利益 2024年', type:'bar', data:pft24, itemStyle:{color:'#f4a261'} },
-      { name:'利益 2025年', type:'bar', data:pft25, itemStyle:{color:'#e15759'} },
-    ];
-    chart.setOption(opt);
-  });
-  // 通年利益率
-  initEC('ec-profit-annual', chart => {
-    const t = gt();
-    const years = Object.keys(PD.annual).sort();
-    const opt = baseOpt(t, '%');
-    opt.xAxis.data = years; opt.yAxis.max = 8; opt.yAxis.min = 3; opt.yAxis.axisLabel.formatter = '{value}%';
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}年</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
-      return s;
-    };
-    opt.series = [{ name:'業界利益率', type:'bar',
-      data: years.map(y => ({ value:PD.annual[y], itemStyle:{color: PD.annual[y]>=5?'#59a14f':PD.annual[y]>=4?'#f28e2b':'#e15759'} })),
-      label:{show:true, position:'top', formatter:'{c}%', fontSize:11, color:t.text}
-    }];
-    chart.setOption(opt);
-  });
-}
-
 // ---- 初期化マップ ----
 const CHART_FNS = {
   'cp-overview':       initOverview,
@@ -5979,8 +5844,6 @@ const CHART_FNS = {
   'cp-production':     initProduction,
   'cp-bev-phev':       initBevPhev,
   'cp-commercial':     initCommercial,
-  'cp-import':         initImport,
-  'cp-profit':         initProfit,
 };
 
 // 大タブ「グラフ」表示時に最初のグラフを初期化

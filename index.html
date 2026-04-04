@@ -8497,7 +8497,7 @@ const IMP = {
     years: ['2022年','2023年','2024年','2025年','2026年'],
     jan:   [8.9, 6.8, 9.3, 5.3, 4.5],
     feb:   [4.3, 6.6, 3.9, 3.1, 2.6],
-    cumul: [13,  13,  13,  8,   7],
+    cumul: [13.2, 13.4, 13.2, 8.4, 7.1],
     yoy:   [-14, 1,  -1, -37, -15]
   },
 
@@ -8663,7 +8663,7 @@ function renderImpSales() {
       { name:'1-2月合計', type:'line', data:d.cumul,
         smooth:true, symbol:'circle', symbolSize:7,
         lineStyle:{width:2.5,color:'#f59e0b'}, itemStyle:{color:'#f59e0b'},
-        label:{show:true,position:'top',fontSize:11, formatter:function(p){return p.data+'万台';}} }
+        label:{show:true,position:'top',fontSize:11, formatter:function(p){return p.data.toFixed(1)+'万台';}} }
     ]
   }));
 }
@@ -8859,9 +8859,12 @@ window.initImportCharts = function(id) {
 // ペイン表示
 window.cdsShowImportPane = function(id) {
   IMP_CURRENT_ID = id;
-  document.querySelectorAll('.cds-pane[id^="imp-"]').forEach(function(p){
-    p.classList.toggle('cds-active', p.id === id);
+  // 全ペイン（輸出・利益率・地域含む）を一旦非表示にしてから輸入ペインを表示
+  document.querySelectorAll('.cds-pane').forEach(function(p){
+    p.classList.remove('cds-active');
   });
+  var target = document.getElementById(id);
+  if (target) target.classList.add('cds-active');
   // ボタンのactive状態更新
   document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-cds-import-target') === '#'+id);

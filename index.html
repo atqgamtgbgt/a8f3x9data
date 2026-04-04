@@ -8695,12 +8695,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================================
   //  1. 電池生産推移
   // ============================================================
+  // ============================================================
+  //  1. 電池生産推移
+  // ============================================================
   function renderProduction(){
     var ec = initOrGet('ec-bat-production'); if(!ec) return;
     var labels = ['2020\n12月累計','2021\n12月累計','2022\n12月累計','2023\n12月累計','2024\n12月累計','2025\n12月累計','2026年\n1月','2026年\n2月'];
-    var totalData  = [83,   220,  546,  778,  1097, 1755.6, 168.0, 309.7];
-    var nmcData    = [49,   94,   213,  245,  278,  347.6,  31.3,  58.2];
-    var lfpData    = [35,   125,  332,  531,  816,  1405.1, 136.7, 251.3];
+    var totalData = [83,   220,  546,  778,  1097, 1755.6, 168.0, 309.7];
+    var nmcData   = [49,   94,   213,  245,  278,  347.6,  31.3,  58.2];
+    var lfpData   = [35,   125,  332,  531,  816,  1405.1, 136.7, 251.3];
     ec.setOption({
       tooltip: baseTooltip(),
       legend: baseLegend(),
@@ -8708,9 +8711,8 @@ document.addEventListener('DOMContentLoaded', function() {
       xAxis: baseXAxis(labels),
       yAxis: baseYAxis('GWh'),
       series:[
-        { name:'三元電池', type:'bar', stack:'total', data:nmcData, itemStyle:{color:C.nmc},
-          label:{show:false} },
-        { name:'LFP（リン酸鉄）', type:'bar', stack:'total', data:lfpData, itemStyle:{color:C.lfp},
+        { name:'三元電池', type:'bar', stack:'s', data:nmcData, itemStyle:{color:C.nmc} },
+        { name:'LFP（リン酸鉄）', type:'bar', stack:'s', data:lfpData, itemStyle:{color:C.lfp},
           label:{show:true, position:'top', formatter:function(p){
             return p.dataIndex >= 6 ? '' : totalData[p.dataIndex]+'GWh';
           }, fontFamily:FONT, fontSize:10, color:'#333'} },
@@ -8722,14 +8724,15 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // ============================================================
-  //  2. 装車量推移
+  //  2. 装車量推移  ※PDFのSheet2（内販合格証ベース）の実データのみ使用
   // ============================================================
   function renderInstall(){
     var ec = initOrGet('ec-bat-install'); if(!ec) return;
-    var labels = ['2019\n12月累計','2020\n12月累計','2021\n12月累計','2022\n12月累計','2023\n12月累計','2024\n12月累計','2025\n12月累計','2026年\n1月','2026年\n2月'];
-    var nmcData = [42,  39,  74,  110, 88,  139, 144.1, 9.4,  15.1];
-    var lfpData = [20,  24,  80,  184, 295, 409, 625.3, 32.7, 53.3];
-    var totalData= [62, 64,  155, 295, 388, 548, 769.7, 42.0, 68.3];
+    // 出所: Sheet2「内販合格証電池装車」三元/LFP累計列
+    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
+    var nmcData  = [42,  39,  74,  110, 88,  139, 144.1, 9.4,  15.1];
+    var lfpData  = [20,  24,  80,  184, 295, 409, 625.3, 32.7, 53.3];
+    var totalData= [62,  64,  155, 295, 388, 548, 769.7, 42.0, 68.3];
     ec.setOption({
       tooltip: baseTooltip(),
       legend: baseLegend(),
@@ -8744,214 +8747,264 @@ document.addEventListener('DOMContentLoaded', function() {
           }, fontFamily:FONT, fontSize:10, color:'#333'} },
         { name:'合計（折れ線）', type:'line', data:totalData, smooth:true,
           symbol:'circle', symbolSize:6, itemStyle:{color:'#E74C3C'},
-          lineStyle:{width:2,color:'#E74C3C'} }
+          lineStyle:{width:2, color:'#E74C3C'} }
       ]
     });
   }
 
   // ============================================================
-  //  3a. LFP占比
+  //  3a. LFP占比  ※PDFのSheet2「リン酸鉄占比」累計列の実値
   // ============================================================
   function renderLfpShare(){
     var ec = initOrGet('ec-bat-lfp-share'); if(!ec) return;
-    var labels = ['2019','2020','2021','2022','2023','2024','2025','26年1月','26年2月'];
-    var lfpShare= [33, 38, 52, 62, 75, 75, 81, 78, 78];
+    // 出所: Sheet2「リン酸鉄占比」累計列
+    // 2019:33%, 2020:38%, 2021:52%, 2022:62%, 2023:65%, 2024:75%, 2025:81%, 26/1月:78%, 26/2月:78%
+    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
+    var lfpShare = [33, 38, 52, 62, 65, 75, 81, 78, 78];
     ec.setOption({
-      tooltip: Object.assign(baseTooltip(),{formatter:'{b}<br/>{a}: {c}%'}),
+      tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>LFP占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
       xAxis: baseXAxis(labels),
       yAxis: Object.assign(baseYAxis('%'),{min:0,max:100}),
       series:[{
         name:'LFP占比', type:'bar', data:lfpShare,
-        itemStyle:{ color: function(p){
-          return new echarts.graphic.LinearGradient(0,0,0,1,[
-            {offset:0,color:'#70c972'},{offset:1,color:'#3a8f3e'}
-          ]);
-        }},
-        label:{show:true,position:'top',formatter:'{c}%',fontFamily:FONT,fontSize:11,color:'#2d6e2f'}
+        itemStyle:{ color: new echarts.graphic.LinearGradient(0,0,0,1,[
+          {offset:0,color:'#70c972'},{offset:1,color:'#3a8f3e'}
+        ])},
+        label:{show:true, position:'top', formatter:'{c}%', fontFamily:FONT, fontSize:11, color:'#2d6e2f'}
       }]
     });
   }
 
   // ============================================================
-  //  3b. 三元占比
+  //  3b. 三元占比  ※PDFのSheet2「三元占比」累計列の実値
   // ============================================================
   function renderNmcShare(){
     var ec = initOrGet('ec-bat-nmc-share'); if(!ec) return;
-    var labels = ['2019','2020','2021','2022','2023','2024','2025','26年1月','26年2月'];
-    var nmcShare= [67, 61, 48, 37, 23, 25, 19, 22, 22];
+    // 出所: Sheet2「三元占比」累計列
+    // 2019:67%, 2020:61%, 2021:48%, 2022:37%, 2023:33%, 2024:25%, 2025:19%, 26/1月:22%, 26/2月:22%
+    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
+    var nmcShare = [67, 61, 48, 37, 33, 25, 19, 22, 22];
     ec.setOption({
-      tooltip: Object.assign(baseTooltip(),{formatter:'{b}<br/>{a}: {c}%'}),
+      tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>三元占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
       xAxis: baseXAxis(labels),
       yAxis: Object.assign(baseYAxis('%'),{min:0,max:100}),
       series:[{
         name:'三元占比', type:'bar', data:nmcShare,
-        itemStyle:{ color: function(p){
-          return new echarts.graphic.LinearGradient(0,0,0,1,[
-            {offset:0,color:'#b39ddb'},{offset:1,color:'#673ab7'}
-          ]);
-        }},
-        label:{show:true,position:'top',formatter:'{c}%',fontFamily:FONT,fontSize:11,color:'#4527a0'}
+        itemStyle:{ color: new echarts.graphic.LinearGradient(0,0,0,1,[
+          {offset:0,color:'#b39ddb'},{offset:1,color:'#673ab7'}
+        ])},
+        label:{show:true, position:'top', formatter:'{c}%', fontFamily:FONT, fontSize:11, color:'#4527a0'}
       }]
     });
   }
 
   // ============================================================
-  //  4. 車種別電池需要
+  //  4. 車種別電池需要（MWh）
+  //  ※純電動貨車: 2020-2024はPDFに記載なし、2025年から集計開始
+  //  ※2026年は1-2月累計
   // ============================================================
   function renderVehicleDemand(){
     var ec = initOrGet('ec-bat-vehicle'); if(!ec) return;
-    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'];
-    // 単位 MWh → 万MWh で視認性UP
-    var bev_pass = [43114,121734,230092,286841,362178,467978,40775];
-    var phev_pass= [4151, 10434, 31148, 65328,118911,139316,12875];
-    var bev_truck= [0,    0,     0,     0,     610100,136237,12854];
-    var bev_sv   = [4252, 12169, 21404, 28039, 56454, 12315, 956];
-    var bev_bus  = [11749,9699,  11376, 6534,  9565,  10776, 546];
-    var others   = [63638-43114-4151-4252-11749,
-                    154495-121734-10434-12169-9699,
-                    294648-230092-31148-21404-11376,
-                    387638-286841-65328-28039-6534,
-                    548431-362178-118911-56454-9565,
-                    768869-467978-139316-12315-10776,
-                    68315-40775-12875-12854-956-546];
-    function toMan(arr){ return arr.map(function(v){ return Math.round(v/10000*10)/10; }); }
+    // 出所: PDFのSheet3「装車電池MWh」
+    // 純電動貨車は2025年から統計に登場（136,237MWh）
+    // 610100は合格証産量表(台数)の数字であり、MWh表には存在しない
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-2月累計'];
+
+    // 各車種の年間累計MWh（PDFのSheet3より）
+    var bev_pass  = [43114,  121734, 230092, 286841, 362178, 467978, 40775];
+    var phev_pass = [4151,   10434,  31148,  65328,  118911, 139316, 12875];
+    var bev_truck = [null,   null,   null,   null,   null,   136237, 12854]; // 2020-2024はPDFに記載なし
+    var bev_sv    = [4252,   12169,  21404,  28039,  56454,  12315,  956];
+    var bev_bus   = [11749,  9699,   11376,  6534,   9565,   10776,  546];
+    // その他（プラグイン専用車・プラグイン貨車・燃料電池車等）
+    var others_raw= [
+      63638  - 43114 - 4151  - 4252  - 11749,
+      154495 - 121734- 10434 - 12169 - 9699,
+      294648 - 230092- 31148 - 21404 - 11376,
+      387638 - 286841- 65328 - 28039 - 6534,
+      548431 - 362178- 118911- 56454 - 9565,
+      768869 - 467978- 139316- 136237- 12315 - 10776,
+      68315  - 40775 - 12875 - 12854 - 956   - 546
+    ];
+
+    // GWhに変換（÷1000、小数1桁）
+    function toGWh(arr){ return arr.map(function(v){ return v===null ? null : Math.round(v/100)/10; }); }
+
     ec.setOption({
-      tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){return v+'万MWh';}}),
+      tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){ return v===null?'データなし': v+'GWh'; }}),
       legend: baseLegend({type:'scroll'}),
       grid: Object.assign(baseGrid(),{bottom:70}),
       xAxis: baseXAxis(labels),
-      yAxis: baseYAxis('万MWh'),
+      yAxis: baseYAxis('GWh'),
       series:[
-        {name:'純電動乗用車', type:'bar', stack:'s', data:toMan(bev_pass),  itemStyle:{color:'#2E75B6'}},
-        {name:'プラグイン乗用車',type:'bar',stack:'s', data:toMan(phev_pass), itemStyle:{color:'#5BA4CF'}},
-        {name:'純電動貨車',  type:'bar', stack:'s', data:toMan(bev_truck), itemStyle:{color:'#F39C12'}},
-        {name:'純電動専用車',type:'bar', stack:'s', data:toMan(bev_sv),    itemStyle:{color:'#1ABC9C'}},
-        {name:'純電動バス',  type:'bar', stack:'s', data:toMan(bev_bus),   itemStyle:{color:'#9B59B6'}},
-        {name:'その他',      type:'bar', stack:'s', data:toMan(others),    itemStyle:{color:'#BDC3C7'}}
+        {name:'純電動乗用車',    type:'bar', stack:'s', data:toGWh(bev_pass),  itemStyle:{color:'#1565C0'}},
+        {name:'プラグイン乗用車', type:'bar', stack:'s', data:toGWh(phev_pass), itemStyle:{color:'#5BA4CF'}},
+        {name:'純電動貨車（※2025年〜）', type:'bar', stack:'s', data:toGWh(bev_truck), itemStyle:{color:'#F39C12'}},
+        {name:'純電動専用車',    type:'bar', stack:'s', data:toGWh(bev_sv),    itemStyle:{color:'#1ABC9C'}},
+        {name:'純電動バス',      type:'bar', stack:'s', data:toGWh(bev_bus),   itemStyle:{color:'#9B59B6'}},
+        {name:'その他',          type:'bar', stack:'s', data:toGWh(others_raw),itemStyle:{color:'#CFD8DC'}}
       ]
     });
   }
 
   // ============================================================
-  //  5. エネルギー密度分布
+  //  5. エネルギー密度分布（年次＋25年4四半期＋26年1Q）
   // ============================================================
   function renderEnergyDensity(){
     var ec = initOrGet('ec-bat-energy'); if(!ec) return;
-    var labels = ['2018','2019','2020','2021','2022','2023','2024','2025','25年1Q','25年2Q','25年3Q','25年4Q','26年1Q'];
-    var d125m  = [25,3,  13,49, 67, 48, 37, 8,  1.9,2.0,2.4,1.6,0.0];
-    var d125_140=[25,24, 16,49, 99, 207,325,483,97.2,121.2,118.7,145.7,28.1];
-    var d140_160=[43,59, 37,76, 173,174,195,281,42.2,63.7,79.6,95.8,25.1];
-    var d160p  = [2, 12, 30,79, 112,95, 83, 69, 14.8,11.6,15.8,26.3,9.2];
+    // 出所: PDFのSheet7「純電動合格証 Wh/kg別」
+    // 年次は通年、25年はQ別も追加、26年1Qまで
+    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年',
+                    '25年\n1Q','25年\n2Q','25年\n3Q','25年\n4Q','26年\n1Q'];
+    var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    1.9, 2.0, 2.4, 1.6, 0.0];
+    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  97.2,121.2,118.7,145.7,28.1];
+    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  42.2,63.7,79.6,95.8,25.1];
+    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   14.8,11.6,15.8,26.3,9.2];
+
+    // 合計ラベル用
+    var totals = labels.map(function(_,i){
+      var v = [d125m,d125_140,d140_160,d160p].reduce(function(s,a){ return s+(a[i]||0); },0);
+      return Math.round(v*10)/10;
+    });
+
     ec.setOption({
       tooltip: baseTooltip(),
       legend: baseLegend(),
-      grid: Object.assign(baseGrid(),{bottom:70}),
-      xAxis: baseXAxis(labels),
+      grid: Object.assign(baseGrid(),{bottom:80}),
+      xAxis: Object.assign(baseXAxis(labels),{
+        axisLabel:{fontFamily:FONT,fontSize:9,rotate:30,color:C.axis}
+      }),
       yAxis: baseYAxis('万台'),
       series:[
-        {name:'125以下 Wh/kg',  type:'bar',stack:'s',data:d125m,  itemStyle:{color:'#BDC3C7'}},
-        {name:'125–140 Wh/kg', type:'bar',stack:'s',data:d125_140,itemStyle:{color:'#5BA4CF'}},
-        {name:'140–160 Wh/kg', type:'bar',stack:'s',data:d140_160,itemStyle:{color:'#2E75B6'}},
-        {name:'160以上 Wh/kg',  type:'bar',stack:'s',data:d160p,  itemStyle:{color:'#C0392B'}}
+        {name:'125以下 Wh/kg',  type:'bar', stack:'s', data:d125m,   itemStyle:{color:'#CFD8DC'}},
+        {name:'125–140 Wh/kg', type:'bar', stack:'s', data:d125_140, itemStyle:{color:'#5BA4CF'}},
+        {name:'140–160 Wh/kg', type:'bar', stack:'s', data:d140_160, itemStyle:{color:'#1565C0'}},
+        {name:'160以上 Wh/kg',  type:'bar', stack:'s', data:d160p,   itemStyle:{color:'#C0392B'},
+          label:{show:true, position:'top',
+            formatter:function(p){ return totals[p.dataIndex]; },
+            fontFamily:FONT, fontSize:9, color:'#333'}}
       ]
     });
   }
 
   // ============================================================
-  //  6. 全体シェア（面グラフ）
+  //  6. 全体シェア（全社）
   // ============================================================
   function renderShareTotal(){
     var ec = initOrGet('ec-bat-share-total'); if(!ec) return;
-    var labels = ['2020','2021','2022','2023','2024','2025','2026\n1Q'];
-    var catl  = [50.0,51.9,47.2,43.5,45.3,43.8,50.1];
-    var byd   = [14.9,16.2,24.4,26.9,24.8,21.8,17.5];
-    var guoxuan=[5.2, 5.2, 4.7, 4.1, 4.6, 5.7, 6.1];
-    var calb  = [5.6, 5.9, 6.5, 8.5, 6.7, 7.0, 5.3];
-    var eve   = [1.9, 1.8, 2.4, 4.5, 3.4, 4.2, 5.0];
-    var othersArr = labels.map(function(_,i){
-      return Math.round((100-catl[i]-byd[i]-guoxuan[i]-calb[i]-eve[i])*10)/10;
-    });
-    function mkSeries(name,data,color,stack){
-      return {name:name,type:'bar',stack:stack||'s',data:data,itemStyle:{color:color},
-        emphasis:{focus:'series'},
-        label:{show:false}};
-    }
+    // 出所: PDFのSheet8「動力電池全体シェア」
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','2026年\n1Q'];
+
+    // 全社データ（PDFのSheet8より、上位〜下位まで全社）
+    var companies = [
+      {name:'寧徳時代 CATL',    data:[50.0,51.9,47.2,43.5,45.3,43.8,50.1], color:'#1565C0'},
+      {name:'比亜迪 BYD',       data:[14.9,16.2,24.4,26.9,24.8,21.8,17.5], color:'#E65100'},
+      {name:'国軒高科 Guoxuan', data:[5.2, 5.2, 4.7, 4.1, 4.6, 5.7, 6.1],  color:'#F39C12'},
+      {name:'中創新航 CALB',    data:[5.6, 5.9, 6.5, 8.5, 6.7, 7.0, 5.3],  color:'#E74C3C'},
+      {name:'億緯リチウム EVE', data:[1.9, 1.8, 2.4, 4.5, 3.4, 4.2, 5.0],  color:'#1ABC9C'},
+      {name:'瑞浦蘭鈞 Ruipu',  data:[1.5, 0.3, 1.4, 1.3, 2.2, 2.6, 3.1],  color:'#8E44AD'},
+      {name:'欣旺達 SVOLT-X',  data:[0.0, 1.1, 2.6, 2.2, 2.9, 3.2, 2.8],  color:'#27AE60'},
+      {name:'蜂巣能源 SVOLT',  data:[0.0, 2.0, 2.1, 2.2, 3.2, 2.7, 2.5],  color:'#E67E22'},
+      {name:'正力新能 Zhengli', data:[0.0, 1.9, 0.7, 1.4, 1.8, 2.1, 2.1],  color:'#16A085'},
+      {name:'吉利耀寧 Geely',  data:[0.0, 0.0, 0.0, 0.0, 0.4, 1.3, 1.8],  color:'#2980B9'},
+      {name:'楚能新能 Chuneng', data:[0.0, 0.0, 0.0, 0.0, 0.1, 0.7, 0.9],  color:'#8D6E63'},
+      {name:'因湃電池 Inpipe',  data:[0.0, 0.0, 0.0, 0.0, 0.4, 0.8, 0.7],  color:'#607D8B'},
+      {name:'LG新能源 LGES',   data:[6.5, 3.9, 1.7, 2.2, 1.4, 1.8, 0.7],  color:'#C0392B'},
+      {name:'巨湾技研 JVST',   data:[0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.6],  color:'#795548'},
+      {name:'遠航錦锂 Yuanhang',data:[0.0, 0.0, 0.0, 0.0, 0.0, 0.6, 0.4],  color:'#9E9D24'},
+      {name:'中汽新能 CAERI',  data:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2],  color:'#00838F'},
+      {name:'多氟多 DFD',      data:[0.0, 0.2, 0.7, 0.6, 0.6, 0.5, 0.0],  color:'#BDC3C7'},
+      {name:'SK SK Ion',       data:[0.0, 0.0, 0.0, 0.1, 0.0, 0.0, 0.0],  color:'#78909C'},
+      {name:'三一紅象 Sany',   data:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],  color:'#B0BEC5'},
+      {name:'北電愛思特 BAIC', data:[0.0, 0.1, 0.1, 0.0, 0.0, 0.0, 0.0],  color:'#90A4AE'},
+    ];
+
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){return v+'%';}}),
-      legend: baseLegend({type:'scroll'}),
-      grid: Object.assign(baseGrid(),{bottom:70}),
+      legend: baseLegend({type:'scroll', bottom:0, top:'auto'}),
+      grid: {top:20, right:20, bottom:120, left:55, containLabel:true},
       xAxis: baseXAxis(labels),
       yAxis: Object.assign(baseYAxis('%'),{max:100}),
-      series:[
-        mkSeries('寧徳時代 CATL', catl,    '#1565C0'),
-        mkSeries('比亜迪 BYD',    byd,     '#E65100'),
-        mkSeries('中創新航 CALB', calb,    '#E74C3C'),
-        mkSeries('国軒高科 Guoxuan',guoxuan,'#F39C12'),
-        mkSeries('億緯リチウム EVE',eve,   '#1ABC9C'),
-        mkSeries('その他',        othersArr,'#CFD8DC')
-      ]
+      series: companies.map(function(c){
+        return {name:c.name, type:'bar', stack:'s', data:c.data, itemStyle:{color:c.color}, emphasis:{focus:'series'}};
+      })
     });
   }
 
   // ============================================================
-  //  7. LFPシェア
+  //  7. LFPシェア（全社）
   // ============================================================
   function renderShareLfp(){
     var ec = initOrGet('ec-bat-share-lfp'); if(!ec) return;
-    var labels = ['2022','2023','2024','2025','2026\n1Q','25年1Q','25年2Q','25年3Q','25年4Q'];
-    var catl  = [42.2,34.1,37.3,37.6,41.0,39.1,36.0,36.2,38.7];
-    var byd   = [39.0,40.4,33.1,26.9,22.6,29.8,28.9,26.0,24.8];
-    var guoxuan=[6.5, 5.6, 5.6, 7.0, 7.7, 6.0, 6.5, 6.8, 7.8];
-    var calb  = [3.7, 6.9, 5.8, 6.6, 5.3, 4.4, 6.6, 7.5, 7.1];
-    var eve   = [2.5, 5.5, 4.0, 5.0, 6.1, 5.0, 4.8, 5.1, 5.0];
-    var others= labels.map(function(_,i){
-      return Math.round((100-catl[i]-byd[i]-guoxuan[i]-calb[i]-eve[i])*10)/10;
-    });
+    // 出所: PDFのSheet9「リン酸鉄電池企業シェア」
+    // X軸: 年次 + 25年4Q + 26年1Q（時系列順）
+    var labels = ['2022年','2023年','2024年','2025年','25年\n1Q','25年\n2Q','25年\n3Q','25年\n4Q','26年\n1Q'];
+
+    var companies = [
+      {name:'寧徳時代 CATL',    data:[42.2,34.1,37.3,37.6,39.1,36.0,36.2,38.7,41.0], color:'#1565C0'},
+      {name:'比亜迪 BYD',       data:[39.0,40.4,33.1,26.9,29.8,28.9,26.0,24.8,22.6], color:'#E65100'},
+      {name:'国軒高科 Guoxuan', data:[6.5, 5.6, 5.6, 7.0, 6.0, 6.5, 6.8, 7.8, 7.7],  color:'#F39C12'},
+      {name:'億緯リチウム EVE', data:[2.5, 5.5, 4.0, 5.0, 5.0, 4.8, 5.1, 5.0, 6.1],  color:'#1ABC9C'},
+      {name:'中創新航 CALB',    data:[3.7, 6.9, 5.8, 6.6, 4.4, 6.6, 7.5, 7.1, 5.3],  color:'#E74C3C'},
+      {name:'瑞浦蘭鈞 Ruipu',  data:[2.2, 1.8, 3.0, 3.2, 2.5, 2.9, 3.1, 3.7, 4.0],  color:'#8E44AD'},
+      {name:'欣旺達 SVOLT-X',  data:[0.7, 1.3, 2.9, 3.7, 2.2, 4.2, 4.6, 3.5, 3.6],  color:'#27AE60'},
+      {name:'正力新能 Zhengli', data:[0.3, 1.6, 2.0, 2.4, 1.4, 3.1, 3.0, 2.0, 2.6],  color:'#16A085'},
+      {name:'吉利耀寧 Geely',  data:[0.0, 0.0, 0.5, 1.5, 0.5, 0.0, 2.1, 2.6, 2.4],  color:'#2980B9'},
+      {name:'楚能新能 Chuneng', data:[0.0, 0.0, 0.2, 0.9, 0.7, 0.9, 1.1, 0.8, 1.2],  color:'#8D6E63'},
+      {name:'蜂巣能源 SVOLT',  data:[1.5, 1.4, 2.6, 1.7, 3.4, 1.3, 1.8, 1.2, 1.1],  color:'#E67E22'},
+      {name:'因湃電池 Inpipe',  data:[0.0, 0.0, 0.5, 1.0, 1.3, 1.4, 0.9, 0.7, 1.0],  color:'#607D8B'},
+      {name:'巨湾技研 JVST',   data:[0.0, 0.0, 0.0, 0.3, 0.0, 0.0, 0.0, 0.8, 0.7],  color:'#795548'},
+      {name:'遠航錦锂 Yuanhang',data:[0.0, 0.0, 0.0, 0.7, 0.5, 0.6, 0.8, 0.8, 0.6],  color:'#9E9D24'},
+      {name:'中汽新能 CAERI',  data:[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.3],  color:'#00838F'},
+      {name:'安馳新能源 Anchi', data:[0.2, 0.1, 0.3, 0.1, 0.0, 0.3, 0.0, 0.0, 0.0],  color:'#BDC3C7'},
+    ];
+
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){return v+'%';}}),
-      legend: baseLegend({type:'scroll'}),
-      grid: Object.assign(baseGrid(),{bottom:70}),
+      legend: baseLegend({type:'scroll', bottom:0, top:'auto'}),
+      grid: {top:20, right:20, bottom:120, left:55, containLabel:true},
       xAxis: baseXAxis(labels),
       yAxis: Object.assign(baseYAxis('%'),{max:100}),
-      series:[
-        {name:'寧徳時代 CATL', type:'bar',stack:'s',data:catl,    itemStyle:{color:'#1565C0'}},
-        {name:'比亜迪 BYD',    type:'bar',stack:'s',data:byd,     itemStyle:{color:'#E65100'}},
-        {name:'中創新航 CALB', type:'bar',stack:'s',data:calb,    itemStyle:{color:'#E74C3C'}},
-        {name:'国軒高科 Guoxuan',type:'bar',stack:'s',data:guoxuan,itemStyle:{color:'#F39C12'}},
-        {name:'億緯リチウム EVE',type:'bar',stack:'s',data:eve,   itemStyle:{color:'#1ABC9C'}},
-        {name:'その他',        type:'bar',stack:'s',data:others,  itemStyle:{color:'#CFD8DC'}}
-      ]
+      series: companies.map(function(c){
+        return {name:c.name, type:'bar', stack:'s', data:c.data, itemStyle:{color:c.color}, emphasis:{focus:'series'}};
+      })
     });
   }
 
   // ============================================================
-  //  8. 三元シェア
+  //  8. 三元シェア（全社）
   // ============================================================
   function renderShareNmc(){
     var ec = initOrGet('ec-bat-share-nmc'); if(!ec) return;
-    var labels = ['2022','2023','2024','2025','2026\n1Q','25年1Q','25年2Q','25年3Q','25年4Q'];
-    var catl  = [57.0,62.3,69.1,70.9,81.6,69.4,72.2,70.6,71.1];
-    var svolt = [3.1, 3.8, 5.1, 7.1, 7.6, 5.5, 5.9, 8.0, 7.8];
-    var calb  = [11.5,11.8,9.5, 8.9, 5.4, 9.8, 11.4,10.0,6.2];
-    var lges  = [4.7, 6.5, 5.6, 9.6, 3.2, 8.0, 7.3, 8.4, 12.4];
-    var others= labels.map(function(_,i){
-      return Math.round((100-catl[i]-svolt[i]-calb[i]-lges[i])*10)/10;
-    });
+    // 出所: PDFのSheet10「三元電池企業シェア」
+    var labels = ['2022年','2023年','2024年','2025年','25年\n1Q','25年\n2Q','25年\n3Q','25年\n4Q','26年\n1Q'];
+
+    var companies = [
+      {name:'寧徳時代 CATL',    data:[57.0,62.3,69.1,70.9,69.4,72.2,70.6,71.1,81.6], color:'#1565C0'},
+      {name:'蜂巣能源 SVOLT',  data:[3.1, 3.8, 5.1, 7.1, 5.5, 5.9, 8.0, 7.8, 7.6],  color:'#E67E22'},
+      {name:'中創新航 CALB',    data:[11.5,11.8,9.5, 8.9, 9.8, 11.4,10.0,6.2, 5.4],  color:'#E74C3C'},
+      {name:'LG新能源 LGES',   data:[4.7, 6.5, 5.6, 9.6, 8.0, 7.3, 8.4, 12.4,3.2],  color:'#C0392B'},
+      {name:'億緯リチウム EVE', data:[2.3, 2.6, 1.9, 0.7, 1.7, 0.4, 1.0, 0.3, 1.1],  color:'#1ABC9C'},
+      {name:'国軒高科 Guoxuan', data:[1.9, 0.9, 1.7, 0.3, 0.6, 0.5, 0.2, 0.2, 0.4],  color:'#F39C12'},
+      {name:'正力新能 Zhengli', data:[1.5, 1.0, 1.2, 0.8, 0.5, 0.4, 1.1, 1.0, 0.3],  color:'#16A085'},
+      {name:'欣旺達 SVOLT-X',  data:[5.9, 4.0, 2.9, 1.1, 2.7, 1.3, 0.4, 0.5, 0.2],  color:'#27AE60'},
+      {name:'巨湾技研 JVST',   data:[0.0, 0.1, 0.1, 0.2, 0.1, 0.1, 0.1, 0.3, 0.1],  color:'#795548'},
+      {name:'華鼎国聯 Huading',data:[1.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],  color:'#90A4AE'},
+      {name:'捷威動力 JEVE',   data:[1.9, 0.7, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],  color:'#B0BEC5'},
+      {name:'星恒電源 Xinghen',data:[0.9, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],  color:'#CFD8DC'},
+    ];
+
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{valueFormatter:function(v){return v+'%';}}),
-      legend: baseLegend({type:'scroll'}),
-      grid: Object.assign(baseGrid(),{bottom:70}),
+      legend: baseLegend({type:'scroll', bottom:0, top:'auto'}),
+      grid: {top:20, right:20, bottom:120, left:55, containLabel:true},
       xAxis: baseXAxis(labels),
       yAxis: Object.assign(baseYAxis('%'),{max:100}),
-      series:[
-        {name:'寧徳時代 CATL',  type:'bar',stack:'s',data:catl,  itemStyle:{color:'#1565C0'}},
-        {name:'蜂巣能源 SVOLT', type:'bar',stack:'s',data:svolt, itemStyle:{color:'#E67E22'}},
-        {name:'中創新航 CALB',  type:'bar',stack:'s',data:calb,  itemStyle:{color:'#E74C3C'}},
-        {name:'LG新能源 LGES',  type:'bar',stack:'s',data:lges,  itemStyle:{color:'#3498DB'}},
-        {name:'その他',         type:'bar',stack:'s',data:others,itemStyle:{color:'#CFD8DC'}}
-      ]
+      series: companies.map(function(c){
+        return {name:c.name, type:'bar', stack:'s', data:c.data, itemStyle:{color:c.color}, emphasis:{focus:'series'}};
+      })
     });
   }
 
@@ -8960,7 +9013,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // ============================================================
   function renderCompanies(){
     var ec = initOrGet('ec-bat-companies'); if(!ec) return;
-    var series = [
+    var seriesDef = [
       {year:'2021年', data:[36,39,42,40,40,39,45,38,39,39,43,47], color:'#BDC3C7'},
       {year:'2022年', data:[35,35,39,34,37,37,37,37,36,40,42,41], color:'#AED6F1'},
       {year:'2023年', data:[35,39,39,36,35,43,36,33,33,35,37,43], color:'#85C1E9'},
@@ -8973,9 +9026,9 @@ document.addEventListener('DOMContentLoaded', function() {
       tooltip: baseTooltip(),
       legend: baseLegend(),
       grid: Object.assign(baseGrid(),{top:50,bottom:50}),
-      xAxis: { type:'category', data:months, axisLabel:{fontFamily:FONT,fontSize:11,color:C.axis} },
+      xAxis: {type:'category', data:months, axisLabel:{fontFamily:FONT,fontSize:11,color:C.axis}},
       yAxis: Object.assign(baseYAxis('社'),{min:28,max:50}),
-      series: series.map(function(s){
+      series: seriesDef.map(function(s){
         return {
           name: s.year, type:'line', data:s.data,
           smooth:true, connectNulls:false,
@@ -8992,25 +9045,22 @@ document.addEventListener('DOMContentLoaded', function() {
   //  描画ディスパッチャ
   // ============================================================
   var renderMap = {
-    'bat-production'   : renderProduction,
-    'bat-install'      : renderInstall,
-    'bat-lfp-nmc'      : function(){ renderLfpShare(); renderNmcShare(); },
+    'bat-production'    : renderProduction,
+    'bat-install'       : renderInstall,
+    'bat-lfp-nmc'       : function(){ renderLfpShare(); renderNmcShare(); },
     'bat-vehicle-demand': renderVehicleDemand,
     'bat-energy-density': renderEnergyDensity,
-    'bat-share-total'  : renderShareTotal,
-    'bat-share-lfp'    : renderShareLfp,
-    'bat-share-nmc'    : renderShareNmc,
-    'bat-companies'    : renderCompanies
+    'bat-share-total'   : renderShareTotal,
+    'bat-share-lfp'     : renderShareLfp,
+    'bat-share-nmc'     : renderShareNmc,
+    'bat-companies'     : renderCompanies
   };
 
   window.batRender = function(id){
     var fn = renderMap[id];
     if (fn) fn();
-    // resize後に再描画
     setTimeout(function(){
-      Object.keys(BAT_EC).forEach(function(k){
-        try{ BAT_EC[k].resize(); }catch(e){}
-      });
+      Object.keys(BAT_EC).forEach(function(k){ try{ BAT_EC[k].resize(); }catch(e){} });
     }, 150);
   };
 

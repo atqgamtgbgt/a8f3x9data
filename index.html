@@ -2787,6 +2787,9 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-china" class="cds-mid-tab" onclick="cdsSetMidTab('china')">
                 🗺️ 中国地域別
               </button>
+              <button id="cds-mid-btn-profit" class="cds-mid-tab" onclick="cdsSetMidTab('profit')">
+                💹 利益率
+              </button>
             </div>
 
             <!-- 中タブA: 輸出分析 サブナビ -->
@@ -2872,6 +2875,21 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div><!-- end cds-sub-china -->
 
+            <!-- 中タブC: 利益率 サブナビ -->
+            <div id="cds-sub-profit" class="cds-sub-nav" style="display:none">
+              <div class="cds-nav-compact">
+                <div class="cds-gc cds-gc-open" data-group="gp">
+                  <button class="cds-gc-label" onclick="cdsToggleGroup('gp')">💹 利益率分析 <span class="cds-gc-arrow">▾</span></button>
+                  <div class="cds-gc-items" id="cds-gc-gp" style="display:flex">
+                    <button class="nav-link active" data-cds-target="#cds-profit-monthly">📈 月別利益率</button>
+                    <button class="nav-link" data-cds-target="#cds-profit-annual">📊 年度別推移</button>
+                    <button class="nav-link" data-cds-target="#cds-profit-chain">🏭 産業チェーン</button>
+                    <button class="nav-link" data-cds-target="#cds-profit-unit">🚗 台あたり指標</button>
+                  </div>
+                </div>
+              </div>
+            </div><!-- end cds-sub-profit -->
+
           </div><!-- end cdsPills -->
 
           <!-- ========== コンテンツペイン ========== -->
@@ -2932,6 +2950,110 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="chart-title">🏙️ 省別乗用車販売量ランキング</div>
                 <div class="chart-subtitle">CPCA②シート — 2024年・2025年年間累計 + 2026年1-2月累計</div>
                 <div id="ec-cpca-prov" class="echart-box" style="height:580px"></div>
+              </div>
+            </div>
+
+            <!-- 利益率 ペイン群 -->
+            <div class="cds-pane" id="cds-profit-monthly">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">📈 自動車業界 月別販売利益率推移（%）</div>
+                    <div class="chart-subtitle">2022〜2026年 月別利益率比較　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート / シート「月別利益率推移」</span></div>
+                    <div id="ec-profit-monthly-trend" class="echart-box" style="height:380px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📊 自動車業界 月別収入・コスト・利益（億元）</div>
+                    <div class="chart-subtitle">2025年 月別推移</div>
+                    <div id="ec-profit-monthly-abs" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">🚗 台あたり収入・コスト・粗利（万元）</div>
+                    <div class="chart-subtitle">2017〜2026年 年度別推移</div>
+                    <div id="ec-profit-per-unit-trend" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="cds-profit-annual">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">📊 自動車業界 年度別利益率推移（%）</div>
+                    <div class="chart-subtitle">2017〜2026年　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート / シート「自動車業界概況」</span></div>
+                    <div id="ec-profit-annual-bar" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">💰 年度別収入・コスト・利益（億元）</div>
+                    <div class="chart-subtitle">2017〜2026年</div>
+                    <div id="ec-profit-annual-abs" class="echart-box" style="height:320px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📉 収入・コスト・利益 前年比増減率（%）</div>
+                    <div class="chart-subtitle">2018〜2026年</div>
+                    <div id="ec-profit-annual-yoy" class="echart-box" style="height:320px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="cds-profit-chain">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🏭 産業チェーン 上流・中流・下流 利益率比較（%）</div>
+                    <div class="chart-subtitle">2017〜2026年（主要7時点）　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート / シート「産業チェーン上中下流利益率」</span></div>
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="profit-chain-tabs">
+                      <button class="btn btn-sm btn-primary active" onclick="profitChainView('overview',this)">上中下流 合計</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="profitChainView('upstream',this)">上流 詳細</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="profitChainView('midstream',this)">中流 詳細</button>
+                      <button class="btn btn-sm btn-outline-secondary" onclick="profitChainView('downstream',this)">下流 詳細</button>
+                    </div>
+                    <div id="ec-profit-chain" class="echart-box" style="height:420px"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🚗 自動車製造業 vs 産業チェーン各層 利益率比較（%）</div>
+                    <div class="chart-subtitle">2017年〜2026年（自動車は中流に位置、構造的に低利益率）</div>
+                    <div id="ec-profit-auto-vs-chain" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="cds-profit-unit">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🚗 台あたり収入・コスト・粗利・税費（万元）</div>
+                    <div class="chart-subtitle">2017〜2026年（年度・累計ベース）　<span class="text-muted" style="font-size:10px">📋 出所：崔東樹レポート / シート「台あたり指標」</span></div>
+                    <div id="ec-profit-unit-bar" class="echart-box" style="height:380px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📉 台あたり粗利の推移（万元）</div>
+                    <div class="chart-subtitle">2017〜2026年</div>
+                    <div id="ec-profit-unit-margin" class="echart-box" style="height:300px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">🏭 生産台数 vs 台あたり粗利</div>
+                    <div class="chart-subtitle">2017〜2026年（台数増加に対する粗利低下の構造）</div>
+                    <div id="ec-profit-unit-prod" class="echart-box" style="height:300px"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -7336,6 +7458,7 @@ function cdsSetMidTab(tab) {
   // サブナビ
   document.getElementById('cds-sub-export').style.display = (tab === 'export') ? '' : 'none';
   document.getElementById('cds-sub-china').style.display  = (tab === 'china')  ? '' : 'none';
+  document.getElementById('cds-sub-profit').style.display = (tab === 'profit') ? '' : 'none';
 
   if (tab === 'china') {
     // 中国地域別タブ初回表示時：地図パネルをデフォルト表示
@@ -7346,6 +7469,12 @@ function cdsSetMidTab(tab) {
     document.querySelectorAll('#cds-sub-china [data-cds-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-target') === '#cds-china-map');
     });
+  } else if (tab === 'profit') {
+    cdsShowPane('cds-profit-monthly');
+    document.querySelectorAll('#cds-sub-profit [data-cds-target]').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-cds-target') === '#cds-profit-monthly');
+    });
+    setTimeout(initProfitCharts, 80);
   } else {
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
@@ -7904,6 +8033,485 @@ function renderProvSalesChart(){
 })();
 
 })(); // end CPCA module
+</script>
+
+<script>
+// ---- 利益率 ペイン切替フック ----
+(function(){
+  var _origP = window.cdsShowPane;
+  window.cdsShowPane = function(id) {
+    _origP(id);
+    if (id === 'cds-profit-monthly') setTimeout(function(){ initProfitCharts(); }, 60);
+    if (id === 'cds-profit-annual')  setTimeout(function(){ initProfitAnnualCharts(); }, 60);
+    if (id === 'cds-profit-chain')   setTimeout(function(){ initProfitChainCharts(); }, 60);
+    if (id === 'cds-profit-unit')    setTimeout(function(){ initProfitUnitCharts(); }, 60);
+  };
+})();
+
+// ========== 利益率グラフ データ & 描画 ==========
+(function(){
+
+// ---- データ定義（崔東樹レポートより） ----
+const PROFIT = {
+  // 月別利益率：年→月順
+  monthly: {
+    '2022年': [null,5.4,5.4,0.7,5.5,7.1,7.7,5.2,6.0,6.2,5.8,6.1,5.7],
+    '2023年': [null,3.2,4.7,4.2,8.1,5.0,5.0,5.3,4.5,5.2,5.4,5.8,5.0],
+    '2024年': [null,4.3,5.2,4.7,7.5,3.8,4.4,3.6,3.4,4.1,3.3,4.1,4.3],
+    '2025年': [null,4.2,3.5,4.4,5.2,6.9,3.5,3.4,4.4,3.9,4.4,1.8,4.1],
+    '2026年': [null,2.9,null,null,null,null,null,null,null,null,null,null,null],
+  },
+  monthLabels: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+
+  // 年度別効益
+  annual: {
+    years:   ['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026\n1-2月'],
+    rev:     [87750, 83373, 80847, 81558, 86706, 92900,100976,106470,111796, 14824],
+    cost:    [73653, 70110, 68219, 68997, 74062, 79833, 87627, 93301, 98498, 13147],
+    profit:  [ 6833,  6091,  5087,  5094,  5306,  5320,  5086,  4623,  4610,   435],
+    rate:    [  7.8,   7.3,   6.3,   6.2,   6.1,   5.7,   5.0,   4.3,   4.1,   2.9],
+    revYoy:  [ null,    3,   -2,    3,    7,    7,   12,    4,    7.1,  -0.9],
+    costYoy: [ null,    4,   -1,    4,    8,    7,   13,    5,    8.1,   0.2],
+    profYoy: [ null,   -5,  -16,    4,    2,    1,    6,   -8,    0.6, -30],
+  },
+
+  // 台あたり（年度・累計ベース、2017〜2026 1-2月）
+  unit: {
+    labels:  ['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026\n1-2月'],
+    prod:    [2981.3,2829.7,2580.4,2490.4,2653.5,2604.2,3011,3156,3478,402],
+    rev:     [29.4,29.5,31.3,32.7,32.7,35.7,33.5,33.7,32.1,36.9],
+    cost:    [24.7,24.8,26.4,27.7,27.9,30.7,29.1,29.6,28.3,32.7],
+    margin:  [2.3,2.2,2.0,2.0,2.0,2.0,1.7,1.5,1.3,1.1],
+    tax:     [2.4,2.5,2.9,3.0,2.8,3.0,2.7,2.7,2.5,3.1],
+  },
+
+  // 産業チェーン利益率（7時点）
+  chain: {
+    years: ['2017年','2020年','2022年','2023年','2024年','2025年','2026年'],
+    overview: {
+      '上流 合計':  [5.3,3.9,5.6,2.8,2.7,2.8,2.9],
+      '中流 合計':  [6.1,6.3,5.5,5.4,5.3,5.0,3.4],
+      '下流 合計':  [7.1,7.0,7.4,6.4,6.0,5.9,5.8],
+      '全体 合計':  [6.3,6.1,6.3,5.8,5.6,5.3,4.9],
+    },
+    upstream: {
+      '非鉄金属製錬・圧延':     [3.5,2.7,4.1,3.9,3.4,4.1,5.6],
+      '化学原料・化学品製造':    [6.8,6.7,8.8,5.3,5.1,4.2,4.0],
+      '鉄鋼金属製錬・圧延':     [4.9,3.4,4.9,0.7,0.7,1.4,-0.2],
+      '石油精製・コークス':      [5.3,2.1,4.1,0.7,0.8,-0.2,0.0],
+    },
+    midstream: {
+      '電気機械・器材製造':      [6.2,5.9,4.4,5.8,5.7,5.4,3.8],
+      '農副食品加工業':          [4.9,4.2,3.2,2.6,2.6,2.5,2.4],
+      '汎用機械製造業':          [6.5,7.1,6.6,7.3,7.0,7.0,4.8],
+      '金属製品業':              [5.3,4.6,4.7,4.2,4.1,3.7,2.6],
+      '自動車製造業':            [7.8,6.2,5.7,5.0,4.3,4.1,2.9],
+    },
+    downstream: {
+      'コンピュータ・通信電子':  [5.1,4.9,5.4,4.2,4.0,4.3,4.1],
+      'タバコ製品業':            [9.8,10.1,9.2,11.5,11.1,11.9,15.2],
+      '食品製造業':              [7.9,9.1,7.3,8.1,7.6,7.7,8.6],
+      '医薬品製造業':            [11.6,14.1,21.5,13.8,13.7,14.0,12.7],
+      '酒類・飲料・茶製造':      [11.3,16.3,15.6,20.0,19.6,19.1,17.3],
+    },
+  },
+
+  // 2025年月別収入・コスト・利益
+  monthly2025: {
+    labels: ['1-2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    rev:    [14808,9214,8530,8731,9634,8275,8856,10186,10543,11445,11573],
+    cost:   [12977,8142,7517,7715,8429,7276,7832, 8978, 9376,10162,10093],
+    profit: [  620, 327, 379, 456, 663, 293, 298,  447,  412,  508,  207],
+  },
+};
+
+// ---- カラーパレット ----
+const C = {
+  y22:'#60a5fa', y23:'#34d399', y24:'#fbbf24', y25:'#a78bfa', y26:'#f87171',
+  rev:'#3b82f6', cost:'#ef4444', profit:'#10b981', rate:'#f59e0b',
+  up:'#f97316', mid:'#6366f1', down:'#10b981', all:'#94a3b8',
+  auto:'#ef4444',
+};
+
+const BG = 'transparent';
+const DARK = { color:'#c9d8ef', splitLine:{lineStyle:{color:'#1e3555'}} };
+
+function darkOpt(base) {
+  return Object.assign({ backgroundColor: BG, textStyle:{color:'#c9d8ef'} }, base);
+}
+
+function mkChart(id) {
+  const el = document.getElementById(id);
+  if (!el) return null;
+  const existing = echarts.getInstanceByDom(el);
+  if (existing) existing.dispose();
+  return echarts.init(el, 'dark');
+}
+
+// ---- 月別利益率トレンド ----
+var chartProfitMonthly = null;
+function renderProfitMonthly() {
+  chartProfitMonthly = mkChart('ec-profit-monthly-trend');
+  if (!chartProfitMonthly) return;
+  const colors = {
+    '2022年': C.y22, '2023年': C.y23, '2024年': C.y24, '2025年': C.y25, '2026年': C.y26
+  };
+  const series = Object.entries(PROFIT.monthly).map(([yr, vals]) => ({
+    name: yr,
+    type: 'line',
+    smooth: true,
+    data: PROFIT.monthLabels.map((_, i) => vals[i+1] ?? null),
+    connectNulls: false,
+    lineStyle: { width: yr === '2026年' ? 3 : 2 },
+    symbol: 'circle', symbolSize: yr === '2026年' ? 8 : 5,
+    itemStyle: { color: colors[yr] },
+  }));
+  chartProfitMonthly.setOption(darkOpt({
+    tooltip: { trigger:'axis', formatter: params => {
+      let s = params[0].axisValue + '<br/>';
+      params.forEach(p => { if(p.value!=null) s += p.marker+p.seriesName+': <b>'+p.value+'%</b><br/>'; });
+      return s;
+    }},
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:55, right:30, top:20, bottom:55 },
+    xAxis: { type:'category', data:PROFIT.monthLabels, axisLabel:{color:'#7eb3ff',fontSize:11} },
+    yAxis: { type:'value', name:'利益率(%)', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa', formatter:v=>v+'%'}, splitLine:{lineStyle:{color:'#1e3555'}} },
+    series,
+  }));
+}
+
+// ---- 2025年月別収入・コスト・利益 ----
+var chartProfitAbs = null;
+function renderProfitAbs() {
+  chartProfitAbs = mkChart('ec-profit-monthly-abs');
+  if (!chartProfitAbs) return;
+  const d = PROFIT.monthly2025;
+  chartProfitAbs.setOption(darkOpt({
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:65, right:55, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.labels, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: [
+      { type:'value', name:'億元', nameTextStyle:{color:'#6a8aaa'},
+        axisLabel:{color:'#6a8aaa',fontSize:10}, splitLine:{lineStyle:{color:'#1e3555'}} },
+      { type:'value', name:'利益(億元)', nameTextStyle:{color:'#6a8aaa'},
+        axisLabel:{color:'#6a8aaa',fontSize:10}, splitLine:{show:false} },
+    ],
+    series: [
+      { name:'収入', type:'bar', data:d.rev,  itemStyle:{color:C.rev, opacity:0.8}, barMaxWidth:28 },
+      { name:'コスト', type:'bar', data:d.cost, itemStyle:{color:C.cost, opacity:0.7}, barMaxWidth:28 },
+      { name:'利益', type:'line', yAxisIndex:1, data:d.profit,
+        smooth:true, lineStyle:{width:2.5,color:C.profit}, itemStyle:{color:C.profit},
+        symbol:'circle', symbolSize:6 },
+    ],
+  }));
+}
+
+// ---- 台あたり指標トレンド（月別ペインの右側） ----
+var chartPerUnitTrend = null;
+function renderPerUnitTrend() {
+  chartPerUnitTrend = mkChart('ec-profit-per-unit-trend');
+  if (!chartPerUnitTrend) return;
+  const d = PROFIT.unit;
+  chartPerUnitTrend.setOption(darkOpt({
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.labels, axisLabel:{color:'#7eb3ff',fontSize:9,rotate:20} },
+    yAxis: { type:'value', name:'万元', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa', fontSize:10}, splitLine:{lineStyle:{color:'#1e3555'}} },
+    series: [
+      { name:'台あたり収入', type:'bar', data:d.rev,    itemStyle:{color:C.rev, opacity:0.8}, barMaxWidth:20 },
+      { name:'台あたりコスト', type:'bar', data:d.cost, itemStyle:{color:C.cost, opacity:0.7}, barMaxWidth:20 },
+      { name:'台あたり粗利', type:'line', data:d.margin,
+        smooth:true, lineStyle:{width:2.5,color:C.profit}, itemStyle:{color:C.profit},
+        symbol:'circle', symbolSize:6 },
+    ],
+  }));
+}
+
+// ---- 年度別利益率バー ----
+var chartAnnualBar = null;
+function renderAnnualBar() {
+  chartAnnualBar = mkChart('ec-profit-annual-bar');
+  if (!chartAnnualBar) return;
+  const d = PROFIT.annual;
+  chartAnnualBar.setOption(darkOpt({
+    tooltip: { trigger:'axis', formatter: params => {
+      let s = params[0].axisValue + '<br/>';
+      params.forEach(p => s += p.marker+p.seriesName+': <b>'+p.value+'%</b><br/>');
+      return s;
+    }},
+    grid: { left:55, right:20, top:20, bottom:50 },
+    xAxis: { type:'category', data:d.years, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: { type:'value', name:'利益率(%)', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa', formatter:v=>v+'%'}, splitLine:{lineStyle:{color:'#1e3555'}},
+      max:9 },
+    series: [{
+      name:'利益率', type:'bar',
+      data: d.rate.map((v,i) => ({
+        value: v,
+        itemStyle: { color: v <= 3.0 ? '#ef4444' : v <= 4.5 ? '#f59e0b' : '#3b82f6' }
+      })),
+      barMaxWidth:40,
+      label: { show:true, position:'top', color:'#c9d8ef', fontSize:11, formatter:p=>p.value+'%' },
+    }],
+  }));
+}
+
+// ---- 年度別収入・コスト・利益 ----
+var chartAnnualAbs = null;
+function renderAnnualAbs() {
+  chartAnnualAbs = mkChart('ec-profit-annual-abs');
+  if (!chartAnnualAbs) return;
+  const d = PROFIT.annual;
+  chartAnnualAbs.setOption(darkOpt({
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:70, right:60, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.years, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: [
+      { type:'value', name:'億元', nameTextStyle:{color:'#6a8aaa'},
+        axisLabel:{color:'#6a8aaa',fontSize:10}, splitLine:{lineStyle:{color:'#1e3555'}} },
+      { type:'value', name:'利益(億元)', nameTextStyle:{color:'#6a8aaa'},
+        axisLabel:{color:'#6a8aaa',fontSize:10}, splitLine:{show:false} },
+    ],
+    series: [
+      { name:'収入', type:'bar', data:d.rev,    itemStyle:{color:C.rev,opacity:0.8}, barMaxWidth:28 },
+      { name:'コスト', type:'bar', data:d.cost, itemStyle:{color:C.cost,opacity:0.7}, barMaxWidth:28 },
+      { name:'利益', type:'line', yAxisIndex:1, data:d.profit,
+        smooth:true, lineStyle:{width:2.5,color:C.profit}, itemStyle:{color:C.profit},
+        symbol:'circle', symbolSize:6 },
+    ],
+  }));
+}
+
+// ---- 年度別前年比 ----
+var chartAnnualYoy = null;
+function renderAnnualYoy() {
+  chartAnnualYoy = mkChart('ec-profit-annual-yoy');
+  if (!chartAnnualYoy) return;
+  const d = PROFIT.annual;
+  const yrs = d.years.slice(1); // 2018〜
+  chartAnnualYoy.setOption(darkOpt({
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
+      formatter: params => {
+        let s = params[0].axisValue + '<br/>';
+        params.forEach(p => { if(p.value!=null) s += p.marker+p.seriesName+': <b>'+p.value+'%</b><br/>'; });
+        return s;
+      }
+    },
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:yrs, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: { type:'value', name:'前年比(%)', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa', formatter:v=>v+'%'}, splitLine:{lineStyle:{color:'#1e3555'}} },
+    series: [
+      { name:'収入増減率', type:'bar',
+        data: d.revYoy.slice(1).map(v=>({ value:v, itemStyle:{color: v<0?'#ef4444':'#3b82f6'} })),
+        barMaxWidth:20 },
+      { name:'利益増減率', type:'bar',
+        data: d.profYoy.slice(1).map(v=>({ value:v, itemStyle:{color: v<0?'#f97316':'#10b981'} })),
+        barMaxWidth:20 },
+    ],
+  }));
+}
+
+// ---- 産業チェーン ----
+var chartChain = null;
+var profitChainMode = 'overview';
+function renderChain() {
+  chartChain = mkChart('ec-profit-chain');
+  if (!chartChain) return;
+  const d = PROFIT.chain;
+  const years = d.years;
+  let src, colorMap;
+  if (profitChainMode === 'overview') {
+    src = d.overview;
+    colorMap = {'上流 合計':C.up,'中流 合計':C.mid,'下流 合計':C.down,'全体 合計':C.all};
+  } else if (profitChainMode === 'upstream') {
+    src = d.upstream;
+    colorMap = {'非鉄金属製錬・圧延':'#f97316','化学原料・化学品製造':'#fb923c','鉄鋼金属製錬・圧延':'#fbbf24','石油精製・コークス':'#fde68a'};
+  } else if (profitChainMode === 'midstream') {
+    src = d.midstream;
+    colorMap = {'電気機械・器材製造':'#818cf8','農副食品加工業':'#a78bfa','汎用機械製造業':'#c4b5fd','金属製品業':'#6366f1','自動車製造業':'#ef4444'};
+  } else {
+    src = d.downstream;
+    colorMap = {'コンピュータ・通信電子':'#34d399','タバコ製品業':'#6ee7b7','食品製造業':'#a7f3d0','医薬品製造業':'#10b981','酒類・飲料・茶製造':'#059669'};
+  }
+  chartChain.setOption(darkOpt({
+    tooltip: { trigger:'axis', formatter: params => {
+      let s = params[0].axisValue + '<br/>';
+      params.forEach(p => { if(p.value!=null) s += p.marker+p.seriesName+': <b>'+p.value+'%</b><br/>'; });
+      return s;
+    }},
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'}, type:'scroll' },
+    grid: { left:55, right:20, top:20, bottom:70 },
+    xAxis: { type:'category', data:years, axisLabel:{color:'#7eb3ff',fontSize:11} },
+    yAxis: { type:'value', name:'利益率(%)', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa', formatter:v=>v+'%'}, splitLine:{lineStyle:{color:'#1e3555'}} },
+    series: Object.entries(src).map(([name, vals]) => ({
+      name, type:'line', data:vals,
+      smooth:true, lineStyle:{width: name.includes('自動車') ? 3 : 2 },
+      symbol:'circle', symbolSize: name.includes('自動車') ? 8 : 5,
+      itemStyle:{ color: colorMap[name] || '#94a3b8' },
+    })),
+  }));
+}
+
+window.profitChainView = function(mode, btn) {
+  profitChainMode = mode;
+  document.querySelectorAll('#profit-chain-tabs button').forEach(b => {
+    b.className = 'btn btn-sm btn-outline-secondary';
+  });
+  btn.className = 'btn btn-sm btn-primary active';
+  renderChain();
+};
+
+// ---- 自動車 vs チェーン各層 ----
+var chartAutoVsChain = null;
+function renderAutoVsChain() {
+  chartAutoVsChain = mkChart('ec-profit-auto-vs-chain');
+  if (!chartAutoVsChain) return;
+  const d = PROFIT.chain;
+  chartAutoVsChain.setOption(darkOpt({
+    tooltip: { trigger:'axis', formatter: params => {
+      let s = params[0].axisValue + '<br/>';
+      params.forEach(p => { if(p.value!=null) s += p.marker+p.seriesName+': <b>'+p.value+'%</b><br/>'; });
+      return s;
+    }},
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.years, axisLabel:{color:'#7eb3ff',fontSize:11} },
+    yAxis: { type:'value', name:'利益率(%)', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa', formatter:v=>v+'%'}, splitLine:{lineStyle:{color:'#1e3555'}} },
+    series: [
+      { name:'上流 合計', type:'line', data:d.overview['上流 合計'], smooth:true,
+        lineStyle:{width:2,color:C.up,type:'dashed'}, itemStyle:{color:C.up}, symbol:'circle', symbolSize:5 },
+      { name:'中流 合計', type:'line', data:d.overview['中流 合計'], smooth:true,
+        lineStyle:{width:2,color:C.mid,type:'dashed'}, itemStyle:{color:C.mid}, symbol:'circle', symbolSize:5 },
+      { name:'下流 合計', type:'line', data:d.overview['下流 合計'], smooth:true,
+        lineStyle:{width:2,color:C.down,type:'dashed'}, itemStyle:{color:C.down}, symbol:'circle', symbolSize:5 },
+      { name:'全体 合計', type:'line', data:d.overview['全体 合計'], smooth:true,
+        lineStyle:{width:1.5,color:C.all,type:'dotted'}, itemStyle:{color:C.all}, symbol:'circle', symbolSize:4 },
+      { name:'自動車製造業', type:'line', data:d.midstream['自動車製造業'], smooth:true,
+        lineStyle:{width:3.5,color:C.auto}, itemStyle:{color:C.auto}, symbol:'circle', symbolSize:8,
+        label:{show:true, position:'top', color:'#f87171', fontSize:11, formatter:p=>p.value!=null?p.value+'%':''} },
+    ],
+  }));
+}
+
+// ---- 台あたり指標 バー ----
+var chartUnitBar = null;
+function renderUnitBar() {
+  chartUnitBar = mkChart('ec-profit-unit-bar');
+  if (!chartUnitBar) return;
+  const d = PROFIT.unit;
+  chartUnitBar.setOption(darkOpt({
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:55, right:20, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.labels, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: { type:'value', name:'万元', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa',fontSize:10}, splitLine:{lineStyle:{color:'#1e3555'}} },
+    series: [
+      { name:'台あたり収入', type:'bar', data:d.rev,    itemStyle:{color:C.rev,opacity:0.8}, barMaxWidth:28,stack:'s1' },
+      { name:'台あたりコスト(差)', type:'bar',
+        data:d.cost.map((c,i)=>-(c)), itemStyle:{color:C.cost,opacity:0.6}, barMaxWidth:28, stack:'dummy'},
+      { name:'台あたり粗利', type:'line', data:d.margin,
+        smooth:true, lineStyle:{width:3,color:C.profit}, itemStyle:{color:C.profit}, symbol:'circle', symbolSize:7,
+        label:{show:true,position:'top',color:'#10b981',fontSize:10,formatter:p=>p.value} },
+    ],
+  }));
+}
+
+// ---- 台あたり粗利ライン ----
+var chartUnitMargin = null;
+function renderUnitMargin() {
+  chartUnitMargin = mkChart('ec-profit-unit-margin');
+  if (!chartUnitMargin) return;
+  const d = PROFIT.unit;
+  chartUnitMargin.setOption(darkOpt({
+    tooltip: { trigger:'axis' },
+    grid: { left:50, right:20, top:20, bottom:50 },
+    xAxis: { type:'category', data:d.labels, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: { type:'value', name:'万元', nameTextStyle:{color:'#6a8aaa'},
+      axisLabel:{color:'#6a8aaa',fontSize:10}, splitLine:{lineStyle:{color:'#1e3555'}}, min:0, max:3 },
+    series: [{
+      name:'台あたり粗利',
+      type:'line', data:d.margin, smooth:true,
+      lineStyle:{width:3,color:C.profit},
+      itemStyle:{color:d.margin.map(v=> v<=1.1?'#ef4444':v<=1.5?'#f59e0b':'#10b981')},
+      symbol:'circle', symbolSize:8, areaStyle:{color:'rgba(16,185,129,0.15)'},
+      label:{show:true,position:'top',color:'#c9d8ef',fontSize:11,formatter:p=>p.value},
+    }],
+  }));
+}
+
+// ---- 生産台数 vs 台あたり粗利 ----
+var chartUnitProd = null;
+function renderUnitProd() {
+  chartUnitProd = mkChart('ec-profit-unit-prod');
+  if (!chartUnitProd) return;
+  const d = PROFIT.unit;
+  chartUnitProd.setOption(darkOpt({
+    tooltip: { trigger:'axis' },
+    legend: { bottom:0, textStyle:{fontSize:11,color:'#8ab0d0'} },
+    grid: { left:60, right:60, top:20, bottom:55 },
+    xAxis: { type:'category', data:d.labels, axisLabel:{color:'#7eb3ff',fontSize:10,rotate:20} },
+    yAxis: [
+      { type:'value', name:'生産台数(万台)', nameTextStyle:{color:'#3b82f6'},
+        axisLabel:{color:'#3b82f6',fontSize:10}, splitLine:{lineStyle:{color:'#1e3555'}} },
+      { type:'value', name:'粗利(万元)', nameTextStyle:{color:'#10b981'},
+        axisLabel:{color:'#10b981',fontSize:10}, splitLine:{show:false}, min:0, max:3 },
+    ],
+    series: [
+      { name:'生産台数', type:'bar', data:d.prod,
+        itemStyle:{color:'#3b82f6',opacity:0.7}, barMaxWidth:30 },
+      { name:'台あたり粗利', type:'line', yAxisIndex:1, data:d.margin,
+        smooth:true, lineStyle:{width:2.5,color:C.profit}, itemStyle:{color:C.profit},
+        symbol:'circle', symbolSize:6 },
+    ],
+  }));
+}
+
+// ---- 公開関数 ----
+window.initProfitCharts = function() {
+  renderProfitMonthly();
+  renderProfitAbs();
+  renderPerUnitTrend();
+};
+window.initProfitAnnualCharts = function() {
+  renderAnnualBar();
+  renderAnnualAbs();
+  renderAnnualYoy();
+};
+window.initProfitChainCharts = function() {
+  renderChain();
+  renderAutoVsChain();
+};
+window.initProfitUnitCharts = function() {
+  renderUnitBar();
+  renderUnitMargin();
+  renderUnitProd();
+};
+
+// サブナビ切替フック
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('#cds-sub-profit [data-cds-target]').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('#cds-sub-profit [data-cds-target]').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const id = btn.getAttribute('data-cds-target').replace('#','');
+      cdsShowPane(id);
+    });
+  });
+});
+
+})(); // end profit module
+
+// ---- 比較トレイ: profitペインにも📌ピンを付ける ----
 </script>
 
 <!-- ========== 比較トレイ（全タブ横断） ========== -->

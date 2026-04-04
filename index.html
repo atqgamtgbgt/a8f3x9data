@@ -7440,11 +7440,22 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-profit').style.display = (tab === 'profit') ? '' : 'none';
 
   if (tab === 'import') {
-    cdsShowImportPane(IMP_CURRENT_ID || 'imp-trend');
+    // cdsPills の !important を解除して確実に表示
+    var pillEl2 = document.getElementById('cdsPills');
+    if (pillEl2) { pillEl2.setAttribute('style','display:block'); }
+    var targetId = IMP_CURRENT_ID || 'imp-trend';
+    cdsShowImportPane(targetId);
     document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(b => {
-      b.classList.toggle('active', b.getAttribute('data-cds-import-target') === ('#' + (IMP_CURRENT_ID || 'imp-trend')));
+      b.classList.toggle('active', b.getAttribute('data-cds-import-target') === ('#' + targetId));
     });
-    setTimeout(function(){ initImportCharts(IMP_CURRENT_ID || 'imp-trend'); }, 80);
+    // DOM が完全に表示されてからグラフを描画・リサイズ
+    setTimeout(function(){
+      initImportCharts(targetId);
+      // ECharts インスタンスが存在すれば resize も呼ぶ
+      if (typeof IMP_EC !== 'undefined' && IMP_EC[targetId.replace('imp-','ec-imp-')]) {
+        try { IMP_EC[targetId.replace('imp-','ec-imp-')].resize(); } catch(e) {}
+      }
+    }, 120);
   } else if (tab === 'china') {
     // 中国地域別タブ初回表示時：地図パネルをデフォルト表示
     cdsShowPane('cds-china-map');
@@ -8584,6 +8595,8 @@ function mkImpChart(id) {
   if (!dom) return null;
   if (IMP_EC[id]) { try { IMP_EC[id].dispose(); } catch(e){} }
   IMP_EC[id] = echarts.init(dom, null, {renderer:'canvas'});
+  // 初期化直後にリサイズして実際のDOM幅を確定させる
+  IMP_EC[id].resize();
   new ResizeObserver(function(){ try{ IMP_EC[id].resize(); }catch(e){} }).observe(dom);
   return IMP_EC[id];
 }
@@ -8853,7 +8866,14 @@ var IMP_RENDER = {
 
 window.initImportCharts = function(id) {
   var fn = IMP_RENDER[id || 'imp-trend'];
-  if (fn) fn();
+  if (fn) {
+    fn();
+    // 描画後にリサイズで確実にサイズ確定
+    var ecId = 'ec-' + (id || 'imp-trend');
+    setTimeout(function(){
+      if (IMP_EC[ecId]) { try { IMP_EC[ecId].resize(); } catch(e){} }
+    }, 80);
+  }
 };
 
 // ペイン表示
@@ -8865,6 +8885,8 @@ window.cdsShowImportPane = function(id) {
   });
   var target = document.getElementById(id);
   if (target) target.classList.add('cds-active');
+  // reflow を強制して ECharts がサイズを正しく認識できるようにする
+  if (target) { void target.offsetHeight; }
   // ボタンのactive状態更新
   document.querySelectorAll('#cds-sub-import [data-cds-import-target]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-cds-import-target') === '#'+id);

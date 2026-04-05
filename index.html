@@ -2557,7 +2557,7 @@ body.tray-open { padding-bottom: 105px; }
             <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cp-overview" type="button" role="tab">📊 総合概要</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-domestic-export" type="button" role="tab">🚢 国内・輸出</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-nev" type="button" role="tab">⚡ NEV内訳</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-penetration" type="button" role="tab">📈 NEV浸透率</button></li>
+
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-segment" type="button" role="tab">🚗 乗用車・商用車</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-brand" type="button" role="tab">🏷️ ブランド系シェア</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-ent" type="button" role="tab">🏭 企業別ランキング</button></li>
@@ -2577,7 +2577,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="tab-pane fade show active" id="cp-overview"><div class="chart-card"><div class="chart-title">総販売台数推移</div><div class="chart-subtitle">CAAM/CADA 2023年5月〜2026年2月　<span class="text-muted" style="font-size:10px">📋 総販売:B7 / 国内:B8 / 輸出:B10</span></div><div id="ec-overview" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 乗用ICE国内:B19 / 乗用NEV国内:B107※ / 商用国内:B78 / ICE乗用輸出:(B20-BEV輸出-PHEV輸出) / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-domestic-export" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / 従来車</div><div class="chart-subtitle">積み上げ棒グラフ　<span class="text-muted" style="font-size:10px">📋 BEV販売:D100※ / PHEV販売:D101※ / NEV合計:D103※　（※行番号は月により変動）</span></div><div id="ec-nev" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-penetration"><div class="chart-card"><div class="chart-title">NEV浸透率推移（%）<span class="badge ms-2" style="background:#f59e0b;color:#fff;font-size:11px;font-weight:500;vertical-align:middle">出所：CADA乗聯分会</span></div><div class="chart-subtitle">全体浸透率・乗用車浸透率　<span class="text-muted" style="font-size:10px">📋 全体普及率:F106備考※ / 乗用車普及率:F107備考※　（※行番号・列は月により変動、正規表現で抽出）</span></div><div id="ec-penetration" class="echart-box"></div></div></div>
+
             <div class="tab-pane fade" id="cp-segment"><div class="chart-card"><div class="chart-title">乗用車・商用車　販売推移</div><div class="chart-subtitle">セグメント別月次推移　<span class="text-muted" style="font-size:10px">📋 乗用車販売:B17 / 国内:B18 / 輸出:B20 / 商用車販売:B77 / 国内:B78 / 輸出:B81</span></div><div id="ec-segment" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-brand">
               <div class="chart-card">
@@ -5627,37 +5627,6 @@ function initNev() {
   });
 }
 
-// ④ NEV浸透率（出所：CADA乗聯分会）
-function initPen() {
-  if (!CAAM_EXCEL_LOADED) return;
-  initEC('ec-penetration', chart => {
-    const t = gt();
-    const opt = baseOpt(t, '%');
-    opt.xAxis.data = CD.labels_all;
-    opt.yAxis.min = 30; opt.yAxis.max = 70;
-    opt.yAxis.axisLabel.formatter = '{value}%';
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}%</b><br>`; });
-      return s;
-    };
-    opt.series = [
-      { name:'全体浸透率', type:'line', data:CD.nev_pen, symbol:'circle', symbolSize:7,
-        lineStyle:{width:3,color:'#4e79a7'}, itemStyle:{color:'#4e79a7'},
-        areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[
-          {offset:0,color:'rgba(78,121,167,0.3)'},{offset:1,color:'rgba(78,121,167,0.02)'}
-        ])} },
-      { name:'乗用車浸透率', type:'line', data:CD.pax_pen, symbol:'diamond', symbolSize:7,
-        lineStyle:{width:2.5,color:'#e15759',type:'dashed'}, itemStyle:{color:'#e15759'} },
-      { type:'line', markLine:{silent:true, symbol:'none', data:[
-        {yAxis:50, lineStyle:{color:'#aaa',type:'dashed',width:1.5},
-         label:{formatter:'50%基準',color:'#888',fontSize:10}}
-      ]}} ,
-    ];
-    chart.setOption(opt);
-  });
-}
-
 // ⑤ 乗用車・商用車
 function initSeg() {
   if (!CAAM_EXCEL_LOADED) return;
@@ -6293,7 +6262,7 @@ const CHART_FNS = {
   'cp-overview':       initOverview,
   'cp-domestic-export': initDomExp,
   'cp-nev':            initNev,
-  'cp-penetration':    initPen,
+  'cp-nev-detail':     initNevDetail,
   'cp-segment':        initSeg,
   'cp-brand':          initBrand,
   'cp-ent':            initEnt,

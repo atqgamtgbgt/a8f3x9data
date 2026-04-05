@@ -2912,7 +2912,7 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="cds-gc-items" id="cds-gc-ginv" style="display:flex">
                     <button class="nav-link active" data-cds-inv-target="#inv-total">📈 総在庫推移</button>
                     <button class="nav-link" data-cds-inv-target="#inv-category">🏷️ カテゴリ別</button>
-                    <button class="nav-link" data-cds-inv-target="#inv-maker-ratio">🏭 厂家占比</button>
+                    <button class="nav-link" data-cds-inv-target="#inv-maker-ratio">🏭 メーカー在庫率</button>
                     <button class="nav-link" data-cds-inv-target="#inv-nev">🔋 NEV専業</button>
                     <button class="nav-link" data-cds-inv-target="#inv-sentiment">📊 予測・満足度</button>
                     <button class="nav-link" data-cds-inv-target="#inv-us">🇺🇸 米国在庫（参考）</button>
@@ -3302,17 +3302,17 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="inv-category">
               <div class="chart-card">
                 <div class="chart-title">🏷️ カテゴリ別 月次在庫推移（万台）</div>
-                <div class="chart-subtitle">自主・合資・新勢力・豪華・外資・其他　出所：崔東樹（乗聯会）</div>
+                <div class="chart-subtitle">自主・合資・新勢力・高級・外資・その他　出所：崔東樹（乗聯会）</div>
                 <div id="ec-inv-category" class="echart-box" style="height:440px"></div>
               </div>
             </div>
 
-            <!-- 3: 厂家占比 -->
+            <!-- 3: メーカー在庫率 -->
             <div class="cds-pane" id="inv-maker-ratio">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🏭 総在庫（万台）と厂家庫存占比（%）</div>
+                    <div class="chart-title">🏭 総在庫（万台）とメーカー在庫率（%）</div>
                     <div class="chart-subtitle">棒グラフ＋折れ線の複合　出所：崔東樹（乗聯会）</div>
                     <div id="ec-inv-maker-ratio" class="echart-box" style="height:420px"></div>
                   </div>
@@ -3323,8 +3323,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 4: NEV専業 -->
             <div class="cds-pane" id="inv-nev">
               <div class="chart-card">
-                <div class="chart-title">🔋 純NEV車企 庫存変化（万台）</div>
-                <div class="chart-subtitle">厂家庫存・渠道庫存・总庫存　出所：崔東樹（乗聯会）</div>
+                <div class="chart-title">🔋 純NEVメーカー 在庫変化（万台）</div>
+                <div class="chart-subtitle">メーカー在庫・流通在庫・総在庫　出所：崔東樹（乗聯会）</div>
                 <div id="ec-inv-nev" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -3332,7 +3332,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 5: 予測・満足度 -->
             <div class="cds-pane" id="inv-sentiment">
               <div class="chart-card">
-                <div class="chart-title">📊 乗聯会 月前予測指数・月後満足度指数（%）</div>
+                <div class="chart-title">📊 乗聯会 翌月楽観度・当月満足度指数（%）</div>
                 <div class="chart-subtitle">楽観度（翌月予測）vs 満足度（当月評価）　出所：崔東樹（乗聯会）</div>
                 <div id="ec-inv-sentiment" class="echart-box" style="height:420px"></div>
               </div>
@@ -9433,15 +9433,15 @@ INV.catLabels = ['23.1','23.2','23.3','23.4','23.5','23.6','23.7','23.8','23.9',
                  '25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12',
                  '26.1','26.2'];
 INV.catData = {
-  '其他':  [53,52,50,48,49,53,54,54,53,53,52,49,47,36,15,13,12,13,13,12,11,10,7,9,6,4,7,11,16,13,18,17,16,14,11,10,16,14],
-  '新勢力': [8,7,6,6,8,6,5,4,4,5,6,6,6,5,6,3,4,4,4,6,6,8,6,5,5,4,6,4,5,4,8,6,4,13,16,18,17,13],
-  '外資':  [1,1,1,2,2,2,2,2,1,2,3,4,3,4,3,3,3,3,2,3,2,2,2,3,2,4,3,4,3,2,4,3,4,4,3,4,4,4],
-  '自主':  [110,113,117,115,109,110,117,121,126,142,158,156,135,100,136,156,149,152,143,128,123,128,138,141,159,192,197,193,180,180,160,174,189,225,205,205,191,203],
-  '合資':  [127,132,145,115,131,133,128,124,129,127,136,131,117,136,131,119,119,126,120,115,108,102,107,97,93,92,99,97,94,94,92,89,95,90,97,89,89,86],
-  '豪華':  [34,36,42,39,40,39,42,43,46,39,37,35,29,40,42,44,42,46,51,51,52,47,45,44,43,39,38,36,34,36,34,39,33,33,33,31,16,13]
+  'その他':  [53,52,50,48,49,53,54,54,53,53,52,49,47,36,15,13,12,13,13,12,11,10,7,9,6,4,7,11,16,13,18,17,16,14,11,10,16,14],
+  '新興EV':  [8,7,6,6,8,6,5,4,4,5,6,6,6,5,6,3,4,4,4,6,6,8,6,5,5,4,6,4,5,4,8,6,4,13,16,18,17,13],
+  '外資':    [1,1,1,2,2,2,2,2,1,2,3,4,3,4,3,3,3,3,2,3,2,2,2,3,2,4,3,4,3,2,4,3,4,4,3,4,4,4],
+  '国内系':  [110,113,117,115,109,110,117,121,126,142,158,156,135,100,136,156,149,152,143,128,123,128,138,141,159,192,197,193,180,180,160,174,189,225,205,205,191,203],
+  '合弁':    [127,132,145,115,131,133,128,124,129,127,136,131,117,136,131,119,119,126,120,115,108,102,107,97,93,92,99,97,94,94,92,89,95,90,97,89,89,86],
+  '高級':    [34,36,42,39,40,39,42,43,46,39,37,35,29,40,42,44,42,46,51,51,52,47,45,44,43,39,38,36,34,36,34,39,33,33,33,31,16,13]
 };
 
-// 在庫変化・厂家占比（23.1〜26.2）
+// 在庫変化・メーカー在庫率（23.1〜26.2）
 INV.makerLabels = ['23.1','23.2','23.3','23.4','23.5','23.6','23.7','23.8','23.9','23.10','23.11','23.12',
                    '24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12',
                    '25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12',
@@ -9549,7 +9549,7 @@ function renderInvTotal() {
 
 function renderInvCategory() {
   var ec = invInitOrGet('ec-inv-category'); if (!ec) return;
-  var cats = ['其他','新勢力','外資','自主','合資','豪華'];
+  var cats = ['その他','新興EV','外資','国内系','合弁','高級'];
   var catColors = ['#a0aec0','#ee6666','#5470c6','#fac858','#91cc75','#fc8452'];
   var series = cats.map(function(cat, i){
     return {
@@ -9580,7 +9580,7 @@ function renderInvMakerRatio() {
   var ec = invInitOrGet('ec-inv-maker-ratio'); if (!ec) return;
   ec.setOption({
     tooltip: { trigger:'axis', axisPointer:{type:'cross'} },
-    legend: { data:['総在庫（万台）','厂家庫存占比（%）'], bottom:0 },
+    legend: { data:['総在庫（万台）','メーカー在庫率（%）'], bottom:0 },
     grid: { left:65, right:65, top:40, bottom:60 },
     xAxis: { type:'category', data:INV.makerLabels, axisLabel:{rotate:45, fontSize:10} },
     yAxis: [
@@ -9589,7 +9589,7 @@ function renderInvMakerRatio() {
     ],
     series: [
       { name:'総在庫（万台）', type:'bar', itemStyle:{color:'#91cc75', opacity:0.8}, data:INV.makerTotal },
-      { name:'厂家庫存占比（%）', type:'line', yAxisIndex:1, smooth:true,
+      { name:'メーカー在庫率（%）', type:'line', yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:5, lineStyle:{color:'#ee6666',width:2},
         itemStyle:{color:'#ee6666'}, data:INV.makerRatio }
     ]
@@ -9600,7 +9600,7 @@ function renderInvNev() {
   var ec = invInitOrGet('ec-inv-nev'); if (!ec) return;
   ec.setOption({
     tooltip: { trigger:'axis', axisPointer:{type:'cross'} },
-    legend: { data:['厂家庫存','渠道庫存','总庫存','厂家占比①（%）'], bottom:0, type:'scroll' },
+    legend: { data:['メーカー在庫','流通在庫','総在庫','メーカー占比（%）'], bottom:0, type:'scroll' },
     grid: { left:65, right:65, top:40, bottom:60 },
     xAxis: { type:'category', data:INV.nevLabels, axisLabel:{rotate:45, fontSize:9} },
     yAxis: [
@@ -9608,11 +9608,11 @@ function renderInvNev() {
       { type:'value', name:'%', position:'right', axisLabel:{formatter:'{value}%'} }
     ],
     series: [
-      { name:'厂家庫存', type:'bar', stack:'inv', itemStyle:{color:'#5470c6'}, data:INV.nevFactory },
-      { name:'渠道庫存', type:'bar', stack:'inv', itemStyle:{color:'#91cc75'}, data:INV.nevChannel },
-      { name:'总庫存', type:'line', smooth:true, symbol:'none',
+      { name:'メーカー在庫', type:'bar', stack:'inv', itemStyle:{color:'#5470c6'}, data:INV.nevFactory },
+      { name:'流通在庫', type:'bar', stack:'inv', itemStyle:{color:'#91cc75'}, data:INV.nevChannel },
+      { name:'総在庫', type:'line', smooth:true, symbol:'none',
         lineStyle:{color:'#333',width:2,type:'dashed'}, data:INV.nevTotal },
-      { name:'厂家占比①（%）', type:'line', yAxisIndex:1, smooth:true,
+      { name:'メーカー占比（%）', type:'line', yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:4, lineStyle:{color:'#ee6666',width:2},
         itemStyle:{color:'#ee6666'}, data:INV.nevRatio1 }
     ]

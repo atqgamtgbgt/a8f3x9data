@@ -3134,33 +3134,33 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="ws-maker-region">
               <div class="chart-card">
                 <div class="chart-title">📊 メーカーグループ 地域別シェア（2026年1-2月）</div>
-                <div class="chart-subtitle">出所：崔東樹（乗聯会）2026年3月29日　全32グループ</div>
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
-                  <span style="font-size:12px;color:#888;white-space:nowrap">表示モード：</span>
-                  <button class="btn btn-sm btn-primary active" id="ws-mr-mode-combined" onclick="wsSetMakerRegionMode('combined',this)">地域を色で重ねる</button>
-                  <button class="btn btn-sm btn-outline-secondary" id="ws-mr-mode-split" onclick="wsSetMakerRegionMode('split',this)">地域ごとに分けて表示</button>
+                <div class="chart-subtitle">出所：崔東樹（乗聯会）2026年3月29日</div>
+                <!-- 国系フィルター -->
+                <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center" id="ws-mr-group-filter">
+                  <span style="font-size:12px;color:#888;white-space:nowrap">メーカー系：</span>
+                  <button class="btn btn-sm btn-primary active" onclick="wsSetMrGroup('all',this)">全社</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrGroup('chinese',this)">🇨🇳 中国系</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrGroup('japanese',this)">🇯🇵 日本系</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrGroup('european',this)">🇪🇺 欧州系</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrGroup('american',this)">🇺🇸 米国系</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrGroup('others',this)">その他</button>
                 </div>
+                <!-- 表示切替 -->
                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="ws-makerregion-tabs">
                   <button class="btn btn-sm btn-primary active" onclick="wsSetMakerRegionView('share2026',this)">2026年シェア（%）</button>
                   <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMakerRegionView('vs2019',this)">較2019年増減（%pt）</button>
                 </div>
-                <!-- 地域別分割表示（splitモード時） -->
-                <div id="ws-mr-split-container" style="display:none">
-                  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px" id="ws-mr-region-btns">
-                    <button class="btn btn-sm btn-primary active" onclick="wsSetMakerRegionSplit('中国',this)">🇨🇳 中国</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMakerRegionSplit('北米洲',this)">🌎 北米洲</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMakerRegionSplit('欧州',this)">🇪🇺 欧州</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMakerRegionSplit('亜洲その他',this)">🌏 亜洲その他</button>
-                    <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMakerRegionSplit('南半球',this)">🌍 南半球</button>
-                  </div>
-                  <div id="ec-ws-maker-region-split" style="width:100%;height:560px"></div>
+                <!-- 地域別選択（地域ごとに表示する場合） -->
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;align-items:center" id="ws-mr-region-select">
+                  <span style="font-size:12px;color:#888;white-space:nowrap">地域：</span>
+                  <button class="btn btn-sm btn-primary active" onclick="wsSetMrRegion('all',this)">5地域を色分け</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrRegion('中国',this)">🇨🇳 中国</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrRegion('北米洲',this)">🌎 北米</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrRegion('欧州',this)">🇪🇺 欧州</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrRegion('亜洲その他',this)">🌏 亜洲</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsSetMrRegion('南半球',this)">🌍 南半球</button>
                 </div>
-                <!-- 地域重ね表示（combinedモード時） -->
-                <div id="ws-mr-combined-container">
-                  <div style="overflow-y:auto;max-height:620px;border:1px solid #e9ecef;border-radius:8px">
-                    <div id="ec-ws-maker-region" style="width:100%;height:900px"></div>
-                  </div>
-                </div>
+                <div id="ec-ws-maker-region" style="width:100%;height:520px"></div>
               </div>
             </div>
             <div class="cds-pane" id="cds-profit-monthly">
@@ -7918,10 +7918,7 @@ window.wsRender = function(id) {
   else if (id === 'ws-monthly') wsDrawMonthly();
   else if (id === 'ws-country') wsDrawCountry(window.WS_COUNTRY_VIEW || 'volume');
   else if (id === 'ws-maker') { wsBuildToggleButtons(WS_MAKER_GROUPS[window.WS_MAKER_FILTER||'top10']); wsDrawMaker(window.WS_MAKER_FILTER || 'top10'); }
-  else if (id === 'ws-maker-region') {
-    if (WS_MR_MODE === 'split') wsDrawMakerRegionSplit(WS_MR_SPLIT_REGION);
-    else wsDrawMakerRegion(window.WS_MAKERREGION_VIEW || 'share2026');
-  }
+  else if (id === 'ws-maker-region') wsDrawMakerRegion(window.WS_MAKERREGION_VIEW || 'share2026');
 };
 
 // 切替ボタン
@@ -7941,8 +7938,7 @@ window.wsSetMakerRegionView = function(view, btn) {
   document.querySelectorAll('#ws-makerregion-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
   btn.className='btn btn-sm btn-primary active';
   window.WS_MAKERREGION_VIEW = view;
-  if (WS_MR_MODE === 'split') wsDrawMakerRegionSplit(WS_MR_SPLIT_REGION);
-  else wsDrawMakerRegion(view);
+  wsDrawMakerRegion(view);
 };
 
 // ① 地域別販売推移
@@ -8119,16 +8115,25 @@ function wsDrawMaker(filter) {
   } else {
     targets = Object.keys(WS.makers).filter(function(n){ return WS_MAKER_VISIBLE[n]; });
   }
-  var series = targets.map(function(name, i) {
+  var SHORT = {
+    '日本 トヨタ':'トヨタ','ドイツ VW':'VW','現代起亜':'現代起亜','Stellantis':'Stellantis',
+    'ルノー日産':'ルノー日産','吉利集団':'吉利','米国 GM':'GM','日本 スズキ':'スズキ',
+    '米国 フォード':'フォード','奇瑞集団':'奇瑞','BYD':'BYD','上汽集団':'上汽',
+    '日本 ホンダ':'ホンダ','ドイツ BMW':'BMW','ドイツ メルセデス':'メルセデス',
+    'タタ集団':'タタ','テスラ':'テスラ','長城汽車':'長城','長安集団':'長安',
+    '日本 マツダ':'マツダ','マヒンドラ':'マヒンドラ','北汽集団':'北汽','東風集団':'東風',
+    '一汽集団':'一汽','広汽集団':'広汽','江淮集団':'江淮','中国重汽':'中国重汽'
+  };
+  var series = targets.map(function(name) {
     var colorIdx = Object.keys(WS.makers).indexOf(name);
     var color = WS_MAKER_COLORS[colorIdx % WS_MAKER_COLORS.length];
+    var dispName = SHORT[name] || name;
     return {
-      name: name, type: 'line', smooth: false,
+      name: dispName, type: 'line', smooth: false,
       data: WS.makers[name],
       symbol: 'circle', symbolSize: 5,
       lineStyle: { width: 2, color: color },
-      itemStyle: { color: color },
-      endLabel: { show: true, formatter: function(p){ return p.seriesName + ' ' + p.value + '%'; }, fontSize: 10 }
+      itemStyle: { color: color }
     };
   });
   chart.setOption({
@@ -8139,8 +8144,14 @@ function wsDrawMaker(filter) {
       });
       return s;
     }},
-    legend: { show: false },
-    grid: { top: 20, left: 50, right: 170, bottom: 40 },
+    legend: {
+      type: 'scroll', orient: 'horizontal',
+      bottom: 0, left: 'center',
+      itemWidth: 14, itemHeight: 10, textStyle: { fontSize: 11 },
+      pageIconSize: 10,
+      data: series.map(function(s){ return s.name; })
+    },
+    grid: { top: 20, left: 50, right: 20, bottom: 80 },
     xAxis: { type: 'category', data: WS.makerYears, axisLabel: { rotate: 30 } },
     yAxis: { type: 'value', name: 'シェア（%）', axisLabel: { formatter: '{value}%' } },
     series: series
@@ -8195,75 +8206,88 @@ var WS_MR_NAMES_JA = {
   '小米汽車':       '小米汽車（中）'
 };
 
-var WS_MR_MODE = 'combined';
-var WS_MR_SPLIT_REGION = '中国';
-var WS_MR_EC_SPLIT = null;
+var WS_MR_GROUP = 'all';
+var WS_MR_REGION = 'all';
 
-window.wsSetMakerRegionMode = function(mode, btn) {
-  WS_MR_MODE = mode;
-  document.querySelectorAll('#ws-mr-mode-combined,#ws-mr-mode-split').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
-  btn.className = 'btn btn-sm btn-primary active';
-  var splitC = document.getElementById('ws-mr-split-container');
-  var combC  = document.getElementById('ws-mr-combined-container');
-  if (mode === 'split') {
-    splitC.style.display = ''; combC.style.display = 'none';
-    wsDrawMakerRegionSplit(WS_MR_SPLIT_REGION);
-  } else {
-    splitC.style.display = 'none'; combC.style.display = '';
-    wsDrawMakerRegion(window.WS_MAKERREGION_VIEW || 'share2026');
-  }
+// 国系グループ定義（makerRegion.namesのインデックスに対応）
+var WS_MR_MAKER_GROUPS = {
+  all:      null, // null = 全社
+  chinese:  ['吉利集団','奇瑞集団','BYD','上汽集団','長城汽車','長安集団','北汽集団','東風集団','一汽集団','広汽集団','江淮集団','零跑汽車','中国重汽','賽力斯','小米汽車'],
+  japanese: ['日本 トヨタ','日本 スズキ','日本 ホンダ','日本 マツダ','日本 五十鈴'],
+  european: ['ドイツ VW','Stellantis','ルノー日産','ドイツ BMW','ドイツ メルセデス'],
+  american: ['米国 GM','米国 フォード','テスラ'],
+  others:   ['現代起亜','タタ集団','マヒンドラ','伊朗霍徳罗']
 };
 
-window.wsSetMakerRegionSplit = function(region, btn) {
-  WS_MR_SPLIT_REGION = region;
-  document.querySelectorAll('#ws-mr-region-btns .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+window.wsSetMrGroup = function(group, btn) {
+  WS_MR_GROUP = group;
+  document.querySelectorAll('#ws-mr-group-filter .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
   btn.className = 'btn btn-sm btn-primary active';
-  wsDrawMakerRegionSplit(region);
+  wsDrawMakerRegion(window.WS_MAKERREGION_VIEW || 'share2026');
 };
 
-function wsDrawMakerRegionSplit(region) {
-  var el = document.getElementById('ec-ws-maker-region-split');
-  if (!el) return;
-  if (!WS_MR_EC_SPLIT) WS_MR_EC_SPLIT = echarts.init(el);
-  var view = window.WS_MAKERREGION_VIEW || 'share2026';
-  var dataSet = view === 'share2026' ? WS.makerRegion.share2026 : WS.makerRegion.vs2019;
-  var raw = WS.makerRegion.names.map(function(n, i) {
-    return { name: n, val: dataSet[region][i] };
-  }).filter(function(d){ return d.val !== null && d.val !== undefined; });
-  raw.sort(function(a,b){ return b.val - a.val; });
-  var names = raw.map(function(d){ return WS_MR_NAMES_JA[d.name] || d.name; });
-  var vals  = raw.map(function(d){ return d.val; });
-  var color = WS_COLORS[region] || '#3498db';
-  WS_MR_EC_SPLIT.setOption({
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-      formatter: function(p){ var prefix=(view==='vs2019'&&p[0].value>0)?'+':''; return '<b>'+p[0].name+'</b>: '+prefix+p[0].value+(view==='share2026'?'%':'%pt'); }
-    },
-    grid: { top: 10, left: 160, right: 70, bottom: 30 },
-    xAxis: { type: 'value', axisLabel: { formatter: function(v){ return (view==='vs2019'&&v>0?'+':'')+v+'%'; } } },
-    yAxis: { type: 'category', data: names.slice().reverse(), axisLabel: { fontSize: 11 } },
-    series: [{ type: 'bar',
-      data: vals.slice().reverse().map(function(v){
-        return { value: v, itemStyle: { color: (view==='vs2019') ? (v>=0?'#2ecc71':'#e74c3c') : color } };
-      }),
-      label: { show: true, position: 'right', formatter: function(p){ return (view==='vs2019'&&p.value>0?'+':'')+p.value+'%'; }, fontSize: 11 }
-    }]
-  }, true);
-}
+window.wsSetMrRegion = function(region, btn) {
+  WS_MR_REGION = region;
+  document.querySelectorAll('#ws-mr-region-select .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className = 'btn btn-sm btn-primary active';
+  wsDrawMakerRegion(window.WS_MAKERREGION_VIEW || 'share2026');
+};
+
+window.wsSetMakerRegionView = function(view, btn) {
+  document.querySelectorAll('#ws-makerregion-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className='btn btn-sm btn-primary active';
+  window.WS_MAKERREGION_VIEW = view;
+  wsDrawMakerRegion(view);
+};
 
 function wsDrawMakerRegion(view) {
   var chart = wsEc('ec-ws-maker-region'); if (!chart) return;
   var regions = ['中国','北米洲','欧州','亜洲その他','南半球'];
-  var names = WS.makerRegion.names;
-  var namesJa = names.map(function(n){ return WS_MR_NAMES_JA[n] || n; });
+  var allNames = WS.makerRegion.names;
   var dataSet = view === 'share2026' ? WS.makerRegion.share2026 : WS.makerRegion.vs2019;
-  var series = regions.map(function(r) {
+
+  // 国系フィルターで表示メーカーを絞り込む
+  var allowedGroup = WS_MR_MAKER_GROUPS[WS_MR_GROUP];
+  var filteredIdx = allNames.map(function(n, i){ return i; }).filter(function(i){
+    return !allowedGroup || allowedGroup.indexOf(allNames[i]) >= 0;
+  });
+  var names = filteredIdx.map(function(i){ return WS_MR_NAMES_JA[allNames[i]] || allNames[i]; });
+
+  // 地域フィルター
+  var regionList = (WS_MR_REGION === 'all') ? regions : [WS_MR_REGION];
+
+  // 表示行数に応じてバー太さを決める
+  var barCount = names.length;
+  var barWidth = barCount <= 5 ? 28 : barCount <= 10 ? 22 : barCount <= 15 ? 16 : 12;
+  var chartH = Math.max(320, barCount * (barWidth * regionList.length + 10) + 80);
+  var el = document.getElementById('ec-ws-maker-region');
+  if (el) el.style.height = chartH + 'px';
+  if (WS_EC['ec-ws-maker-region']) { WS_EC['ec-ws-maker-region'].dispose(); WS_EC['ec-ws-maker-region'] = null; }
+  chart = wsEc('ec-ws-maker-region');
+  if (!chart) return;
+
+  var series = regionList.map(function(r) {
     return {
       name: r, type: 'bar',
-      data: dataSet[r].slice().reverse().map(function(v){ return v === null ? 0 : v; }),
+      barWidth: barWidth,
+      data: filteredIdx.slice().reverse().map(function(i){
+        var v = dataSet[r][i];
+        return v === null || v === undefined ? 0 : v;
+      }),
       itemStyle: { color: WS_COLORS[r] },
-      label: { show: false }
+      label: {
+        show: barCount <= 12,
+        position: 'right',
+        formatter: function(p){
+          if (!p.value) return '';
+          var prefix = (view==='vs2019' && p.value > 0) ? '+' : '';
+          return prefix + p.value + '%';
+        },
+        fontSize: 10
+      }
     };
   });
+
   chart.setOption({
     tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
       formatter: function(params) {
@@ -8276,13 +8300,13 @@ function wsDrawMakerRegion(view) {
         return s;
       }
     },
-    legend: { top: 8, data: regions, itemGap: 12 },
-    grid: { top: 40, left: 165, right: 30, bottom: 30 },
+    legend: regionList.length > 1 ? { top: 8, data: regions } : { show: false },
+    grid: { top: regionList.length > 1 ? 40 : 10, left: 10, right: barCount<=12 ? 60 : 20, bottom: 20, containLabel: true },
     xAxis: { type: 'value', name: view==='share2026'?'シェア（%）':'増減（%pt）',
       axisLabel: { formatter: function(v){ return view==='vs2019' ? (v>0?'+':'')+v+'%' : v+'%'; } }
     },
-    yAxis: { type: 'category', data: namesJa.slice().reverse(),
-      axisLabel: { fontSize: 10.5, width: 155, overflow: 'truncate' }
+    yAxis: { type: 'category', data: names.slice().reverse(),
+      axisLabel: { fontSize: 11 }
     },
     series: series
   }, true);
@@ -8291,7 +8315,7 @@ function wsDrawMakerRegion(view) {
 // リサイズ対応
 window.addEventListener('resize', function(){
   Object.values(WS_EC).forEach(function(c){ try{ c.resize(); } catch(e){} });
-  if (WS_MR_EC_SPLIT) { try{ WS_MR_EC_SPLIT.resize(); } catch(e){} }
+
 });
 
 })();

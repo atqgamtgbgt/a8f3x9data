@@ -2639,7 +2639,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="tab-pane fade" id="cp-commercial">
               <div class="row g-3">
                 <div class="col-12"><div class="chart-card"><div class="chart-title">商用車　貨車細分類別販売推移</div><div class="chart-subtitle">重型 / 中型 / 軽型 / 微型（2025年4月〜）　<span class="text-muted" style="font-size:10px">📋 重型:B88 / 中型:B89 / 軽型:B90 / 微型:B91　（行番号固定）</span></div><div id="ec-truck-type" class="echart-box"></div></div></div>
-                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　客車細分類別販売</div><div class="chart-subtitle">大中型客車 / 軽型客車　<span class="text-muted" style="font-size:10px">📋 大中型:B95 / 小型:B96　（行番号固定）</span></div><div id="ec-bus-type" class="echart-box" style="height:340px"></div></div></div>
+                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　バス細分類別販売</div><div class="chart-subtitle">大中型バス / 軽型バス　<span class="text-muted" style="font-size:10px">📋 大中型:B95 / 小型:B96　（行番号固定）</span></div><div id="ec-bus-type" class="echart-box" style="height:340px"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">商用車　天然ガス車販売</div><div class="chart-subtitle">月次推移　<span class="text-muted" style="font-size:10px">📋 天然ガス車販売:B84　（行番号固定）</span></div><div id="ec-lng" class="echart-box" style="height:340px"></div></div></div>
               </div>
             </div>
@@ -2811,13 +2811,13 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc" data-group="g5">
                   <button class="cds-gc-label" onclick="cdsToggleGroup('g5')">🚛 商用車 国別 <span class="cds-gc-arrow">▾</span></button>
                   <div class="cds-gc-items" id="cds-gc-g5">
-                    <button class="nav-link" data-cds-target="#cds-r8">⛽ 燃油TR</button>
-                    <button class="nav-link" data-cds-target="#cds-r9">🔋 PHEV-TR</button>
-                    <button class="nav-link" data-cds-target="#cds-r10">🔌 BEV-TR</button>
-                    <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEV-TR</button>
-                    <button class="nav-link" data-cds-target="#cds-r11">⛽ 燃油BS</button>
-                    <button class="nav-link" data-cds-target="#cds-r12">⚡ NEV-BS</button>
-                    <button class="nav-link" data-cds-target="#cds-r12b">⚡ NEV-BS+</button>
+                    <button class="nav-link" data-cds-target="#cds-r8">⛽ 燃油トラック</button>
+                    <button class="nav-link" data-cds-target="#cds-r9">🔋 PHEVトラック</button>
+                    <button class="nav-link" data-cds-target="#cds-r10">🔌 BEVトラック</button>
+                    <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEVトラック</button>
+                    <button class="nav-link" data-cds-target="#cds-r11">⛽ 燃油バス</button>
+                    <button class="nav-link" data-cds-target="#cds-r12">⚡ NEVバス</button>
+                    <button class="nav-link" data-cds-target="#cds-r12b">⚡ NEVバス（詳細）</button>
                   </div>
                 </div>
 
@@ -6046,9 +6046,9 @@ function initCommercial() {
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
     opt.series = [
-      { name:'大中型客車', type:'line', data:CD.bus_large, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[4]}, itemStyle:{color:PAL[4]},
+      { name:'大中型バス', type:'line', data:CD.bus_large, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[4]}, itemStyle:{color:PAL[4]},
         } ,
-      { name:'軽型客車', type:'line', data:CD.bus_light, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[5]}, itemStyle:{color:PAL[5]},
+      { name:'軽型バス', type:'line', data:CD.bus_light, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[5]}, itemStyle:{color:PAL[5]},
         } ,
     ];
     chart.setOption(opt);
@@ -7314,7 +7314,7 @@ function cdsDrawPowertype() {
 
 function cdsDrawBodytype() {
   if (!CDS_LOADED) return;
-  const yrs=['2022','2023','2024','2025'], bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'], d=CDS.bodyTypes||{};
+  const yrs=['2022','2023','2024','2025'], bts=[['乗用車 汇総','乗用車'],['货車 汇総','トラック'],['客車 汇総','バス']], cols=['#3b82f6','#f59e0b','#10b981'], d=CDS.bodyTypes||{};
   drawBar('ec-cds-bodytype','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:20});
 }
 
@@ -7328,7 +7328,7 @@ function cdsDrawNevPower() {
 function cdsDrawNevBody() {
   if (!CDS_LOADED) return;
   const yrs=['2022','2023','2024','2025'], d=CDS.nevBody||{};
-  const bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'];
+  const bts=[['乗用車 汇総','乗用車'],['货車 汇総','トラック'],['客車 汇総','バス']], cols=['#3b82f6','#f59e0b','#10b981'];
   drawBar('ec-cds-nev-body','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:5});
 }
 
@@ -7439,8 +7439,8 @@ function cdsDrawDisplace() {
 
 const RANK_TITLES = {
   r3:'整車出口', r4:'NEV出口', r5:'燃油乗用車', r6:'BEV乗用車',
-  r7:'PHEV乗用車', r6b:'HEV乗用車', r8:'燃油货車', r9:'PHEV货車（皮卡）',
-  r10:'BEV货車', r9b:'新能源货車', r11:'燃油客車', r12:'新能源客車', r12b:'新能源客車（詳細）',
+  r7:'PHEV乗用車', r6b:'HEV乗用車', r8:'燃油トラック', r9:'PHEVトラック（ピックアップ）',
+  r10:'BEVトラック', r9b:'新エネトラック', r11:'燃油バス', r12:'新エネバス', r12b:'新エネバス（詳細）',
 };
 
 const PALETTE = [
@@ -9996,7 +9996,7 @@ window.addEventListener('resize', function(){
         {name:'純電動貨車（2025年〜）',    type:'bar', stack:'s', data:toGWh(bev_truck),  itemStyle:{color:'#F39C12'}},
         {name:'プラグイン貨車（2025年〜）',type:'bar', stack:'s', data:toGWh(phev_truck), itemStyle:{color:'#FF8F00'}},
         {name:'純電動専用車',              type:'bar', stack:'s', data:toGWh(bev_sv),     itemStyle:{color:'#1ABC9C'}},
-        {name:'純電動客車',                type:'bar', stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
+        {name:'純電動バス',                type:'bar', stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
         {name:'その他',                    type:'bar', stack:'s', data:toGWh(others_raw), itemStyle:{color:'#CFD8DC'}}
       ]
     });

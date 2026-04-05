@@ -8108,7 +8108,8 @@ function wsDrawMakerRegion(view) {
       formatter: function(params) {
         var s = '<b>' + params[0].axisValue + '</b><br>';
         params.forEach(function(p){
-          s += p.marker + p.seriesName + ': ' + (p.value > 0 ? '+' : '') + p.value + (view==='share2026'?'%':'%pt') + '<br>';
+          var prefix = (view === 'vs2019' && p.value > 0) ? '+' : '';
+          s += p.marker + p.seriesName + ': ' + prefix + p.value + (view==='share2026'?'%':'%pt') + '<br>';
         });
         return s;
       }
@@ -8116,7 +8117,7 @@ function wsDrawMakerRegion(view) {
     legend: { top: 0, data: regions },
     grid: { top: 40, left: 110, right: 20, bottom: 20 },
     xAxis: { type: 'value', name: view==='share2026'?'シェア（%）':'増減（%pt）',
-      axisLabel: { formatter: function(v){ return (v>0?'+':'')+v+'%'; } } },
+      axisLabel: { formatter: function(v){ return view==='vs2019' ? (v>0?'+':'')+v+'%' : v+'%'; } } },
     yAxis: { type: 'category', data: names.slice().reverse(), axisLabel: { fontSize: 11 } },
     series: series.map(function(s){ s.data = s.data.slice().reverse(); return s; })
   }, true);

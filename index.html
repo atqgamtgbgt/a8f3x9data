@@ -8619,8 +8619,8 @@ function updateCustomLabels() {
   var ecEl = document.getElementById('cpca-map-ec');
   if (!ecEl) return;
   var customLabels = [
-    ['甘肃', '甘粛', 103.5, 38.5],
-    ['河北', '河北', 118.3, 40.8],
+    ['甘肃', '甘粛', 105.5, 38.0],
+    ['河北', '河北', 116.8, 40.5],
   ];
   customLabels.forEach(function(item) {
     var zhName = item[0], jaName = item[1], lon = item[2], lat = item[3];
@@ -8629,7 +8629,7 @@ function updateCustomLabels() {
     if (!div) {
       div = document.createElement('div');
       div.id = divId;
-      div.style.cssText = 'position:absolute;pointer-events:none;font-size:14px;font-weight:bold;color:#fff;text-shadow:0 0 5px rgba(0,0,0,0.95),0 0 5px rgba(0,0,0,0.95);-webkit-text-stroke:1px rgba(0,0,0,0.6);transform:translate(-50%,-50%);z-index:10;';
+      div.style.cssText = 'position:absolute;pointer-events:none;font-size:14px;font-weight:bold;font-family:"Noto Sans SC","Noto Sans JP",sans-serif;color:#fff;text-shadow:-1px -1px 3px rgba(0,0,0,0.9),1px -1px 3px rgba(0,0,0,0.9),-1px 1px 3px rgba(0,0,0,0.9),1px 1px 3px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.95);transform:translate(-50%,-50%);z-index:10;letter-spacing:0;';
       ecEl.parentElement.appendChild(div);
     }
     var pt = mapChart.convertToPixel({seriesIndex:0}, [lon, lat]);

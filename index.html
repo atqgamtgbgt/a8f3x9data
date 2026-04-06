@@ -8589,6 +8589,16 @@ window.cpcaInitMap = function() {
   `;
 
   const ecEl = document.getElementById('cpca-map-ec');
+  (function(){
+    var dbg = document.getElementById('map-debug-coord');
+    if (!dbg) {
+      dbg = document.createElement('div');
+      dbg.id = 'map-debug-coord';
+      dbg.style.cssText = 'position:absolute;top:4px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.7);color:#ff0;font-size:12px;padding:3px 8px;border-radius:4px;pointer-events:none;z-index:20;';
+      dbg.textContent = '地図をクリックすると経緯度が表示されます';
+      ecEl.parentElement.appendChild(dbg);
+    }
+  })();
   mapChart = echarts.init(ecEl, 'dark');
   mapChart.showLoading({text:'地図データ読み込み中…',color:'#2563eb',textColor:'#8ab0d0',maskColor:'rgba(13,27,42,0.8)'});
 
@@ -8606,6 +8616,11 @@ window.cpcaInitMap = function() {
   })();
 
   mapChart.on('click', p=>{
+    const geo = mapChart.convertFromPixel({seriesIndex:0}, [p.event.offsetX, p.event.offsetY]);
+    if (geo) {
+      const dbg = document.getElementById('map-debug-coord');
+      if (dbg) dbg.textContent = '📍 lon=' + geo[0].toFixed(2) + ', lat=' + geo[1].toFixed(2);
+    }
     if(p.componentType!=='series') return;
     const ja = CPCA.zh2ja[p.name] || p.name;
     showProvDetail(ja);
@@ -8621,6 +8636,7 @@ function updateCustomLabels() {
   var customLabels = [
     ['甘肃', '甘粛', 104.39, 35.13],
     ['河北', '河北', 115.14, 38.51],
+    ['内蒙古', '内蒙古', 112.0, 40.0],
   ];
   customLabels.forEach(function(item) {
     var zhName = item[0], jaName = item[1], lon = item[2], lat = item[3];
@@ -8724,7 +8740,7 @@ function renderMapChart() {
         textBorderColor:'rgba(0,0,0,0.6)',
         textBorderWidth:2,
         formatter:p=>{
-          if (p.name === '甘肃' || p.name === '河北') return '';
+          if (p.name === '甘肃' || p.name === '河北' || p.name === '内蒙古') return '';
           const ja = CPCA.zh2ja[p.name] || p.name;
           return ja;
         },

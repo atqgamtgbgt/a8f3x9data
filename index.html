@@ -8688,27 +8688,11 @@ window.cpcaInitMap = function() {
   });
 };
 
-// 省別ラベルオフセット（[dx, dy] ピクセル）
-var LABEL_OFFSETS = {
-  '甘肃': [0, 35],
-  '河北': [38, -22],
-  '宁夏': [0, 0],
-  '北京': [0, 0],
-  '天津': [6, 6],
-};
 
 function mapDataArr() {
-  var HIDE_LABEL = {'甘肃':true,'河北':true};
   return Object.keys(CPCA.prov).map(ja=>{
     var zh = CPCA.ja2zh[ja] || ja;
-    var item = {
-      name: zh,
-      value: metricVal(ja),
-    };
-    if (HIDE_LABEL[zh]) {
-      item.label = { show: false };
-    }
-    return item;
+    return { name: zh, value: metricVal(ja) };
   });
 }
 
@@ -8773,27 +8757,17 @@ function renderMapChart() {
           return ja;
         },
       },
-      labelLayout:{hideOverlap:true,moveOverlap:'shiftY',fontSize:13},
-    },{
-      // 甘肃・河北のラベルを正確な座標で追加描画
-      type:'scatter', map:'china_full', coordinateSystem:'geo',
-      symbol:'none', silent:true,
-      data:[
-        {name:'甘肃ラベル', value:[104.0, 37.5], label:{
-          show:true, formatter:'甘粛',
-          color:'#fff', fontSize:14, fontWeight:'bold',
-          textShadowColor:'rgba(0,0,0,0.95)', textShadowBlur:5,
-          textBorderColor:'rgba(0,0,0,0.6)', textBorderWidth:2,
-          position:'inside'
-        }},
-        {name:'河北ラベル', value:[118.5, 39.8], label:{
-          show:true, formatter:'河北',
-          color:'#fff', fontSize:14, fontWeight:'bold',
-          textShadowColor:'rgba(0,0,0,0.95)', textShadowBlur:5,
-          textBorderColor:'rgba(0,0,0,0.6)', textBorderWidth:2,
-          position:'inside'
-        }},
-      ],
+      labelLayout:function(params){
+        var dx = {'甘肃':80, '河北':55};
+        var dy = {'甘肃':0,  '河北':-45};
+        var x = dx[params.name];
+        if (x == null) return {hideOverlap:true, moveOverlap:'shiftY'};
+        return {
+          x: params.point[0] + x,
+          y: params.point[1] + dy[params.name],
+          hideOverlap: false
+        };
+      },
     }]
   });
 }

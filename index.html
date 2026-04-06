@@ -2560,6 +2560,9 @@ body.tray-open { padding-bottom: 105px; }
 
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-segment" type="button" role="tab">🚗 乗用車・商用車</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-brand" type="button" role="tab">🏷️ ブランド系シェア</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-ent" type="button" role="tab">🏭 企業別ランキング</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-nev-ent" type="button" role="tab">⚡ NEV企業</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-export-ent" type="button" role="tab">🌍 輸出企業</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-trad-seg" type="button" role="tab">🔧 ICE セグメント</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-nev-seg" type="button" role="tab">⚡ NEVセグメント</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-price" type="button" role="tab">💰 価格帯</button></li>
@@ -2583,6 +2586,9 @@ body.tray-open { padding-bottom: 105px; }
                 <div id="ec-brand" class="echart-box" style="height:420px"></div>
               </div>
             </div>
+            <div class="tab-pane fade" id="cp-ent"><div class="chart-card"><div class="chart-title">重点企業　月次総合販売推移</div><div class="chart-subtitle">上位11社　<span class="text-muted" style="font-size:10px">📋 集団名:B列 / 販売台数:C列（行番号は月により変動、2026/2月基準: 行114〜128）</span></div><div id="ec-ent" class="echart-box" style="height:500px"></div></div></div>
+            <div class="tab-pane fade" id="cp-nev-ent"><div class="chart-card"><div class="chart-title">NEV重点企業　月次販売推移</div><div class="chart-subtitle">上位15社　<span class="text-muted" style="font-size:10px">📋 集団名:B列 / NEV販売:C列（行番号は月により変動、2026/2月基準: 行134〜148）</span></div><div id="ec-nev-ent" class="echart-box" style="height:520px"></div></div></div>
+            <div class="tab-pane fade" id="cp-export-ent"><div class="chart-card"><div class="chart-title">輸出ランキング企業　月次推移</div><div class="chart-subtitle">上位10社　<span class="text-muted" style="font-size:10px">📋 企業名:B列 / 輸出台数:C列（行番号は月により変動、2026/2月基準: 行154〜163）</span></div><div id="ec-export-ent" class="echart-box" style="height:500px"></div></div></div>
             <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（伝統燃料車）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）　<span class="text-muted" style="font-size:10px">📋 シート「単月計算（セグメント・価格帯）」/ ICEセグメント: 行6〜11 / B列=23年6月〜 各列が1ヶ月</span></div>
                 <div class="seg-definition">
                   <span class="seg-item"><b>A00</b> 軽小型（〜3.4m）</span>
@@ -5746,7 +5752,74 @@ function initBrand() {
     chart.setOption(opt);
   });
 }
+// ⑦ 企業別総合販売
+function initEnt() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-ent', chart => {
+    const t = gt();
+    const opt = baseOpt(t);
+    opt.xAxis.data = CD.labels_ent;
+    opt.grid.bottom = 80; opt.grid.right = 150;
+    opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value??'−'}</b> 万台<br>`);
+      return s;
+    };
+    opt.series = CD.ent_companies.map((co,i) => ({
+      name:co, type:'line', data:CD.ent_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:true,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
 
+// ⑧ NEV企業
+function initNevEnt() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-nev-ent', chart => {
+    const t = gt();
+    const opt = baseOpt(t);
+    opt.xAxis.data = CD.labels_nev_ent;
+    opt.grid.right = 150;
+    opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value??'−'}</b> 万台<br>`);
+      return s;
+    };
+    opt.series = CD.nev_companies.map((co,i) => ({
+      name:co, type:'line', data:CD.nev_ent_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:true,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
+
+// ⑨ 輸出企業
+function initExpEnt() {
+  if (!CAAM_EXCEL_LOADED) return;
+  initEC('ec-export-ent', chart => {
+    const t = gt();
+    const opt = baseOpt(t);
+    opt.xAxis.data = CD.labels_exp_ent;
+    opt.grid.right = 130;
+    opt.legend.right = 0; opt.legend.top = 40; opt.legend.orient = 'vertical';
+    opt.tooltip.formatter = params => {
+      let s = `<b>${params[0].axisValue}</b><br>`;
+      params.forEach(p => s += `${p.marker}${p.seriesName}：<b>${p.value??'−'}</b> 万台<br>`);
+      return s;
+    };
+    opt.series = CD.exp_companies.map((co,i) => ({
+      name:co, type:'line', data:CD.exp_ent_series[co],
+      symbol:'circle', symbolSize:5, connectNulls:true,
+      lineStyle:{width:2,color:PAL[i%12]}, itemStyle:{color:PAL[i%12]}
+    }));
+    chart.setOption(opt);
+  });
+}
 
 
 function initTradSeg() {
@@ -6217,6 +6290,9 @@ const CHART_FNS = {
   'cp-nev-detail':     initNevDetail,
   'cp-segment':        initSeg,
   'cp-brand':          initBrand,
+  'cp-ent':            initEnt,
+  'cp-nev-ent':        initNevEnt,
+  'cp-export-ent':     initExpEnt,
   'cp-trad-seg':       initTradSeg,
   'cp-nev-seg':        initNevSeg,
   'cp-price':          initPrice,
@@ -8614,8 +8690,8 @@ window.cpcaInitMap = function() {
 
 // 省別ラベルオフセット（[x, y] ピクセル調整）
 var LABEL_OFFSETS = {
-  '甘肃': [0, -12],
-  '河北': [-8, 10],
+  '甘肃': [0, 30],
+  '河北': [35, -20],
   '宁夏': [0, 0],
   '北京': [0, 0],
   '天津': [6, 6],

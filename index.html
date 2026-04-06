@@ -8817,14 +8817,14 @@ function showProvDetail(ja) {
     c.setOption({backgroundColor:'transparent',
       title:{text:'車身構造（2025年）',textStyle:{fontSize:12,color:'#7eb3ff'},top:0},
       legend:{data:['SUV','セダン（CAR）','MPV'],bottom:2,textStyle:{fontSize:10,color:'#8ab0d0'}},
-      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
+      tooltip:{formatter:p=>`${p.seriesName}: ${p.value.toFixed(1)}%`},
       grid:{left:8,right:8,top:30,bottom:40},
       xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
       yAxis:{type:'category',data:[''],axisLabel:{show:false}},
       series:[
-        {name:'SUV',type:'bar',stack:'s',data:[b.SUV],itemStyle:{color:'#ef6c00'},label:{show:true,formatter:p=>'SUV '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
-        {name:'セダン（CAR）',type:'bar',stack:'s',data:[b.CAR],itemStyle:{color:'#5e35b1'},label:{show:true,formatter:p=>'セダン '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
-        {name:'MPV',type:'bar',stack:'s',data:[b.MPV],itemStyle:{color:'#00897b'},label:{show:true,formatter:p=>p.value>=5?'MPV '+p.value.toFixed(0)+'%':'',fontSize:10,color:'#fff'}},
+        {name:'SUV',type:'bar',stack:'s',data:[b.SUV],itemStyle:{color:'#ef6c00'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
+        {name:'セダン（CAR）',type:'bar',stack:'s',data:[b.CAR],itemStyle:{color:'#5e35b1'},label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
+        {name:'MPV',type:'bar',stack:'s',data:[b.MPV],itemStyle:{color:'#00897b'},label:{show:true,formatter:p=>p.value>=5?p.value.toFixed(0)+'%':'',fontSize:10,color:'#fff'}},
       ]
     });
   }
@@ -8833,7 +8833,7 @@ function showProvDetail(ja) {
     c.setOption({backgroundColor:'transparent',
       title:{text:'ブランド構成（2025年）',textStyle:{fontSize:12,color:'#7eb3ff'},top:0},
       legend:{data:['自主','合資','豪華'],bottom:2,textStyle:{fontSize:10,color:'#8ab0d0'}},
-      tooltip:{formatter:p=>`${p.name}: ${p.value.toFixed(1)}%`},
+      tooltip:{formatter:p=>`${p.seriesName}: ${p.value.toFixed(1)}%`},
       grid:{left:8,right:8,top:30,bottom:40},
       xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
       yAxis:{type:'category',data:[''],axisLabel:{show:false}},

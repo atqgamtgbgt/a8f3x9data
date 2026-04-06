@@ -5679,10 +5679,17 @@ function initBrand() {
     ];
 
     // 各年の「最終月」インデックスを取得（12月優先）
+    // 2022・2023はハードコード済みのため先頭インデックスを直接使用
+    const HC_YEARS = { '2022': 0, '2023': 1 };
     const years = [...new Set(CD.labels_all.map(l => '20' + l.slice(0,2)))].sort();
     const yearLabels = [];
     const yearIndices = [];
     years.forEach(yr => {
+      if (HC_YEARS[yr] !== undefined) {
+        yearLabels.push(yr + '年末時点');
+        yearIndices.push(HC_YEARS[yr]);
+        return;
+      }
       const shortYr = yr.slice(2);
       const idxList = CD.labels_all.reduce((acc, l, i) => {
         if (l.startsWith(shortYr + '年')) acc.push(i);

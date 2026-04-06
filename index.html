@@ -5368,12 +5368,11 @@ function buildCdSd(monthly) {
   }
 
   // 2022年・2023年 通年シェア ハードコード（出所：CAAM）
-  // 2022年: 仏系はその他に合算（合計99.01% → 正規化）
-  // 2023年: 出所：CAAM 2023年12月報告（合計99.2% → 正規化）
+  // 2022年: 仏系はその他に合算 / 2023年: CAAM 2023年12月報告
   {
     const HC = [
-      { label: '22年12月末', cn:49.93, de:19.53, jp:17.80, us:9.37, kr:1.62, other:0.76 },
-      { label: '23年12月末', cn:56.0,  de:17.8,  jp:14.4,  us:8.8,  kr:1.6,  other:1.4  },
+      { label: '22年', cn:49.93, de:19.53, jp:17.80, us:9.37, kr:1.62, other:0.76 },
+      { label: '23年', cn:56.0,  de:17.8,  jp:14.4,  us:8.8,  kr:1.6,  other:1.4  },
     ];
     for (const hc of HC.slice().reverse()) {
       const tot = hc.cn + hc.de + hc.jp + hc.us + hc.kr + hc.other;
@@ -5692,7 +5691,7 @@ function initBrand() {
       if (!idxList.length) return;
       const dec = idxList.find(i => CD.labels_all[i].includes('12月'));
       const useIdx = dec !== undefined ? dec : idxList[idxList.length - 1];
-      yearLabels.push(CD.labels_all[useIdx].replace('月', '月末'));
+      yearLabels.push(yr + '年末時点');
       yearIndices.push(useIdx);
     });
 

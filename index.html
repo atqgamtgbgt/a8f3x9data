@@ -8690,8 +8690,8 @@ window.cpcaInitMap = function() {
 
 // 省別ラベルオフセット（[x, y] ピクセル調整）
 var LABEL_OFFSETS = {
-  '甘肃': [0, 30],
-  '河北': [35, -20],
+  '甘肃': [0, -12],
+  '河北': [-8, 10],
   '宁夏': [0, 0],
   '北京': [0, 0],
   '天津': [6, 6],
@@ -8773,10 +8773,17 @@ function renderMapChart() {
           return ja;
         },
       },
-      labelLayout:{
-        hideOverlap:true,
-        moveOverlap:'shiftY',
-        fontSize:13,
+      labelLayout:function(params){
+        var offsets = {
+          '甘肃': [0, 30],
+          '河北': [32, -18],
+        };
+        var off = offsets[params.text] || offsets[Object.keys(offsets).find(k=>params.text.includes(k))];
+        if (off) {
+          return { x: params.labelRect.x + params.labelRect.width/2 + off[0],
+                   y: params.labelRect.y + params.labelRect.height/2 + off[1] };
+        }
+        return {};
       },
     }]
   });

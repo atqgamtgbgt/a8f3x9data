@@ -5698,7 +5698,8 @@ function initBrand() {
       if (!idxList.length) return;
       const dec = idxList.find(i => CD.labels_all[i].includes('12月'));
       const useIdx = dec !== undefined ? dec : idxList[idxList.length - 1];
-      yearLabels.push(yr + '年末時点');
+      const lbl = dec !== undefined ? yr + '年末時点' : CD.labels_all[useIdx] + '時点';
+      yearLabels.push(lbl);
       yearIndices.push(useIdx);
     });
 

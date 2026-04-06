@@ -1694,53 +1694,53 @@ img.car-thumb {
 .cds-nav-compact {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   align-items: flex-start;
   margin-bottom: 10px;
 }
 .cds-gc {
   display: flex;
   flex-direction: column;
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 10px;
-  overflow: hidden;
   min-width: 0;
 }
 .cds-gc-label {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 5px 10px;
-  font-size: 0.88rem;
+  padding: 3px 6px;
+  font-size: 0.82rem;
+  color: #6a8aaa;
+  cursor: default;
 }
-.cds-gc-label:hover { background: #f1f5f9; }
-.cds-gc-label.has-active { color: #0d6efd; }
+.cds-gc-label:hover { background: transparent; }
+.cds-gc-label.has-active { color: #6a8aaa; }
 .cds-gc-arrow { font-size: 10px; margin-left: auto; color: #94a3b8; transition: transform 0.2s; }
 .cds-gc.collapsed .cds-gc-arrow { transform: rotate(-90deg); }
 .cds-gc-items {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px;
-  padding: 4px 6px 6px;
-  border-top: 1px solid #e2e8f0;
+  gap: 4px;
+  padding: 2px 0 4px;
+  background: #1a2a3a;
+  border-radius: 8px;
+  padding: 4px;
 }
 .cds-gc.collapsed .cds-gc-items { display: none; }
 .cds-gc-items .nav-link {
-  border-radius: 16px;
-  padding: 3px 9px;
-  font-size: 0.9rem;
+  border-radius: 6px;
+  padding: 4px 11px;
+  font-size: 0.85rem;
   font-weight: 500;
-  color: #555;
-  background: #fff;
-  border: 1px solid #e0e0e0;
+  color: #8ab0d0;
+  background: transparent;
+  border: none;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
   line-height: 1.5;
 }
-.cds-gc-items .nav-link:hover { background: #e2e8f0; color: #333; }
-.cds-gc-items .nav-link.active { background: #0d6efd; border-color: #0d6efd; color: #fff; }
+.cds-gc-items .nav-link:hover { background: #243447; color: #c8dcf0; }
+.cds-gc-items .nav-link.active { background: #0d1b2a; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
 /* カスタムタブペイン */
 .cds-pane { display: none; }
 

@@ -1803,6 +1803,77 @@ img.car-thumb {
 }
 
 /* ========================================
+   スマホ対応（地図タブ・グラフ系）
+   ======================================== */
+@media (max-width: 768px) {
+
+  /* 地図タブ：高さを画面に合わせる */
+  #cpca-map-root,
+  .chart-card[style*="min-height:760px"],
+  .chart-card[style*="min-height: 760px"] {
+    height: 100svh !important;
+    min-height: 0 !important;
+  }
+
+  /* 地図の内部3カラム → 縦積み */
+  #cpca-map-root > div {
+    flex-direction: column !important;
+    height: 100% !important;
+  }
+
+  /* 左コントロールパネル：横スクロール帯に */
+  #cpca-map-root > div > div:first-child {
+    flex: 0 0 auto !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    width: 100% !important;
+    padding: 6px 8px !important;
+    gap: 4px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+  }
+
+  /* ボタン群を横並び */
+  #cpca-btns {
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    gap: 3px !important;
+  }
+
+  #cpca-btns button {
+    font-size: 10px !important;
+    padding: 3px 6px !important;
+    white-space: nowrap;
+  }
+
+  /* 地図本体：残りの高さを使う */
+  #cpca-map-root > div > div:nth-child(2) {
+    flex: 1 1 auto !important;
+    min-height: 300px !important;
+  }
+
+  /* 右詳細パネル：スマホでは非表示 */
+  #cpca-detail-panel {
+    display: none !important;
+  }
+
+  /* CAAMグラフ等のechart-box高さ調整 */
+  .echart-box {
+    height: 260px !important;
+  }
+
+  /* chartカードのパディング縮小 */
+  .chart-card {
+    padding: 10px 8px !important;
+  }
+
+  /* CPCAの省詳細チャート */
+  #cp-nev, #cp-body, #cp-brand {
+    height: 140px !important;
+  }
+}
+
+/* ========================================
    印刷用スタイル
    ======================================== */
 @media print {
@@ -3064,8 +3135,8 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- 中国地域別 ペイン群 -->
             <div class="cds-pane" id="cds-china-map">
-              <div class="chart-card" style="padding:0;overflow:hidden;min-height:760px">
-                <div id="cpca-map-root" style="height:760px"></div>
+              <div class="chart-card" style="padding:0;overflow:hidden;min-height:clamp(400px,80svh,760px)">
+                <div id="cpca-map-root" style="height:760px;height:clamp(400px,80svh,760px)"></div>
               </div>
             </div>
             <div class="cds-pane" id="cds-region-trend">

@@ -1693,73 +1693,78 @@ img.car-thumb {
 /* コンパクト横並びナビ */
 .cds-nav-compact {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: flex-start;
-  margin-bottom: 10px;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 12px;
 }
 .cds-gc {
   display: flex;
-  flex-direction: column;
-  min-width: 0;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 4px 0;
 }
 .cds-gc-label {
   display: flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 6px;
-  font-size: 0.82rem;
-  color: #6a8aaa;
+  padding: 3px 8px 3px 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #94a3b8;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
   cursor: default;
+  border-right: 1px solid #e2e8f0;
+  margin-right: 2px;
 }
 .cds-gc-label:hover { background: transparent; }
-.cds-gc-label.has-active { color: #6a8aaa; }
-.cds-gc-arrow { font-size: 10px; margin-left: auto; color: #94a3b8; transition: transform 0.2s; }
-.cds-gc.collapsed .cds-gc-arrow { transform: rotate(-90deg); }
+.cds-gc-label.has-active { color: #64748b; }
+.cds-gc-arrow { display: none; }
+.cds-gc.collapsed .cds-gc-items { display: flex; }
 .cds-gc-items {
   display: flex;
   flex-wrap: wrap;
   gap: 4px;
-  padding: 2px 0 4px;
-  background: #1a2a3a;
-  border-radius: 8px;
-  padding: 4px;
+  background: transparent;
+  padding: 0;
 }
 .cds-gc.collapsed .cds-gc-items { display: none; }
 .cds-gc-items .nav-link {
-  border-radius: 6px;
-  padding: 4px 11px;
-  font-size: 0.85rem;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 0.82rem;
   font-weight: 500;
-  color: #8ab0d0;
+  color: #64748b;
   background: transparent;
-  border: none;
+  border: 1px solid #cbd5e1;
   cursor: pointer;
   white-space: nowrap;
   transition: all 0.15s;
-  line-height: 1.5;
+  line-height: 1.6;
 }
-.cds-gc-items .nav-link:hover { background: #243447; color: #c8dcf0; }
-.cds-gc-items .nav-link.active { background: #0d1b2a; color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.3); }
+.cds-gc-items .nav-link:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
+.cds-gc-items .nav-link.active { background: #3b82f6; color: #fff; border-color: #3b82f6; font-weight: 600; }
 /* カスタムタブペイン */
 .cds-pane { display: none; }
 
 /* 中タブ（輸出分析 / 中国地域別） */
 .cds-mid-tab {
-  padding: 8px 22px;
-  font-size: 15px;
-  font-weight: 600;
-  border: none;
-  border-bottom: 3px solid transparent;
+  padding: 5px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
   background: transparent;
-  color: #666;
+  color: #64748b;
   cursor: pointer;
-  transition: all 0.18s;
-  margin-bottom: -2px;
+  transition: all 0.15s;
+  white-space: nowrap;
 }
-.cds-mid-tab:hover { color: #0d6efd; background: #f0f4ff; }
-.cds-mid-tab.active { color: #0d6efd; border-bottom-color: #0d6efd; background: #f8f9ff; }
-.cds-sub-nav { padding: 8px 0 4px; }
+.cds-mid-tab:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
+.cds-mid-tab.active { background: #1e40af; color: #fff; border-color: #1e40af; font-weight: 600; }
+.cds-sub-nav { padding: 10px 0 4px; }
 .cds-pane.cds-active { display: block; }
 .chart-card {
   background: #fff;
@@ -2798,7 +2803,7 @@ body.tray-open { padding-bottom: 105px; }
           <div id="cdsPills" style="display:none!important">
 
             <!-- 中タブ切替ボタン -->
-            <div id="cds-mid-tabs" style="display:flex;gap:0;margin-bottom:0;border-bottom:2px solid #dee2e6">
+            <div id="cds-mid-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f1f5f9">
               <button id="cds-mid-btn-export" class="cds-mid-tab active" onclick="cdsSetMidTab('export')">
                 🚢 輸出分析
               </button>

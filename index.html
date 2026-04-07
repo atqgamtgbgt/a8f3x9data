@@ -2694,7 +2694,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="tab-pane fade" id="cp-bev-phev">
               <div class="row g-3">
                 <div class="col-12"><div class="chart-card"><div class="chart-title">BEV / PHEV　国内販売 vs 輸出</div><div class="chart-subtitle">動力別の国内・輸出内訳推移　<span class="text-muted" style="font-size:10px">📋 BEV販売:D100※ - BEV輸出:E109※ = BEV国内 / PHEV販売:D101※ - PHEV輸出:E110※ = PHEV国内　（※行番号・列は月により変動）</span></div><div id="ec-bev-phev-dom-exp" class="echart-box"></div></div></div>
-                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV輸出内訳：乗用車 vs 商用車、BEV vs PHEV</div><div class="chart-subtitle">輸出の2軸分類　<span class="text-muted" style="font-size:10px">📋 NEV輸出:E106※ / 乗用NEV輸出:E107※ / 商用NEV輸出:E108※ / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-nev-exp-breakdown" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">NEV輸出内訳：乗用車 / 商用車 / BEV / PHEV</div><div class="chart-subtitle">輸出の2軸分類　<span class="text-muted" style="font-size:10px">📋 NEV輸出:E106※ / 乗用NEV輸出:E107※ / 商用NEV輸出:E108※ / BEV輸出:E109※ / PHEV輸出:E110※　（※行番号は月により変動）</span></div><div id="ec-nev-exp-breakdown" class="echart-box"></div></div></div>
               </div>
             </div>
 
@@ -2740,7 +2740,7 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="tab-pane fade" id="cccm-bike-type">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">二輪車型別 月次販売（跨骑・踏板・弯梁）</div><div class="chart-subtitle">4〜6月は直接データ、7〜11月は累計差し引き逆算、12月はデータなし</div><div id="cccm-ec-bike-type" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">二輪 車種別月次販売（オートバイ・スクーター・カブ型）</div><div class="chart-subtitle">4〜6月は直接データ、7〜11月は累計差し引き逆算、12月はデータなし</div><div id="cccm-ec-bike-type" class="echart-box"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">二輪車 ＋ 三輪車内訳（貨運・客運）</div><div class="chart-subtitle">三輪内訳は4〜6月のみ</div><div id="cccm-ec-bike-trike" class="echart-box" style="height:340px"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">二輪・三輪 前年同月比（%）</div><div class="chart-subtitle">前年同月比</div><div id="cccm-ec-bike-trike-yoy" class="echart-box" style="height:340px"></div></div></div>
               </div>
@@ -2753,7 +2753,7 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="tab-pane fade" id="cccm-export">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">月次整車輸出台数 ＋ 輸出金額</div><div class="chart-subtitle">棒グラフ＝台数（万台）、折れ線＝金額（億ドル）</div><div id="cccm-ec-export" class="echart-box"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">月次完成車輸出台数 ＋ 輸出金額</div><div class="chart-subtitle">棒グラフ＝台数（万台）、折れ線＝金額（億ドル）</div><div id="cccm-ec-export" class="echart-box"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">輸出台数 前年同月比（%）</div><div class="chart-subtitle">前年同月比</div><div id="cccm-ec-export-yoy" class="echart-box" style="height:300px"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">排気量別輸出（月次、5〜9月）</div><div class="chart-subtitle">積み上げ棒グラフ / 7・8月は400ccが上位入り</div><div id="cccm-ec-cc-export" class="echart-box" style="height:300px"></div></div></div>
               </div>
@@ -2828,10 +2828,10 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">📊 全体トレンド </span>
                   <div class="cds-gc-items" id="cds-gc-g1">
                     <button class="nav-link active" data-cds-target="#cds-monthly">📈 月次推移</button>
-                    <button class="nav-link" data-cds-target="#cds-annual">📊 歴年出口</button>
+                    <button class="nav-link" data-cds-target="#cds-annual">📊 年別輸出推移</button>
                     <button class="nav-link" data-cds-target="#cds-nev">⚡ NEV月次</button>
-                    <button class="nav-link" data-cds-target="#cds-nev-annual">⚡ NEV歴年</button>
-                    <button class="nav-link" data-cds-target="#cds-nev-trend">⚡ NEV走勢</button>
+                    <button class="nav-link" data-cds-target="#cds-nev-annual">⚡ NEV年別推移</button>
+                    <button class="nav-link" data-cds-target="#cds-nev-trend">⚡ NEVトレンド</button>
                     <button class="nav-link" data-cds-target="#cds-russia">🇷🇺 対ロシア</button>
                   </div>
                 </div>
@@ -2840,10 +2840,10 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">🔋 動力・車型 </span>
                   <div class="cds-gc-items" id="cds-gc-g2">
                     <button class="nav-link" data-cds-target="#cds-powertype">🔋 動力別</button>
-                    <button class="nav-link" data-cds-target="#cds-bodytype">🚗 車型別</button>
+                    <button class="nav-link" data-cds-target="#cds-bodytype">🚗 ボディタイプ別</button>
                     <button class="nav-link" data-cds-target="#cds-nev-power">🔋 NEV動力</button>
-                    <button class="nav-link" data-cds-target="#cds-nev-body">🚗 NEV車型</button>
-                    <button class="nav-link" data-cds-target="#cds-displace">🔧 排量別</button>
+                    <button class="nav-link" data-cds-target="#cds-nev-body">🚗 NEVボディタイプ別</button>
+                    <button class="nav-link" data-cds-target="#cds-displace">🔧 排気量別</button>
                   </div>
                 </div>
 
@@ -2862,7 +2862,7 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🚗 乗用車 国別 </span>
                   <div class="cds-gc-items" id="cds-gc-g4">
-                    <button class="nav-link" data-cds-target="#cds-r3">🚘 整車</button>
+                    <button class="nav-link" data-cds-target="#cds-r3">🚘 完成車</button>
                     <button class="nav-link" data-cds-target="#cds-r4">⚡ NEV</button>
                     <button class="nav-link" data-cds-target="#cds-r5">⛽ 燃油</button>
                     <button class="nav-link" data-cds-target="#cds-r6">🔌 BEV</button>
@@ -2926,7 +2926,7 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <div class="cds-gc-items" id="cds-gc-gc">
                     <button class="nav-link" data-cds-target="#cds-china-map" id="btn-china-map">🗺️ インタラクティブ地図</button>
-                    <button class="nav-link" data-cds-target="#cds-region-trend">📈 大区域トレンド</button>
+                    <button class="nav-link" data-cds-target="#cds-region-trend">📈 地域別トレンド</button>
                     <button class="nav-link" data-cds-target="#cds-prov-sales">🏙️ 省別販売量</button>
                   </div>
                 </div>
@@ -2987,7 +2987,7 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">📊 生産・装車 </span>
                   <div class="cds-gc-items" id="cds-gc-gb1">
                     <button class="nav-link active" data-cds-battery-target="#bat-production">📈 電池生産推移</button>
-                    <button class="nav-link" data-cds-battery-target="#bat-install">🚗 装車占比推移</button>
+                    <button class="nav-link" data-cds-battery-target="#bat-install">🚗 車両搭載比率推移</button>
                     <button class="nav-link" data-cds-battery-target="#bat-lfp-nmc">⚡ LFP vs 三元</button>
                   </div>
                 </div>
@@ -3068,7 +3068,7 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="imp-nev-country">
               <div class="chart-card">
-                <div class="chart-title">新エネルギー車 国別輸入量（台）</div>
+                <div class="chart-title">NEV 国別輸入量（台）</div>
                 <div class="chart-subtitle">崔東树レポート ⑦シート　2021〜2026年</div>
                 <div id="ec-imp-nev-country" class="echart-box" style="height:460px"></div>
               </div>
@@ -3096,18 +3096,18 @@ body.tray-open { padding-bottom: 105px; }
             </div>
 
             <!-- 輸出分析 ペイン群 -->
-            <div class="cds-pane cds-active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-annual"><div class="chart-card"><div class="chart-title">歴年出口量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑭シート　2007〜2025年</div><div id="ec-cds-annual" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev"><div class="chart-card"><div class="chart-title">NEV出口 vs 総出口（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ②シート　月次単月</div><div id="ec-cds-nev" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-annual"><div class="chart-card"><div class="chart-title">NEV出口 歴年推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉕シート　2020〜2025年</div><div id="ec-cds-nev-annual" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-trend"><div class="chart-card"><div class="chart-title">NEV出口 走勢グラフ（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉖シート　2017〜2025年</div><div id="ec-cds-nev-trend" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-russia"><div class="chart-card"><div class="chart-title">対ロシア月次出口量推移（台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉗シート　2021〜2025年</div><div id="ec-cds-russia" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-powertype"><div class="chart-card"><div class="chart-title">乗用車 動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑰シート　2022〜2025年</div><div id="ec-cds-powertype" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-bodytype"><div class="chart-card"><div class="chart-title">車型別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑯シート　2022〜2025年</div><div id="ec-cds-bodytype" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-power"><div class="chart-card"><div class="chart-title">新能源 動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉓シート　2022〜2025年</div><div id="ec-cds-nev-power" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-body"><div class="chart-card"><div class="chart-title">新能源 車型別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉔シート　2022〜2025年</div><div id="ec-cds-nev-body" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-displace"><div class="chart-card"><div class="chart-title">乗用車 排量別×動力別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉘シート　2020〜2025年</div><div id="ec-cds-displace" class="echart-box" style="height:480px"></div></div></div>
-            <div class="cds-pane" id="cds-region"><div class="chart-card"><div class="chart-title">地域別出口量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑲シート　2019〜2025年</div><div id="ec-cds-region" class="echart-box" style="height:460px"></div></div></div>
+            <div class="cds-pane cds-active" id="cds-monthly"><div class="chart-card"><div class="chart-title">月次輸出量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑮シート　2021〜2026年</div><div id="ec-cds-monthly" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-annual"><div class="chart-card"><div class="chart-title">年別輸出量推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑭シート　2007〜2025年</div><div id="ec-cds-annual" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-nev"><div class="chart-card"><div class="chart-title">NEV輸出 vs 総輸出（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ②シート　月次単月</div><div id="ec-cds-nev" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-nev-annual"><div class="chart-card"><div class="chart-title">NEV輸出 年別推移（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉕シート　2020〜2025年</div><div id="ec-cds-nev-annual" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-nev-trend"><div class="chart-card"><div class="chart-title">NEV輸出 長期トレンド（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉖シート　2017〜2025年</div><div id="ec-cds-nev-trend" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-russia"><div class="chart-card"><div class="chart-title">対ロシア 月次輸出量推移（台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉗シート　2021〜2025年</div><div id="ec-cds-russia" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-powertype"><div class="chart-card"><div class="chart-title">乗用車 動力別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑰シート　2022〜2025年</div><div id="ec-cds-powertype" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-bodytype"><div class="chart-card"><div class="chart-title">ボディタイプ別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑯シート　2022〜2025年</div><div id="ec-cds-bodytype" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-nev-power"><div class="chart-card"><div class="chart-title">NEV 動力別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉓シート　2022〜2025年</div><div id="ec-cds-nev-power" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-nev-body"><div class="chart-card"><div class="chart-title">新能源 ボディタイプ別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉔シート　2022〜2025年</div><div id="ec-cds-nev-body" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-displace"><div class="chart-card"><div class="chart-title">乗用車 排気量×動力別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉘シート　2020〜2025年</div><div id="ec-cds-displace" class="echart-box" style="height:480px"></div></div></div>
+            <div class="cds-pane" id="cds-region"><div class="chart-card"><div class="chart-title">地域別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑲シート　2019〜2025年</div><div id="ec-cds-region" class="echart-box" style="height:460px"></div></div></div>
             <div class="cds-pane" id="cds-country"><div class="chart-card"><div class="chart-title">主要国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑳シート　2024年・2025年比較</div><div id="ec-cds-country" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-nev-ctry"><div class="chart-card"><div class="chart-title">NEV 国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉑シート　2024年・2025年比較</div><div id="ec-cds-nev-ctry" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-prov"><div class="chart-card"><div class="chart-title">省別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑱シート　2019〜2025年</div><div id="ec-cds-prov" class="echart-box" style="height:500px"></div></div></div>
@@ -3428,7 +3428,7 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <!-- 2: 装車占比推移（4チャート） -->
+            <!-- 2: 車両搭載比率推移（4チャート） -->
             <div class="cds-pane" id="bat-install">
               <div class="row g-3">
                 <!-- 2-1: 装車量GWh（三元+LFP積み上げ） -->

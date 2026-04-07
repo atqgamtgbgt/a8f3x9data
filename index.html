@@ -8781,11 +8781,10 @@ function renderMapChart() {
     series:[{
       type:'map', map:'china_full', roam:true, scaleLimit:{min:0.8,max:6},
       data: mapDataArr(),
-      selectedMode:'single',
+      selectedMode:false,
       emphasis:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2},
-        label:{show:true,color:'#fff',fontWeight:700,fontSize:13,
-          textShadowColor:'rgba(0,0,0,0.9)',textShadowBlur:5}},
-      select:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2}},
+        label:{show:true,color:'#fff',fontWeight:'bold',fontSize:14,
+          textShadowColor:'rgba(0,0,0,0.95)',textShadowBlur:5}},
       itemStyle:{borderColor:'rgba(255,255,255,0.35)',borderWidth:0.7},
       label:{
         show:true,

@@ -7207,10 +7207,10 @@ async function loadCdsExcel() {
     const rankSheets = {
       r3:'③整車出口_月次比較表', r4:'④新能源出口_月次比較表',
       r5:'⑤燃油乗用車_月次比較表', r6:'⑥BEV乗用車_月次比較表',
-      r7:'⑦PHEV乗用車_月次比較表', r8:'⑧燃油货車_月次比較表',
+      r7:'⑦PHEV乗用車_月次比較表', r8:'⑧燃油トラック_月次比較表',
       r9:'⑨PHEV货車_月次比較表', r10:'⑩BEV货車_月次比較表',
-      r11:'⑪燃油客車_月次比較表', r12:'⑫新能源客車_月次比較表',
-      r6b:'⑥b混合動力乗用車_月次比較表', r9b:'⑨b新能源货車_月次比較表', r12b:'⑫b新能源客車_月次比較表',
+      r11:'⑪燃油バス_月次比較表', r12:'⑫新能源バス_月次比較表',
+      r6b:'⑥b混合動力乗用車_月次比較表', r9b:'⑨b新能源トラック_月次比較表', r12b:'⑫b新能源バス_月次比較表',
     };
     CDS.rankings = {};
     for (const [key, sname] of Object.entries(rankSheets)) {
@@ -7328,7 +7328,7 @@ function cdsDrawPowertype() {
 
 function cdsDrawBodytype() {
   if (!CDS_LOADED) return;
-  const yrs=['2022','2023','2024','2025'], bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'], d=CDS.bodyTypes||{};
+  const yrs=['2022','2023','2024','2025'], bts=[['乗用車 汇総','乗用車'],['货車 汇総','トラック'],['客車 汇総','バス']], cols=['#3b82f6','#f59e0b','#10b981'], d=CDS.bodyTypes||{};
   drawBar('ec-cds-bodytype','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:20});
 }
 
@@ -7342,7 +7342,7 @@ function cdsDrawNevPower() {
 function cdsDrawNevBody() {
   if (!CDS_LOADED) return;
   const yrs=['2022','2023','2024','2025'], d=CDS.nevBody||{};
-  const bts=[['乗用車 汇総','乗用車'],['货車 汇総','货車'],['客車 汇総','客車']], cols=['#3b82f6','#f59e0b','#10b981'];
+  const bts=[['乗用車 汇総','乗用車'],['货車 汇総','トラック'],['客車 汇総','バス']], cols=['#3b82f6','#f59e0b','#10b981'];
   drawBar('ec-cds-nev-body','','',yrs.map(y=>y+'年'),bts.map(([k,nm],i)=>({name:nm,data:yrs.map(yr=>d[k]?d[k][yr]:null),itemStyle:{color:cols[i]}})),{stack:true,label:true,labelMin:5});
 }
 
@@ -7453,8 +7453,8 @@ function cdsDrawDisplace() {
 
 const RANK_TITLES = {
   r3:'整車出口', r4:'NEV出口', r5:'燃油乗用車', r6:'BEV乗用車',
-  r7:'PHEV乗用車', r6b:'HEV乗用車', r8:'燃油货車', r9:'PHEV货車（皮卡）',
-  r10:'BEV货車', r9b:'新能源货車', r11:'燃油客車', r12:'新能源客車', r12b:'新能源客車（詳細）',
+  r7:'PHEV乗用車', r6b:'HEV乗用車', r8:'燃油トラック', r9:'PHEVトラック（ピックアップ）',
+  r10:'BEVトラック', r9b:'NEVトラック', r11:'燃油バス', r12:'NEVバス', r12b:'NEVバス（詳細）',
 };
 
 const PALETTE = [
@@ -10038,7 +10038,7 @@ window.addEventListener('resize', function(){
         {name:'純電動貨車（2025年〜）',    type:'bar', stack:'s', data:toGWh(bev_truck),  itemStyle:{color:'#F39C12'}},
         {name:'プラグイン貨車（2025年〜）',type:'bar', stack:'s', data:toGWh(phev_truck), itemStyle:{color:'#FF8F00'}},
         {name:'純電動専用車',              type:'bar', stack:'s', data:toGWh(bev_sv),     itemStyle:{color:'#1ABC9C'}},
-        {name:'純電動客車',                type:'bar', stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
+        {name:'BEVバス',                type:'bar', stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
         {name:'その他',                    type:'bar', stack:'s', data:toGWh(others_raw), itemStyle:{color:'#CFD8DC'}}
       ]
     });

@@ -18,54 +18,52 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
-// ===== ECharts パッチ: 凡例ホバー時のみ他シリーズをフェード（グラフホバーは影響なし） =====
-// 凡例ホバー時: highlight イベントで seriesName あり & name===null → 他をフェード
-// グラフホバー時: name !== null なので無視
+// ===== ECharts パッチ: 凡例ホバー時のみ他シリーズをフェード =====
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
 
-    // emphasis.focus = 'none' にして、グラフホバーでは他シリーズが消えないようにする
+    // emphasis.focus = 'none' → グラフホバーでは他シリーズが消えない
     var _setOption = instance.setOption.bind(instance);
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.series) {
         var serArr = Array.isArray(option.series) ? option.series : [option.series];
         serArr.forEach(function(s) {
-          if (s) {
-            if (!s.emphasis) s.emphasis = {};
-            s.emphasis.focus = 'none';
-          }
+          if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'none'; }
         });
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
-    var _legendHovered = null;
+    var _dispatching = false; // 自分のdispatchActionによる再帰イベントを無視するフラグ
 
-    // 凡例ホバー開始: seriesName あり & name === null が目印
     instance.on('highlight', function(params) {
+      if (_dispatching) return;
       if (!params.seriesName || params.name !== null) return;
-      _legendHovered = params.seriesName;
+      _dispatching = true;
       var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      opt.series.forEach(function(s) {
-        if (s.name !== _legendHovered) {
-          instance.dispatchAction({ type: 'downplay', seriesName: s.name });
-        }
-      });
+      if (opt && opt.series) {
+        opt.series.forEach(function(s) {
+          if (s.name !== params.seriesName) {
+            instance.dispatchAction({ type: 'downplay', seriesName: s.name });
+          }
+        });
+      }
+      _dispatching = false;
     });
 
-    // 凡例ホバー終了: downplay & seriesName あり & name === null
     instance.on('downplay', function(params) {
+      if (_dispatching) return;
       if (!params.seriesName || params.name !== null) return;
-      if (_legendHovered === null) return;
-      _legendHovered = null;
+      _dispatching = true;
       var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      opt.series.forEach(function(s) {
-        instance.dispatchAction({ type: 'downplay', seriesName: s.name });
-      });
+      if (opt && opt.series) {
+        opt.series.forEach(function(s) {
+          instance.dispatchAction({ type: 'downplay', seriesName: s.name });
+        });
+      }
+      _dispatching = false;
     });
 
     return instance;

@@ -26,10 +26,10 @@
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
 
-    // emphasis.focus='series' を全シリーズに付与（フェード効果に必要）
     var _setOption = instance.setOption.bind(instance);
-    // 元のオプションを保持（積み上げ棒の復元用）
     var _savedOption = null;
+    // 凡例クリックによる表示/非表示状態を保持
+    var _legendSelected = {};
 
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.series) {
@@ -38,12 +38,16 @@
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
-      // 積み上げ棒復元用に保存（_savedOptionフラグなしの通常setOptionのみ）
-      if (!notMerge || notMerge !== '__restore__') {
+      if (notMerge !== '__restore__') {
         _savedOption = option;
       }
       return _setOption(option, notMerge === '__restore__' ? true : notMerge, lazyUpdate);
     };
+
+    // 凡例クリックの選択状態を追跡
+    instance.on('legendselectchanged', function(params) {
+      _legendSelected = params.selected;
+    });
 
     function getLegendIdx(el) {
       if (!el) return null;
@@ -53,12 +57,9 @@
     }
 
     function isStackedBar() {
-      // 積み上げ棒グラフかどうか判定
       var opt = instance.getOption();
       if (!opt || !opt.series) return false;
-      return opt.series.some(function(s) {
-        return s.type === 'bar' && s.stack;
-      });
+      return opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
     }
 
     function getLegendNames() {
@@ -68,28 +69,27 @@
       return data.map(function(d) { return typeof d === 'object' ? d.name : d; });
     }
 
+    function restoreWithSelected() {
+      // 元オプションを復元しつつ、凡例クリックの選択状態を再適用
+      if (_savedOption) {
+        _setOption(_savedOption, true);
+      }
+      // 非表示になっているシリーズを再度非表示に
+      Object.keys(_legendSelected).forEach(function(name) {
+        if (!_legendSelected[name]) {
+          instance.dispatchAction({ type: 'legendUnSelect', name: name });
+        }
+      });
+    }
+
     var _inLegend = false;
 
     instance.getZr().on('mouseover', function(e) {
       var idx = getLegendIdx(e.target);
-
-      if (idx === null) {
-        // グラフエリアホバー → フォーカスをキャンセル
-        if (!_inLegend) {
-          var opt = instance.getOption();
-          if (opt && opt.series) {
-            opt.series.forEach(function(s, i) {
-              instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-            });
-          }
-        }
-        return;
-      }
-
+      if (idx === null) return;
       _inLegend = true;
 
       if (isStackedBar()) {
-        // 積み上げ棒: ホバーしたシリーズのみ表示・縦軸自動
         var names = getLegendNames();
         var hoveredName = names[idx];
         var opt = instance.getOption();
@@ -97,31 +97,23 @@
         var newSeries = opt.series.map(function(s) {
           var isHovered = s.name === hoveredName;
           return {
-            name: s.name,
-            type: 'bar',
-            stack: 'total',
+            name: s.name, type: 'bar', stack: 'total',
             itemStyle: s.itemStyle,
             data: isHovered ? s.data : s.data.map(function() { return 0; })
           };
         });
         _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, false);
       }
-      // 折れ線/通常棒は emphasis.focus='series' のネイティブ動作に任せる
     });
 
     instance.getZr().on('mouseout', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
-
       _inLegend = false;
 
       if (isStackedBar()) {
-        // 積み上げ棒: 元に戻す
-        if (_savedOption) {
-          _setOption(_savedOption, true);
-        }
+        restoreWithSelected();
       } else {
-        // 折れ線/通常棒: downplay で通常状態に戻す
         var opt = instance.getOption();
         if (opt && opt.series) {
           opt.series.forEach(function(s, i) {
@@ -131,9 +123,9 @@
       }
     });
 
-    // グラフエリアホバーでフォーカスが発動しないようにキャンセル
+    // グラフエリアホバーでフォーカスをキャンセル
     instance.getZr().on('mouseover', function(e) {
-      if (getLegendIdx(e.target) !== null) return; // 凡例は除外
+      if (getLegendIdx(e.target) !== null) return;
       var opt = instance.getOption();
       if (opt && opt.series) {
         opt.series.forEach(function(s, i) {

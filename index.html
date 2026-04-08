@@ -2823,6 +2823,11 @@ body.tray-open { padding-bottom: 105px; }
               </button>
             </div>
 
+            <!-- 引用元バー（中タブ別） -->
+            <div id="cds-source-bar" style="font-size:11px;color:#999;margin-bottom:6px;padding:2px 0;">
+              引用元：<a id="cds-source-link" href="#" target="_blank" rel="noopener" style="color:#aaa;word-break:break-all;"></a>
+            </div>
+
             <!-- 中タブA: 輸出分析 サブナビ -->
             <div id="cds-sub-export" class="cds-sub-nav">
               <div class="cds-nav-compact">
@@ -7341,6 +7346,9 @@ async function loadCdsExcel() {
     if (loadEl) loadEl.style.display = 'none';
     if (pillEl) { pillEl.style.display = 'block'; }
     if (contEl) contEl.style.removeProperty('display');
+    // 引用元リンクを初期化（輸出タブがデフォルト）
+    var _srcLink = document.getElementById('cds-source-link');
+    if (_srcLink) { _srcLink.href = 'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA'; _srcLink.textContent = 'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA'; }
     // 初期タブを表示
     cdsShowPane('cds-monthly');
     // 比較ボタンを各グラフに追加（少し遅延して描画後に）
@@ -7880,6 +7888,21 @@ function cdsSetMidTab(tab) {
   document.querySelectorAll('.cds-pane').forEach(function(p) {
     p.classList.remove('cds-active');
   });
+
+  // ── 引用元リンク切替 ──
+  var CDS_SOURCE_URLS = {
+    'export':     'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA',
+    'import':     'https://mp.weixin.qq.com/s/eZZK8I86zaTzH0604cCYpw',
+    'china':      'https://mp.weixin.qq.com/s/JGRelbBCdAPqSgaxb4W6YQ',
+    'worldshare': 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg',
+    'profit':     'https://mp.weixin.qq.com/s/tKkV8nPjYXjQlEFPYxMIBQ',
+    'inventory':  'https://mp.weixin.qq.com/s/u0KRHvAP2DhaaCQeVracVQ',
+    'battery':    'https://mp.weixin.qq.com/s/mV9NgfWWVYEjIUyUWfQMbQ',
+    'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ'
+  };
+  var srcUrl = CDS_SOURCE_URLS[tab] || '';
+  var srcLink = document.getElementById('cds-source-link');
+  if (srcLink) { srcLink.href = srcUrl; srcLink.textContent = srcUrl; }
 
   // ボタン
   document.querySelectorAll('.cds-mid-tab').forEach(b => b.classList.remove('active'));

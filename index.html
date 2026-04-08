@@ -3020,18 +3020,23 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="cds-gc-items" id="cds-gc-gd">
                     <button class="nav-link active" data-cds-discount-target="#disc-monthly-dist">📅 月次分布</button>
                     <button class="nav-link" data-cds-discount-target="#disc-powertype">🔋 動力種別</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-overall-rate">📊 総合降価幅度</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-nev-trend">⚡ NEV促销推移</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-fuel-trend">⛽ 燃油車促销推移</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-luxury">💎 豪华车促销</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-joint">🤝 合資燃油車</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-domestic">🏭 自主燃油車</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-by-power">🔌 動力種別幅度</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-by-origin">🌍 出身別燃油車</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-overall-rate">📊 総合値引き率</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-nev-trend">⚡ 新エネ車推移</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-fuel-trend">⛽ ガソリン車推移</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-luxury">💎 高級車</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-joint">🤝 合弁ガソリン車</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-domestic">🏭 国内系ガソリン車</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-by-power">🔌 動力種別値引き率</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-by-origin">🌍 出身地域別</button>
                   </div>
                 </div>
               </div>
             </div><!-- end cds-sub-discount -->
+
+            <!-- 降価促销 引用元 -->
+            <div id="disc-citation" style="display:none; font-size:11px; color:#888; margin: 6px 0 10px; padding: 4px 0; border-bottom:1px solid #f1f5f9">
+              引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener" style="color:#888">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a>
+            </div>
 
           </div><!-- end cdsPills -->
 
@@ -3568,9 +3573,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 1: 月次分布 -->
             <div class="cds-pane" id="disc-monthly-dist">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">📅 降価車型 月次分布（車型数）</div>
-                <div class="chart-subtitle">歴年 月次降価車型数（新車・調価合計）</div>
+                <div class="chart-title">📅 値引き車型 月次分布（車型数）</div>
+                <div class="chart-subtitle">歴年 月次値引き車型数（新車・価格改定 合計）</div>
                 <div id="ec-disc-monthly-dist" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3578,9 +3582,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 2: 動力種別 -->
             <div class="cds-pane" id="disc-powertype">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">🔋 動力種別 降価車型数（2026年）</div>
-                <div class="chart-subtitle">常規・純電動・插混・増程・混合動力別 2026年月次累計</div>
+                <div class="chart-title">🔋 動力種別 値引き車型数（2026年）</div>
+                <div class="chart-subtitle">通常エンジン・純電動・プラグインHEV・レンジエクステンダー・ハイブリッド別 2026年月次累計</div>
                 <div id="ec-disc-powertype" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3588,9 +3591,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 3: 総合降価幅度 -->
             <div class="cds-pane" id="disc-overall-rate">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">📊 総合降価幅度（新能源 vs 常規）</div>
-                <div class="chart-subtitle">降価比例（%）　2020〜2026年</div>
+                <div class="chart-title">📊 総合値引き率（新エネ車 vs 通常エンジン車）</div>
+                <div class="chart-subtitle">値引き比率（%）　2020〜2026年</div>
                 <div id="ec-disc-overall-rate" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3598,9 +3600,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 4: NEV促销推移 -->
             <div class="cds-pane" id="disc-nev-trend">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">⚡ 新能源乗用車 月次促销幅度推移（%）</div>
-                <div class="chart-subtitle">確認値：2025年全月・2026年1-3月 ／ 推測値は非表示</div>
+                <div class="chart-title">⚡ 新エネ乗用車 月次値引き率推移（%）</div>
+                <div class="chart-subtitle">確認値：2025年全月・2026年1-3月　推測値：2022〜2024年（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-nev-trend" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3608,9 +3609,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 5: 燃油車促销推移 -->
             <div class="cds-pane" id="disc-fuel-trend">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">⛽ 伝統燃油車 月次促销幅度推移（%）</div>
-                <div class="chart-subtitle">確認値：2022・2023・2025年全月・2026年1-3月 ／ 推測値は非表示</div>
+                <div class="chart-title">⛽ ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-subtitle">確認値：2022・2023・2025年全月・2026年1-3月　推測値：2024年（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-fuel-trend" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3618,9 +3618,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 6: 豪华车 -->
             <div class="cds-pane" id="disc-luxury">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">💎 豪華燃油車 月次促销幅度推移（%）</div>
-                <div class="chart-subtitle">確認値：2025年全月・2026年1-3月 ／ 推測値は非表示</div>
+                <div class="chart-title">💎 高級ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-subtitle">確認値：2025年全月・2026年1-3月　推測値：2022〜2024年（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-luxury" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3628,9 +3627,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 7: 合資燃油車 -->
             <div class="cds-pane" id="disc-joint">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">🤝 合資燃油車 月次促销幅度推移（%）</div>
-                <div class="chart-subtitle">確認値：2022・2023・2025年全月・2026年1-3月 ／ 推測値は非表示</div>
+                <div class="chart-title">🤝 合弁ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-subtitle">確認値：2022・2023・2025年全月・2026年1-3月　推測値：2024年（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-joint" class="echart-box" style="height:400px"></div>
               </div>
             </div>
@@ -3638,8 +3636,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 8: 自主燃油車 -->
             <div class="cds-pane" id="disc-domestic">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">🏭 自主燃油車 月次促销幅度推移（%）</div>
+                <div class="chart-title">🏭 国内系ガソリン車 月次値引き率推移（%）</div>
                 <div class="chart-subtitle">確認値：2022・2023・2024・2025年全月・2026年1-3月</div>
                 <div id="ec-disc-domestic" class="echart-box" style="height:400px"></div>
               </div>
@@ -3648,9 +3645,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 9: 動力種別幅度 -->
             <div class="cds-pane" id="disc-by-power">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">🔌 動力種別 促销幅度（%）月次推移</div>
-                <div class="chart-subtitle">常規・混合動力・插混・増程・純電動　2020年末〜2026年3月</div>
+                <div class="chart-title">🔌 動力種別 値引き率（%）月次推移</div>
+                <div class="chart-subtitle">通常エンジン・HEV・PHEV・レンジエクステンダー・BEV　2020年末〜2026年3月</div>
                 <div id="ec-disc-by-power" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -3658,9 +3654,8 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 10: 出身別燃油車 -->
             <div class="cds-pane" id="disc-by-origin">
               <div class="chart-card">
-                <p style="font-size:11px;color:#888;margin-bottom:8px">引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a></p>
-                <div class="chart-title">🌍 燃油車促销幅度：出身別（%）</div>
-                <div class="chart-subtitle">日系・独系・韓系・米系・欧系・自主・総体　2017〜2026年</div>
+                <div class="chart-title">🌍 ガソリン車 値引き率：出身地域別（%）</div>
+                <div class="chart-subtitle">日系・独系・韓系・米系・欧系・国内系・全体　2017〜2026年</div>
                 <div id="ec-disc-by-origin" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -10635,7 +10630,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // ----- データ -----
 var DISC_MONTHLY_DIST = {
   years: ['2023年','2024年','2025年','2026年'],
-  months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
   data: {
     '2023年': [65,17,20,11,15,6,21,22,20,17,25,12],
     '2024年': [7,23,52,12,26,3,41,11,12,28,29,36],
@@ -10645,96 +10639,87 @@ var DISC_MONTHLY_DIST = {
 };
 
 var DISC_POWERTYPE_2026 = {
-  categories: ['常規','純電動','插混','増程','混合動力'],
+  // 日本語ラベル
+  categories: ['通常エンジン','純電動(BEV)','PHEV','レンジEX','ハイブリッド'],
   jan: [10,6,5,1,0],
   feb: [6,2,0,0,1],
   mar: [6,5,5,2,0]
 };
 
 var DISC_OVERALL_RATE = {
-  periods: ['2020年','2021年','2022年','2023年','2024年','2025年汇总','2026年1月','2026年2月','2026年3月','2026年汇总'],
-  nev:     [0.087,0.092,0.138,0.108,0.100,0.110,0.148,0.151,0.120,0.137],
-  regular: [0.070,0.050,0.179,0.099,0.084,0.089,0.150,0.148,0.125,0.143],
-  total:   [0.080,0.080,0.152,0.106,0.096,0.105,0.149,0.150,0.121,0.139]
+  periods: ['2020年','2021年','2022年','2023年','2024年','2025年累計','2026年1月','2026年2月','2026年3月','2026年累計'],
+  新エネ:     [0.087,0.092,0.138,0.108,0.100,0.110,0.148,0.151,0.120,0.137],
+  通常エンジン: [0.070,0.050,0.179,0.099,0.084,0.089,0.150,0.148,0.125,0.143],
+  全体:        [0.080,0.080,0.152,0.106,0.096,0.105,0.149,0.150,0.121,0.139]
 };
 
-// 確認値のみ（推測値は除外）
+// confirmed:false の年はグラフ線は描くが、tooltip で「不明」と表示
 var DISC_NEV_TREND = {
-  years: {
-    '2025年': { confirmed: true,  data: [0.084,0.099,0.106,0.084,0.099,0.092,0.092,0.095,0.102,0.098,0.101,0.101] },
-    '2026年': { confirmed: true,  data: [0.101,0.104,0.106,null,null,null,null,null,null,null,null,null] }
-  }
+  '2022年': { confirmed:false, data:[0.089,0.075,0.060,0.055,0.054,0.051,0.050,0.052,0.047,0.050,0.047,0.049] },
+  '2023年': { confirmed:false, data:[0.052,0.023,0.026,0.047,0.050,0.053,0.055,0.052,0.054,0.060,0.070,0.065] },
+  '2024年': { confirmed:false, data:[0.055,0.080,0.090,0.110,0.123,0.088,0.070,0.065,0.068,0.078,0.076,0.075] },
+  '2025年': { confirmed:true,  data:[0.084,0.099,0.106,0.084,0.099,0.092,0.092,0.095,0.102,0.098,0.101,0.101] },
+  '2026年': { confirmed:true,  data:[0.101,0.104,0.106,null,null,null,null,null,null,null,null,null] }
 };
 
 var DISC_FUEL_TREND = {
-  years: {
-    '2022年': { confirmed: true,  data: [0.098,0.098,0.101,0.108,0.111,0.113,0.118,0.120,0.120,0.121,0.124,0.129] },
-    '2023年': { confirmed: true,  data: [0.122,0.122,0.132,0.142,0.150,0.155,0.154,0.157,0.163,0.168,0.175,0.188] },
-    '2025年': { confirmed: true,  data: [0.219,0.217,0.221,0.222,0.225,0.233,0.234,0.229,0.239,0.240,0.240,0.236] },
-    '2026年': { confirmed: true,  data: [0.237,0.235,0.227,null,null,null,null,null,null,null,null,null] }
-  }
+  '2022年': { confirmed:true,  data:[0.098,0.098,0.101,0.108,0.111,0.113,0.118,0.120,0.120,0.121,0.124,0.129] },
+  '2023年': { confirmed:true,  data:[0.122,0.122,0.132,0.142,0.150,0.155,0.154,0.157,0.163,0.168,0.175,0.188] },
+  '2024年': { confirmed:false, data:[0.184,0.180,0.183,0.190,0.197,0.215,0.218,0.220,0.220,0.218,0.220,0.219] },
+  '2025年': { confirmed:true,  data:[0.219,0.217,0.221,0.222,0.225,0.233,0.234,0.229,0.239,0.240,0.240,0.236] },
+  '2026年': { confirmed:true,  data:[0.237,0.235,0.227,null,null,null,null,null,null,null,null,null] }
 };
 
 var DISC_LUXURY_TREND = {
-  years: {
-    '2025年': { confirmed: true,  data: [0.263,0.258,0.261,0.258,0.257,0.268,0.272,0.273,0.277,0.284,0.288,0.291] },
-    '2026年': { confirmed: true,  data: [0.288,0.270,0.259,null,null,null,null,null,null,null,null,null] }
-  }
+  '2022年': { confirmed:false, data:[0.112,0.115,0.120,0.127,0.130,0.132,0.135,0.138,0.140,0.140,0.142,0.145] },
+  '2023年': { confirmed:false, data:[0.142,0.145,0.152,0.160,0.170,0.172,0.171,0.175,0.179,0.185,0.195,0.205] },
+  '2024年': { confirmed:false, data:[0.210,0.202,0.215,0.210,0.215,0.230,0.250,0.245,0.250,0.255,0.258,0.258] },
+  '2025年': { confirmed:true,  data:[0.263,0.258,0.261,0.258,0.257,0.268,0.272,0.273,0.277,0.284,0.288,0.291] },
+  '2026年': { confirmed:true,  data:[0.288,0.270,0.259,null,null,null,null,null,null,null,null,null] }
 };
 
 var DISC_JOINT_TREND = {
-  years: {
-    '2022年': { confirmed: true,  data: [0.108,0.106,0.108,0.116,0.119,0.123,0.130,0.132,0.132,0.133,0.136,0.141] },
-    '2023年': { confirmed: true,  data: [0.130,0.128,0.138,0.147,0.156,0.164,0.163,0.166,0.175,0.180,0.187,0.205] },
-    '2025年': { confirmed: true,  data: [0.215,0.213,0.215,0.219,0.225,0.231,0.229,0.220,0.233,0.231,0.229,0.205] },
-    '2026年': { confirmed: true,  data: [0.223,0.233,0.225,null,null,null,null,null,null,null,null,null] }
-  }
+  '2022年': { confirmed:true,  data:[0.108,0.106,0.108,0.116,0.119,0.123,0.130,0.132,0.132,0.133,0.136,0.141] },
+  '2023年': { confirmed:true,  data:[0.130,0.128,0.138,0.147,0.156,0.164,0.163,0.166,0.175,0.180,0.187,0.205] },
+  '2024年': { confirmed:false, data:[0.198,0.195,0.195,0.200,0.210,0.223,0.226,0.228,0.230,0.218,0.220,0.198] },
+  '2025年': { confirmed:true,  data:[0.215,0.213,0.215,0.219,0.225,0.231,0.229,0.220,0.233,0.231,0.229,0.205] },
+  '2026年': { confirmed:true,  data:[0.223,0.233,0.225,null,null,null,null,null,null,null,null,null] }
 };
 
 var DISC_DOMESTIC_TREND = {
-  years: {
-    '2022年': { confirmed: true,  data: [0.062,0.057,0.059,0.062,0.064,0.066,0.069,0.073,0.072,0.073,0.079,0.082] },
-    '2023年': { confirmed: true,  data: [0.081,0.082,0.093,0.109,0.114,0.118,0.117,0.117,0.122,0.126,0.127,0.137] },
-    '2024年': { confirmed: true,  data: [0.143,0.133,0.135,0.141,0.150,0.158,0.158,0.164,0.163,0.162,0.163,0.164] },
-    '2025年': { confirmed: true,  data: [0.164,0.166,0.172,0.175,0.178,0.182,0.186,0.184,0.188,0.188,0.188,0.185] },
-    '2026年': { confirmed: true,  data: [0.186,0.182,0.180,null,null,null,null,null,null,null,null,null] }
-  }
+  '2022年': { confirmed:true,  data:[0.062,0.057,0.059,0.062,0.064,0.066,0.069,0.073,0.072,0.073,0.079,0.082] },
+  '2023年': { confirmed:true,  data:[0.081,0.082,0.093,0.109,0.114,0.118,0.117,0.117,0.122,0.126,0.127,0.137] },
+  '2024年': { confirmed:true,  data:[0.143,0.133,0.135,0.141,0.150,0.158,0.158,0.164,0.163,0.162,0.163,0.164] },
+  '2025年': { confirmed:true,  data:[0.164,0.166,0.172,0.175,0.178,0.182,0.186,0.184,0.188,0.188,0.188,0.185] },
+  '2026年': { confirmed:true,  data:[0.186,0.182,0.180,null,null,null,null,null,null,null,null,null] }
 };
 
-var DISC_BY_POWER = {
-  periods: [],
-  常規: [], 混合動力: [], 插混: [], 増程: [], 純電動: []
-};
-// 年末スナップショット（2020〜2024）
+var DISC_BY_POWER = { periods:[], 通常エンジン:[], HEV:[], PHEV:[], レンジEX:[], BEV:[] };
 var snapshots = [
-  {p:'2020年末', 常規:0.140, 混合動力:0.068, 插混:0.117, 増程:0.000, 純電動:0.121},
-  {p:'2021年末', 常規:0.101, 混合動力:0.060, 插混:0.088, 増程:0.000, 純電動:0.088},
-  {p:'2022年末', 常規:0.132, 混合動力:0.067, 插混:0.035, 増程:0.033, 純電動:0.063},
-  {p:'2023年末', 常規:0.189, 混合動力:0.177, 插混:0.078, 増程:0.069, 純電動:0.081},
-  {p:'2024年末', 常規:0.221, 混合動力:0.174, 插混:0.066, 増程:0.032, 純電動:0.095}
+  {p:'2020年末', 通常エンジン:0.140, HEV:0.068, PHEV:0.117, レンジEX:0.000, BEV:0.121},
+  {p:'2021年末', 通常エンジン:0.101, HEV:0.060, PHEV:0.088, レンジEX:0.000, BEV:0.088},
+  {p:'2022年末', 通常エンジン:0.132, HEV:0.067, PHEV:0.035, レンジEX:0.033, BEV:0.063},
+  {p:'2023年末', 通常エンジン:0.189, HEV:0.177, PHEV:0.078, レンジEX:0.069, BEV:0.081},
+  {p:'2024年末', 通常エンジン:0.221, HEV:0.174, PHEV:0.066, レンジEX:0.032, BEV:0.095}
 ];
 snapshots.forEach(function(s){
   DISC_BY_POWER.periods.push(s.p);
-  DISC_BY_POWER.常規.push(s.常規); DISC_BY_POWER.混合動力.push(s.混合動力);
-  DISC_BY_POWER.插混.push(s.插混); DISC_BY_POWER.増程.push(s.増程); DISC_BY_POWER.純電動.push(s.純電動);
+  ['通常エンジン','HEV','PHEV','レンジEX','BEV'].forEach(function(k){ DISC_BY_POWER[k].push(s[k]); });
 });
-var months2025 = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 var raw2025 = [
   [0.222,0.174,0.088,0.035,0.094],[0.220,0.176,0.104,0.049,0.108],[0.224,0.179,0.107,0.064,0.117],
   [0.225,0.181,0.083,0.065,0.088],[0.228,0.184,0.097,0.055,0.105],[0.236,0.193,0.098,0.053,0.098],
   [0.237,0.193,0.096,0.053,0.100],[0.234,0.196,0.103,0.058,0.096],[0.241,0.204,0.110,0.062,0.108],
   [0.243,0.201,0.113,0.059,0.100],[0.243,0.193,0.109,0.078,0.102],[0.238,0.197,0.106,0.076,0.105]
 ];
-months2025.forEach(function(m,i){
+['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'].forEach(function(m,i){
   DISC_BY_POWER.periods.push('2025年'+m);
-  DISC_BY_POWER.常規.push(raw2025[i][0]); DISC_BY_POWER.混合動力.push(raw2025[i][1]);
-  DISC_BY_POWER.插混.push(raw2025[i][2]); DISC_BY_POWER.増程.push(raw2025[i][3]); DISC_BY_POWER.純電動.push(raw2025[i][4]);
+  ['通常エンジン','HEV','PHEV','レンジEX','BEV'].forEach(function(k,ki){ DISC_BY_POWER[k].push(raw2025[i][ki]); });
 });
 var raw2026 = [[0.239,0.202,0.113,0.078,0.102],[0.237,0.203,0.112,0.080,0.106],[0.229,0.199,0.106,0.093,0.111]];
 ['1月','2月','3月'].forEach(function(m,i){
   DISC_BY_POWER.periods.push('2026年'+m);
-  DISC_BY_POWER.常規.push(raw2026[i][0]); DISC_BY_POWER.混合動力.push(raw2026[i][1]);
-  DISC_BY_POWER.插混.push(raw2026[i][2]); DISC_BY_POWER.増程.push(raw2026[i][3]); DISC_BY_POWER.純電動.push(raw2026[i][4]);
+  ['通常エンジン','HEV','PHEV','レンジEX','BEV'].forEach(function(k,ki){ DISC_BY_POWER[k].push(raw2026[i][ki]); });
 });
 
 var DISC_BY_ORIGIN = {
@@ -10747,8 +10732,8 @@ var DISC_BY_ORIGIN = {
   韓系: [0.155,0.159,0.169,0.162,0.122,0.163,0.229,0.257,0.249,0.257,0.257,0.252,0.250,0.256,0.271,0.275,0.285,0.286,0.288,0.293,0.272,0.300,0.300],
   米系: [0.132,0.151,0.178,0.174,0.166,0.159,0.193,0.217,0.204,0.220,0.211,0.209,0.214,0.219,0.216,0.213,0.180,0.209,0.211,0.194,0.204,0.155,0.202],
   欧系: [0.142,0.181,0.197,0.217,0.198,0.213,0.292,0.324,0.306,0.323,0.330,0.329,0.337,0.345,0.355,0.360,0.320,0.361,0.362,0.369,0.347,0.371,0.387],
-  自主: [0.060,0.082,0.117,0.099,0.089,0.084,0.142,0.169,0.157,0.169,0.171,0.178,0.181,0.184,0.190,0.194,0.200,0.196,0.196,0.196,0.187,0.194,0.190],
-  総体: [0.108,0.123,0.136,0.123,0.112,0.129,0.188,0.218,0.205,0.219,0.217,0.221,0.222,0.225,0.233,0.234,0.233,0.239,0.240,0.240,0.230,0.237,0.235]
+  国内系: [0.060,0.082,0.117,0.099,0.089,0.084,0.142,0.169,0.157,0.169,0.171,0.178,0.181,0.184,0.190,0.194,0.200,0.196,0.196,0.196,0.187,0.194,0.190],
+  全体: [0.108,0.123,0.136,0.123,0.112,0.129,0.188,0.218,0.205,0.219,0.217,0.221,0.222,0.225,0.233,0.234,0.233,0.239,0.240,0.240,0.230,0.237,0.235]
 };
 
 // ----- ペイン表示 -----
@@ -10757,16 +10742,20 @@ window.DISC_CURRENT_ID = 'disc-monthly-dist';
 
 function discShowPane(id) {
   window.DISC_CURRENT_ID = id;
-  document.querySelectorAll('.cds-pane[id^="disc-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+  // すべての cds-pane を非表示にしてから対象だけ表示
+  document.querySelectorAll('#cdsPillsContent .cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
   var el = document.getElementById(id);
   if (el) {
     el.classList.add('cds-active');
-    // cdsPillsContent を表示
     var pillEl = document.getElementById('cdsPills');
     var contEl = document.getElementById('cdsPillsContent');
     if (pillEl) pillEl.setAttribute('style','display:block');
     if (contEl) contEl.setAttribute('style','display:block');
   }
+  // 引用元表示（discount ペインのときだけ表示）
+  var cit = document.getElementById('disc-citation');
+  if (cit) cit.style.display = (id && id.indexOf('disc-') === 0) ? '' : 'none';
+  // ボタンのactive更新
   document.querySelectorAll('#cds-sub-discount [data-cds-discount-target]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-cds-discount-target') === '#'+id);
   });
@@ -10782,9 +10771,42 @@ document.addEventListener('click', function(e){
 });
 
 var months12 = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-var YEAR_COLORS = {'2022年':'#3b82f6','2023年':'#22c55e','2024年':'#a855f7','2025年':'#111','2026年':'#ef4444','2025年(確認)':'#111','2026年(確認)':'#ef4444'};
+var YEAR_COLORS = {
+  '2022年':'#3b82f6','2023年':'#22c55e','2024年':'#a855f7',
+  '2025年':'#374151','2026年':'#ef4444'
+};
 
 function pct(v){ return v == null ? null : Math.round(v*1000)/10; }
+
+// 推測年のtooltip用：値があれば「（推測）不明」、nullなら非表示
+function makeTooltipFormatter(dataObj) {
+  return function(params) {
+    var s = params[0].axisValue + '<br>';
+    params.forEach(function(p) {
+      if (p.value == null) return;
+      var yr = p.seriesName;
+      var confirmed = dataObj[yr] ? dataObj[yr].confirmed : true;
+      var valStr = confirmed ? p.value + '%' : '（推測）不明';
+      s += p.marker + yr + ': ' + valStr + '<br>';
+    });
+    return s;
+  };
+}
+
+// 推測系列はpointsを描画するが値をnullにしてhoverで「不明」表示
+function makeEstimatedSeries(yr, data, confirmed, color) {
+  var plotData = data.map(function(v) { return v; }); // グラフ用：値そのまま描画
+  return {
+    name: yr,
+    type: 'line',
+    data: plotData.map(pct),
+    connectNulls: false,
+    lineStyle: { color: color, type: confirmed ? 'solid' : 'dashed', opacity: confirmed ? 1 : 0.55 },
+    itemStyle: { color: color, opacity: confirmed ? 1 : 0.55 },
+    symbol: confirmed ? 'circle' : 'emptyCircle',
+    symbolSize: confirmed ? 5 : 4
+  };
+}
 
 function discRender(id) {
   var ec = DISC_EC[id];
@@ -10793,19 +10815,17 @@ function discRender(id) {
   if (!dom || typeof echarts === 'undefined') return;
   ec = echarts.init(dom);
   DISC_EC[id] = ec;
-
   var opt = {};
 
   if (id === 'disc-monthly-dist') {
-    var series = DISC_MONTHLY_DIST.years.map(function(yr){
-      return { name: yr, type:'bar', data: DISC_MONTHLY_DIST.data[yr].map(function(v){ return v==null?null:v; }), barMaxWidth:28 };
-    });
     opt = {
       tooltip:{ trigger:'axis' },
       legend:{ top:8 },
       xAxis:{ type:'category', data: months12 },
       yAxis:{ type:'value', name:'車型数' },
-      series: series
+      series: DISC_MONTHLY_DIST.years.map(function(yr){
+        return { name:yr, type:'bar', data: DISC_MONTHLY_DIST.data[yr].map(function(v){ return v==null?null:v; }), barMaxWidth:28 };
+      })
     };
 
   } else if (id === 'disc-powertype') {
@@ -10814,7 +10834,7 @@ function discRender(id) {
       legend:{ top:8 },
       xAxis:{ type:'category', data:['1月','2月','3月','年累計'] },
       yAxis:{ type:'value', name:'車型数' },
-      series: DISC_POWERTYPE_2026.categories.map(function(cat, ci){
+      series: DISC_POWERTYPE_2026.categories.map(function(cat,ci){
         var clrs=['#3b82f6','#ef4444','#f59e0b','#22c55e','#8b5cf6'];
         var v1=DISC_POWERTYPE_2026.jan[ci], v2=DISC_POWERTYPE_2026.feb[ci], v3=DISC_POWERTYPE_2026.mar[ci];
         return { name:cat, type:'bar', stack:'total', data:[v1,v2,v3,v1+v2+v3], itemStyle:{color:clrs[ci]}, barMaxWidth:40 };
@@ -10822,119 +10842,120 @@ function discRender(id) {
     };
 
   } else if (id === 'disc-overall-rate') {
+    var clrs = {新エネ:'#ef4444', 通常エンジン:'#3b82f6', 全体:'#374151'};
     opt = {
-      tooltip:{ trigger:'axis', formatter: function(params){ var s=params[0].axisValue+'<br>'; params.forEach(function(p){ s+=p.marker+p.seriesName+': '+p.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter:function(params){
+        var s=params[0].axisValue+'<br>';
+        params.forEach(function(p){ s+=p.marker+p.seriesName+': '+p.value+'%<br>'; });
+        return s;
+      }},
       legend:{ top:8 },
       xAxis:{ type:'category', data: DISC_OVERALL_RATE.periods, axisLabel:{rotate:35, fontSize:10} },
-      yAxis:{ type:'value', name:'降価比例(%)', axisLabel:{formatter:'{value}%'} },
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
       series:[
-        { name:'新能源', type:'line', data: DISC_OVERALL_RATE.nev.map(pct), lineStyle:{color:'#ef4444'}, itemStyle:{color:'#ef4444'}, symbol:'circle' },
-        { name:'常規(ICE)', type:'line', data: DISC_OVERALL_RATE.regular.map(pct), lineStyle:{color:'#3b82f6'}, itemStyle:{color:'#3b82f6'}, symbol:'circle' },
-        { name:'総体', type:'line', data: DISC_OVERALL_RATE.total.map(pct), lineStyle:{color:'#111',type:'dashed'}, itemStyle:{color:'#111'}, symbol:'diamond' }
+        { name:'新エネ車', type:'line', data: DISC_OVERALL_RATE.新エネ.map(pct), lineStyle:{color:clrs.新エネ}, itemStyle:{color:clrs.新エネ}, symbol:'circle' },
+        { name:'通常エンジン車', type:'line', data: DISC_OVERALL_RATE.通常エンジン.map(pct), lineStyle:{color:clrs.通常エンジン}, itemStyle:{color:clrs.通常エンジン}, symbol:'circle' },
+        { name:'全体', type:'line', data: DISC_OVERALL_RATE.全体.map(pct), lineStyle:{color:clrs.全体,type:'dashed'}, itemStyle:{color:clrs.全体}, symbol:'diamond' }
       ]
     };
 
   } else if (id === 'disc-nev-trend') {
-    var sNEV = Object.keys(DISC_NEV_TREND.years).map(function(yr){
-      var d = DISC_NEV_TREND.years[yr];
-      return { name: yr, type:'line', data: d.data.map(pct), connectNulls:false,
-        lineStyle:{color: YEAR_COLORS[yr]||'#888'}, itemStyle:{color: YEAR_COLORS[yr]||'#888'}, symbol:'circle' };
-    });
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter: makeTooltipFormatter(DISC_NEV_TREND) },
       legend:{ top:8 },
       xAxis:{ type:'category', data: months12 },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
-      series: sNEV
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
+      series: Object.keys(DISC_NEV_TREND).map(function(yr){
+        var d=DISC_NEV_TREND[yr];
+        return makeEstimatedSeries(yr, d.data, d.confirmed, YEAR_COLORS[yr]||'#888');
+      })
     };
 
   } else if (id === 'disc-fuel-trend') {
-    var sFuel = Object.keys(DISC_FUEL_TREND.years).map(function(yr){
-      var d = DISC_FUEL_TREND.years[yr];
-      return { name: yr, type:'line', data: d.data.map(pct), connectNulls:false,
-        lineStyle:{color: YEAR_COLORS[yr]||'#888'}, itemStyle:{color: YEAR_COLORS[yr]||'#888'}, symbol:'circle' };
-    });
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter: makeTooltipFormatter(DISC_FUEL_TREND) },
       legend:{ top:8 },
       xAxis:{ type:'category', data: months12 },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
-      series: sFuel
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
+      series: Object.keys(DISC_FUEL_TREND).map(function(yr){
+        var d=DISC_FUEL_TREND[yr];
+        return makeEstimatedSeries(yr, d.data, d.confirmed, YEAR_COLORS[yr]||'#888');
+      })
     };
 
   } else if (id === 'disc-luxury') {
-    var sLux = Object.keys(DISC_LUXURY_TREND.years).map(function(yr){
-      var d = DISC_LUXURY_TREND.years[yr];
-      return { name: yr, type:'line', data: d.data.map(pct), connectNulls:false,
-        lineStyle:{color: YEAR_COLORS[yr]||'#888'}, itemStyle:{color: YEAR_COLORS[yr]||'#888'}, symbol:'circle' };
-    });
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter: makeTooltipFormatter(DISC_LUXURY_TREND) },
       legend:{ top:8 },
       xAxis:{ type:'category', data: months12 },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
-      series: sLux
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
+      series: Object.keys(DISC_LUXURY_TREND).map(function(yr){
+        var d=DISC_LUXURY_TREND[yr];
+        return makeEstimatedSeries(yr, d.data, d.confirmed, YEAR_COLORS[yr]||'#888');
+      })
     };
 
   } else if (id === 'disc-joint') {
-    var sJoint = Object.keys(DISC_JOINT_TREND.years).map(function(yr){
-      var d = DISC_JOINT_TREND.years[yr];
-      return { name: yr, type:'line', data: d.data.map(pct), connectNulls:false,
-        lineStyle:{color: YEAR_COLORS[yr]||'#888'}, itemStyle:{color: YEAR_COLORS[yr]||'#888'}, symbol:'circle' };
-    });
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter: makeTooltipFormatter(DISC_JOINT_TREND) },
       legend:{ top:8 },
       xAxis:{ type:'category', data: months12 },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
-      series: sJoint
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
+      series: Object.keys(DISC_JOINT_TREND).map(function(yr){
+        var d=DISC_JOINT_TREND[yr];
+        return makeEstimatedSeries(yr, d.data, d.confirmed, YEAR_COLORS[yr]||'#888');
+      })
     };
 
   } else if (id === 'disc-domestic') {
-    var sDom = Object.keys(DISC_DOMESTIC_TREND.years).map(function(yr){
-      var d = DISC_DOMESTIC_TREND.years[yr];
-      return { name: yr, type:'line', data: d.data.map(pct), connectNulls:false,
-        lineStyle:{color: YEAR_COLORS[yr]||'#888'}, itemStyle:{color: YEAR_COLORS[yr]||'#888'}, symbol:'circle' };
-    });
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter: makeTooltipFormatter(DISC_DOMESTIC_TREND) },
       legend:{ top:8 },
       xAxis:{ type:'category', data: months12 },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
-      series: sDom
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
+      series: Object.keys(DISC_DOMESTIC_TREND).map(function(yr){
+        var d=DISC_DOMESTIC_TREND[yr];
+        return makeEstimatedSeries(yr, d.data, d.confirmed, YEAR_COLORS[yr]||'#888');
+      })
     };
 
   } else if (id === 'disc-by-power') {
-    var pwColors = {常規:'#3b82f6',混合動力:'#22c55e',插混:'#f59e0b',増程:'#8b5cf6',純電動:'#ef4444'};
-    var pwSeries = ['常規','混合動力','插混','増程','純電動'].map(function(k){
-      return { name:k, type:'line', data: DISC_BY_POWER[k].map(pct), connectNulls:false,
-        lineStyle:{color:pwColors[k]}, itemStyle:{color:pwColors[k]}, symbol:'circle', symbolSize:4 };
-    });
+    var pwColors = {通常エンジン:'#3b82f6',HEV:'#22c55e',PHEV:'#f59e0b',レンジEX:'#8b5cf6',BEV:'#ef4444'};
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter:function(p){
+        var s=p[0].axisValue+'<br>';
+        p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; });
+        return s;
+      }},
       legend:{ top:8 },
       xAxis:{ type:'category', data: DISC_BY_POWER.periods, axisLabel:{rotate:45, fontSize:9} },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
       dataZoom:[{type:'inside'},{type:'slider',height:20,bottom:0}],
       grid:{ bottom:60 },
-      series: pwSeries
+      series: ['通常エンジン','HEV','PHEV','レンジEX','BEV'].map(function(k){
+        return { name:k, type:'line', data: DISC_BY_POWER[k].map(pct), connectNulls:false,
+          lineStyle:{color:pwColors[k]}, itemStyle:{color:pwColors[k]}, symbol:'circle', symbolSize:4 };
+      })
     };
 
   } else if (id === 'disc-by-origin') {
-    var orgColors = {日系:'#ef4444',独系:'#3b82f6',韓系:'#22c55e',米系:'#f59e0b',欧系:'#8b5cf6',自主:'#f97316',総体:'#111'};
-    var orgSeries = ['日系','独系','韓系','米系','欧系','自主','総体'].map(function(k){
-      return { name:k, type:'line', data: DISC_BY_ORIGIN[k].map(pct), connectNulls:false,
-        lineStyle:{color:orgColors[k], width: k==='総体'?2.5:1.5, type: k==='総体'?'dashed':'solid'},
-        itemStyle:{color:orgColors[k]}, symbol:'circle', symbolSize:4 };
-    });
+    var orgColors = {日系:'#ef4444',独系:'#3b82f6',韓系:'#22c55e',米系:'#f59e0b',欧系:'#8b5cf6',国内系:'#f97316',全体:'#374151'};
     opt = {
-      tooltip:{ trigger:'axis', formatter:function(p){ var s=p[0].axisValue+'<br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      tooltip:{ trigger:'axis', formatter:function(p){
+        var s=p[0].axisValue+'<br>';
+        p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; });
+        return s;
+      }},
       legend:{ top:8 },
       xAxis:{ type:'category', data: DISC_BY_ORIGIN.periods, axisLabel:{rotate:40, fontSize:9} },
-      yAxis:{ type:'value', name:'促销幅度(%)', axisLabel:{formatter:'{value}%'} },
+      yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
       dataZoom:[{type:'inside'},{type:'slider',height:20,bottom:0}],
       grid:{ bottom:60 },
-      series: orgSeries
+      series: ['日系','独系','韓系','米系','欧系','国内系','全体'].map(function(k){
+        return { name:k, type:'line', data: DISC_BY_ORIGIN[k].map(pct), connectNulls:false,
+          lineStyle:{color:orgColors[k], width: k==='全体'?2.5:1.5, type: k==='全体'?'dashed':'solid'},
+          itemStyle:{color:orgColors[k]}, symbol:'circle', symbolSize:4 };
+      })
     };
   }
 

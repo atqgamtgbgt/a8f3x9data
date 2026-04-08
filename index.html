@@ -7816,8 +7816,8 @@ const CDS_FNS = {
 let CDS_CURRENT_ID = 'cds-monthly';  // 現在表示中のID
 
 function cdsShowPane(id) {
-  // 全ペイン非表示
-  document.querySelectorAll('.cds-pane').forEach(p => p.classList.remove('cds-active'));
+  // cds-プレフィックスのペインのみ非表示（cds-super-content は除外、他タブのペインを巻き込まない）
+  document.querySelectorAll('.cds-pane[id^="cds-"]:not(#cds-super-content)').forEach(p => p.classList.remove('cds-active'));
   // 対象ペインを表示
   const target = document.getElementById(id);
   if (target) target.classList.add('cds-active');
@@ -7898,8 +7898,8 @@ function cdsSetMidTab(tab) {
     var contEl2 = document.getElementById('cdsPillsContent');
     if (pillEl2) pillEl2.setAttribute('style', 'display:block');
     if (contEl2) contEl2.setAttribute('style', 'display:block');
-    // 2) 全ペインを非表示 → 対象ペインだけ表示
-    document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+    // 2) imp-プレフィックスのペインのみ非表示 → 対象ペインだけ表示（他タブのペインを巻き込まない）
+    document.querySelectorAll('.cds-pane[id^="imp-"]').forEach(function(p){ p.classList.remove('cds-active'); });
     var targetPane = document.getElementById(targetId);
     if (targetPane) targetPane.classList.add('cds-active');
     // 3) サブナビのactive状態
@@ -8110,7 +8110,8 @@ function wsEc(id) {
 }
 // ペイン表示
 window.wsShowPane = function(id) {
-  document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+  // ws-プレフィックスのペインのみ非表示（他タブのペインを巻き込まない）
+  document.querySelectorAll('.cds-pane[id^="ws-"]').forEach(function(p){ p.classList.remove('cds-active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('cds-active');
   window.WS_CURRENT_ID = id;
@@ -9625,7 +9626,8 @@ window.INV_CURRENT_ID = 'inv-total';
 
 function invShowPane(id) {
   window.INV_CURRENT_ID = id;
-  document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+  // inv-プレフィックスのペインのみ非表示（他タブのペインを巻き込まない）
+  document.querySelectorAll('.cds-pane[id^="inv-"]').forEach(function(p){ p.classList.remove('cds-active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('cds-active');
   // サブナビ active
@@ -9852,7 +9854,8 @@ window.addEventListener('resize', function(){
     var contEl = document.getElementById('cdsPillsContent');
     if (pillEl) pillEl.setAttribute('style','display:block');
     if (contEl) contEl.setAttribute('style','display:block');
-    document.querySelectorAll('.cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+    // bat-プレフィックスのペインのみ非表示（他タブのペインを巻き込まない）
+    document.querySelectorAll('.cds-pane[id^="bat-"]').forEach(function(p){ p.classList.remove('cds-active'); });
     var pane = document.getElementById(id);
     if (pane) pane.classList.add('cds-active');
     window.BAT_CURRENT_ID = id;
@@ -10392,8 +10395,8 @@ window.initImportCharts = function(id) {
 // ペイン表示
 window.cdsShowImportPane = function(id) {
   window.IMP_CURRENT_ID = id;
-  // 全ペイン（輸出・利益率・地域含む）を一旦非表示にしてから輸入ペインを表示
-  document.querySelectorAll('.cds-pane').forEach(function(p){
+  // imp-プレフィックスのペインのみ非表示にしてから輸入ペインを表示（他タブのペインを巻き込まない）
+  document.querySelectorAll('.cds-pane[id^="imp-"]').forEach(function(p){
     p.classList.remove('cds-active');
   });
   var target = document.getElementById(id);
@@ -10742,8 +10745,8 @@ window.DISC_CURRENT_ID = 'disc-monthly-dist';
 
 function discShowPane(id) {
   window.DISC_CURRENT_ID = id;
-  // すべての cds-pane を非表示にしてから対象だけ表示
-  document.querySelectorAll('#cdsPillsContent .cds-pane').forEach(function(p){ p.classList.remove('cds-active'); });
+  // disc-プレフィックスのペインのみ非表示にしてから対象だけ表示（他タブのペインを巻き込まない）
+  document.querySelectorAll('.cds-pane[id^="disc-"]').forEach(function(p){ p.classList.remove('cds-active'); });
   var el = document.getElementById(id);
   if (el) {
     el.classList.add('cds-active');

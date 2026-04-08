@@ -18,26 +18,69 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
-// ===== ECharts setOption パッチ: 全シリーズに emphasis:{focus:'series'} を自動付与 =====
-// 凡例ホバー時に他シリーズをフェードアウトさせるために必要
+// ===== ECharts パッチ: 凡例ホバー時のみ他シリーズをフェード（グラフホバーは影響なし） =====
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
+
+    // mouseover/mouseout を無視するため emphasis.focus は使わない（'none' に統一）
     var _setOption = instance.setOption.bind(instance);
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.series) {
         var series = Array.isArray(option.series) ? option.series : [option.series];
         series.forEach(function(s) {
-          if (s && !s.emphasis) {
-            s.emphasis = { focus: 'series' };
-          } else if (s && s.emphasis && !s.emphasis.focus) {
-            s.emphasis.focus = 'series';
+          if (s) {
+            if (!s.emphasis) s.emphasis = {};
+            s.emphasis.focus = 'none'; // グラフホバーでは消えない
           }
         });
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
+
+    // 凡例アイテムホバー → 他シリーズをフェード
+    instance.on('legendselectchanged', function() {}); // placeholder
+
+    var _hovered = null;
+
+    instance.getZr().on('mousemove', function(e) {
+      // legend アイテム上かどうかをチェック
+      var target = e && e.target;
+      // legend テキスト or アイコンには __legendDataIndex が付く
+      while (target) {
+        if (target.__legendDataIndex !== undefined || (target.name && target.name.indexOf('legendSymbol') === 0)) {
+          return; // legend 内なので何もしない（下の legendhoverlink に任せる）
+        }
+        target = target.parent;
+      }
+    });
+
+    // legend の hover イベントを捕捉する
+    instance.on('legendItemHover', function(params) {
+      var name = params.name;
+      if (_hovered === name) return;
+      _hovered = name;
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return;
+      var actions = opt.series.map(function(s) {
+        return {
+          type: s.name === name ? 'highlight' : 'downplay',
+          seriesName: s.name
+        };
+      });
+      actions.forEach(function(a) { instance.dispatchAction(a); });
+    });
+
+    instance.on('legendItemUnHover', function() {
+      _hovered = null;
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return;
+      opt.series.forEach(function(s) {
+        instance.dispatchAction({ type: 'downplay', seriesName: s.name });
+      });
+    });
+
     return instance;
   };
 })();

@@ -18,15 +18,19 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
-// ===== ECharts パッチ: 凡例ホバー時のみ他シリーズをフェード =====
+// ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
+// - 折れ線/通常棒: ホバーしたシリーズ以外をフェード（グラフホバーは無効）
+// - 積み上げ棒: ホバーしたシリーズのみ表示・縦軸自動スケール
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
 
-    // setOption: emphasis.focus='series' はそのまま保持（フェード効果に必要）
-    // ただしグラフエリアのホバーによるフォーカスは ZRender レベルで止める
+    // emphasis.focus='series' を全シリーズに付与（フェード効果に必要）
     var _setOption = instance.setOption.bind(instance);
+    // 元のオプションを保持（積み上げ棒の復元用）
+    var _savedOption = null;
+
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.series) {
         var serArr = Array.isArray(option.series) ? option.series : [option.series];
@@ -34,26 +38,90 @@
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
-      return _setOption(option, notMerge, lazyUpdate);
+      // 積み上げ棒復元用に保存（_savedOptionフラグなしの通常setOptionのみ）
+      if (!notMerge || notMerge !== '__restore__') {
+        _savedOption = option;
+      }
+      return _setOption(option, notMerge === '__restore__' ? true : notMerge, lazyUpdate);
     };
 
     function getLegendIdx(el) {
-      // d1（親）に必ずある
       if (!el) return null;
       if (el.__legendDataIndex !== undefined && el.__legendDataIndex !== null) return el.__legendDataIndex;
       if (el.parent && el.parent.__legendDataIndex !== undefined && el.parent.__legendDataIndex !== null) return el.parent.__legendDataIndex;
       return null;
     }
 
-    function isInChartArea(el) {
-      // legendIdx が取れない = グラフエリア上の要素
-      return getLegendIdx(el) === null;
+    function isStackedBar() {
+      // 積み上げ棒グラフかどうか判定
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return false;
+      return opt.series.some(function(s) {
+        return s.type === 'bar' && s.stack;
+      });
     }
 
-    // グラフエリアのホバーイベントを止める（凡例以外では focus が発動しないよう）
+    function getLegendNames() {
+      var opt = instance.getOption();
+      if (!opt || !opt.legend || !opt.legend[0]) return [];
+      var data = opt.legend[0].data || [];
+      return data.map(function(d) { return typeof d === 'object' ? d.name : d; });
+    }
+
+    var _inLegend = false;
+
     instance.getZr().on('mouseover', function(e) {
-      if (isInChartArea(e.target)) {
-        // グラフエリアのハイライトを即キャンセル
+      var idx = getLegendIdx(e.target);
+
+      if (idx === null) {
+        // グラフエリアホバー → フォーカスをキャンセル
+        if (!_inLegend) {
+          var opt = instance.getOption();
+          if (opt && opt.series) {
+            opt.series.forEach(function(s, i) {
+              instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+            });
+          }
+        }
+        return;
+      }
+
+      _inLegend = true;
+
+      if (isStackedBar()) {
+        // 積み上げ棒: ホバーしたシリーズのみ表示・縦軸自動
+        var names = getLegendNames();
+        var hoveredName = names[idx];
+        var opt = instance.getOption();
+        if (!opt || !opt.series) return;
+        var newSeries = opt.series.map(function(s) {
+          var isHovered = s.name === hoveredName;
+          return {
+            name: s.name,
+            type: 'bar',
+            stack: 'total',
+            itemStyle: s.itemStyle,
+            data: isHovered ? s.data : s.data.map(function() { return 0; })
+          };
+        });
+        _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, false);
+      }
+      // 折れ線/通常棒は emphasis.focus='series' のネイティブ動作に任せる
+    });
+
+    instance.getZr().on('mouseout', function(e) {
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
+
+      _inLegend = false;
+
+      if (isStackedBar()) {
+        // 積み上げ棒: 元に戻す
+        if (_savedOption) {
+          _setOption(_savedOption, true);
+        }
+      } else {
+        // 折れ線/通常棒: downplay で通常状態に戻す
         var opt = instance.getOption();
         if (opt && opt.series) {
           opt.series.forEach(function(s, i) {
@@ -61,7 +129,18 @@
           });
         }
       }
-    }, true); // useCapture=true で先に捕捉
+    });
+
+    // グラフエリアホバーでフォーカスが発動しないようにキャンセル
+    instance.getZr().on('mouseover', function(e) {
+      if (getLegendIdx(e.target) !== null) return; // 凡例は除外
+      var opt = instance.getOption();
+      if (opt && opt.series) {
+        opt.series.forEach(function(s, i) {
+          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+        });
+      }
+    }, true);
 
     return instance;
   };

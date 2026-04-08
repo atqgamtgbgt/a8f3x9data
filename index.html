@@ -24,53 +24,44 @@
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
 
-    // グラフホバーでは消えないよう focus='none'
+    // setOption: emphasis.focus='series' はそのまま保持（フェード効果に必要）
+    // ただしグラフエリアのホバーによるフォーカスは ZRender レベルで止める
     var _setOption = instance.setOption.bind(instance);
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.series) {
         var serArr = Array.isArray(option.series) ? option.series : [option.series];
         serArr.forEach(function(s) {
-          if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'none'; }
+          if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
-    function getLegendDataIndex(el) {
-      // depth=0 と depth=1 の両方をチェック
+    function getLegendIdx(el) {
+      // d1（親）に必ずある
       if (!el) return null;
       if (el.__legendDataIndex !== undefined && el.__legendDataIndex !== null) return el.__legendDataIndex;
       if (el.parent && el.parent.__legendDataIndex !== undefined && el.parent.__legendDataIndex !== null) return el.parent.__legendDataIndex;
       return null;
     }
 
-    var _hovering = false;
+    function isInChartArea(el) {
+      // legendIdx が取れない = グラフエリア上の要素
+      return getLegendIdx(el) === null;
+    }
 
+    // グラフエリアのホバーイベントを止める（凡例以外では focus が発動しないよう）
     instance.getZr().on('mouseover', function(e) {
-      var idx = getLegendDataIndex(e.target);
-      if (idx === null) return;
-      _hovering = true;
-      var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      // 凡例のdata配列からname取得（なければindexで代用）
-      var legendName = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data[idx]) || null;
-      if (legendName && typeof legendName === 'object') legendName = legendName.name;
-      opt.series.forEach(function(s, i) {
-        var match = legendName ? (s.name === legendName) : (i === idx);
-        instance.dispatchAction({ type: match ? 'highlight' : 'downplay', seriesIndex: i });
-      });
-    });
-
-    instance.getZr().on('mouseout', function(e) {
-      var idx = getLegendDataIndex(e.target);
-      if (idx === null) return;
-      _hovering = false;
-      var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      opt.series.forEach(function(s, i) {
-        instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-      });
-    });
+      if (isInChartArea(e.target)) {
+        // グラフエリアのハイライトを即キャンセル
+        var opt = instance.getOption();
+        if (opt && opt.series) {
+          opt.series.forEach(function(s, i) {
+            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+          });
+        }
+      }
+    }, true); // useCapture=true で先に捕捉
 
     return instance;
   };

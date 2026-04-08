@@ -17,6 +17,39 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+// ============================================================
+// 凡例ホバー時のみ他シリーズを薄くする共通関数
+// グラフ上のtooltip時には発動しない
+// ============================================================
+var LEGEND_BLUR_OPACITY = 0.1;
+function attachLegendBlur(chart) {
+  if (!chart || chart._legendBlurAttached) return;
+  chart._legendBlurAttached = true;
+  chart.on('mouseover', function(params) {
+    if (params.componentType !== 'legend') return;
+    var name = params.name;
+    var opt = chart.getOption();
+    if (!opt || !opt.series) return;
+    chart.setOption({ series: opt.series.map(function(s) {
+      var dim = s.name !== name;
+      return { blur: {
+        itemStyle: { opacity: dim ? LEGEND_BLUR_OPACITY : 1 },
+        lineStyle: { opacity: dim ? LEGEND_BLUR_OPACITY : 1 }
+      }};
+    })}, false);
+  });
+  chart.on('mouseout', function(params) {
+    if (params.componentType !== 'legend') return;
+    var opt = chart.getOption();
+    if (!opt || !opt.series) return;
+    chart.setOption({ series: opt.series.map(function() {
+      return { blur: { itemStyle: { opacity: 1 }, lineStyle: { opacity: 1 } }};
+    })}, false);
+  });
+}
+</script>
+
 <style>
 body {
   background-color: #f8f9fa;
@@ -5871,6 +5904,7 @@ function initEC(id, fn) {
   if (!el) return;
   INITED[id] = true;
   EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
+  attachLegendBlur(EC[id]);
   fn(EC[id]);
 }
 
@@ -6631,6 +6665,7 @@ function initCccmEC(id, fn) {
     const dom = document.getElementById(id);
     if (!dom) return;
     CCCM_EC[id] = echarts.init(dom, null, {renderer:'svg'});
+    attachLegendBlur(CCCM_EC[id]);
   }
   fn(CCCM_EC[id]);
 }
@@ -7247,6 +7282,7 @@ function cdsEc(id) {
     const el = document.getElementById(id);
     if (!el) return null;
     CDS_EC[id] = echarts.init(el, null, { renderer: 'canvas' });
+    attachLegendBlur(CDS_EC[id]);
   }
   return CDS_EC[id];
 }
@@ -8253,6 +8289,7 @@ function wsEc(id) {
     var el = document.getElementById(id);
     if (!el) return null;
     WS_EC[id] = echarts.init(el, null, {renderer:'canvas'});
+    attachLegendBlur(WS_EC[id]);
   }
   return WS_EC[id];
 }
@@ -9372,7 +9409,9 @@ function mkChart(id) {
   if (!el) return null;
   const ex = echarts.getInstanceByDom(el);
   if (ex) ex.dispose();
-  return echarts.init(el); // ライトテーマ（darkなし）
+  var c = echarts.init(el);
+  attachLegendBlur(c);
+  return c;
 }
 
 // ============================================================
@@ -9801,6 +9840,7 @@ function invInitOrGet(domId) {
   if (!dom) return null;
   if (INV_EC[domId]) return INV_EC[domId];
   var ec = echarts.init(dom, null, {renderer:'canvas'});
+  attachLegendBlur(ec);
   INV_EC[domId] = ec;
   return ec;
 }
@@ -10054,6 +10094,7 @@ window.addEventListener('resize', function(){
     if (!dom) return null;
     if (BAT_EC[id]) { try{ BAT_EC[id].dispose(); }catch(e){} }
     BAT_EC[id] = echarts.init(dom);
+    attachLegendBlur(BAT_EC[id]);
     return BAT_EC[id];
   }
 
@@ -10498,6 +10539,7 @@ function mkImpChart(id) {
   if (!dom) return null;
   if (IMP_EC[id]) { try { IMP_EC[id].dispose(); } catch(e){} }
   IMP_EC[id] = echarts.init(dom, null, {renderer:'canvas'});
+  attachLegendBlur(IMP_EC[id]);
   // 初期化直後にリサイズして実際のDOM幅を確定させる
   IMP_EC[id].resize();
   new ResizeObserver(function(){ try{ IMP_EC[id].resize(); }catch(e){} }).observe(dom);
@@ -11203,6 +11245,7 @@ function discRender(id) {
   var dom = document.getElementById('ec-'+id);
   if (!dom || typeof echarts === 'undefined') return;
   ec = echarts.init(dom);
+  attachLegendBlur(ec);
   DISC_EC[id] = ec;
   var opt = {};
 
@@ -11357,62 +11400,6 @@ window.discShowPane = discShowPane;
 })();
 </script>
 
-
-<script>
-// ============================================================
-// 凡例ホバー時のみ他シリーズを薄くする（グローバル）
-// tooltip表示中（グラフ上カーソル）には発動しない
-// ============================================================
-(function() {
-  var BLUR_OPACITY = 0.12;
-
-  function applyLegendBlur(chart) {
-    var _isHoveringLegend = false;
-
-    chart.on('mouseover', function(params) {
-      if (params.componentType !== 'legend') return;
-      _isHoveringLegend = true;
-      var hoveredName = params.name;
-      var option = chart.getOption();
-      if (!option || !option.series) return;
-      chart.setOption({
-        series: option.series.map(function(s) {
-          var dim = s.name !== hoveredName;
-          return Object.assign({}, s, {
-            blur: {
-              itemStyle: { opacity: dim ? BLUR_OPACITY : 1 },
-              lineStyle: { opacity: dim ? BLUR_OPACITY : 1 },
-              areaStyle: { opacity: dim ? BLUR_OPACITY : 0.7 }
-            }
-          });
-        })
-      }, false);
-    });
-
-    chart.on('mouseout', function(params) {
-      if (params.componentType !== 'legend') return;
-      _isHoveringLegend = false;
-      var option = chart.getOption();
-      if (!option || !option.series) return;
-      chart.setOption({
-        series: option.series.map(function(s) {
-          return Object.assign({}, s, {
-            blur: { itemStyle: { opacity: 1 }, lineStyle: { opacity: 1 }, areaStyle: { opacity: 0.7 } }
-          });
-        })
-      }, false);
-    });
-  }
-
-  // echarts.init をラップして全チャートに自動適用
-  var _origInit = echarts.init;
-  echarts.init = function() {
-    var chart = _origInit.apply(echarts, arguments);
-    try { applyLegendBlur(chart); } catch(e) {}
-    return chart;
-  };
-})();
-</script>
 
 <script>
 // ============================================================
@@ -11613,7 +11600,9 @@ var JH_RUSSIA_VIEW = 'group';
 function jhEc(id) {
   var el = document.getElementById(id);
   if (!el) return null;
-  return echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
+  var c = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
+  attachLegendBlur(c);
+  return c;
 }
 
 function jhShowPane(id) {

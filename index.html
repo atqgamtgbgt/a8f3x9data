@@ -7816,8 +7816,8 @@ const CDS_FNS = {
 let CDS_CURRENT_ID = 'cds-monthly';  // 現在表示中のID
 
 function cdsShowPane(id) {
-  // 全ペイン非表示
-  document.querySelectorAll('.cds-pane[id^="cds-"]:not([id="cds-super-content"])').forEach(p => p.classList.remove('cds-active'));
+  // 全ペイン非表示（全系統: cds-/ws-/inv-/bat-/imp-/disc-）
+  document.querySelectorAll('.cds-pane:not(#cds-super-content)').forEach(p => p.classList.remove('cds-active'));
   // 対象ペインを表示
   const target = document.getElementById(id);
   if (target) target.classList.add('cds-active');
@@ -7876,6 +7876,11 @@ const CHINA_GEOJSON = {"type":"FeatureCollection","features":[{"type":"Feature",
 
 // ========== 中タブ切替 ==========
 function cdsSetMidTab(tab) {
+  // ── 全系統のサブペインを一括非表示（タブ間の残像バグ対策） ──
+  document.querySelectorAll('.cds-pane').forEach(function(p) {
+    p.classList.remove('cds-active');
+  });
+
   // ボタン
   document.querySelectorAll('.cds-mid-tab').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById('cds-mid-btn-' + tab);

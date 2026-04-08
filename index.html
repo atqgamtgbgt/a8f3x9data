@@ -5786,16 +5786,16 @@ function buildCdSd(monthly) {
   }
 
   // 2022年・2023年 通年シェア ハードコード（出所：CAAM）
-  // 2022年: 仏系はその他に合算 / 2023年: CAAM 2023年12月報告
+  // ブランドシェアグラフ専用ラベル（brand_labels）に追加し、labels_all には触れない
+  const brand_labels = labels_all.slice();
   {
     const HC = [
       { label: '22年', cn:49.93, de:19.53, jp:17.80, us:9.37, kr:1.62, other:0.76 },
       { label: '23年', cn:56.0,  de:17.8,  jp:14.4,  us:8.8,  kr:1.6,  other:1.4  },
     ];
-
     for (const hc of HC.slice().reverse()) {
       const tot = hc.cn + hc.de + hc.jp + hc.us + hc.kr + hc.other;
-      labels_all.unshift(hc.label);
+      brand_labels.unshift(hc.label);
       for (const k of brand_keys) {
         const v = { cn:hc.cn, de:hc.de, jp:hc.jp, us:hc.us, kr:hc.kr, other:hc.other }[k];
         brand_series_normed[brand_names[k]].unshift(+(v/tot*100).toFixed(1));
@@ -5803,9 +5803,6 @@ function buildCdSd(monthly) {
     }
   }
 
-  // HC で labels_all に先頭追加した分（22年・23年 = 2件）、
-  // labels_all を参照する全データ配列の先頭にも null を補填してズレを防ぐ
-  function _padArr(a) { return [null, null].concat(a); }
 
   // ---- CD 組み立て ----
   CD = {
@@ -5814,38 +5811,39 @@ function buildCdSd(monthly) {
     labels_nev_ent: nev_ent_months.map(lbl),
     labels_exp_ent: exp_ent_months.map(lbl),
 
-    total_prod:     _padArr(arr(sorted,'total_prod')),
-    total_sales:    _padArr(arr(sorted,'total_sales')),
-    domestic_sales: _padArr(arr(sorted,'domestic_sales')),
-    export_total:   _padArr(arr(sorted,'export_total')),
-    nev_exp:        _padArr(arr(sorted,'nev_exp')),
-    trad_export:    _padArr(arr(sorted,'trad_export')),  // 参照のみ残す（他チャートで使用の可能性）
-    pax_ice_exp:    _padArr(arr(sorted,'pax_ice_exp')),
+    total_prod:     arr(sorted,'total_prod'),
+    total_sales:    arr(sorted,'total_sales'),
+    domestic_sales: arr(sorted,'domestic_sales'),
+    export_total:   arr(sorted,'export_total'),
+    nev_exp:        arr(sorted,'nev_exp'),
+    trad_export:    arr(sorted,'trad_export'),  // 参照のみ残す（他チャートで使用の可能性）
+    pax_ice_exp:    arr(sorted,'pax_ice_exp'),
 
-    pax_prod:       _padArr(arr(sorted,'pax_prod')),
-    pax_sales:      _padArr(arr(sorted,'pax_sales')),
-    pax_domestic:   _padArr(arr(sorted,'pax_domestic')),
-    pax_trad_dom:   _padArr(arr(sorted,'pax_trad_dom')),
-    pax_export:     _padArr(arr(sorted,'pax_export')),
+    pax_prod:       arr(sorted,'pax_prod'),
+    pax_sales:      arr(sorted,'pax_sales'),
+    pax_domestic:   arr(sorted,'pax_domestic'),
+    pax_trad_dom:   arr(sorted,'pax_trad_dom'),
+    pax_export:     arr(sorted,'pax_export'),
 
-    com_prod:       _padArr(arr(sorted,'com_prod')),
-    com_sales:      _padArr(arr(sorted,'com_sales')),
-    com_domestic:   _padArr(arr(sorted,'com_domestic')),
-    com_export:     _padArr(arr(sorted,'com_export')),
+    com_prod:       arr(sorted,'com_prod'),
+    com_sales:      arr(sorted,'com_sales'),
+    com_domestic:   arr(sorted,'com_domestic'),
+    com_export:     arr(sorted,'com_export'),
 
-    bev_prod:   _padArr(arr(sorted,'bev_prod')),   phev_prod:  _padArr(arr(sorted,'phev_prod')),
-    nev_prod:   _padArr(arr(sorted,'nev_prod')),
-    bev_sales:  _padArr(arr(sorted,'bev_sales')),  phev_sales: _padArr(arr(sorted,'phev_sales')),
-    nev_total:  _padArr(arr(sorted,'nev_total')),
-    nev_domestic: _padArr(arr(sorted,'nev_domestic')),
-    nev_pax_dom:  _padArr(arr(sorted,'nev_pax_dom')), nev_pax_exp: _padArr(arr(sorted,'nev_pax_exp')),
-    nev_com_dom:  _padArr(arr(sorted,'nev_com_dom')), nev_com_exp: _padArr(arr(sorted,'nev_com_exp')),
-    bev_exp:    _padArr(arr(sorted,'bev_exp')),    phev_exp:   _padArr(arr(sorted,'phev_exp')),
-    bev_dom:    _padArr(arr(sorted,'bev_dom')),    phev_dom:   _padArr(arr(sorted,'phev_dom')),
+    bev_prod:   arr(sorted,'bev_prod'),   phev_prod:  arr(sorted,'phev_prod'),
+    nev_prod:   arr(sorted,'nev_prod'),
+    bev_sales:  arr(sorted,'bev_sales'),  phev_sales: arr(sorted,'phev_sales'),
+    nev_total:  arr(sorted,'nev_total'),
+    nev_domestic: arr(sorted,'nev_domestic'),
+    nev_pax_dom:  arr(sorted,'nev_pax_dom'), nev_pax_exp: arr(sorted,'nev_pax_exp'),
+    nev_com_dom:  arr(sorted,'nev_com_dom'), nev_com_exp: arr(sorted,'nev_com_exp'),
+    bev_exp:    arr(sorted,'bev_exp'),    phev_exp:   arr(sorted,'phev_exp'),
+    bev_dom:    arr(sorted,'bev_dom'),    phev_dom:   arr(sorted,'phev_dom'),
 
     // CADA出所
-    nev_pen:    _padArr(arr(sorted,'nev_pen')),
-    pax_pen:    _padArr(arr(sorted,'pax_pen')),
+    nev_pen:    arr(sorted,'nev_pen'),
+    pax_pen:    arr(sorted,'pax_pen'),
+    brand_labels,
     brand_series_normed,
 
     ent_series: Object.fromEntries(ent_companies.map(co => [co, ent_months.map(ym => monthly[ym]?.ent?.[co] ?? null)])),
@@ -5855,11 +5853,11 @@ function buildCdSd(monthly) {
     exp_ent_series: Object.fromEntries(exp_companies.map(co => [co, exp_ent_months.map(ym => monthly[ym]?.exp_ent?.[co] ?? null)])),
     exp_companies,
 
-    truck_heavy: _padArr(arr(sorted,'truck_heavy')), truck_mid:   _padArr(arr(sorted,'truck_mid')),
-    truck_light: _padArr(arr(sorted,'truck_light')), truck_micro: _padArr(arr(sorted,'truck_micro')),
-    bus_large:   _padArr(arr(sorted,'bus_large')),   bus_light:   _padArr(arr(sorted,'bus_light')),
-    lng_sales:   _padArr(arr(sorted,'lng_sales')),   fcev_sales:  _padArr(arr(sorted,'fcev_sales')),
-    fcev_prod:   _padArr(arr(sorted,'fcev_prod')),
+    truck_heavy: arr(sorted,'truck_heavy'), truck_mid:   arr(sorted,'truck_mid'),
+    truck_light: arr(sorted,'truck_light'), truck_micro: arr(sorted,'truck_micro'),
+    bus_large:   arr(sorted,'bus_large'),   bus_light:   arr(sorted,'bus_light'),
+    lng_sales:   arr(sorted,'lng_sales'),   fcev_sales:  arr(sorted,'fcev_sales'),
+    fcev_prod:   arr(sorted,'fcev_prod'),
   };
 
   // 派生フィールド
@@ -6103,8 +6101,9 @@ function initBrand() {
 
     // 各年の「最終月」インデックスを取得（12月優先）
     // 2022・2023はハードコード済みのため先頭インデックスを直接使用
+    // brand_labels = ['22年','23年', '23年5月', ..., '26年2月']
     const HC_YEARS = { '2022': 0, '2023': 1 };
-    const years = [...new Set(CD.labels_all.map(l => '20' + l.slice(0,2)))].sort();
+    const years = [...new Set(CD.brand_labels.map(l => '20' + l.slice(0,2)))].sort();
     const yearLabels = [];
     const yearIndices = [];
     years.forEach(yr => {
@@ -6114,14 +6113,14 @@ function initBrand() {
         return;
       }
       const shortYr = yr.slice(2);
-      const idxList = CD.labels_all.reduce((acc, l, i) => {
+      const idxList = CD.brand_labels.reduce((acc, l, i) => {
         if (l.startsWith(shortYr + '年')) acc.push(i);
         return acc;
       }, []);
       if (!idxList.length) return;
-      const dec = idxList.find(i => CD.labels_all[i].includes('12月'));
+      const dec = idxList.find(i => CD.brand_labels[i].includes('12月'));
       const useIdx = dec !== undefined ? dec : idxList[idxList.length - 1];
-      const lbl = dec !== undefined ? yr + '年末時点' : CD.labels_all[useIdx] + '時点';
+      const lbl = dec !== undefined ? yr + '年末時点' : CD.brand_labels[useIdx] + '時点';
       yearLabels.push(lbl);
       yearIndices.push(useIdx);
     });

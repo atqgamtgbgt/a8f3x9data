@@ -5792,7 +5792,7 @@ function buildCdSd(monthly) {
       { label: '22年', cn:49.93, de:19.53, jp:17.80, us:9.37, kr:1.62, other:0.76 },
       { label: '23年', cn:56.0,  de:17.8,  jp:14.4,  us:8.8,  kr:1.6,  other:1.4  },
     ];
-    const HC_COUNT = HC.length;
+
     for (const hc of HC.slice().reverse()) {
       const tot = hc.cn + hc.de + hc.jp + hc.us + hc.kr + hc.other;
       labels_all.unshift(hc.label);
@@ -5803,10 +5803,9 @@ function buildCdSd(monthly) {
     }
   }
 
-  // HC で labels_all に先頭追加した分（22年・23年）、
+  // HC で labels_all に先頭追加した分（22年・23年 = 2件）、
   // labels_all を参照する全データ配列の先頭にも null を補填してズレを防ぐ
-  const HC_PAD = HC_COUNT;
-  function _padArr(a) { return Array(HC_PAD).fill(null).concat(a); }
+  function _padArr(a) { return [null, null].concat(a); }
 
   // ---- CD 組み立て ----
   CD = {

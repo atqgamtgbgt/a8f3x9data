@@ -17,6 +17,32 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+// ===== ECharts setOption パッチ: 全シリーズに emphasis:{focus:'series'} を自動付与 =====
+// 凡例ホバー時に他シリーズをフェードアウトさせるために必要
+(function() {
+  var _init = echarts.init;
+  echarts.init = function() {
+    var instance = _init.apply(this, arguments);
+    var _setOption = instance.setOption.bind(instance);
+    instance.setOption = function(option, notMerge, lazyUpdate) {
+      if (option && option.series) {
+        var series = Array.isArray(option.series) ? option.series : [option.series];
+        series.forEach(function(s) {
+          if (s && !s.emphasis) {
+            s.emphasis = { focus: 'series' };
+          } else if (s && s.emphasis && !s.emphasis.focus) {
+            s.emphasis.focus = 'series';
+          }
+        });
+      }
+      return _setOption(option, notMerge, lazyUpdate);
+    };
+    return instance;
+  };
+})();
+// ===================================================================
+</script>
 
 <style>
 body {
@@ -9823,8 +9849,7 @@ function renderInvTotal() {
       lineStyle: { width: yr == 2026 ? 3 : 2 },
       itemStyle: { color: yearColors[yr] },
       data: INV.totalYears[yr],
-      connectNulls: false,
-      emphasis: { focus: 'series' }
+      connectNulls: false
     };
   });
   ec.setOption({
@@ -9850,7 +9875,6 @@ function renderInvCategory() {
       name: cat,
       type: 'bar',
       stack: 'total',
-      emphasis: { focus: 'series' },
       itemStyle: { color: catColors[i] },
       data: INV.catData[cat]
     };
@@ -9883,7 +9907,7 @@ function renderInvMakerRatio() {
       { type:'value', name:'%', position:'right', axisLabel:{formatter:'{value}%'} }
     ],
     series: [
-      { name:'総在庫（万台）', type:'bar', emphasis:{focus:'series'}, itemStyle:{color:'#91cc75', opacity:0.8}, data:INV.makerTotal },
+      { name:'総在庫（万台）', type:'bar', itemStyle:{color:'#91cc75', opacity:0.8}, data:INV.makerTotal },
       { name:'メーカー在庫率（%）', type:'line', emphasis:{focus:'series'},  yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:5, lineStyle:{color:'#ee6666',width:2},
         itemStyle:{color:'#ee6666'}, data:INV.makerRatio }
@@ -9946,7 +9970,7 @@ function renderInvUsVol() {
     xAxis: { type:'category', data:INV.usYears },
     yAxis: { type:'value', name:'百万台', axisLabel:{formatter:'{value}'} },
     series: [
-      { name:'Total',    type:'bar', emphasis:{focus:'series'}, itemStyle:{color:'#5470c6'}, data:INV.usTotal },
+      { name:'Total',    type:'bar', itemStyle:{color:'#5470c6'}, data:INV.usTotal },
       { name:'Domestic', type:'line', emphasis:{focus:'series'}, smooth:true, symbol:'circle', lineStyle:{color:'#91cc75',width:2}, itemStyle:{color:'#91cc75'}, data:INV.usDomestic },
       { name:'Import',   type:'line', emphasis:{focus:'series'}, smooth:true, symbol:'circle', lineStyle:{color:'#ee6666',width:2}, itemStyle:{color:'#ee6666'}, data:INV.usImport }
     ]
@@ -9962,8 +9986,8 @@ function renderInvUsDays() {
     xAxis: { type:'category', data:INV.usYears },
     yAxis: { type:'value', name:'日', axisLabel:{formatter:'{value}日'} },
     series: [
-      { name:'Domestic（日）', type:'bar', emphasis:{focus:'series'}, itemStyle:{color:'#91cc75'}, data:INV.usDomDays },
-      { name:'Import（日）',   type:'bar', emphasis:{focus:'series'}, itemStyle:{color:'#ee6666'}, data:INV.usImpDays }
+      { name:'Domestic（日）', type:'bar', itemStyle:{color:'#91cc75'}, data:INV.usDomDays },
+      { name:'Import（日）',   type:'bar', itemStyle:{color:'#ee6666'}, data:INV.usImpDays }
     ]
   });
 }
@@ -11197,8 +11221,7 @@ function makeEstimatedSeries(yr, data, confirmed, color) {
     lineStyle: { color: color, type: confirmed ? 'solid' : 'dashed', opacity: confirmed ? 1 : 0.55 },
     itemStyle: { color: color, opacity: confirmed ? 1 : 0.55 },
     symbol: confirmed ? 'circle' : 'emptyCircle',
-    symbolSize: confirmed ? 5 : 4,
-    emphasis: { focus: 'series' }
+    symbolSize: confirmed ? 5 : 4
   };
 }
 
@@ -11218,7 +11241,7 @@ function discRender(id) {
       xAxis:{ type:'category', data: months12 },
       yAxis:{ type:'value', name:'車型数' },
       series: DISC_MONTHLY_DIST.years.map(function(yr){
-        return { name:yr, type:'bar', emphasis:{focus:'series'}, data: DISC_MONTHLY_DIST.data[yr].map(function(v){ return v==null?null:v; }), barMaxWidth:28 };
+        return { name:yr, type:'bar', data: DISC_MONTHLY_DIST.data[yr].map(function(v){ return v==null?null:v; }), barMaxWidth:28 };
       })
     };
 
@@ -11247,9 +11270,9 @@ function discRender(id) {
       xAxis:{ type:'category', data: DISC_OVERALL_RATE.periods, axisLabel:{rotate:35, fontSize:10} },
       yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
       series:[
-        { name:'新エネ車', type:'line', emphasis:{focus:'series'}, data: DISC_OVERALL_RATE.新エネ.map(pct), lineStyle:{color:clrs.新エネ}, itemStyle:{color:clrs.新エネ}, symbol:'circle' },
-        { name:'通常エンジン車', type:'line', emphasis:{focus:'series'}, data: DISC_OVERALL_RATE.通常エンジン.map(pct), lineStyle:{color:clrs.通常エンジン}, itemStyle:{color:clrs.通常エンジン}, symbol:'circle' },
-        { name:'全体', type:'line', emphasis:{focus:'series'}, data: DISC_OVERALL_RATE.全体.map(pct), lineStyle:{color:clrs.全体,type:'dashed'}, itemStyle:{color:clrs.全体}, symbol:'diamond' }
+        { name:'新エネ車', type:'line', data: DISC_OVERALL_RATE.新エネ.map(pct), lineStyle:{color:clrs.新エネ}, itemStyle:{color:clrs.新エネ}, symbol:'circle' },
+        { name:'通常エンジン車', type:'line', data: DISC_OVERALL_RATE.通常エンジン.map(pct), lineStyle:{color:clrs.通常エンジン}, itemStyle:{color:clrs.通常エンジン}, symbol:'circle' },
+        { name:'全体', type:'line', data: DISC_OVERALL_RATE.全体.map(pct), lineStyle:{color:clrs.全体,type:'dashed'}, itemStyle:{color:clrs.全体}, symbol:'diamond' }
       ]
     };
 
@@ -11327,7 +11350,7 @@ function discRender(id) {
       dataZoom:[{type:'inside'},{type:'slider',height:20,bottom:0}],
       grid:{ bottom:60 },
       series: ['通常エンジン','HEV','PHEV','レンジEX','BEV'].map(function(k){
-        return { name:k, type:'line', emphasis:{focus:'series'}, data: DISC_BY_POWER[k].map(pct), connectNulls:false,
+        return { name:k, type:'line', data: DISC_BY_POWER[k].map(pct), connectNulls:false,
           lineStyle:{color:pwColors[k]}, itemStyle:{color:pwColors[k]}, symbol:'circle', symbolSize:4 };
       })
     };
@@ -11346,22 +11369,14 @@ function discRender(id) {
       dataZoom:[{type:'inside'},{type:'slider',height:20,bottom:0}],
       grid:{ bottom:60 },
       series: ['日系','独系','韓系','米系','欧系','国内系','全体'].map(function(k){
-        return { name:k, type:'line', emphasis:{focus:'series'}, data: DISC_BY_ORIGIN[k].map(pct), connectNulls:false,
+        return { name:k, type:'line', data: DISC_BY_ORIGIN[k].map(pct), connectNulls:false,
           lineStyle:{color:orgColors[k], width: k==='全体'?2.5:1.5, type: k==='全体'?'dashed':'solid'},
           itemStyle:{color:orgColors[k]}, symbol:'circle', symbolSize:4 };
       })
     };
   }
 
-  if (Object.keys(opt).length) {
-    if (opt.series) {
-      opt.series = opt.series.map(function(s) {
-        if (!s.emphasis) s.emphasis = { focus: 'series' };
-        return s;
-      });
-    }
-    ec.setOption(opt);
-  }
+  if (Object.keys(opt).length) ec.setOption(opt);
 }
 
 window.discRender = discRender;

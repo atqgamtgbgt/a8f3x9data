@@ -2819,7 +2819,7 @@ body.tray-open { padding-bottom: 105px; }
                 🔋 電池
               </button>
               <button id="cds-mid-btn-discount" class="cds-mid-tab" onclick="cdsSetMidTab('discount')">
-                💴 降価促销
+                💴 値引き率
               </button>
             </div>
 
@@ -3038,10 +3038,6 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div><!-- end cds-sub-discount -->
 
-            <!-- 降価促销 引用元 -->
-            <div id="disc-citation" style="display:none; font-size:11px; color:#888; margin: 6px 0 10px; padding: 4px 0; border-bottom:1px solid #f1f5f9">
-              引用元：<a href="https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ" target="_blank" rel="noopener" style="color:#888">https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ</a>
-            </div>
 
           </div><!-- end cdsPills -->
 
@@ -11023,9 +11019,6 @@ function discShowPane(id) {
     if (pillEl) pillEl.setAttribute('style','display:block');
     if (contEl) contEl.setAttribute('style','display:block');
   }
-  // 引用元表示（discount ペインのときだけ表示）
-  var cit = document.getElementById('disc-citation');
-  if (cit) cit.style.display = (id && id.indexOf('disc-') === 0) ? '' : 'none';
   // ボタンのactive更新
   document.querySelectorAll('#cds-sub-discount [data-cds-discount-target]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-cds-discount-target') === '#'+id);

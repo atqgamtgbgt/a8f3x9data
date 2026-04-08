@@ -2800,6 +2800,9 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-export" class="cds-mid-tab active" onclick="cdsSetMidTab('export')">
                 🚢 輸出分析
               </button>
+              <button id="cds-mid-btn-jishuhaiex" class="cds-mid-tab" onclick="cdsSetMidTab('jishuhaiex')">
+                🌏 自主海外販売
+              </button>
               <button id="cds-mid-btn-import" class="cds-mid-tab" onclick="cdsSetMidTab('import')">
                 📦 輸入分析
               </button>
@@ -2889,6 +2892,37 @@ body.tray-open { padding-bottom: 105px; }
 
               </div><!-- end cds-nav-compact -->
             </div><!-- end cds-sub-export -->
+
+            <!-- 中タブ自主海外販売: 自主海外販売 サブナビ -->
+            <div id="cds-sub-jishuhaiex" class="cds-sub-nav" style="display:none">
+              <div class="cds-nav-compact">
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📊 トレンド・地域別 </span>
+                  <div class="cds-gc-items" id="cds-gc-jh1">
+                    <button class="nav-link active" data-cds-jh-target="#jh-monthly-trend">📈 月次小売推移</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-region-volume">🌍 地域別販売推移</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-region-share">🥧 地域別構成比</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🏆 メーカー別 </span>
+                  <div class="cds-gc-items" id="cds-gc-jh2">
+                    <button class="nav-link" data-cds-jh-target="#jh-maker-total">🚗 全体メーカー別</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-maker-nev">⚡ NEVメーカー別</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-maker-growth">📈 メーカー増速</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🏳️ シェア・国別 </span>
+                  <div class="cds-gc-items" id="cds-gc-jh3">
+                    <button class="nav-link" data-cds-jh-target="#jh-brand-share">🏷️ ブランド系シェア（地域別）</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-country-maker">🗺️ 国別×メーカー（全体）</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-country-maker-nev">⚡ 国別×メーカー（NEV）</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-russia-detail">🇷🇺 ロシア詳細</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <!-- 中タブ輸入: 輸入分析 サブナビ -->
             <div id="cds-sub-import" class="cds-sub-nav" style="display:none">
@@ -3155,6 +3189,87 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-r11"> <div id="rk-wrap-r11"></div></div>
             <div class="cds-pane" id="cds-r12"> <div id="rk-wrap-r12"></div></div>
             <div class="cds-pane" id="cds-r12b"><div id="rk-wrap-r12b"></div></div>
+
+            <!-- ===== 自主海外販売 ペイン群 ===== -->
+            <div class="cds-pane" id="jh-monthly-trend">
+              <div class="chart-card">
+                <div class="chart-title">📈 自主ブランド 海外部分地区 月次小売推移（万台）</div>
+                <div class="chart-subtitle">2021〜2026年　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-monthly-trend" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-region-volume">
+              <div class="chart-card">
+                <div class="chart-title">🌍 地域別 自主海外販売台数推移（万台）</div>
+                <div class="chart-subtitle">2020〜2026年1-2月累計　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-region-volume" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-region-share">
+              <div class="chart-card">
+                <div class="chart-title">🥧 地域別 自主海外販売構成比（2026年1-2月）</div>
+                <div class="chart-subtitle">地域別シェア比較　出所：崔東樹（乗聯会）</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="jh-region-share-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="jhSetRegionShareView('pie26',this)">2026年1-2月（円グラフ）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRegionShareView('bar',this)">年次推移（棒グラフ）</button>
+                </div>
+                <div id="ec-jh-region-share" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-maker-total">
+              <div class="chart-card">
+                <div class="chart-title">🚗 メーカー別 自主海外販売台数（台）</div>
+                <div class="chart-subtitle">2020〜2026年1-2月　主要メーカー　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-maker-total" class="echart-box" style="height:520px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-maker-nev">
+              <div class="chart-card">
+                <div class="chart-title">⚡ NEVメーカー別 自主海外販売台数（台）</div>
+                <div class="chart-subtitle">2020〜2026年1-2月　主要メーカー　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-maker-nev" class="echart-box" style="height:520px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-maker-growth">
+              <div class="chart-card">
+                <div class="chart-title">📈 メーカー別 26年1-2月 vs 25年1-2月 増速比較（%）</div>
+                <div class="chart-subtitle">前年同期比　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-maker-growth" class="echart-box" style="height:480px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-brand-share">
+              <div class="chart-card">
+                <div class="chart-title">🏷️ 地域別 ブランド系シェア（2026年1-2月）</div>
+                <div class="chart-subtitle">自主・日系・独系・米系・欧系・韓系・アジア系・ロシア系　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-brand-share" class="echart-box" style="height:480px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-country-maker">
+              <div class="chart-card">
+                <div class="chart-title">🗺️ 国別×メーカー別 販売台数（26年1-2月・全体）</div>
+                <div class="chart-subtitle">上位30カ国　主要メーカー別内訳（積み上げ）　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-country-maker" class="echart-box" style="height:640px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-country-maker-nev">
+              <div class="chart-card">
+                <div class="chart-title">⚡ 国別×メーカー別 NEV販売台数（26年1-2月）</div>
+                <div class="chart-subtitle">上位30カ国　主要NEVメーカー別内訳（積み上げ）　出所：崔東樹（乗聯会）</div>
+                <div id="ec-jh-country-maker-nev" class="echart-box" style="height:640px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="jh-russia-detail">
+              <div class="chart-card">
+                <div class="chart-title">🇷🇺 ロシア市場 中国自主ブランド詳細（集団別・ブランド別）</div>
+                <div class="chart-subtitle">2024年〜2026年1-2月　前年比増速付き　出所：崔東樹（乗聯会）</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="jh-russia-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="jhSetRussiaView('group',this)">集団別シェア（2026年1-2月）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRussiaView('trend',this)">集団別月次推移</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRussiaView('growth',this)">集団別前年比</button>
+                </div>
+                <div id="ec-jh-russia-detail" class="echart-box" style="height:480px"></div>
+              </div>
+            </div>
 
             <!-- 中国地域別 ペイン群 -->
             <div class="cds-pane" id="cds-china-map">
@@ -7888,6 +8003,7 @@ function cdsSetMidTab(tab) {
   // ── 引用元リンク切替 ──
   var CDS_SOURCE_URLS = {
     'export':     'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA',
+    'jishuhaiex': 'https://mp.weixin.qq.com/s/I9noQ4j76sBTSDcJoZ5cfg',
     'import':     'https://mp.weixin.qq.com/s/eZZK8I86zaTzH0604cCYpw',
     'china':      'https://mp.weixin.qq.com/s/JGRelbBCdAPqSgaxb4W6YQ',
     'worldshare': 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg',
@@ -7914,8 +8030,16 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-inventory').style.display   = (tab === 'inventory')   ? '' : 'none';
   document.getElementById('cds-sub-battery').style.display     = (tab === 'battery')     ? '' : 'none';
   document.getElementById('cds-sub-discount').style.display    = (tab === 'discount')    ? '' : 'none';
+  document.getElementById('cds-sub-jishuhaiex').style.display  = (tab === 'jishuhaiex')  ? '' : 'none';
 
-  if (tab === 'import') {
+  if (tab === 'jishuhaiex') {
+    var jhTarget = window.JH_CURRENT_ID || 'jh-monthly-trend';
+    jhShowPane(jhTarget);
+    document.querySelectorAll('#cds-sub-jishuhaiex [data-cds-jh-target]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-cds-jh-target') === '#' + jhTarget);
+    });
+    setTimeout(function(){ jhRender(jhTarget); }, 80);
+  } else if (tab === 'import') {
     var targetId = window.IMP_CURRENT_ID || 'imp-trend';
     // 1) cdsPills / cdsPillsContent を確実に表示（!important を setAttribute で上書き）
     var pillEl2 = document.getElementById('cdsPills');
@@ -11228,6 +11352,586 @@ function discRender(id) {
 
 window.discRender = discRender;
 window.discShowPane = discShowPane;
+
+})();
+</script>
+
+<script>
+// ============================================================
+// 🌏 自主海外販売 タブ
+// ============================================================
+(function(){
+
+// ---- データ定義 ----
+
+// 画像1: 月次小売推移（万台）
+var JH_MONTHLY = {
+  months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+  series: [
+    { name:'2021年', data:[4.4,4.7,6.1,5.6,5.8,7.2,6.8,7.1,7.8,8.0,8.1,7.8] },
+    { name:'2022年', data:[7.2,7.4,8.8,7.2,7.7,8.2,7.8,8.7,9.8,9.6,10.7,12.1] },
+    { name:'2023年', data:[10.6,10.7,14.6,12.2,14.6,16.1,15.4,16.7,18.2,17.4,18.4,20.3] },
+    { name:'2024年', data:[18.7,19.0,24.0,21.6,21.5,23.7,24.3,23.4,24.7,26.1,23.0,25.5] },
+    { name:'2025年', data:[22.3,21.1,26.6,25.4,27.3,29.0,29.9,29.1,34.3,35.8,33.7,39.2] },
+    { name:'2026年', data:[36.5,35.7,null,null,null,null,null,null,null,null,null,null] }
+  ]
+};
+
+// 画像5: 地域別年次販売（万台）
+var JH_REGION = {
+  regions: ['欧州連合','東南アジア','中南米','旧ソ連圏','中東','オセアニア','アフリカ','アジアその他','日韓'],
+  years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
+  data: {
+    '欧州連合':     [3.0,6.9,16.2,32.9,38.3,75.8,13.8],
+    '東南アジア':   [4.5,7.8,10.4,15.4,19.6,38.2,13.7],
+    '中南米':       [9.2,20.9,28.4,30.4,43.3,61.3,13.1],
+    '旧ソ連圏':     [6.3,12.8,14.0,53.8,115.3,94.7,11.8],
+    '中東':         [6.0,9.7,12.6,24.3,29.2,36.7,10.0],
+    'オセアニア':   [3.4,8.3,10.6,14.9,15.1,22.6,4.5],
+    'アフリカ':     [5.2,8.3,7.9,6.8,8.7,15.2,3.5],
+    'アジアその他': [2.9,4.1,5.0,5.1,5.9,8.2,1.4],
+    '日韓':         [0.0,0.0,0.0,0.2,0.2,1.0,0.3]
+  }
+};
+
+// 画像8: メーカー別販売（台）
+var JH_MAKER = {
+  makers: ['奇瑞集団','比亜迪','上汽集団','長城汽車','吉利集団','長安集団','江淮集団','広汽集団','北汽集団','零跑汽車','東風集団'],
+  years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
+  data: {
+    '奇瑞集団': [52811,133046,168172,444131,658646,848142,187888],
+    '比亜迪':   [4510,9194,22034,111025,251290,614728,135147],
+    '上汽集団': [169658,325245,444938,610791,600206,651441,115732],
+    '長城汽車': [41168,117822,129961,269076,399107,426912,75590],
+    '吉利集団': [22163,49603,95347,157005,268817,303595,54509],
+    '長安集団': [52333,61320,74507,101408,180273,183752,36352],
+    '江淮集団': [16257,31848,41476,54835,95953,95276,22230],
+    '広汽集団': [247,2804,2879,6931,32827,48420,17230],
+    '北汽集団': [10071,15116,18083,17562,43889,66580,15564],
+    '零跑汽車': [null,null,58,1352,1827,36417,14267],
+    '東風集団': [9212,14176,19523,13562,40194,42887,9686]
+  }
+};
+
+// 画像9: NEVメーカー別販売（台）
+var JH_MAKER_NEV = {
+  makers: ['比亜迪','奇瑞集団','上汽集団','吉利集団','零跑汽車','広汽集団','長安集団','小鵬汽車','長城汽車','東風集団'],
+  years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
+  data: {
+    '比亜迪':   [381,1429,10772,111025,251290,614727,135147],
+    '奇瑞集団': [null,null,755,1066,10804,93685,44087],
+    '上汽集団': [23061,44783,98682,171028,134373,202615,38195],
+    '吉利集団': [9,6091,26442,30737,28711,50525,15832],
+    '零跑汽車': [null,null,58,1352,1827,36417,14267],
+    '広汽集団': [null,null,null,88,5380,21247,12988],
+    '長安集団': [131,39,null,null,6802,20247,12180],
+    '小鵬汽車': [null,483,745,2071,13600,31412,6283],
+    '長城汽車': [2,null,4064,16959,19443,20364,6098],
+    '東風集団': [88,247,2294,2992,11875,18312,2959]
+  }
+};
+
+// 画像6: 地域別ブランド系シェア（2026年1-2月）
+var JH_BRAND_SHARE = {
+  regions: ['中国国内','米加','欧州連合','アジアその他','日韓','中南米','中東','東南アジア','旧ソ連圏','オセアニア','アフリカ'],
+  brands: ['自主系','日系','独系','米系','欧系','韓系','アジア系','ロシア系'],
+  colors: ['#ee4444','#4488ee','#f5a623','#22bb55','#9b59b6','#1abc9c','#e67e22','#95a5a6'],
+  data: [
+    // 自主, 日, 独, 米, 欧, 韓, 亜, 俄
+    [73,8,10,6,1,1,0,0],   // 中国
+    [0,38,9,37,5,11,0,0],  // 米加
+    [6,12,34,7,34,6,0,0],  // 欧州連合
+    [1,41,2,0,3,15,36,0],  // アジアその他
+    [0,73,5,2,2,16,0,0],   // 日韓
+    [14,24,14,16,21,9,0,0],// 中南米
+    [14,28,7,6,26,11,9,0], // 中東
+    [22,52,1,3,14,4,5,0],  // 東南アジア
+    [50,7,5,5,1,9,0,23],   // 旧ソ連圏
+    [22,42,9,10,3,14,0,0], // オセアニア
+    [21,32,12,6,17,10,2,0] // アフリカ
+  ]
+};
+
+// 画像10: 国別×メーカー別（全体）
+var JH_COUNTRY_MAKER = {
+  countries: ['ロシア','タイ','ブラジル','オーストラリア','イタリア','イギリス','メキシコ','イスラエル','インドネシア','カザフスタン',
+              '南アフリカ','スペイン','チリ','ペルー','UAE','ドイツ','インド','トルコ','エジプト','マレーシア',
+              'フィリピン','ポーランド','アルゼンチン','エクアドル','フランス','コロンビア','クウェート','イラク','ウルグアイ','モロッコ'],
+  makers: ['奇瑞集団','比亜迪','上汽集団','長城汽車','吉利集団','長安集団','その他'],
+  colors: ['#e53935','#f5a623','#1e88e5','#43a047','#8e24aa','#00acc1','#aaa'],
+  data: [
+    [31335,300,39,23572,19643,4632,3901+2636+2182+629+5+3189],
+    [19448,26460,13358,6366,1882,7758,8+11168+60+106+826],
+    [10129,21099,149,9126,1324,0,32+820+181+745],
+    [9224,10633,8502,9198,2756,170,221+220+107],
+    [7594,7661,9851,0,746,0,2+6124+499+67],
+    [13543,6175,8549,34,331,213,1205+22],
+    [844,0,9352,2341,7155,3350,3725+252],
+    [15548,3464,2019,74,1922,1194,46+270+183+447+288+1057+173],
+    [7648,10194,2828,594,1770,156,1545+117+391+177],
+    [8120,950,232,3062,1680,2282,3630+142+22+114+210],
+    [10494,0,1132,5095,0,202,578+1297+8+873],
+    [4868,4972,6188,0,693,296,8+100+505+43+226+67],
+    [3617,215,2768,2771,1035,2152,1264+271+964+48+454+21],
+    [3842,132,120,906,1560,2836,1926+4+1196+466+228],
+    [3230,0,2548,836,5390,338,0],
+    [2,5730,3904,54,150,13,1780+658],
+    [0,667,11461,0,0,0,0],
+    [5353,5294,334,0,0,0,5],
+    [3080,0,3846,132,280,636,1128],
+    [6050,1895,587,772,0,32,99+219+53]
+  ]
+};
+
+// 画像11: 国別×メーカー別（NEV）
+var JH_COUNTRY_MAKER_NEV = {
+  countries: ['タイ','ブラジル','インドネシア','イギリス','イタリア','オーストラリア','ドイツ','インド','スペイン',
+              'フィリピン','イスラエル','ロシア','トルコ','ポーランド','フランス','マレーシア','メキシコ',
+              'オランダ','シンガポール','コロンビア','アイルランド','韓国','ベルギー','オーストリア','ポルトガル'],
+  makers: ['比亜迪','奇瑞集団','上汽集団','吉利集団','零跑汽車','広汽集団','その他'],
+  colors: ['#e53935','#f5a623','#1e88e5','#43a047','#8e24aa','#00acc1','#aaa'],
+  data: [
+    [26460,19448,12596,1882,106,11168,7758+826+4110+4+128],
+    [21099,934,148,1324,745,23,1205],
+    [10194,6183,2371,1770,0,1545,156+391+94+47+72],
+    [6175,8524,2431,292,1205,0,213+22+8],
+    [7661,2407,427,746,6124,0,67+147+17],
+    [10633,262,1002,2736,107,0,170+225],
+    [5730,2,1258,150,1780,0,13+658+54],
+    [667,0,8963,0,0,0,0],
+    [4972,1366,470,323,505,0,296+226+43+13],
+    [6444,208,84,10,0,0,122+28],
+    [3464,0,82,447,447,0,1194+1057+74+90],
+    [300,29,4,1249,0,18,114+5+4+2316+1042+94+1],
+    [5294,0,0,0,0,0,0],
+    [1068,700,2160,37,386,67,65+31+5],
+    [1858,45,572,23,700,0,750+160],
+    [1895,828,259,0,0,0,81+32],
+    [0,292,326,2107,0,0,165+39+22],
+    [687,334,298,654,421,0,127+34+9],
+    [2155,0,0,168,34,0,59+141],
+    [1636,422,0,0,0,0,396+10],
+    [1441,0,662,7,125,0,199],
+    [2304,0,0,0,0,0,0],
+    [952,112,530,110,254,0,270+4+2],
+    [1292,306,232,0,190,0,50+4],
+    [970,182,434,0,116,38,120+200+28]
+  ]
+};
+
+// 画像12: ロシア集団別データ
+var JH_RUSSIA = {
+  groups: ['奇瑞集団','長城汽車','吉利集団','長安集団','江淮集団','東風集団','一汽集団','中国重汽','理想汽車','広汽集団'],
+  data26: [31335,23572,19643,4632,2636,3901,3189,887,1042,2182],
+  data25: [245819,198205,177779,67835,26763,19632,19393,10061,13088,21330],
+  growth_cum: [-5,-8,17,-52,-41,51,69,-63,-37,11],  // %
+  jan26: [16035,12042,9119,2450,1484,1747,1662,447,638,1093],
+  feb26: [15300,11530,10524,2182,1152,2154,1527,440,404,1089]
+};
+
+var JH_CURRENT_ID = 'jh-monthly-trend';
+var JH_REGION_SHARE_VIEW = 'pie26';
+var JH_RUSSIA_VIEW = 'group';
+
+function jhEc(id) {
+  var el = document.getElementById(id);
+  if (!el) return null;
+  return echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
+}
+
+function jhShowPane(id) {
+  document.querySelectorAll('.cds-pane[id^="jh-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+  var el = document.getElementById(id);
+  if (el) el.classList.add('cds-active');
+  JH_CURRENT_ID = id;
+  // サブナビ active 更新
+  document.querySelectorAll('#cds-sub-jishuhaiex [data-cds-jh-target]').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-cds-jh-target') === '#' + id);
+  });
+}
+
+function jhRender(id) {
+  var fns = {
+    'jh-monthly-trend':     jhDrawMonthlyTrend,
+    'jh-region-volume':     jhDrawRegionVolume,
+    'jh-region-share':      jhDrawRegionShare,
+    'jh-maker-total':       jhDrawMakerTotal,
+    'jh-maker-nev':         jhDrawMakerNev,
+    'jh-maker-growth':      jhDrawMakerGrowth,
+    'jh-brand-share':       jhDrawBrandShare,
+    'jh-country-maker':     jhDrawCountryMaker,
+    'jh-country-maker-nev': jhDrawCountryMakerNev,
+    'jh-russia-detail':     jhDrawRussiaDetail
+  };
+  if (fns[id]) fns[id]();
+  setTimeout(function(){
+    var ec = jhEc('ec-' + id.replace('jh-','jh-'));
+    if (ec) { try { ec.resize(); } catch(e){} }
+  }, 120);
+}
+
+// ---- 描画関数 ----
+
+function jhDrawMonthlyTrend() {
+  var ec = jhEc('ec-jh-monthly-trend');
+  if (!ec) return;
+  var colors = ['#94a3b8','#64748b','#22c55e','#3b82f6','#f97316','#ef4444'];
+  var series = JH_MONTHLY.series.map(function(s, i){
+    return {
+      name: s.name, type:'line', smooth:true,
+      data: s.data,
+      connectNulls: false,
+      lineStyle: { width: s.name === '2026年' ? 3 : (s.name === '2025年' ? 3 : 2) },
+      symbol: 'circle', symbolSize: 5,
+      color: colors[i],
+      label: {
+        show: (s.name === '2025年' || s.name === '2026年'),
+        position:'top', fontSize:10,
+        formatter: function(p){ return p.value != null ? p.value : ''; }
+      },
+      emphasis: { focus:'series' }
+    };
+  });
+  ec.setOption({
+    tooltip: { trigger:'axis', formatter: function(params){
+      var s = params[0].name + '<br/>';
+      params.forEach(function(p){ if(p.value!=null) s += p.seriesName+': <b>'+p.value+'</b>万台<br/>'; });
+      return s;
+    }},
+    legend: { data: JH_MONTHLY.series.map(function(s){ return s.name; }), top:8 },
+    grid: { left:50, right:30, top:50, bottom:40 },
+    xAxis: { type:'category', data: JH_MONTHLY.months, boundaryGap:false },
+    yAxis: { type:'value', name:'万台', axisLabel:{ formatter:'{value}' } },
+    series: series
+  });
+}
+
+function jhDrawRegionVolume() {
+  var ec = jhEc('ec-jh-region-volume');
+  if (!ec) return;
+  var colors = ['#3b82f6','#f97316','#22c55e','#ef4444','#a855f7','#06b6d4','#f59e0b','#6b7280','#ec4899'];
+  var series = JH_REGION.regions.map(function(r, i){
+    return {
+      name: r, type:'bar', stack:'total',
+      data: JH_REGION.data[r],
+      color: colors[i],
+      label: { show:false },
+      emphasis: { focus:'series' }
+    };
+  });
+  ec.setOption({
+    tooltip: { trigger:'axis', axisPointer:{ type:'shadow' },
+      formatter: function(params){
+        var total = 0;
+        var s = params[0].name + '<br/>';
+        params.forEach(function(p){ if(p.value){ s += p.marker+p.seriesName+': <b>'+p.value+'</b>万台<br/>'; total+=p.value; }});
+        s += '<hr style="margin:4px 0"/>合計: <b>'+total.toFixed(1)+'</b>万台';
+        return s;
+      }
+    },
+    legend: { data: JH_REGION.regions, top:8, type:'scroll' },
+    grid: { left:50, right:30, top:60, bottom:40 },
+    xAxis: { type:'category', data: JH_REGION.years },
+    yAxis: { type:'value', name:'万台' },
+    series: series
+  });
+}
+
+function jhSetRegionShareView(view, btn) {
+  JH_REGION_SHARE_VIEW = view;
+  document.querySelectorAll('#jh-region-share-tabs button').forEach(function(b){
+    b.className = b === btn ? 'btn btn-sm btn-primary active' : 'btn btn-sm btn-outline-secondary';
+  });
+  jhDrawRegionShare();
+}
+window.jhSetRegionShareView = jhSetRegionShareView;
+
+function jhDrawRegionShare() {
+  var ec = jhEc('ec-jh-region-share');
+  if (!ec) return;
+  var colors = ['#3b82f6','#f97316','#22c55e','#ef4444','#a855f7','#06b6d4','#f59e0b','#6b7280','#ec4899'];
+  if (JH_REGION_SHARE_VIEW === 'pie26') {
+    var pieData = JH_REGION.regions.map(function(r, i){
+      return { name:r, value: JH_REGION.data[r][6], itemStyle:{ color:colors[i] } };
+    }).filter(function(d){ return d.value > 0; });
+    ec.setOption({
+      tooltip: { trigger:'item', formatter: function(p){ return p.name+'<br/><b>'+p.value+'</b>万台 ('+p.percent+'%)'; } },
+      legend: { orient:'vertical', right:10, top:'center', type:'scroll' },
+      series: [{ name:'地域別販売', type:'pie', radius:['35%','65%'], center:['42%','52%'],
+        data: pieData, label:{ formatter: function(p){ return p.name+'\n'+p.value+'万台'; }, fontSize:11 },
+        emphasis: { itemStyle:{ shadowBlur:8, shadowColor:'rgba(0,0,0,0.2)' } }
+      }]
+    });
+  } else {
+    // 横棒グラフ：年次推移
+    var series = JH_REGION.years.map(function(y, yi){
+      return {
+        name:y, type:'bar',
+        data: JH_REGION.regions.map(function(r){ return JH_REGION.data[r][yi]; }),
+        emphasis:{ focus:'series' }
+      };
+    });
+    ec.setOption({
+      tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+      legend:{ top:8, type:'scroll' },
+      grid:{ left:90, right:30, top:50, bottom:40 },
+      xAxis:{ type:'value', name:'万台' },
+      yAxis:{ type:'category', data: JH_REGION.regions },
+      series: series
+    });
+  }
+}
+
+function jhDrawMakerTotal() {
+  var ec = jhEc('ec-jh-maker-total');
+  if (!ec) return;
+  var colors = ['#ef4444','#f97316','#3b82f6','#22c55e','#a855f7','#06b6d4','#f59e0b','#14b8a6','#8b5cf6','#ec4899','#64748b'];
+  var series = JH_MAKER.years.map(function(y, yi){
+    return {
+      name:y, type:'bar',
+      data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }),
+      emphasis:{focus:'series'}
+    };
+  });
+  ec.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
+      formatter: function(params){
+        var s = params[0].axisValue+'<br/>';
+        params.forEach(function(p){ s += p.marker+p.seriesName+': <b>'+(p.value||0).toLocaleString()+'</b>台<br/>'; });
+        return s;
+      }
+    },
+    legend:{ top:8, type:'scroll' },
+    grid:{ left:90, right:30, top:60, bottom:40 },
+    xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
+    yAxis:{ type:'category', data: JH_MAKER.makers },
+    series: series
+  });
+}
+
+function jhDrawMakerNev() {
+  var ec = jhEc('ec-jh-maker-nev');
+  if (!ec) return;
+  var series = JH_MAKER_NEV.years.map(function(y, yi){
+    return {
+      name:y, type:'bar',
+      data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }),
+      emphasis:{focus:'series'}
+    };
+  });
+  ec.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
+      formatter: function(params){
+        var s = params[0].axisValue+'<br/>';
+        params.forEach(function(p){ s += p.marker+p.seriesName+': <b>'+(p.value||0).toLocaleString()+'</b>台<br/>'; });
+        return s;
+      }
+    },
+    legend:{ top:8, type:'scroll' },
+    grid:{ left:80, right:30, top:60, bottom:40 },
+    xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
+    yAxis:{ type:'category', data: JH_MAKER_NEV.makers },
+    series: series
+  });
+}
+
+function jhDrawMakerGrowth() {
+  var ec = jhEc('ec-jh-maker-growth');
+  if (!ec) return;
+  // 26年1-2月 vs 25年1-2月 YoY
+  var makers = ['奇瑞集団','比亜迪','上汽集団','長城汽車','吉利集団','長安集団','江淮集団','広汽集団','北汽集団','零跑汽車','東風集団'];
+  var val25 = [133046+9194, 9194+4510, 325245+169658, 117822+41168, 49603+22163, 61320+52333, 31848+16257, 2804+247, 15116+10071, null, 14176+9212];
+  // 26年1-2月 vs 25年1-2月（1月+2月相当の簡易比較：25年は年計/12*2で推計）
+  var val26_12 = [187888, 135147, 115732, 75590, 54509, 36352, 22230, 17230, 15564, 14267, 9686];
+  var val25_12 = [848142/12*2, 614728/12*2, 651441/12*2, 426912/12*2, 303595/12*2, 183752/12*2, 95276/12*2, 48420/12*2, 66580/12*2, 36417/12*2, 42887/12*2];
+  var growths = makers.map(function(m, i){
+    if (!val25_12[i]) return null;
+    return Math.round((val26_12[i] - val25_12[i]) / val25_12[i] * 100);
+  });
+  // sort by growth
+  var paired = makers.map(function(m,i){ return {maker:m, growth:growths[i]}; }).sort(function(a,b){ return a.growth-b.growth; });
+  ec.setOption({
+    tooltip:{ trigger:'axis', formatter: function(params){
+      return params[0].name+': <b>'+params[0].value+'%</b>';
+    }},
+    grid:{ left:90, right:60, top:20, bottom:40 },
+    xAxis:{ type:'value', name:'前年同期比（%）', axisLine:{ onZero:true } },
+    yAxis:{ type:'category', data: paired.map(function(p){ return p.maker; }) },
+    series:[{ type:'bar',
+      data: paired.map(function(p){ return { value:p.growth,
+        itemStyle:{ color: p.growth >= 0 ? '#22c55e' : '#ef4444' }
+      }; }),
+      label:{ show:true, position:function(p){ return p.value >= 0 ? 'right' : 'left'; },
+        formatter: function(p){ return p.value+'%'; }, fontSize:11 }
+    }]
+  });
+}
+
+function jhDrawBrandShare() {
+  var ec = jhEc('ec-jh-brand-share');
+  if (!ec) return;
+  ec.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+    legend:{ data: JH_BRAND_SHARE.brands, top:8, type:'scroll' },
+    grid:{ left:100, right:30, top:55, bottom:40 },
+    xAxis:{ type:'value', max:100, axisLabel:{ formatter:'{value}%' } },
+    yAxis:{ type:'category', data: JH_BRAND_SHARE.regions },
+    series: JH_BRAND_SHARE.brands.map(function(b, bi){
+      return {
+        name:b, type:'bar', stack:'total',
+        color: JH_BRAND_SHARE.colors[bi],
+        data: JH_BRAND_SHARE.data.map(function(row){ return row[bi]; }),
+        label:{ show:true, formatter:function(p){ return p.value > 5 ? p.value+'%' : ''; }, fontSize:10 },
+        emphasis:{focus:'series'}
+      };
+    })
+  });
+}
+
+function jhDrawCountryMaker() {
+  var ec = jhEc('ec-jh-country-maker');
+  if (!ec) return;
+  // ソート（合計降順）
+  var totals = JH_COUNTRY_MAKER.data.map(function(row){ return row.reduce(function(a,b){ return a+(b||0); },0); });
+  var indices = totals.map(function(_,i){ return i; }).sort(function(a,b){ return totals[a]-totals[b]; });
+  var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER.countries[i]; });
+  ec.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
+      formatter: function(params){
+        var total = params.reduce(function(s,p){ return s+(p.value||0); },0);
+        var s = params[0].axisValue+'<br/>';
+        params.forEach(function(p){ if(p.value) s += p.marker+p.seriesName+': <b>'+p.value.toLocaleString()+'</b>台<br/>'; });
+        s += '合計: <b>'+total.toLocaleString()+'</b>台';
+        return s;
+      }
+    },
+    legend:{ data: JH_COUNTRY_MAKER.makers, top:8, type:'scroll' },
+    grid:{ left:100, right:30, top:55, bottom:20 },
+    xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
+    yAxis:{ type:'category', data: sortedCountries },
+    series: JH_COUNTRY_MAKER.makers.map(function(m, mi){
+      return {
+        name:m, type:'bar', stack:'total',
+        color: JH_COUNTRY_MAKER.colors[mi],
+        data: indices.map(function(i){ return JH_COUNTRY_MAKER.data[i] ? (JH_COUNTRY_MAKER.data[i][mi]||0) : 0; }),
+        emphasis:{focus:'series'}
+      };
+    })
+  });
+}
+
+function jhDrawCountryMakerNev() {
+  var ec = jhEc('ec-jh-country-maker-nev');
+  if (!ec) return;
+  var totals = JH_COUNTRY_MAKER_NEV.data.map(function(row){ return row.reduce(function(a,b){ return a+(b||0); },0); });
+  var indices = totals.map(function(_,i){ return i; }).sort(function(a,b){ return totals[a]-totals[b]; });
+  var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER_NEV.countries[i]; });
+  ec.setOption({
+    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
+      formatter: function(params){
+        var total = params.reduce(function(s,p){ return s+(p.value||0); },0);
+        var s = params[0].axisValue+'<br/>';
+        params.forEach(function(p){ if(p.value) s += p.marker+p.seriesName+': <b>'+p.value.toLocaleString()+'</b>台<br/>'; });
+        s += '合計: <b>'+total.toLocaleString()+'</b>台';
+        return s;
+      }
+    },
+    legend:{ data: JH_COUNTRY_MAKER_NEV.makers, top:8, type:'scroll' },
+    grid:{ left:110, right:30, top:55, bottom:20 },
+    xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
+    yAxis:{ type:'category', data: sortedCountries },
+    series: JH_COUNTRY_MAKER_NEV.makers.map(function(m, mi){
+      return {
+        name:m, type:'bar', stack:'total',
+        color: JH_COUNTRY_MAKER_NEV.colors[mi],
+        data: indices.map(function(i){ return JH_COUNTRY_MAKER_NEV.data[i] ? (JH_COUNTRY_MAKER_NEV.data[i][mi]||0) : 0; }),
+        emphasis:{focus:'series'}
+      };
+    })
+  });
+}
+
+function jhSetRussiaView(view, btn) {
+  JH_RUSSIA_VIEW = view;
+  document.querySelectorAll('#jh-russia-tabs button').forEach(function(b){
+    b.className = b === btn ? 'btn btn-sm btn-primary active' : 'btn btn-sm btn-outline-secondary';
+  });
+  jhDrawRussiaDetail();
+}
+window.jhSetRussiaView = jhSetRussiaView;
+
+function jhDrawRussiaDetail() {
+  var ec = jhEc('ec-jh-russia-detail');
+  if (!ec) return;
+  var groups = JH_RUSSIA.groups;
+  var colors = ['#ef4444','#22c55e','#3b82f6','#f97316','#a855f7','#06b6d4','#f59e0b','#64748b','#ec4899','#14b8a6'];
+
+  if (JH_RUSSIA_VIEW === 'group') {
+    // 円グラフ：2026年1-2月集団別シェア
+    var pieData = groups.map(function(g, i){
+      return { name:g, value:JH_RUSSIA.data26[i], itemStyle:{color:colors[i]} };
+    });
+    ec.setOption({
+      tooltip:{ trigger:'item', formatter: function(p){ return p.name+'<br/><b>'+p.value.toLocaleString()+'</b>台 ('+p.percent+'%)'; } },
+      legend:{ orient:'vertical', right:10, top:'center', type:'scroll' },
+      series:[{ name:'ロシア販売', type:'pie', radius:['35%','65%'], center:['42%','52%'],
+        data:pieData,
+        label:{ formatter:function(p){ return p.name+'\n'+p.value.toLocaleString()+'台'; }, fontSize:11 },
+        emphasis:{ itemStyle:{shadowBlur:8,shadowColor:'rgba(0,0,0,0.2)'} }
+      }]
+    });
+  } else if (JH_RUSSIA_VIEW === 'trend') {
+    // 棒グラフ：1月・2月別
+    ec.setOption({
+      tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+      legend:{ data:['2026年1月','2026年2月'], top:8 },
+      grid:{ left:90, right:30, top:50, bottom:40 },
+      xAxis:{ type:'category', data:groups },
+      yAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(1)+'万'; } } },
+      series:[
+        { name:'2026年1月', type:'bar', data:JH_RUSSIA.jan26, color:'#3b82f6' },
+        { name:'2026年2月', type:'bar', data:JH_RUSSIA.feb26, color:'#f97316',
+          label:{ show:true, position:'top', formatter:function(p){ return p.value.toLocaleString(); }, fontSize:10 }
+        }
+      ]
+    });
+  } else {
+    // 前年比棒グラフ
+    var paired = groups.map(function(g,i){ return {g:g, v:JH_RUSSIA.growth_cum[i]}; }).sort(function(a,b){ return a.v-b.v; });
+    ec.setOption({
+      tooltip:{ trigger:'axis', formatter:function(params){ return params[0].name+': <b>'+params[0].value+'%</b>'; } },
+      grid:{ left:90, right:60, top:20, bottom:40 },
+      xAxis:{ type:'value', name:'前年比（%）' },
+      yAxis:{ type:'category', data:paired.map(function(p){ return p.g; }) },
+      series:[{ type:'bar',
+        data:paired.map(function(p){ return { value:p.v, itemStyle:{color:p.v>=0?'#22c55e':'#ef4444'} }; }),
+        label:{ show:true, position:function(p){ return p.value>=0?'right':'left'; }, formatter:function(p){ return p.value+'%'; } }
+      }]
+    });
+  }
+}
+
+// ---- サブナビクリックハンドラ ----
+document.addEventListener('click', function(e) {
+  var btn = e.target.closest('[data-cds-jh-target]');
+  if (!btn) return;
+  var targetId = btn.getAttribute('data-cds-jh-target').replace('#','');
+  jhShowPane(targetId);
+  setTimeout(function(){ jhRender(targetId); }, 80);
+});
+
+// ---- resize ----
+window.addEventListener('resize', function(){
+  ['jh-monthly-trend','jh-region-volume','jh-region-share','jh-maker-total','jh-maker-nev',
+   'jh-maker-growth','jh-brand-share','jh-country-maker','jh-country-maker-nev','jh-russia-detail'].forEach(function(id){
+    var ec = echarts.getInstanceByDom(document.getElementById('ec-'+id));
+    if (ec) { try { ec.resize(); } catch(e){} }
+  });
+});
+
+window.jhShowPane = jhShowPane;
+window.jhRender   = jhRender;
+window.JH_CURRENT_ID = JH_CURRENT_ID;
 
 })();
 </script>

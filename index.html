@@ -89,20 +89,22 @@
       if (idx === null) return;
       _inLegend = true;
 
+      var names = getLegendNames();
+      var hoveredName = names[idx];
+      if (!hoveredName) return;
+
       if (isStackedBar()) {
-        var names = getLegendNames();
-        var hoveredName = names[idx];
+        // 積み上げ棒: ホバーしたシリーズを強調、他をフェード（opacityで制御）
         var opt = instance.getOption();
         if (!opt || !opt.series) return;
         var newSeries = opt.series.map(function(s) {
           var isHovered = s.name === hoveredName;
           return {
-            name: s.name, type: 'bar', stack: 'total',
-            itemStyle: s.itemStyle,
-            data: isHovered ? s.data : s.data.map(function() { return 0; })
+            name: s.name,
+            itemStyle: { opacity: isHovered ? 1 : 0.15 }
           };
         });
-        _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, false);
+        _setOption({ series: newSeries }, false);
       }
     });
 
@@ -112,7 +114,13 @@
       _inLegend = false;
 
       if (isStackedBar()) {
-        restoreWithSelected();
+        // opacity をリセット
+        var opt = instance.getOption();
+        if (!opt || !opt.series) return;
+        var newSeries = opt.series.map(function(s) {
+          return { name: s.name, itemStyle: { opacity: 1 } };
+        });
+        _setOption({ series: newSeries }, false);
       } else {
         var opt = instance.getOption();
         if (opt && opt.series) {

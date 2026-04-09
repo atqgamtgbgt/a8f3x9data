@@ -25,7 +25,6 @@
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
-    var _domId = (arguments[0] && arguments[0].id) || 'no-id';
 
     var _setOption = instance.setOption.bind(instance);
     var _lastOption = null;
@@ -55,25 +54,12 @@
       return null;
     }
 
-    // デバッグパネル
-    var _dbgPanel = document.getElementById('__patch_dbg');
-    if (!_dbgPanel) {
-      _dbgPanel = document.createElement('div');
-      _dbgPanel.id = '__patch_dbg';
-      _dbgPanel.style.cssText = 'position:fixed;top:0;right:0;width:600px;max-height:400px;overflow:auto;background:rgba(0,0,0,0.85);color:#0f0;font:11px monospace;padding:8px;z-index:99999;pointer-events:none;';
-      document.body.appendChild(_dbgPanel);
-    }
-    function dbg(msg) {
-      _dbgPanel.innerHTML = msg + '<br>' + _dbgPanel.innerHTML;
-    }
-
-    // mouseover - 1つのハンドラに統合
+    // mouseover
     instance.getZr().on('mouseover', function(e) {
       var el = e.target;
       if (!el) return;
       var idx = getLegendIdx(el);
 
-      // 凡例以外 → downplayしてフォーカスキャンセル
       if (idx === null) {
         var o2 = instance.getOption();
         if (o2 && o2.series) {
@@ -84,27 +70,20 @@
         return;
       }
 
-      // 凡例ホバー
       var opt = instance.getOption();
       if (!opt || !opt.series) return;
       var hasStack = opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
-
-      dbg('[' + _domId + '] idx=' + idx + ' stacked=' + hasStack);
-
       if (!hasStack) return;
 
-      // 積み上げ棒グラフ: ホバー系列だけ残して他は0
       var names = [];
       if (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length > 0) {
         names = opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; });
       } else {
-        // legend.dataが未指定の場合、シリーズ名から構築
         names = opt.series.map(function(s) { return s.name; });
       }
       var hoveredName = names[idx];
-      if (!hoveredName) { dbg('  no name for idx=' + idx + ' names=' + JSON.stringify(names)); return; }
+      if (!hoveredName) return;
 
-      dbg('  hover: ' + hoveredName);
       _hovering = true;
       var patchSeries = opt.series.map(function(s) {
         var isHovered = s.name === hoveredName;

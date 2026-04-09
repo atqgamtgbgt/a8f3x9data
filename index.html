@@ -25,9 +25,13 @@
     var instance = _init.apply(this, arguments);
     var _setOption = instance.setOption.bind(instance);
     var _saved = null;
+    var _patching = false; // パッチ内部のsetOption呼び出し中はtrue
 
     instance.setOption = function(option, notMerge, lazyUpdate) {
-      _saved = JSON.parse(JSON.stringify(option));
+      if (!_patching) {
+        // 外部からの呼び出しのみ保存
+        try { _saved = JSON.parse(JSON.stringify(option)); } catch(e) {}
+      }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
@@ -52,12 +56,17 @@
       return leg.data.map(function(d) { return typeof d === 'object' ? d.name : d; });
     }
 
+    function patchSetOption(option, notMerge) {
+      _patching = true;
+      _setOption(option, notMerge);
+      _patching = false;
+    }
+
     instance.getZr().on('mouseover', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null || !isStackedBar()) return;
       var names = getLegendNames();
       var hoveredName = names[idx];
-      console.log('[patch] hover:', hoveredName, 'saved.series count:', _saved && _saved.series && _saved.series.length);
       var arr = Array.isArray(_saved.series) ? _saved.series : [_saved.series];
       var newSeries = arr.map(function(s) {
         var isHovered = s.name === hoveredName;
@@ -67,13 +76,13 @@
           data: isHovered ? s.data : s.data.map(function() { return 0; })
         };
       });
-      _setOption({ series: newSeries, yAxis: [{ max: undefined, min: undefined }] }, false);
+      patchSetOption({ series: newSeries, yAxis: [{ max: undefined, min: undefined }] }, false);
     });
 
     instance.getZr().on('mouseout', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null || !isStackedBar()) return;
-      _setOption(_saved, true);
+      patchSetOption(_saved, true);
     });
 
     return instance;

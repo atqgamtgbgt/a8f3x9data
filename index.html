@@ -19,129 +19,75 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
 // ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
-// - 折れ線/通常棒: ホバーしたシリーズ以外をフェード（グラフホバーは無効）
-// - 積み上げ棒: ホバーしたシリーズのみハイライト表示（他は半透明）
+// legendmouseover / legendmouseout イベントを使用（canvas・SVG 両対応）
+// - 積み上げ棒: ホバー系列以外を半透明にして強調
+// - それ以外: highlight / downplay で通常フェード
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
 
-    var _setOption = instance.setOption.bind(instance);
-    var _savedOption = null;
-    var _legendSelected = {};
+    // 積み上げ棒かどうか判定（オリジナル option を保持）
+    var _origSeries = null;
 
+    var _setOption = instance.setOption.bind(instance);
     instance.setOption = function(option, notMerge, lazyUpdate) {
+      // emphasis.focus='series' を自動付与
       if (option && option.series) {
-        var serArr = Array.isArray(option.series) ? option.series : [option.series];
-        serArr.forEach(function(s) {
+        var arr = Array.isArray(option.series) ? option.series : [option.series];
+        arr.forEach(function(s) {
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
-      if (notMerge !== '__patch__') {
-        _savedOption = JSON.parse(JSON.stringify(option));
+      // オリジナルのシリーズ定義を保存（itemStyle等の復元用）
+      if (option && option.series) {
+        _origSeries = JSON.parse(JSON.stringify(
+          Array.isArray(option.series) ? option.series : [option.series]
+        ));
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
-    instance.on('legendselectchanged', function(params) {
-      _legendSelected = params.selected;
-    });
-
-    // canvas・SVG 両レンダラー対応: 祖先を最大5段階まで辿る
-    function getLegendIdx(el) {
-      var cur = el;
-      for (var i = 0; i < 5; i++) {
-        if (!cur) break;
-        if (cur.__legendDataIndex !== undefined && cur.__legendDataIndex !== null) return cur.__legendDataIndex;
-        cur = cur.parent;
-      }
-      return null;
-    }
-
     function isStackedBar() {
-      if (!_savedOption || !_savedOption.series) return false;
-      var arr = Array.isArray(_savedOption.series) ? _savedOption.series : [_savedOption.series];
-      return arr.some(function(s) { return s && s.type === 'bar' && s.stack; });
-    }
-
-    function getLegendNames() {
-      if (!_savedOption || !_savedOption.legend) return [];
-      var leg = Array.isArray(_savedOption.legend) ? _savedOption.legend[0] : _savedOption.legend;
-      if (!leg || !leg.data) return [];
-      return leg.data.map(function(d) { return typeof d === 'object' ? d.name : d; });
-    }
-
-    function restoreWithSelected() {
-      if (!_savedOption) return;
-      // savedOptionを完全復元（notMerge=true）
-      _setOption(_savedOption, true);
-      // 凡例クリックで非表示にされていたシリーズを再非表示
-      Object.keys(_legendSelected).forEach(function(name) {
-        if (!_legendSelected[name]) {
-          instance.dispatchAction({ type: 'legendUnSelect', name: name });
-        }
+      return _origSeries && _origSeries.some(function(s) {
+        return s && s.type === 'bar' && s.stack;
       });
     }
 
-    instance.getZr().on('mouseover', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null) return;
-
-      if (isStackedBar()) {
-        var names = getLegendNames();
-        var hoveredName = names[idx];
-        if (!hoveredName || !_savedOption || !_savedOption.series) return;
-        var arr = Array.isArray(_savedOption.series) ? _savedOption.series : [_savedOption.series];
-        // 元のスタック名・itemStyleをそのまま継承し、非ホバー系列は opacity を下げる
-        var newSeries = arr.map(function(s) {
-          var isHovered = s.name === hoveredName;
-          var baseStyle = s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {};
-          if (!isHovered) {
-            baseStyle.opacity = 0.15;
-          } else {
-            delete baseStyle.opacity;
-          }
-          return {
-            name: s.name,
-            type: 'bar',
-            stack: s.stack,
-            barMaxWidth: s.barMaxWidth,
-            itemStyle: baseStyle,
-            emphasis: s.emphasis,
-            label: s.label,
-            data: s.data
-          };
-        });
-        _setOption({ series: newSeries }, '__patch__');
+    // 凡例ホバー開始：ホバーした系列名が params.name で取得できる
+    instance.on('legendmouseover', function(params) {
+      if (!isStackedBar()) {
+        // 通常グラフ: highlight / downplay
+        instance.dispatchAction({ type: 'highlight', seriesName: params.name });
+        return;
       }
+      // 積み上げ棒: ホバー系列だけ不透明、他を半透明
+      var newSeries = _origSeries.map(function(s) {
+        var isHovered = (s.name === params.name);
+        var style = s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {};
+        style.opacity = isHovered ? 1 : 0.15;
+        return { name: s.name, itemStyle: style };
+      });
+      _setOption({ series: newSeries }, false);
     });
 
-    instance.getZr().on('mouseout', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null) return;
-
-      if (isStackedBar()) {
-        restoreWithSelected();
-      } else {
+    // 凡例ホバー終了：元の状態に戻す
+    instance.on('legendmouseout', function() {
+      if (!isStackedBar()) {
         var opt = instance.getOption();
         if (opt && opt.series) {
           opt.series.forEach(function(s, i) {
             instance.dispatchAction({ type: 'downplay', seriesIndex: i });
           });
         }
+        return;
       }
+      // 積み上げ棒: 元の itemStyle（opacity なし）に復元
+      var restore = _origSeries.map(function(s) {
+        return { name: s.name, itemStyle: s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {} };
+      });
+      _setOption({ series: restore }, false);
     });
-
-    // グラフエリアホバーでフォーカスをキャンセル
-    instance.getZr().on('mouseover', function(e) {
-      if (getLegendIdx(e.target) !== null) return;
-      var opt = instance.getOption();
-      if (opt && opt.series) {
-        opt.series.forEach(function(s, i) {
-          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-        });
-      }
-    }, true);
 
     return instance;
   };

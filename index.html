@@ -85,13 +85,21 @@
       if (!hoveredName) return;
 
       _hovering = true;
+      var hoveredSeries = opt.series.find(function(s) { return s.name === hoveredName; });
+      var hoveredData = hoveredSeries ? hoveredSeries.data : [];
+      var dataMax = 0;
+      hoveredData.forEach(function(v) {
+        var n = (typeof v === 'object' && v !== null) ? (v.value != null ? v.value : 0) : (v != null ? v : 0);
+        if (n > dataMax) dataMax = n;
+      });
+      var niceMax = dataMax <= 0 ? null : (Math.ceil(dataMax * 1.15 / 5) * 5);
       var patchSeries = opt.series.map(function(s) {
         var isHovered = s.name === hoveredName;
         return {
           data: isHovered ? s.data : s.data.map(function() { return 0; })
         };
       });
-      _setOption({ series: patchSeries }, false);
+      _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);
       _hovering = false;
     });
 

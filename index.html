@@ -30,6 +30,13 @@
     var _setOption = instance.setOption.bind(instance);
     var _savedOption = null;
     var _legendSelected = {};
+    var _patching = false;  // ← setOption より前に宣言
+
+    function patchSet(option, notMerge) {
+      _patching = true;
+      _setOption(option, notMerge);
+      _patching = false;
+    }
 
     instance.setOption = function(option, notMerge, lazyUpdate) {
       // 全シリーズに emphasis:{focus:'series'} を自動付与
@@ -40,19 +47,12 @@
         });
       }
       var result = _setOption(option, notMerge, lazyUpdate);
-      // 外部からの呼び出し時のみ保存（再帰防止）
+      // 外部からの呼び出し時のみ保存（ディープコピーで参照汚染を防ぐ）
       if (!_patching) {
-        _savedOption = option;
+        try { _savedOption = JSON.parse(JSON.stringify(option)); } catch(e) {}
       }
       return result;
     };
-
-    var _patching = false;
-    function patchSet(option, notMerge) {
-      _patching = true;
-      _setOption(option, notMerge);
-      _patching = false;
-    }
 
     // 凡例クリックの選択状態を追跡
     instance.on('legendselectchanged', function(params) {

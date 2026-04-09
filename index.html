@@ -25,9 +25,9 @@
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
+    var _domId = (arguments[0] && arguments[0].id) || 'no-id';
 
     var _setOption = instance.setOption.bind(instance);
-    // setOptionに渡された生のoptionオブジェクト（参照）を保持
     var _lastOption = null;
     var _hovering = false;
 
@@ -38,7 +38,6 @@
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
-      // ホバー中のパッチ内部呼び出しでは _lastOption を更新しない
       if (!_hovering) {
         _lastOption = option;
       }
@@ -47,28 +46,16 @@
 
     function getLegendIdx(el) {
       if (!el) return null;
-      if (el.__legendDataIndex != null) return el.__legendDataIndex;
-      if (el.parent && el.parent.__legendDataIndex != null) return el.parent.__legendDataIndex;
-      if (el.parent && el.parent.parent && el.parent.parent.__legendDataIndex != null) return el.parent.parent.__legendDataIndex;
+      var cur = el;
+      for (var d = 0; d < 6; d++) {
+        if (!cur) break;
+        if (cur.__legendDataIndex != null) return cur.__legendDataIndex;
+        cur = cur.parent;
+      }
       return null;
     }
 
-    function getStackInfo() {
-      var opt = instance.getOption();
-      if (!opt || !opt.series) return null;
-      var stacked = false;
-      for (var i = 0; i < opt.series.length; i++) {
-        if (opt.series[i].type === 'bar' && opt.series[i].stack) { stacked = true; break; }
-      }
-      if (!stacked) return null;
-      var names = [];
-      if (opt.legend && opt.legend[0] && opt.legend[0].data) {
-        names = opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; });
-      }
-      return { series: opt.series, names: names };
-    }
-
-    // デバッグパネル作成
+    // デバッグパネル
     var _dbgPanel = document.getElementById('__patch_dbg');
     if (!_dbgPanel) {
       _dbgPanel = document.createElement('div');
@@ -80,84 +67,70 @@
       _dbgPanel.innerHTML = msg + '<br>' + _dbgPanel.innerHTML;
     }
 
-    // 全mouseoverイベントを診断
+    // mouseover - 1つのハンドラに統合
     instance.getZr().on('mouseover', function(e) {
       var el = e.target;
       if (!el) return;
-      // 要素ツリーを上に辿って全プロパティを表示
-      var chain = [];
-      var cur = el;
-      for (var d = 0; d < 8 && cur; d++) {
-        var info = 'depth' + d + ': ';
-        var keys = [];
-        if (cur.__legendDataIndex != null) keys.push('__legendDataIndex=' + cur.__legendDataIndex);
-        if (cur.__ecComponentInfo) keys.push('__ecComponentInfo=' + JSON.stringify(cur.__ecComponentInfo));
-        if (cur.name) keys.push('name=' + cur.name);
-        if (cur.style && cur.style.text) keys.push('text=' + cur.style.text);
-        if (cur.type) keys.push('type=' + cur.type);
-        info += keys.length ? keys.join(', ') : '(no relevant props)';
-        chain.push(info);
-        cur = cur.parent;
+      var idx = getLegendIdx(el);
+
+      // 凡例以外 → downplayしてフォーカスキャンセル
+      if (idx === null) {
+        var o2 = instance.getOption();
+        if (o2 && o2.series) {
+          o2.series.forEach(function(s, i) {
+            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+          });
+        }
+        return;
       }
-      dbg('--- mouseover ---');
-      chain.forEach(function(c) { dbg(c); });
+
+      // 凡例ホバー
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return;
+      var hasStack = opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
+
+      dbg('[' + _domId + '] idx=' + idx + ' stacked=' + hasStack);
+
+      if (!hasStack) return;
+
+      // 積み上げ棒グラフ: ホバー系列だけ残して他は0
+      var names = [];
+      if (opt.legend && opt.legend[0] && opt.legend[0].data) {
+        names = opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; });
+      }
+      var hoveredName = names[idx];
+      if (!hoveredName) { dbg('  no name for idx=' + idx + ' names=' + JSON.stringify(names)); return; }
+
+      dbg('  hover: ' + hoveredName);
+      _hovering = true;
+      var patchSeries = opt.series.map(function(s) {
+        var isHovered = s.name === hoveredName;
+        return {
+          data: isHovered ? s.data : s.data.map(function() { return 0; })
+        };
+      });
+      _setOption({ series: patchSeries }, false);
+      _hovering = false;
     });
 
-    instance.getZr().on('mouseover', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null) return;
-
-      var info = getStackInfo();
-      if (info) {
-        var hoveredName = info.names[idx];
-        if (!hoveredName) return;
-        dbg('[STACKED hover] name=' + hoveredName + ' idx=' + idx);
-        _hovering = true;
-        var patchSeries = info.series.map(function(s) {
-          var isHovered = s.name === hoveredName;
-          return {
-            data: isHovered ? s.data : s.data.map(function() { return 0; })
-          };
-        });
-        _setOption({ series: patchSeries }, false);
-        _hovering = false;
-      } else {
-        dbg('[hover] idx=' + idx + ' NOT stacked bar');
-      }
-    });
-
+    // mouseout
     instance.getZr().on('mouseout', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
 
-      var info = getStackInfo();
-      if (info) {
-        // 積み上げ棒: 元のoptionを再適用して完全復元
-        if (_lastOption) {
-          _hovering = true;
-          _setOption(_lastOption, true);
-          _hovering = false;
-        }
-      } else {
-        var opt = instance.getOption();
-        if (opt && opt.series) {
-          opt.series.forEach(function(s, i) {
-            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-          });
-        }
-      }
-    });
-
-    // グラフエリアホバーでフォーカスをキャンセル
-    instance.getZr().on('mouseover', function(e) {
-      if (getLegendIdx(e.target) !== null) return;
       var opt = instance.getOption();
-      if (opt && opt.series) {
+      var hasStack = opt && opt.series && opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
+
+      if (hasStack && _lastOption) {
+        _hovering = true;
+        _setOption(_lastOption, true);
+        _hovering = false;
+      } else if (!hasStack && opt && opt.series) {
         opt.series.forEach(function(s, i) {
           instance.dispatchAction({ type: 'downplay', seriesIndex: i });
         });
       }
-    }, true);
+    });
 
     return instance;
   };

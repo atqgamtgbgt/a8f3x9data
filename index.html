@@ -3285,8 +3285,8 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-region"><div class="chart-card"><div class="chart-title">地域別輸出量（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑲シート　2019〜2025年</div><div id="ec-cds-region" class="echart-box" style="height:460px"></div></div></div>
             <div class="cds-pane" id="cds-country"><div class="chart-card"><div class="chart-title">主要国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑳シート　2024年・2025年比較</div><div id="ec-cds-country" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-nev-ctry"><div class="chart-card"><div class="chart-title">NEV 国別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉑シート　2024年・2025年比較</div><div id="ec-cds-nev-ctry" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-prov"><div class="chart-card"><div class="chart-title">省別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑱シート　2019〜2025年</div><div id="ec-cds-prov" class="echart-box" style="height:500px"></div></div></div>
-            <div class="cds-pane" id="cds-nev-prov"><div class="chart-card"><div class="chart-title">NEV省別出口量 Top12（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉒シート　2019〜2025年</div><div id="ec-cds-nev-prov" class="echart-box" style="height:500px"></div></div></div>
+            <div class="cds-pane" id="cds-prov"><div class="chart-card"><div class="chart-title">省別出口量 Top15（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ⑱シート　2019〜2025年</div><div id="ec-cds-prov" class="echart-box" style="height:700px"></div></div></div>
+            <div class="cds-pane" id="cds-nev-prov"><div class="chart-card"><div class="chart-title">NEV省別出口量 Top12（万台）</div><div class="chart-subtitle">崔東树/乗聯会 ㉒シート　2019〜2025年</div><div id="ec-cds-nev-prov" class="echart-box" style="height:620px"></div></div></div>
             <div class="cds-pane" id="cds-rank"><div class="chart-card"><div class="chart-title">歴年 主力市場ランキング推移</div><div class="chart-subtitle">崔東树/乗聯会 ⑬シート　2020〜2026.1-2月</div><div id="ec-cds-rank" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-r3">  <div id="rk-wrap-r3"></div></div>
             <div class="cds-pane" id="cds-r4">  <div id="rk-wrap-r4"></div></div>
@@ -7734,7 +7734,7 @@ function cdsDrawProv() {
   const chart=cdsEc('ec-cds-prov'); if(!chart) return;
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
     xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))});
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',barMaxWidth:14,data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))});
   setTimeout(()=>{try{cdsEc('ec-cds-prov')?.resize();}catch(e){}},80);
 }
 
@@ -7745,7 +7745,7 @@ function cdsDrawNevProv() {
   const chart=cdsEc('ec-cds-nev-prov'); if(!chart) return;
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
     xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))});
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',barMaxWidth:16,data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))});
   setTimeout(()=>{try{cdsEc('ec-cds-nev-prov')?.resize();}catch(e){}},80);
 }
 

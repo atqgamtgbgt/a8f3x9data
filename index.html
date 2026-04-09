@@ -95,8 +95,11 @@
 
       // 積み上げ棒グラフ: ホバー系列だけ残して他は0
       var names = [];
-      if (opt.legend && opt.legend[0] && opt.legend[0].data) {
+      if (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length > 0) {
         names = opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; });
+      } else {
+        // legend.dataが未指定の場合、シリーズ名から構築
+        names = opt.series.map(function(s) { return s.name; });
       }
       var hoveredName = names[idx];
       if (!hoveredName) { dbg('  no name for idx=' + idx + ' names=' + JSON.stringify(names)); return; }

@@ -94,17 +94,21 @@
       if (!hoveredName) return;
 
       if (isStackedBar()) {
-        // 積み上げ棒: ホバーしたシリーズを強調、他をフェード（opacityで制御）
+        // 積み上げ棒: ホバーしたシリーズのみ底辺表示・縦軸自動スケール
         var opt = instance.getOption();
         if (!opt || !opt.series) return;
         var newSeries = opt.series.map(function(s) {
           var isHovered = s.name === hoveredName;
+          // stack・type・itemStyle を保持しつつ、非ホバーのデータを 0 にする
           return {
             name: s.name,
-            itemStyle: { opacity: isHovered ? 1 : 0.15 }
+            type: s.type,
+            stack: s.stack,
+            itemStyle: s.itemStyle,
+            data: isHovered ? s.data : (s.data || []).map(function() { return 0; })
           };
         });
-        _setOption({ series: newSeries }, false);
+        _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, false);
       }
     });
 
@@ -114,13 +118,7 @@
       _inLegend = false;
 
       if (isStackedBar()) {
-        // opacity をリセット
-        var opt = instance.getOption();
-        if (!opt || !opt.series) return;
-        var newSeries = opt.series.map(function(s) {
-          return { name: s.name, itemStyle: { opacity: 1 } };
-        });
-        _setOption({ series: newSeries }, false);
+        restoreWithSelected();
       } else {
         var opt = instance.getOption();
         if (opt && opt.series) {

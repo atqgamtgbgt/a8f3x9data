@@ -77,6 +77,9 @@
         // 積み上げ棒: ホバー系列だけ残して他は data:0 + 縦軸自動スケール
         var hoveredName = info.names[idx];
         if (!hoveredName) return;
+        console.log('[patch] hover:', hoveredName, 'idx:', idx);
+        console.log('[patch] series count:', info.series.length);
+        console.log('[patch] series[0].data sample:', JSON.stringify(info.series[0].data.slice(0,3)));
         _hovering = true;
         var patchSeries = info.series.map(function(s) {
           var isHovered = s.name === hoveredName;
@@ -84,8 +87,12 @@
             data: isHovered ? s.data : s.data.map(function() { return 0; })
           };
         });
+        console.log('[patch] patchSeries[0].data sample:', JSON.stringify(patchSeries[0].data.slice(0,3)));
         _setOption({ series: patchSeries }, false);
         _hovering = false;
+        // 確認: setOption後のシリーズデータ
+        var after = instance.getOption();
+        console.log('[patch] after setOption series[0].data sample:', JSON.stringify(after.series[0].data.slice(0,3)));
       }
     });
 

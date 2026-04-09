@@ -96,7 +96,8 @@
       var patchSeries = opt.series.map(function(s) {
         var isHovered = s.name === hoveredName;
         return {
-          data: isHovered ? s.data : s.data.map(function() { return 0; })
+          data: isHovered ? s.data : s.data.map(function() { return 0; }),
+          label: isHovered ? { show: true, formatter: function(p) { return p.value != null && p.value > 0 ? p.value + '%' : ''; } } : { show: false }
         };
       });
       _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);

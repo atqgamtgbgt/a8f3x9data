@@ -88,44 +88,18 @@
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
       _inLegend = true;
-
-      var names = getLegendNames();
-      var hoveredName = names[idx];
-      if (!hoveredName) return;
-
-      if (isStackedBar()) {
-        // 積み上げ棒: ホバーしたシリーズのみ底辺表示・縦軸自動スケール
-        var opt = instance.getOption();
-        if (!opt || !opt.series) return;
-        var newSeries = opt.series.map(function(s) {
-          var isHovered = s.name === hoveredName;
-          // stack・type・itemStyle を保持しつつ、非ホバーのデータを 0 にする
-          return {
-            name: s.name,
-            type: s.type,
-            stack: s.stack,
-            itemStyle: s.itemStyle,
-            data: isHovered ? s.data : (s.data || []).map(function() { return 0; })
-          };
-        });
-        _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, false);
-      }
+      // 積み上げ棒を含む全グラフ: ECharts デフォルト (emphasis.focus:'series') に委ねる
     });
 
     instance.getZr().on('mouseout', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
       _inLegend = false;
-
-      if (isStackedBar()) {
-        restoreWithSelected();
-      } else {
-        var opt = instance.getOption();
-        if (opt && opt.series) {
-          opt.series.forEach(function(s, i) {
-            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-          });
-        }
+      var opt = instance.getOption();
+      if (opt && opt.series) {
+        opt.series.forEach(function(s, i) {
+          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+        });
       }
     });
 
@@ -6002,7 +5976,7 @@ function initEC(id, fn) {
   const el = document.getElementById(id);
   if (!el) return;
   INITED[id] = true;
-  EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
+  EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'svg'});
   fn(EC[id]);
 }
 

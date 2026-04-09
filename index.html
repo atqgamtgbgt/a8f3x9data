@@ -6123,6 +6123,7 @@ function initBrand() {
       xAxis: {
         type: 'category',
         data: yearLabels,
+        boundaryGap: true,
         axisLabel: { color: t.sub, fontSize: 11 },
         axisLine: { lineStyle: { color: t.ax } }
       },
@@ -6133,13 +6134,10 @@ function initBrand() {
       },
       series: series_def.map(s => ({
         name: s.name,
-        type: 'line',
+        type: 'bar',
         stack: 'brand',
         data: yearIndices.map(i => CD.brand_series_normed[s.name]?.[i] ?? null),
-        symbol: 'none',
-        lineStyle: { width: 0 },
         itemStyle: { color: s.color },
-        areaStyle: { color: s.color, opacity: 0.88 },
         label: {
           show: true,
           position: 'inside',

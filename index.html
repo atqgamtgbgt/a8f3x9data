@@ -17,6 +17,136 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+<script>
+// ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
+// - 折れ線/通常棒: ホバーしたシリーズ以外をフェード（グラフホバーは無効）
+// - 積み上げ棒: ホバーしたシリーズのみハイライト表示（他は半透明）
+(function() {
+  var _init = echarts.init;
+  echarts.init = function() {
+    var instance = _init.apply(this, arguments);
+
+    var _setOption = instance.setOption.bind(instance);
+    var _savedOption = null;
+    var _legendSelected = {};
+
+    instance.setOption = function(option, notMerge, lazyUpdate) {
+      if (option && option.series) {
+        var serArr = Array.isArray(option.series) ? option.series : [option.series];
+        serArr.forEach(function(s) {
+          if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
+        });
+      }
+      if (notMerge !== '__patch__') {
+        _savedOption = JSON.parse(JSON.stringify(option));
+      }
+      return _setOption(option, notMerge, lazyUpdate);
+    };
+
+    instance.on('legendselectchanged', function(params) {
+      _legendSelected = params.selected;
+    });
+
+    // canvas・SVG 両レンダラー対応: 祖先を最大5段階まで辿る
+    function getLegendIdx(el) {
+      var cur = el;
+      for (var i = 0; i < 5; i++) {
+        if (!cur) break;
+        if (cur.__legendDataIndex !== undefined && cur.__legendDataIndex !== null) return cur.__legendDataIndex;
+        cur = cur.parent;
+      }
+      return null;
+    }
+
+    function isStackedBar() {
+      if (!_savedOption || !_savedOption.series) return false;
+      var arr = Array.isArray(_savedOption.series) ? _savedOption.series : [_savedOption.series];
+      return arr.some(function(s) { return s && s.type === 'bar' && s.stack; });
+    }
+
+    function getLegendNames() {
+      if (!_savedOption || !_savedOption.legend) return [];
+      var leg = Array.isArray(_savedOption.legend) ? _savedOption.legend[0] : _savedOption.legend;
+      if (!leg || !leg.data) return [];
+      return leg.data.map(function(d) { return typeof d === 'object' ? d.name : d; });
+    }
+
+    function restoreWithSelected() {
+      if (!_savedOption) return;
+      // savedOptionを完全復元（notMerge=true）
+      _setOption(_savedOption, true);
+      // 凡例クリックで非表示にされていたシリーズを再非表示
+      Object.keys(_legendSelected).forEach(function(name) {
+        if (!_legendSelected[name]) {
+          instance.dispatchAction({ type: 'legendUnSelect', name: name });
+        }
+      });
+    }
+
+    instance.getZr().on('mouseover', function(e) {
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
+
+      if (isStackedBar()) {
+        var names = getLegendNames();
+        var hoveredName = names[idx];
+        if (!hoveredName || !_savedOption || !_savedOption.series) return;
+        var arr = Array.isArray(_savedOption.series) ? _savedOption.series : [_savedOption.series];
+        // 元のスタック名・itemStyleをそのまま継承し、非ホバー系列は opacity を下げる
+        var newSeries = arr.map(function(s) {
+          var isHovered = s.name === hoveredName;
+          var baseStyle = s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {};
+          if (!isHovered) {
+            baseStyle.opacity = 0.15;
+          } else {
+            delete baseStyle.opacity;
+          }
+          return {
+            name: s.name,
+            type: 'bar',
+            stack: s.stack,
+            barMaxWidth: s.barMaxWidth,
+            itemStyle: baseStyle,
+            emphasis: s.emphasis,
+            label: s.label,
+            data: s.data
+          };
+        });
+        _setOption({ series: newSeries }, '__patch__');
+      }
+    });
+
+    instance.getZr().on('mouseout', function(e) {
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
+
+      if (isStackedBar()) {
+        restoreWithSelected();
+      } else {
+        var opt = instance.getOption();
+        if (opt && opt.series) {
+          opt.series.forEach(function(s, i) {
+            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+          });
+        }
+      }
+    });
+
+    // グラフエリアホバーでフォーカスをキャンセル
+    instance.getZr().on('mouseover', function(e) {
+      if (getLegendIdx(e.target) !== null) return;
+      var opt = instance.getOption();
+      if (opt && opt.series) {
+        opt.series.forEach(function(s, i) {
+          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+        });
+      }
+    }, true);
+
+    return instance;
+  };
+})();
+// ===================================================================
 </script>
 
 <style>
@@ -5665,8 +5795,7 @@ function buildCdSd(monthly) {
   }
 
   // 2022年・2023年 通年シェア ハードコード（出所：CAAM）
-  // ブランドシェアグラフ専用ラベル（brand_labels）に追加し、labels_all には触れない
-  const brand_labels = labels_all.slice();
+  // 2022年: 仏系はその他に合算 / 2023年: CAAM 2023年12月報告
   {
     const HC = [
       { label: '22年', cn:49.93, de:19.53, jp:17.80, us:9.37, kr:1.62, other:0.76 },
@@ -5674,14 +5803,13 @@ function buildCdSd(monthly) {
     ];
     for (const hc of HC.slice().reverse()) {
       const tot = hc.cn + hc.de + hc.jp + hc.us + hc.kr + hc.other;
-      brand_labels.unshift(hc.label);
+      labels_all.unshift(hc.label);
       for (const k of brand_keys) {
         const v = { cn:hc.cn, de:hc.de, jp:hc.jp, us:hc.us, kr:hc.kr, other:hc.other }[k];
         brand_series_normed[brand_names[k]].unshift(+(v/tot*100).toFixed(1));
       }
     }
   }
-
 
   // ---- CD 組み立て ----
   CD = {
@@ -5722,7 +5850,6 @@ function buildCdSd(monthly) {
     // CADA出所
     nev_pen:    arr(sorted,'nev_pen'),
     pax_pen:    arr(sorted,'pax_pen'),
-    brand_labels,
     brand_series_normed,
 
     ent_series: Object.fromEntries(ent_companies.map(co => [co, ent_months.map(ym => monthly[ym]?.ent?.[co] ?? null)])),
@@ -5859,7 +5986,7 @@ function baseOpt(t, yname) {
   return {
     backgroundColor: t.bg,
     tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
-    legend: { top:8, textStyle:{color:t.text}, type:'scroll', triggerEvent:true },
+    legend: { top:8, textStyle:{color:t.text}, type:'scroll' },
     grid: { top:56, bottom:72, left:64, right:24 },
     xAxis: { type:'category', axisLabel:{color:t.sub, rotate:35, fontSize:10}, axisLine:{lineStyle:{color:t.ax}} },
     yAxis: { type:'value', name:yname||'万台',
@@ -5875,7 +6002,7 @@ function initEC(id, fn) {
   const el = document.getElementById(id);
   if (!el) return;
   INITED[id] = true;
-  EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'svg'});
+  EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
   fn(EC[id]);
 }
 
@@ -5980,9 +6107,8 @@ function initBrand() {
 
     // 各年の「最終月」インデックスを取得（12月優先）
     // 2022・2023はハードコード済みのため先頭インデックスを直接使用
-    // brand_labels = ['22年','23年', '23年5月', ..., '26年2月']
     const HC_YEARS = { '2022': 0, '2023': 1 };
-    const years = [...new Set(CD.brand_labels.map(l => '20' + l.slice(0,2)))].sort();
+    const years = [...new Set(CD.labels_all.map(l => '20' + l.slice(0,2)))].sort();
     const yearLabels = [];
     const yearIndices = [];
     years.forEach(yr => {
@@ -5992,14 +6118,14 @@ function initBrand() {
         return;
       }
       const shortYr = yr.slice(2);
-      const idxList = CD.brand_labels.reduce((acc, l, i) => {
+      const idxList = CD.labels_all.reduce((acc, l, i) => {
         if (l.startsWith(shortYr + '年')) acc.push(i);
         return acc;
       }, []);
       if (!idxList.length) return;
-      const dec = idxList.find(i => CD.brand_labels[i].includes('12月'));
+      const dec = idxList.find(i => CD.labels_all[i].includes('12月'));
       const useIdx = dec !== undefined ? dec : idxList[idxList.length - 1];
-      const lbl = dec !== undefined ? yr + '年末時点' : CD.brand_labels[useIdx] + '時点';
+      const lbl = dec !== undefined ? yr + '年末時点' : CD.labels_all[useIdx] + '時点';
       yearLabels.push(lbl);
       yearIndices.push(useIdx);
     });

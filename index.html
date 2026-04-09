@@ -68,18 +68,30 @@
       return { series: opt.series, names: names };
     }
 
+    // デバッグパネル作成
+    var _dbgPanel = document.getElementById('__patch_dbg');
+    if (!_dbgPanel) {
+      _dbgPanel = document.createElement('div');
+      _dbgPanel.id = '__patch_dbg';
+      _dbgPanel.style.cssText = 'position:fixed;top:0;right:0;width:500px;max-height:300px;overflow:auto;background:rgba(0,0,0,0.85);color:#0f0;font:11px monospace;padding:8px;z-index:99999;pointer-events:none;';
+      document.body.appendChild(_dbgPanel);
+    }
+    function dbg(msg) {
+      _dbgPanel.innerHTML = msg + '<br>' + _dbgPanel.innerHTML;
+      if (_dbgPanel.children.length > 50) _dbgPanel.innerHTML = Array.from(_dbgPanel.children).slice(0,30).map(function(e){return e.outerHTML||e.textContent;}).join('');
+    }
+
     instance.getZr().on('mouseover', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
 
       var info = getStackInfo();
       if (info) {
-        // 積み上げ棒: ホバー系列だけ残して他は data:0 + 縦軸自動スケール
         var hoveredName = info.names[idx];
         if (!hoveredName) return;
-        console.log('[patch] hover:', hoveredName, 'idx:', idx);
-        console.log('[patch] series count:', info.series.length);
-        console.log('[patch] series[0].data sample:', JSON.stringify(info.series[0].data.slice(0,3)));
+        dbg('[hover] name=' + hoveredName + ' idx=' + idx + ' seriesCnt=' + info.series.length);
+        dbg('[hover] s[0].data[0:2]=' + JSON.stringify(info.series[0].data.slice(0,2)));
+        dbg('[hover] s[0].stack=' + JSON.stringify(info.series[0].stack));
         _hovering = true;
         var patchSeries = info.series.map(function(s) {
           var isHovered = s.name === hoveredName;
@@ -87,12 +99,13 @@
             data: isHovered ? s.data : s.data.map(function() { return 0; })
           };
         });
-        console.log('[patch] patchSeries[0].data sample:', JSON.stringify(patchSeries[0].data.slice(0,3)));
         _setOption({ series: patchSeries }, false);
         _hovering = false;
-        // 確認: setOption後のシリーズデータ
         var after = instance.getOption();
-        console.log('[patch] after setOption series[0].data sample:', JSON.stringify(after.series[0].data.slice(0,3)));
+        dbg('[after] s[0].data[0:2]=' + JSON.stringify(after.series[0].data.slice(0,2)));
+        dbg('---');
+      } else {
+        dbg('[hover] idx=' + idx + ' NOT stacked bar');
       }
     });
 

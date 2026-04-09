@@ -6182,6 +6182,7 @@ function initTradSeg() {
       name: s, type:'bar', emphasis:{focus:'series'}, stack:'ice_seg', data: SD.trad_seg[s],
       itemStyle:{color:PAL[i%12]}
     }));
+    opt.yAxis.min = 0;
     chart.setOption(opt);
   });
 }

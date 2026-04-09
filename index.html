@@ -5767,6 +5767,8 @@ function buildCdSd(monthly) {
 
   // 2022年・2023年 通年シェア ハードコード（出所：CAAM）
   // 2022年: 仏系はその他に合算 / 2023年: CAAM 2023年12月報告
+  // ※ labels_all（全チャート共通）は汚染しないよう brand_labels_all を別途作成
+  const brand_labels_all = [...labels_all];
   {
     const HC = [
       { label: '22年', cn:49.93, de:19.53, jp:17.80, us:9.37, kr:1.62, other:0.76 },
@@ -5774,7 +5776,7 @@ function buildCdSd(monthly) {
     ];
     for (const hc of HC.slice().reverse()) {
       const tot = hc.cn + hc.de + hc.jp + hc.us + hc.kr + hc.other;
-      labels_all.unshift(hc.label);
+      brand_labels_all.unshift(hc.label);
       for (const k of brand_keys) {
         const v = { cn:hc.cn, de:hc.de, jp:hc.jp, us:hc.us, kr:hc.kr, other:hc.other }[k];
         brand_series_normed[brand_names[k]].unshift(+(v/tot*100).toFixed(1));
@@ -5822,6 +5824,7 @@ function buildCdSd(monthly) {
     nev_pen:    arr(sorted,'nev_pen'),
     pax_pen:    arr(sorted,'pax_pen'),
     brand_series_normed,
+    brand_labels_all,
 
     ent_series: Object.fromEntries(ent_companies.map(co => [co, ent_months.map(ym => monthly[ym]?.ent?.[co] ?? null)])),
     ent_companies,
@@ -6079,7 +6082,7 @@ function initBrand() {
     // 各年の「最終月」インデックスを取得（12月優先）
     // 2022・2023はハードコード済みのため先頭インデックスを直接使用
     const HC_YEARS = { '2022': 0, '2023': 1 };
-    const years = [...new Set(CD.labels_all.map(l => '20' + l.slice(0,2)))].sort();
+    const years = [...new Set(CD.brand_labels_all.map(l => '20' + l.slice(0,2)))].sort();
     const yearLabels = [];
     const yearIndices = [];
     years.forEach(yr => {
@@ -6089,14 +6092,14 @@ function initBrand() {
         return;
       }
       const shortYr = yr.slice(2);
-      const idxList = CD.labels_all.reduce((acc, l, i) => {
+      const idxList = CD.brand_labels_all.reduce((acc, l, i) => {
         if (l.startsWith(shortYr + '年')) acc.push(i);
         return acc;
       }, []);
       if (!idxList.length) return;
-      const dec = idxList.find(i => CD.labels_all[i].includes('12月'));
+      const dec = idxList.find(i => CD.brand_labels_all[i].includes('12月'));
       const useIdx = dec !== undefined ? dec : idxList[idxList.length - 1];
-      const lbl = dec !== undefined ? yr + '年末時点' : CD.labels_all[useIdx] + '時点';
+      const lbl = dec !== undefined ? yr + '年末時点' : CD.brand_labels_all[useIdx] + '時点';
       yearLabels.push(lbl);
       yearIndices.push(useIdx);
     });

@@ -73,13 +73,35 @@
     if (!_dbgPanel) {
       _dbgPanel = document.createElement('div');
       _dbgPanel.id = '__patch_dbg';
-      _dbgPanel.style.cssText = 'position:fixed;top:0;right:0;width:500px;max-height:300px;overflow:auto;background:rgba(0,0,0,0.85);color:#0f0;font:11px monospace;padding:8px;z-index:99999;pointer-events:none;';
+      _dbgPanel.style.cssText = 'position:fixed;top:0;right:0;width:600px;max-height:400px;overflow:auto;background:rgba(0,0,0,0.85);color:#0f0;font:11px monospace;padding:8px;z-index:99999;pointer-events:none;';
       document.body.appendChild(_dbgPanel);
     }
     function dbg(msg) {
       _dbgPanel.innerHTML = msg + '<br>' + _dbgPanel.innerHTML;
-      if (_dbgPanel.children.length > 50) _dbgPanel.innerHTML = Array.from(_dbgPanel.children).slice(0,30).map(function(e){return e.outerHTML||e.textContent;}).join('');
     }
+
+    // 全mouseoverイベントを診断
+    instance.getZr().on('mouseover', function(e) {
+      var el = e.target;
+      if (!el) return;
+      // 要素ツリーを上に辿って全プロパティを表示
+      var chain = [];
+      var cur = el;
+      for (var d = 0; d < 8 && cur; d++) {
+        var info = 'depth' + d + ': ';
+        var keys = [];
+        if (cur.__legendDataIndex != null) keys.push('__legendDataIndex=' + cur.__legendDataIndex);
+        if (cur.__ecComponentInfo) keys.push('__ecComponentInfo=' + JSON.stringify(cur.__ecComponentInfo));
+        if (cur.name) keys.push('name=' + cur.name);
+        if (cur.style && cur.style.text) keys.push('text=' + cur.style.text);
+        if (cur.type) keys.push('type=' + cur.type);
+        info += keys.length ? keys.join(', ') : '(no relevant props)';
+        chain.push(info);
+        cur = cur.parent;
+      }
+      dbg('--- mouseover ---');
+      chain.forEach(function(c) { dbg(c); });
+    });
 
     instance.getZr().on('mouseover', function(e) {
       var idx = getLegendIdx(e.target);
@@ -89,9 +111,7 @@
       if (info) {
         var hoveredName = info.names[idx];
         if (!hoveredName) return;
-        dbg('[hover] name=' + hoveredName + ' idx=' + idx + ' seriesCnt=' + info.series.length);
-        dbg('[hover] s[0].data[0:2]=' + JSON.stringify(info.series[0].data.slice(0,2)));
-        dbg('[hover] s[0].stack=' + JSON.stringify(info.series[0].stack));
+        dbg('[STACKED hover] name=' + hoveredName + ' idx=' + idx);
         _hovering = true;
         var patchSeries = info.series.map(function(s) {
           var isHovered = s.name === hoveredName;
@@ -101,9 +121,6 @@
         });
         _setOption({ series: patchSeries }, false);
         _hovering = false;
-        var after = instance.getOption();
-        dbg('[after] s[0].data[0:2]=' + JSON.stringify(after.series[0].data.slice(0,2)));
-        dbg('---');
       } else {
         dbg('[hover] idx=' + idx + ' NOT stacked bar');
       }

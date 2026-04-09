@@ -27,9 +27,9 @@
     var instance = _init.apply(this, arguments);
 
     var _setOption = instance.setOption.bind(instance);
-    var _savedOption = null;
-    // 凡例クリックによる表示/非表示状態を保持
-    var _legendSelected = {};
+    // setOptionに渡された生のoptionオブジェクト（参照）を保持
+    var _lastOption = null;
+    var _hovering = false;
 
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.series) {
@@ -38,81 +38,69 @@
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
-      if (notMerge !== '__restore__') {
-        _savedOption = JSON.parse(JSON.stringify(option));
+      // ホバー中のパッチ内部呼び出しでは _lastOption を更新しない
+      if (!_hovering) {
+        _lastOption = option;
       }
-      return _setOption(option, notMerge === '__restore__' ? true : notMerge, lazyUpdate);
+      return _setOption(option, notMerge, lazyUpdate);
     };
-
-    // 凡例クリックの選択状態を追跡
-    instance.on('legendselectchanged', function(params) {
-      _legendSelected = params.selected;
-    });
 
     function getLegendIdx(el) {
       if (!el) return null;
-      if (el.__legendDataIndex !== undefined && el.__legendDataIndex !== null) return el.__legendDataIndex;
-      if (el.parent && el.parent.__legendDataIndex !== undefined && el.parent.__legendDataIndex !== null) return el.parent.__legendDataIndex;
+      if (el.__legendDataIndex != null) return el.__legendDataIndex;
+      if (el.parent && el.parent.__legendDataIndex != null) return el.parent.__legendDataIndex;
+      if (el.parent && el.parent.parent && el.parent.parent.__legendDataIndex != null) return el.parent.parent.__legendDataIndex;
       return null;
     }
 
-    function isStackedBar() {
+    function getStackInfo() {
       var opt = instance.getOption();
-      if (!opt || !opt.series) return false;
-      return opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
-    }
-
-    function getLegendNames() {
-      var opt = instance.getOption();
-      if (!opt || !opt.legend || !opt.legend[0]) return [];
-      var data = opt.legend[0].data || [];
-      return data.map(function(d) { return typeof d === 'object' ? d.name : d; });
-    }
-
-    function restoreWithSelected() {
-      // 元オプションを復元しつつ、凡例クリックの選択状態を再適用
-      if (_savedOption) {
-        _setOption(_savedOption, true);
+      if (!opt || !opt.series) return null;
+      var stacked = false;
+      for (var i = 0; i < opt.series.length; i++) {
+        if (opt.series[i].type === 'bar' && opt.series[i].stack) { stacked = true; break; }
       }
-      // 非表示になっているシリーズを再度非表示に
-      Object.keys(_legendSelected).forEach(function(name) {
-        if (!_legendSelected[name]) {
-          instance.dispatchAction({ type: 'legendUnSelect', name: name });
-        }
-      });
+      if (!stacked) return null;
+      var names = [];
+      if (opt.legend && opt.legend[0] && opt.legend[0].data) {
+        names = opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; });
+      }
+      return { series: opt.series, names: names };
     }
-
-    var _inLegend = false;
 
     instance.getZr().on('mouseover', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
-      _inLegend = true;
 
-      if (isStackedBar()) {
-        var names = getLegendNames();
-        var hoveredName = names[idx];
-        var opt = instance.getOption();
-        if (!opt || !opt.series) return;
-        var newSeries = opt.series.map(function(s) {
+      var info = getStackInfo();
+      if (info) {
+        // 積み上げ棒: ホバー系列だけ残して他は data:0 + 縦軸自動スケール
+        var hoveredName = info.names[idx];
+        if (!hoveredName) return;
+        _hovering = true;
+        var patchSeries = info.series.map(function(s) {
           var isHovered = s.name === hoveredName;
           return {
-            name: s.name, type: 'bar', stack: s.stack,
-            itemStyle: s.itemStyle,
             data: isHovered ? s.data : s.data.map(function() { return 0; })
           };
         });
-        _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, false);
+        _setOption({ series: patchSeries }, false);
+        _hovering = false;
       }
     });
 
     instance.getZr().on('mouseout', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null) return;
-      _inLegend = false;
 
-      if (isStackedBar()) {
-        restoreWithSelected();
+      var info = getStackInfo();
+      if (info) {
+        // 積み上げ棒: 元のoptionを再適用して完全復元
+        if (_lastOption) {
+          _hovering = true;
+          _setOption(_lastOption, true);
+          _hovering = false;
+        }
       } else {
         var opt = instance.getOption();
         if (opt && opt.series) {

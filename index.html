@@ -17,79 +17,6 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
-<script>
-// ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
-(function() {
-  var _init = echarts.init;
-  echarts.init = function() {
-    var instance = _init.apply(this, arguments);
-    var _setOption = instance.setOption.bind(instance);
-    var _saved = null;
-    var _patching = false; // パッチ内部のsetOption呼び出し中はtrue
-
-    instance.setOption = function(option, notMerge, lazyUpdate) {
-      if (!_patching) {
-        // 外部からの呼び出しのみ保存
-        try { _saved = JSON.parse(JSON.stringify(option)); } catch(e) {}
-      }
-      return _setOption(option, notMerge, lazyUpdate);
-    };
-
-    function getLegendIdx(el) {
-      if (!el) return null;
-      if (el.__legendDataIndex != null) return el.__legendDataIndex;
-      if (el.parent && el.parent.__legendDataIndex != null) return el.parent.__legendDataIndex;
-      if (el.parent && el.parent.parent && el.parent.parent.__legendDataIndex != null) return el.parent.parent.__legendDataIndex;
-      return null;
-    }
-
-    function isStackedBar() {
-      if (!_saved || !_saved.series) return false;
-      var arr = Array.isArray(_saved.series) ? _saved.series : [_saved.series];
-      return arr.some(function(s) { return s && s.type === 'bar' && s.stack; });
-    }
-
-    function getLegendNames() {
-      if (!_saved || !_saved.legend) return [];
-      var leg = Array.isArray(_saved.legend) ? _saved.legend[0] : _saved.legend;
-      if (!leg || !leg.data) return [];
-      return leg.data.map(function(d) { return typeof d === 'object' ? d.name : d; });
-    }
-
-    function patchSetOption(option, notMerge) {
-      _patching = true;
-      _setOption(option, notMerge);
-      _patching = false;
-    }
-
-    instance.getZr().on('mouseover', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null || !isStackedBar()) return;
-      var names = getLegendNames();
-      var hoveredName = names[idx];
-      var arr = Array.isArray(_saved.series) ? _saved.series : [_saved.series];
-      var newSeries = arr.map(function(s) {
-        var isHovered = s.name === hoveredName;
-        return {
-          name: s.name, type: 'bar', stack: s.stack,
-          itemStyle: s.itemStyle,
-          data: isHovered ? s.data : s.data.map(function() { return 0; })
-        };
-      });
-      patchSetOption({ series: newSeries, yAxis: [{ max: undefined, min: undefined }] }, false);
-    });
-
-    instance.getZr().on('mouseout', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null || !isStackedBar()) return;
-      patchSetOption(_saved, true);
-    });
-
-    return instance;
-  };
-})();
-// ===================================================================
-</script>
 
 <style>
 body {
@@ -5944,7 +5871,7 @@ function initEC(id, fn) {
   const el = document.getElementById(id);
   if (!el) return;
   INITED[id] = true;
-  EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'canvas'});
+  EC[id] = echarts.getInstanceByDom(el) || echarts.init(el, null, {renderer:'svg'});
   fn(EC[id]);
 }
 

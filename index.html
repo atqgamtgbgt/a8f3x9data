@@ -19,8 +19,7 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
 // ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
-// - 折れ線/通常棒: ホバーしたシリーズ以外をフェード（グラフホバーは無効）
-// - 積み上げ棒: ホバーしたシリーズのみ表示・縦軸自動スケール
+// legendhighlight/legenddownhighlight イベントでシリーズの強調・解除を行う
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
@@ -28,33 +27,11 @@
 
     var _setOption = instance.setOption.bind(instance);
     var _savedOption = null;
-    // 凡例クリックによる表示/非表示状態を保持
-    var _legendSelected = {};
 
     instance.setOption = function(option, notMerge, lazyUpdate) {
-      if (option && option.series) {
-        var serArr = Array.isArray(option.series) ? option.series : [option.series];
-        serArr.forEach(function(s) {
-          if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
-        });
-      }
-      if (notMerge !== '__restore__') {
-        _savedOption = option;
-      }
-      return _setOption(option, notMerge === '__restore__' ? true : notMerge, lazyUpdate);
+      if (notMerge !== '__patch__') _savedOption = option;
+      return _setOption(option, notMerge === '__patch__' ? false : notMerge, lazyUpdate);
     };
-
-    // 凡例クリックの選択状態を追跡
-    instance.on('legendselectchanged', function(params) {
-      _legendSelected = params.selected;
-    });
-
-    function getLegendIdx(el) {
-      if (!el) return null;
-      if (el.__legendDataIndex !== undefined && el.__legendDataIndex !== null) return el.__legendDataIndex;
-      if (el.parent && el.parent.__legendDataIndex !== undefined && el.parent.__legendDataIndex !== null) return el.parent.__legendDataIndex;
-      return null;
-    }
 
     function isStackedBar() {
       var opt = instance.getOption();
@@ -62,57 +39,75 @@
       return opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
     }
 
-    function getLegendNames() {
-      var opt = instance.getOption();
-      if (!opt || !opt.legend || !opt.legend[0]) return [];
-      var data = opt.legend[0].data || [];
-      return data.map(function(d) { return typeof d === 'object' ? d.name : d; });
-    }
-
-    function restoreWithSelected() {
-      // 元オプションを復元しつつ、凡例クリックの選択状態を再適用
-      if (_savedOption) {
-        _setOption(_savedOption, true);
-      }
-      // 非表示になっているシリーズを再度非表示に
-      Object.keys(_legendSelected).forEach(function(name) {
-        if (!_legendSelected[name]) {
-          instance.dispatchAction({ type: 'legendUnSelect', name: name });
+    // 凡例ホバー開始: legendhighlight
+    instance.on('legendselectchanged', function() {});  // 初期化トリガー
+    instance.getZr().on('mouseover', function(e) {
+      // 凡例アイテム要素を辿る
+      var el = e.target;
+      var legendIdx = null;
+      while (el) {
+        if (el.__legendDataIndex !== undefined && el.__legendDataIndex !== null) {
+          legendIdx = el.__legendDataIndex; break;
         }
-      });
-    }
+        el = el.parent;
+      }
+      if (legendIdx === null) return;
 
-    var _inLegend = false;
+      var opt = instance.getOption();
+      if (!opt) return;
+      var legendData = (opt.legend && opt.legend[0] && opt.legend[0].data) || [];
+      var item = legendData[legendIdx];
+      var hoveredName = item ? (typeof item === 'object' ? item.name : item) : null;
+      if (!hoveredName || !opt.series) return;
 
-    instance.getZr().on('mouseover', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null) return;
-      _inLegend = true;
-      // 積み上げ棒を含む全グラフ: ECharts デフォルト (emphasis.focus:'series') に委ねる
+      if (isStackedBar()) {
+        // 積み上げ棒: ホバーしたシリーズのみ残して底辺表示、縦軸自動スケール
+        var newSeries = opt.series.map(function(s) {
+          var isHovered = (s.name === hoveredName);
+          return {
+            name: s.name, type: s.type || 'bar',
+            stack: s.stack, barMaxWidth: s.barMaxWidth,
+            itemStyle: s.itemStyle,
+            data: isHovered ? s.data : (s.data||[]).map(function() { return 0; })
+          };
+        });
+        _setOption({ series: newSeries, yAxis: [{ max: undefined }] }, '__patch__');
+      } else {
+        // 折れ線・通常棒: highlight/downplay
+        opt.series.forEach(function(s, i) {
+          if (s.name === hoveredName) {
+            instance.dispatchAction({ type: 'highlight', seriesIndex: i });
+          } else {
+            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+          }
+        });
+      }
     });
 
+    // 凡例ホバー終了
     instance.getZr().on('mouseout', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null) return;
-      _inLegend = false;
-      var opt = instance.getOption();
-      if (opt && opt.series) {
-        opt.series.forEach(function(s, i) {
-          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-        });
+      var el = e.target;
+      var isLegend = false;
+      while (el) {
+        if (el.__legendDataIndex !== undefined && el.__legendDataIndex !== null) {
+          isLegend = true; break;
+        }
+        el = el.parent;
+      }
+      if (!isLegend) return;
+
+      if (isStackedBar()) {
+        // 元のオプションで復元
+        if (_savedOption) _setOption(_savedOption, true);
+      } else {
+        var opt = instance.getOption();
+        if (opt && opt.series) {
+          opt.series.forEach(function(s, i) {
+            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
+          });
+        }
       }
     });
-
-    // グラフエリアホバーでフォーカスをキャンセル
-    instance.getZr().on('mouseover', function(e) {
-      if (getLegendIdx(e.target) !== null) return;
-      var opt = instance.getOption();
-      if (opt && opt.series) {
-        opt.series.forEach(function(s, i) {
-          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-        });
-      }
-    }, true);
 
     return instance;
   };

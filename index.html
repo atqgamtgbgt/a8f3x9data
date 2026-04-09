@@ -19,74 +19,88 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
 // ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
-// legendmouseover / legendmouseout イベントを使用（canvas・SVG 両対応）
-// - 積み上げ棒: ホバー系列以外を半透明にして強調
-// - それ以外: highlight / downplay で通常フェード
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
-
-    // 積み上げ棒かどうか判定（オリジナル option を保持）
-    var _origSeries = null;
-
     var _setOption = instance.setOption.bind(instance);
+
+    // setOption のたびにシリーズのオリジナル itemStyle を保存
+    var _origStyles = []; // [{color, opacity, ...}, ...]
+    var _isStackedBar = false;
+    var _legendNames = [];
+
     instance.setOption = function(option, notMerge, lazyUpdate) {
-      // emphasis.focus='series' を自動付与
       if (option && option.series) {
         var arr = Array.isArray(option.series) ? option.series : [option.series];
+        // emphasis.focus 自動付与
         arr.forEach(function(s) {
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
+        // 積み上げ棒かどうか記録
+        _isStackedBar = arr.some(function(s) { return s && s.type === 'bar' && s.stack; });
+        // オリジナルの itemStyle を保存
+        _origStyles = arr.map(function(s) {
+          return s && s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {};
+        });
       }
-      // オリジナルのシリーズ定義を保存（itemStyle等の復元用）
-      if (option && option.series) {
-        _origSeries = JSON.parse(JSON.stringify(
-          Array.isArray(option.series) ? option.series : [option.series]
-        ));
+      if (option && option.legend) {
+        var leg = Array.isArray(option.legend) ? option.legend[0] : option.legend;
+        if (leg && leg.data) {
+          _legendNames = leg.data.map(function(d) { return typeof d === 'object' ? d.name : d; });
+        }
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
-    function isStackedBar() {
-      return _origSeries && _origSeries.some(function(s) {
-        return s && s.type === 'bar' && s.stack;
-      });
+    // parent.__legendDataIndex で凡例インデックスを取得（デバッグで確認済み）
+    function getLegendIdx(el) {
+      if (!el) return null;
+      if (el.__legendDataIndex != null) return el.__legendDataIndex;
+      if (el.parent && el.parent.__legendDataIndex != null) return el.parent.__legendDataIndex;
+      if (el.parent && el.parent.parent && el.parent.parent.__legendDataIndex != null) return el.parent.parent.__legendDataIndex;
+      return null;
     }
 
-    // 凡例ホバー開始：ホバーした系列名が params.name で取得できる
-    instance.on('legendmouseover', function(params) {
-      if (!isStackedBar()) {
-        // 通常グラフ: highlight / downplay
-        instance.dispatchAction({ type: 'highlight', seriesName: params.name });
-        return;
+    instance.getZr().on('mouseover', function(e) {
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
+
+      if (_isStackedBar) {
+        // ホバー系列だけ不透明、他を半透明
+        var hoveredName = _legendNames[idx];
+        var opt = instance.getOption();
+        if (!opt || !opt.series) return;
+        var newSeries = opt.series.map(function(s, i) {
+          var style = JSON.parse(JSON.stringify(_origStyles[i] || {}));
+          style.opacity = (s.name === hoveredName) ? 1 : 0.15;
+          return { name: s.name, itemStyle: style };
+        });
+        _setOption({ series: newSeries }, false);
+      } else {
+        // 通常グラフ: highlight
+        instance.dispatchAction({ type: 'highlight', seriesName: _legendNames[idx] });
       }
-      // 積み上げ棒: ホバー系列だけ不透明、他を半透明
-      var newSeries = _origSeries.map(function(s) {
-        var isHovered = (s.name === params.name);
-        var style = s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {};
-        style.opacity = isHovered ? 1 : 0.15;
-        return { name: s.name, itemStyle: style };
-      });
-      _setOption({ series: newSeries }, false);
     });
 
-    // 凡例ホバー終了：元の状態に戻す
-    instance.on('legendmouseout', function() {
-      if (!isStackedBar()) {
+    instance.getZr().on('mouseout', function(e) {
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
+
+      if (_isStackedBar) {
+        // opacity をオリジナルに戻す
+        var restore = _origStyles.map(function(style, i) {
+          return { name: _legendNames[i], itemStyle: JSON.parse(JSON.stringify(style)) };
+        });
+        _setOption({ series: restore }, false);
+      } else {
         var opt = instance.getOption();
         if (opt && opt.series) {
-          opt.series.forEach(function(s, i) {
+          opt.series.forEach(function(_, i) {
             instance.dispatchAction({ type: 'downplay', seriesIndex: i });
           });
         }
-        return;
       }
-      // 積み上げ棒: 元の itemStyle（opacity なし）に復元
-      var restore = _origSeries.map(function(s) {
-        return { name: s.name, itemStyle: s.itemStyle ? JSON.parse(JSON.stringify(s.itemStyle)) : {} };
-      });
-      _setOption({ series: restore }, false);
     });
 
     return instance;

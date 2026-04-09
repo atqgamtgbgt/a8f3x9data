@@ -19,14 +19,12 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
 // ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
-// 積み上げ棒: ホバー系列のみ表示・縦軸自動スケール（CCCMと同じ動作）
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
     var _setOption = instance.setOption.bind(instance);
-
-    var _saved = null; // setOption時にディープコピーして保存
+    var _saved = null;
 
     instance.setOption = function(option, notMerge, lazyUpdate) {
       _saved = JSON.parse(JSON.stringify(option));
@@ -57,9 +55,9 @@
     instance.getZr().on('mouseover', function(e) {
       var idx = getLegendIdx(e.target);
       if (idx === null || !isStackedBar()) return;
-
       var names = getLegendNames();
       var hoveredName = names[idx];
+      console.log('[patch] hover:', hoveredName, 'saved.series count:', _saved && _saved.series && _saved.series.length);
       var arr = Array.isArray(_saved.series) ? _saved.series : [_saved.series];
       var newSeries = arr.map(function(s) {
         var isHovered = s.name === hoveredName;

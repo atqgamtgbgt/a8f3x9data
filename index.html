@@ -97,7 +97,7 @@
         var isHovered = s.name === hoveredName;
         return {
           data: isHovered ? s.data : s.data.map(function() { return 0; }),
-          label: isHovered ? { show: true, position: 'top', color: 'inherit', fontSize: 11, fontWeight: 'bold', formatter: function(p) { return p.value != null && p.value >= Math.max(niceMax * 0.08, 0.5) ? p.value + '%' : ''; } } : { show: false }
+          label: isHovered ? { show: true, position: 'top', color: 'inherit', fontSize: 11, fontWeight: 'bold', formatter: function(p) { var yAxisArr = instance.getOption().yAxis; var yFmt = yAxisArr && yAxisArr[0] && yAxisArr[0].axisLabel && yAxisArr[0].axisLabel.formatter; var isPercent = (typeof yFmt === 'string' && yFmt.indexOf('%') >= 0); var unit = isPercent ? '%' : ''; return p.value != null && p.value >= Math.max(niceMax * 0.08, 0.5) ? p.value + unit : ''; } } : { show: false }
         };
       });
       _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);

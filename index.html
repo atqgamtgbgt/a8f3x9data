@@ -2933,9 +2933,6 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-inventory" class="cds-mid-tab" onclick="cdsSetMidTab('inventory')">
                 📦 在庫
               </button>
-              <button id="cds-mid-btn-gentax" class="cds-mid-tab" onclick="cdsSetMidTab('gentax')">
-                ⚖️ 重量・航続距離
-              </button>
               <button id="cds-mid-btn-battery" class="cds-mid-tab" onclick="cdsSetMidTab('battery')">
                 🔋 電池
               </button>
@@ -3134,18 +3131,6 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
               </div>
             </div><!-- end cds-sub-inventory -->
-
-            <!-- 中タブ重量・航続距離 サブナビ -->
-            <div id="cds-sub-gentax" class="cds-sub-nav" style="display:none">
-              <div class="cds-nav-compact">
-                <div class="cds-gc">
-                  <div class="cds-gc-items" id="cds-gc-gt1">
-                    <button class="nav-link active" data-cds-gentax-target="#gt-weight-class">⚖️ 重量クラス別</button>
-                    <button class="nav-link" data-cds-gentax-target="#gt-range">🔋 航続距離別</button>
-                  </div>
-                </div>
-              </div>
-            </div><!-- end cds-sub-gentax -->
 
             <!-- 中タブ電池: 電池 サブナビ -->
             <div id="cds-sub-battery" class="cds-sub-nav" style="display:none">
@@ -3688,26 +3673,6 @@ body.tray-open { padding-bottom: 105px; }
                     <div id="ec-inv-us-days" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
-              </div>
-            </div>
-
-            <!-- ===== 重量・航続距離 ペイン群 ===== -->
-
-            <!-- 1: 乗用車 重量クラス別 -->
-            <div class="cds-pane cds-active" id="gt-weight-class">
-              <div class="chart-card">
-                <div class="chart-title">乗用車 重量クラス別 登録台数（台）</div>
-                <div class="chart-subtitle">2710kg超 / 1090-2710kg / 1090kg未満　BEV・PHEV・EREV別　第2批（崔东树レポート）</div>
-                <div id="ec-gt-weight-class" class="echart-box" style="height:480px"></div>
-              </div>
-            </div>
-
-            <!-- 2: 乗用車 航続距離別 -->
-            <div class="cds-pane" id="gt-range">
-              <div class="chart-card">
-                <div class="chart-title">乗用車 航続距離別 登録台数（台）</div>
-                <div class="chart-subtitle">BEV・PHEV・EREV　各航続距離区間別　第2批（崔东树レポート）</div>
-                <div id="ec-gt-range" class="echart-box" style="height:520px"></div>
               </div>
             </div>
 
@@ -8289,7 +8254,6 @@ function cdsSetMidTab(tab) {
     'worldshare': 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg',
     'profit':     'https://mp.weixin.qq.com/s/tKkV8nPjYXjQlEFPYxMIBQ',
     'inventory':  'https://mp.weixin.qq.com/s/u0KRHvAP2DhaaCQeVracVQ',
-    'gentax':     'https://mp.weixin.qq.com/s/qobaVJ82ODGTRaba0KUjVg',
     'battery':    'https://mp.weixin.qq.com/s/mV9NgfWWVYEjIUyUWfQMbQ',
     'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ'
   };
@@ -8309,7 +8273,6 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-worldshare').style.display  = (tab === 'worldshare')  ? '' : 'none';
   document.getElementById('cds-sub-profit').style.display      = (tab === 'profit')      ? '' : 'none';
   document.getElementById('cds-sub-inventory').style.display   = (tab === 'inventory')   ? '' : 'none';
-  document.getElementById('cds-sub-gentax').style.display      = (tab === 'gentax')      ? '' : 'none';
   document.getElementById('cds-sub-battery').style.display     = (tab === 'battery')     ? '' : 'none';
   document.getElementById('cds-sub-discount').style.display    = (tab === 'discount')    ? '' : 'none';
   document.getElementById('cds-sub-jishuhaiex').style.display  = (tab === 'jishuhaiex')  ? '' : 'none';
@@ -8377,13 +8340,6 @@ function cdsSetMidTab(tab) {
       b.classList.toggle('active', b.getAttribute('data-cds-inv-target') === '#' + invTarget);
     });
     setTimeout(function(){ invRender(invTarget); }, 80);
-  } else if (tab === 'gentax') {
-    var gtTarget = window.GT_CURRENT_ID || 'gt-weight-class';
-    gtShowPane(gtTarget);
-    document.querySelectorAll('#cds-sub-gentax [data-cds-gentax-target]').forEach(function(b){
-      b.classList.toggle('active', b.getAttribute('data-cds-gentax-target') === '#' + gtTarget);
-    });
-    setTimeout(function(){ gtRender(gtTarget); }, 80);
   } else if (tab === 'battery') {
     var batTarget = window.BAT_CURRENT_ID || 'bat-production';
     batShowPane(batTarget);
@@ -11647,223 +11603,6 @@ window.discShowPane = discShowPane;
 })();
 </script>
 
-<script>
-// ============================================================
-// 📋 減税目録 タブ（画像3〜5データ）
-// ============================================================
-(function(){
-
-window.GT_CURRENT_ID = 'gt-weight-class';
-
-// ---- データ ----
-
-// 画像4: 乗用車 重量クラス別（25年は累計のみ）
-var GT_WEIGHT = {
-  years: ['23年', '24年', '25年累計', '26年1月', '26年2月', '26年累計'],
-  series: [
-    { name:'BEV >2710kg',     data:[16,  66,  19,  62,  3,  65] },
-    { name:'BEV 1090-2710kg', data:[523, 2623,730, 1857,48, 1905] },
-    { name:'BEV <1090kg',     data:[68,  469, 31,  160, 0,  160] },
-    { name:'PHEV >2710kg',    data:[8,   15,  56,  52,  6,  58] },
-    { name:'PHEV 1090-2710kg',data:[176, 472, 294, 399, 14, 413] },
-    { name:'EREV >2710kg',    data:[0,   1,   12,  12,  4,  16] },
-    { name:'EREV 1090-2710kg',data:[40,  185, 138, 279, 8,  287] },
-  ]
-};
-
-// 画像5: 乗用車 航続距離別（25年は累計のみ、インデックス: 23年/24年/25年累計/26年1月/26年2月/26年累計）
-var GT_RANGE = {
-  years: ['23年', '24年', '25年累計', '26年1月', '26年2月', '26年累計'],
-  bev: [
-    { range:'100-149km', data:[7,  76,  0,   4,   0,  4] },
-    { range:'150-199km', data:[17, 118, 0,   4,   0,  4] },
-    { range:'200-249km', data:[38, 121, 23,  55,  0,  55] },
-    { range:'250-299km', data:[22, 153, 13,  21,  0,  21] },
-    { range:'300-399km', data:[53, 505, 154, 219, 2,  221] },
-    { range:'400-499km', data:[108,855, 150, 358, 7,  365] },
-    { range:'500-599km', data:[176,683, 187, 629, 10, 639] },
-    { range:'600-699km', data:[130,452, 146, 501, 13, 514] },
-    { range:'700km超',   data:[56, 195, 107, 288, 19, 307] },
-  ],
-  phev: [
-    { range:'50-79km',   data:[37, 138, 22,  0,   0,  0] },
-    { range:'80-99km',   data:[50, 128, 37,  6,   0,  6] },
-    { range:'100-149km', data:[59, 129, 170, 258, 8,  266] },
-    { range:'150-199km', data:[34, 76,  90,  146, 7,  153] },
-    { range:'200-249km', data:[4,  16,  21,  31,  1,  32] },
-    { range:'250-299km', data:[0,  0,   4,   4,   2,  6] },
-    { range:'300-399km', data:[0,  0,   6,   6,   2,  8] },
-  ],
-  erev: [
-    { range:'80-99km',   data:[1,  8,   4,   1,   0,  1] },
-    { range:'100-149km', data:[7,  48,  22,  41,  0,  41] },
-    { range:'150-199km', data:[29, 102, 65,  163, 4,  167] },
-    { range:'200-249km', data:[3,  25,  31,  58,  2,  60] },
-    { range:'250-299km', data:[0,  0,   17,  17,  2,  19] },
-    { range:'300-399km', data:[0,  0,   11,  11,  4,  15] },
-  ]
-};
-
-// ---- ユーティリティ ----
-var GT_EC = {};
-function gtEc(id) {
-  if (!GT_EC[id]) {
-    var el = document.getElementById(id);
-    if (!el) return null;
-    GT_EC[id] = echarts.init(el, null, {renderer:'canvas'});
-  }
-  return GT_EC[id];
-}
-
-// ---- showPane ----
-function gtShowPane(id) {
-  window.GT_CURRENT_ID = id;
-  document.querySelectorAll('.cds-pane[id^="gt-"]').forEach(function(p){ p.classList.remove('cds-active'); });
-  var t = document.getElementById(id);
-  if (t) t.classList.add('cds-active');
-  var pillEl = document.getElementById('cdsPills');
-  var contEl = document.getElementById('cdsPillsContent');
-  if (pillEl) pillEl.setAttribute('style','display:block');
-  if (contEl) contEl.setAttribute('style','display:block');
-}
-
-// ---- render dispatcher ----
-function gtRender(id) {
-  if (id === 'gt-weight-class') gtDrawWeightClass();
-  else if (id === 'gt-range')   gtDrawRange();
-  setTimeout(function(){
-    Object.values(GT_EC).forEach(function(c){ try { c && c.resize(); } catch(e){} });
-  }, 80);
-}
-
-// ---- click handler ----
-document.addEventListener('click', function(e) {
-  var btn = e.target.closest('[data-cds-gentax-target]');
-  if (!btn) return;
-  var id = btn.getAttribute('data-cds-gentax-target').replace('#','');
-  gtShowPane(id);
-  document.querySelectorAll('#cds-sub-gentax [data-cds-gentax-target]').forEach(function(b){
-    b.classList.toggle('active', b.getAttribute('data-cds-gentax-target') === '#' + id);
-  });
-  setTimeout(function(){ gtRender(id); }, 80);
-});
-
-// ---- グラフ1: 重量クラス別 ----
-function gtDrawWeightClass() {
-  var ec = gtEc('ec-gt-weight-class');
-  if (!ec) return;
-  // BEV:青系、PHEV:橙系、EREV:緑系　各3色でトーン差
-  var colors = [
-    '#1d4ed8', '#60a5fa', '#bfdbfe',   // BEV >2710 / 1090-2710 / <1090
-    '#c2410c', '#fb923c',               // PHEV >2710 / 1090-2710
-    '#15803d', '#86efac'                // EREV >2710 / 1090-2710
-  ];
-  ec.setOption({
-    tooltip:{
-      trigger:'axis', axisPointer:{type:'shadow'},
-      formatter:function(params){
-        var total = 0;
-        var s = '<b>'+params[0].axisValue+'</b><br/>';
-        params.forEach(function(p){ if(p.value){ s += p.marker+p.seriesName+': <b>'+p.value.toLocaleString()+'</b>台<br/>'; total += p.value; } });
-        s += '<hr style="margin:4px 0"/>合計: <b>'+total.toLocaleString()+'</b>台';
-        return s;
-      }
-    },
-    legend:{ data: GT_WEIGHT.series.map(function(s){ return s.name; }), top:8, type:'scroll', textStyle:{fontSize:11} },
-    grid:{ left:70, right:30, top:80, bottom:40 },
-    xAxis:{ type:'category', data: GT_WEIGHT.years, axisLabel:{ fontSize:12 } },
-    yAxis:{ type:'value', name:'台', axisLabel:{ formatter:function(v){ return v >= 1000 ? (v/1000).toFixed(0)+'k' : v; } } },
-    series: GT_WEIGHT.series.map(function(s, i){
-      return {
-        name:s.name, type:'bar', stack:'total',
-        color: colors[i],
-        data: s.data,
-        label:{ show:false }
-      };
-    })
-  });
-}
-
-// ---- グラフ2: 航続距離別（3段グリッド） ----
-function gtDrawRange() {
-  var ec = gtEc('ec-gt-range');
-  if (!ec) return;
-
-  // BEV:青系9段階（明→暗）、PHEV:緑系7段階、EREV:橙系6段階　明確にトーン差をつける
-  var bevColors  = ['#dbeafe','#93c5fd','#60a5fa','#3b82f6','#2563eb','#1d4ed8','#1e40af','#1e3a8a','#172554'];
-  var phevColors = ['#dcfce7','#86efac','#4ade80','#22c55e','#16a34a','#15803d','#14532d'];
-  var erevColors = ['#ffedd5','#fdba74','#fb923c','#f97316','#ea580c','#c2410c'];
-
-  var yrs = GT_RANGE.years;
-
-  function makeBarSeries(arr, colors, stackName, gridIndex, yAxisIndex) {
-    return arr.map(function(item, i){
-      return {
-        name: item.range, type:'bar', stack: stackName,
-        xAxisIndex: gridIndex, yAxisIndex: yAxisIndex,
-        color: colors[i % colors.length],
-        data: item.data,
-        label:{ show:false }
-      };
-    });
-  }
-
-  // 凡例データ
-  var bevLegend  = GT_RANGE.bev.map(function(d){ return d.range; });
-  var phevLegend = GT_RANGE.phev.map(function(d){ return d.range; });
-  var erevLegend = GT_RANGE.erev.map(function(d){ return d.range; });
-
-  ec.setOption({
-    tooltip:{
-      trigger:'axis', axisPointer:{type:'shadow'},
-      formatter:function(params){
-        var total = 0;
-        var s = '<b>'+params[0].axisValue+'</b><br/>';
-        params.forEach(function(p){ if(p.value){ s += p.marker+p.seriesName+': <b>'+p.value.toLocaleString()+'</b>台<br/>'; total += p.value; } });
-        s += '<hr style="margin:4px 0"/>合計: <b>'+total.toLocaleString()+'</b>台';
-        return s;
-      }
-    },
-    legend:[
-      { data: bevLegend,  top:2,   left:10, orient:'horizontal', type:'scroll', textStyle:{fontSize:10},
-        formatter:function(n){ return 'BEV '+n; } },
-      { data: phevLegend, top:'36%', left:10, orient:'horizontal', type:'scroll', textStyle:{fontSize:10},
-        formatter:function(n){ return 'PHEV '+n; } },
-      { data: erevLegend, top:'64%', left:10, orient:'horizontal', type:'scroll', textStyle:{fontSize:10},
-        formatter:function(n){ return 'EREV '+n; } }
-    ],
-    grid:[
-      { left:65, right:20, top:55,    height:'25%' },
-      { left:65, right:20, top:'40%', height:'20%' },
-      { left:65, right:20, top:'66%', height:'18%' }
-    ],
-    xAxis:[
-      { gridIndex:0, type:'category', data:yrs, axisLabel:{show:false} },
-      { gridIndex:1, type:'category', data:yrs, axisLabel:{show:false} },
-      { gridIndex:2, type:'category', data:yrs, axisLabel:{fontSize:11} }
-    ],
-    yAxis:[
-      { gridIndex:0, type:'value', name:'BEV(台)',  nameTextStyle:{fontSize:10}, axisLabel:{formatter:function(v){ return v>=1000?(v/1000).toFixed(0)+'k':v; }, fontSize:10} },
-      { gridIndex:1, type:'value', name:'PHEV(台)', nameTextStyle:{fontSize:10}, axisLabel:{formatter:function(v){ return v>=1000?(v/1000).toFixed(0)+'k':v; }, fontSize:10} },
-      { gridIndex:2, type:'value', name:'EREV(台)', nameTextStyle:{fontSize:10}, axisLabel:{formatter:function(v){ return v>=1000?(v/1000).toFixed(0)+'k':v; }, fontSize:10} }
-    ],
-    series: [].concat(
-      makeBarSeries(GT_RANGE.bev,  bevColors,  'bev',  0, 0),
-      makeBarSeries(GT_RANGE.phev, phevColors, 'phev', 1, 1),
-      makeBarSeries(GT_RANGE.erev, erevColors, 'erev', 2, 2)
-    )
-  });
-}
-
-window.gtRender = gtRender;
-window.gtShowPane = gtShowPane;
-
-window.addEventListener('resize', function(){
-  Object.values(GT_EC).forEach(function(c){ try { c && c.resize(); } catch(e){} });
-});
-
-})();
-</script>
 
 
 

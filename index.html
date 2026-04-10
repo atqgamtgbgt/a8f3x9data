@@ -6427,7 +6427,7 @@ function initCommercial() {
     const t = gt();
     const opt = baseOpt(t);
     // 客車細分類別は2025年4月以降のみデータあり
-    const busStart = CD.labels_all.indexOf('2025年4月');
+    const busStart = CD.labels_all.indexOf('25年4月');
     const busLabels = busStart >= 0 ? CD.labels_all.slice(busStart) : CD.labels_all;
     const busLarge  = busStart >= 0 ? CD.bus_large.slice(busStart)  : CD.bus_large;
     const busLight  = busStart >= 0 ? CD.bus_light.slice(busStart)  : CD.bus_light;
@@ -6445,7 +6445,7 @@ function initCommercial() {
     const t = gt();
     const opt = baseOpt(t);
     // 天然ガス車販売は2025年2月以降のみデータあり
-    const lngStart  = CD.labels_all.indexOf('2025年2月');
+    const lngStart  = CD.labels_all.indexOf('25年2月');
     const lngLabels = lngStart >= 0 ? CD.labels_all.slice(lngStart) : CD.labels_all;
     const lngData   = lngStart >= 0 ? CD.lng_sales.slice(lngStart)  : CD.lng_sales;
     opt.xAxis.data = lngLabels;

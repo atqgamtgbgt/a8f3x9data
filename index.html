@@ -2932,7 +2932,7 @@ body.tray-open { padding-bottom: 105px; }
           <div id="cdsPills" style="display:none!important">
 
             <!-- 中タブ切替ボタン -->
-            <div id="cds-mid-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f1f5f9">
+            <div id="cds-mid-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;padding-bottom:10px">
               <button id="cds-mid-btn-export" class="cds-mid-tab active" onclick="cdsSetMidTab('export')">
                 🚢 輸出分析
               </button>
@@ -2962,7 +2962,7 @@ body.tray-open { padding-bottom: 105px; }
               </button>
             </div>
 
-            <hr style="border:none;border-top:1px solid #e2e8f0;margin:4px 0 12px;">
+            <hr style="border:none;border-top:2px solid #94a3b8;margin:2px 0 14px;">
 
             <!-- 中タブA: 輸出分析 サブナビ -->
             <div id="cds-sub-export" class="cds-sub-nav">
@@ -7725,7 +7725,7 @@ async function loadCdsExcel() {
 
     CDS_LOADED = true;
     if (loadEl) loadEl.style.display = 'none';
-    if (pillEl) { pillEl.style.display = 'block'; }
+    if (pillEl) { pillEl.setAttribute('style', 'display:block'); }
     if (contEl) contEl.style.removeProperty('display');
     // 引用元リンクを初期化（輸出タブがデフォルト）
     var _srcLink = document.getElementById('cds-source-link');
@@ -11441,7 +11441,7 @@ document.addEventListener('DOMContentLoaded', function() {
       var cell = document.createElement('div');
       cell.className = 'compare-cell';
       cell.innerHTML =
-        '<div style="padding:10px 14px 2px;font-weight:700;font-size:13px;border-bottom:1px solid #f1f5f9">' +
+        '<div style="padding:10px 14px 2px;font-weight:700;font-size:13px;border-bottom:2px solid #cbd5e1">' +
           item.icon + ' ' + item.label + '</div>' +
         '<div style="font-size:11px;color:#94a3b8;padding:4px 14px 6px">' + (item.source||'') + '</div>' +
         '<div id="cmp-' + i + '" style="height:400px"></div>';

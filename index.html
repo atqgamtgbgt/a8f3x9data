@@ -101,6 +101,10 @@
       if (_hiddenSeries[hoveredName]) return;
 
       _hovering = true;
+      // 横向き積み上げ棒か判定（xAxis=value, yAxis=category）
+      var isHorizontal = opt.xAxis && opt.xAxis[0] && opt.xAxis[0].type === 'value'
+                      && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].type === 'category';
+
       var hoveredSeries = opt.series.find(function(s) { return s.name === hoveredName; });
       var hoveredData = hoveredSeries ? hoveredSeries.data : [];
       var dataMax = 0;
@@ -108,16 +112,45 @@
         var n = (typeof v === 'object' && v !== null) ? (v.value != null ? v.value : 0) : (v != null ? v : 0);
         if (n > dataMax) dataMax = n;
       });
-      var niceMax = dataMax <= 0 ? null : (Math.ceil(dataMax * 1.15 / 5) * 5);
+
+      // % グラフかどうかの判定（横グラフはxAxis、縦グラフはyAxisのformatterで判定）
+      var fmtAxis = isHorizontal
+        ? (opt.xAxis && opt.xAxis[0] && opt.xAxis[0].axisLabel && opt.xAxis[0].axisLabel.formatter)
+        : (opt.yAxis && opt.yAxis[0] && opt.yAxis[0].axisLabel && opt.yAxis[0].axisLabel.formatter);
+      var isPercent = (typeof fmtAxis === 'string' && fmtAxis.indexOf('%') >= 0);
+
+      // % グラフは max:100 固定、それ以外はデータから算出
+      var niceMax = isPercent ? 100 : (dataMax <= 0 ? null : (Math.ceil(dataMax * 1.15 / 5) * 5));
+
+      // ラベル位置：横グラフは 'right'、縦グラフは 'top'
+      var labelPos = isHorizontal ? 'right' : 'top';
+
       var patchSeries = opt.series.map(function(s) {
         var isHovered = s.name === hoveredName;
         var isHidden  = !!_hiddenSeries[s.name];
         return {
           data: (isHovered && !isHidden) ? s.data : s.data.map(function() { return 0; }),
-          label: (isHovered && !isHidden) ? { show: true, position: 'top', color: 'inherit', fontSize: 11, fontWeight: 'bold', formatter: function(p) { var yAxisArr = instance.getOption().yAxis; var yFmt = yAxisArr && yAxisArr[0] && yAxisArr[0].axisLabel && yAxisArr[0].axisLabel.formatter; var isPercent = (typeof yFmt === 'string' && yFmt.indexOf('%') >= 0); var unit = isPercent ? '%' : ''; return p.value != null && p.value >= Math.max(niceMax * 0.08, 0.5) ? p.value + unit : ''; } } : { show: false }
+          label: (isHovered && !isHidden) ? {
+            show: true,
+            position: labelPos,
+            color: 'inherit',
+            fontSize: 11,
+            fontWeight: 'bold',
+            formatter: function(p) {
+              var unit = isPercent ? '%' : '';
+              var threshold = niceMax ? Math.max(niceMax * 0.08, 0.5) : 0.5;
+              return p.value != null && p.value >= threshold ? p.value + unit : '';
+            }
+          } : { show: false }
         };
       });
-      _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);
+
+      // 横グラフは xAxis のmax、縦グラフは yAxis の max を調整
+      if (isHorizontal) {
+        _setOption({ series: patchSeries, xAxis: [{ max: niceMax }] }, false);
+      } else {
+        _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);
+      }
       _hovering = false;
     });
 

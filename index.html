@@ -6851,7 +6851,7 @@ function cccmInitBikeType() {
   initCccmEC('cccm-ec-bike-type', chart => {
     const opt = cccmBaseOpt();
     opt.legend={data:['跨骑車（クロス）','踏板車（スクーター）','弯梁車（アンダーボーン）'], textStyle:{color:opt.textStyle.color}, top:8};
-    opt.subtitle={text:'※4〜6月は直接データ、7〜11月は累計差し引き逆算、12月はデータなし', textStyle:{color:'#999',fontSize:11}, top:28};
+    opt.subtitle={text:'※2025年12月のみデータなし（収官号に車種別内訳の記載なし）', textStyle:{color:'#999',fontSize:11}, top:28};
     opt.grid.top=65;
     opt.series=[
       {name:'跨骑車（クロス）',type:'bar',emphasis:{focus:'series'},stack:'type',data:CCCM.cross_sales,itemStyle:{color:CP[0]},barMaxWidth:50},

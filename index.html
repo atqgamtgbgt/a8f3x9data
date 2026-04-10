@@ -5944,9 +5944,7 @@ function buildCdSd(monthly) {
     trad_price: Object.fromEntries(ice_prices.map(p => [p, seg_months.map(ym => monthly[ym]?.trad_price?.[p]?? null)])),
     nev_price:  Object.fromEntries(nev_prices.map(p => [p, seg_months.map(ym => monthly[ym]?.nev_price?.[p] ?? null)])),
   };
-  // NEVセグメントのラベル名をHTMLに合わせる（B→B（主力）、A→A（主力））
-  SD.trad_seg['A（主力）'] = SD.trad_seg['A']; delete SD.trad_seg['A'];
-  SD.nev_seg['B（主力）']  = SD.nev_seg['B'];  delete SD.nev_seg['B'];
+
 }
 
 // ロード済みチェック付きの安全なグラフ初期化ラッパー
@@ -6181,7 +6179,7 @@ function initTradSeg() {
       return s;
     };
     const segs = Object.keys(SD.trad_seg).filter(s=>s!=='D'); // Dは超小量なので省略可だが表示
-    opt.series = Object.keys(SD.trad_seg).map((s,i) => ({
+    opt.series = ['A00','A0','A','B','C','D'].filter(s => SD.trad_seg[s]).map((s,i) => ({
       name: s, type:'bar', emphasis:{focus:'series'}, stack:'ice_seg', data: SD.trad_seg[s],
       itemStyle:{color:PAL[i%12]}
     }));
@@ -6205,7 +6203,7 @@ function initNevSeg() {
       s += `<hr style="margin:4px 0">合計：<b>${total.toFixed(1)}</b> 万台`;
       return s;
     };
-    opt.series = Object.keys(SD.nev_seg).map((s,i) => ({
+    opt.series = ['A00','A0','A','B','C','D'].filter(s => SD.nev_seg[s]).map((s,i) => ({
       name: s, type:'bar', emphasis:{focus:'series'}, stack:'nev_seg', data: SD.nev_seg[s],
       itemStyle:{color:PAL[i%12]}
     }));

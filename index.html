@@ -10304,10 +10304,9 @@ window.addEventListener('resize', function(){
   }
 
   // ============================================================
-  //  1. 電池生産推移
-  // ============================================================
-  // ============================================================
-  //  1. 電池生産推移
+  //  1. 電池生産推移  ＋ 前年比増速（第2軸）
+  //  出所: 画像① 動力電池産量・三元産量増速・磷酸鉄鋰産量増速（累計列）
+  //  ※2020〜2025は12月累計、2026年1月・2月は当月累計（累計ベース統一）
   // ============================================================
   function renderProduction(){
     var ec = initOrGet('ec-bat-production'); if(!ec) return;
@@ -10315,46 +10314,131 @@ window.addEventListener('resize', function(){
     var totalData = [83,   220,  546,  778,  1097, 1755.6, 168.0, 309.7];
     var nmcData   = [49,   94,   213,  245,  278,  347.6,  31.3,  58.2];
     var lfpData   = [35,   125,  332,  531,  816,  1405.1, 136.7, 251.3];
+
+    // 画像①「増速」累計列（前年同期比 %）
+    // 2020年12月累計：動76、三64、LFP71
+    // 2021年12月累計：動70、三64、LFP71  ※画像から2021累計=70/64/71
+    // 2022年12月累計：動54、三52、LFP55
+    // 2023年12月累計：動50、三51、LFP49
+    // 2024年12月累計：動41、三14、LFP54
+    // 2025年12月累計：動44、三41、LFP45
+    // 2026年1月累計 ：動25、三30、LFP24
+    // 2026年2月累計 ：動22、三26、LFP21
+    var totalGrowth = [76, 70, 54, 50, 41, 44, 25, 22];
+    var nmcGrowth   = [64, 64, 52, 51, 14, 41, 30, 26];
+    var lfpGrowth   = [71, 71, 55, 49, 54, 45, 24, 21];
+
     ec.setOption({
-      tooltip: baseTooltip(),
-      legend: baseLegend(),
-      grid: baseGrid(),
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+        textStyle:{fontFamily:FONT, fontSize:12},
+        formatter: function(params){
+          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
+          params.forEach(function(p){
+            if(p.value == null) return;
+            var isGrowth = p.seriesName.indexOf('増速') >= 0;
+            var val = isGrowth ? p.value + '%' : p.value + ' GWh';
+            s += p.marker + p.seriesName + ': <b>' + val + '</b><br/>';
+          });
+          return s;
+        }
+      },
+      legend: baseLegend({type:'scroll'}),
+      grid: Object.assign(baseGrid(), {right:70}),
       xAxis: baseXAxis(labels),
-      yAxis: baseYAxis('GWh'),
+      yAxis: [
+        baseYAxis('GWh'),
+        { type:'value', name:'前年比', nameTextStyle:{fontFamily:FONT,fontSize:11,color:'#999'},
+          position:'right', axisLine:{show:true, lineStyle:{color:'#ccc'}},
+          axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:10, color:'#999'},
+          splitLine:{show:false} }
+      ],
       series:[
         { name:'三元電池', type:'bar', emphasis:{focus:'series'}, stack:'s', data:nmcData, itemStyle:{color:C.nmc} },
-        { name:'LFP（リン酸鉄）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:lfpData, itemStyle:{color:C.lfp},
+        { name:'LFP（リン酸鉄）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:lfpData, itemStyle:{color:C.lfp} },
+        { name:'合計（折れ線）', type:'line', yAxisIndex:0, data:totalData, smooth:true,
+          symbol:'circle', symbolSize:6, itemStyle:{color:'#E74C3C'}, lineStyle:{width:2, color:'#E74C3C'} },
+        { name:'動力電池産量増速', type:'line', yAxisIndex:1, data:totalGrowth, smooth:true,
+          symbol:'diamond', symbolSize:7, itemStyle:{color:'#E74C3C'},
+          lineStyle:{width:1.5, color:'#E74C3C', type:'dashed'},
           label:{show:false} },
-        { name:'合計（折れ線）', type:'line', emphasis:{focus:'series'}, data:totalData, smooth:true,
-          symbol:'circle', symbolSize:6, itemStyle:{color:'#E74C3C'},
-          lineStyle:{width:2, color:'#E74C3C'} }
+        { name:'三元産量増速', type:'line', yAxisIndex:1, data:nmcGrowth, smooth:true,
+          symbol:'triangle', symbolSize:7, itemStyle:{color:C.nmc},
+          lineStyle:{width:1.5, color:C.nmc, type:'dashed'},
+          label:{show:false} },
+        { name:'LFP産量増速', type:'line', yAxisIndex:1, data:lfpGrowth, smooth:true,
+          symbol:'rect', symbolSize:6, itemStyle:{color:C.lfp},
+          lineStyle:{width:1.5, color:C.lfp, type:'dashed'},
+          label:{show:false} }
       ]
     });
   }
 
   // ============================================================
-  //  2. 装車量推移  ※PDFのSheet2（内販合格証ベース）の実データのみ使用
+  //  2. 装車量推移  ＋ 装車増速（第2軸）
+  //  出所: 画像②「動力電池装車増速」累計列
+  //  ※2019〜2025は12月累計、2026年1月・2月は当月累計
   // ============================================================
   function renderInstall(){
     var ec = initOrGet('ec-bat-install'); if(!ec) return;
-    // 出所: 画像2（内販合格証電池装車 累計列）
     var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
     var nmcData  = [42,   39,    74,    110,   126,   139,   144.1, 9.4,   15.1];
     var lfpData  = [20,   24,    80,    184,   261,   409,   625.3, 32.7,  53.3];
     var totalData= [62,   64,    154.5, 294.6, 387.7, 548.4, 769.7, 42.0,  68.3];
+
+    // 画像②「動力電池装車増速」累計列
+    // 2019:なし, 2020:-2, 2021:163, 2022:91, 2023:32, 2024:41, 2025:40, 2026/1:8, 2026/2:-7
+    // ※2019は前年データなし、2020は2%減
+    var installGrowth = [null, -2, 163, 91, 32, 41, 40, 8, -7];
+
+    // 画像③「電池総増速・三元増速・鉄鋰増速」累計列（装車ベース）
+    // 2021:143, 2022:91, 2023:32, 2024:41, 2025:40, 2026/1:8, 2026/2:-7  ← 総増速は装車増速と同値
+    // 三元増速: 91, 49, 14, 10, 4, 11, 1  （2021〜2026/2）
+    // 鉄鋰増速: 227,130, 42, 57, 53, 8, -9（2021〜2026/2）
+    var nmcInstallGrowth = [null, null, 91,  49,  14,  10,  4,   11,  1 ];
+    var lfpInstallGrowth = [null, null, 227, 130, 42,  57,  53,  8,  -9 ];
+
     ec.setOption({
-      tooltip: baseTooltip(),
-      legend: baseLegend(),
-      grid: baseGrid(),
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+        textStyle:{fontFamily:FONT, fontSize:12},
+        formatter: function(params){
+          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
+          params.forEach(function(p){
+            if(p.value == null) return;
+            var isGrowth = p.seriesName.indexOf('増速') >= 0;
+            var val = isGrowth ? p.value + '%' : p.value + ' GWh';
+            s += p.marker + p.seriesName + ': <b>' + val + '</b><br/>';
+          });
+          return s;
+        }
+      },
+      legend: baseLegend({type:'scroll'}),
+      grid: Object.assign(baseGrid(), {right:70}),
       xAxis: baseXAxis(labels),
-      yAxis: baseYAxis('GWh'),
+      yAxis: [
+        baseYAxis('GWh'),
+        { type:'value', name:'前年比', nameTextStyle:{fontFamily:FONT,fontSize:11,color:'#999'},
+          position:'right', axisLine:{show:true, lineStyle:{color:'#ccc'}},
+          axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:10, color:'#999'},
+          splitLine:{show:false} }
+      ],
       series:[
         { name:'三元電池', type:'bar', emphasis:{focus:'series'}, stack:'s', data:nmcData, itemStyle:{color:C.nmc} },
-        { name:'LFP（リン酸鉄）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:lfpData, itemStyle:{color:C.lfp},
-          label:{show:false} },
-        { name:'合計（折れ線）', type:'line', emphasis:{focus:'series'}, data:totalData, smooth:true,
-          symbol:'circle', symbolSize:6, itemStyle:{color:'#E74C3C'},
-          lineStyle:{width:2, color:'#E74C3C'} }
+        { name:'LFP（リン酸鉄）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:lfpData, itemStyle:{color:C.lfp} },
+        { name:'合計（折れ線）', type:'line', yAxisIndex:0, data:totalData, smooth:true,
+          symbol:'circle', symbolSize:6, itemStyle:{color:'#E74C3C'}, lineStyle:{width:2, color:'#E74C3C'} },
+        { name:'装車増速（動力電池）', type:'line', yAxisIndex:1, data:installGrowth, smooth:true,
+          symbol:'diamond', symbolSize:7, itemStyle:{color:'#E74C3C'},
+          lineStyle:{width:1.5, color:'#E74C3C', type:'dashed'}, connectNulls:false, label:{show:false} },
+        { name:'装車増速（三元）', type:'line', yAxisIndex:1, data:nmcInstallGrowth, smooth:true,
+          symbol:'triangle', symbolSize:7, itemStyle:{color:C.nmc},
+          lineStyle:{width:1.5, color:C.nmc, type:'dashed'}, connectNulls:false, label:{show:false} },
+        { name:'装車増速（LFP）', type:'line', yAxisIndex:1, data:lfpInstallGrowth, smooth:true,
+          symbol:'rect', symbolSize:6, itemStyle:{color:C.lfp},
+          lineStyle:{width:1.5, color:C.lfp, type:'dashed'}, connectNulls:false, label:{show:false} }
       ]
     });
     renderInstallRate();

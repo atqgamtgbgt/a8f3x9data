@@ -2841,7 +2841,7 @@ body.tray-open { padding-bottom: 105px; }
           </ul>
           <div class="tab-content" id="cccmPillsContent">
             <div class="tab-pane fade show active" id="cccm-overview">
-              <div class="chart-card"><div class="chart-title">月次総販売台数推移（燃油車 + EV）</div><div class="chart-subtitle">CCCM 2025年1月〜12月</div><div id="cccm-ec-overview" class="echart-box"></div></div>
+              <div class="chart-card"><div class="chart-title">月次総販売台数推移（燃油車 + EV）</div><div class="chart-subtitle">CCCM 月次統計</div><div id="cccm-ec-overview" class="echart-box"></div></div>
             </div>
             <div class="tab-pane fade" id="cccm-fuel-ev">
               <div class="row g-3">
@@ -6681,7 +6681,20 @@ const CCCM_RAW = {"meta":{"source":"CCCM 月次統計","months":["2025-01","2025
 
 // ---- データ展開 ----
 const MONTHS = CCCM_RAW.meta.months;
-const JP = MONTHS.map(m => parseInt(m.split('-')[1])+'月');
+// X軸ラベル：年が変わる月・その年最初の月は「'25/1」形式、それ以外は「2月」形式
+const JP = MONTHS.map((m, i) => {
+  const [yr, mo] = m.split('-').map(Number);
+  const yy = String(yr).slice(2); // '25'
+  // 最初の月、または前月と年が違う場合は年付き
+  const prevYr = i > 0 ? Number(MONTHS[i-1].split('-')[0]) : null;
+  const showYr = (i === 0) || (prevYr !== null && prevYr !== yr);
+  return showYr ? `'${yy}/${mo}` : `${mo}月`;
+});
+// tooltip用フルラベル
+const JP_FULL = MONTHS.map(m => {
+  const [yr, mo] = m.split('-').map(Number);
+  return `${yr}年${mo}月`;
+});
 const ps = m => CCCM_RAW.prod_sales[m] || {};
 const ex = m => CCCM_RAW.export[m] || {};
 const bk = m => CCCM_RAW.bike_type[m] || {};
@@ -6691,7 +6704,7 @@ const bl = m => CCCM_RAW.balance[m] || {};
 function cccmSeries(fn) { return MONTHS.map(fn); }
 
 const CCCM = {
-  labels: JP,
+  labels: JP_FULL,
   gas_sales:      cccmSeries(m => ps(m).gas_sales),
   ev_sales:       cccmSeries(m => ps(m).ev_sales),
   total_sales:    cccmSeries(m => ps(m).total_sales),
@@ -6733,7 +6746,16 @@ const CCCM = {
   }).sort(),
   cc_labels: [],
 };
-CCCM.cc_labels = CCCM.cc_months.map(m => parseInt(m.split('-')[1])+'月');
+CCCM.cc_labels = CCCM.cc_months.map((m, i) => {
+  const [yr, mo] = m.split('-').map(Number);
+  const yy = String(yr).slice(2);
+  const prevYr = i > 0 ? Number(CCCM.cc_months[i-1].split('-')[0]) : null;
+  return ((i===0)||prevYr!==yr) ? `'${yy}/${mo}` : `${mo}月`;
+});
+CCCM.cc_labels_full = CCCM.cc_months.map(m => {
+  const [yr, mo] = m.split('-').map(Number);
+  return `${yr}年${mo}月`;
+});
 CCCM.cc_data = {};
 ['125cc','150cc','110cc','200cc','50cc','250cc','400cc'].forEach(cc => {
   CCCM.cc_data[cc] = CCCM.cc_months.map(m => (CCCM_RAW.export_cc[m]||{})[cc] ?? null);
@@ -6764,7 +6786,9 @@ function cccmBaseOpt() {
     tooltip:{trigger:'axis', backgroundColor:isDark?'#1e1e1e':'#fff', borderColor:isDark?'#444':'#ddd', textStyle:{color:fg}},
     legend:{textStyle:{color:fg}, top:8},
     grid:{left:60,right:30,top:50,bottom:50,containLabel:true},
-    xAxis:{type:'category',data:CCCM.labels,axisLine:{lineStyle:{color:fg}},axisLabel:{color:fg},splitLine:{lineStyle:{color:gc}}},
+    xAxis:{type:'category',data:CCCM.labels,axisLine:{lineStyle:{color:fg}},
+      axisLabel:{color:fg, formatter:(val,i)=>JP[i]||val},
+      splitLine:{lineStyle:{color:gc}}},
     yAxis:{type:'value',axisLine:{lineStyle:{color:fg}},axisLabel:{color:fg},splitLine:{lineStyle:{color:gc}}},
   };
 }
@@ -6885,7 +6909,7 @@ function cccmInitExport() {
       }},
       legend:{data:['輸出台数','輸出金額'],textStyle:{color:fg},top:8},
       grid:{left:65,right:65,top:50,bottom:50,containLabel:true},
-      xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg}},
+      xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg,formatter:(v,i)=>JP[i]||v}},
       yAxis:[
         {type:'value',name:'万台',axisLabel:{color:fg},splitLine:{lineStyle:{color:isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.07)'}}},
         {type:'value',name:'億ドル',axisLabel:{color:fg},splitLine:{show:false},min:5,max:10},
@@ -6913,7 +6937,7 @@ function cccmInitExport() {
       legend:{data:ccKeys,textStyle:{color:fg},top:8},
       subtitle:{text:'※7・8月は400ccが上位入り',textStyle:{color:'#999',fontSize:11},top:28},
       grid:{left:55,right:30,top:65,bottom:50,containLabel:true},
-      xAxis:{type:'category',data:CCCM.cc_labels,axisLabel:{color:fg}},
+      xAxis:{type:'category',data:CCCM.cc_labels_full,axisLabel:{color:fg,formatter:(v,i)=>CCCM.cc_labels[i]||v}},
       yAxis:{type:'value',name:'万台',axisLabel:{color:fg}},
       series:ccKeys.map((cc,i)=>{return {name:cc,type:'bar',emphasis:{focus:'series'},stack:'cc',data:CCCM.cc_data[cc],itemStyle:{color:CP[i%CP.length]},barMaxWidth:60};}),
     });
@@ -7020,7 +7044,7 @@ function cccmInitMakers() {
         legend:{data:names,textStyle:{color:fg},top:8,type:'scroll'},
         subtitle:{text:'※4月は逆算不可（1〜3月累計が基準のため）',textStyle:{color:'#999',fontSize:11},top:28},
         grid:{left:55,right:30,top:70,bottom:50,containLabel:true},
-        xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg}},
+        xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg,formatter:(v,i)=>JP[i]||v}},
         yAxis:{type:'value',name:'万台',axisLabel:{color:fg}},
         series:names.map((n,i)=>{return {name:n,type:'line',data:top10[i],symbol:'circle',symbolSize:5,lineStyle:{width:2,color:CP[i%CP.length]},itemStyle:{color:CP[i%CP.length]},connectNulls:false};})
       });
@@ -7040,7 +7064,7 @@ function cccmInitBalance() {
       tooltip:{trigger:'axis',textStyle:{color:fg}},
       legend:{data:['売掛金','製品在庫'],textStyle:{color:fg},top:8},
       grid:{left:60,right:30,top:50,bottom:50,containLabel:true},
-      xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg}},
+      xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg,formatter:(v,i)=>JP[i]||v}},
       yAxis:{type:'value',name:'億元',axisLabel:{color:fg}},
       series:[
         {name:'売掛金',type:'line',data:CCCM.receivable,symbol:'circle',symbolSize:6,lineStyle:{width:2,color:CP[0]},itemStyle:{color:CP[0]}},

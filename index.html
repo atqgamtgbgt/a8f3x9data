@@ -6729,16 +6729,25 @@ const CCCM = {
   inventory:      cccmSeries(m => bl(m).inventory),
   inventory_yoy:  cccmSeries(m => bl(m).inventory_yoy),
   // 経済効益（単月逆算）
-  econ_months: Object.keys(CCCM_RAW.econ_monthly),
-  econ_labels: Object.values(CCCM_RAW.econ_monthly).map(d => d.note||d.label),
-  econ_revenue: Object.values(CCCM_RAW.econ_monthly).map(d => d['営業収入']),
-  econ_profit:  Object.values(CCCM_RAW.econ_monthly).map(d => d['利益総額']),
-  econ_margin:  Object.values(CCCM_RAW.econ_monthly).map(d => d['利益率%']),
-  econ_cost:    Object.values(CCCM_RAW.econ_monthly).map(d => d['営業コスト']),
-  econ_rd:      Object.values(CCCM_RAW.econ_monthly).map(d => d['研究開発費用']),
-  econ_selling: Object.values(CCCM_RAW.econ_monthly).map(d => d['販売費用']),
-  econ_admin:   Object.values(CCCM_RAW.econ_monthly).map(d => d['管理費用']),
-  econ_note:    Object.values(CCCM_RAW.econ_monthly).map(d => d.note),
+  econ_months: Object.keys(CCCM_RAW.econ_monthly).sort(),
+  econ_labels: Object.keys(CCCM_RAW.econ_monthly).sort().map((m,i,arr) => {
+    const [yr,mo] = m.split('-').map(Number);
+    const yy = String(yr).slice(2);
+    const prevYr = i>0 ? Number(arr[i-1].split('-')[0]) : null;
+    return (i===0||prevYr!==yr) ? `'${yy}/${mo}` : `${mo}月`;
+  }),
+  econ_labels_full: Object.keys(CCCM_RAW.econ_monthly).sort().map(m => {
+    const [yr,mo] = m.split('-').map(Number);
+    return `${yr}年${mo}月`;
+  }),
+  econ_revenue: Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['営業収入']),
+  econ_profit:  Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['利益総額']),
+  econ_margin:  Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['利益率%']),
+  econ_cost:    Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['営業コスト']),
+  econ_rd:      Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['研究開発費用']),
+  econ_selling: Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['販売費用']),
+  econ_admin:   Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k]['管理費用']),
+  econ_note:    Object.keys(CCCM_RAW.econ_monthly).sort().map(k => CCCM_RAW.econ_monthly[k].note),
   // 排気量別輸出
   cc_months: Object.keys(CCCM_RAW.export_cc).filter(m => {
     const d = CCCM_RAW.export_cc[m];
@@ -6912,7 +6921,7 @@ function cccmInitExport() {
       xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg,formatter:(v,i)=>JP[i]||v}},
       yAxis:[
         {type:'value',name:'万台',axisLabel:{color:fg},splitLine:{lineStyle:{color:isDark?'rgba(255,255,255,0.08)':'rgba(0,0,0,0.07)'}}},
-        {type:'value',name:'億ドル',axisLabel:{color:fg},splitLine:{show:false},min:5,max:10},
+        {type:'value',name:'億ドル',axisLabel:{color:fg},splitLine:{show:false}},
       ],
       series:[
         {name:'輸出台数',type:'bar',yAxisIndex:0,data:CCCM.export_total,itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#76b7b2'},{offset:1,color:'#3d8a85'}])},barMaxWidth:45},
@@ -7067,8 +7076,8 @@ function cccmInitBalance() {
       xAxis:{type:'category',data:CCCM.labels,axisLabel:{color:fg,formatter:(v,i)=>JP[i]||v}},
       yAxis:{type:'value',name:'億元',axisLabel:{color:fg}},
       series:[
-        {name:'売掛金',type:'line',data:CCCM.receivable,symbol:'circle',symbolSize:6,lineStyle:{width:2,color:CP[0]},itemStyle:{color:CP[0]}},
-        {name:'製品在庫',type:'line',data:CCCM.inventory,symbol:'square',symbolSize:6,lineStyle:{width:2,color:CP[1]},itemStyle:{color:CP[1]}},
+        {name:'売掛金',type:'line',data:CCCM.receivable,symbol:'circle',symbolSize:6,connectNulls:true,lineStyle:{width:2,color:CP[0]},itemStyle:{color:CP[0]}},
+        {name:'製品在庫',type:'line',data:CCCM.inventory,symbol:'square',symbolSize:6,connectNulls:true,lineStyle:{width:2,color:CP[1]},itemStyle:{color:CP[1]}},
       ]
     });
   });
@@ -7097,13 +7106,13 @@ function cccmInitEcon() {
         formatter: params => {
           const idx = params[0].dataIndex;
           const note = CCCM.econ_note[idx];
-          let s = `<b>${CCCM.econ_labels[idx]}</b>${note==='1〜3月合計'?' <span style="color:#f28e2b">（1〜3月合計）</span>':''}<br>`;
+          let s = `<b>${CCCM.econ_labels_full[idx]}</b>${note==='1〜3月合計'?' <span style="color:#f28e2b">（1〜3月合計）</span>':''}<br>`;
           params.forEach(p => s += `${p.marker}${p.seriesName}: <b>${p.value != null ? p.value.toFixed(2) : '-'}</b> 億元<br>`);
           return s;
         }
       },
-      legend:{data:['営業収入（単月）','利益総額（単月）'],textStyle:{color:fg},top:8},
-      subtitle:{text:'※1〜3月合計は薄色（単月逆算不可） / 4〜11月は累計差し引き逆算',textStyle:{color:'#999',fontSize:11},top:28},
+      legend:{data:['営業収入','利益総額'],textStyle:{color:fg},top:8},
+      subtitle:{text:'※2月は1-2月累計、3月は1Q合計（薄色） / その他は累計差し引き単月逆算',textStyle:{color:'#999',fontSize:11},top:28},
       grid:{left:65,right:65,top:70,bottom:50,containLabel:true},
       xAxis:{type:'category',data:CCCM.econ_labels,axisLabel:{color:fg,rotate:15}},
       yAxis:[

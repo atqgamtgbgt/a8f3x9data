@@ -10603,13 +10603,314 @@ window.addEventListener('resize', function(){
     });
   }
 
+  // ============================================================
+  //  6. 全体シェア（動力電池）
+  //  出所: 画像⑩ 動力電池份額
+  //  左端列「26年-25年份額」= 2026年1Q と 2025年通年との差分（pp）
+  // ============================================================
+  function renderShareTotal(){
+    var ec = initOrGet('ec-bat-share-total'); if(!ec) return;
+
+    // 年次ラベル（2020〜2025通年 + 2026年1Q）
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','2026年\n1Q'];
+
+    // 画像⑩より（%）
+    var makers = [
+      { name:'寧德時代 CATL', color:'#2E75B6', data:[50.0,51.9,47.2,43.5,45.3,43.8,50.1], prev25:43.8, diff:6.3  },
+      { name:'比亜迪 BYD',    color:'#FF6600', data:[14.9,16.2,24.4,26.9,24.8,21.8,17.5], prev25:21.8, diff:-4.3 },
+      { name:'国軒高科',      color:'#F39C12', data:[5.2, 5.2, 4.7, 4.1, 4.6, 5.7, 6.1],  prev25:5.7,  diff:0.4  },
+      { name:'中創新航',      color:'#E74C3C', data:[5.6, 5.9, 6.5, 8.5, 6.7, 7.0, 5.3],  prev25:7.0,  diff:-1.7 },
+      { name:'億緯鋰能',      color:'#1ABC9C', data:[1.9, 1.8, 2.4, 4.5, 3.4, 4.2, 5.0],  prev25:4.2,  diff:0.8  },
+      { name:'瑞浦蘭鈞',      color:'#9B59B6', data:[1.5, 0.3, 1.4, 1.3, 2.2, 2.6, 3.1],  prev25:2.6,  diff:0.5  },
+      { name:'欣旺達',        color:'#E67E22', data:[0.0, 1.1, 2.6, 2.2, 2.9, 3.2, 2.8],  prev25:3.2,  diff:-0.4 },
+      { name:'蜂巣能源',      color:'#3498DB', data:[0.0, 2.0, 2.1, 2.2, 3.2, 2.7, 2.5],  prev25:2.7,  diff:-0.2 },
+      { name:'正力新能',      color:'#27AE60', data:[0.0, 1.9, 0.7, 1.4, 1.8, 2.1, 2.1],  prev25:2.1,  diff:0.0  },
+      { name:'吉利耀寧',      color:'#8E44AD', data:[0.0, 0.0, 0.0, 0.0, 0.4, 1.3, 1.8],  prev25:1.3,  diff:0.6  },
+      { name:'LG新能源',      color:'#2980B9', data:[6.5, 3.9, 1.7, 2.2, 1.4, 1.8, 0.7],  prev25:1.8,  diff:-1.1 },
+      { name:'その他',        color:'#BDC3C7', data:[14.4,9.8, 6.3, 3.2, 3.3, 3.8, 2.9],  prev25:3.8,  diff:null }
+    ];
+
+    var latestIdx = labels.length - 1; // 2026年1Q のインデックス
+
+    ec.setOption({
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+        textStyle:{fontFamily:FONT,fontSize:12},
+        formatter: function(params){
+          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
+          var isLatest = (params[0].dataIndex === latestIdx);
+          params.forEach(function(p){
+            if(p.value == null || p.value === 0) return;
+            var mk = makers.find(function(m){ return m.name === p.seriesName; });
+            var diffStr = '';
+            if(isLatest && mk && mk.diff !== null){
+              var sign = mk.diff >= 0 ? '▲+' : '▼';
+              var cls  = mk.diff >= 0 ? 'color:#e74c3c' : 'color:#3498db';
+              diffStr = ' <span style="'+cls+';font-size:11px">('+sign+mk.diff.toFixed(1)+'pp vs 2025年)</span>';
+            }
+            s += p.marker + p.seriesName + ': <b>' + p.value + '%</b>' + diffStr + '<br/>';
+          });
+          if(isLatest) s += '<span style="font-size:10px;color:#888">※2026年1Qと2025年通年の比較</span>';
+          return s;
+        }
+      },
+      legend: baseLegend({type:'scroll', top:8}),
+      grid: Object.assign(baseGrid(),{bottom:70}),
+      xAxis: baseXAxis(labels),
+      yAxis: Object.assign(baseYAxis('%'),{max:100, axisLabel:{formatter:'{value}%'}}),
+      series: makers.map(function(m){
+        return {
+          name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
+          itemStyle:{
+            color: function(p){
+              // 最新期（2026年1Q）だけ少し明るく枠線つき
+              if(p.dataIndex === latestIdx){
+                return { type:'linear', x:0,y:0,x2:0,y2:1,
+                  colorStops:[{offset:0,color:m.color},{offset:1,color:m.color+'cc'}],
+                  borderColor:'#fff', borderWidth:1 };
+              }
+              return m.color;
+            }
+          },
+          data: m.data,
+          label:{show:false}
+        };
+      })
+    });
+  }
+
+  // ============================================================
+  //  7. LFP企業シェア
+  //  出所: 画像⑪ 磷酸鉄鋰份額
+  //  ラベル: 2022〜2025通年 + 2026年1Q（右端）
+  //  前年比: 2026年1Q vs 2025年通年の差分（pp）
+  // ============================================================
+  function renderShareLfp(){
+    var ec = initOrGet('ec-bat-share-lfp'); if(!ec) return;
+
+    var labels = ['2022年','2023年','2024年','2025年','2026年\n1Q'];
+
+    // 画像⑪より（%）。シェアが小さい企業は「その他」にまとめ
+    var makers = [
+      { name:'寧德時代 CATL', color:'#2E75B6', data:[42.2,34.1,37.3,37.6,41.0], prev25:37.6, diff:3.4  },
+      { name:'比亜迪 BYD',    color:'#FF6600', data:[39.0,40.4,33.1,26.9,22.6], prev25:26.9, diff:-4.2 },
+      { name:'国軒高科',      color:'#F39C12', data:[6.5, 5.6, 5.6, 7.0, 7.7],  prev25:7.0,  diff:0.8  },
+      { name:'億緯鋰能',      color:'#1ABC9C', data:[2.5, 5.5, 4.0, 5.0, 6.1],  prev25:5.0,  diff:1.1  },
+      { name:'中創新航',      color:'#E74C3C', data:[3.7, 6.9, 5.8, 6.6, 5.3],  prev25:6.6,  diff:-1.3 },
+      { name:'瑞浦蘭鈞',      color:'#9B59B6', data:[2.2, 1.8, 3.0, 3.2, 4.0],  prev25:3.2,  diff:0.8  },
+      { name:'欣旺達',        color:'#E67E22', data:[0.7, 1.3, 2.9, 3.7, 3.6],  prev25:3.7,  diff:-0.1 },
+      { name:'正力新能',      color:'#27AE60', data:[0.3, 1.6, 2.0, 2.4, 2.6],  prev25:2.4,  diff:0.2  },
+      { name:'吉利耀寧',      color:'#8E44AD', data:[0.0, 0.0, 0.5, 1.5, 2.4],  prev25:1.5,  diff:0.8  },
+      { name:'楚能新能',      color:'#16A085', data:[0.0, 0.0, 0.2, 0.9, 1.2],  prev25:0.9,  diff:0.3  },
+      { name:'蜂巣能源',      color:'#3498DB', data:[1.5, 1.4, 2.6, 1.7, 1.1],  prev25:1.7,  diff:-0.6 },
+      { name:'その他',        color:'#BDC3C7', data:[1.4, 1.4, 3.0, 3.5, 2.4],  prev25:3.5,  diff:null }
+    ];
+
+    var latestIdx = labels.length - 1;
+
+    ec.setOption({
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+        textStyle:{fontFamily:FONT,fontSize:12},
+        formatter: function(params){
+          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
+          var isLatest = (params[0].dataIndex === latestIdx);
+          params.forEach(function(p){
+            if(p.value == null || p.value === 0) return;
+            var mk = makers.find(function(m){ return m.name === p.seriesName; });
+            var diffStr = '';
+            if(isLatest && mk && mk.diff !== null){
+              var sign = mk.diff >= 0 ? '▲+' : '▼';
+              var cls  = mk.diff >= 0 ? 'color:#e74c3c' : 'color:#3498db';
+              diffStr = ' <span style="'+cls+';font-size:11px">('+sign+mk.diff.toFixed(1)+'pp vs 2025年)</span>';
+            }
+            s += p.marker + p.seriesName + ': <b>' + p.value + '%</b>' + diffStr + '<br/>';
+          });
+          if(isLatest) s += '<span style="font-size:10px;color:#888">※2026年1Qと2025年通年の比較</span>';
+          return s;
+        }
+      },
+      legend: baseLegend({type:'scroll', top:8}),
+      grid: Object.assign(baseGrid(),{bottom:70}),
+      xAxis: baseXAxis(labels),
+      yAxis: Object.assign(baseYAxis('%'),{max:100, axisLabel:{formatter:'{value}%'}}),
+      series: makers.map(function(m){
+        return {
+          name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
+          itemStyle:{
+            color: function(p){
+              if(p.dataIndex === latestIdx){
+                return { type:'linear', x:0,y:0,x2:0,y2:1,
+                  colorStops:[{offset:0,color:m.color},{offset:1,color:m.color+'cc'}] };
+              }
+              return m.color;
+            }
+          },
+          data: m.data, label:{show:false}
+        };
+      })
+    });
+  }
+
+  // ============================================================
+  //  8. 三元企業シェア
+  //  出所: 画像⑫ 三元份額
+  //  前年比: 2026年1Q vs 2025年通年の差分（pp）
+  // ============================================================
+  function renderShareNmc(){
+    var ec = initOrGet('ec-bat-share-nmc'); if(!ec) return;
+
+    var labels = ['2022年','2023年','2024年','2025年','2026年\n1Q'];
+
+    // 画像⑫より（%）
+    var makers = [
+      { name:'寧德時代 CATL', color:'#2E75B6', data:[57.0,62.3,69.1,70.9,81.6], prev25:70.9, diff:10.7 },
+      { name:'蜂巣能源',      color:'#3498DB', data:[3.1, 3.8, 5.1, 7.1, 7.6],  prev25:7.1,  diff:0.5  },
+      { name:'中創新航',      color:'#E74C3C', data:[11.5,11.8,9.5, 8.9, 5.4],  prev25:8.9,  diff:-3.4 },
+      { name:'LG新能源',      color:'#2980B9', data:[4.7, 6.5, 5.6, 9.6, 3.2],  prev25:9.6,  diff:-6.4 },
+      { name:'億緯鋰能',      color:'#1ABC9C', data:[2.3, 2.6, 1.9, 0.7, 1.1],  prev25:0.7,  diff:0.4  },
+      { name:'国軒高科',      color:'#F39C12', data:[1.9, 0.9, 1.7, 0.3, 0.4],  prev25:0.3,  diff:0.1  },
+      { name:'正力新能',      color:'#27AE60', data:[1.5, 1.0, 1.2, 0.8, 0.3],  prev25:0.8,  diff:-0.5 },
+      { name:'欣旺達',        color:'#E67E22', data:[5.9, 4.0, 2.9, 1.1, 0.2],  prev25:1.1,  diff:-0.8 },
+      { name:'その他',        color:'#BDC3C7', data:[12.1,7.1, 3.0, 0.6, 0.2],  prev25:0.6,  diff:null }
+    ];
+
+    var latestIdx = labels.length - 1;
+
+    ec.setOption({
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+        textStyle:{fontFamily:FONT,fontSize:12},
+        formatter: function(params){
+          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
+          var isLatest = (params[0].dataIndex === latestIdx);
+          params.forEach(function(p){
+            if(p.value == null || p.value === 0) return;
+            var mk = makers.find(function(m){ return m.name === p.seriesName; });
+            var diffStr = '';
+            if(isLatest && mk && mk.diff !== null){
+              var sign = mk.diff >= 0 ? '▲+' : '▼';
+              var cls  = mk.diff >= 0 ? 'color:#e74c3c' : 'color:#3498db';
+              diffStr = ' <span style="'+cls+';font-size:11px">('+sign+mk.diff.toFixed(1)+'pp vs 2025年)</span>';
+            }
+            s += p.marker + p.seriesName + ': <b>' + p.value + '%</b>' + diffStr + '<br/>';
+          });
+          if(isLatest) s += '<span style="font-size:10px;color:#888">※2026年1Qと2025年通年の比較</span>';
+          return s;
+        }
+      },
+      legend: baseLegend({type:'scroll', top:8}),
+      grid: Object.assign(baseGrid(),{bottom:70}),
+      xAxis: baseXAxis(labels),
+      yAxis: Object.assign(baseYAxis('%'),{max:100, axisLabel:{formatter:'{value}%'}}),
+      series: makers.map(function(m){
+        return {
+          name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
+          itemStyle:{
+            color: function(p){
+              if(p.dataIndex === latestIdx){
+                return { type:'linear', x:0,y:0,x2:0,y2:1,
+                  colorStops:[{offset:0,color:m.color},{offset:1,color:m.color+'cc'}] };
+              }
+              return m.color;
+            }
+          },
+          data: m.data, label:{show:false}
+        };
+      })
+    });
+  }
+
+  // ============================================================
+  //  9. 企業数推移
+  //  出所: 画像⑦ 配套動力電池企業数
+  //  月別データ 2021〜2026年
+  // ============================================================
+  function renderCompanies(){
+    var ec = initOrGet('ec-bat-companies'); if(!ec) return;
+
+    var months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+    // 画像⑦より（社数）
+    var years = {
+      '2021年': [36,39,42,40,40,39,45,38,39,39,43,47],
+      '2022年': [35,35,39,34,37,37,37,37,36,40,42,41],
+      '2023年': [35,39,39,36,35,43,36,33,33,35,37,43],
+      '2024年': [38,35,39,40,38,40,39,37,38,39,38,41],
+      '2025年': [36,38,41,40,37,37,33,33,35,33,36,40],
+      '2026年': [33,30,null,null,null,null,null,null,null,null,null,null]
+    };
+
+    // 前年比（2026年各月 vs 2025年同月）
+    var yoy = {
+      '2026年': { 1: 33-36, 2: 30-38 }  // 1月: -3社, 2月: -8社
+    };
+
+    var colors = ['#BDC3C7','#95A5A6','#7F8C8D','#5D6D7E','#2E75B6','#E74C3C'];
+    var yrKeys = Object.keys(years);
+
+    ec.setOption({
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+        textStyle:{fontFamily:FONT,fontSize:12},
+        formatter: function(params){
+          var s = '<b>' + params[0].axisValue + '</b><br/>';
+          params.forEach(function(p){
+            if(p.value == null) return;
+            var isLatestYear = (p.seriesName === '2026年');
+            var diffStr = '';
+            if(isLatestYear){
+              var mIdx = months.indexOf(params[0].axisValue) + 1;
+              var d = yoy['2026年'][mIdx];
+              if(d !== undefined){
+                var sign = d >= 0 ? '+' : '';
+                var cls  = d >= 0 ? 'color:#e74c3c' : 'color:#3498db';
+                diffStr = ' <span style="'+cls+';font-size:11px">(前年同月比: '+sign+d+'社)</span>';
+              }
+            }
+            s += p.marker + p.seriesName + ': <b>' + p.value + '社</b>' + diffStr + '<br/>';
+          });
+          return s;
+        }
+      },
+      legend: baseLegend({type:'scroll', top:8}),
+      grid: Object.assign(baseGrid(),{bottom:60}),
+      xAxis: baseXAxis(months),
+      yAxis: Object.assign(baseYAxis('社'),{min:25, max:50}),
+      series: yrKeys.map(function(yr, i){
+        var isLatest = (yr === '2026年');
+        return {
+          name: yr, type:'line', emphasis:{focus:'series'},
+          data: years[yr],
+          smooth: false,
+          connectNulls: false,
+          symbol: 'circle', symbolSize: isLatest ? 8 : 5,
+          lineStyle:{ width: isLatest ? 3 : 1.5, color: colors[i], type: isLatest ? 'solid' : 'solid' },
+          itemStyle:{ color: colors[i] },
+          label: isLatest ? {
+            show: true, position:'top', fontSize:11, fontWeight:'bold',
+            formatter: function(p){ return p.value != null ? p.value+'社' : ''; }
+          } : { show:false }
+        };
+      })
+    });
+  }
+
   // ---------- 公開 API ----------
   var BAT_RENDER = {
     'bat-production':     function(){ renderProduction(); },
     'bat-install':        function(){ renderInstall(); renderInstallRate(); renderTypeRate(); renderGrowth(); },
     'bat-lfp-nmc':        function(){ renderLfpShare(); renderNmcShare(); },
     'bat-vehicle-demand': function(){ renderVehicleDemand(); },
-    'bat-energy-density': function(){ renderEnergyDensity(); }
+    'bat-energy-density': function(){ renderEnergyDensity(); },
+    'bat-share-total':    function(){ renderShareTotal(); },
+    'bat-share-lfp':      function(){ renderShareLfp(); },
+    'bat-share-nmc':      function(){ renderShareNmc(); },
+    'bat-companies':      function(){ renderCompanies(); }
   };
 
   window.batRender = function(id) {
@@ -11602,8 +11903,6 @@ window.discShowPane = discShowPane;
 
 })();
 </script>
-
-
 
 
 <script>

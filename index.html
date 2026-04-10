@@ -6426,11 +6426,16 @@ function initCommercial() {
   initEC('ec-bus-type', chart => {
     const t = gt();
     const opt = baseOpt(t);
-    opt.xAxis.data = CD.labels_all;
+    // 客車細分類別は2025年4月以降のみデータあり
+    const busStart = CD.labels_all.indexOf('2025年4月');
+    const busLabels = busStart >= 0 ? CD.labels_all.slice(busStart) : CD.labels_all;
+    const busLarge  = busStart >= 0 ? CD.bus_large.slice(busStart)  : CD.bus_large;
+    const busLight  = busStart >= 0 ? CD.bus_light.slice(busStart)  : CD.bus_light;
+    opt.xAxis.data = busLabels;
     opt.series = [
-      { name:'大中型客車', type:'line', data:CD.bus_large, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[4]}, itemStyle:{color:PAL[4]},
+      { name:'大中型客車', type:'line', data:busLarge, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[4]}, itemStyle:{color:PAL[4]},
         } ,
-      { name:'軽型客車', type:'line', data:CD.bus_light, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[5]}, itemStyle:{color:PAL[5]},
+      { name:'軽型客車', type:'line', data:busLight, symbol:'circle', symbolSize:6, lineStyle:{width:2,color:PAL[5]}, itemStyle:{color:PAL[5]},
         } ,
     ];
     chart.setOption(opt);
@@ -6439,9 +6444,13 @@ function initCommercial() {
   initEC('ec-lng', chart => {
     const t = gt();
     const opt = baseOpt(t);
-    opt.xAxis.data = CD.labels_all;
+    // 天然ガス車販売は2025年2月以降のみデータあり
+    const lngStart  = CD.labels_all.indexOf('2025年2月');
+    const lngLabels = lngStart >= 0 ? CD.labels_all.slice(lngStart) : CD.labels_all;
+    const lngData   = lngStart >= 0 ? CD.lng_sales.slice(lngStart)  : CD.lng_sales;
+    opt.xAxis.data = lngLabels;
     opt.series = [{
-      name:'天然ガス車販売', type:'bar', data:CD.lng_sales,
+      name:'天然ガス車販売', type:'bar', data:lngData,
       itemStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'#59a14f'},{offset:1,color:'#2d6a4f'}])}
     }];
     chart.setOption(opt);

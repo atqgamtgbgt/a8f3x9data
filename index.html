@@ -5767,8 +5767,8 @@ function parseSingleSheet(sheet) {
 }
 
 // ---- Excel fetch & 全データ組み立て ----
-const CAAM_EXCEL_PATH    = `${RAW_BASE}output/market/${encodeURIComponent('CAAM_2026年産販月報_v34.xlsx')}`;
-const CAAM_EXCEL_PATH_EN = `${RAW_BASE}output/market/caam_monthly.xlsx`;  // 英語名フォールバック
+const CAAM_EXCEL_PATH    = `${RAW_BASE}output/source/${encodeURIComponent('CAAM_2026年産販月報_v34.xlsx')}`;
+const CAAM_EXCEL_PATH_EN = `${RAW_BASE}output/source/caam_monthly.xlsx`;  // 英語名フォールバック
 
 async function loadCaamExcel() {
   const loadingEl = document.getElementById('caam-loading');
@@ -5784,7 +5784,7 @@ async function loadCaamExcel() {
       console.warn('日本語ファイル名でのfetch失敗、英語名フォールバックを試みます:', res.status);
       res = await fetch(CAAM_EXCEL_PATH_EN + `?v=${Date.now()}`, { cache: 'no-store' });
     }
-    if (!res.ok) throw new Error(`HTTP ${res.status} — GitHubの output/market/ にExcelファイル（日本語名 or caam_monthly.xlsx）が配置されているか確認してください`);
+    if (!res.ok) throw new Error(`HTTP ${res.status} — GitHubの output/source/ にExcelファイル（日本語名 or caam_monthly.xlsx）が配置されているか確認してください`);
     const buf = await res.arrayBuffer();
     const wb  = XLSX.read(buf, { type: 'array' });
 
@@ -5838,7 +5838,7 @@ async function loadCaamExcel() {
     if (pillsEl)   pillsEl.style.display   = '';
     if (contentEl) contentEl.style.display = '';
     if (loadingEl) {
-      loadingEl.innerHTML = `<div class="text-danger p-3 text-center">⚠️ データ読み込み失敗: ${err.message}<br><small class="text-muted">GitHubの output/market/ にExcelファイルが配置されているか確認してください。</small></div>`;
+      loadingEl.innerHTML = `<div class="text-danger p-3 text-center">⚠️ データ読み込み失敗: ${err.message}<br><small class="text-muted">GitHubの output/source/ にExcelファイルが配置されているか確認してください。</small></div>`;
       loadingEl.style.display = 'flex';
     }
   }
@@ -7614,7 +7614,7 @@ window.addEventListener('afterprint', function() {
 // =============================================
 // 崔東树（輸出分析）タブ — 全シート対応
 // =============================================
-const CDS_EXCEL_PATH = `${RAW_BASE}output/market/${encodeURIComponent('中国自動車輸出市場分析_完全版v9.xlsx')}`;
+const CDS_EXCEL_PATH = `${RAW_BASE}output/source/${encodeURIComponent('中国自動車輸出市場分析_完全版v9.xlsx')}`;
 let CDS_LOADED = false;
 let CDS = {};          // 全データ格納
 const CDS_EC = {};
@@ -7684,7 +7684,7 @@ async function loadCdsExcel() {
   const contEl = document.getElementById('cdsPillsContent');
   try {
     const res = await fetch(CDS_EXCEL_PATH + `?v=${Date.now()}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error(`HTTP ${res.status} — GitHubのoutput/market/にExcelファイルが配置されているか確認してください`);
+    if (!res.ok) throw new Error(`HTTP ${res.status} — GitHubのoutput/source/にExcelファイルが配置されているか確認してください`);
     const buf = await res.arrayBuffer();
     const wb  = XLSX.read(buf, { type: 'array' });
     const S   = name => XLSX.utils.sheet_to_json(wb.Sheets[name], { header: 1, defval: null });
@@ -7843,7 +7843,7 @@ async function loadCdsExcel() {
     console.log('✅ CDS Excel loaded');
   } catch(err) {
     console.error('CDS Excel error:', err);
-    if (loadEl) { loadEl.innerHTML = `<div class="text-danger p-3 text-center">⚠️ データ読み込み失敗: ${err.message}<br><small class="text-muted">GitHubのoutput/market/に「中国自動車輸出市場分析_完全版v9.xlsx」が配置されているか確認してください。</small></div>`; loadEl.style.display='flex'; }
+    if (loadEl) { loadEl.innerHTML = `<div class="text-danger p-3 text-center">⚠️ データ読み込み失敗: ${err.message}<br><small class="text-muted">GitHubのoutput/source/に「中国自動車輸出市場分析_完全版v9.xlsx」が配置されているか確認してください。</small></div>`; loadEl.style.display='flex'; }
   }
 }
 

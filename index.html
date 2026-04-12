@@ -2966,6 +2966,9 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- 中タブ切替ボタン -->
             <div id="cds-mid-tabs" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;padding-bottom:10px">
+              <button id="cds-mid-btn-zenntai" class="cds-mid-tab" onclick="cdsSetMidTab('zenntai')">
+                📋 全体
+              </button>
               <button id="cds-mid-btn-export" class="cds-mid-tab active" onclick="cdsSetMidTab('export')">
                 🚢 輸出分析
               </button>
@@ -3001,6 +3004,26 @@ body.tray-open { padding-bottom: 105px; }
             <hr style="border:none;border-top:2px solid #94a3b8;margin:2px 0 14px;">
 
             <!-- 中タブA: 輸出分析 サブナビ -->
+            <!-- 中タブ全体: サブナビ -->
+            <div id="cds-sub-zenntai" class="cds-sub-nav" style="display:none">
+              <div class="cds-gc" style="display:flex;flex-wrap:wrap;gap:5px;padding:6px 0">
+                <span class="cds-gc-label">📊 主要指標 </span>
+                <button class="nav-link active" onclick="ztGo('zt-summary');ztActBtn(this)">📊 月次4指標</button>
+                <button class="nav-link" onclick="ztGo('zt-retail-trend');ztActBtn(this)">🛒 零售 年比較</button>
+                <button class="nav-link" onclick="ztGo('zt-wholesale-trend');ztActBtn(this)">🏭 卸売 年比較</button>
+                <button class="nav-link" onclick="ztGo('zt-export-trend');ztActBtn(this)">🚢 輸出 年比較</button>
+                <span class="cds-gc-label">🔋 NEV </span>
+                <button class="nav-link" onclick="ztGo('zt-nev-penetration');ztActBtn(this)">🔋 NEV浸透率</button>
+                <button class="nav-link" onclick="ztGo('zt-nev-brand');ztActBtn(this)">🏷️ ブランド別浸透率</button>
+                <span class="cds-gc-label">🚗 ブランド別 </span>
+                <button class="nav-link" onclick="ztGo('zt-brand-wholesale');ztActBtn(this)">🚗 豪华・合資・自主 卸売</button>
+                <button class="nav-link" onclick="ztGo('zt-nation-share');ztActBtn(this)">🌐 国籍別シェア</button>
+                <span class="cds-gc-label">💴 市場動向 </span>
+                <button class="nav-link" onclick="ztGo('zt-discount');ztActBtn(this)">💴 値引き率</button>
+                <button class="nav-link" onclick="ztGo('zt-inventory');ztActBtn(this)">📦 在庫増減</button>
+              </div>
+            </div>
+
             <div id="cds-sub-export" class="cds-sub-nav">
               <div class="cds-nav-compact">
 
@@ -3290,6 +3313,78 @@ body.tray-open { padding-bottom: 105px; }
           <!-- ========== コンテンツペイン ========== -->
           <div id="cdsPillsContent" style="display:none">
 
+
+            <!-- ===== 全体 ペイン群 ===== -->
+            <div class="cds-pane" id="zt-summary">
+              <div class="chart-card">
+                <div class="chart-title">月次 零售・卸売・生産・輸出（万台）</div>
+                <div class="chart-subtitle">概要シート 2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-summary" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-retail-trend">
+              <div class="chart-card">
+                <div class="chart-title">年度別 月次零售推移（万台）</div>
+                <div class="chart-subtitle">年度別トレンドシート 2022〜2026年　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-retail-trend" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-wholesale-trend">
+              <div class="chart-card">
+                <div class="chart-title">年度別 月次卸売推移（万台）</div>
+                <div class="chart-subtitle">年度別トレンドシート 2023〜2026年　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-wholesale-trend" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-export-trend">
+              <div class="chart-card">
+                <div class="chart-title">年度別 月次輸出推移（万台）</div>
+                <div class="chart-subtitle">年度別トレンドシート 2022〜2026年　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-export-trend" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-nev-penetration">
+              <div class="chart-card">
+                <div class="chart-title">NEV浸透率 月次推移（%）</div>
+                <div class="chart-subtitle">NEV浸透率シート 卸売・零売　2023〜2026年　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-nev-penetration" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-nev-brand">
+              <div class="chart-card">
+                <div class="chart-title">NEV浸透率 ブランド別（豪华・合資・自主）月次推移（%）</div>
+                <div class="chart-subtitle">NEVブランド別浸透率シート 卸売浸透率　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-nev-brand" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-brand-wholesale">
+              <div class="chart-card">
+                <div class="chart-title">国籍別 ブランド層別 卸売 月次推移（万台）</div>
+                <div class="chart-subtitle">国籍別ブランド別シート 豪华・合資・自主　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-brand-wholesale" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-nation-share">
+              <div class="chart-card">
+                <div class="chart-title">国籍別 卸売シェア推移（%）</div>
+                <div class="chart-subtitle">国籍別ブランド別シート 自主・独・日・米・韓・欧　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-nation-share" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-discount">
+              <div class="chart-card">
+                <div class="chart-title">動力種別 値引き率 月次推移（%）</div>
+                <div class="chart-subtitle">促销データシート 2025年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-discount" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="zt-inventory">
+              <div class="chart-card">
+                <div class="chart-title">メーカー在庫・チャネル在庫 月次増減（万台）</div>
+                <div class="chart-subtitle">在庫変化シート 2023〜2026年　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-inventory" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
 
             <!-- ===== 輸入分析 ペイン群 ===== -->
             <div class="cds-pane" id="imp-trend">
@@ -8459,6 +8554,7 @@ function cdsSetMidTab(tab) {
 
   // ── 引用元リンク切替 ──
   var CDS_SOURCE_URLS = {
+    'zenntai':    'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA',
     'export':     'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA',
     'jishuhaiex': 'https://mp.weixin.qq.com/s/I9noQ4j76sBTSDcJoZ5cfg',
     'import':     'https://mp.weixin.qq.com/s/eZZK8I86zaTzH0604cCYpw',
@@ -8480,6 +8576,7 @@ function cdsSetMidTab(tab) {
   if (btn) btn.classList.add('active');
 
   // サブナビ
+  document.getElementById('cds-sub-zenntai').style.display     = (tab === 'zenntai')     ? '' : 'none';
   document.getElementById('cds-sub-export').style.display      = (tab === 'export')      ? '' : 'none';
   document.getElementById('cds-sub-import').style.display      = (tab === 'import')      ? '' : 'none';
   document.getElementById('cds-sub-china').style.display       = (tab === 'china')       ? '' : 'none';
@@ -8491,7 +8588,17 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-jishuhaiex').style.display  = (tab === 'jishuhaiex')  ? '' : 'none';
   document.getElementById('cds-sub-price').style.display       = (tab === 'price')       ? '' : 'none';
 
-  if (tab === 'jishuhaiex') {
+  if (tab === 'zenntai') {
+    var pillElZt = document.getElementById('cdsPills');
+    var contElZt = document.getElementById('cdsPillsContent');
+    if (pillElZt) pillElZt.setAttribute('style', 'display:block');
+    if (contElZt) contElZt.setAttribute('style', 'display:block');
+    ztShowPane('zt-summary');
+    document.querySelectorAll('#cds-sub-zenntai .nav-link').forEach(function(b){
+      b.classList.toggle('active', b.textContent.indexOf('月次4指標') >= 0);
+    });
+    setTimeout(ztInitCharts, 80);
+  } else if (tab === 'jishuhaiex') {
     var jhTarget = window.JH_CURRENT_ID || 'jh-monthly-trend';
     jhShowPane(jhTarget);
     document.querySelectorAll('#cds-sub-jishuhaiex [data-cds-jh-target]').forEach(function(b){
@@ -13486,6 +13593,389 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
   });
 
 })(); // end price module
+</script>
+
+<script>
+// ========== 全体（市場総括） タブ ==========
+(function(){
+
+var ZT_EC = {};
+var ZT_INITIALIZED = false;
+
+// ── アクティブボタン切替 ──
+window.ztActBtn = function(btn){
+  document.querySelectorAll('#cds-sub-zenntai .nav-link').forEach(function(b){ b.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+};
+
+// ── ペイン切替 ──
+window.ztShowPane = function(id) {
+  document.querySelectorAll('.cds-pane[id^="zt-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+  var el = document.getElementById(id);
+  if (el) el.classList.add('cds-active');
+};
+
+// ── ヘルパー（既存グローバルと同一パターン） ──
+var FONT = 'Noto Sans JP, Helvetica Neue, Arial, sans-serif';
+var MONTHS = ['3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
+var MONTHS_LABEL = ['25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];
+var MONTHS_TREND = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+
+function leg(opt){ return Object.assign({top:8,right:12,textStyle:{fontFamily:FONT,fontSize:11},itemWidth:14,itemHeight:10}, opt||{}); }
+function grid(opt){ return Object.assign({top:55,bottom:55,left:60,right:20,containLabel:false}, opt||{}); }
+function yVal(unit,opt){ return Object.assign({type:'value',name:unit,nameTextStyle:{fontFamily:FONT,fontSize:11,color:'#888'},axisLabel:{fontFamily:FONT,fontSize:11,color:'#555'},splitLine:{lineStyle:{color:'#f0f0f0'}},axisLine:{show:true,lineStyle:{color:'#ddd'}}}, opt||{}); }
+function xCat(data){ return {type:'category',data:data,axisLabel:{fontFamily:FONT,fontSize:11,color:'#555',interval:0},axisLine:{lineStyle:{color:'#ddd'}}}; }
+
+var PAL = ['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#06b6d4','#ec4899','#84cc16'];
+
+function makeEc(id){
+  var dom = document.getElementById(id);
+  if (!dom) return null;
+  if (ZT_EC[id]) { try{ ZT_EC[id].dispose(); }catch(e){} }
+  ZT_EC[id] = echarts.init(dom);
+  return ZT_EC[id];
+}
+
+// ── ① 月次 零售・卸売・生産・輸出 ──
+function renderSummary(){
+  var ec = makeEc('ec-zt-summary'); if(!ec) return;
+  var months = MONTHS_LABEL;
+  ec.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'cross'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){ return x.marker+x.seriesName+': <b>'+x.value+'万台</b>'; }).join('<br>'); }},
+    legend: leg({data:['零售（小売）','卸売（出荷）','生産','輸出']}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(months),
+    yAxis: [
+      yVal('万台',{min:0,max:320}),
+      Object.assign(yVal('万台',{min:0,max:80}),{splitLine:{show:false}})
+    ],
+    series:[
+      {name:'零售（小売）', type:'line', yAxisIndex:0, color:PAL[0], symbol:'circle', symbolSize:5,
+       data:[194,176,194,208,183,200,224,224,222,230,154.8,103.4,164.8], lineStyle:{width:2}},
+      {name:'卸売（出荷）', type:'line', yAxisIndex:0, color:PAL[1], symbol:'circle', symbolSize:5,
+       data:[241,219,232,248,222,246,280,293,300,279,197,152,237.8], lineStyle:{width:2}},
+      {name:'生産', type:'line', yAxisIndex:0, color:PAL[2], symbol:'diamond', symbolSize:5,
+       data:[247,223,228,241,221,241,284,295,309,279,201,137,236], lineStyle:{width:2,type:'dashed'}},
+      {name:'輸出', type:'bar', yAxisIndex:1, color:'rgba(245,158,11,0.6)', barMaxWidth:20,
+       data:[39.1,42.3,44.8,47.2,47.5,49.9,52.8,56.8,60,58.8,57.6,55.5,69]}
+    ]
+  });
+}
+
+// ── ② 年度別 月次零售推移 ──
+function renderRetailTrend(){
+  var ec = makeEc('ec-zt-retail-trend'); if(!ec) return;
+  var years = {
+    '2022年': [207,127,158,104,135,190,180,187,188,194,183,217],
+    '2023年': [129,136,193,162,175,188,177,191,190,205,208,234],
+    '2024年': [203,139,159,155,174,190,174,170,192,247,241,265],
+    '2025年': [179,137,194,176,194,208,183,200,224,224,222,230],
+    '2026年': [154,103,165,null,null,null,null,null,null,null,null,null]
+  };
+  var colors = ['#94a3b8','#64748b','#3b82f6','#ef4444','#f59e0b'];
+  var series = Object.keys(years).map(function(yr,i){
+    return {name:yr, type:'line', color:colors[i], symbol:'circle', symbolSize:4,
+      data:years[yr], connectNulls:false, lineStyle:{width:yr==='2025年'?2.5:1.5},
+      emphasis:{lineStyle:{width:3}}};
+  });
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+MONTHS_TREND[p[0].dataIndex]+'</b><br>'+p.filter(function(x){return x.value!=null;}).map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>'); }},
+    legend: leg({data:Object.keys(years)}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(MONTHS_TREND),
+    yAxis: yVal('万台',{min:80,max:300}),
+    series: series
+  });
+}
+
+// ── ③ 年度別 月次卸売推移 ──
+function renderWholesaleTrend(){
+  var ec = makeEc('ec-zt-wholesale-trend'); if(!ec) return;
+  var years = {
+    '2023年': [146,176,199,178,202,222,206,224,247,256,255,271],
+    '2024年': [210,130,200,204,203,214,197,214,247,271,294,311],
+    '2025年': [211,176,241,219,232,248,222,246,280,293,300,279],
+    '2026年': [197,152,238,null,null,null,null,null,null,null,null,null]
+  };
+  var colors = ['#64748b','#3b82f6','#ef4444','#f59e0b'];
+  var series = Object.keys(years).map(function(yr,i){
+    return {name:yr, type:'line', color:colors[i], symbol:'circle', symbolSize:4,
+      data:years[yr], connectNulls:false, lineStyle:{width:yr==='2025年'?2.5:1.5}};
+  });
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+MONTHS_TREND[p[0].dataIndex]+'</b><br>'+p.filter(function(x){return x.value!=null;}).map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>'); }},
+    legend: leg({data:Object.keys(years)}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(MONTHS_TREND),
+    yAxis: yVal('万台',{min:120,max:330}),
+    series: series
+  });
+}
+
+// ── ④ 年度別 月次輸出推移 ──
+function renderExportTrend(){
+  var ec = makeEc('ec-zt-export-trend'); if(!ec) return;
+  var years = {
+    '2022年': [17,14,10,12,19,19,26,25,24,25,25,27],
+    '2023年': [24,24,29,32,30,30,32,33,35,39,38,39],
+    '2024年': [38,31,42,39,39,38,38,37,43,44,44,41],
+    '2025年': [38,36,39,42,45,47,48,50,53,57,60,59],
+    '2026年': [58,56,69,null,null,null,null,null,null,null,null,null]
+  };
+  var colors = ['#94a3b8','#64748b','#3b82f6','#ef4444','#f59e0b'];
+  var series = Object.keys(years).map(function(yr,i){
+    return {name:yr, type:'line', color:colors[i], symbol:'circle', symbolSize:4,
+      data:years[yr], connectNulls:false, lineStyle:{width:yr==='2025年'?2.5:1.5}};
+  });
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+MONTHS_TREND[p[0].dataIndex]+'</b><br>'+p.filter(function(x){return x.value!=null;}).map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>'); }},
+    legend: leg({data:Object.keys(years)}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(MONTHS_TREND),
+    yAxis: yVal('万台',{min:0,max:80}),
+    series: series
+  });
+}
+
+// ── ⑤ NEV浸透率 月次推移 ──
+function renderNevPenetration(){
+  var ec = makeEc('ec-zt-nev-penetration'); if(!ec) return;
+  // 卸売浸透率
+  var wh = {
+    '2023年卸売': [26.8,30.7,31.1,34.0,33.9,34.0,35.9,35.6,33.9,36.0,37.7,40.7],
+    '2024年卸売': [33.2,35.0,37.6,40.8,44.6,45.2,48.3,48.9,49.1,50.2,56.9,49.2],
+    '2025年卸売': [42.5,47.0,46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.9,56.0],
+    '2026年卸売': [44.3,48,48,null,null,null,null,null,null,null,null,null]
+  };
+  var rt = {
+    '2023年零売': [26,32,34,32,33,35,36,37,37,38,40,40],
+    '2024年零売': [33,35,42,44,47,49,51,54,53,53,59.4,49.4],
+    '2025年零売': [41.5,49.3,51.1,51.5,53.0,53.3,54.0,55.2,57.8,57.2,59.3,59.1],
+    '2026年零売': [38.8,45,51,null,null,null,null,null,null,null,null,null]
+  };
+  var colorsWh = ['#94a3b8','#3b82f6','#ef4444','#f59e0b'];
+  var colorsRt = ['#cbd5e1','#93c5fd','#fca5a5','#fde68a'];
+  var series = [];
+  Object.keys(wh).forEach(function(yr,i){
+    series.push({name:yr,type:'line',color:colorsWh[i],symbol:'circle',symbolSize:4,data:wh[yr],connectNulls:false,lineStyle:{width:2}});
+  });
+  Object.keys(rt).forEach(function(yr,i){
+    series.push({name:yr,type:'line',color:colorsRt[i],symbol:'triangle',symbolSize:4,data:rt[yr],connectNulls:false,lineStyle:{width:1.5,type:'dashed'}});
+  });
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+MONTHS_TREND[p[0].dataIndex]+'</b><br>'+p.filter(function(x){return x.value!=null;}).map(function(x){return x.marker+x.seriesName+': <b>'+x.value.toFixed(1)+'%</b>';}).join('<br>'); }},
+    legend: leg({data:series.map(function(s){return s.name;}),top:8,itemWidth:14}),
+    grid: grid({bottom:50,top:75,left:55,right:20}),
+    xAxis: xCat(MONTHS_TREND),
+    yAxis: yVal('%',{min:20,max:65}),
+    series: series
+  });
+}
+
+// ── ⑥ NEV浸透率 ブランド別 ──
+function renderNevBrand(){
+  var ec = makeEc('ec-zt-nev-brand'); if(!ec) return;
+  var months = MONTHS_LABEL;
+  var data = {
+    '豪华': [36.0,38.4,39.2,32.6,43.5,41.9,40.0,36.9,42.5,39.8,48.2,43.3,null],
+    '主流合資': [4.9,6.9,5.7,6.6,6.6,7.1,6.6,7.0,7.2,3.6,4.6,6.4,null],
+    '自主': [63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,null],
+    '総体': [46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.0,44.3,47.6,48.1,null]
+  };
+  // 最後の月(26.3)のデータは未掲載のためnull
+  var colors = ['#8b5cf6','#06b6d4','#ef4444','#3b82f6'];
+  var series = Object.keys(data).map(function(nm,i){
+    return {name:nm, type:'line', color:colors[i], symbol:'circle', symbolSize:5, data:data[nm], connectNulls:false, lineStyle:{width:2}};
+  });
+  // 26年1月のラベルにX表示（春節月）
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.filter(function(x){return x.value!=null;}).map(function(x){return x.marker+x.seriesName+': <b>'+x.value.toFixed(1)+'%</b>';}).join('<br>'); }},
+    legend: leg({data:Object.keys(data)}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(months),
+    yAxis: yVal('%',{min:0,max:85}),
+    series: series
+  });
+}
+
+// ── ⑦ 国籍別ブランド層別 卸売推移 ──
+function renderBrandWholesale(){
+  var ec = makeEc('ec-zt-brand-wholesale'); if(!ec) return;
+  var months = MONTHS_LABEL;
+  // 各月の豪华・合資・自主 卸売
+  var gouhua = [27.2,21.1,23.7,25.6,20.4,25.9,28.9,23.3,28,30.2,22.8,16.1,27.2];
+  var heizi  = [49.5,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58,57.4,42,28.3,49.5];
+  var ziZhu  = [161, 154.2,160.6,167, 157.8,172.1,197.5,214.2,214,191.2,132.6,107.4,161];
+  ec.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>')+'<br><b>合計: '+p.reduce(function(s,x){return s+x.value;},0).toFixed(1)+'万台</b>'; }},
+    legend: leg({data:['豪华','合資','自主']}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(months),
+    yAxis: yVal('万台',{min:0,max:320}),
+    series:[
+      {name:'豪华', type:'bar', stack:'s', color:'#8b5cf6', data:gouhua,
+        label:{show:false}},
+      {name:'合資', type:'bar', stack:'s', color:'#06b6d4', data:heizi},
+      {name:'自主', type:'bar', stack:'s', color:'#ef4444', data:ziZhu}
+    ]
+  });
+}
+
+// ── ⑧ 国籍別 卸売シェア推移 ──
+function renderNationShare(){
+  var ec = makeEc('ec-zt-nation-share'); if(!ec) return;
+  var months = MONTHS_LABEL;
+  // シェア：各月の国籍別卸売実績から計算 or 概要シートから
+  // 自主シェア: 概要シート 自主ブランド零售份额より（零売なので参考値）
+  // 卸売シェアは国籍別ブランド別シートより各月
+  var totals= [241,219,232,248,222,246,280,293,300,279,197,152,238];
+  var ziZhu = [161,154.2,160.6,167,157.8,172.1,197.5,214.2,214,191.2,132.6,107.4,161];
+  // 独系・日系・米系・韓系・欧系: 各月のデータ（国籍別シートより抽出）
+  var doku  = [27,24,30,35,26,30,34,31,33,33,28,17,29];
+  var nichi = [22,19,23,26,22,24,27,28,29,30,18,13,26];
+  var bei   = [15,13,13,15,11,15,16,14,17,18,14,11,16];
+  var kan   = [3,4,4,4,3,4,4,4,4,4,3,3,3];
+  var ou    = [3,3,2,2,2,2,2,2,2,3,2,1,2];
+
+  function pct(a,t){ return a.map(function(v,i){ return t[i]>0?+(v/t[i]*100).toFixed(1):0; }); }
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'%</b>';}).join('<br>'); }},
+    legend: leg({data:['自主','独系','日系','米系','韓系','欧系']}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(months),
+    yAxis: yVal('%',{min:0,max:100}),
+    series:[
+      {name:'自主', type:'bar',stack:'s',color:'#ef4444',data:pct(ziZhu,totals)},
+      {name:'独系', type:'bar',stack:'s',color:'#3b82f6',data:pct(doku,totals)},
+      {name:'日系', type:'bar',stack:'s',color:'#f59e0b',data:pct(nichi,totals)},
+      {name:'米系', type:'bar',stack:'s',color:'#10b981',data:pct(bei,totals)},
+      {name:'韓系', type:'bar',stack:'s',color:'#8b5cf6',data:pct(kan,totals)},
+      {name:'欧系', type:'bar',stack:'s',color:'#06b6d4',data:pct(ou,totals)}
+    ]
+  });
+}
+
+// ── ⑨ 値引き率 ──
+function renderDiscount(){
+  var ec = makeEc('ec-zt-discount'); if(!ec) return;
+  var months = ['25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];
+  ec.setOption({
+    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value.toFixed(1)+'%</b>';}).join('<br>'); }},
+    legend: leg({data:['常規（ICE）','混合動力（HEV）','PHEV','増程（EREV）','純電動（BEV）']}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(months),
+    yAxis: yVal('%',{min:0,max:28}),
+    series:[
+      {name:'常規（ICE）',  type:'line',color:'#64748b',symbol:'circle',symbolSize:4,lineStyle:{width:2},
+       data:[22.2,22.0,22.4,22.5,22.8,23.6,23.7,23.4,24.1,24.3,24.3,23.8,23.9,23.7,22.9]},
+      {name:'混合動力（HEV）',type:'line',color:'#10b981',symbol:'circle',symbolSize:4,lineStyle:{width:2},
+       data:[17.4,17.6,17.9,18.1,18.4,19.3,19.3,19.6,20.4,20.2,19.3,19.7,20.2,20.3,19.9]},
+      {name:'PHEV',        type:'line',color:'#3b82f6',symbol:'circle',symbolSize:4,lineStyle:{width:2},
+       data:[8.8,10.4,10.7,8.3,9.7,9.8,9.6,10.3,11.0,11.3,10.9,10.6,11.3,11.2,10.6]},
+      {name:'増程（EREV）', type:'line',color:'#f59e0b',symbol:'diamond',symbolSize:4,lineStyle:{width:1.5,type:'dashed'},
+       data:[3.5,4.9,6.4,6.5,5.5,5.3,5.3,5.8,6.2,5.9,7.8,7.6,7.8,8.0,9.3]},
+      {name:'純電動（BEV）',type:'line',color:'#ef4444',symbol:'circle',symbolSize:4,lineStyle:{width:2},
+       data:[9.4,10.8,11.7,8.8,10.5,9.8,10.0,9.6,10.8,10.0,10.2,10.5,10.2,10.6,11.1]}
+    ]
+  });
+}
+
+// ── ⑩ 在庫増減 ──
+function renderInventory(){
+  var ec = makeEc('ec-zt-inventory'); if(!ec) return;
+  var mkr23=[-10,5,9,-5,-2,-4,3,0,-1,1,10,-6];
+  var mkr24=[-7,-7,1,3,-3,-3,2,2,-7,-8,9,-14];
+  var mkr25=[-1,-3,7,3,-4,-10,0,-3,5,14,9,0];
+  var mkr26=[3,-15,-1];
+  var ch23=[-8,-2,11,-15,-4,5,-1,-2,8,3,10,1];
+  var ch24=[-30,-9,9,1,-5,1,-13,-18,-5,2,11,3];
+  var ch25=[-7,3,8,-7,-7,-7,-8,-3,2,12,17,-6];
+  var ch26=[-15,-7,4];
+  // 連結して2023年1月〜2026年3月（39ヶ月）の時系列
+  var labels=[];
+  [[2023,mkr23.length],[2024,mkr24.length],[2025,mkr25.length],[2026,mkr26.length]].forEach(function(p){
+    for(var m=1;m<=p[1];m++) labels.push(p[0]+'.'+(m<10?'0':'')+m);
+  });
+  var mData = mkr23.concat(mkr24).concat(mkr25).concat(mkr26);
+  var cData = ch23.concat(ch24).concat(ch25).concat(ch26);
+  ec.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
+      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+(x.value>=0?'+':'')+x.value+'万台</b>';}).join('<br>'); }},
+    legend: leg({data:['メーカー在庫増減','チャネル在庫増減']}),
+    grid: grid({bottom:65,top:55,left:55,right:20}),
+    xAxis: {type:'category',data:labels,axisLabel:{fontFamily:FONT,fontSize:9,color:'#555',rotate:45,interval:1},axisLine:{lineStyle:{color:'#ddd'}}},
+    yAxis: yVal('万台',{min:-35,max:20}),
+    series:[
+      {name:'メーカー在庫増減', type:'bar', barMaxWidth:14, color:'#3b82f6',
+        itemStyle:{color:function(p){ return p.value>=0?'#3b82f6':'#f87171'; }},
+        data:mData},
+      {name:'チャネル在庫増減', type:'bar', barMaxWidth:14, color:'#10b981',
+        itemStyle:{color:function(p){ return p.value>=0?'#10b981':'#fbbf24'; }},
+        data:cData}
+    ],
+    markLine:{data:[{yAxis:0}]}
+  });
+}
+
+// ── 全グラフ初期化（初回のみ） ──
+window.ztInitCharts = function(){
+  if (ZT_INITIALIZED) {
+    // resize only
+    Object.keys(ZT_EC).forEach(function(id){ try{ ZT_EC[id].resize(); }catch(e){} });
+    return;
+  }
+  ZT_INITIALIZED = true;
+  renderSummary();
+  renderRetailTrend();
+  renderWholesaleTrend();
+  renderExportTrend();
+  renderNevPenetration();
+  renderNevBrand();
+  renderBrandWholesale();
+  renderNationShare();
+  renderDiscount();
+  renderInventory();
+};
+
+// ── サブナビ切替（全体タブ内ナビはHTMLボタンで制御） ──
+// 全体タブ用ペイン切替
+window.ztGo = function(id){
+  ztShowPane(id);
+  setTimeout(function(){
+    var fn = {
+      'zt-summary': renderSummary,
+      'zt-retail-trend': renderRetailTrend,
+      'zt-wholesale-trend': renderWholesaleTrend,
+      'zt-export-trend': renderExportTrend,
+      'zt-nev-penetration': renderNevPenetration,
+      'zt-nev-brand': renderNevBrand,
+      'zt-brand-wholesale': renderBrandWholesale,
+      'zt-nation-share': renderNationShare,
+      'zt-discount': renderDiscount,
+      'zt-inventory': renderInventory
+    }[id];
+    if (fn) fn();
+    setTimeout(function(){
+      var ec = ZT_EC['ec-'+id];
+      if (ec) { try{ ec.resize(); }catch(e){} }
+    }, 60);
+  }, 60);
+};
+
+window.addEventListener('resize', function(){
+  Object.keys(ZT_EC).forEach(function(id){ try{ ZT_EC[id].resize(); }catch(e){} });
+});
+
+})(); // end zenntai module
 </script>
   <div class="print-footer container">
     中国自動車販売ランキングや関連データ &nbsp;|&nbsp; 非公式・個人作成 &nbsp;|&nbsp; 印刷日: <span id="print-date"></span>

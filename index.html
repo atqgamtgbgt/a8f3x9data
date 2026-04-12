@@ -3006,21 +3006,42 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 中タブA: 輸出分析 サブナビ -->
             <!-- 中タブ全体: サブナビ -->
             <div id="cds-sub-zenntai" class="cds-sub-nav" style="display:none">
-              <div class="cds-gc" style="display:flex;flex-wrap:wrap;gap:5px;padding:6px 0">
-                <span class="cds-gc-label">📊 主要指標 </span>
-                <button class="nav-link active" onclick="ztGo('zt-summary');ztActBtn(this)">📊 月次4指標</button>
-                <button class="nav-link" onclick="ztGo('zt-retail-trend');ztActBtn(this)">🛒 零售 年比較</button>
-                <button class="nav-link" onclick="ztGo('zt-wholesale-trend');ztActBtn(this)">🏭 卸売 年比較</button>
-                <button class="nav-link" onclick="ztGo('zt-export-trend');ztActBtn(this)">🚢 輸出 年比較</button>
-                <span class="cds-gc-label">🔋 NEV </span>
-                <button class="nav-link" onclick="ztGo('zt-nev-penetration');ztActBtn(this)">🔋 NEV浸透率</button>
-                <button class="nav-link" onclick="ztGo('zt-nev-brand');ztActBtn(this)">🏷️ ブランド別浸透率</button>
-                <span class="cds-gc-label">🚗 ブランド別 </span>
-                <button class="nav-link" onclick="ztGo('zt-brand-wholesale');ztActBtn(this)">🚗 豪华・合資・自主 卸売</button>
-                <button class="nav-link" onclick="ztGo('zt-nation-share');ztActBtn(this)">🌐 国籍別シェア</button>
-                <span class="cds-gc-label">💴 市場動向 </span>
-                <button class="nav-link" onclick="ztGo('zt-discount');ztActBtn(this)">💴 値引き率</button>
-                <button class="nav-link" onclick="ztGo('zt-inventory');ztActBtn(this)">📦 在庫増減</button>
+              <div class="cds-nav-compact">
+
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📊 主要指標 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link active" onclick="ztGo('zt-summary');ztActBtn(this)">📊 月次4指標</button>
+                    <button class="nav-link" onclick="ztGo('zt-retail-trend');ztActBtn(this)">🛒 零售 年比較</button>
+                    <button class="nav-link" onclick="ztGo('zt-wholesale-trend');ztActBtn(this)">🏭 卸売 年比較</button>
+                    <button class="nav-link" onclick="ztGo('zt-export-trend');ztActBtn(this)">🚢 輸出 年比較</button>
+                  </div>
+                </div>
+
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🔋 NEV </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" onclick="ztGo('zt-nev-penetration');ztActBtn(this)">🔋 NEV浸透率</button>
+                    <button class="nav-link" onclick="ztGo('zt-nev-brand');ztActBtn(this)">🏷️ ブランド別浸透率</button>
+                  </div>
+                </div>
+
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🚗 ブランド別 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" onclick="ztGo('zt-brand-wholesale');ztActBtn(this)">🚗 豪华・合資・自主 卸売</button>
+                    <button class="nav-link" onclick="ztGo('zt-nation-share');ztActBtn(this)">🌐 国籍別シェア</button>
+                  </div>
+                </div>
+
+                <div class="cds-gc">
+                  <span class="cds-gc-label">💴 市場動向 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" onclick="ztGo('zt-discount');ztActBtn(this)">💴 値引き率</button>
+                    <button class="nav-link" onclick="ztGo('zt-inventory');ztActBtn(this)">📦 在庫増減</button>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -8554,7 +8575,7 @@ function cdsSetMidTab(tab) {
 
   // ── 引用元リンク切替 ──
   var CDS_SOURCE_URLS = {
-    'zenntai':    'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA',
+    'zenntai':    'https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ',
     'export':     'https://mp.weixin.qq.com/s/yuSNZPJKDeV5W6cWc2rMRA',
     'jishuhaiex': 'https://mp.weixin.qq.com/s/I9noQ4j76sBTSDcJoZ5cfg',
     'import':     'https://mp.weixin.qq.com/s/eZZK8I86zaTzH0604cCYpw',

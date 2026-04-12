@@ -2993,6 +2993,9 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-discount" class="cds-mid-tab" onclick="cdsSetMidTab('discount')">
                 💴 値引き率
               </button>
+              <button id="cds-mid-btn-price" class="cds-mid-tab" onclick="cdsSetMidTab('price')">
+                💰 価格段分析
+              </button>
             </div>
 
             <hr style="border:none;border-top:2px solid #94a3b8;margin:2px 0 14px;">
@@ -3238,6 +3241,33 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div><!-- end cds-sub-discount -->
 
+
+            <!-- 中タブ価格段: サブナビ -->
+            <div id="cds-sub-price" class="cds-sub-nav" style="display:none">
+              <div class="cds-nav-compact">
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📊 均価推移</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link active" data-cds-price-target="#price-avg-power">⚡ 動力別均価推移</button>
+                    <button class="nav-link" data-cds-price-target="#price-avg-brand">🏷️ ブランド別均価比較</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📦 販売台数</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-price-target="#price-yoy-band">📉 価格帯別前年同期比</button>
+                    <button class="nav-link" data-cds-price-target="#price-cum-compare">📅 2026年累計 vs 2025年</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">⚡ 新エネ動向</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-price-target="#price-nev-rate">🔋 車格別新エネ浸透率</button>
+                    <button class="nav-link" data-cds-price-target="#price-power-share">📊 動力別構成比推移</button>
+                  </div>
+                </div>
+              </div>
+            </div><!-- end cds-sub-price -->
 
           </div><!-- end cdsPills -->
 
@@ -3937,6 +3967,50 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="chart-title">🌍 ガソリン車 値引き率：出身地域別（%）</div>
                 <div class="chart-subtitle">日系・独系・韓系・米系・欧系・国内系・全体　2017〜2026年</div>
                 <div id="ec-disc-by-origin" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+
+            <!-- ===== 価格段分析 ペイン群 ===== -->
+            <div class="cds-pane" id="price-avg-power">
+              <div class="chart-card">
+                <div class="chart-title">動力別 平均価格推移（万元）</div>
+                <div class="chart-subtitle">崔東树レポート 2021〜2026年3月</div>
+                <div id="ec-price-avg-power" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="price-avg-brand">
+              <div class="chart-card">
+                <div class="chart-title">ブランドカテゴリ別 均価比較（万元）・前年同期比</div>
+                <div class="chart-subtitle">崔東树レポート 2026年3月 vs 2025年3月</div>
+                <div id="ec-price-avg-brand" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="price-yoy-band">
+              <div class="chart-card">
+                <div class="chart-title">価格帯別 販売台数 前年同期比（2026年3月）</div>
+                <div class="chart-subtitle">崔東树レポート 2026年3月 vs 2025年3月</div>
+                <div id="ec-price-yoy-band" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="price-cum-compare">
+              <div class="chart-card">
+                <div class="chart-title">2026年累計（1〜3月）vs 2025年累計 販売台数比較（千台）</div>
+                <div class="chart-subtitle">崔東树レポート 価格帯別・動力別</div>
+                <div id="ec-price-cum-compare" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="price-nev-rate">
+              <div class="chart-card">
+                <div class="chart-title">車格別 新エネルギー車 浸透率推移（%）</div>
+                <div class="chart-subtitle">崔東树レポート 2021〜2026年3月</div>
+                <div id="ec-price-nev-rate" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+            <div class="cds-pane" id="price-power-share">
+              <div class="chart-card">
+                <div class="chart-title">動力タイプ別 販売構成比推移（%）</div>
+                <div class="chart-subtitle">崔東树レポート 2021〜2026年3月</div>
+                <div id="ec-price-power-share" class="echart-box" style="height:420px"></div>
               </div>
             </div>
 
@@ -8313,7 +8387,8 @@ function cdsSetMidTab(tab) {
     'profit':     'https://mp.weixin.qq.com/s/tKkV8nPjYXjQlEFPYxMIBQ',
     'inventory':  'https://mp.weixin.qq.com/s/u0KRHvAP2DhaaCQeVracVQ',
     'battery':    'https://mp.weixin.qq.com/s/mV9NgfWWVYEjIUyUWfQMbQ',
-    'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ'
+    'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ',
+    'price':      'https://mp.weixin.qq.com/s/dxRuOcqPkUCBjDDkiI5Fqw'
   };
   var srcUrl = CDS_SOURCE_URLS[tab] || '';
   var srcLink = document.getElementById('cds-source-link');
@@ -8334,6 +8409,7 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-battery').style.display     = (tab === 'battery')     ? '' : 'none';
   document.getElementById('cds-sub-discount').style.display    = (tab === 'discount')    ? '' : 'none';
   document.getElementById('cds-sub-jishuhaiex').style.display  = (tab === 'jishuhaiex')  ? '' : 'none';
+  document.getElementById('cds-sub-price').style.display       = (tab === 'price')       ? '' : 'none';
 
   if (tab === 'jishuhaiex') {
     var jhTarget = window.JH_CURRENT_ID || 'jh-monthly-trend';
@@ -8412,6 +8488,13 @@ function cdsSetMidTab(tab) {
       b.classList.toggle('active', b.getAttribute('data-cds-discount-target') === '#' + discTarget);
     });
     setTimeout(function(){ discRender(discTarget); }, 80);
+  } else if (tab === 'price') {
+    var priceTarget = window.PRICE_CURRENT_ID || 'price-avg-power';
+    priceShowPane(priceTarget);
+    document.querySelectorAll('#cds-sub-price [data-cds-price-target]').forEach(b => {
+      b.classList.toggle('active', b.getAttribute('data-cds-price-target') === '#' + priceTarget);
+    });
+    setTimeout(function(){ priceRender(priceTarget); }, 80);
   } else {
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
@@ -12658,6 +12741,356 @@ window.jhRender   = jhRender;
 window.JH_CURRENT_ID = JH_CURRENT_ID;
 
 })();
+</script>
+
+<script>
+// ============================================================
+//  💰 価格段分析モジュール
+// ============================================================
+(function(){
+
+  var PRICE_EC = {};
+  window.PRICE_CURRENT_ID = 'price-avg-power';
+
+  var FONT = 'Noto Sans JP, sans-serif';
+  var GRID = { top:55, right:30, bottom:65, left:60, containLabel:true };
+
+  function tooltip(){ return { trigger:'axis', backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1, textStyle:{fontFamily:FONT,fontSize:12} }; }
+  function xAxis(data){ return { type:'category', data:data, axisLabel:{fontFamily:FONT,fontSize:10,rotate:30} }; }
+  function yAxis(name){ return { type:'value', name:name||'', nameTextStyle:{fontFamily:FONT,fontSize:11}, axisLabel:{fontFamily:FONT,fontSize:11}, splitLine:{lineStyle:{color:'rgba(0,0,0,0.06)'}} }; }
+  function legend(d){ return Object.assign({ top:8, textStyle:{fontFamily:FONT,fontSize:11} }, d||{}); }
+
+  function initOrGet(id){
+    var dom = document.getElementById(id);
+    if (!dom) return null;
+    if (PRICE_EC[id]) { try{ PRICE_EC[id].dispose(); }catch(e){} }
+    PRICE_EC[id] = echarts.init(dom);
+    return PRICE_EC[id];
+  }
+
+  // pane 表示
+  window.priceShowPane = function(id){
+    var pillEl = document.getElementById('cdsPills');
+    var contEl = document.getElementById('cdsPillsContent');
+    if (pillEl) pillEl.setAttribute('style','display:block');
+    if (contEl) contEl.setAttribute('style','display:block');
+    document.querySelectorAll('.cds-pane[id^="price-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+    var pane = document.getElementById(id);
+    if (pane) pane.classList.add('cds-active');
+    window.PRICE_CURRENT_ID = id;
+  };
+
+  // サブナビクリック
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-cds-price-target]');
+    if (!btn) return;
+    var targetId = btn.getAttribute('data-cds-price-target').replace('#','');
+    priceShowPane(targetId);
+    document.querySelectorAll('#cds-sub-price [data-cds-price-target]').forEach(function(b){
+      b.classList.toggle('active', b === btn);
+    });
+    requestAnimationFrame(function(){
+      setTimeout(function(){ priceRender(targetId); }, 50);
+    });
+  });
+
+  // ============================================================
+  // 1. 動力別 均価推移
+  // ============================================================
+  function renderAvgPower(){
+    var ec = initOrGet('ec-price-avg-power'); if(!ec) return;
+    var labels = ['2021','2022','2023','2024','2025\n3月','2025\n汇总','2026\n1月','2026\n2月','2026\n3月'];
+    ec.setOption({
+      tooltip: Object.assign(tooltip(), {
+        formatter: function(params){
+          var s = params[0].name + '<br>';
+          params.forEach(function(p){ s += p.marker + p.seriesName + '：<b>' + p.value + '万元</b><br>'; });
+          return s;
+        }
+      }),
+      legend: legend(),
+      grid: GRID,
+      xAxis: xAxis(labels),
+      yAxis: yAxis('均価（万元）'),
+      series:[
+        { name:'ガソリン車', type:'line', symbol:'circle', symbolSize:6, lineStyle:{width:2.5},
+          data:[16.4,17.2,18.1,18.5,17.8,17.4,17.4,17.0,17.8], color:'#5470c6' },
+        { name:'HEV', type:'line', symbol:'circle', symbolSize:6,
+          data:[20.6,21.8,21.5,22.3,21.6,21.9,21.9,21.2,21.3], color:'#91cc75' },
+        { name:'PHEV', type:'line', symbol:'circle', symbolSize:6,
+          data:[20.1,18.0,18.2,16.7,15.2,15.9,18.7,18.2,18.3], color:'#fac858' },
+        { name:'EREV', type:'line', symbol:'circle', symbolSize:6,
+          data:[32.3,32.0,31.1,30.2,25.8,27.3,27.1,26.1,23.4], color:'#ee6666' },
+        { name:'BEV', type:'line', symbol:'circle', symbolSize:6,
+          data:[14.9,15.8,16.8,16.6,14.0,14.3,18.1,17.7,15.5], color:'#73c0de' },
+        { name:'全体', type:'line', symbol:'circle', symbolSize:7, lineStyle:{width:3, type:'dashed'},
+          data:[16.5,17.3,18.3,18.4,16.8,17.0,18.4,18.0,17.5], color:'#3b3b3b' }
+      ]
+    });
+  }
+
+  // ============================================================
+  // 2. ブランド別 均価比較・前年同期比（横棒）
+  // ============================================================
+  function renderAvgBrand(){
+    var ec = initOrGet('ec-price-avg-brand'); if(!ec) return;
+    // ブランド、2025年3月均価、2026年3月均価、前年同期比（万元）
+    var brands  = ['テスラ','高級ブランド','主流合弁','新興EV','自主ブランド','全体'];
+    var val25   = [25.37, 35.8,  17.3, 22.3, 11.9, 16.8];
+    var val26   = [25.54, 33.9,  17.3, 24.1, 12.5, 17.5];
+    var diff    = [+0.17, -1.9,   0.0, +1.8, +0.6, +0.7];
+
+    ec.setOption({
+      tooltip:{
+        trigger:'axis', axisPointer:{type:'shadow'},
+        formatter: function(params){
+          var idx = params[0].dataIndex;
+          var d = diff[idx];
+          var sign = d >= 0 ? '+' : '';
+          return brands[idx] + '<br>'
+            + '2025年3月: <b>' + val25[idx] + '万元</b><br>'
+            + '2026年3月: <b>' + val26[idx] + '万元</b><br>'
+            + '前年同期比: <b style="color:' + (d >= 0 ? '#ef4444' : '#22c55e') + '">' + sign + d.toFixed(2) + '万元</b>';
+        }
+      },
+      legend: legend(),
+      grid:{ top:55, right:80, bottom:40, left:20, containLabel:true },
+      xAxis:{ type:'value', name:'均価（万元）', nameTextStyle:{fontFamily:FONT,fontSize:11},
+               axisLabel:{fontFamily:FONT,fontSize:11} },
+      yAxis:{ type:'category', data:brands, axisLabel:{fontFamily:FONT,fontSize:11} },
+      series:[
+        { name:'2025年3月', type:'bar', barMaxWidth:28, color:'#93c5fd',
+          data: val25,
+          label:{ show:true, position:'right', formatter:function(p){ return p.value+'万'; }, fontFamily:FONT, fontSize:10 }
+        },
+        { name:'2026年3月', type:'bar', barMaxWidth:28,
+          data: val26.map(function(v,i){
+            return { value:v, itemStyle:{ color: diff[i] >= 0 ? '#ef4444' : '#22c55e' } };
+          }),
+          label:{ show:true, position:'right', formatter:function(p){ return p.value+'万'; }, fontFamily:FONT, fontSize:10 }
+        }
+      ]
+    });
+
+    // 前年比ラベル（右端に差分表示）
+    // → tooltipで対応済み
+  }
+
+  // ============================================================
+  // 3. 価格帯別 前年同期比（横棒）
+  // ============================================================
+  function renderYoyBand(){
+    var ec = initOrGet('ec-price-yoy-band'); if(!ec) return;
+    var bands  = ['40万以上','30-40万','20-30万','15-20万','10-15万','5-10万','5万以下'];
+    // 2025年3月 vs 2026年3月 合計台数
+    var val25  = [9,   15,  33,  37,  60,  33,  6];
+    var val26  = [10,  12,  32,  29,  52,  27,  3];
+    var yoy    = [+4, -23,  -3, -21, -13, -17, -53];  // %
+
+    // 前年比グラフ（横棒、増減赤緑）
+    var sorted = bands.map(function(b,i){ return {b:b, yoy:yoy[i], v25:val25[i], v26:val26[i]}; })
+                      .sort(function(a,c){ return a.yoy - c.yoy; });
+
+    ec.setOption({
+      tooltip:{
+        trigger:'axis', axisPointer:{type:'shadow'},
+        formatter: function(params){
+          var d = sorted[params[0].dataIndex];
+          return d.b + '<br>'
+            + '2025年3月: <b>' + d.v25 + '千台</b><br>'
+            + '2026年3月: <b>' + d.v26 + '千台</b><br>'
+            + '前年同期比: <b style="color:' + (d.yoy>=0?'#22c55e':'#ef4444') + '">' + (d.yoy>=0?'+':'') + d.yoy + '%</b>';
+        }
+      },
+      grid:{ top:30, right:80, bottom:40, left:20, containLabel:true },
+      xAxis:{ type:'value', name:'前年同期比（%）', nameTextStyle:{fontFamily:FONT,fontSize:11},
+               axisLabel:{fontFamily:FONT,fontSize:11},
+               axisLine:{ onZero:true } },
+      yAxis:{ type:'category', data:sorted.map(function(d){ return d.b; }),
+               axisLabel:{fontFamily:FONT,fontSize:11} },
+      series:[{
+        type:'bar', barMaxWidth:36,
+        data: sorted.map(function(d){
+          return { value:d.yoy, itemStyle:{ color: d.yoy >= 0 ? '#22c55e' : '#ef4444',
+                    borderRadius: d.yoy >= 0 ? [0,4,4,0] : [4,0,0,4] } };
+        }),
+        label:{
+          show:true,
+          position: function(p){ return p.value >= 0 ? 'right' : 'left'; },
+          formatter: function(p){ return (p.value >= 0 ? '+' : '') + p.value + '%'; },
+          fontFamily:FONT, fontSize:11, fontWeight:'bold',
+          color: function(p){ return p.value >= 0 ? '#16a34a' : '#dc2626'; }
+        },
+        markLine:{
+          silent:true, symbol:'none',
+          data:[{ xAxis:0, lineStyle:{color:'#999',width:1.5,type:'solid'} }]
+        }
+      }]
+    });
+  }
+
+  // ============================================================
+  // 4. 2026年累計 vs 2025年累計（価格帯別積み上げ棒）
+  // ============================================================
+  function renderCumCompare(){
+    var ec = initOrGet('ec-price-cum-compare'); if(!ec) return;
+    // 2025年1-3月累計 と 2026年1-3月累計（千台）
+    // Source: 汇总列（2025=Q1=3月合計、2026=1+2+3月合計）
+    var years = ['2025年\n1-3月累計', '2026年\n1-3月累計'];
+    var data = {
+      '40万以上':  [9,  10],
+      '30-40万':   [15, 12],
+      '20-30万':   [33, 32],
+      '15-20万':   [37, 29],
+      '10-15万':   [60, 52],
+      '5-10万':    [33, 27],
+      '5万以下':   [6,   3],
+    };
+    var colors = ['#1d4ed8','#2563eb','#3b82f6','#60a5fa','#93c5fd','#bfdbfe','#dbeafe'];
+    var bands = Object.keys(data);
+
+    ec.setOption({
+      tooltip:{
+        trigger:'axis', axisPointer:{type:'shadow'},
+        formatter: function(params){
+          var total = params.reduce(function(s,p){ return s + (p.value||0); }, 0);
+          var s = params[0].name + ' 合計: <b>' + total + '千台</b><br>';
+          params.slice().reverse().forEach(function(p){
+            s += p.marker + p.seriesName + ': <b>' + p.value + '千台</b><br>';
+          });
+          return s;
+        }
+      },
+      legend: Object.assign(legend(), { bottom:0, top:'auto' }),
+      grid:{ top:30, right:30, bottom:80, left:20, containLabel:true },
+      xAxis:{ type:'category', data:years, axisLabel:{fontFamily:FONT,fontSize:12} },
+      yAxis: yAxis('台数（千台）'),
+      series: bands.map(function(b,i){
+        return {
+          name:b, type:'bar', stack:'total',
+          color: colors[i],
+          data: data[b],
+          label:{ show:true, formatter:function(p){ return p.value > 0 ? p.value : ''; },
+                  fontFamily:FONT, fontSize:10, color:'#fff' }
+        };
+      })
+    });
+  }
+
+  // ============================================================
+  // 5. 車格別 新エネ浸透率推移（折れ線）
+  // ============================================================
+  function renderNevRate(){
+    var ec = initOrGet('ec-price-nev-rate'); if(!ec) return;
+    var labels = ['2021','2022','2023','2024','2025\n1Q','2025\n2Q','2025\n3Q','2025\n4Q','2025\n汇总','2026\n1月','2026\n2月','2026\n3月'];
+
+    ec.setOption({
+      tooltip: Object.assign(tooltip(), {
+        formatter: function(params){
+          var s = params[0].name + '<br>';
+          params.forEach(function(p){ s += p.marker + p.seriesName + ': <b>' + p.value + '%</b><br>'; });
+          return s;
+        }
+      }),
+      legend: legend(),
+      grid: GRID,
+      xAxis: xAxis(labels),
+      yAxis: Object.assign(yAxis('浸透率（%）'), { max:100, axisLabel:{ formatter:'{value}%', fontFamily:FONT, fontSize:11 } }),
+      series:[
+        { name:'C級（高級）', type:'line', symbol:'circle', symbolSize:6,
+          data:[8,18,32,44,40,54,59,63,56,52,59,56], color:'#7c3aed' },
+        { name:'B級', type:'line', symbol:'circle', symbolSize:6,
+          data:[18,29,40,52,54,54,59,63,57,46,54,55], color:'#2563eb' },
+        { name:'A級（主流）', type:'line', symbol:'circle', symbolSize:6,
+          data:[8,18,22,35,39,41,42,43,40,21,26,37], color:'#059669' },
+        { name:'A0級（小型）', type:'line', symbol:'circle', symbolSize:6,
+          data:[12,35,56,66,71,71,74,81,74,67,69,75], color:'#d97706' },
+        { name:'a0級（微型）', type:'line', symbol:'circle', symbolSize:7, lineStyle:{width:2.5},
+          data:[100,100,100,100,100,100,100,100,100,100,100,100], color:'#ef4444' },
+        { name:'全体', type:'line', symbol:'circle', symbolSize:7, lineStyle:{width:2.5, type:'dashed'},
+          data:[null,null,null,null,44,44,44,41,44,43,41,42], color:'#374151' }
+      ]
+    });
+  }
+
+  // ============================================================
+  // 6. 動力タイプ別 販売構成比推移（面積積み上げ）
+  // ============================================================
+  function renderPowerShare(){
+    var ec = initOrGet('ec-price-power-share'); if(!ec) return;
+    var labels = ['2021','2022','2023','2024','2025\n3月','2025\n汇总','2026\n1月','2026\n2月','2026\n3月'];
+    // 各動力の販売台数（千台）→ 構成比で表示
+    var raw = {
+      'ガソリン車': [1656,1410,1312,1106, 87,1004, 87, 53, 72],
+      'HEV':        [  61,  77,  84,  93,  8,  89,  8,  4,  8],
+      'PHEV':       [  44, 119, 194, 340, 27, 370, 17, 13, 20],
+      'EREV':       [  10,  23,  65, 116,  8, 123,  8,  5,  8],
+      'BEV':        [ 244, 426, 515, 633, 64, 788, 35, 28, 57],
+    };
+    var keys = Object.keys(raw);
+    var totals = labels.map(function(_,i){
+      return keys.reduce(function(s,k){ return s + raw[k][i]; }, 0);
+    });
+    var colors = { 'ガソリン車':'#5470c6', 'HEV':'#91cc75', 'PHEV':'#fac858', 'EREV':'#ee6666', 'BEV':'#73c0de' };
+
+    ec.setOption({
+      tooltip: Object.assign(tooltip(), {
+        formatter: function(params){
+          var s = params[0].name + '<br>';
+          var tot = totals[params[0].dataIndex];
+          params.slice().reverse().forEach(function(p){
+            var pct = tot > 0 ? (p.value / tot * 100).toFixed(1) : 0;
+            s += p.marker + p.seriesName + ': <b>' + p.value + '千台</b> (' + pct + '%)<br>';
+          });
+          s += '合計: <b>' + tot + '千台</b>';
+          return s;
+        }
+      }),
+      legend: legend(),
+      grid: GRID,
+      xAxis: xAxis(labels),
+      yAxis: Object.assign(yAxis('%'), {
+        max: 100,
+        axisLabel:{ formatter:'{value}%', fontFamily:FONT, fontSize:11 }
+      }),
+      series: keys.map(function(k){
+        return {
+          name:k, type:'bar', stack:'total', barMaxWidth:60,
+          color: colors[k],
+          data: labels.map(function(_,i){
+            return totals[i] > 0 ? Math.round(raw[k][i] / totals[i] * 1000) / 10 : 0;
+          }),
+          label:{ show:true, formatter:function(p){ return p.value >= 5 ? p.value + '%' : ''; },
+                  fontFamily:FONT, fontSize:10, color:'#fff' }
+        };
+      })
+    });
+  }
+
+  // ---------- render ディスパッチ ----------
+  var PRICE_RENDER = {
+    'price-avg-power':    renderAvgPower,
+    'price-avg-brand':    renderAvgBrand,
+    'price-yoy-band':     renderYoyBand,
+    'price-cum-compare':  renderCumCompare,
+    'price-nev-rate':     renderNevRate,
+    'price-power-share':  renderPowerShare
+  };
+
+  window.priceRender = function(id){
+    var fn = PRICE_RENDER[id];
+    if (fn) fn();
+  };
+
+  // resize
+  window.addEventListener('resize', function(){
+    Object.keys(PRICE_EC).forEach(function(id){
+      var ec = PRICE_EC[id];
+      if (ec) { try{ ec.resize(); }catch(e){} }
+    });
+  });
+
+})(); // end price module
 </script>
   <div class="print-footer container">
     中国自動車販売ランキングや関連データ &nbsp;|&nbsp; 非公式・個人作成 &nbsp;|&nbsp; 印刷日: <span id="print-date"></span>

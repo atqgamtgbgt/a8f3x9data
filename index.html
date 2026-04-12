@@ -3244,7 +3244,8 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- 中タブ価格段: サブナビ -->
             <div id="cds-sub-price" class="cds-sub-nav" style="display:none">
-              <div class="cds-nav-compact">
+              <div class="cds-nav-compact" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <div style="display:flex;flex-wrap:wrap;gap:0">
                 <div class="cds-gc">
                   <span class="cds-gc-label">📊 均価推移</span>
                   <div class="cds-gc-items">
@@ -3270,6 +3271,12 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-price-target="#price-segment-share">🚗 車格別市場シェア</button>
                   </div>
                 </div>
+                </div>
+                <button id="price-toggle-2026-btn" onclick="priceToggle2026Monthly()" style="
+                  font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
+                  border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);
+                  color:#6b7280;transition:all .15s;white-space:nowrap;align-self:center;margin-bottom:10px;
+                ">▶ 2026年 月次を展開</button>
               </div>
             </div><!-- end cds-sub-price -->
 
@@ -3975,49 +3982,6 @@ body.tray-open { padding-bottom: 105px; }
             </div>
 
             <!-- ===== 価格段分析 ペイン群 ===== -->
-
-            <!-- KPI + 2026月次トグル（共通ヘッダー） -->
-            <div id="price-header-bar" style="display:none">
-              <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
-                <button id="price-toggle-2026-btn" onclick="priceToggle2026Monthly()" style="
-                  font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
-                  border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);
-                  color:#6b7280;transition:all .15s;
-                ">▶ 2026年 月次を展開</button>
-              </div>
-              <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:18px">
-                <div class="chart-card" style="padding:12px 14px">
-                  <div style="font-size:10px;color:#9ca3af;margin-bottom:4px">全体均価 2026年3月</div>
-                  <div style="font-size:20px;font-weight:700">17.5<span style="font-size:13px;font-weight:400;color:#9ca3af">万元</span></div>
-                  <div style="font-size:10px;margin-top:3px;color:#f25c5c">▲ +0.7万元 前年同期比</div>
-                </div>
-                <div class="chart-card" style="padding:12px 14px">
-                  <div style="font-size:10px;color:#9ca3af;margin-bottom:4px">新エネルギー車均価</div>
-                  <div style="font-size:20px;font-weight:700">16.9<span style="font-size:13px;font-weight:400;color:#9ca3af">万元</span></div>
-                  <div style="font-size:10px;margin-top:3px;color:#f25c5c">▲ +1.5万元（量減・価上昇）</div>
-                </div>
-                <div class="chart-card" style="padding:12px 14px">
-                  <div style="font-size:10px;color:#9ca3af;margin-bottom:4px">ガソリン車均価</div>
-                  <div style="font-size:20px;font-weight:700">18.1<span style="font-size:13px;font-weight:400;color:#9ca3af">万元</span></div>
-                  <div style="font-size:10px;margin-top:3px;color:#22d3a0">▼ -0.2万元</div>
-                </div>
-                <div class="chart-card" style="padding:12px 14px">
-                  <div style="font-size:10px;color:#9ca3af;margin-bottom:4px">小売台数 2026年3月</div>
-                  <div style="font-size:20px;font-weight:700">165<span style="font-size:13px;font-weight:400;color:#9ca3af">千台</span></div>
-                  <div style="font-size:10px;margin-top:3px;color:#22d3a0">▼ -15% 前年同期比</div>
-                </div>
-                <div class="chart-card" style="padding:12px 14px">
-                  <div style="font-size:10px;color:#9ca3af;margin-bottom:4px">新エネ浸透率</div>
-                  <div style="font-size:20px;font-weight:700">51<span style="font-size:13px;font-weight:400;color:#9ca3af">%</span></div>
-                  <div style="font-size:10px;margin-top:3px;color:#6b7280">2025年通年 54%</div>
-                </div>
-                <div class="chart-card" style="padding:12px 14px">
-                  <div style="font-size:10px;color:#9ca3af;margin-bottom:4px">5万元以下 前年比</div>
-                  <div style="font-size:20px;font-weight:700;color:#ef4444">-53<span style="font-size:13px;font-weight:400">%</span></div>
-                  <div style="font-size:10px;margin-top:3px;color:#ef4444">A00級急減が主因</div>
-                </div>
-              </div>
-            </div>
 
             <!-- ① 動力別均価推移 -->
             <div class="cds-pane" id="price-avg-power">
@@ -8612,9 +8576,6 @@ function cdsSetMidTab(tab) {
     });
     setTimeout(function(){ priceRender(priceTarget); }, 80);
   } else {
-    // price以外のタブへ切替時はKPIヘッダーを隠す
-    var _phdr = document.getElementById('price-header-bar');
-    if (_phdr) _phdr.style.display = 'none';
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
   }
@@ -12919,9 +12880,6 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     document.querySelectorAll('.cds-pane[id^="price-"]').forEach(function(p){ p.classList.remove('cds-active'); });
     var pane = document.getElementById(id);
     if (pane) pane.classList.add('cds-active');
-    // KPIヘッダーバーの表示
-    var hdr = document.getElementById('price-header-bar');
-    if (hdr) hdr.style.display = '';
     window.PRICE_CURRENT_ID = id;
   };
 

@@ -8612,13 +8612,18 @@ function cdsSetMidTab(tab) {
   if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
     var contElZt = document.getElementById('cdsPillsContent');
-    if (pillElZt) pillElZt.setAttribute('style', 'display:block');
-    if (contElZt) contElZt.setAttribute('style', 'display:block');
+    // display:none!important を強制上書き
+    if (pillElZt) pillElZt.style.cssText = 'display:block !important';
+    if (contElZt) contElZt.style.cssText = 'display:block';
     ztShowPane('zt-summary');
     document.querySelectorAll('#cds-sub-zenntai .nav-link').forEach(function(b){
       b.classList.toggle('active', b.textContent.indexOf('月次4指標') >= 0);
     });
     setTimeout(ztInitCharts, 80);
+    // Excel未読込の場合もバックグラウンドで読み込む
+    if (typeof CDS_LOADED !== 'undefined' && !CDS_LOADED && typeof loadCdsExcel === 'function') {
+      loadCdsExcel();
+    }
   } else if (tab === 'jishuhaiex') {
     var jhTarget = window.JH_CURRENT_ID || 'jh-monthly-trend';
     jhShowPane(jhTarget);
@@ -13631,6 +13636,11 @@ window.ztActBtn = function(btn){
 
 // ── ペイン切替 ──
 window.ztShowPane = function(id) {
+  // cdsPills/cdsPillsContent を !important 込みで強制表示
+  var pills = document.getElementById('cdsPills');
+  var cont  = document.getElementById('cdsPillsContent');
+  if (pills) pills.style.cssText = 'display:block !important';
+  if (cont)  cont.style.cssText  = 'display:block';
   document.querySelectorAll('.cds-pane[id^="zt-"]').forEach(function(p){ p.classList.remove('cds-active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('cds-active');

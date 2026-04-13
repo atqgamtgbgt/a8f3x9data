@@ -4347,7 +4347,7 @@ const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/
 const DATA_SOURCES = {
   autohome: {
     csvPath: `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
-    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`,
+    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/`,
     seriesUrlsPath: `${RAW_BASE}output/pipeline/autohome-series-urls/series_urls.csv`,
     configPath: 'output/autohome/',
     koubeiPath: 'output/koubei/'
@@ -4409,29 +4409,16 @@ function convertToJPY(priceStr) {
 
 function imgTag(rankStr, model, imageUrl, source, originalName) {
   const imgBase = DATA_SOURCES[source].imgBase;
-  const fileName = source === 'hezi' ? originalName : model;
-  
-  if (source === 'hezi') {
-    // CSVのimage_urlをそのまま使用
-    if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
-      const fullPath = `${imgBase}${imageUrl.replace('/autohome_images/', '')}?v=${Date.now()}`;
-      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-    } else if (imageUrl) {
-      return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-    } else {
-      const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
-      return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-    }
-  }
-  
-  if (imageUrl && imageUrl.startsWith("/autohome_images/")) {
-    const fullPath = `${RAW_BASE}output/pipeline/autohome-ranking-images${imageUrl}?v=${Date.now()}`;
+
+  if (imageUrl && imageUrl.startsWith("public/autohome_images/")) {
+    // CSVのimage_url形式: "public/autohome_images/1_0_轩逸.png"
+    const fileName = imageUrl.replace("public/autohome_images/", "");
+    const fullPath = `${imgBase}${fileName}?v=${Date.now()}`;
     return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   } else if (imageUrl) {
     return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   } else {
-    const fullPath = `${imgBase}${rankStr}_${fileName}.png?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    return "";
   }
 }
 

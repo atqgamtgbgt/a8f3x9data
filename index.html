@@ -4347,7 +4347,7 @@ const RAW_BASE = "https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/
 const DATA_SOURCES = {
   autohome: {
     csvPath: `${RAW_BASE}output/pipeline/autohome-ranking-csvs/autohome_ranking_with_image_urls_with_maker_with_maker_ja.csv`,
-    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/`,
+    imgBase: `${RAW_BASE}output/pipeline/autohome-ranking-images/autohome_images/`,
     seriesUrlsPath: `${RAW_BASE}output/pipeline/autohome-series-urls/series_urls.csv`,
     configPath: 'output/autohome/',
     koubeiPath: 'output/koubei/'
@@ -4410,16 +4410,18 @@ function convertToJPY(priceStr) {
 function imgTag(rankStr, model, imageUrl, source, originalName) {
   const imgBase = DATA_SOURCES[source].imgBase;
 
-  if (imageUrl && imageUrl.startsWith("public/autohome_images/")) {
-    // CSVのimage_url形式: "public/autohome_images/1_0_轩逸.png"
-    const fileName = imageUrl.replace("public/autohome_images/", "");
-    const fullPath = `${imgBase}${fileName}?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${fullPath}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  } else if (imageUrl) {
-    return `<img class="car-thumb" src="${imageUrl}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  } else {
+  if (source === 'hezi') {
+    // hezi: CSVのimage_url "public/autohome_images/100_99_xxx.png" からファイル名を取り出す
+    if (imageUrl && imageUrl.startsWith("public/autohome_images/")) {
+      const fileName = imageUrl.replace("public/autohome_images/", "");
+      return `<img class="car-thumb" src="${imgBase}${fileName}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+    }
     return "";
   }
+
+  // autohome: "001_Model_Y.png" 形式（rankStr=3桁ゼロ埋め、model名）
+  const fileName = `${rankStr}_${model}.png`;
+  return `<img class="car-thumb" src="${imgBase}${fileName}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
 }
 
 async function loadData(source) {

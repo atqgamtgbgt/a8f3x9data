@@ -4479,7 +4479,7 @@ function renderTable(data, tableId, source) {
     tr.innerHTML = `
       <td class="rank-badge">${r.rank}</td>
       <td class="diff-badge">${diffHtml}</td>
-      <td>${imgTag(rankStr, globalName, r.image_url, source, originalName)}</td>
+      <td>${imgTag(rankStr, originalName, r.image_url, source, originalName)}</td>
       <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
       <td>${maker}</td>
       <td style="white-space: nowrap;">${units}</td>

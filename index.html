@@ -2112,9 +2112,18 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
     display: none !important;
   }
 
-  /* --- タブペインを全て表示 --- */
-  .tab-content,
-  .tab-pane {
+  /* --- アクティブなタブペインのみ表示 --- */
+  .tab-content {
+    display: block !important;
+  }
+
+  /* 非アクティブタブは完全非表示 */
+  .tab-pane:not(.active) {
+    display: none !important;
+  }
+
+  /* アクティブなタブペインのみ表示 */
+  .tab-pane.active {
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
@@ -2122,8 +2131,16 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
     overflow: visible !important;
   }
 
-  /* 各タブに見出しを付与（data-print-title属性で制御） */
-  .tab-pane[data-print-title]::before {
+  /* cds-pane（崔東樹タブ内）も同様：アクティブのみ表示 */
+  .cds-pane:not(.cds-active) {
+    display: none !important;
+  }
+  .cds-pane.cds-active {
+    display: block !important;
+  }
+
+  /* アクティブタブの見出し（page-break-before不要、1タブだけなので） */
+  .tab-pane.active[data-print-title]::before {
     content: attr(data-print-title);
     display: block;
     font-size: 13pt;
@@ -2131,12 +2148,6 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
     border-bottom: 2px solid #333;
     margin-bottom: 0.6rem;
     padding-bottom: 0.3rem;
-    page-break-before: always;
-  }
-
-  /* 最初のタブペインはページブレーク不要 */
-  .tab-pane[data-print-title]:first-of-type::before {
-    page-break-before: avoid;
   }
 
   /* --- コンテナ --- */
@@ -2313,7 +2324,7 @@ body.tray-open { padding-bottom: 105px; }
 
     <!-- 印刷ボタン -->
     <div class="print-btn-wrap">
-      <button class="btn btn-outline-secondary btn-sm" onclick="window.print()">
+      <button class="btn btn-outline-secondary btn-sm" onclick="doPrint()">
         <i class="fa-solid fa-print me-1"></i>印刷 / PDF保存
       </button>
     </div>
@@ -7803,41 +7814,62 @@ window.addEventListener('resize', function() {
 });
 
 /* ========================================
+   印刷ボタン：アクティブタブのEChartsをリサイズして
+   描画完了を待ってからwindow.print()を呼ぶ
+   ======================================== */
+function doPrint() {
+  var activePane = document.querySelector('.tab-pane.active');
+  if (!activePane) { window.print(); return; }
+
+  // アクティブペイン内のEChartsをリサイズ
+  var targets = activePane.querySelectorAll('.echart-box');
+  targets.forEach(function(el) {
+    try {
+      var inst = echarts.getInstanceByDom(el);
+      if (inst) { inst.resize(); }
+    } catch(e) {}
+  });
+
+  // cds-activeサブペインも対象
+  activePane.querySelectorAll('.cds-pane.cds-active .echart-box').forEach(function(el) {
+    try {
+      var inst = echarts.getInstanceByDom(el);
+      if (inst) { inst.resize(); }
+    } catch(e) {}
+  });
+
+  // canvasの描画が確定するまで少し待ってからprint
+  setTimeout(function() { window.print(); }, 200);
+}
+
+/* ========================================
    印刷前処理：EChartsを全て強制リサイズして
    キャンバスが正しく描画された状態で印刷する
    ======================================== */
 window.addEventListener('beforeprint', function() {
-  // Bootstrap の tab-pane を一時的に全表示
-  document.querySelectorAll('.tab-pane').forEach(function(el) {
-    el.classList.add('_print-visible');
-    el.style.display = 'block';
-    el.style.opacity = '1';
-    el.style.visibility = 'visible';
-  });
+  // アクティブなタブペインのみ対象（非アクティブは印刷対象外）
+  var activePane = document.querySelector('.tab-pane.active');
+  if (!activePane) return;
 
-  // ECharts インスタンスを全てリサイズ
-  var allInstances = [];
-  try {
-    // グローバル変数にあるEChartsインスタンスを収集
-    if (typeof CNSUV_EC === 'object') Object.values(CNSUV_EC).forEach(function(c){ if(c) allInstances.push(c); });
-  } catch(e) {}
-  // echarts.getInstanceByDom で全 echart-box を走査
-  document.querySelectorAll('.echart-box').forEach(function(el) {
+  // activePane内のechart-boxをリサイズ
+  activePane.querySelectorAll('.echart-box').forEach(function(el) {
     try {
       var inst = echarts.getInstanceByDom(el);
-      if (inst) { inst.resize(); allInstances.push(inst); }
+      if (inst) { inst.resize(); }
+    } catch(e) {}
+  });
+
+  // cds-pane（崔東樹タブ内サブペイン）が含まれる場合も対応
+  activePane.querySelectorAll('.cds-pane.cds-active .echart-box').forEach(function(el) {
+    try {
+      var inst = echarts.getInstanceByDom(el);
+      if (inst) { inst.resize(); }
     } catch(e) {}
   });
 });
 
 window.addEventListener('afterprint', function() {
-  // 印刷後は元のBootstrap制御に戻す
-  document.querySelectorAll('.tab-pane._print-visible').forEach(function(el) {
-    el.classList.remove('_print-visible');
-    el.style.display = '';
-    el.style.opacity = '';
-    el.style.visibility = '';
-  });
+  // CSSのみで制御しているためJS側のリセット不要
 });
 
 // 印刷フッターの日付

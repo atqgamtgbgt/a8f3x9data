@@ -40,6 +40,18 @@
           if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
         });
       }
+      // スマホ対応: 全チャートのtooltipに confine:true を自動付与（画面端での見切れ防止）
+      if (option && option.tooltip) {
+        var tips = Array.isArray(option.tooltip) ? option.tooltip : [option.tooltip];
+        tips.forEach(function(t) {
+          if (!t) return;
+          if (t.confine == null) t.confine = true;
+          // スマホでtooltipが画面幅を超えないようmax-widthを付与
+          if (t.extraCssText == null) {
+            t.extraCssText = 'max-width:min(88vw,320px);white-space:normal;word-break:break-word;font-size:12px;';
+          }
+        });
+      }
       if (!_hovering) {
         _lastOption = option;
         _hiddenSeries = {}; // オプション再設定時は非表示状態をリセット
@@ -2036,6 +2048,36 @@ img.car-thumb {
     height: 140px !important;
   }
 }
+
+/* ========================================
+   スマホ向けEChartsツールチップ最適化
+   ======================================== */
+/* EChartsが動的に生成するtooltip要素の最大幅・折り返し制御 */
+.ec-extension-canvas-renderer ~ div[style*="position: absolute"],
+div[style*="position: absolute"][style*="z-index: 9999999"] {
+  max-width: min(90vw, 320px) !important;
+  white-space: normal !important;
+  word-break: break-word !important;
+  font-size: 12px !important;
+}
+
+/* EChartsのデフォルトtooltip DOM（.zr__svg / .zr__canvas 配下ではなく body直下に出る場合も） */
+@media (max-width: 576px) {
+  /* タブ文字サイズ（さらに小さい画面） */
+  .nav-tabs-main .nav-link {
+    font-size: 0.82rem !important;
+    padding: 0.55rem 0.7rem !important;
+  }
+  .nav-tabs-sub .nav-link {
+    font-size: 0.78rem !important;
+    padding: 0.4rem 0.6rem !important;
+  }
+  /* グラフの凡例テキストが詰まらないよう調整 */
+  .echart-box {
+    height: 280px !important;
+  }
+}
+
 
 /* ========================================
    印刷用スタイル

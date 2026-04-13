@@ -4419,8 +4419,8 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
     return "";
   }
 
-  // autohome: "001_Model_Y.png" 形式（rankStr=3桁ゼロ埋め、model名）
-  const fileName = `${rankStr}_${model}.png`;
+  // autohome: "001_Model_Y.png" 形式（rankStr=3桁ゼロ埋め、スペースは_に変換）
+  const fileName = `${rankStr}_${model.replace(/ /g, '_')}.png`;
   return `<img class="car-thumb" src="${imgBase}${fileName}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
 }
 

@@ -7627,7 +7627,7 @@ function rebuildCnsuvAllMakers() {
 function cnsuvJa(name) {
   var ja = CNSUV_MAKER_JA[name];
   if (!ja || ja === name) return name;
-  return name + ' (' + ja + ')';
+  return ja + ' (' + name + ')';
 }
 function cnsuvColor(maker) { return CNSUV_COLORS[CNSUV_ALL_MAKERS.indexOf(maker) % CNSUV_COLORS.length]; }
 

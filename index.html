@@ -7607,7 +7607,7 @@ async function loadCnsuvRaw() {
     console.error('cnsuv JSON 読み込み失敗:', err);
   }
 }
-var CNSUV_MAKER_JA = {"比亚迪":"BYD","吉利汽车":"吉利","上汽大众":"SAIC-VW","一汽-大众":"FAW-VW","长安汽车":"長安","上汽通用五菱":"SGMW","广汽丰田":"広汽トヨタ","一汽丰田":"一汽トヨタ","华晨宝马":"華晨BMW","北京奔驰":"北京Benz","东风日产":"東風日産","特斯拉中国":"Tesla","奇瑞汽车":"奇瑞","广汽本田":"広汽Honda","东风本田":"東風Honda","一汽-大众奥迪":"一汽Audi","长城汽车":"長城","理想":"Li Auto","广汽埃安":"AION","零跑汽车":"Leapmotor","小鹏汽车":"XPENG","蔚来":"NIO","AITO 问界":"AITO","小米汽车":"Xiaomi","深蓝汽车":"Deepal","极氪":"Zeekr","广汽乘用车":"広汽乗用","一汽红旗":"紅旗","领克":"LYNK&CO","上汽通用别克":"Buick","上汽通用凯迪拉克":"Cadillac","上汽通用雪佛兰":"Chevrolet","东风本田":"東風Honda","广汽本田":"広汽Honda","北京现代":"北京Hyundai","沃尔沃亚太":"Volvo","上汽集团":"SAIC","一汽-大众捷达":"捷達","一汽-大众奥迪":"一汽Audi","合众汽车":"哪吒","长安启源":"啓源","方程豹":"方程豹","北汽新能源":"BJEV","一汽奔腾":"奔腾"};
+var CNSUV_MAKER_JA = {"比亚迪":"BYD","吉利汽车":"吉利","长安汽车":"長安","奇瑞汽车":"奇瑞","长城汽车":"長城","一汽红旗":"紅旗","上汽集团":"SAIC","特斯拉中国":"Tesla","理想":"Li Auto","蔚来":"NIO","小鹏汽车":"XPENG","零跑汽车":"Leapmotor","极氪":"Zeekr","小米汽车":"Xiaomi","深蓝汽车":"Deepal","AITO 问界":"AITO（問界）","广汽埃安":"広汽AION","领克":"LYNK&CO（領克）","合众汽车":"Neta（合衆汽車）","方程豹":"方程豹（BYD傘下）","长安启源":"長安啓源","一汽-大众":"FAW-フォルクスワーゲン","上汽大众":"SAIC-フォルクスワーゲン","一汽-大众奥迪":"FAW-アウディ","一汽-大众捷达":"FAW-捷達（Jetta）","上汽大众斯柯达":"SAIC-シュコダ","上汽通用别克":"Buick（上汽GM）","上汽通用凯迪拉克":"Cadillac（上汽GM）","上汽通用雪佛兰":"Chevrolet（上汽GM）","上汽通用五菱":"GM五菱（SGMW）","广汽丰田":"広汽トヨタ","一汽丰田":"一汽トヨタ","广汽本田":"広汽Honda","东风本田":"東風Honda","东风日产":"東風日産","华晨宝马":"華晨BMW","北京奔驰":"北京メルセデス","北京现代":"北京ヒュンダイ","悦达起亚":"悦達・起亜（Kia）","长安福特":"長安Ford","长安马自达":"長安Mazda","广汽三菱":"広汽Mitsubishi","广汽菲克Jeep":"広汽Jeep","沃尔沃亚太":"Volvo（中国生産）","东风标致":"東風Peugeot","北汽新能源":"BJEV（北汽新能源）","北京汽车":"BAIC（北京汽車）","北汽幻速":"BAIC幻速","广汽乘用车":"広汽乗用（Trumpchi）","奇瑞新能源":"奇瑞EV","长城新能源":"長城EV","一汽奔腾":"FAW-奔騰","东风乘用车":"東風乗用","东风小康":"東風小康","东风风行":"東風Forthing","众泰汽车":"Zotye（衆泰）","江淮汽车":"JAC（江淮）","江汽集团":"JAC集団（江汽）","鑫源汽车":"鑫源"};
 var CNSUV_COLORS = ["#5470c6","#ee6666","#91cc75","#fac858","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc","#48b6c8","#ff9e7d","#a0c878","#6baed6","#fd8d3c","#9e9ac8"];
 var CNSUV_DEFAULT = ["比亚迪","吉利汽车","上汽大众","一汽-大众","上汽通用五菱","广汽丰田","一汽丰田","华晨宝马","长安汽车","特斯拉中国","奇瑞汽车","理想","零跑汽车","小米汽车","AITO 问界"];
 var CNSUV_EC = {};
@@ -7624,7 +7624,11 @@ function rebuildCnsuvAllMakers() {
   CNSUV_ALL_MAKERS = Object.keys(freq).sort(function(a,b){ return freq[b]-freq[a]; });
 }
 
-function cnsuvJa(name) { return CNSUV_MAKER_JA[name] || name; }
+function cnsuvJa(name) {
+  var ja = CNSUV_MAKER_JA[name];
+  if (!ja || ja === name) return name;
+  return name + ' (' + ja + ')';
+}
 function cnsuvColor(maker) { return CNSUV_COLORS[CNSUV_ALL_MAKERS.indexOf(maker) % CNSUV_COLORS.length]; }
 
 function cnsuvGetMonths() {

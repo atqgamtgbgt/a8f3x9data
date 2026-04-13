@@ -3185,7 +3185,7 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="cds-gc-items" id="cds-gc-jh2">
                     <button class="nav-link" data-cds-jh-target="#jh-maker-total">🚗 全体メーカー別</button>
                     <button class="nav-link" data-cds-jh-target="#jh-maker-nev">⚡ NEVメーカー別</button>
-                    <button class="nav-link" data-cds-jh-target="#jh-maker-growth">📈 メーカー増速</button>
+
                   </div>
                 </div>
                 <div class="cds-gc">
@@ -3616,13 +3616,7 @@ body.tray-open { padding-bottom: 105px; }
                 <div id="ec-jh-maker-nev" class="echart-box" style="height:520px"></div>
               </div>
             </div>
-            <div class="cds-pane" id="jh-maker-growth">
-              <div class="chart-card">
-                <div class="chart-title">📈 メーカー別 26年1-2月 vs 25年1-2月 増速比較（%）</div>
-                <div class="chart-subtitle">前年同期比　出所：崔東樹（乗聯会）</div>
-                <div id="ec-jh-maker-growth" class="echart-box" style="height:480px"></div>
-              </div>
-            </div>
+
             <div class="cds-pane" id="jh-brand-share">
               <div class="chart-card">
                 <div class="chart-title">🏷️ 地域別 ブランド系シェア（2026年1-2月）</div>
@@ -12649,7 +12643,7 @@ function jhRender(id) {
     'jh-region-share':      jhDrawRegionShare,
     'jh-maker-total':       jhDrawMakerTotal,
     'jh-maker-nev':         jhDrawMakerNev,
-    'jh-maker-growth':      jhDrawMakerGrowth,
+
     'jh-brand-share':       jhDrawBrandShare,
     'jh-country-maker':     jhDrawCountryMaker,
     'jh-country-maker-nev': jhDrawCountryMakerNev,
@@ -12827,37 +12821,7 @@ function jhDrawMakerNev() {
   });
 }
 
-function jhDrawMakerGrowth() {
-  var ec = jhEc('ec-jh-maker-growth');
-  if (!ec) return;
-  // 26年1-2月 vs 25年1-2月 YoY
-  var makers = ['奇瑞集団','比亜迪','上汽集団','長城汽車','吉利集団','長安集団','江淮集団','広汽集団','北汽集団','零跑汽車','東風集団'];
-  var val25 = [133046+9194, 9194+4510, 325245+169658, 117822+41168, 49603+22163, 61320+52333, 31848+16257, 2804+247, 15116+10071, null, 14176+9212];
-  // 26年1-2月 vs 25年1-2月（1月+2月相当の簡易比較：25年は年計/12*2で推計）
-  var val26_12 = [187888, 135147, 115732, 75590, 54509, 36352, 22230, 17230, 15564, 14267, 9686];
-  var val25_12 = [848142/12*2, 614728/12*2, 651441/12*2, 426912/12*2, 303595/12*2, 183752/12*2, 95276/12*2, 48420/12*2, 66580/12*2, 36417/12*2, 42887/12*2];
-  var growths = makers.map(function(m, i){
-    if (!val25_12[i]) return null;
-    return Math.round((val26_12[i] - val25_12[i]) / val25_12[i] * 100);
-  });
-  // sort by growth
-  var paired = makers.map(function(m,i){ return {maker:m, growth:growths[i]}; }).sort(function(a,b){ return a.growth-b.growth; });
-  ec.setOption({
-    tooltip:{ trigger:'axis', formatter: function(params){
-      return params[0].name+': <b>'+params[0].value+'%</b>';
-    }},
-    grid:{ left:90, right:60, top:20, bottom:40 },
-    xAxis:{ type:'value', name:'前年同期比（%）', axisLine:{ onZero:true } },
-    yAxis:{ type:'category', data: paired.map(function(p){ return p.maker; }) },
-    series:[{ type:'bar',
-      data: paired.map(function(p){ return { value:p.growth,
-        itemStyle:{ color: p.growth >= 0 ? '#22c55e' : '#ef4444' }
-      }; }),
-      label:{ show:true, position:function(p){ return p.value >= 0 ? 'right' : 'left'; },
-        formatter: function(p){ return p.value+'%'; }, fontSize:11 }
-    }]
-  });
-}
+
 
 function jhDrawBrandShare() {
   var ec = jhEc('ec-jh-brand-share');
@@ -13015,7 +12979,7 @@ document.addEventListener('click', function(e) {
 // ---- resize ----
 window.addEventListener('resize', function(){
   ['jh-monthly-trend','jh-region-volume','jh-region-share','jh-maker-total','jh-maker-nev',
-   'jh-maker-growth','jh-brand-share','jh-country-maker','jh-country-maker-nev','jh-russia-detail'].forEach(function(id){
+   'jh-brand-share','jh-country-maker','jh-country-maker-nev','jh-russia-detail'].forEach(function(id){
     var ec = echarts.getInstanceByDom(document.getElementById('ec-'+id));
     if (ec) { try { ec.resize(); } catch(e){} }
   });

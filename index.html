@@ -18,113 +18,122 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
-// ===== ECharts パッチ: 凡例ホバー時の挙動を制御 =====
-// - 折れ線/通常棒: ホバーしたシリーズ以外をフェード
-// - 積み上げ棒: ホバーしたシリーズのみ表示・縦軸自動スケール
-// - 凡例クリックによる表示/非表示は正常に動作するよう保持
+// ===== ECharts パッチ: 凡例ホバー時にラベル表示 =====
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
-
     var _setOption = instance.setOption.bind(instance);
     var _lastOption = null;
-    var _hovering = false;
-    // 凡例クリックで非表示になったシリーズ名を記録
+    var _hovering   = false;
     var _hiddenSeries = {};
 
+    // setOption をラップして _lastOption を保存
     instance.setOption = function(option, notMerge, lazyUpdate) {
+      // emphasis.focus を自動付与（既存設定を上書きしない）
       if (option && option.series) {
-        var serArr = Array.isArray(option.series) ? option.series : [option.series];
-        serArr.forEach(function(s) {
-          if (s) { if (!s.emphasis) s.emphasis = {}; if (!s.emphasis.focus) s.emphasis.focus = 'series'; }
+        var arr = Array.isArray(option.series) ? option.series : [option.series];
+        arr.forEach(function(s) {
+          if (s && !s.emphasis) s.emphasis = {};
+          if (s && !s.emphasis.focus) s.emphasis.focus = 'series';
         });
       }
-      // スマホ対応: 全チャートのtooltipに confine:true を自動付与（画面端での見切れ防止）
+      // tooltip: confine + max-width
       if (option && option.tooltip) {
         var tips = Array.isArray(option.tooltip) ? option.tooltip : [option.tooltip];
         tips.forEach(function(t) {
           if (!t) return;
           if (t.confine == null) t.confine = true;
-          // スマホでtooltipが画面幅を超えないようmax-widthを付与
-          if (t.extraCssText == null) {
+          if (t.extraCssText == null)
             t.extraCssText = 'max-width:min(88vw,320px);white-space:normal;word-break:break-word;font-size:12px;';
-          }
         });
       }
       if (!_hovering) {
         _lastOption = option;
-        _hiddenSeries = {}; // オプション再設定時は非表示状態をリセット
+        _hiddenSeries = {};
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
-    // 凡例クリックを監視して非表示状態を記録
+    // 凡例クリックで非表示シリーズを記録
     instance.on('legendselectchanged', function(params) {
       _hiddenSeries = {};
       Object.keys(params.selected).forEach(function(name) {
-        if (!params.selected[name]) {
-          _hiddenSeries[name] = true;
-        }
+        if (!params.selected[name]) _hiddenSeries[name] = true;
       });
     });
 
+    // 凡例アイテムのzrender要素からインデックスを取得
     function getLegendIdx(el) {
-      if (!el) return null;
-      var cur = el;
-      for (var d = 0; d < 6; d++) {
-        if (!cur) break;
+      for (var cur = el, d = 0; cur && d < 8; cur = cur.parent, d++) {
         if (cur.__legendDataIndex != null) return cur.__legendDataIndex;
-        cur = cur.parent;
       }
       return null;
     }
 
-    function triggerHoverLabel(inst, hoveredName, opt) {
+    // 単位を yAxis/xAxis の設定から判定
+    function detectUnit(opt, isHorizontal, isPercent) {
+      if (isPercent) return '%';
+      var axisObj = isHorizontal ? (opt.xAxis && opt.xAxis[0]) : (opt.yAxis && opt.yAxis[0]);
+      if (!axisObj) return '';
+      var name = axisObj.name || '';
+      var fmt  = axisObj.axisLabel && axisObj.axisLabel.formatter
+                 ? axisObj.axisLabel.formatter.toString() : '';
+      if (fmt.indexOf('万') >= 0 || name.indexOf('万') >= 0) return '万';
+      if (name.indexOf('GWh') >= 0) return 'GWh';
+      if (name.indexOf('億')  >= 0) return '億';
+      if (name.indexOf('台')  >= 0) return '台';
+      return '';
+    }
+
+    // ラベル表示のメイン処理
+    function showHoverLabels(hoveredName) {
       if (!hoveredName || _hiddenSeries[hoveredName]) return;
-      var hasStack = opt.series.some(function(s){ return s.type === 'bar' && s.stack; });
-      var isHorizontal = opt.xAxis && opt.xAxis[0] && opt.xAxis[0].type === 'value'
-                      && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].type === 'category';
-      var hoveredSeries = opt.series.find(function(s){ return s.name === hoveredName; });
-      var hoveredData = hoveredSeries ? hoveredSeries.data : [];
-      var dataMax = 0;
-      hoveredData.forEach(function(v){
-        var n = (typeof v === 'object' && v !== null) ? (v.value != null ? v.value : 0) : (v != null ? v : 0);
-        if (n > dataMax) dataMax = n;
-      });
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return;
+      var hasBar = opt.series.some(function(s) { return s.type === 'bar'; });
+      if (!hasBar) return;
+
+      var hasStack    = opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
+      var isHorizontal = !!(opt.xAxis && opt.xAxis[0] && opt.xAxis[0].type === 'value'
+                         && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].type === 'category');
+
+      // %グラフ判定
       var fmtAxis = isHorizontal
         ? (opt.xAxis && opt.xAxis[0] && opt.xAxis[0].axisLabel && opt.xAxis[0].axisLabel.formatter)
         : (opt.yAxis && opt.yAxis[0] && opt.yAxis[0].axisLabel && opt.yAxis[0].axisLabel.formatter);
-      var fmtStr = fmtAxis ? fmtAxis.toString() : '';
-      var yMax = !isHorizontal && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].max;
-      var isPercent = fmtStr.indexOf('%') >= 0 || yMax === 100;
-      var niceMax = isPercent ? 100 : (dataMax <= 0 ? null : (Math.ceil(dataMax * 1.15 / 5) * 5));
+      var fmtStr   = fmtAxis ? fmtAxis.toString() : '';
+      var axisMax  = !isHorizontal && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].max;
+      var isPercent = fmtStr.indexOf('%') >= 0 || axisMax === 100;
+
+      var unit     = detectUnit(opt, isHorizontal, isPercent);
       var labelPos = isHorizontal ? 'right' : 'top';
 
-      // 単位判定
-      var axisObj = isHorizontal ? (opt.xAxis && opt.xAxis[0]) : (opt.yAxis && opt.yAxis[0]);
-      var axisName = axisObj && axisObj.name ? axisObj.name : '';
-      var unit = '';
-      if (isPercent) { unit = '%'; }
-      else if (fmtStr.indexOf('万') >= 0 || axisName.indexOf('万') >= 0) { unit = '万'; }
-      else if (axisName.indexOf('GWh') >= 0) { unit = 'GWh'; }
-      else if (axisName.indexOf('億') >= 0) { unit = '億'; }
-      else if (axisName.indexOf('台') >= 0) { unit = '台'; }
+      // niceMax
+      var hovSeries = opt.series.find(function(s) { return s.name === hoveredName; });
+      var dataMax = 0;
+      (hovSeries ? hovSeries.data : []).forEach(function(v) {
+        var n = (v != null && typeof v === 'object') ? (v.value || 0) : (v || 0);
+        if (n > dataMax) dataMax = n;
+      });
+      var niceMax = isPercent ? 100 : (dataMax > 0 ? Math.ceil(dataMax * 1.15 / 5) * 5 : null);
 
-      var patchSeries = opt.series.map(function(s){
-        var isHov = s.name === hoveredName;
-        var isHid = !!_hiddenSeries[s.name];
+      var patchSeries = opt.series.map(function(s) {
+        var isHov = (s.name === hoveredName) && !_hiddenSeries[s.name];
         var newData = hasStack
-          ? ((isHov && !isHid) ? s.data : s.data.map(function(){ return 0; }))
+          ? (isHov ? s.data : s.data.map(function() { return 0; }))
           : s.data;
         return {
           data: newData,
-          itemStyle: hasStack ? {} : { opacity: (isHov && !isHid) ? 1 : 0.2 },
-          label: (isHov && !isHid) ? {
-            show: true, position: labelPos, color: 'inherit',
-            fontSize: 11, fontWeight: 'bold',
-            formatter: function(p){
-              return p.value != null && p.value > 0 ? p.value + unit : '';
+          itemStyle: hasStack ? {} : { opacity: isHov ? 1 : 0.2 },
+          label: isHov ? {
+            show: true,
+            position: labelPos,
+            color: 'inherit',
+            fontSize: 11,
+            fontWeight: 'bold',
+            formatter: function(p) {
+              return (p.value != null && p.value > 0) ? p.value + unit : '';
             }
           } : { show: false }
         };
@@ -139,62 +148,28 @@
       _hovering = false;
     }
 
-    // バーホバー（系列名を直接取得）
-    instance.on('mouseover', function(params) {
-      if (!params || params.componentType !== 'series') return;
-      var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      var hasBar = opt.series.some(function(s){ return s.type === 'bar'; });
-      if (!hasBar) return;
-      triggerHoverLabel(instance, params.seriesName, opt);
-    });
-
-    // mouseover（凡例ホバー）
+    // 凡例ホバー検出
     instance.getZr().on('mouseover', function(e) {
-      var el = e.target;
-      if (!el) return;
-      var idx = getLegendIdx(el);
-
-      if (idx === null) {
-        return; // バーホバーは上のon('mouseover')で処理
-      }
-
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
       var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      var hasBar = opt.series.some(function(s){ return s.type === 'bar'; });
-      if (!hasBar) return;
-      var names = [];
-      if (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length > 0) {
-        names = opt.legend[0].data.map(function(d){ return typeof d === 'object' ? d.name : d; });
-      } else {
-        names = opt.series.map(function(s){ return s.name; });
-      }
-      var hoveredName = names[idx];
-      triggerHoverLabel(instance, hoveredName, opt);
+      if (!opt) return;
+      var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
+        ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
+        : (opt.series || []).map(function(s) { return s.name; });
+      showHoverLabels(names[idx]);
     });
 
-    // mouseout: 非表示状態を維持しながらリセット
+    // マウスアウト → リセット
     instance.getZr().on('mouseout', function(e) {
-      var idx = getLegendIdx(e.target);
-      // idxがnullでもリセット処理は実行（凡例エリア外へのマウスアウトも含む）
-
-      var opt = instance.getOption();
-      var hasStack = opt && opt.series && opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
-
-      if ((hasStack || hasBar) && _lastOption) {
-        _hovering = true;
-        _setOption(_lastOption, true);
-        // 非表示だったシリーズを再度非表示に戻す
-        Object.keys(_hiddenSeries).forEach(function(name) {
-          instance.dispatchAction({ type: 'legendUnSelect', name: name });
-        });
-        _hovering = false;
-      } else if (!hasStack && opt && opt.series) {
-        opt.series.forEach(function(s, i) {
-          instance.dispatchAction({ type: 'highlight', seriesIndex: i });
-          instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-        });
-      }
+      if (getLegendIdx(e.target) === null) return;
+      if (!_lastOption) return;
+      _hovering = true;
+      _setOption(_lastOption, true);
+      Object.keys(_hiddenSeries).forEach(function(name) {
+        instance.dispatchAction({ type: 'legendUnSelect', name: name });
+      });
+      _hovering = false;
     });
 
     return instance;

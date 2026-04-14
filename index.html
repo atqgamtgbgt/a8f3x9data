@@ -3554,7 +3554,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-bodytype"><div class="chart-card"><div class="chart-title">ボディタイプ別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ⑯シート　2022〜2025年</div><div id="ec-cds-bodytype" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-nev-power"><div class="chart-card"><div class="chart-title">NEV 動力別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉓シート　2022〜2025年</div><div id="ec-cds-nev-power" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-nev-body"><div class="chart-card"><div class="chart-title">新エネルギー車 ボディタイプ別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉔シート　2022〜2025年</div><div id="ec-cds-nev-body" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-displace"><div class="chart-card"><div class="chart-title">乗用車 排気量×動力別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉘シート　2020〜2025年</div><div id="ec-cds-displace" class="echart-box" style="height:480px"></div></div></div>
+            <div class="cds-pane" id="cds-displace"><div class="chart-card"><div class="chart-title">乗用車 排気量×動力別輸出量（万台）</div><div class="chart-subtitle">排気量帯×動力種別　2022〜2025年（出所：崔東樹/乗聯会）</div><div id="ec-cds-displace" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-region"><div class="chart-card"><div class="chart-title">地域別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ⑲シート　2019〜2025年</div><div id="ec-cds-region" class="echart-box" style="height:460px"></div></div></div>
             <div class="cds-pane" id="cds-country"><div class="chart-card"><div class="chart-title">主要国別輸出量 Top15（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ⑳シート　2024年・2025年比較</div><div id="ec-cds-country" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-nev-ctry"><div class="chart-card"><div class="chart-title">NEV 国別輸出量 Top15（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉑シート　2024年・2025年比較</div><div id="ec-cds-nev-ctry" class="echart-box" style="height:500px"></div></div></div>
@@ -8328,14 +8328,89 @@ function cdsDrawRussia() {
   setTimeout(()=>{try{cdsEc('ec-cds-russia')?.resize();}catch(e){}},80);
 }
 
+// 動力種別の日本語マップ
+const DISP_POWER_MAP = {
+  '汽油':'ガソリン', '柴油':'ディーゼル', '混合動力':'HEV',
+  '純電動':'BEV', '插混':'PHEV'
+};
+// 排量帯の日本語マップ（ソート順も管理）
+const DISP_RANGE_ORDER = ['≤1L','1〜1.5L','1.5〜2L','2〜2.5L','2.5〜3L','3L超','全排量'];
+const DISP_RANGE_MAP = {
+  '排量≦1L':'≤1L',
+  '1L＜排量≦1.5L':'1〜1.5L',
+  '1.5L＜排量≦2L':'1.5〜2L',
+  '2L＜排量≦2.5L':'2〜2.5L',
+  '2.5L＜排量≦3L':'2.5〜3L',
+  '排量＞3L':'3L超',
+  '（全排量）':'全排量',
+};
+
+let _displaceYear = '2025';
+function _setDisplaceYear(yr, btn) {
+  _displaceYear = yr;
+  document.querySelectorAll('.displace-yr-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  cdsDrawDisplace();
+}
+
 function cdsDrawDisplace() {
   if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-displace'); if(!chart) return;
-  const yrs=['2022','2023','2024','2025'], d=(CDS.displace||[]).filter(x=>x.power!=='動力'&&!x.range.includes('汇総'));
-  const labels=d.map(x=>`${x.power}\n${x.range}`);
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:80},
-    xAxis:{type:'category',data:labels,axisLabel:{fontSize:9,rotate:30}},yAxis:{type:'value',name:'万台'},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',data:d.map(x=>x.vals[yr]),itemStyle:{color:YRCOLORS[i+1]},label:{show:i===3,position:'top',fontSize:9,formatter:p=>p.value&&p.value>=1?p.value:''}}))});
+  const yr = _displaceYear;
+
+  // ボタン生成（初回のみ）
+  const pane = document.getElementById('cds-displace');
+  if(pane && !pane.querySelector('.displace-yr-btn')) {
+    const btnDiv = document.createElement('div');
+    btnDiv.style.cssText='text-align:center;margin-bottom:6px;';
+    ['2022','2023','2024','2025'].forEach(y=>{
+      const b=document.createElement('button');
+      b.className='btn btn-sm btn-outline-primary displace-yr-btn me-1'+(y===yr?' active':'');
+      b.textContent=y+'年'; b.style.fontSize='11px';
+      b.onclick=()=>_setDisplaceYear(y,b);
+      btnDiv.appendChild(b);
+    });
+    const chartEl = pane.querySelector('#ec-cds-displace');
+    pane.querySelector('.chart-card').insertBefore(btnDiv, chartEl);
+  }
+
+  // データ整形: 排量帯×動力種別のマトリクス
+  const rawData = (CDS.displace||[]).filter(x=>!x.range.includes('汇総'));
+  // 排量帯一覧（存在するもの）
+  const rangeSet = new Set(rawData.map(x=>DISP_RANGE_MAP[x.range]||x.range).filter(Boolean));
+  const ranges = DISP_RANGE_ORDER.filter(r=>rangeSet.has(r));
+  // 動力種別一覧
+  const powerSet = new Set(rawData.map(x=>x.power).filter(p=>p&&!p.includes('汇')));
+  const powerOrder = ['汽油','混合動力','純電動','插混','柴油'];
+  const powers = powerOrder.filter(p=>powerSet.has(p));
+  const pwCols = {'汽油':'#94a3b8','混合動力':'#f59e0b','純電動':'#3b82f6','插混':'#10b981','柴油':'#a78bfa'};
+
+  // 系列データ作成
+  const series = powers.map(pw=>{
+    const data = ranges.map(rng=>{
+      const item = rawData.find(x=>x.power===pw&&(DISP_RANGE_MAP[x.range]||x.range)===rng);
+      return item ? (item.vals[yr]??null) : null;
+    });
+    return {
+      name: DISP_POWER_MAP[pw]||pw,
+      type:'bar', barGap:'5%', barCategoryGap:'30%',
+      data, itemStyle:{color:pwCols[pw]||'#888'},
+      label:{show:true,position:'top',fontSize:9,
+        formatter:p=>p.value!=null&&p.value>=0.5?p.value.toFixed(1):''}
+    };
+  });
+
+  chart.setOption({
+    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},
+      formatter:p=>`<b>${p[0].axisValueLabel}</b> (${yr}年)<br/>`+
+        p.filter(s=>s.value!=null&&s.value>0).map(s=>`${s.marker}${s.seriesName}: <b>${s.value}万台</b>`).join('<br/>')
+    },
+    legend:{data:powers.map(p=>DISP_POWER_MAP[p]||p),bottom:0,type:'scroll'},
+    grid:{left:55,right:15,top:20,bottom:55},
+    xAxis:{type:'category',data:ranges,axisLabel:{fontSize:11}},
+    yAxis:{type:'value',name:'万台',nameTextStyle:{fontSize:11}},
+    series
+  });
   setTimeout(()=>{try{cdsEc('ec-cds-displace')?.resize();}catch(e){}},80);
 }
 

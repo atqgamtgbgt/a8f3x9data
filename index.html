@@ -11152,17 +11152,7 @@ window.addEventListener('resize', function(){
       series: makers.map(function(m){
         return {
           name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
-          itemStyle:{
-            color: function(p){
-              // 最新期（2026年1Q）だけ少し明るく枠線つき
-              if(p.dataIndex === latestIdx){
-                return { type:'linear', x:0,y:0,x2:0,y2:1,
-                  colorStops:[{offset:0,color:m.color},{offset:1,color:m.color+'cc'}],
-                  borderColor:'#fff', borderWidth:1 };
-              }
-              return m.color;
-            }
-          },
+          itemStyle:{ color: m.color, opacity: function(p){ return p.dataIndex === latestIdx ? 1 : 0.82; } },
           data: m.data,
           label:{show:false}
         };
@@ -11229,15 +11219,7 @@ window.addEventListener('resize', function(){
       series: makers.map(function(m){
         return {
           name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
-          itemStyle:{
-            color: function(p){
-              if(p.dataIndex === latestIdx){
-                return { type:'linear', x:0,y:0,x2:0,y2:1,
-                  colorStops:[{offset:0,color:m.color},{offset:1,color:m.color+'cc'}] };
-              }
-              return m.color;
-            }
-          },
+          itemStyle:{ color: m.color, opacity: function(p){ return p.dataIndex === latestIdx ? 1 : 0.82; } },
           data: m.data, label:{show:false}
         };
       })
@@ -11299,15 +11281,7 @@ window.addEventListener('resize', function(){
       series: makers.map(function(m){
         return {
           name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
-          itemStyle:{
-            color: function(p){
-              if(p.dataIndex === latestIdx){
-                return { type:'linear', x:0,y:0,x2:0,y2:1,
-                  colorStops:[{offset:0,color:m.color},{offset:1,color:m.color+'cc'}] };
-              }
-              return m.color;
-            }
-          },
+          itemStyle:{ color: m.color, opacity: function(p){ return p.dataIndex === latestIdx ? 1 : 0.82; } },
           data: m.data, label:{show:false}
         };
       })

@@ -3162,7 +3162,6 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEVトラック</button>
                     <button class="nav-link" data-cds-target="#cds-r11">⛽ 燃油バス</button>
                     <button class="nav-link" data-cds-target="#cds-r12">⚡ NEVバス</button>
-                    <button class="nav-link" data-cds-target="#cds-r12b">⚡ NEVバス+</button>
                   </div>
                 </div>
 
@@ -3550,7 +3549,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-nev"><div class="chart-card"><div class="chart-title">NEV輸出 vs 総輸出（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ②シート　月次単月</div><div id="ec-cds-nev" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-nev-annual"><div class="chart-card"><div class="chart-title">NEV輸出 年別推移（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉕シート　2020〜2025年</div><div id="ec-cds-nev-annual" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-nev-trend"><div class="chart-card"><div class="chart-title">NEV輸出 長期トレンド（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉖シート　2017〜2025年</div><div id="ec-cds-nev-trend" class="echart-box" style="height:420px"></div></div></div>
-            <div class="cds-pane" id="cds-russia"><div class="chart-card"><div class="chart-title">対ロシア 月次輸出量推移（台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉗シート　2021〜2025年</div><div id="ec-cds-russia" class="echart-box" style="height:420px"></div></div></div>
+            <div class="cds-pane" id="cds-russia"><div class="chart-card"><div class="chart-title">対ロシア 月次輸出量推移（台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉗シート　2021〜2026年</div><div id="ec-cds-russia" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-powertype"><div class="chart-card"><div class="chart-title">乗用車 動力別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ⑰シート　2022〜2025年</div><div id="ec-cds-powertype" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-bodytype"><div class="chart-card"><div class="chart-title">ボディタイプ別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ⑯シート　2022〜2025年</div><div id="ec-cds-bodytype" class="echart-box" style="height:420px"></div></div></div>
             <div class="cds-pane" id="cds-nev-power"><div class="chart-card"><div class="chart-title">NEV 動力別輸出量（万台）</div><div class="chart-subtitle">崔東樹/乗聯会 ㉓シート　2022〜2025年</div><div id="ec-cds-nev-power" class="echart-box" style="height:420px"></div></div></div>
@@ -7876,7 +7875,7 @@ window.addEventListener('afterprint', function() {
 // =============================================
 // 崔東樹（輸出分析）タブ — 全シート対応
 // =============================================
-const CDS_EXCEL_PATH = `${RAW_BASE}source/${encodeURIComponent('中国自動車輸出市場分析_完全版v9.xlsx')}`;
+const CDS_EXCEL_PATH = `${RAW_BASE}source/${encodeURIComponent('中国自動車輸出市場分析_完全版v9_update.xlsx')}`;
 let CDS_LOADED = false;
 let CDS = {};          // 全データ格納
 const CDS_EC = {};
@@ -8084,8 +8083,8 @@ async function loadCdsExcel() {
       r5:'⑤燃油乗用車_月次比較表', r6:'⑥BEV乗用車_月次比較表',
       r7:'⑦PHEV乗用車_月次比較表', r8:'⑧燃油货車_月次比較表',
       r9:'⑨PHEV货車_月次比較表', r10:'⑩BEV货車_月次比較表',
-      r11:'⑪燃油客車_月次比較表', r12:'⑫新能源客車_月次比較表',
-      r6b:'⑥b混合動力乗用車_月次比較表', r9b:'⑨b新能源货車_月次比較表', r12b:'⑫b新能源客車_月次比較表',
+      r11:'⑪燃油客車_月次比較表', r12:'⑫b新能源客車_月次比較表',
+      r6b:'⑥b混合動力乗用車_月次比較表', r9b:'⑨b新能源货車_月次比較表',
     };
     CDS.rankings = {};
     for (const [key, sname] of Object.entries(rankSheets)) {
@@ -8305,11 +8304,11 @@ function cdsDrawRussia() {
   if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-russia'); if(!chart) return;
   const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-  const yrs=Object.keys(CDS.russia||{}).sort(), cols=['#cbd5e1','#94a3b8','#3b82f6','#f59e0b','#ef4444'];
+  const yrs=Object.keys(CDS.russia||{}).sort(), cols=['#cbd5e1','#94a3b8','#3b82f6','#f59e0b','#ef4444','#10b981'];
   chart.setOption({tooltip:{trigger:'axis',formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>`+p.map(s=>`${s.marker}${s.seriesName}: <b>${s.value!=null?s.value.toLocaleString()+'台':'—'}</b>`).join('<br/>')},
     legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:50},
     xAxis:{type:'category',data:months},yAxis:{type:'value',name:'台',axisLabel:{formatter:v=>v>=10000?(v/10000).toFixed(0)+'万':v}},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',emphasis:{focus:'series'},smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:2,color:cols[i]},itemStyle:{color:cols[i]},data:CDS.russia[yr]}))});
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',emphasis:{focus:'series'},smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:(yr==='2025'||yr==='2026')?3:2,color:cols[i]},itemStyle:{color:cols[i]},data:CDS.russia[yr]}))});
   setTimeout(()=>{try{cdsEc('ec-cds-russia')?.resize();}catch(e){}},80);
 }
 
@@ -8335,7 +8334,7 @@ function cdsDrawDisplace() {
 const RANK_TITLES = {
   r3:'整車出口', r4:'NEV出口', r5:'燃油乗用車', r6:'BEV乗用車',
   r7:'PHEV乗用車', r6b:'HEV乗用車', r8:'燃油トラック', r9:'PHEVトラック（ピックアップ）',
-  r10:'BEVトラック', r9b:'NEVトラック', r11:'燃油バス', r12:'NEVバス', r12b:'NEVバス（詳細）',
+  r10:'BEVトラック', r9b:'NEVトラック', r11:'燃油バス', r12:'NEVバス（統合）',
 };
 
 const PALETTE = [
@@ -8563,7 +8562,6 @@ const CDS_FNS = {
   'cds-r9b':  makeRankingPanel('r9b'),
   'cds-r11':  makeRankingPanel('r11'),
   'cds-r12':  makeRankingPanel('r12'),
-  'cds-r12b': makeRankingPanel('r12b'),
 };
 
 // =============================================
@@ -8792,7 +8790,7 @@ var CDS_CURRENT_EXPORT_ID = 'cds-monthly';
       'cds-russia','cds-powertype','cds-bodytype','cds-nev-power','cds-nev-body','cds-displace',
       'cds-region','cds-country','cds-nev-ctry','cds-prov','cds-nev-prov','cds-rank',
       'cds-r3','cds-r4','cds-r5','cds-r6','cds-r7','cds-r6b',
-      'cds-r8','cds-r9','cds-r10','cds-r9b','cds-r11','cds-r12','cds-r12b'];
+      'cds-r8','cds-r9','cds-r10','cds-r9b','cds-r11','cds-r12'];
     if (exportIds.includes(id)) CDS_CURRENT_EXPORT_ID = id;
   };
 })();

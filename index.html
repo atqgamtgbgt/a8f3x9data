@@ -8130,7 +8130,7 @@ function drawBar(id, title, subtitle, categories, series, opts={}) {
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
     legend:{data:series.map(s=>s.name),bottom:0,type:'scroll'},
-    grid:{left:opts.left||55,right:opts.right||20,top:30,bottom:opts.bottom||55},
+    grid:{left:opts.left||60,right:opts.right||20,top:30,bottom:opts.bottom||55,containLabel:true},
     xAxis:opts.horizontal?{type:'value',name:opts.xname||'万台'}:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
     yAxis:opts.horizontal?{type:'category',data:categories}:{type:'value',name:opts.yname||'万台'},
     series:series.map(s=>({...s,type:'bar',stack:opts.stack?'total':undefined,emphasis:{focus:'series'},label:{show:!!opts.label,position:opts.horizontal?'right':'top',fontSize:10,formatter:p=>p.value&&Math.abs(p.value)>=opts.labelMin?p.value:''}})),
@@ -8143,7 +8143,7 @@ function drawLine(id, categories, series, opts={}) {
   chart.setOption({
     tooltip:{trigger:'axis'},
     legend:{data:series.map(s=>s.name),bottom:0,type:'scroll'},
-    grid:{left:60,right:opts.r2?55:20,top:20,bottom:55},
+    grid:{left:60,right:opts.r2?55:20,top:20,bottom:55,containLabel:true},
     xAxis:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
     yAxis:opts.yAxis||[{type:'value',name:opts.yname||'万台'}],
     series:series.map(s=>({smooth:true,symbol:'circle',symbolSize:5,emphasis:{focus:'series'},...s})),
@@ -8157,7 +8157,7 @@ function cdsDrawMonthly() {
   const chart=cdsEc('ec-cds-monthly'); if(!chart) return;
   const months=['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
   const yrs=['2021','2022','2023','2024','2025','2026'];
-  chart.setOption({tooltip:{trigger:'axis'},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:50,right:20,top:20,bottom:50},
+  chart.setOption({tooltip:{trigger:'axis'},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:55,right:20,top:20,bottom:50,containLabel:true},
     xAxis:{type:'category',data:months},yAxis:{type:'value',name:'万台'},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'line',emphasis:{focus:'series'},smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:yr==='2024'?2.5:1.5,type:yr==='2026'?'dashed':'solid'},itemStyle:{color:YRCOLORS[i]},data:(CDS.monthly[yr]||[])}))});
   setTimeout(()=>{try{cdsEc('ec-cds-monthly')?.resize();}catch(e){}},80);
@@ -8167,7 +8167,7 @@ function cdsDrawAnnual() {
   if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-annual'); if(!chart) return;
   const d=CDS.annual;
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:55,right:55,top:20,bottom:55},
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:60,right:55,top:20,bottom:55,containLabel:true},
     xAxis:{type:'category',data:d.map(x=>x.year),axisLabel:{rotate:45}},
     yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
     series:[{name:'出口量',type:'bar',emphasis:{focus:'series'},data:d.map(x=>x.vol),itemStyle:{color:p=>p.data>=500?'#10b981':p.data>=300?'#3b82f6':p.data>=150?'#f59e0b':'#94a3b8'},label:{show:false}},
@@ -8185,7 +8185,7 @@ function cdsDrawNev() {
     const t=n(tot[i]),ne=n(nev[i]); if(t===null) continue;
     labels.push(h.replace('年','年\n')); tv.push(t); nv.push(ne); iv.push(t!==null&&ne!==null?Math.round((t-ne)*10)/10:null);
   }
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:55,right:20,top:20,bottom:65},
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:60,right:20,top:20,bottom:65,containLabel:true},
     xAxis:{type:'category',data:labels,axisLabel:{fontSize:10}},yAxis:{type:'value',name:'万台'},
     series:[{name:'燃油車等',type:'bar',emphasis:{focus:'series'},stack:'t',data:iv,itemStyle:{color:'#94a3b8'}},{name:'NEV',type:'bar',emphasis:{focus:'series'},stack:'t',data:nv,itemStyle:{color:'#10b981'},label:{show:false}}]});
   setTimeout(()=>{try{cdsEc('ec-cds-nev')?.resize();}catch(e){}},80);
@@ -8203,7 +8203,7 @@ function cdsDrawNevTrend() {
   if (!CDS_LOADED) return;
   const d=CDS.nevTrend||[];
   const chart=cdsEc('ec-cds-nev-trend'); if(!chart) return;
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:55,right:55,top:20,bottom:40},
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:60,right:55,top:20,bottom:40,containLabel:true},
     xAxis:{type:'category',data:d.map(x=>x.year)},
     yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
     series:[{name:'出口量',type:'bar',emphasis:{focus:'series'},data:d.map(x=>x.vol),itemStyle:{color:'#10b981'},label:{show:false}},
@@ -8244,7 +8244,7 @@ function cdsDrawRegion() {
   if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-region'); if(!chart) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025','2026年1-2月'], rs=(CDS.regions||[]).filter(r=>r.name!=='総計');
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:rs.map(r=>r.name),bottom:0,type:'scroll'},grid:{left:55,right:20,top:30,bottom:70},
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:rs.map(r=>r.name),bottom:0,type:'scroll'},grid:{left:55,right:20,top:30,bottom:70,containLabel:true},
     xAxis:{type:'category',data:yrs,axisLabel:{rotate:30,fontSize:10}},yAxis:{type:'value',name:'万台'},
     series:rs.map((r,ri)=>({name:r.name,type:'bar',emphasis:{focus:'series'},stack:'t',
       data:[...r.v, r.v2026??null],label:{show:false}}))});
@@ -8273,7 +8273,7 @@ function cdsDrawProv() {
   const ps=(CDS.provs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,15);
   const chart=cdsEc('ec-cds-prov'); if(!chart) return;
   const COLS8=[...YRCOLORS,'#1d4ed8'];
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60,containLabel:true},
     xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     series:yrs.map((yr,i)=>({name:yr,type:'bar',barMaxWidth:14,data:ps.map(p=>p.v[i]??null).reverse(),itemStyle:{color:COLS8[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))});
   setTimeout(()=>{try{cdsEc('ec-cds-prov')?.resize();}catch(e){}},80);
@@ -8284,7 +8284,7 @@ function cdsDrawNevProv() {
   const yrs=['2019','2020','2021','2022','2023','2024','2025'];
   const ps=(CDS.nevProvs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,12);
   const chart=cdsEc('ec-cds-nev-prov'); if(!chart) return;
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60},
+  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},grid:{left:65,right:20,top:30,bottom:60,containLabel:true},
     xAxis:{type:'value',name:'万台'},yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',barMaxWidth:16,data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))});
   setTimeout(()=>{try{cdsEc('ec-cds-nev-prov')?.resize();}catch(e){}},80);
@@ -8296,7 +8296,7 @@ function cdsDrawRank() {
   const yrs=CDS.rankYears||[], rd=CDS.rankData||[];
   // ランキング逆表示（1位が上）
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>`+p.map(s=>`${s.marker}${s.seriesName}: <b>${s.value!=null?s.value+'位':'—'}</b>`).join('<br/>')},
-    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:55,right:20,top:20,bottom:60},
+    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:55,right:20,top:20,bottom:60,containLabel:true},
     xAxis:{type:'category',data:yrs},
     yAxis:{type:'value',name:'順位',inverse:true,min:1,max:rd.length,interval:1,axisLabel:{formatter:v=>v+'位'}},
     series:rd.map((row,i)=>({name:`${row.rank}位グループ`,type:'line', emphasis:{focus:'series'},smooth:false,symbol:'circle',symbolSize:8,data:row.vals.map((v,j)=>{
@@ -8309,7 +8309,7 @@ function cdsDrawRank() {
   // 代わりにヒートマップ形式で表示
   const countries=[...new Set(rd.flatMap(r=>r.vals).filter(Boolean))];
   chart.setOption({tooltip:{trigger:'item',formatter:p=>`${p.name}<br/>${p.seriesName}: <b>${p.value}位</b>`},
-    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:100,right:20,top:20,bottom:60},
+    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:100,right:20,top:20,bottom:60,containLabel:true},
     xAxis:{type:'category',data:yrs},
     yAxis:{type:'category',data:countries.slice(0,15)},
     series:[{type:'heatmap',data:rd.flatMap(r=>r.vals.map((country,j)=>country?[j,countries.indexOf(country),r.rank]:null)).filter(Boolean),label:{show:true,formatter:p=>`${p.data[2]}位`},itemStyle:{borderWidth:1,borderColor:'#fff'},emphasis:{itemStyle:{shadowBlur:5}}}],
@@ -8406,7 +8406,7 @@ function cdsDrawDisplace() {
         p.filter(s=>s.value!=null&&s.value>0).map(s=>`${s.marker}${s.seriesName}: <b>${s.value}万台</b>`).join('<br/>')
     },
     legend:{data:powers.map(p=>DISP_POWER_MAP[p]||p),bottom:0,type:'scroll'},
-    grid:{left:55,right:15,top:20,bottom:55},
+    grid:{left:60,right:15,top:20,bottom:55,containLabel:true},
     xAxis:{type:'category',data:ranges,axisLabel:{fontSize:11}},
     yAxis:{type:'value',name:'万台',nameTextStyle:{fontSize:11}},
     series

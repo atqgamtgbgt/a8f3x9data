@@ -11169,7 +11169,7 @@ window.addEventListener('resize', function(){
               fontWeight: 'bold',
               color: 'inherit',
               formatter: function(p){
-                return p.value != null && p.value >= 2 ? p.value + '%' : '';
+                return p.value != null && p.value > 0 ? p.value + '%' : '';
               }
             }
           }
@@ -11249,7 +11249,7 @@ window.addEventListener('resize', function(){
               fontWeight: 'bold',
               color: 'inherit',
               formatter: function(p){
-                return p.value != null && p.value >= 2 ? p.value + '%' : '';
+                return p.value != null && p.value > 0 ? p.value + '%' : '';
               }
             }
           }
@@ -11325,7 +11325,7 @@ window.addEventListener('resize', function(){
               fontWeight: 'bold',
               color: 'inherit',
               formatter: function(p){
-                return p.value != null && p.value >= 2 ? p.value + '%' : '';
+                return p.value != null && p.value > 0 ? p.value + '%' : '';
               }
             }
           }

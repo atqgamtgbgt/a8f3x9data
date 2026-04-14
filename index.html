@@ -6299,6 +6299,56 @@ function safeInit(fn) {
 // 実際の値は loadCaamExcel() 完了後にセットされる
 const PAL = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f','#edc948','#b07aa1','#ff9da7','#9c755f','#bab0ac','#d37295','#a0cbe8'];
 
+/* ============================================================
+ * 全積み上げ棒グラフ共通 tooltip (LFP/三元型式に統一)
+ *   - 合計を先頭に太字表示
+ *   - 各系列は ● カラードット + 系列名: <値> 単位
+ *   - <br> 区切り、<hr>・YoY・構成比%は付けない
+ * ============================================================ */
+function unifiedStackTooltip(opts) {
+  opts = opts || {};
+  var unit = opts.unit != null ? opts.unit : '万台';
+  var digits = opts.digits != null ? opts.digits : 1;
+  var note = opts.note || '';
+  var showTotal = opts.showTotal !== false;
+  function fmtNum(v){
+    if (v == null || isNaN(v)) return '−';
+    var n = Number(v);
+    return n.toLocaleString(undefined, {minimumFractionDigits:0, maximumFractionDigits:digits});
+  }
+  return {
+    trigger: 'axis',
+    axisPointer: { type: 'shadow' },
+    backgroundColor: 'rgba(255,255,255,0.97)',
+    borderColor: '#ddd',
+    borderWidth: 1,
+    textStyle: { fontSize: 12 },
+    formatter: function(params){
+      if (!params || !params.length) return '';
+      var valid = params.filter(function(p){ return p.value != null && !isNaN(p.value); });
+      if (!valid.length) return '';
+      var axisLabel = (params[0].axisValueLabel || params[0].axisValue || '');
+      if (typeof axisLabel === 'string') axisLabel = axisLabel.replace(/\n/g, ' ');
+      var total = 0;
+      valid.forEach(function(p){ total += Number(p.value) || 0; });
+      var s = '<b>' + axisLabel + '</b><br/>';
+      if (showTotal && valid.length > 1) {
+        s += '合計: <b>' + fmtNum(total) + '</b> ' + unit + '<br/>';
+      }
+      valid.forEach(function(p){
+        var color = (p.color && typeof p.color === 'string') ? p.color
+                  : (p.color && p.color.colorStops && p.color.colorStops[0] && p.color.colorStops[0].color) ? p.color.colorStops[0].color
+                  : '#888';
+        s += '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'
+           + color + ';margin-right:4px;vertical-align:middle"></span>';
+        s += p.seriesName + ': <b>' + fmtNum(p.value) + '</b> ' + unit + '<br/>';
+      });
+      if (note) s += '<span style="font-size:10px;color:#888">' + note + '</span>';
+      return s;
+    }
+  };
+}
+
 function gt() {
   const dark = document.documentElement.getAttribute('data-bs-theme')==='dark';
   return {
@@ -6360,15 +6410,7 @@ function initDomExp() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      let total = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; total+=p.value; } });
-      s += `<hr style="margin:4px 0">合計：<b>${total.toFixed(1)}</b> 万台`;
-      s += `<br><span style="font-size:10px;color:#888">※FCEV(燃料電池)は国内NEVに含む（最大0.4万台/月）</span>`;
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台', note:'※FCEV(燃料電池)は国内NEVに含む（最大0.4万台/月）'});
     opt.series = [
       { name:'国内（乗用ICE）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.pax_trad_dom, itemStyle:{color:'#adb5bd'} },
       { name:'国内（乗用NEV）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.nev_pax_dom,  itemStyle:{color:'#4e79a7'} },
@@ -6388,6 +6430,7 @@ function initNev() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'従来車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.trad_sales, itemStyle:{color:'#94a3b8'} },
       { name:'BEV', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.bev_sales, itemStyle:{color:'#4e79a7'} },
@@ -6500,6 +6543,7 @@ function initBrand() {
         }
       }))
     };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     chart.setOption(opt);
   });
 }
@@ -6512,15 +6556,8 @@ function initTradSeg() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = SD.months;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      let total = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; total+=p.value; } });
-      s += `<hr style="margin:4px 0">合計：<b>${total.toFixed(1)}</b> 万台`;
-      return s;
-    };
     const segs = Object.keys(SD.trad_seg).filter(s=>s!=='D'); // Dは超小量なので省略可だが表示
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = ['A00','A0','A','B','C','D'].filter(s => SD.trad_seg[s]).map((s,i) => ({
       name: s, type:'bar', emphasis:{focus:'series'}, stack:'ice_seg', data: SD.trad_seg[s],
       itemStyle:{color:PAL[i%12]}
@@ -6537,14 +6574,7 @@ function initNevSeg() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = SD.months;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      let total = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; total+=p.value; } });
-      s += `<hr style="margin:4px 0">合計：<b>${total.toFixed(1)}</b> 万台`;
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = ['A00','A0','A','B','C','D'].filter(s => SD.nev_seg[s]).map((s,i) => ({
       name: s, type:'bar', emphasis:{focus:'series'}, stack:'nev_seg', data: SD.nev_seg[s],
       itemStyle:{color:PAL[i%12]}
@@ -6612,11 +6642,7 @@ function initNevDetail() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; });
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'BEV生産', type:'bar', emphasis:{focus:'series'}, stack:'prod', data:CD.bev_prod, itemStyle:{color:'rgba(78,121,167,0.45)'}, barMaxWidth:28 },
       { name:'PHEV生産', type:'bar', emphasis:{focus:'series'}, stack:'prod', data:CD.phev_prod, itemStyle:{color:'rgba(89,161,79,0.45)'}, barMaxWidth:28 },
@@ -6630,12 +6656,7 @@ function initNevDetail() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; });
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'NEV乗用車 国内', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.nev_pax_dom, itemStyle:{color:'#4e79a7'} },
       { name:'NEV商用車 国内', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.nev_com_dom, itemStyle:{color:'#f28e2b'} },
@@ -6682,12 +6703,7 @@ function initBevPhev() {
     const t = gt();
     const opt = baseOpt(t);
     opt.xAxis.data = CD.labels_all;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; });
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'BEV国内', type:'bar', emphasis:{focus:'series'}, stack:'bev', data:CD.bev_dom, itemStyle:{color:'#4e79a7'}, barMaxWidth:30 },
       { name:'BEV輸出', type:'bar', emphasis:{focus:'series'}, stack:'bev', data:CD.bev_exp, itemStyle:{color:'#a0cbe8'}, barMaxWidth:30 },
@@ -6734,14 +6750,7 @@ function initCommercial() {
       return acc;
     }, []);
     opt.xAxis.data = truckMonths;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      let total = 0;
-      params.forEach(p => { if(p.value!=null){ s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; total+=p.value; } });
-      if(total>0) s += `<hr style="margin:4px 0">合計：<b>${total.toFixed(1)}</b> 万台`;
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'重型貨車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:truckIdx.map(i=>CD.truck_heavy[i]), itemStyle:{color:PAL[0]} },
       { name:'中型貨車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:truckIdx.map(i=>CD.truck_mid[i]),   itemStyle:{color:PAL[1]} },
@@ -6874,12 +6883,7 @@ function initCadaSummary() {
     if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
     const t = gt(); const opt = baseOpt(t);
     opt.xAxis.data = CD.cada_sum_months;
-    opt.tooltip.axisPointer = {type:'shadow'};
-    opt.tooltip.formatter = params => {
-      let s = `<b>${params[0].axisValue}</b><br>`;
-      params.forEach(p => { if(p.value!=null) s += `${p.marker}${p.seriesName}：<b>${p.value}</b> 万台<br>`; });
-      return s;
-    };
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'中国ブランドICE輸出', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_ice_exp,   itemStyle:{color:'#adb5bd'} },
       { name:'自主NEV輸出',         type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_nev_zizhu, itemStyle:{color:'#4e79a7'} },
@@ -6912,7 +6916,7 @@ function initCadaSummary() {
     if (noData) { chart.setOption({title:{text:'データなし',left:'center',top:'middle'}}); return; }
     const t = gt(); const opt = baseOpt(t);
     opt.xAxis.data = CD.cada_sum_months;
-    opt.tooltip.axisPointer = {type:'shadow'};
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'BEV輸出',       type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_bev_exp,  itemStyle:{color:'#4e79a7'} },
       { name:'PHEV/EREV輸出', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_phev_exp, itemStyle:{color:'#59a14f'} },
@@ -7173,6 +7177,7 @@ function cccmInitFuelEv() {
   initCccmEC('cccm-ec-fuel-ev', chart => {
     const opt = cccmBaseOpt();
     opt.legend = {data:['燃油車','EV'], textStyle:{color:opt.textStyle.color}, top:8};
+    opt.tooltip = unifiedStackTooltip({unit:'万台', note:'※電動摩托車のみ（街中のe-bikeは別統計）'});
     opt.series = [
       {name:'燃油車',type:'bar',emphasis:{focus:'series'},stack:'total',data:CCCM.gas_sales,itemStyle:{color:'#f28e2b'},barMaxWidth:50},
       {name:'EV',type:'bar',emphasis:{focus:'series'},stack:'total',data:CCCM.ev_sales,itemStyle:{color:'#4e79a7'},barMaxWidth:50},
@@ -7202,6 +7207,7 @@ function cccmInitBikeType() {
     opt.legend={data:['跨骑車（クロス）','踏板車（スクーター）','弯梁車（アンダーボーン）'], textStyle:{color:opt.textStyle.color}, top:8};
     opt.subtitle={text:'※2025年12月のみデータなし（収官号に車種別内訳の記載なし）', textStyle:{color:'#999',fontSize:11}, top:28};
     opt.grid.top=65;
+    opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series=[
       {name:'跨骑車（クロス）',type:'bar',emphasis:{focus:'series'},stack:'type',data:CCCM.cross_sales,itemStyle:{color:CP[0]},barMaxWidth:50},
       {name:'踏板車（スクーター）',type:'bar',emphasis:{focus:'series'},stack:'type',data:CCCM.scooter_sales,itemStyle:{color:CP[1]},barMaxWidth:50},
@@ -7291,7 +7297,7 @@ function cccmInitExport() {
     const ccKeys = ['125cc','150cc','110cc','200cc','50cc','250cc','400cc'];
     chart.setOption({
       backgroundColor:'transparent',textStyle:{color:fg,fontFamily:'inherit'},
-      tooltip:{trigger:'axis',textStyle:{color:fg}},
+      tooltip: unifiedStackTooltip({unit:'万台'}),
       legend:{data:ccKeys,textStyle:{color:fg},top:8},
       subtitle:{text:'※7・8月は400ccが上位入り',textStyle:{color:'#999',fontSize:11},top:28},
       grid:{left:55,right:30,top:65,bottom:50,containLabel:true},
@@ -7372,11 +7378,7 @@ function cccmInitExport() {
     });
     chart.setOption({
       backgroundColor:'transparent',textStyle:{color:fg,fontFamily:'inherit'},
-      tooltip:{trigger:'axis',textStyle:{color:fg},formatter:params=>{
-        let s=`<b>${seLabels[params[0].dataIndex]}</b><br>`;
-        params.forEach(p=>{if(p.value!=null)s+=`${p.marker}${p.seriesName}: <b>${p.value}</b>億ドル<br>`;});
-        return s;
-      }},
+      tooltip: unifiedStackTooltip({unit:'億ドル'}),
       legend:{data:['ATV(沙滩车)','エンジン','零部件(部品)'],textStyle:{color:fg},top:8},
       grid:{left:60,right:30,top:50,bottom:60,containLabel:true},
       xAxis:{type:'category',data:seLabels,axisLabel:{color:fg,rotate:10}},
@@ -7629,7 +7631,7 @@ function cnsuvDrawBar() {
   var c = cnsuvGetChart('ec-cnsuv-bar'); if (!c) return;
   var months = cnsuvGetMonths(), makers = cnsuvGetMakers();
   c.setOption({ backgroundColor:'transparent',
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    tooltip: unifiedStackTooltip({unit:'万台'}),
     legend:{top:8,type:'scroll',textStyle:{fontSize:11}},
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
@@ -8111,7 +8113,7 @@ const YRCOLORS = ['#cbd5e1','#94a3b8','#64748b','#3b82f6','#f59e0b','#10b981','#
 function drawBar(id, title, subtitle, categories, series, opts={}) {
   const chart = cdsEc(id); if(!chart) return;
   chart.setOption({
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+    tooltip: opts.stack ? unifiedStackTooltip({unit: opts.yunit||'万'}) : {trigger:'axis',axisPointer:{type:'shadow'}},
     legend:{data:series.map(s=>s.name),bottom:0,type:'scroll'},
     grid:{left:opts.left||60,right:opts.right||20,top:30,bottom:opts.bottom||55,containLabel:true},
     xAxis:opts.horizontal?{type:'value',name:opts.xname||'万台'}:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
@@ -8168,7 +8170,7 @@ function cdsDrawNev() {
     const t=n(tot[i]),ne=n(nev[i]); if(t===null) continue;
     labels.push(h.replace('年','年\n')); tv.push(t); nv.push(ne); iv.push(t!==null&&ne!==null?Math.round((t-ne)*10)/10:null);
   }
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:60,right:20,top:20,bottom:65,containLabel:true},
+  chart.setOption({tooltip: unifiedStackTooltip({unit:'万'}),legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:60,right:20,top:20,bottom:65,containLabel:true},
     xAxis:{type:'category',data:labels,axisLabel:{fontSize:10}},yAxis:{type:'value',axisLabel:{formatter:function(v){return v+'万';}}},
     series:[{name:'燃油車等',type:'bar',emphasis:{focus:'series'},stack:'t',data:iv,itemStyle:{color:'#94a3b8'}},{name:'NEV',type:'bar',emphasis:{focus:'series'},stack:'t',data:nv,itemStyle:{color:'#10b981'},label:{show:false}}]});
   setTimeout(()=>{try{cdsEc('ec-cds-nev')?.resize();}catch(e){}},80);
@@ -8227,7 +8229,7 @@ function cdsDrawRegion() {
   if (!CDS_LOADED) return;
   const chart=cdsEc('ec-cds-region'); if(!chart) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025','2026年1-2月'], rs=(CDS.regions||[]).filter(r=>r.name!=='総計');
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:rs.map(r=>r.name),bottom:0,type:'scroll'},grid:{left:55,right:20,top:30,bottom:70,containLabel:true},
+  chart.setOption({tooltip: unifiedStackTooltip({unit:'万'}),legend:{data:rs.map(r=>r.name),bottom:0,type:'scroll'},grid:{left:55,right:20,top:30,bottom:70,containLabel:true},
     xAxis:{type:'category',data:yrs,axisLabel:{rotate:30,fontSize:10}},yAxis:{type:'value',axisLabel:{formatter:function(v){return v+'万';}}},
     series:rs.map((r,ri)=>({name:r.name,type:'bar',emphasis:{focus:'series'},stack:'t',
       data:[...r.v, r.v2026??null],label:{show:false}}))});
@@ -9056,19 +9058,7 @@ function wsDrawRegional(view) {
     };
   });
   chart.setOption({
-    tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-      formatter: function(params) {
-        var s = '<b>' + params[0].axisValue + '</b><br>';
-        params.slice().reverse().forEach(function(p){
-          s += p.marker + p.seriesName + ': ' + p.value + (view==='volume'?'万台':'%') + '<br>';
-        });
-        if (view === 'volume') {
-          var total = params.reduce(function(a,b){ return a + (b.value||0); }, 0);
-          s += '<b>合計: ' + total.toLocaleString() + '万台</b>';
-        }
-        return s;
-      }
-    },
+    tooltip: unifiedStackTooltip({unit: view==='volume'?'万台':'%'}),
     legend: { top: 0, data: regions },
     grid: { top: 50, left: 60, right: 20, bottom: 60 },
     xAxis: { type: 'category', data: WS.years, axisLabel: { rotate: 30 } },
@@ -9892,7 +9882,7 @@ function showProvDetail(ja) {
     c.setOption({backgroundColor:'transparent',
       title:{text:'車身構造（2025年）',textStyle:{fontSize:12,color:'#7eb3ff'},top:0},
       legend:{data:['SUV','セダン（CAR）','MPV'],bottom:2,textStyle:{fontSize:10,color:'#8ab0d0'}},
-      tooltip:{formatter:p=>`${p.seriesName}: ${p.value.toFixed(1)}%`},
+      tooltip: unifiedStackTooltip({unit:'%'}),
       grid:{left:8,right:8,top:30,bottom:40},
       xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
       yAxis:{type:'category',data:[''],axisLabel:{show:false}},
@@ -9908,7 +9898,7 @@ function showProvDetail(ja) {
     c.setOption({backgroundColor:'transparent',
       title:{text:'ブランド構成（2025年）',textStyle:{fontSize:12,color:'#7eb3ff'},top:0},
       legend:{data:['自主','合資','豪華'],bottom:2,textStyle:{fontSize:10,color:'#8ab0d0'}},
-      tooltip:{formatter:p=>`${p.seriesName}: ${p.value.toFixed(1)}%`},
+      tooltip: unifiedStackTooltip({unit:'%'}),
       grid:{left:8,right:8,top:30,bottom:40},
       xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
       yAxis:{type:'category',data:[''],axisLabel:{show:false}},
@@ -10628,7 +10618,7 @@ function renderInvMakerRatio() {
 function renderInvNev() {
   var ec = invInitOrGet('ec-inv-nev'); if (!ec) return;
   ec.setOption({
-    tooltip: { trigger:'axis', axisPointer:{type:'cross'} },
+    tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: { data:['メーカー在庫','流通在庫','総在庫','メーカー占比（%）'], bottom:0, type:'scroll' },
     grid: { left:65, right:65, top:40, bottom:60 },
     xAxis: { type:'category', data:INV.nevLabels, axisLabel:{rotate:45, fontSize:9} },
@@ -10803,28 +10793,8 @@ window.addEventListener('resize', function(){
     var labels      = ['2020\n12月累計','2021\n12月累計','2022\n12月累計','2023\n12月累計','2024\n12月累計','2025\n12月累計','2026年\n1月','2026年\n2月'];
     var nmcData     = [49,  94,  213, 245, 278,  347.6,  31.3,  58.2];
     var lfpData     = [35,  125, 332, 531, 816,  1405.1, 136.7, 251.3];
-    var totalGrowth = [76,  70,  54,  50,  41,   44,     25,    22];
-    var nmcGrowth   = [64,  64,  52,  51,  14,   41,     30,    26];
-    var lfpGrowth   = [71,  71,  55,  49,  54,   45,     24,    21];
-    function yoyStr(v){ return v!=null ? '（前年同期比 '+(v>=0?'+':'')+v+'%）' : ''; }
     ec.setOption({
-      tooltip:{
-        trigger:'axis', axisPointer:{type:'shadow'},
-        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
-        textStyle:{fontFamily:FONT,fontSize:12},
-        formatter:function(params){
-          var idx=params[0].dataIndex;
-          var nmc=nmcData[idx]||0, lfp=lfpData[idx]||0;
-          var total=Math.round((nmc+lfp)*10)/10;
-          var s='<b>'+params[0].axisValue.replace('\n',' ')+'</b><br/>';
-          s+='合計: <b>'+total+' GWh</b>'+yoyStr(totalGrowth[idx])+'<br/>';
-          s+='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+C.nmc+';margin-right:4px"></span>';
-          s+='三元電池: <b>'+nmc+' GWh</b>'+yoyStr(nmcGrowth[idx])+'<br/>';
-          s+='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+C.lfp+';margin-right:4px"></span>';
-          s+='LFP（リン酸鉄）: <b>'+lfp+' GWh</b>'+yoyStr(lfpGrowth[idx])+'<br/>';
-          return s;
-        }
-      },
+      tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
       grid:baseGrid(),
       xAxis:baseXAxis(labels),
@@ -10844,28 +10814,8 @@ window.addEventListener('resize', function(){
     var labels      = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
     var nmcData     = [42,  39,   74,  110,  126,  139,  144.1, 9.4,  15.1];
     var lfpData     = [20,  24,   80,  184,  261,  409,  625.3, 32.7, 53.3];
-    var totalGrowth = [null,-2,  163,   91,   32,   41,   40,   8,   -7];
-    var nmcGrowth   = [null,null, 91,   49,   14,   10,    4,  11,    1];
-    var lfpGrowth   = [null,null,227,  130,   42,   57,   53,   8,   -9];
-    function yoyStr(v){ return v!=null ? '（前年同期比 '+(v>=0?'+':'')+v+'%）' : ''; }
     ec.setOption({
-      tooltip:{
-        trigger:'axis', axisPointer:{type:'shadow'},
-        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
-        textStyle:{fontFamily:FONT,fontSize:12},
-        formatter:function(params){
-          var idx=params[0].dataIndex;
-          var nmc=nmcData[idx]||0, lfp=lfpData[idx]||0;
-          var total=Math.round((nmc+lfp)*10)/10;
-          var s='<b>'+params[0].axisValue.replace('\n',' ')+'</b><br/>';
-          s+='合計: <b>'+total+' GWh</b>'+yoyStr(totalGrowth[idx])+'<br/>';
-          s+='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+C.nmc+';margin-right:4px"></span>';
-          s+='三元電池: <b>'+nmc+' GWh</b>'+yoyStr(nmcGrowth[idx])+'<br/>';
-          s+='<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+C.lfp+';margin-right:4px"></span>';
-          s+='LFP（リン酸鉄）: <b>'+lfp+' GWh</b>'+yoyStr(lfpGrowth[idx])+'<br/>';
-          return s;
-        }
-      },
+      tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
       grid:baseGrid(),
       xAxis:baseXAxis(labels),
@@ -11020,9 +10970,7 @@ window.addEventListener('resize', function(){
     function toGWh(arr){ return arr.map(function(v){ return v===null ? null : Math.round(v/100)/10; }); }
 
     ec.setOption({
-      tooltip: Object.assign(baseTooltip(),{
-        valueFormatter:function(v){ return v===null ? 'データなし' : v+'GWh'; }
-      }),
+      tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend: baseLegend({type:'scroll'}),
       grid: Object.assign(baseGrid(),{bottom:80}),
       xAxis: baseXAxis(labels),
@@ -11056,7 +11004,7 @@ window.addEventListener('resize', function(){
     });
 
     ec.setOption({
-      tooltip: baseTooltip(),
+      tooltip: unifiedStackTooltip({unit:'万台'}),
       legend: baseLegend(),
       grid: Object.assign(baseGrid(),{bottom:80}),
       xAxis: Object.assign(baseXAxis(labels),{
@@ -11103,31 +11051,8 @@ window.addEventListener('resize', function(){
       { name:'その他',        color:'#BDC3C7', data:[14.4,9.8, 6.3, 3.2, 3.3, 3.8, 2.9],  prev25:3.8,  diff:null }
     ];
 
-    var latestIdx = labels.length - 1; // 2026年1Q のインデックス
-
     ec.setOption({
-      tooltip: {
-        trigger:'axis', axisPointer:{type:'shadow'},
-        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
-        textStyle:{fontFamily:FONT,fontSize:12},
-        formatter: function(params){
-          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
-          var isLatest = (params[0].dataIndex === latestIdx);
-          params.forEach(function(p){
-            if(p.value == null || p.value === 0) return;
-            var mk = makers.find(function(m){ return m.name === p.seriesName; });
-            var diffStr = '';
-            if(isLatest && mk && mk.diff !== null){
-              var sign = mk.diff >= 0 ? '▲+' : '▼';
-              var cls  = mk.diff >= 0 ? 'color:#e74c3c' : 'color:#3498db';
-              diffStr = ' <span style="'+cls+';font-size:11px">('+sign+mk.diff.toFixed(1)+'pp vs 2025年)</span>';
-            }
-            s += p.marker + p.seriesName + ': <b>' + p.value + '%</b>' + diffStr + '<br/>';
-          });
-          if(isLatest) s += '<span style="font-size:10px;color:#888">※2026年1Qと2025年通年の比較</span>';
-          return s;
-        }
-      },
+      tooltip: unifiedStackTooltip({unit:'%'}),
       legend: baseLegend({type:'scroll', top:8}),
       grid: Object.assign(baseGrid(),{bottom:70}),
       xAxis: baseXAxis(labels),
@@ -11183,31 +11108,8 @@ window.addEventListener('resize', function(){
       { name:'その他',        color:'#BDC3C7', data:[1.4, 1.4, 3.0, 3.5, 2.4],  prev25:3.5,  diff:null }
     ];
 
-    var latestIdx = labels.length - 1;
-
     ec.setOption({
-      tooltip: {
-        trigger:'axis', axisPointer:{type:'shadow'},
-        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
-        textStyle:{fontFamily:FONT,fontSize:12},
-        formatter: function(params){
-          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
-          var isLatest = (params[0].dataIndex === latestIdx);
-          params.forEach(function(p){
-            if(p.value == null || p.value === 0) return;
-            var mk = makers.find(function(m){ return m.name === p.seriesName; });
-            var diffStr = '';
-            if(isLatest && mk && mk.diff !== null){
-              var sign = mk.diff >= 0 ? '▲+' : '▼';
-              var cls  = mk.diff >= 0 ? 'color:#e74c3c' : 'color:#3498db';
-              diffStr = ' <span style="'+cls+';font-size:11px">('+sign+mk.diff.toFixed(1)+'pp vs 2025年)</span>';
-            }
-            s += p.marker + p.seriesName + ': <b>' + p.value + '%</b>' + diffStr + '<br/>';
-          });
-          if(isLatest) s += '<span style="font-size:10px;color:#888">※2026年1Qと2025年通年の比較</span>';
-          return s;
-        }
-      },
+      tooltip: unifiedStackTooltip({unit:'%'}),
       legend: baseLegend({type:'scroll', top:8}),
       grid: Object.assign(baseGrid(),{bottom:70}),
       xAxis: baseXAxis(labels),
@@ -11259,31 +11161,8 @@ window.addEventListener('resize', function(){
       { name:'その他',        color:'#BDC3C7', data:[12.1,7.1, 3.0, 0.6, 0.2],  prev25:0.6,  diff:null }
     ];
 
-    var latestIdx = labels.length - 1;
-
     ec.setOption({
-      tooltip: {
-        trigger:'axis', axisPointer:{type:'shadow'},
-        backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
-        textStyle:{fontFamily:FONT,fontSize:12},
-        formatter: function(params){
-          var s = '<b>' + params[0].axisValue.replace('\n',' ') + '</b><br/>';
-          var isLatest = (params[0].dataIndex === latestIdx);
-          params.forEach(function(p){
-            if(p.value == null || p.value === 0) return;
-            var mk = makers.find(function(m){ return m.name === p.seriesName; });
-            var diffStr = '';
-            if(isLatest && mk && mk.diff !== null){
-              var sign = mk.diff >= 0 ? '▲+' : '▼';
-              var cls  = mk.diff >= 0 ? 'color:#e74c3c' : 'color:#3498db';
-              diffStr = ' <span style="'+cls+';font-size:11px">('+sign+mk.diff.toFixed(1)+'pp vs 2025年)</span>';
-            }
-            s += p.marker + p.seriesName + ': <b>' + p.value + '%</b>' + diffStr + '<br/>';
-          });
-          if(isLatest) s += '<span style="font-size:10px;color:#888">※2026年1Qと2025年通年の比較</span>';
-          return s;
-        }
-      },
+      tooltip: unifiedStackTooltip({unit:'%'}),
       legend: baseLegend({type:'scroll', top:8}),
       grid: Object.assign(baseGrid(),{bottom:70}),
       xAxis: baseXAxis(labels),
@@ -11645,6 +11524,7 @@ function renderImpFuel() {
   var fuelKeys  = ['gasoline','hybrid','phev','diesel','bev'];
   var fc = ['#3b82f6','#10b981','#f59e0b','#6b7280','#ef4444'];
   c.setOption(impBase({
+    tooltip: unifiedStackTooltip({unit:'万'}),
     legend: { data:fuelNames, bottom:0 },
     grid: { left:55, right:20, top:20, bottom:55 },
     xAxis: { type:'category', data:d.years },
@@ -11669,6 +11549,7 @@ function renderImpDisplace() {
     {name:'1〜1.5L', key:'d1to15', color:'#6ee7b7'}
   ];
   c.setOption(impBase({
+    tooltip: unifiedStackTooltip({unit:'万'}),
     legend: { data:bands.map(function(b){return b.name;}), bottom:0 },
     grid: { left:55, right:20, top:20, bottom:55 },
     xAxis: { type:'category', data:d.years },
@@ -12254,7 +12135,7 @@ function discRender(id) {
 
   } else if (id === 'disc-powertype') {
     opt = {
-      tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+      tooltip: unifiedStackTooltip({unit:'車型', digits:0}),
       legend:{ top:8 },
       xAxis:{ type:'category', data:['1月','2月','3月','年累計'] },
       yAxis:{ type:'value', name:'車型数' },
@@ -12793,15 +12674,7 @@ function jhDrawRegionVolume() {
     };
   });
   ec.setOption({
-    tooltip: { trigger:'axis', axisPointer:{ type:'shadow' },
-      formatter: function(params){
-        var total = 0;
-        var s = params[0].name + '<br/>';
-        params.forEach(function(p){ if(p.value){ s += p.marker+p.seriesName+': <b>'+p.value+'</b>万台<br/>'; total+=p.value; }});
-        s += '<hr style="margin:4px 0"/>合計: <b>'+total.toFixed(1)+'</b>万台';
-        return s;
-      }
-    },
+    tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: { data: JH_REGION.regions, top:8, type:'scroll' },
     grid: { left:50, right:30, top:60, bottom:40 },
     xAxis: { type:'category', data: JH_REGION.years },
@@ -12914,7 +12787,7 @@ function jhDrawBrandShare() {
   var ec = jhEc('ec-jh-brand-share');
   if (!ec) return;
   ec.setOption({
-    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
+    tooltip: unifiedStackTooltip({unit:'%'}),
     legend:{ data: JH_BRAND_SHARE.brands, top:8, type:'scroll' },
     grid:{ left:100, right:30, top:55, bottom:40 },
     xAxis:{ type:'value', max:100, axisLabel:{ formatter:'{value}%' } },
@@ -12939,15 +12812,7 @@ function jhDrawCountryMaker() {
   var indices = totals.map(function(_,i){ return i; }).sort(function(a,b){ return totals[a]-totals[b]; });
   var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER.countries[i]; });
   ec.setOption({
-    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
-      formatter: function(params){
-        var total = params.reduce(function(s,p){ return s+(p.value||0); },0);
-        var s = params[0].axisValue+'<br/>';
-        params.forEach(function(p){ if(p.value) s += p.marker+p.seriesName+': <b>'+p.value.toLocaleString()+'</b>台<br/>'; });
-        s += '合計: <b>'+total.toLocaleString()+'</b>台';
-        return s;
-      }
-    },
+    tooltip: unifiedStackTooltip({unit:'台', digits:0}),
     legend:{ data: JH_COUNTRY_MAKER.makers, top:8, type:'scroll' },
     grid:{ left:100, right:30, top:55, bottom:20 },
     xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
@@ -12970,15 +12835,7 @@ function jhDrawCountryMakerNev() {
   var indices = totals.map(function(_,i){ return i; }).sort(function(a,b){ return totals[a]-totals[b]; });
   var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER_NEV.countries[i]; });
   ec.setOption({
-    tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
-      formatter: function(params){
-        var total = params.reduce(function(s,p){ return s+(p.value||0); },0);
-        var s = params[0].axisValue+'<br/>';
-        params.forEach(function(p){ if(p.value) s += p.marker+p.seriesName+': <b>'+p.value.toLocaleString()+'</b>台<br/>'; });
-        s += '合計: <b>'+total.toLocaleString()+'</b>台';
-        return s;
-      }
-    },
+    tooltip: unifiedStackTooltip({unit:'台', digits:0}),
     legend:{ data: JH_COUNTRY_MAKER_NEV.makers, top:8, type:'scroll' },
     grid:{ left:110, right:30, top:55, bottom:20 },
     xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
@@ -13516,13 +13373,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
       nevD = nevAll.slice(0,6);
     }
     ec.setOption({
-      tooltip:Object.assign(tt(),{formatter:function(p){
-        var s='<b>'+p[0].axisValue.replace('\n',' ')+'</b><br>';
-        var tot=0; p.forEach(function(x){tot+=x.value||0;});
-        p.forEach(function(x){s+=x.marker+x.seriesName+': <b>'+x.value.toLocaleString()+'億元</b><br>';});
-        s+='合計: <b>'+tot.toLocaleString()+'億元</b>';
-        return s;
-      }}),
+      tooltip: unifiedStackTooltip({unit:'億元'}),
       legend:leg({data:['ガソリン車','新エネルギー車']}),
       grid:grid({right:20}),
       xAxis:xCat(xlD),
@@ -13656,11 +13507,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     var tots=curXl.map(function(_,i){ return keys.reduce(function(s,k){return s+curData[k][i];},0); });
     function pp(k){ return curData[k].map(function(v,i){ return tots[i]>0?Math.round(v/tots[i]*1000)/10:0; }); }
     ec.setOption({
-      tooltip:Object.assign(tt(),{formatter:function(p){
-        var s='<b>'+p[0].axisValue.replace('\n',' ')+'</b><br>';
-        p.slice().reverse().forEach(function(x){ s+=x.marker+x.seriesName+': <b>'+x.value+'%</b><br>'; });
-        return s;
-      }}),
+      tooltip: unifiedStackTooltip({unit:'%'}),
       legend:leg(), grid:grid({right:20}),
       xAxis:xCat(curXl),
       yAxis:Object.assign(yVal('%'),{max:100,axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}}),
@@ -13681,11 +13528,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     var segData={'C級(高級)':[5,5,7,8,9,10],'B級':[26,28,31,31,36,35],'A級(主流)':[54,52,48,46,44,42],'A0級(小型)':[13,11,12,10,11,10],'a0級(微型)':[5,5,5,6,6,2]};
     var segColors=['#a78bfa','#5b8fff','#4ecb8d','#f5c842','#f97316'];
     ec.setOption({
-      tooltip:Object.assign(tt(),{formatter:function(p){
-        var s='<b>'+p[0].axisValue.replace('\n',' ')+'</b><br>';
-        p.slice().reverse().forEach(function(x){ s+=x.marker+x.seriesName+': <b>'+x.value+'%</b><br>'; });
-        return s;
-      }}),
+      tooltip: unifiedStackTooltip({unit:'%'}),
       legend:leg({bottom:0,top:'auto'}),grid:grid({bottom:70}),
       xAxis:xCat(xlabels),
       yAxis:Object.assign(yVal('%'),{max:100,axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}}),
@@ -13701,9 +13544,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     var grades=['C級','B級','A級','A0級'];
     var gas26=[4.4,4.5,18.5,4.8],nev26=[5.6,5.5,9.5,14.4];
     ec.setOption({
-      tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12,color:'#333'},
-        formatter:function(p){return '<b>'+grades[p[0].dataIndex]+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'千台</b>';}).join('<br>');}
-      },
+      tooltip: unifiedStackTooltip({unit:'千台'}),
       legend:leg({data:['ガソリン車','新エネルギー車']}),grid:grid({bottom:40,top:45}),
       xAxis:{type:'category',data:grades,axisLabel:{fontFamily:FONT,fontSize:11,color:DARK_AXIS}},
       yAxis:yVal('千台'),
@@ -13967,8 +13808,7 @@ function renderBrandWholesale(){
   var heizi  = [49.5,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58,57.4,42,28.3,49.5];
   var ziZhu  = [161, 154.2,160.6,167, 157.8,172.1,197.5,214.2,214,191.2,132.6,107.4,161];
   ec.setOption({
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
-      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>')+'<br><b>合計: '+p.reduce(function(s,x){return s+x.value;},0).toFixed(1)+'万台</b>'; }},
+    tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: leg({data:['高級車','合弁メーカー','自主ブランド']}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
@@ -14000,8 +13840,7 @@ function renderNationShare(){
 
   function pct(a,t){ return a.map(function(v,i){ return t[i]>0?+(v/t[i]*100).toFixed(1):0; }); }
   ec.setOption({
-    tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
-      formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'%</b>';}).join('<br>'); }},
+    tooltip: unifiedStackTooltip({unit:'%'}),
     legend: leg({data:['自主ブランド','独系','日系','米系','韓系','欧州系']}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),

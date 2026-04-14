@@ -11588,18 +11588,20 @@ function renderImpFuel() {
   var fuelNames = ['ガソリン','ハイブリッド','PHEV','ディーゼル','BEV'];
   var fuelKeys  = ['gasoline','hybrid','phev','diesel','bev'];
   var fc = ['#3b82f6','#10b981','#f59e0b','#6b7280','#ef4444'];
-  c.setOption(impBase({
-    tooltip: unifiedStackTooltip({unit:'万'}),
-    legend: { data:fuelNames, bottom:0 },
-    grid: { left:55, right:20, top:20, bottom:55 },
+  c.setOption({
+    backgroundColor: 'transparent',
+    textStyle: { fontFamily: 'Noto Sans JP, sans-serif', fontSize: 12 },
+    animation: true,
+    tooltip: unifiedStackTooltip({unit:'万台'}),
+    legend: { data:fuelNames, bottom:0, type:'scroll' },
+    grid: { left:60, right:20, top:50, bottom:60, containLabel:true },
     xAxis: { type:'category', data:d.years },
-    yAxis: { type:'value', axisLabel:{formatter:function(v){return v+'万';}} },
+    yAxis: { type:'value', name:'万台' },
     series: fuelNames.map(function(nm,i){
-      return { name:nm, type:'bar', emphasis:{focus:'series'}, stack:'fuel', data:d[fuelKeys[i]],
-               itemStyle:{color:fc[i]}, barMaxWidth:50,
-               label:{show:false} };
+      return { name:nm, type:'bar', stack:'fuel', data:d[fuelKeys[i]],
+               itemStyle:{color:fc[i]}, barMaxWidth:50 };
     })
-  }));
+  });
 }
 
 function renderImpDisplace() {
@@ -11613,17 +11615,20 @@ function renderImpDisplace() {
     {name:'1.5〜2L', key:'d15to2', color:'#10b981'},
     {name:'1〜1.5L', key:'d1to15', color:'#6ee7b7'}
   ];
-  c.setOption(impBase({
-    tooltip: unifiedStackTooltip({unit:'万'}),
-    legend: { data:bands.map(function(b){return b.name;}), bottom:0 },
-    grid: { left:55, right:20, top:20, bottom:55 },
+  c.setOption({
+    backgroundColor: 'transparent',
+    textStyle: { fontFamily: 'Noto Sans JP, sans-serif', fontSize: 12 },
+    animation: true,
+    tooltip: unifiedStackTooltip({unit:'万台'}),
+    legend: { data:bands.map(function(b){return b.name;}), bottom:0, type:'scroll' },
+    grid: { left:60, right:20, top:50, bottom:60, containLabel:true },
     xAxis: { type:'category', data:d.years },
-    yAxis: { type:'value', axisLabel:{formatter:function(v){return v+'万';}} },
+    yAxis: { type:'value', name:'万台' },
     series: bands.map(function(b){
-      return { name:b.name, type:'bar', emphasis:{focus:'series'}, stack:'disp', data:d[b.key],
+      return { name:b.name, type:'bar', stack:'disp', data:d[b.key],
                itemStyle:{color:b.color}, barMaxWidth:55 };
     })
-  }));
+  });
 }
 
 function renderImpCountry() {
@@ -12729,22 +12734,19 @@ function jhDrawRegionVolume() {
   var ec = jhEc('ec-jh-region-volume');
   if (!ec) return;
   var colors = ['#3b82f6','#f97316','#22c55e','#ef4444','#a855f7','#06b6d4','#f59e0b','#6b7280','#ec4899'];
-  var series = JH_REGION.regions.map(function(r, i){
-    return {
-      name: r, type:'bar', emphasis:{focus:'series'}, stack:'total',
-      data: JH_REGION.data[r],
-      color: colors[i],
-      label: { show:false },
-      emphasis: { focus:'series' }
-    };
-  });
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: { data: JH_REGION.regions, top:8, type:'scroll' },
-    grid: { left:50, right:30, top:60, bottom:40 },
+    grid: { left:60, right:20, top:50, bottom:60, containLabel:true },
     xAxis: { type:'category', data: JH_REGION.years },
     yAxis: { type:'value', name:'万台' },
-    series: series
+    series: JH_REGION.regions.map(function(r, i){
+      return {
+        name: r, type: 'bar', stack: 'total',
+        data: JH_REGION.data[r],
+        itemStyle: { color: colors[i] }
+      };
+    })
   });
 }
 

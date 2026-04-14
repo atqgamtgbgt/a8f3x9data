@@ -37,7 +37,7 @@
       if (option && option.series) {
         var serArr = Array.isArray(option.series) ? option.series : [option.series];
         serArr.forEach(function(s) {
-          if (s) { if (!s.emphasis) s.emphasis = {}; s.emphasis.focus = 'series'; }
+          if (s) { if (!s.emphasis) s.emphasis = {}; if (!s.emphasis.focus) s.emphasis.focus = 'series'; }
         });
       }
       // スマホ対応: 全チャートのtooltipに confine:true を自動付与（画面端での見切れ防止）

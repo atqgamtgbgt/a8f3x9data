@@ -169,7 +169,7 @@
     // mouseout: 非表示状態を維持しながらリセット
     instance.getZr().on('mouseout', function(e) {
       var idx = getLegendIdx(e.target);
-      if (idx === null) return;
+      // idxがnullでもリセット処理は実行（凡例エリア外へのマウスアウトも含む）
 
       var opt = instance.getOption();
       var hasStack = opt && opt.series && opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
@@ -184,6 +184,7 @@
         _hovering = false;
       } else if (!hasStack && opt && opt.series) {
         opt.series.forEach(function(s, i) {
+          instance.dispatchAction({ type: 'highlight', seriesIndex: i });
           instance.dispatchAction({ type: 'downplay', seriesIndex: i });
         });
       }

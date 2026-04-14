@@ -125,11 +125,15 @@
         if (n > dataMax) dataMax = n;
       });
 
-      // % グラフかどうかの判定（横グラフはxAxis、縦グラフはyAxisのformatterで判定）
+      // % グラフかどうかの判定
+      // formatter が文字列・関数どちらでも '%' 含有チェック
       var fmtAxis = isHorizontal
         ? (opt.xAxis && opt.xAxis[0] && opt.xAxis[0].axisLabel && opt.xAxis[0].axisLabel.formatter)
         : (opt.yAxis && opt.yAxis[0] && opt.yAxis[0].axisLabel && opt.yAxis[0].axisLabel.formatter);
-      var isPercent = (typeof fmtAxis === 'string' && fmtAxis.indexOf('%') >= 0);
+      var fmtStr = fmtAxis ? fmtAxis.toString() : '';
+      // yAxis.max===100 または formatter に '%' が含まれる場合は%グラフ
+      var yMax = !isHorizontal && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].max;
+      var isPercent = fmtStr.indexOf('%') >= 0 || yMax === 100;
 
       // % グラフは max:100 固定、それ以外はデータから算出
       var niceMax = isPercent ? 100 : (dataMax <= 0 ? null : (Math.ceil(dataMax * 1.15 / 5) * 5));
@@ -11153,9 +11157,22 @@ window.addEventListener('resize', function(){
       series: makers.map(function(m){
         return {
           name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
-          itemStyle:{ color: m.color, opacity: function(p){ return p.dataIndex === latestIdx ? 1 : 0.82; } },
+          itemStyle:{ color: m.color },
           data: m.data,
-          label:{show:false}
+          label:{ show:false },
+          emphasis:{
+            focus:'series',
+            label:{
+              show: true,
+              position: 'inside',
+              fontSize: 10,
+              fontWeight: 'bold',
+              color: '#fff',
+              formatter: function(p){
+                return p.value != null && p.value >= 2 ? p.value + '%' : '';
+              }
+            }
+          }
         };
       })
     });
@@ -11220,8 +11237,22 @@ window.addEventListener('resize', function(){
       series: makers.map(function(m){
         return {
           name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
-          itemStyle:{ color: m.color, opacity: function(p){ return p.dataIndex === latestIdx ? 1 : 0.82; } },
-          data: m.data, label:{show:false}
+          itemStyle:{ color: m.color },
+          data: m.data,
+          label:{ show:false },
+          emphasis:{
+            focus:'series',
+            label:{
+              show: true,
+              position: 'inside',
+              fontSize: 10,
+              fontWeight: 'bold',
+              color: '#fff',
+              formatter: function(p){
+                return p.value != null && p.value >= 2 ? p.value + '%' : '';
+              }
+            }
+          }
         };
       })
     });
@@ -11282,8 +11313,22 @@ window.addEventListener('resize', function(){
       series: makers.map(function(m){
         return {
           name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
-          itemStyle:{ color: m.color, opacity: function(p){ return p.dataIndex === latestIdx ? 1 : 0.82; } },
-          data: m.data, label:{show:false}
+          itemStyle:{ color: m.color },
+          data: m.data,
+          label:{ show:false },
+          emphasis:{
+            focus:'series',
+            label:{
+              show: true,
+              position: 'inside',
+              fontSize: 10,
+              fontWeight: 'bold',
+              color: '#fff',
+              formatter: function(p){
+                return p.value != null && p.value >= 2 ? p.value + '%' : '';
+              }
+            }
+          }
         };
       })
     });

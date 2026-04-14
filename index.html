@@ -80,114 +80,97 @@
       return null;
     }
 
-    // mouseover
-    instance.getZr().on('mouseover', function(e) {
-      var el = e.target;
-      if (!el) return;
-      var idx = getLegendIdx(el);
-
-      if (idx === null) {
-        var o2 = instance.getOption();
-        if (o2 && o2.series) {
-          o2.series.forEach(function(s, i) {
-            instance.dispatchAction({ type: 'downplay', seriesIndex: i });
-          });
-        }
-        return;
-      }
-
-      var opt = instance.getOption();
-      if (!opt || !opt.series) return;
-      var hasStack = opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
-      if (!hasStack) return;
-
-      var names = [];
-      if (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length > 0) {
-        names = opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; });
-      } else {
-        names = opt.series.map(function(s) { return s.name; });
-      }
-      var hoveredName = names[idx];
-      if (!hoveredName) return;
-      // 非表示シリーズはホバー対象から除外
-      if (_hiddenSeries[hoveredName]) return;
-
-      _hovering = true;
-      // 横向き積み上げ棒か判定（xAxis=value, yAxis=category）
+    function triggerHoverLabel(inst, hoveredName, opt) {
+      if (!hoveredName || _hiddenSeries[hoveredName]) return;
+      var hasStack = opt.series.some(function(s){ return s.type === 'bar' && s.stack; });
       var isHorizontal = opt.xAxis && opt.xAxis[0] && opt.xAxis[0].type === 'value'
                       && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].type === 'category';
-
-      var hoveredSeries = opt.series.find(function(s) { return s.name === hoveredName; });
+      var hoveredSeries = opt.series.find(function(s){ return s.name === hoveredName; });
       var hoveredData = hoveredSeries ? hoveredSeries.data : [];
       var dataMax = 0;
-      hoveredData.forEach(function(v) {
+      hoveredData.forEach(function(v){
         var n = (typeof v === 'object' && v !== null) ? (v.value != null ? v.value : 0) : (v != null ? v : 0);
         if (n > dataMax) dataMax = n;
       });
-
-      // % グラフかどうかの判定
-      // formatter が文字列・関数どちらでも '%' 含有チェック
       var fmtAxis = isHorizontal
         ? (opt.xAxis && opt.xAxis[0] && opt.xAxis[0].axisLabel && opt.xAxis[0].axisLabel.formatter)
         : (opt.yAxis && opt.yAxis[0] && opt.yAxis[0].axisLabel && opt.yAxis[0].axisLabel.formatter);
       var fmtStr = fmtAxis ? fmtAxis.toString() : '';
-      // yAxis.max===100 または formatter に '%' が含まれる場合は%グラフ
       var yMax = !isHorizontal && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].max;
       var isPercent = fmtStr.indexOf('%') >= 0 || yMax === 100;
-
-      // % グラフは max:100 固定、それ以外はデータから算出
       var niceMax = isPercent ? 100 : (dataMax <= 0 ? null : (Math.ceil(dataMax * 1.15 / 5) * 5));
-
-      // ラベル位置：横グラフは 'right'、縦グラフは 'top'
       var labelPos = isHorizontal ? 'right' : 'top';
 
-      var patchSeries = opt.series.map(function(s) {
-        var isHovered = s.name === hoveredName;
-        var isHidden  = !!_hiddenSeries[s.name];
+      // 単位判定
+      var axisObj = isHorizontal ? (opt.xAxis && opt.xAxis[0]) : (opt.yAxis && opt.yAxis[0]);
+      var axisName = axisObj && axisObj.name ? axisObj.name : '';
+      var unit = '';
+      if (isPercent) { unit = '%'; }
+      else if (fmtStr.indexOf('万') >= 0 || axisName.indexOf('万') >= 0) { unit = '万'; }
+      else if (axisName.indexOf('GWh') >= 0) { unit = 'GWh'; }
+      else if (axisName.indexOf('億') >= 0) { unit = '億'; }
+      else if (axisName.indexOf('台') >= 0) { unit = '台'; }
+
+      var patchSeries = opt.series.map(function(s){
+        var isHov = s.name === hoveredName;
+        var isHid = !!_hiddenSeries[s.name];
         var newData = hasStack
-          ? ((isHovered && !isHidden) ? s.data : s.data.map(function() { return 0; }))
+          ? ((isHov && !isHid) ? s.data : s.data.map(function(){ return 0; }))
           : s.data;
         return {
           data: newData,
-          itemStyle: hasStack ? {} : { opacity: (isHovered && !isHidden) ? 1 : 0.2 },
-          label: (isHovered && !isHidden) ? {
-            show: true,
-            position: labelPos,
-            color: 'inherit',
-            fontSize: 11,
-            fontWeight: 'bold',
-            formatter: function(p) {
-              // 単位を軸のname/formatterから取得
-              var unit = '';
-              if (isPercent) {
-                unit = '%';
-              } else {
-                var axisObj = isHorizontal
-                  ? (opt.xAxis && opt.xAxis[0])
-                  : (opt.yAxis && opt.yAxis[0]);
-                var axisName = axisObj && axisObj.name ? axisObj.name : '';
-                var axisFmt  = axisObj && axisObj.axisLabel && axisObj.axisLabel.formatter
-                               ? axisObj.axisLabel.formatter.toString() : '';
-                if (axisFmt.indexOf('万') >= 0 || axisName.indexOf('万') >= 0) unit = '万';
-                else if (axisName.indexOf('GWh') >= 0) unit = 'GWh';
-                else if (axisName.indexOf('億') >= 0) unit = '億';
-                else if (axisName.indexOf('台') >= 0) unit = '台';
-                else if (axisName.indexOf('万') >= 0) unit = '万';
-                else unit = '';
-              }
+          itemStyle: hasStack ? {} : { opacity: (isHov && !isHid) ? 1 : 0.2 },
+          label: (isHov && !isHid) ? {
+            show: true, position: labelPos, color: 'inherit',
+            fontSize: 11, fontWeight: 'bold',
+            formatter: function(p){
               return p.value != null && p.value > 0 ? p.value + unit : '';
             }
           } : { show: false }
         };
       });
 
-      // 横グラフは xAxis のmax、縦グラフは yAxis の max を調整
+      _hovering = true;
       if (isHorizontal) {
         _setOption({ series: patchSeries, xAxis: [{ max: niceMax }] }, false);
       } else {
         _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);
       }
       _hovering = false;
+    }
+
+    // バーホバー（系列名を直接取得）
+    instance.on('mouseover', function(params) {
+      if (!params || params.componentType !== 'series') return;
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return;
+      var hasBar = opt.series.some(function(s){ return s.type === 'bar'; });
+      if (!hasBar) return;
+      triggerHoverLabel(instance, params.seriesName, opt);
+    });
+
+    // mouseover（凡例ホバー）
+    instance.getZr().on('mouseover', function(e) {
+      var el = e.target;
+      if (!el) return;
+      var idx = getLegendIdx(el);
+
+      if (idx === null) {
+        return; // バーホバーは上のon('mouseover')で処理
+      }
+
+      var opt = instance.getOption();
+      if (!opt || !opt.series) return;
+      var hasBar = opt.series.some(function(s){ return s.type === 'bar'; });
+      if (!hasBar) return;
+      var names = [];
+      if (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length > 0) {
+        names = opt.legend[0].data.map(function(d){ return typeof d === 'object' ? d.name : d; });
+      } else {
+        names = opt.series.map(function(s){ return s.name; });
+      }
+      var hoveredName = names[idx];
+      triggerHoverLabel(instance, hoveredName, opt);
     });
 
     // mouseout: 非表示状態を維持しながらリセット

@@ -18,62 +18,25 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
-// ===== ECharts パッチ: 凡例/バーホバーで該当系列のみ表示 & 値ラベル表示 =====
-// 実装方針: ECharts 標準 'highlight' イベント + series 書き換えで 1系列だけ残す。
-// 「一番下に移動」「縦軸rescale」「値ラベル表示」をすべて ec-bat-share-lfp/nmc と同じ挙動に統一。
+// ===== ECharts パッチ: 凡例ホバー時にラベル表示 =====
+// v88 原文のまま (detectUnit の認識単位のみ拡張)
 (function() {
-  // 単位判定
-  function detectUnit(opt, isHorizontal) {
-    var axisObj = isHorizontal ? (opt.xAxis && opt.xAxis[0]) : (opt.yAxis && opt.yAxis[0]);
-    if (!axisObj) return '';
-    var name = axisObj.name || '';
-    var fmt  = axisObj.axisLabel && axisObj.axisLabel.formatter
-               ? axisObj.axisLabel.formatter.toString() : '';
-    var axisMax = !isHorizontal && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].max;
-    if (fmt.indexOf('%') >= 0 || axisMax === 100 || name === '%') return '%';
-    if (name.indexOf('万台') >= 0) return '万台';
-    if (name.indexOf('千台') >= 0) return '千台';
-    if (name.indexOf('GWh') >= 0) return 'GWh';
-    if (name.indexOf('億元') >= 0) return '億元';
-    if (name.indexOf('億ドル') >= 0) return '億ドル';
-    if (name.indexOf('億')  >= 0) return '億';
-    if (name.indexOf('万')  >= 0) return '万';
-    if (name.indexOf('台')  >= 0) return '台';
-    return '';
-  }
-
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
     var _setOption = instance.setOption.bind(instance);
     var _lastOption = null;
-    var _hovering = false;
+    var _hovering   = false;
     var _hiddenSeries = {};
 
+    // setOption をラップして _lastOption を保存
     instance.setOption = function(option, notMerge, lazyUpdate) {
-      // emphasis.focus/label を自動付与（既存設定を上書きしない）
-      // バーホバー時にも値ラベルが出るように、積み上げ棒グラフの各系列に emphasis.label を付与
+      // emphasis.focus を自動付与（既存設定を上書きしない）
       if (option && option.series) {
         var arr = Array.isArray(option.series) ? option.series : [option.series];
-        var hasStackedBar = arr.some(function(s){ return s && s.type === 'bar' && s.stack; });
-        var emphasisUnit = hasStackedBar ? detectUnit(option, false) : '';
         arr.forEach(function(s) {
-          if (!s) return;
-          if (!s.emphasis) s.emphasis = {};
-          if (!s.emphasis.focus) s.emphasis.focus = 'series';
-          if (s.type === 'bar' && hasStackedBar && (!s.emphasis.label || s.emphasis.label.show == null)) {
-            s.emphasis.label = Object.assign({
-              show: true, position: 'top', color: 'inherit',
-              fontSize: 11, fontWeight: 'bold',
-              formatter: function(p) {
-                if (p.value == null || p.value === 0) return '';
-                var num = typeof p.value === 'number'
-                  ? (Math.abs(p.value) >= 1000 ? p.value.toLocaleString() : p.value)
-                  : p.value;
-                return num + (emphasisUnit || '');
-              }
-            }, s.emphasis.label || {});
-          }
+          if (s && !s.emphasis) s.emphasis = {};
+          if (s && !s.emphasis.focus) s.emphasis.focus = 'series';
         });
       }
       // tooltip: confine + max-width
@@ -96,41 +59,79 @@
     // 凡例クリックで非表示シリーズを記録
     instance.on('legendselectchanged', function(params) {
       _hiddenSeries = {};
-      Object.keys(params.selected || {}).forEach(function(name) {
+      Object.keys(params.selected).forEach(function(name) {
         if (!params.selected[name]) _hiddenSeries[name] = true;
       });
     });
 
-    // ソロ表示処理: 指定された1系列のみ残して他を 0 化、縦軸を rescale し値ラベルを出す
-    function soloSeries(hoveredName) {
+    // 凡例アイテムのzrender要素からインデックスを取得
+    function getLegendIdx(el) {
+      for (var cur = el, d = 0; cur && d < 8; cur = cur.parent, d++) {
+        if (cur.__legendDataIndex != null) return cur.__legendDataIndex;
+      }
+      return null;
+    }
+
+    // 単位を yAxis/xAxis の設定から判定（v89 拡張: 万台/千台/億元/億ドル にも対応）
+    function detectUnit(opt, isHorizontal, isPercent) {
+      if (isPercent) return '%';
+      var axisObj = isHorizontal ? (opt.xAxis && opt.xAxis[0]) : (opt.yAxis && opt.yAxis[0]);
+      if (!axisObj) return '';
+      var name = axisObj.name || '';
+      var fmt  = axisObj.axisLabel && axisObj.axisLabel.formatter
+                 ? axisObj.axisLabel.formatter.toString() : '';
+      // 長い単位から先にマッチ
+      if (name.indexOf('万台')  >= 0) return '万台';
+      if (name.indexOf('千台')  >= 0) return '千台';
+      if (name.indexOf('億元')  >= 0) return '億元';
+      if (name.indexOf('億ドル') >= 0) return '億ドル';
+      if (name.indexOf('GWh')  >= 0) return 'GWh';
+      if (fmt.indexOf('万') >= 0 || name.indexOf('万') >= 0) return '万';
+      if (name.indexOf('億')  >= 0) return '億';
+      if (name.indexOf('台')  >= 0) return '台';
+      return '';
+    }
+
+    // ラベル表示のメイン処理
+    function showHoverLabels(hoveredName) {
       if (!hoveredName || _hiddenSeries[hoveredName]) return;
       var opt = instance.getOption();
       if (!opt || !opt.series) return;
       var hasBar = opt.series.some(function(s) { return s.type === 'bar'; });
       if (!hasBar) return;
-      var hasStack = opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
-      if (!hasStack) return; // 積み上げ棒グラフのみ対象
+
+      var hasStack    = opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
       var isHorizontal = !!(opt.xAxis && opt.xAxis[0] && opt.xAxis[0].type === 'value'
                          && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].type === 'category');
-      var unit = detectUnit(opt, isHorizontal);
+
+      // %グラフ判定
+      var fmtAxis = isHorizontal
+        ? (opt.xAxis && opt.xAxis[0] && opt.xAxis[0].axisLabel && opt.xAxis[0].axisLabel.formatter)
+        : (opt.yAxis && opt.yAxis[0] && opt.yAxis[0].axisLabel && opt.yAxis[0].axisLabel.formatter);
+      var fmtStr   = fmtAxis ? fmtAxis.toString() : '';
+      var axisMax  = !isHorizontal && opt.yAxis && opt.yAxis[0] && opt.yAxis[0].max;
+      var isPercent = fmtStr.indexOf('%') >= 0 || axisMax === 100;
+
+      var unit     = detectUnit(opt, isHorizontal, isPercent);
       var labelPos = isHorizontal ? 'right' : 'top';
 
+      // niceMax
       var hovSeries = opt.series.find(function(s) { return s.name === hoveredName; });
-      if (!hovSeries) return;
       var dataMax = 0;
-      (hovSeries.data || []).forEach(function(v) {
+      (hovSeries ? hovSeries.data : []).forEach(function(v) {
         var n = (v != null && typeof v === 'object') ? (v.value || 0) : (v || 0);
         if (n > dataMax) dataMax = n;
       });
-      var isPercent = unit === '%';
       var niceMax = isPercent ? 100 : (dataMax > 0 ? Math.ceil(dataMax * 1.15 / 5) * 5 : null);
 
       var patchSeries = opt.series.map(function(s) {
-        var isHov = (s.name === hoveredName);
-        var origData = s.data || [];
-        var newData = isHov ? origData : origData.map(function() { return 0; });
+        var isHov = (s.name === hoveredName) && !_hiddenSeries[s.name];
+        var newData = hasStack
+          ? (isHov ? s.data : s.data.map(function() { return 0; }))
+          : s.data;
         return {
           data: newData,
+          itemStyle: hasStack ? {} : { opacity: isHov ? 1 : 0.2 },
           label: isHov ? {
             show: true,
             position: labelPos,
@@ -138,27 +139,36 @@
             fontSize: 11,
             fontWeight: 'bold',
             formatter: function(p) {
-              if (p.value == null || p.value === 0) return '';
-              var num = typeof p.value === 'number'
-                ? (Math.abs(p.value) >= 1000 ? p.value.toLocaleString() : p.value)
-                : p.value;
-              return num + (unit || '');
+              return (p.value != null && p.value > 0) ? p.value + unit : '';
             }
           } : { show: false }
         };
       });
 
       _hovering = true;
-      var patch = { series: patchSeries };
-      if (niceMax != null) {
-        if (isHorizontal) patch.xAxis = [{ max: niceMax }];
-        else patch.yAxis = [{ max: niceMax }];
+      if (isHorizontal) {
+        _setOption({ series: patchSeries, xAxis: [{ max: niceMax }] }, false);
+      } else {
+        _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);
       }
-      _setOption(patch, false);
       _hovering = false;
     }
 
-    function resetSolo() {
+    // 凡例ホバー検出
+    instance.getZr().on('mouseover', function(e) {
+      var idx = getLegendIdx(e.target);
+      if (idx === null) return;
+      var opt = instance.getOption();
+      if (!opt) return;
+      var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
+        ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
+        : (opt.series || []).map(function(s) { return s.name; });
+      showHoverLabels(names[idx]);
+    });
+
+    // マウスアウト → リセット
+    instance.getZr().on('mouseout', function(e) {
+      if (getLegendIdx(e.target) === null) return;
       if (!_lastOption) return;
       _hovering = true;
       _setOption(_lastOption, true);
@@ -166,14 +176,6 @@
         instance.dispatchAction({ type: 'legendUnSelect', name: name });
       });
       _hovering = false;
-    }
-
-    // 凡例ホバー: ECharts 公式 componentType イベント (scroll legend でも動作)
-    instance.on('mouseover', {componentType: 'legend'}, function(params) {
-      if (params && params.name) soloSeries(params.name);
-    });
-    instance.on('mouseout', {componentType: 'legend'}, function(params) {
-      if (params && params.name) resetSolo();
     });
 
     return instance;

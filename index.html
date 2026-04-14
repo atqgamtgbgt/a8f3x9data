@@ -144,8 +144,12 @@
       var patchSeries = opt.series.map(function(s) {
         var isHovered = s.name === hoveredName;
         var isHidden  = !!_hiddenSeries[s.name];
+        var newData = hasStack
+          ? ((isHovered && !isHidden) ? s.data : s.data.map(function() { return 0; }))
+          : s.data;
         return {
-          data: (isHovered && !isHidden) ? s.data : s.data.map(function() { return 0; }),
+          data: newData,
+          itemStyle: hasStack ? {} : { opacity: (isHovered && !isHidden) ? 1 : 0.2 },
           label: (isHovered && !isHidden) ? {
             show: true,
             position: labelPos,
@@ -153,9 +157,25 @@
             fontSize: 11,
             fontWeight: 'bold',
             formatter: function(p) {
-              var unit = isPercent ? '%' : '';
-              var threshold = niceMax ? Math.max(niceMax * 0.08, 0.5) : 0.5;
-              return p.value != null && p.value >= threshold ? p.value + unit : '';
+              // 単位を軸のname/formatterから取得
+              var unit = '';
+              if (isPercent) {
+                unit = '%';
+              } else {
+                var axisObj = isHorizontal
+                  ? (opt.xAxis && opt.xAxis[0])
+                  : (opt.yAxis && opt.yAxis[0]);
+                var axisName = axisObj && axisObj.name ? axisObj.name : '';
+                var axisFmt  = axisObj && axisObj.axisLabel && axisObj.axisLabel.formatter
+                               ? axisObj.axisLabel.formatter.toString() : '';
+                if (axisFmt.indexOf('万') >= 0 || axisName.indexOf('万') >= 0) unit = '万';
+                else if (axisName.indexOf('GWh') >= 0) unit = 'GWh';
+                else if (axisName.indexOf('億') >= 0) unit = '億';
+                else if (axisName.indexOf('台') >= 0) unit = '台';
+                else if (axisName.indexOf('万') >= 0) unit = '万';
+                else unit = '';
+              }
+              return p.value != null && p.value > 0 ? p.value + unit : '';
             }
           } : { show: false }
         };
@@ -178,7 +198,7 @@
       var opt = instance.getOption();
       var hasStack = opt && opt.series && opt.series.some(function(s) { return s.type === 'bar' && s.stack; });
 
-      if (hasStack && _lastOption) {
+      if ((hasStack || hasBar) && _lastOption) {
         _hovering = true;
         _setOption(_lastOption, true);
         // 非表示だったシリーズを再度非表示に戻す

@@ -64,12 +64,34 @@
       });
     });
 
-    // 凡例ホバー: ECharts公式イベント legendmouseover / legendmouseout を使用
-    instance.on('legendmouseover', function(params) {
-      showHoverLabels(params.name);
+    // 凡例アイテムのzrender要素からインデックスを取得
+    function getLegendIdx(el) {
+      for (var cur = el, d = 0; cur && d < 8; cur = cur.parent, d++) {
+        if (cur.__legendDataIndex != null) return cur.__legendDataIndex;
+      }
+      return null;
+    }
+
+    // 凡例ホバー検出（zrender）
+    instance.getZr().on('mouseover', function(e) {
+      var relIdx = getLegendIdx(e.target);
+      if (relIdx === null) return;
+      var opt = instance.getOption();
+      if (!opt) return;
+      // legend.data から全系列名リストを取得
+      var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
+        ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
+        : (opt.series || []).map(function(s) { return s.name; });
+      // scroll凡例のページオフセットを補正
+      var scrollIdx = (opt.legend && opt.legend[0] && opt.legend[0].scrollDataIndex) || 0;
+      var absIdx = relIdx + scrollIdx;
+      var name = names[absIdx] !== undefined ? names[absIdx] : names[relIdx];
+      if (name) showHoverLabels(name);
     });
 
-    instance.on('legendmouseout', function() {
+    // マウスアウト → リセット
+    instance.getZr().on('mouseout', function(e) {
+      if (getLegendIdx(e.target) === null) return;
       if (!_lastOption) return;
       _hovering = true;
       _setOption(_lastOption, true);

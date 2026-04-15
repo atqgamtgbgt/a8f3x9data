@@ -64,10 +64,30 @@
       });
     });
 
-    // 凡例アイテムのzrender要素からインデックスを取得
-    function getLegendIdx(el) {
-      for (var cur = el, d = 0; cur && d < 8; cur = cur.parent, d++) {
-        if (cur.__legendDataIndex != null) return cur.__legendDataIndex;
+    // 凡例アイテムのzrender要素から系列名を直接取得
+    function getLegendName(el) {
+      // まずテキスト要素からシリーズ名を探す
+      for (var cur = el, d = 0; cur && d < 10; cur = cur.parent, d++) {
+        // __legendDataIndex がある → その親グループのテキスト子要素を探す
+        if (cur.__legendDataIndex != null) {
+          // opt から名前を引く（インデックスはページ相対なので使わない）
+          // 代わりに同グループ内のテキスト要素を探す
+          var grp = cur;
+          function findText(node) {
+            if (node && node.style && node.style.text != null) return node.style.text;
+            if (node && node.children) {
+              for (var i = 0; i < node.children.length; i++) {
+                var t = findText(node.children[i]);
+                if (t != null) return t;
+              }
+            }
+            return null;
+          }
+          var txt = findText(grp);
+          if (txt != null) return String(txt);
+          // テキストが見つからない場合はインデックスをフォールバックとして返す（後で名前解決）
+          return { idx: cur.__legendDataIndex };
+        }
       }
       return null;
     }
@@ -161,19 +181,26 @@
 
     // 凡例ホバー検出
     instance.getZr().on('mouseover', function(e) {
-      var idx = getLegendIdx(e.target);
-      if (idx === null) return;
-      var opt = instance.getOption();
-      if (!opt) return;
-      var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
-        ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
-        : (opt.series || []).map(function(s) { return s.name; });
-      showHoverLabels(names[idx]);
+      var result = getLegendName(e.target);
+      if (result === null) return;
+      var name;
+      if (typeof result === 'string') {
+        name = result;
+      } else {
+        // フォールバック: インデックスから名前を解決
+        var opt = instance.getOption();
+        if (!opt) return;
+        var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
+          ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
+          : (opt.series || []).map(function(s) { return s.name; });
+        name = names[result.idx];
+      }
+      if (name) showHoverLabels(name);
     });
 
     // マウスアウト → リセット
     instance.getZr().on('mouseout', function(e) {
-      if (getLegendIdx(e.target) === null) return;
+      if (getLegendName(e.target) === null) return;
       if (!_lastOption) return;
       _hovering = true;
       _setOption(_lastOption, true);
@@ -11722,12 +11749,15 @@ function renderImpBrand() {
   var d = IMP.brand;
   var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
   var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
+  // 動的高さ: ブランド数×(系列数×14px+12px) + 余白
+  var el = document.getElementById('ec-imp-brand');
+  if (el) { el.style.height = (d.names.length * (years.length * 14 + 12) + 100) + 'px'; c.resize(); }
   c.setOption(impBase({
     legend: { data:years, bottom:0 },
     grid: { left:105, right:60, top:20, bottom:55 },
     xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
-    barCategoryGap: '40%', barMaxWidth: 20,
+    barMaxWidth: 20,
     tooltip: { formatter:function(params){
       return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
     }},
@@ -11744,12 +11774,15 @@ function renderImpLuxury() {
   var d = IMP.luxury;
   var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
   var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
+  // 動的高さ
+  var el = document.getElementById('ec-imp-luxury');
+  if (el) { el.style.height = (d.names.length * (years.length * 14 + 12) + 100) + 'px'; c.resize(); }
   c.setOption(impBase({
     legend: { data:years, bottom:0 },
     grid: { left:130, right:60, top:20, bottom:55 },
     xAxis: { type:'value', name:'台' },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
-    barCategoryGap: '40%', barMaxWidth: 20,
+    barMaxWidth: 20,
     tooltip: { formatter:function(params){
       return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
     }},

@@ -159,33 +159,38 @@
         var newData = hasStack
           ? (isHov ? s.data : (s.data || []).map(function() { return 0; }))
           : s.data;
-        return {
-          data: newData,
-          itemStyle: hasStack ? {} : { opacity: isHov ? 1 : 0.2 },
-          label: isHov ? {
-            show: true,
-            position: labelPos,
-            color: 'inherit',
-            fontSize: 11,
-            fontWeight: 'bold',
-            formatter: function(p) {
-              if (p.value == null || p.value === 0) return '';
-              var v = p.value;
-              if (unit === '万台' || unit === '万') return v >= 0.05 ? v.toFixed(1) + unit : '';
-              if (unit === '台') return v > 0 ? v.toLocaleString() + '台' : '';
-              if (unit === '%') return v > 0 ? v + '%' : '';
-              return v !== 0 ? String(v) + unit : '';
-            }
-          } : { show: false }
-        };
+        // 元のseriesをコピーしてlabel/itemStyleだけ上書き
+        var patched = {};
+        Object.keys(s).forEach(function(k) { patched[k] = s[k]; });
+        patched.data = newData;
+        patched.itemStyle = hasStack ? (s.itemStyle || {}) : Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
+        patched.label = isHov ? {
+          show: true,
+          position: labelPos,
+          color: 'inherit',
+          fontSize: 11,
+          fontWeight: 'bold',
+          formatter: (function(u) { return function(p) {
+            if (p.value == null || p.value === 0) return '';
+            var v = p.value;
+            if (u === '万台' || u === '万') return v >= 0.05 ? v.toFixed(1) + u : '';
+            if (u === '台') return v > 0 ? v.toLocaleString() + '台' : '';
+            if (u === '%') return v > 0 ? v + '%' : '';
+            return v !== 0 ? String(v) + u : '';
+          }; })(unit)
+        } : { show: false };
+        return patched;
       });
 
+      // 元optionのコピーにseriesだけ差し替えてnotMerge:trueで再セット
+      var fullOpt = {};
+      Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
+      fullOpt.series = patchSeries;
+      if (isHorizontal && niceMax) fullOpt.xAxis = [Object.assign({}, xAxisObj, { max: niceMax })];
+      if (!isHorizontal && niceMax) fullOpt.yAxis = [Object.assign({}, yAxisObj, { max: niceMax })];
+
       _hovering = true;
-      if (isHorizontal) {
-        _setOption({ series: patchSeries, xAxis: [{ max: niceMax }] }, false);
-      } else {
-        _setOption({ series: patchSeries, yAxis: [{ max: niceMax }] }, false);
-      }
+      _setOption(fullOpt, true);
       _hovering = false;
     }
 

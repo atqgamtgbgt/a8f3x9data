@@ -8136,8 +8136,8 @@ function drawBar(id, title, subtitle, categories, series, opts={}) {
   const chart = cdsEc(id); if(!chart) return;
   chart.setOption({
     tooltip: opts.stack ? unifiedStackTooltip({unit: opts.yunit||'万台'}) : {trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:series.map(s=>s.name),bottom:0,type:'scroll'},
-    grid:{left:opts.left||60,right:opts.right||20,top:opts.stack?50:30,bottom:opts.bottom||55,containLabel:true},
+    legend:{data:series.map(s=>s.name),top:8,type:'scroll'},
+    grid:{left:opts.left||60,right:opts.right||20,top:opts.stack?50:45,bottom:opts.bottom||20,containLabel:true},
     xAxis:opts.horizontal?{type:'value',name:opts.xname||'万台'}:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
     yAxis:opts.horizontal?{type:'category',data:categories}:{type:'value',name:opts.yunit||'万台',axisLabel:{formatter:function(v){return v+(opts.yunit||'万台');}}},
     series:series.map(s=>({...s,type:'bar',stack:opts.stack?'total':undefined,emphasis:{focus:'series'},label:{show:!!opts.label,position:opts.horizontal?'right':'top',fontSize:10,formatter:p=>p.value&&Math.abs(p.value)>=opts.labelMin?p.value:''}})),
@@ -8350,8 +8350,8 @@ function cdsDrawProv() {
   const chart = CDS_EC['ec-cds-prov'];
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:yrs,bottom:0,type:'scroll'},
-    grid:{left:65,right:60,top:30,bottom:60,containLabel:true},
+    legend:{data:yrs,top:8,type:'scroll'},
+    grid:{left:65,right:60,top:50,bottom:30,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     barMaxWidth:16,
@@ -8378,8 +8378,8 @@ function cdsDrawNevProv() {
   const chart = CDS_EC['ec-cds-nev-prov'];
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},
-    grid:{left:65,right:60,top:30,bottom:60,containLabel:true},
+    legend:{data:yrs.map(y=>y+'年'),top:8,type:'scroll'},
+    grid:{left:65,right:60,top:50,bottom:30,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     barMaxWidth:16,
@@ -10075,8 +10075,8 @@ function renderProvSalesChart(){
   cpcaProvChart.setOption({
     backgroundColor:'transparent',
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:['2024年','2025年','26年1-2月'],bottom:0,textStyle:{fontSize:10,color:'#8ab0d0'}},
-    grid:{left:65,right:55,top:10,bottom:55},
+    legend:{data:['2024年','2025年','26年1-2月'],top:8,type:'scroll',textStyle:{fontSize:10,color:'#8ab0d0'}},
+    grid:{left:65,right:55,top:45,bottom:20},
     yAxis:{type:'category',data:sorted.map(([k])=>k),axisLabel:{fontSize:9,color:'#7eb3ff'}},
     xAxis:{type:'value',name:'万台',nameTextStyle:{color:'#6a8aaa',fontSize:9},
       axisLabel:{fontSize:9,color:'#6a8aaa'},splitLine:{lineStyle:{color:'#1e3555'}}},
@@ -11622,8 +11622,8 @@ function renderImpType() {
   var c = mkImpChart('ec-imp-type'); if(!c) return;
   var d = IMP.typeComp;
   c.setOption(impBase({
-    legend: { data:['2024年','2025年','2026年1-2月'], bottom:0 },
-    grid: { left:110, right:60, top:20, bottom:55 },
+    legend: { data:['2024年','2025年','2026年1-2月'], top:8 },
+    grid: { left:110, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'万台' },
     yAxis: { type:'category', data:d.cats.slice().reverse(), axisLabel:{fontSize:11} },
     barCategoryGap: '40%', barMaxWidth: 20,
@@ -11692,8 +11692,8 @@ function renderImpCountry() {
   var d = IMP.country;
   var rev = d.names.slice().reverse();
   c.setOption(impBase({
-    legend: { data:['2024年','2025年合計','2026年1-2月'], bottom:0 },
-    grid: { left:100, right:60, top:20, bottom:55 },
+    legend: { data:['2024年','2025年合計','2026年1-2月'], top:8 },
+    grid: { left:100, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
     yAxis: { type:'category', data:rev, axisLabel:{fontSize:11} },
     barCategoryGap: '40%', barMaxWidth: 20,
@@ -11716,8 +11716,8 @@ function renderImpNevCountry() {
   var d = IMP.nevCountry;
   var rev = d.names.slice().reverse();
   c.setOption(impBase({
-    legend: { data:['2024年','2025年合計','2026年1-2月'], bottom:0 },
-    grid: { left:110, right:60, top:20, bottom:55 },
+    legend: { data:['2024年','2025年合計','2026年1-2月'], top:8 },
+    grid: { left:110, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台' },
     yAxis: { type:'category', data:rev, axisLabel:{fontSize:11} },
     barCategoryGap: '40%', barMaxWidth: 20,
@@ -11744,8 +11744,8 @@ function renderImpBrand() {
   var el = document.getElementById('ec-imp-brand');
   if (el) { el.style.height = (d.names.length * (years.length * 14 + 12) + 100) + 'px'; c.resize(); }
   c.setOption(impBase({
-    legend: { data:years, bottom:0 },
-    grid: { left:105, right:60, top:20, bottom:55 },
+    legend: { data:years, top:8, type:'scroll' },
+    grid: { left:105, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
     barMaxWidth: 20,
@@ -11769,8 +11769,8 @@ function renderImpLuxury() {
   var el = document.getElementById('ec-imp-luxury');
   if (el) { el.style.height = (d.names.length * (years.length * 14 + 12) + 100) + 'px'; c.resize(); }
   c.setOption(impBase({
-    legend: { data:years, bottom:0 },
-    grid: { left:130, right:60, top:20, bottom:55 },
+    legend: { data:years, top:8, type:'scroll' },
+    grid: { left:130, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台' },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
     barMaxWidth: 20,

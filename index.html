@@ -2172,12 +2172,20 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
     overflow: visible !important;
   }
 
-  /* cds-pane（崔東樹タブ内）も同様：アクティブのみ表示 */
-  .cds-pane:not(.cds-active) {
+  /* cds-pane（崔東樹タブ内サブペイン）：アクティブのみ表示、ただしcds-super-content自体は除外 */
+  .cds-pane:not(.cds-active):not(#cds-super-content) {
     display: none !important;
   }
   .cds-pane.cds-active {
     display: block !important;
+  }
+  /* cds-super-content自体はBootstrapのactive制御に従う */
+  #cds-super-content.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
   }
 
   /* アクティブタブの見出し（page-break-before不要、1タブだけなので） */
@@ -3051,7 +3059,7 @@ body.tray-open { padding-bottom: 105px; }
       </div><!-- end cccm-super-content -->
 
       <!-- ===== 崔東樹（輸出分析） 大タブ ===== -->
-      <div class="cds-pane" id="cds-super-content" role="tabpanel" data-print-title="崔東樹（輸出分析）">
+      <div class="tab-pane cds-pane" id="cds-super-content" role="tabpanel" data-print-title="崔東樹（輸出分析）">
         <div class="container-fluid py-3">
 
           <!-- ローディング -->

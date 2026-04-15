@@ -8331,13 +8331,17 @@ function cdsDrawProv() {
   if (!CDS_LOADED) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025','2026年1-2月'];
   const ps=(CDS.provs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,15);
-  const chart=cdsEc('ec-cds-prov'); if(!chart) return;
   const COLS8=[...YRCOLORS,'#1d4ed8'];
   const visN = yrs.length;
   const rowH = visN * 14 + 12;
   const totalH = ps.length * rowH + 120;
   const el = document.getElementById('ec-cds-prov');
-  if(el){ el.style.height = totalH+'px'; chart.resize(); }
+  if(!el) return;
+  el.style.height = totalH+'px';
+  // dispose→init でラップ済みインスタンスを確実に取得
+  if (CDS_EC['ec-cds-prov']) { try { CDS_EC['ec-cds-prov'].dispose(); } catch(e){} }
+  CDS_EC['ec-cds-prov'] = echarts.init(el, null, { renderer: 'canvas' });
+  const chart = CDS_EC['ec-cds-prov'];
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
     legend:{data:yrs,bottom:0,type:'scroll'},
@@ -8349,19 +8353,23 @@ function cdsDrawProv() {
       data:ps.map(p=>p.v[i]??null).reverse(),itemStyle:{color:COLS8[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))
   });
-  setTimeout(()=>{try{cdsEc('ec-cds-prov')?.resize();}catch(e){}},80);
+  setTimeout(()=>{try{CDS_EC['ec-cds-prov']?.resize();}catch(e){}},80);
 }
 
 function cdsDrawNevProv() {
   if (!CDS_LOADED) return;
   const yrs=['2019','2020','2021','2022','2023','2024','2025'];
   const ps=(CDS.nevProvs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,12);
-  const chart=cdsEc('ec-cds-nev-prov'); if(!chart) return;
   const visN = yrs.length;
   const rowH = visN * 14 + 12;
   const totalH = ps.length * rowH + 120;
   const el = document.getElementById('ec-cds-nev-prov');
-  if(el){ el.style.height = totalH+'px'; chart.resize(); }
+  if(!el) return;
+  el.style.height = totalH+'px';
+  // dispose→init でラップ済みインスタンスを確実に取得
+  if (CDS_EC['ec-cds-nev-prov']) { try { CDS_EC['ec-cds-nev-prov'].dispose(); } catch(e){} }
+  CDS_EC['ec-cds-nev-prov'] = echarts.init(el, null, { renderer: 'canvas' });
+  const chart = CDS_EC['ec-cds-nev-prov'];
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
     legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},
@@ -8373,7 +8381,7 @@ function cdsDrawNevProv() {
       data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))
   });
-  setTimeout(()=>{try{cdsEc('ec-cds-nev-prov')?.resize();}catch(e){}},80);
+  setTimeout(()=>{try{CDS_EC['ec-cds-nev-prov']?.resize();}catch(e){}},80);
 }
 
 function cdsDrawRank() {
@@ -10052,13 +10060,12 @@ var cpcaProvChart=null;
 function renderProvSalesChart(){
   const el=document.getElementById('ec-cpca-prov');
   if(!el) return;
-  if(!cpcaProvChart) cpcaProvChart=echarts.init(el,'dark');
   const sorted=Object.entries(CPCA.prov).sort((a,b)=>b[1].y25-a[1].y25);
-  // 動的高さ: 省数×(3系列×14px+12px) + 余白
   const rowH = 3 * 14 + 12;
   const totalH = sorted.length * rowH + 100;
   el.style.height = totalH + 'px';
-  cpcaProvChart.resize();
+  if(cpcaProvChart){ try{cpcaProvChart.dispose();}catch(e){} }
+  cpcaProvChart=echarts.init(el,'dark');
   cpcaProvChart.setOption({
     backgroundColor:'transparent',
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
@@ -12849,14 +12856,15 @@ function jhDrawRegionShare() {
 }
 
 function jhDrawMakerTotal() {
-  var ec = jhEc('ec-jh-maker-total');
-  if (!ec) return;
   var visibleCount = JH_MAKER.years.length;
-  // カテゴリ数×(系列数×棒高さ+間隔) + grid余白 で高さ動的計算
-  var rowH = visibleCount * 14 + 10; // 1カテゴリあたりのpx
+  var rowH = visibleCount * 14 + 10;
   var totalH = JH_MAKER.makers.length * rowH + 120;
   var el = document.getElementById('ec-jh-maker-total');
-  if (el) { el.style.height = totalH + 'px'; ec.resize(); }
+  if (!el) return;
+  el.style.height = totalH + 'px';
+  var existing = echarts.getInstanceByDom(el);
+  if (existing) { try { existing.dispose(); } catch(e){} }
+  var ec = echarts.init(el, null, {renderer:'canvas'});
   var series = JH_MAKER.years.map(function(y, yi){
     return { name:y, type:'bar', barMaxWidth:18, emphasis:{focus:'series'},
       data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
@@ -12878,13 +12886,15 @@ function jhDrawMakerTotal() {
 }
 
 function jhDrawMakerNev() {
-  var ec = jhEc('ec-jh-maker-nev');
-  if (!ec) return;
   var visibleCount = JH_MAKER_NEV.years.length;
   var rowH = visibleCount * 14 + 10;
   var totalH = JH_MAKER_NEV.makers.length * rowH + 120;
   var el = document.getElementById('ec-jh-maker-nev');
-  if (el) { el.style.height = totalH + 'px'; ec.resize(); }
+  if (!el) return;
+  el.style.height = totalH + 'px';
+  var existing = echarts.getInstanceByDom(el);
+  if (existing) { try { existing.dispose(); } catch(e){} }
+  var ec = echarts.init(el, null, {renderer:'canvas'});
   var series = JH_MAKER_NEV.years.map(function(y, yi){
     return { name:y, type:'bar', barMaxWidth:18, emphasis:{focus:'series'},
       data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };

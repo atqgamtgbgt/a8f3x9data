@@ -145,33 +145,43 @@
       var opt = _lastOption;
       if (!opt || !opt.series) return;
       var seriesArr = Array.isArray(opt.series) ? opt.series : [opt.series];
-      var hasBar = seriesArr.some(function(s) { return s.type === 'bar'; });
-      if (!hasBar) return;
+      // bar/line どちらも対象（barがない場合もlineのみで処理続行）
+      var hasBar   = seriesArr.some(function(s) { return s.type === 'bar'; });
+      var hasStack = seriesArr.some(function(s) { return s.type === 'bar' && s.stack; });
 
-      var hasStack    = seriesArr.some(function(s) { return s.type === 'bar' && s.stack; });
       var isHorizontal = !!(opt.xAxis && (Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis) &&
                            (Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis).type === 'value' &&
                            opt.yAxis && (Array.isArray(opt.yAxis) ? opt.yAxis[0] : opt.yAxis) &&
                            (Array.isArray(opt.yAxis) ? opt.yAxis[0] : opt.yAxis).type === 'category');
 
-      var xAxisObj = Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis;
-      var yAxisObj = Array.isArray(opt.yAxis) ? opt.yAxis[0] : opt.yAxis;
-      var fmtAxis = isHorizontal ? xAxisObj : yAxisObj;
+      var xAxisArr = Array.isArray(opt.xAxis) ? opt.xAxis : (opt.xAxis ? [opt.xAxis] : [{}]);
+      var yAxisArr = Array.isArray(opt.yAxis) ? opt.yAxis : (opt.yAxis ? [opt.yAxis] : [{}]);
+      var xAxisObj = xAxisArr[0];
+      var yAxisObj = yAxisArr[0];
+
+      // ホバー対象シリーズのyAxisIndex（複数y軸対応）
+      var hovSeries = seriesArr.find(function(s) { return s.name === hoveredName; });
+      var hovYIdx = (hovSeries && hovSeries.yAxisIndex) ? hovSeries.yAxisIndex : 0;
+      var hovYAxis = yAxisArr[hovYIdx] || yAxisArr[0];
+
+      // 単位・%判定はホバー対象のy軸を参照
+      var fmtAxis = isHorizontal ? xAxisObj : hovYAxis;
       var fmtStr = (fmtAxis && fmtAxis.axisLabel && fmtAxis.axisLabel.formatter)
         ? fmtAxis.axisLabel.formatter.toString() : '';
-      var axisName = (fmtAxis && fmtAxis.name) || '';
-      var axisMax = (!isHorizontal && yAxisObj && yAxisObj.max) || null;
+      var axisMax = (!isHorizontal && hovYAxis && hovYAxis.max) || null;
       var isPercent = fmtStr.indexOf('%') >= 0 || axisMax === 100;
-      var unit = detectUnit(isHorizontal ? xAxisObj : yAxisObj, isPercent);
+      var unit = detectUnit(fmtAxis, isPercent);
       var labelPos = isHorizontal ? 'right' : 'top';
 
-      var hovSeries = seriesArr.find(function(s) { return s.name === hoveredName; });
       var dataMax = 0;
       ((hovSeries && hovSeries.data) || []).forEach(function(v) {
         var n = (v != null && typeof v === 'object') ? (v.value || 0) : (v || 0);
         if (n > dataMax) dataMax = n;
       });
-      var niceMax = isPercent ? 100 : (dataMax > 0 ? Math.ceil(dataMax * 1.15 / 5) * 5 : null);
+      // lineのみチャートはy軸max書き換え不要（元のスケールを保持）
+      var niceMax = hasBar
+        ? (isPercent ? 100 : (dataMax > 0 ? Math.ceil(dataMax * 1.15 / 5) * 5 : null))
+        : null;
 
       var patchSeries = seriesArr.map(function(s) {
         var isHov = (s.name === hoveredName) && !_hiddenSeries[s.name];
@@ -184,9 +194,15 @@
         patched.data = newData;
         // ECharts自身のemphasis強調を無効化（mouseout後の残留を防ぐ）
         patched.emphasis = { disabled: true };
-        patched.itemStyle = hasStack
-          ? (s.itemStyle || {})
-          : Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
+        // lineの場合は lineStyle.opacity で dim、barの場合は itemStyle.opacity
+        if (!hasStack) {
+          patched.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
+          if (s.type === 'line') {
+            patched.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: isHov ? 1 : 0.15 });
+          }
+        } else {
+          patched.itemStyle = s.itemStyle || {};
+        }
         patched.label = isHov ? {
           show: true,
           position: labelPos,

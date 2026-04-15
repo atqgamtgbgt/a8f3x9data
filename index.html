@@ -3599,14 +3599,14 @@ body.tray-open { padding-bottom: 105px; }
               <div class="chart-card">
                 <div class="chart-title">🚗 メーカー別 自主海外販売台数（台）</div>
                 <div class="chart-subtitle">2020〜2026年1-2月　主要メーカー</div>
-                <div id="ec-jh-maker-total" class="echart-box" style="height:800px"></div>
+                <div id="ec-jh-maker-total" class="echart-box" style="height:1050px"></div>
               </div>
             </div>
             <div class="cds-pane" id="jh-maker-nev">
               <div class="chart-card">
                 <div class="chart-title">⚡ NEVメーカー別 自主海外販売台数（台）</div>
                 <div class="chart-subtitle">2020〜2026年1-2月　主要メーカー</div>
-                <div id="ec-jh-maker-nev" class="echart-box" style="height:740px"></div>
+                <div id="ec-jh-maker-nev" class="echart-box" style="height:950px"></div>
               </div>
             </div>
 
@@ -8335,7 +8335,7 @@ function cdsDrawProv() {
     grid:{left:65,right:60,top:30,bottom:60,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
-    series:yrs.map((yr,i)=>({name:yr,type:'bar',barWidth:14,emphasis:{focus:'series'},
+    series:yrs.map((yr,i)=>({name:yr,type:'bar',barWidth:'60%',emphasis:{focus:'series'},
       data:ps.map(p=>p.v[i]??null).reverse(),itemStyle:{color:COLS8[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))
   });
@@ -8354,7 +8354,7 @@ function cdsDrawNevProv() {
     grid:{left:65,right:60,top:30,bottom:60,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',barWidth:14,emphasis:{focus:'series'},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',barWidth:'60%',emphasis:{focus:'series'},
       data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))
   });
@@ -10048,9 +10048,9 @@ function renderProvSalesChart(){
     xAxis:{type:'value',name:'万台',nameTextStyle:{color:'#6a8aaa',fontSize:9},
       axisLabel:{fontSize:9,color:'#6a8aaa'},splitLine:{lineStyle:{color:'#1e3555'}}},
     series:[
-      {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barWidth:16,emphasis:{focus:'series'}},
-      {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barWidth:16,emphasis:{focus:'series'}},
-      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barWidth:16,emphasis:{focus:'series'}},
+      {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barWidth:'60%',emphasis:{focus:'series'}},
+      {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barWidth:'60%',emphasis:{focus:'series'}},
+      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barWidth:'60%',emphasis:{focus:'series'}},
     ]
   });
 }
@@ -11593,11 +11593,11 @@ function renderImpType() {
     xAxis: { type:'value', name:'万台' },
     yAxis: { type:'category', data:d.cats.slice().reverse(), axisLabel:{fontSize:11} },
     series:[
-      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#93c5fd'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#93c5fd'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:10} },
-      { name:'2025年', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2025年', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:10} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:10} }
     ]
   }));
@@ -11665,11 +11665,11 @@ function renderImpCountry() {
       return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
     }},
     series:[
-      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
-      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} }
     ]
   }));
@@ -11688,11 +11688,11 @@ function renderImpNevCountry() {
       return params.map(function(p){return p.seriesName+': '+(p.value||0).toLocaleString()+'台';}).join('<br>');
     }},
     series:[
-      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} },
-      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#10b981'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#10b981'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'}, barWidth:16, emphasis:{focus:'series'},
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'}, barWidth:'60%', emphasis:{focus:'series'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} }
     ]
   }));
@@ -11714,7 +11714,7 @@ function renderImpBrand() {
     }},
     series: years.map(function(yr,i){
       return { name:yr, type:'bar', data:allData[i].slice().reverse(),
-               itemStyle:{color:COLORS[i]}, barWidth:14, emphasis:{focus:'series'},
+               itemStyle:{color:COLORS[i]}, barWidth:'60%', emphasis:{focus:'series'},
                label:{show:true,position:'right',fontSize:9,formatter:function(p){return p.value>=1000?(p.value/10000).toFixed(1)+'万':p.value>0?p.value.toLocaleString():'';}} };
     })
   }));
@@ -11736,7 +11736,7 @@ function renderImpLuxury() {
     }},
     series: years.map(function(yr,i){
       return { name:yr, type:'bar', data:allData[i].slice().reverse(),
-               itemStyle:{color:COLORS[i]}, barWidth:14, emphasis:{focus:'series'},
+               itemStyle:{color:COLORS[i]}, barWidth:'60%', emphasis:{focus:'series'},
                label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} };
     })
   }));
@@ -12824,7 +12824,7 @@ function jhDrawMakerTotal() {
   var sel = {}; JH_MAKER.years.forEach(function(y,i){ sel[y]=i>=2; }); // 2022以降のみ初期表示
   var series = JH_MAKER.years.map(function(y, yi){
     return {
-      name:y, type:'bar', barWidth:10, emphasis:{focus:'series'},
+      name:y, type:'bar', barWidth:'60%', emphasis:{focus:'series'},
       data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }),
     };
   });
@@ -12836,7 +12836,7 @@ function jhDrawMakerTotal() {
         return s;
       }
     },
-    legend:{ top:8, type:'scroll', selected:sel },
+    legend:{ data:JH_MAKER.years, top:8, type:'scroll', selected:sel },
     grid:{ left:90, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: JH_MAKER.makers },
@@ -12850,7 +12850,7 @@ function jhDrawMakerNev() {
   var sel = {}; JH_MAKER_NEV.years.forEach(function(y,i){ sel[y]=i>=2; }); // 2022以降のみ初期表示
   var series = JH_MAKER_NEV.years.map(function(y, yi){
     return {
-      name:y, type:'bar', barWidth:10, emphasis:{focus:'series'},
+      name:y, type:'bar', barWidth:'60%', emphasis:{focus:'series'},
       data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }),
     };
   });
@@ -12862,7 +12862,7 @@ function jhDrawMakerNev() {
         return s;
       }
     },
-    legend:{ top:8, type:'scroll', selected:sel },
+    legend:{ data:JH_MAKER_NEV.years, top:8, type:'scroll', selected:sel },
     grid:{ left:80, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: JH_MAKER_NEV.makers },

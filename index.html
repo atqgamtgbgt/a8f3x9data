@@ -50,6 +50,8 @@
 
     // 凡例クリックで非表示シリーズを記録
     instance.on('legendselectchanged', function(params) {
+      // パッチ内部のsetOption起因の発火では上書きしない
+      if (_hovering) return;
       _hiddenSeries = {};
       Object.keys(params.selected).forEach(function(name) {
         if (!params.selected[name]) _hiddenSeries[name] = true;
@@ -88,13 +90,29 @@
         resetOpt = {};
         Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
         resetOpt.series = resetSeries;
+
+        // notMerge:true で凡例選択状態がリセットされるため、legend.selected を明示的にセット
+        if (Object.keys(_hiddenSeries).length > 0) {
+          var legObj = resetOpt.legend || {};
+          if (Array.isArray(legObj)) {
+            legObj = Object.assign({}, legObj[0] || {});
+            resetOpt.legend = [legObj];
+          } else {
+            legObj = Object.assign({}, legObj);
+            resetOpt.legend = legObj;
+          }
+          var sel = {};
+          seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
+          if (Array.isArray(resetOpt.legend)) {
+            resetOpt.legend[0].selected = sel;
+          } else {
+            resetOpt.legend.selected = sel;
+          }
+        }
       }
       _hovering = true;
       _setOption(resetOpt, true);
       _hovering = false;
-      Object.keys(_hiddenSeries).forEach(function(name) {
-        instance.dispatchAction({ type: 'legendUnSelect', name: name });
-      });
     }
 
     // 凡例ホバー検出（zrender）
@@ -262,6 +280,25 @@
       var fullOpt = {};
       Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
       fullOpt.series = patchSeries;
+
+      // notMerge:true で凡例選択状態がリセットされるため、legend.selected を明示的にセット
+      if (Object.keys(_hiddenSeries).length > 0) {
+        var legObj = fullOpt.legend || {};
+        if (Array.isArray(legObj)) {
+          legObj = Object.assign({}, legObj[0] || {});
+          fullOpt.legend = [legObj];
+        } else {
+          legObj = Object.assign({}, legObj);
+          fullOpt.legend = legObj;
+        }
+        var sel = {};
+        seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
+        if (Array.isArray(fullOpt.legend)) {
+          fullOpt.legend[0].selected = sel;
+        } else {
+          fullOpt.legend.selected = sel;
+        }
+      }
 
       // 軸max上書き：二軸配列を保持したまま、ホバー系列の軸のみ調整
       // line系列ホバー時は軸上書きしない

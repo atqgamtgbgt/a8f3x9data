@@ -19,39 +19,37 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
 // ===== ECharts パッチ v94: 凡例ホバー強調 =====
-// zrender依存を廃止し、公式イベント legendmouseover/legendmouseout を使用
 (function() {
   var _init = echarts.init;
   echarts.init = function() {
-    var instance = _init.apply(this, arguments);
+    var instance   = _init.apply(this, arguments);
     var _setOption = instance.setOption.bind(instance);
-    var _lastOption = null;
-    var _patching   = false;  // setOption再入防止
-    var _hiddenSeries = {};   // 凡例クリックで非表示になったシリーズ
+    var _lastOption   = null;
+    var _patching     = false;
+    var _hiddenSeries = {};
 
-    // ── setOption ラップ: _lastOption保存 + tooltip補正 ──
+    // ── setOption ラップ ──
     instance.setOption = function(option, notMerge, lazyUpdate) {
       if (option && option.tooltip) {
         var tips = Array.isArray(option.tooltip) ? option.tooltip : [option.tooltip];
         tips.forEach(function(t) {
           if (!t) return;
-          if (t.confine == null) t.confine = true;
+          if (t.confine    == null) t.confine    = true;
           if (t.extraCssText == null)
             t.extraCssText = 'max-width:min(88vw,320px);white-space:normal;word-break:break-word;font-size:12px;';
         });
       }
       if (!_patching) {
-        _lastOption = option;
+        _lastOption   = option;
         _hiddenSeries = {};
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
 
-    // ── 凡例クリック: 非表示シリーズを記録（標準動作は妨げない） ──
     instance.on('legendselectchanged', function(params) {
       _hiddenSeries = {};
-      Object.keys(params.selected).forEach(function(name) {
-        if (!params.selected[name]) _hiddenSeries[name] = true;
+      Object.keys(params.selected).forEach(function(k) {
+        if (!params.selected[k]) _hiddenSeries[k] = true;
       });
     });
 
@@ -59,121 +57,110 @@
     function detectUnit(axisObj, isPercent) {
       if (isPercent) return '%';
       if (!axisObj) return '';
-      var name = (axisObj.name || '');
-      var fmt  = (axisObj.axisLabel && axisObj.axisLabel.formatter)
-                 ? axisObj.axisLabel.formatter.toString() : '';
-      if (name.indexOf('万台')   >= 0) return '万台';
-      if (name.indexOf('千台')   >= 0) return '千台';
-      if (name.indexOf('億元')   >= 0) return '億元';
-      if (name.indexOf('億ドル') >= 0) return '億ドル';
-      if (name.indexOf('GWh')    >= 0) return 'GWh';
-      if (fmt.indexOf('万')  >= 0 || name.indexOf('万')  >= 0) return '万';
-      if (name.indexOf('億') >= 0) return '億';
-      if (name.indexOf('台') >= 0) return '台';
+      var n = axisObj.name || '';
+      var f = axisObj.axisLabel && axisObj.axisLabel.formatter
+              ? axisObj.axisLabel.formatter.toString() : '';
+      if (n.indexOf('万台')   >= 0) return '万台';
+      if (n.indexOf('千台')   >= 0) return '千台';
+      if (n.indexOf('億元')   >= 0) return '億元';
+      if (n.indexOf('億ドル') >= 0) return '億ドル';
+      if (n.indexOf('GWh')    >= 0) return 'GWh';
+      if (f.indexOf('万') >= 0 || n.indexOf('万') >= 0) return '万';
+      if (n.indexOf('億') >= 0) return '億';
+      if (n.indexOf('台') >= 0) return '台';
       return '';
     }
 
-    // ── ホバー強調のメイン処理 ──
-    function applyHover(hoveredName) {
-      if (!hoveredName || _hiddenSeries[hoveredName]) return;
-      var opt = _lastOption;
-      if (!opt || !opt.series) return;
-      var seriesArr = Array.isArray(opt.series) ? opt.series : [opt.series];
-      var hasStack  = seriesArr.some(function(s) { return s.type === 'bar' && s.stack; });
+    // ── ホバー強調 ──
+    function applyHover(hovName) {
+      if (!hovName || _hiddenSeries[hovName] || !_lastOption) return;
+      var opt      = _lastOption;
+      var allSer   = Array.isArray(opt.series) ? opt.series : [opt.series];
+      if (!allSer.length) return;
 
-      var isHorizontal = !!(
-        opt.xAxis && (Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis).type === 'value' &&
-        opt.yAxis && (Array.isArray(opt.yAxis) ? opt.yAxis[0] : opt.yAxis).type === 'category'
-      );
-      var xAxisArr = Array.isArray(opt.xAxis) ? opt.xAxis : (opt.xAxis ? [opt.xAxis] : [{}]);
       var yAxisArr = Array.isArray(opt.yAxis) ? opt.yAxis : (opt.yAxis ? [opt.yAxis] : [{}]);
-      var xAxisObj = xAxisArr[0] || {};
-      var yAxisObj = yAxisArr[0] || {};
+      var xAxisArr = Array.isArray(opt.xAxis) ? opt.xAxis : (opt.xAxis ? [opt.xAxis] : [{}]);
+      var isHoriz  = !!(xAxisArr[0] && xAxisArr[0].type === 'value' &&
+                        yAxisArr[0] && yAxisArr[0].type === 'category');
 
-      var hovSeries = seriesArr.find(function(s) { return s.name === hoveredName; });
-      var hovYIdx   = (hovSeries && hovSeries.yAxisIndex) || 0;
-      var hovYAxis  = yAxisArr[hovYIdx] || yAxisArr[0] || {};
+      var hovSer  = allSer.find(function(s) { return s.name === hovName; });
+      var hovYIdx = (hovSer && hovSer.yAxisIndex) || 0;
+      var hovAxis = yAxisArr[hovYIdx] || yAxisArr[0] || {};
+      var fmtAxis = isHoriz ? (xAxisArr[0] || {}) : hovAxis;
+      var fmtStr  = fmtAxis.axisLabel && fmtAxis.axisLabel.formatter
+                    ? fmtAxis.axisLabel.formatter.toString() : '';
+      var isPercent = fmtStr.indexOf('%') >= 0 ||
+                      (!isHoriz && hovAxis.max === 100);
+      var unit     = detectUnit(fmtAxis, isPercent);
+      var labelPos = isHoriz ? 'right' : 'top';
 
-      var fmtAxis   = isHorizontal ? xAxisObj : hovYAxis;
-      var fmtStr    = (fmtAxis.axisLabel && fmtAxis.axisLabel.formatter)
-                      ? fmtAxis.axisLabel.formatter.toString() : '';
-      var axisMax   = (!isHorizontal && hovYAxis.max != null) ? hovYAxis.max : null;
-      var isPercent = fmtStr.indexOf('%') >= 0 || axisMax === 100;
-      var unit      = detectUnit(fmtAxis, isPercent);
-      var labelPos  = isHorizontal ? 'right' : 'top';
+      // series だけ差し替えた最小パッチを notMerge:false で送る
+      // → 軸・凡例の状態は ECharts 側が保持したまま series だけ更新
+      var patchedSeries = allSer.map(function(s) {
+        var isHov = (s.name === hovName) && !_hiddenSeries[s.name];
+        var p     = Object.assign({}, s);
 
-      var hasBar = seriesArr.some(function(s) { return s.type === 'bar'; });
-      var dataMax = 0;
-      ((hovSeries && hovSeries.data) || []).forEach(function(v) {
-        var n = (v != null && typeof v === 'object') ? (v.value || 0) : (v || 0);
-        if (n > dataMax) dataMax = n;
-      });
-      var niceMax = (hasBar && !hasStack)
-        ? (isPercent ? 100 : (dataMax > 0 ? Math.ceil(dataMax * 1.15 / 5) * 5 : null))
-        : null;
-
-      var patchSeries = seriesArr.map(function(s) {
-        var isHov = (s.name === hoveredName) && !_hiddenSeries[s.name];
-        var patched = Object.assign({}, s);
-        patched.data = hasStack
-          ? (isHov ? s.data : (s.data || []).map(function() { return 0; }))
-          : s.data;
-        patched.emphasis = { disabled: true };
-        if (!hasStack) {
-          patched.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
-          if (s.type === 'line') {
-            patched.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: isHov ? 1 : 0.15 });
-          }
+        // opacity: color が関数でも効く global opacity を使う
+        p.emphasis = { disabled: true };
+        if (typeof s.itemStyle === 'object' && s.itemStyle !== null &&
+            typeof s.itemStyle.color === 'function') {
+          // color関数を保持しつつ opacity を追加
+          p.itemStyle = Object.assign({}, s.itemStyle, { opacity: isHov ? 1 : 0.15 });
         } else {
-          patched.itemStyle = Object.assign({}, s.itemStyle || {});
+          p.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
         }
-        patched.label = isHov ? {
+        if (s.type === 'line') {
+          p.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: isHov ? 1 : 0.15 });
+        }
+
+        p.label = isHov ? {
           show: true, position: labelPos,
           color: 'inherit', fontSize: 11, fontWeight: 'bold',
-          formatter: (function(u) { return function(p) {
-            if (p.value == null || p.value === 0) return '';
-            var v = p.value;
-            if (u === '万台' || u === '万') return v >= 0.05 ? v.toFixed(1) + u : '';
-            if (u === '台') return v > 0 ? v.toLocaleString() + '台' : '';
-            if (u === '%') return v > 0 ? v + '%' : '';
+          formatter: (function(u) { return function(params) {
+            var v = params.value;
+            if (v == null || v === 0) return '';
+            if (u === '万台' || u === '万') return v >= 0.05 ? (+v).toFixed(1) + u : '';
+            if (u === '台')  return v > 0 ? v.toLocaleString() + '台' : '';
+            if (u === '%')   return v > 0 ? v + '%' : '';
             return v !== 0 ? String(v) + u : '';
           }; })(unit)
         } : { show: false };
-        return patched;
+        return p;
       });
 
-      var fullOpt = Object.assign({}, opt, { series: patchSeries });
-      // yAxis配列（複数軸）チャートではスケール書き換えしない（1要素配列で上書きすると第2軸が消えてチャートが壊れる）
-      var multiAxis = yAxisArr.length > 1;
-      if (!multiAxis) {
-        if (isHorizontal && niceMax) fullOpt.xAxis = [Object.assign({}, xAxisObj, { max: niceMax })];
-        if (!isHorizontal && niceMax) fullOpt.yAxis = [Object.assign({}, yAxisObj, { max: niceMax })];
-      }
-
       _patching = true;
-      _setOption(fullOpt, true);
+      // notMerge:false → 軸・グリッド等はそのまま、series だけ差分更新
+      _setOption({ series: patchedSeries }, false);
       _patching = false;
     }
 
-    // ── ホバー解除: _lastOptionで完全リセット ──
+    // ── ホバー解除 ──
     function clearHover() {
-      if (!_lastOption) return;
-      _patching = true;
-      _setOption(_lastOption, true);
-      _patching = false;
-      // 凡例クリックで非表示になっているシリーズを再反映
-      Object.keys(_hiddenSeries).forEach(function(name) {
-        instance.dispatchAction({ type: 'legendUnSelect', name: name });
+      if (!_lastOption || !_lastOption.series) return;
+      var allSer = Array.isArray(_lastOption.series)
+                   ? _lastOption.series : [_lastOption.series];
+      var restored = allSer.map(function(s) {
+        var p = Object.assign({}, s);
+        if (typeof s.itemStyle === 'object' && s.itemStyle !== null &&
+            typeof s.itemStyle.color === 'function') {
+          p.itemStyle = Object.assign({}, s.itemStyle, { opacity: 1 });
+        } else {
+          p.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: 1 });
+        }
+        if (s.type === 'line') {
+          p.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: 1 });
+        }
+        p.emphasis = { disabled: false };
+        p.label    = s.label || { show: false };
+        return p;
       });
+      _patching = true;
+      _setOption({ series: restored }, false);
+      _patching = false;
     }
 
-    // ── 公式イベントで凡例ホバー検出 ──
-    instance.on('legendmouseover', function(params) {
-      applyHover(params.name);
-    });
-    instance.on('legendmouseout', function() {
-      clearHover();
-    });
+    instance.on('legendmouseover', function(params) { applyHover(params.name); });
+    instance.on('legendmouseout',  function()        { clearHover();           });
 
     return instance;
   };

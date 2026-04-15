@@ -2145,13 +2145,26 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
     display: block !important;
   }
 
-  /* 非アクティブタブは完全非表示 */
-  .tab-pane:not(.active) {
+  /* outerタブ（メインタブ）の非アクティブのみ非表示
+     ネストされたサブタブには適用しないよう #mainTabsContent 直下を対象にする */
+  #mainTabsContent > .tab-pane:not(.active) {
     display: none !important;
   }
 
-  /* アクティブなタブペインのみ表示 */
-  .tab-pane.active {
+  /* アクティブなouterタブペインを表示 */
+  #mainTabsContent > .tab-pane.active {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  /* サブタブ（ネスト内）：アクティブなもののみ表示、非アクティブは非表示 */
+  #mainTabsContent > .tab-pane.active .tab-pane:not(.active) {
+    display: none !important;
+  }
+  #mainTabsContent > .tab-pane.active .tab-pane.active {
     display: block !important;
     opacity: 1 !important;
     visibility: visible !important;
@@ -2168,7 +2181,7 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
   }
 
   /* アクティブタブの見出し（page-break-before不要、1タブだけなので） */
-  .tab-pane.active[data-print-title]::before {
+  #mainTabsContent > .tab-pane.active[data-print-title]::before {
     content: attr(data-print-title);
     display: block;
     font-size: 13pt;
@@ -7839,7 +7852,9 @@ window.addEventListener('resize', function() {
    描画完了を待ってからwindow.print()を呼ぶ
    ======================================== */
 function doPrint() {
-  var activePane = document.querySelector('.tab-pane.active');
+  // outerタブ（#mainTabsContent直下）のアクティブペインを確実に取得
+  var activePane = document.querySelector('#mainTabsContent > .tab-pane.active');
+  if (!activePane) { activePane = document.querySelector('.tab-pane.active'); }
   if (!activePane) { window.print(); return; }
 
   // アクティブペイン内のEChartsをリサイズ
@@ -7868,8 +7883,9 @@ function doPrint() {
    キャンバスが正しく描画された状態で印刷する
    ======================================== */
 window.addEventListener('beforeprint', function() {
-  // アクティブなタブペインのみ対象（非アクティブは印刷対象外）
-  var activePane = document.querySelector('.tab-pane.active');
+  // outerタブ（#mainTabsContent直下）のアクティブペインを確実に取得
+  var activePane = document.querySelector('#mainTabsContent > .tab-pane.active');
+  if (!activePane) { activePane = document.querySelector('.tab-pane.active'); }
   if (!activePane) return;
 
   // activePane内のechart-boxをリサイズ

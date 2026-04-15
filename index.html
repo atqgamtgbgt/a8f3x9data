@@ -31,14 +31,6 @@
 
     // setOption をラップして _lastOption を保存
     instance.setOption = function(option, notMerge, lazyUpdate) {
-      // emphasis.focus を自動付与（既存設定を上書きしない）
-      if (option && option.series) {
-        var arr = Array.isArray(option.series) ? option.series : [option.series];
-        arr.forEach(function(s) {
-          if (s && !s.emphasis) s.emphasis = {};
-          if (s && !s.emphasis.focus) s.emphasis.focus = 'series';
-        });
-      }
       // tooltip: confine + max-width
       if (option && option.tooltip) {
         var tips = Array.isArray(option.tooltip) ? option.tooltip : [option.tooltip];
@@ -78,12 +70,15 @@
       if (!_isShowingHover) return;
       if (!_lastOption) return;
       _isShowingHover = false;
+      // EChartsのemphasis/downplay状態を全系列に対して解除
+      instance.dispatchAction({ type: 'downplay' });
       _hovering = true;
       _setOption(_lastOption, true);
+      _hovering = false;
+      // legendUnSelectはsetOption後に適用
       Object.keys(_hiddenSeries).forEach(function(name) {
         instance.dispatchAction({ type: 'legendUnSelect', name: name });
       });
-      _hovering = false;
     }
 
     // 凡例ホバー検出（zrender）
@@ -171,11 +166,15 @@
         var newData = hasStack
           ? (isHov ? s.data : (s.data || []).map(function() { return 0; }))
           : s.data;
-        // 元のseriesをコピーしてlabel/itemStyleだけ上書き
+        // 元のseriesをコピーしてlabel/itemStyle/emphasisだけ上書き
         var patched = {};
         Object.keys(s).forEach(function(k) { patched[k] = s[k]; });
         patched.data = newData;
-        patched.itemStyle = hasStack ? (s.itemStyle || {}) : Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
+        // ECharts自身のemphasis強調を無効化（mouseout後の残留を防ぐ）
+        patched.emphasis = { disabled: true };
+        patched.itemStyle = hasStack
+          ? (s.itemStyle || {})
+          : Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
         patched.label = isHov ? {
           show: true,
           position: labelPos,

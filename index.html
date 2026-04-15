@@ -70,12 +70,24 @@
       if (!_isShowingHover) return;
       if (!_lastOption) return;
       _isShowingHover = false;
-      // EChartsのemphasis/downplay状態を全系列に対して解除
-      instance.dispatchAction({ type: 'downplay' });
+      // opacityを明示的に1に戻したoptionでリセット
+      var resetOpt = _lastOption;
+      if (resetOpt.series) {
+        var seriesArr = Array.isArray(resetOpt.series) ? resetOpt.series : [resetOpt.series];
+        var resetSeries = seriesArr.map(function(s) {
+          var r = {};
+          Object.keys(s).forEach(function(k) { r[k] = s[k]; });
+          r.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: 1 });
+          r.emphasis = { disabled: false };
+          return r;
+        });
+        resetOpt = {};
+        Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
+        resetOpt.series = resetSeries;
+      }
       _hovering = true;
-      _setOption(_lastOption, true);
+      _setOption(resetOpt, true);
       _hovering = false;
-      // legendUnSelectはsetOption後に適用
       Object.keys(_hiddenSeries).forEach(function(name) {
         instance.dispatchAction({ type: 'legendUnSelect', name: name });
       });
@@ -6445,12 +6457,12 @@ function initDomExp() {
     opt.xAxis.data = CD.labels_all;
     opt.tooltip = unifiedStackTooltip({unit:'万台', note:'※FCEV(燃料電池)は国内NEVに含む（最大0.4万台/月）'});
     opt.series = [
-      { name:'国内（乗用ICE）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.pax_trad_dom, itemStyle:{color:'#adb5bd'} },
-      { name:'国内（乗用NEV）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.nev_pax_dom,  itemStyle:{color:'#4e79a7'} },
-      { name:'国内（商用）',   type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.com_domestic,  itemStyle:{color:'#9dc6e0'} },
-      { name:'輸出（ICE乗用）', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.pax_ice_exp,   itemStyle:{color:'#ffd6a5'} },
-      { name:'輸出（BEV）',   type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.bev_exp,       itemStyle:{color:'#f28e2b'} },
-      { name:'輸出（PHEV）',  type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.phev_exp,      itemStyle:{color:'#e15759'} },
+      { name:'国内（乗用ICE）', type:'bar', stack:'s', data:CD.pax_trad_dom, itemStyle:{color:'#adb5bd'} },
+      { name:'国内（乗用NEV）', type:'bar', stack:'s', data:CD.nev_pax_dom,  itemStyle:{color:'#4e79a7'} },
+      { name:'国内（商用）',   type:'bar', stack:'s', data:CD.com_domestic,  itemStyle:{color:'#9dc6e0'} },
+      { name:'輸出（ICE乗用）', type:'bar', stack:'s', data:CD.pax_ice_exp,   itemStyle:{color:'#ffd6a5'} },
+      { name:'輸出（BEV）',   type:'bar', stack:'s', data:CD.bev_exp,       itemStyle:{color:'#f28e2b'} },
+      { name:'輸出（PHEV）',  type:'bar', stack:'s', data:CD.phev_exp,      itemStyle:{color:'#e15759'} },
     ];
     chart.setOption(opt);
   });
@@ -6465,9 +6477,9 @@ function initNev() {
     opt.xAxis.data = CD.labels_all;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'従来車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.trad_sales, itemStyle:{color:'#94a3b8'} },
-      { name:'BEV', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.bev_sales, itemStyle:{color:'#4e79a7'} },
-      { name:'PHEV', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.phev_sales, itemStyle:{color:'#59a14f'} },
+      { name:'従来車', type:'bar', stack:'s', data:CD.trad_sales, itemStyle:{color:'#94a3b8'} },
+      { name:'BEV', type:'bar', stack:'s', data:CD.bev_sales, itemStyle:{color:'#4e79a7'} },
+      { name:'PHEV', type:'bar', stack:'s', data:CD.phev_sales, itemStyle:{color:'#59a14f'} },
     ];
     chart.setOption(opt);
   });
@@ -6592,7 +6604,7 @@ function initTradSeg() {
     const segs = Object.keys(SD.trad_seg).filter(s=>s!=='D'); // Dは超小量なので省略可だが表示
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = ['A00','A0','A','B','C','D'].filter(s => SD.trad_seg[s]).map((s,i) => ({
-      name: s, type:'bar', emphasis:{focus:'series'}, stack:'ice_seg', data: SD.trad_seg[s],
+      name: s, type:'bar', stack:'ice_seg', data: SD.trad_seg[s],
       itemStyle:{color:PAL[i%12]}
     }));
     opt.yAxis.min = 0;
@@ -6609,7 +6621,7 @@ function initNevSeg() {
     opt.xAxis.data = SD.months;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = ['A00','A0','A','B','C','D'].filter(s => SD.nev_seg[s]).map((s,i) => ({
-      name: s, type:'bar', emphasis:{focus:'series'}, stack:'nev_seg', data: SD.nev_seg[s],
+      name: s, type:'bar', stack:'nev_seg', data: SD.nev_seg[s],
       itemStyle:{color:PAL[i%12]}
     }));
     chart.setOption(opt);
@@ -6677,8 +6689,8 @@ function initNevDetail() {
     opt.xAxis.data = CD.labels_all;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'BEV生産', type:'bar', emphasis:{focus:'series'}, stack:'prod', data:CD.bev_prod, itemStyle:{color:'rgba(78,121,167,0.45)'}, barMaxWidth:28 },
-      { name:'PHEV生産', type:'bar', emphasis:{focus:'series'}, stack:'prod', data:CD.phev_prod, itemStyle:{color:'rgba(89,161,79,0.45)'}, barMaxWidth:28 },
+      { name:'BEV生産', type:'bar', stack:'prod', data:CD.bev_prod, itemStyle:{color:'rgba(78,121,167,0.45)'}, barMaxWidth:28 },
+      { name:'PHEV生産', type:'bar', stack:'prod', data:CD.phev_prod, itemStyle:{color:'rgba(89,161,79,0.45)'}, barMaxWidth:28 },
       { name:'BEV販売', type:'line', data:CD.bev_sales, symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#4e79a7'}, itemStyle:{color:'#4e79a7'} },
       { name:'PHEV販売', type:'line', data:CD.phev_sales, symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#59a14f'}, itemStyle:{color:'#59a14f'} },
     ];
@@ -6691,8 +6703,8 @@ function initNevDetail() {
     opt.xAxis.data = CD.labels_all;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'NEV乗用車 国内', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.nev_pax_dom, itemStyle:{color:'#4e79a7'} },
-      { name:'NEV商用車 国内', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.nev_com_dom, itemStyle:{color:'#f28e2b'} },
+      { name:'NEV乗用車 国内', type:'bar', stack:'s', data:CD.nev_pax_dom, itemStyle:{color:'#4e79a7'} },
+      { name:'NEV商用車 国内', type:'bar', stack:'s', data:CD.nev_com_dom, itemStyle:{color:'#f28e2b'} },
       { name:'NEV全体 国内（合計線）', type:'line', data:CD.nev_domestic, symbol:'diamond', symbolSize:6,
         lineStyle:{width:2,color:'#e15759',type:'dashed'}, itemStyle:{color:'#e15759'},
         } ,
@@ -6738,10 +6750,10 @@ function initBevPhev() {
     opt.xAxis.data = CD.labels_all;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'BEV国内', type:'bar', emphasis:{focus:'series'}, stack:'bev', data:CD.bev_dom, itemStyle:{color:'#4e79a7'}, barMaxWidth:30 },
-      { name:'BEV輸出', type:'bar', emphasis:{focus:'series'}, stack:'bev', data:CD.bev_exp, itemStyle:{color:'#a0cbe8'}, barMaxWidth:30 },
-      { name:'PHEV国内', type:'bar', emphasis:{focus:'series'}, stack:'phev', data:CD.phev_dom, itemStyle:{color:'#59a14f'}, barMaxWidth:30 },
-      { name:'PHEV輸出', type:'bar', emphasis:{focus:'series'}, stack:'phev', data:CD.phev_exp, itemStyle:{color:'#b6d8a8'}, barMaxWidth:30 },
+      { name:'BEV国内', type:'bar', stack:'bev', data:CD.bev_dom, itemStyle:{color:'#4e79a7'}, barMaxWidth:30 },
+      { name:'BEV輸出', type:'bar', stack:'bev', data:CD.bev_exp, itemStyle:{color:'#a0cbe8'}, barMaxWidth:30 },
+      { name:'PHEV国内', type:'bar', stack:'phev', data:CD.phev_dom, itemStyle:{color:'#59a14f'}, barMaxWidth:30 },
+      { name:'PHEV輸出', type:'bar', stack:'phev', data:CD.phev_exp, itemStyle:{color:'#b6d8a8'}, barMaxWidth:30 },
     ];
     chart.setOption(opt);
   });
@@ -6785,10 +6797,10 @@ function initCommercial() {
     opt.xAxis.data = truckMonths;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'重型貨車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:truckIdx.map(i=>CD.truck_heavy[i]), itemStyle:{color:PAL[0]} },
-      { name:'中型貨車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:truckIdx.map(i=>CD.truck_mid[i]),   itemStyle:{color:PAL[1]} },
-      { name:'軽型貨車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:truckIdx.map(i=>CD.truck_light[i]), itemStyle:{color:PAL[2]} },
-      { name:'微型貨車', type:'bar', emphasis:{focus:'series'}, stack:'s', data:truckIdx.map(i=>CD.truck_micro[i]), itemStyle:{color:PAL[3]} },
+      { name:'重型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_heavy[i]), itemStyle:{color:PAL[0]} },
+      { name:'中型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_mid[i]),   itemStyle:{color:PAL[1]} },
+      { name:'軽型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_light[i]), itemStyle:{color:PAL[2]} },
+      { name:'微型貨車', type:'bar', stack:'s', data:truckIdx.map(i=>CD.truck_micro[i]), itemStyle:{color:PAL[3]} },
     ];
     chart.setOption(opt);
   });
@@ -6918,9 +6930,9 @@ function initCadaSummary() {
     opt.xAxis.data = CD.cada_sum_months;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'中国ブランドICE輸出', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_ice_exp,   itemStyle:{color:'#adb5bd'} },
-      { name:'自主NEV輸出',         type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_nev_zizhu, itemStyle:{color:'#4e79a7'} },
-      { name:'JV・外資輸出',        type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_jv_exp,    itemStyle:{color:'#f28e2b'} },
+      { name:'中国ブランドICE輸出', type:'bar', stack:'s', data:CD.cada_ice_exp,   itemStyle:{color:'#adb5bd'} },
+      { name:'自主NEV輸出',         type:'bar', stack:'s', data:CD.cada_nev_zizhu, itemStyle:{color:'#4e79a7'} },
+      { name:'JV・外資輸出',        type:'bar', stack:'s', data:CD.cada_jv_exp,    itemStyle:{color:'#f28e2b'} },
       { name:'CADA出口合計',        type:'line', data:CD.cada_exp_total,
         symbol:'circle', symbolSize:7, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'} },
     ];
@@ -6951,8 +6963,8 @@ function initCadaSummary() {
     opt.xAxis.data = CD.cada_sum_months;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
-      { name:'BEV輸出',       type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_bev_exp,  itemStyle:{color:'#4e79a7'} },
-      { name:'PHEV/EREV輸出', type:'bar', emphasis:{focus:'series'}, stack:'s', data:CD.cada_phev_exp, itemStyle:{color:'#59a14f'} },
+      { name:'BEV輸出',       type:'bar', stack:'s', data:CD.cada_bev_exp,  itemStyle:{color:'#4e79a7'} },
+      { name:'PHEV/EREV輸出', type:'bar', stack:'s', data:CD.cada_phev_exp, itemStyle:{color:'#59a14f'} },
     ];
     chart.setOption(opt);
   });
@@ -7212,8 +7224,8 @@ function cccmInitFuelEv() {
     opt.legend = {data:['燃油車','EV'], textStyle:{color:opt.textStyle.color}, top:8};
     opt.tooltip = unifiedStackTooltip({unit:'万台', note:'※電動摩托車のみ（街中のe-bikeは別統計）'});
     opt.series = [
-      {name:'燃油車',type:'bar',emphasis:{focus:'series'},stack:'total',data:CCCM.gas_sales,itemStyle:{color:'#f28e2b'},barMaxWidth:50},
-      {name:'EV',type:'bar',emphasis:{focus:'series'},stack:'total',data:CCCM.ev_sales,itemStyle:{color:'#4e79a7'},barMaxWidth:50},
+      {name:'燃油車',type:'bar',stack:'total',data:CCCM.gas_sales,itemStyle:{color:'#f28e2b'},barMaxWidth:50},
+      {name:'EV',type:'bar',stack:'total',data:CCCM.ev_sales,itemStyle:{color:'#4e79a7'},barMaxWidth:50},
     ];
     opt.yAxis.name='万台';
     opt.graphic=[{type:'text',left:'center',bottom:4,style:{text:'※電動摩托車のみ（街中のe-bikeは別統計）',fontSize:11,fill:'#999'}}];
@@ -7242,9 +7254,9 @@ function cccmInitBikeType() {
     opt.grid.top=65;
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series=[
-      {name:'跨骑車（クロス）',type:'bar',emphasis:{focus:'series'},stack:'type',data:CCCM.cross_sales,itemStyle:{color:CP[0]},barMaxWidth:50},
-      {name:'踏板車（スクーター）',type:'bar',emphasis:{focus:'series'},stack:'type',data:CCCM.scooter_sales,itemStyle:{color:CP[1]},barMaxWidth:50},
-      {name:'弯梁車（アンダーボーン）',type:'bar',emphasis:{focus:'series'},stack:'type',data:CCCM.underbone_sales,itemStyle:{color:CP[2]},barMaxWidth:50},
+      {name:'跨骑車（クロス）',type:'bar',stack:'type',data:CCCM.cross_sales,itemStyle:{color:CP[0]},barMaxWidth:50},
+      {name:'踏板車（スクーター）',type:'bar',stack:'type',data:CCCM.scooter_sales,itemStyle:{color:CP[1]},barMaxWidth:50},
+      {name:'弯梁車（アンダーボーン）',type:'bar',stack:'type',data:CCCM.underbone_sales,itemStyle:{color:CP[2]},barMaxWidth:50},
     ];
     opt.yAxis.name='万台'; chart.setOption(opt);
   });
@@ -7336,7 +7348,7 @@ function cccmInitExport() {
       grid:{left:55,right:30,top:65,bottom:50,containLabel:true},
       xAxis:{type:'category',data:CCCM.cc_labels_full,axisLabel:{color:fg,formatter:(v,i)=>CCCM.cc_labels[i]||v}},
       yAxis:{type:'value',name:'万台',axisLabel:{color:fg}},
-      series:ccKeys.map((cc,i)=>{return {name:cc,type:'bar',emphasis:{focus:'series'},stack:'cc',data:CCCM.cc_data[cc],itemStyle:{color:CP[i%CP.length]},barMaxWidth:60};}),
+      series:ccKeys.map((cc,i)=>{return {name:cc,type:'bar',stack:'cc',data:CCCM.cc_data[cc],itemStyle:{color:CP[i%CP.length]},barMaxWidth:60};}),
     });
   });
 
@@ -7656,7 +7668,7 @@ function cnsuvDrawLine() {
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'万台'},
-    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',emphasis:{focus:'series'},smooth:true,symbolSize:4,color:cnsuvColor(mk),connectNulls:false,
+    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:true,symbolSize:4,color:cnsuvColor(mk),connectNulls:false,
       data:months.map(function(m){ var e=CNSUV_RAW[m]&&CNSUV_RAW[m].top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/10000*10)/10:null; })}; })
   });
 }
@@ -7669,7 +7681,7 @@ function cnsuvDrawBar() {
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'万台'},
-    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'bar',emphasis:{focus:'series'},stack:'total',color:cnsuvColor(mk),
+    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'bar',stack:'total',color:cnsuvColor(mk),
       data:months.map(function(m){ var e=CNSUV_RAW[m]&&CNSUV_RAW[m].top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/10000*10)/10:null; })}; })
   });
 }
@@ -7682,7 +7694,7 @@ function cnsuvDrawShare() {
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'シェア(%)'},
-    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',emphasis:{focus:'series'},smooth:true,color:cnsuvColor(mk),connectNulls:false,
+    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:true,color:cnsuvColor(mk),connectNulls:false,
       data:months.map(function(m){ var md=CNSUV_RAW[m]; if(!md)return null; var e=md.top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/md.total_sales*1000)/10:null; })}; })
   });
 }
@@ -7695,7 +7707,7 @@ function cnsuvDrawRank() {
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'順位',inverse:true,min:1,max:10,interval:1},
-    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line', emphasis:{focus:'series'},smooth:false,symbolSize:5,color:cnsuvColor(mk),connectNulls:false,
+    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:false,symbolSize:5,color:cnsuvColor(mk),connectNulls:false,
       data:months.map(function(m){ var e=CNSUV_RAW[m]&&CNSUV_RAW[m].top_30.find(function(r){return r.factory===mk;}); return e?e.rank:null; })}; })
   });
 }
@@ -8151,7 +8163,7 @@ function drawBar(id, title, subtitle, categories, series, opts={}) {
     grid:{left:opts.left||60,right:opts.right||20,top:opts.stack?50:45,bottom:opts.bottom||20,containLabel:true},
     xAxis:opts.horizontal?{type:'value',name:opts.xname||'万台'}:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
     yAxis:opts.horizontal?{type:'category',data:categories}:{type:'value',name:opts.yunit||'万台',axisLabel:{formatter:function(v){return v+(opts.yunit||'万台');}}},
-    series:series.map(s=>({...s,type:'bar',stack:opts.stack?'total':undefined,emphasis:{focus:'series'},label:{show:!!opts.label,position:opts.horizontal?'right':'top',fontSize:10,formatter:p=>p.value&&Math.abs(p.value)>=opts.labelMin?p.value:''}})),
+    series:series.map(s=>({...s,type:'bar',stack:opts.stack?'total':undefined,label:{show:!!opts.label,position:opts.horizontal?'right':'top',fontSize:10,formatter:p=>p.value&&Math.abs(p.value)>=opts.labelMin?p.value:''}})),
   });
   setTimeout(()=>{ try{chart.resize();}catch(e){} }, 80);
 }
@@ -8164,7 +8176,7 @@ function drawLine(id, categories, series, opts={}) {
     grid:{left:60,right:opts.r2?55:20,top:20,bottom:55,containLabel:true},
     xAxis:{type:'category',data:categories,axisLabel:{rotate:opts.rotate||0}},
     yAxis:opts.yAxis||[{type:'value',axisLabel:{formatter:function(v){return v+(opts.yunit||'万');}}}],
-    series:series.map(s=>({smooth:true,symbol:'circle',symbolSize:5,emphasis:{focus:'series'},...s})),
+    series:series.map(s=>({smooth:true,symbol:'circle',symbolSize:5,...s})),
   });
   setTimeout(()=>{ try{chart.resize();}catch(e){} }, 80);
 }
@@ -8177,7 +8189,7 @@ function cdsDrawMonthly() {
   const yrs=['2021','2022','2023','2024','2025','2026'];
   chart.setOption({tooltip:{trigger:'axis'},legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:55,right:20,top:20,bottom:50,containLabel:true},
     xAxis:{type:'category',data:months},yAxis:{type:'value',axisLabel:{formatter:function(v){return v+'万';}}},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',emphasis:{focus:'series'},smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:yr==='2024'?2.5:1.5,type:yr==='2026'?'dashed':'solid'},itemStyle:{color:YRCOLORS[i]},data:(CDS.monthly[yr]||[])}))});
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:yr==='2025'?3:yr==='2024'?2.5:1.5,type:yr==='2026'?'dashed':'solid'},itemStyle:{color:YRCOLORS[i]},data:(CDS.monthly[yr]||[])}))});
   setTimeout(()=>{try{cdsEc('ec-cds-monthly')?.resize();}catch(e){}},80);
 }
 
@@ -8188,8 +8200,8 @@ function cdsDrawAnnual() {
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:60,right:55,top:20,bottom:55,containLabel:true},
     xAxis:{type:'category',data:d.map(x=>x.year),axisLabel:{rotate:45}},
     yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
-    series:[{name:'出口量',type:'bar',emphasis:{focus:'series'},data:d.map(x=>x.vol),itemStyle:{color:p=>p.data>=500?'#10b981':p.data>=300?'#3b82f6':p.data>=150?'#f59e0b':'#94a3b8'},label:{show:false}},
-      {name:'前年比',type:'line',emphasis:{focus:'series'},yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:5,lineStyle:{color:'#ef4444',width:2},itemStyle:{color:'#ef4444'}}]});
+    series:[{name:'出口量',type:'bar',data:d.map(x=>x.vol),itemStyle:{color:p=>p.data>=500?'#10b981':p.data>=300?'#3b82f6':p.data>=150?'#f59e0b':'#94a3b8'},label:{show:false}},
+      {name:'前年比',type:'line',yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:5,lineStyle:{color:'#ef4444',width:2},itemStyle:{color:'#ef4444'}}]});
   setTimeout(()=>{try{cdsEc('ec-cds-annual')?.resize();}catch(e){}},80);
 }
 
@@ -8205,7 +8217,7 @@ function cdsDrawNev() {
   }
   chart.setOption({tooltip: unifiedStackTooltip({unit:'万'}),legend:{data:['燃油車等','NEV'],bottom:0},grid:{left:60,right:20,top:20,bottom:65,containLabel:true},
     xAxis:{type:'category',data:labels,axisLabel:{fontSize:10}},yAxis:{type:'value',axisLabel:{formatter:function(v){return v+'万';}}},
-    series:[{name:'燃油車等',type:'bar',emphasis:{focus:'series'},stack:'t',data:iv,itemStyle:{color:'#94a3b8'}},{name:'NEV',type:'bar',emphasis:{focus:'series'},stack:'t',data:nv,itemStyle:{color:'#10b981'},label:{show:false}}]});
+    series:[{name:'燃油車等',type:'bar',stack:'t',data:iv,itemStyle:{color:'#94a3b8'}},{name:'NEV',type:'bar',stack:'t',data:nv,itemStyle:{color:'#10b981'},label:{show:false}}]});
   setTimeout(()=>{try{cdsEc('ec-cds-nev')?.resize();}catch(e){}},80);
 }
 
@@ -8224,8 +8236,8 @@ function cdsDrawNevTrend() {
   chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},legend:{data:['出口量','前年比'],bottom:0},grid:{left:60,right:55,top:20,bottom:40,containLabel:true},
     xAxis:{type:'category',data:d.map(x=>x.year)},
     yAxis:[{type:'value',name:'万台'},{type:'value',name:'前年比(%)',position:'right',axisLabel:{formatter:v=>v+'%'}}],
-    series:[{name:'出口量',type:'bar',emphasis:{focus:'series'},data:d.map(x=>x.vol),itemStyle:{color:'#10b981'},label:{show:false}},
-      {name:'前年比',type:'line',emphasis:{focus:'series'},yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:6,lineStyle:{color:'#f59e0b',width:2.5},itemStyle:{color:'#f59e0b'}}]});
+    series:[{name:'出口量',type:'bar',data:d.map(x=>x.vol),itemStyle:{color:'#10b981'},label:{show:false}},
+      {name:'前年比',type:'line',yAxisIndex:1,data:d.map(x=>x.yoy),smooth:true,symbol:'circle',symbolSize:6,lineStyle:{color:'#f59e0b',width:2.5},itemStyle:{color:'#f59e0b'}}]});
   setTimeout(()=>{try{cdsEc('ec-cds-nev-trend')?.resize();}catch(e){}},80);
 }
 
@@ -8366,7 +8378,7 @@ function cdsDrawProv() {
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     barMaxWidth:16,
-    series:yrs.map((yr,i)=>({name:yr,type:'bar',emphasis:{focus:'series'},
+    series:yrs.map((yr,i)=>({name:yr,type:'bar',
       data:ps.map(p=>p.v[i]??null).reverse(),itemStyle:{color:COLS8[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))
   });
@@ -8394,7 +8406,7 @@ function cdsDrawNevProv() {
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
     barMaxWidth:16,
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',emphasis:{focus:'series'},
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',
       data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))
   });
@@ -8410,7 +8422,7 @@ function cdsDrawRank() {
     legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:55,right:20,top:20,bottom:60,containLabel:true},
     xAxis:{type:'category',data:yrs},
     yAxis:{type:'value',name:'順位',inverse:true,min:1,max:rd.length,interval:1,axisLabel:{formatter:v=>v+'位'}},
-    series:rd.map((row,i)=>({name:`${row.rank}位グループ`,type:'line', emphasis:{focus:'series'},smooth:false,symbol:'circle',symbolSize:8,data:row.vals.map((v,j)=>{
+    series:rd.map((row,i)=>({name:`${row.rank}位グループ`,type:'line',smooth:false,symbol:'circle',symbolSize:8,data:row.vals.map((v,j)=>{
       // 国名→順位に変換（同じ国が何位か）
       const country=v;
       if(!country) return null;
@@ -8435,7 +8447,7 @@ function cdsDrawRussia() {
   chart.setOption({tooltip:{trigger:'axis',formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>`+p.map(s=>`${s.marker}${s.seriesName}: <b>${s.value!=null?s.value.toLocaleString()+'台':'—'}</b>`).join('<br/>')},
     legend:{data:yrs.map(y=>y+'年'),bottom:0},grid:{left:65,right:20,top:20,bottom:50},
     xAxis:{type:'category',data:months},yAxis:{type:'value',name:'台',axisLabel:{formatter:v=>v>=10000?(v/10000).toFixed(0)+'万':v}},
-    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',emphasis:{focus:'series'},smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:(yr==='2025'||yr==='2026')?3:2,color:cols[i]},itemStyle:{color:cols[i]},data:CDS.russia[yr]}))});
+    series:yrs.map((yr,i)=>({name:yr+'年',type:'line',smooth:true,symbol:'circle',symbolSize:5,lineStyle:{width:(yr==='2025'||yr==='2026')?3:2,color:cols[i]},itemStyle:{color:cols[i]},data:CDS.russia[yr]}))});
   setTimeout(()=>{try{cdsEc('ec-cds-russia')?.resize();}catch(e){}},80);
 }
 
@@ -8689,7 +8701,7 @@ function drawTrend(key) {
       xAxis: { type:'category', data: months.map(m => m.label), axisLabel:{rotate:30, fontSize:10} },
       yAxis: { type:'value', name:'台', axisLabel:{formatter: v => v>=10000?(v/10000).toFixed(0)+'万':v} },
       series: selArr.map((c, i) => ({
-        name: c, type:'line', emphasis:{focus:'series'}, smooth:true, connectNulls:false,
+        name: c, type:'line', smooth:true, connectNulls:false,
         symbol:'circle', symbolSize:7,
         lineStyle:{ width:2.5, color:PALETTE[i%PALETTE.length] },
         itemStyle:{ color:PALETTE[i%PALETTE.length] },
@@ -10093,9 +10105,9 @@ function renderProvSalesChart(){
       axisLabel:{fontSize:9,color:'#6a8aaa'},splitLine:{lineStyle:{color:'#1e3555'}}},
     barMaxWidth:16,
     series:[
-      {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barMaxWidth:16,emphasis:{focus:'series'}},
-      {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barMaxWidth:16,emphasis:{focus:'series'}},
-      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barMaxWidth:16,emphasis:{focus:'series'}},
+      {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barMaxWidth:16},
+      {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barMaxWidth:16},
+      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barMaxWidth:16},
     ]
   });
 }
@@ -10415,7 +10427,7 @@ function renderChain() {
     xAxis: { type:'category', data:d.years },
     yAxis: { type:'value', name:'利益率(%)', axisLabel:{formatter:v=>v+'%'} },
     series: Object.entries(src).map(([name, vals]) => ({
-      name, type:'line', emphasis:{focus:'series'},  smooth:true,
+      name, type:'line',  smooth:true,
       data: vals,
       symbol:'circle',
       symbolSize: name==='自動車製造業'||name.includes('合計') ? 7 : 5,
@@ -10459,7 +10471,7 @@ function renderAutoVsChain() {
     xAxis: { type:'category', data:d.years },
     yAxis: { type:'value', name:'利益率(%)', axisLabel:{formatter:v=>v+'%'} },
     series: entries.map(([name,vals,col,w,type]) => ({
-      name, type:'line', emphasis:{focus:'series'},  smooth:true, data:vals,
+      name, type:'line',  smooth:true, data:vals,
       symbol:'circle', symbolSize: name==='自動車製造業'?7:5,
       lineStyle:{width:w,color:col,type},
       itemStyle:{color:col},
@@ -10500,7 +10512,7 @@ function renderUnitMargin() {
     xAxis: { type:'category', data:d.labels, axisLabel:{rotate:20,fontSize:10} },
     yAxis: { type:'value', name:'万元', min:0, max:3 },
     series: [{
-      name:'台あたり粗利', type:'line', emphasis:{focus:'series'},  smooth:true,
+      name:'台あたり粗利', type:'line',  smooth:true,
       data: d.margin,
       symbol:'circle', symbolSize:7,
       lineStyle:{width:2.5,color:'#f59e0b'},
@@ -10714,7 +10726,7 @@ function renderInvCategory() {
   var totals = INV.catLabels.map(function(_,i){
     return cats.reduce(function(s,c){ return s + (INV.catData[c][i]||0); }, 0);
   });
-  series.push({ name:'総計', type:'line', emphasis:{focus:'series'},  yAxisIndex:0, smooth:true, symbol:'none',
+  series.push({ name:'総計', type:'line',  yAxisIndex:0, smooth:true, symbol:'none',
     lineStyle:{color:'#333',width:2,type:'dashed'}, data:totals });
   ec.setOption({
     tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
@@ -10739,7 +10751,7 @@ function renderInvMakerRatio() {
     ],
     series: [
       { name:'総在庫（万台）', type:'bar', itemStyle:{color:'#91cc75', opacity:0.8}, data:INV.makerTotal },
-      { name:'メーカー在庫率（%）', type:'line', emphasis:{focus:'series'},  yAxisIndex:1, smooth:true,
+      { name:'メーカー在庫率（%）', type:'line',  yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:5, lineStyle:{color:'#ee6666',width:2},
         itemStyle:{color:'#ee6666'}, data:INV.makerRatio }
     ]
@@ -10758,11 +10770,11 @@ function renderInvNev() {
       { type:'value', name:'%', position:'right', axisLabel:{formatter:'{value}%'} }
     ],
     series: [
-      { name:'メーカー在庫', type:'bar', emphasis:{focus:'series'}, stack:'inv', itemStyle:{color:'#5470c6'}, data:INV.nevFactory },
-      { name:'流通在庫', type:'bar', emphasis:{focus:'series'}, stack:'inv', itemStyle:{color:'#91cc75'}, data:INV.nevChannel },
-      { name:'総在庫', type:'line', emphasis:{focus:'series'},  smooth:true, symbol:'none',
+      { name:'メーカー在庫', type:'bar', stack:'inv', itemStyle:{color:'#5470c6'}, data:INV.nevFactory },
+      { name:'流通在庫', type:'bar', stack:'inv', itemStyle:{color:'#91cc75'}, data:INV.nevChannel },
+      { name:'総在庫', type:'line',  smooth:true, symbol:'none',
         lineStyle:{color:'#333',width:2,type:'dashed'}, data:INV.nevTotal },
-      { name:'メーカー占比（%）', type:'line', emphasis:{focus:'series'}, yAxisIndex:1, smooth:true,
+      { name:'メーカー占比（%）', type:'line', yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:4, lineStyle:{color:'#ee6666',width:2},
         itemStyle:{color:'#ee6666'}, data:INV.nevRatio1 }
     ]
@@ -10784,9 +10796,9 @@ function renderInvSentiment() {
     xAxis: { type:'category', data:INV.sentLabels, axisLabel:{rotate:45, fontSize:9} },
     yAxis: { type:'value', name:'%', min:0, max:110, axisLabel:{formatter:'{value}%'} },
     series: [
-      { name:'上月予測（楽観度%）', type:'line', emphasis:{focus:'series'}, smooth:true, symbol:'circle', symbolSize:5,
+      { name:'上月予測（楽観度%）', type:'line', smooth:true, symbol:'circle', symbolSize:5,
         lineStyle:{color:'#5470c6',width:2}, itemStyle:{color:'#5470c6'}, data:INV.sentForecast, connectNulls:false },
-      { name:'本月評価（満足度%）', type:'line', emphasis:{focus:'series'}, smooth:true, symbol:'circle', symbolSize:5,
+      { name:'本月評価（満足度%）', type:'line', smooth:true, symbol:'circle', symbolSize:5,
         lineStyle:{color:'#fac858',width:2}, itemStyle:{color:'#fac858'}, data:INV.sentSatisfy, connectNulls:false }
     ]
   });
@@ -10802,8 +10814,8 @@ function renderInvUsVol() {
     yAxis: { type:'value', name:'百万台', axisLabel:{formatter:'{value}'} },
     series: [
       { name:'Total',    type:'bar', itemStyle:{color:'#5470c6'}, data:INV.usTotal },
-      { name:'Domestic', type:'line', emphasis:{focus:'series'}, smooth:true, symbol:'circle', lineStyle:{color:'#91cc75',width:2}, itemStyle:{color:'#91cc75'}, data:INV.usDomestic },
-      { name:'Import',   type:'line', emphasis:{focus:'series'}, smooth:true, symbol:'circle', lineStyle:{color:'#ee6666',width:2}, itemStyle:{color:'#ee6666'}, data:INV.usImport }
+      { name:'Domestic', type:'line', smooth:true, symbol:'circle', lineStyle:{color:'#91cc75',width:2}, itemStyle:{color:'#91cc75'}, data:INV.usDomestic },
+      { name:'Import',   type:'line', smooth:true, symbol:'circle', lineStyle:{color:'#ee6666',width:2}, itemStyle:{color:'#ee6666'}, data:INV.usImport }
     ]
   });
 }
@@ -10931,8 +10943,8 @@ window.addEventListener('resize', function(){
       xAxis:baseXAxis(labels),
       yAxis:baseYAxis('GWh'),
       series:[
-        {name:'三元電池',        type:'bar',emphasis:{focus:'series'},stack:'s',data:nmcData,itemStyle:{color:C.nmc}},
-        {name:'LFP（リン酸鉄）', type:'bar',emphasis:{focus:'series'},stack:'s',data:lfpData,itemStyle:{color:C.lfp}}
+        {name:'三元電池',        type:'bar',stack:'s',data:nmcData,itemStyle:{color:C.nmc}},
+        {name:'LFP（リン酸鉄）', type:'bar',stack:'s',data:lfpData,itemStyle:{color:C.lfp}}
       ]
     });
   }
@@ -10952,8 +10964,8 @@ window.addEventListener('resize', function(){
       xAxis:baseXAxis(labels),
       yAxis:baseYAxis('GWh'),
       series:[
-        {name:'三元電池',        type:'bar',emphasis:{focus:'series'},stack:'s',data:nmcData,itemStyle:{color:C.nmc}},
-        {name:'LFP（リン酸鉄）', type:'bar',emphasis:{focus:'series'},stack:'s',data:lfpData,itemStyle:{color:C.lfp}}
+        {name:'三元電池',        type:'bar',stack:'s',data:nmcData,itemStyle:{color:C.nmc}},
+        {name:'LFP（リン酸鉄）', type:'bar',stack:'s',data:lfpData,itemStyle:{color:C.lfp}}
       ]
     });
     renderInstallRate();
@@ -10982,7 +10994,7 @@ window.addEventListener('resize', function(){
         ])},
         label:{show:false}
       },{
-        name:'トレンド', type:'line', emphasis:{focus:'series'}, data:rate, smooth:true,
+        name:'トレンド', type:'line', data:rate, smooth:true,
         symbol:'circle', symbolSize:5,
         itemStyle:{color:'#E74C3C'}, lineStyle:{width:2, color:'#E74C3C', type:'dashed'}
       }]
@@ -11005,11 +11017,11 @@ window.addEventListener('resize', function(){
       xAxis: baseXAxis(labels),
       yAxis: Object.assign(baseYAxis('%'),{min:0, max:100}),
       series:[
-        { name:'三元電池装車率', type:'line', emphasis:{focus:'series'}, data:nmcRate, smooth:true,
+        { name:'三元電池装車率', type:'line', data:nmcRate, smooth:true,
           symbol:'circle', symbolSize:7, itemStyle:{color:C.nmc},
           lineStyle:{width:2.5, color:C.nmc},
           label:{show:false} },
-        { name:'LFP装車率', type:'line', emphasis:{focus:'series'}, data:lfpRate, smooth:true,
+        { name:'LFP装車率', type:'line', data:lfpRate, smooth:true,
           symbol:'circle', symbolSize:7, itemStyle:{color:C.lfp},
           lineStyle:{width:2.5, color:C.lfp},
           label:{show:false} }
@@ -11107,13 +11119,13 @@ window.addEventListener('resize', function(){
       xAxis: baseXAxis(labels),
       yAxis: baseYAxis('GWh'),
       series:[
-        {name:'純電動乗用車',             type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(bev_pass),   itemStyle:{color:'#1565C0'}},
-        {name:'プラグイン乗用車',          type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(phev_pass),  itemStyle:{color:'#5BA4CF'}},
-        {name:'純電動貨車（2025年〜）',    type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(bev_truck),  itemStyle:{color:'#F39C12'}},
-        {name:'プラグイン貨車（2025年〜）',type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(phev_truck), itemStyle:{color:'#FF8F00'}},
-        {name:'純電動専用車',              type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(bev_sv),     itemStyle:{color:'#1ABC9C'}},
-        {name:'BEVバス',                type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
-        {name:'その他',                    type:'bar', emphasis:{focus:'series'}, stack:'s', data:toGWh(others_raw), itemStyle:{color:'#CFD8DC'}}
+        {name:'純電動乗用車',             type:'bar', stack:'s', data:toGWh(bev_pass),   itemStyle:{color:'#1565C0'}},
+        {name:'プラグイン乗用車',          type:'bar', stack:'s', data:toGWh(phev_pass),  itemStyle:{color:'#5BA4CF'}},
+        {name:'純電動貨車（2025年〜）',    type:'bar', stack:'s', data:toGWh(bev_truck),  itemStyle:{color:'#F39C12'}},
+        {name:'プラグイン貨車（2025年〜）',type:'bar', stack:'s', data:toGWh(phev_truck), itemStyle:{color:'#FF8F00'}},
+        {name:'純電動専用車',              type:'bar', stack:'s', data:toGWh(bev_sv),     itemStyle:{color:'#1ABC9C'}},
+        {name:'BEVバス',                type:'bar', stack:'s', data:toGWh(bev_bus),    itemStyle:{color:'#9B59B6'}},
+        {name:'その他',                    type:'bar', stack:'s', data:toGWh(others_raw), itemStyle:{color:'#CFD8DC'}}
       ]
     });
   }
@@ -11143,10 +11155,10 @@ window.addEventListener('resize', function(){
       }),
       yAxis: baseYAxis('万台'),
       series:[
-        {name:'125以下 Wh/kg',  type:'bar', emphasis:{focus:'series'}, stack:'s', data:d125m,   itemStyle:{color:'#CFD8DC'}},
-        {name:'125–140 Wh/kg', type:'bar', emphasis:{focus:'series'}, stack:'s', data:d125_140, itemStyle:{color:'#5BA4CF'}},
-        {name:'140–160 Wh/kg', type:'bar', emphasis:{focus:'series'}, stack:'s', data:d140_160, itemStyle:{color:'#1565C0'}},
-        {name:'160以上 Wh/kg',  type:'bar', emphasis:{focus:'series'}, stack:'s', data:d160p,   itemStyle:{color:'#C0392B'},
+        {name:'125以下 Wh/kg',  type:'bar', stack:'s', data:d125m,   itemStyle:{color:'#CFD8DC'}},
+        {name:'125–140 Wh/kg', type:'bar', stack:'s', data:d125_140, itemStyle:{color:'#5BA4CF'}},
+        {name:'140–160 Wh/kg', type:'bar', stack:'s', data:d140_160, itemStyle:{color:'#1565C0'}},
+        {name:'160以上 Wh/kg',  type:'bar', stack:'s', data:d160p,   itemStyle:{color:'#C0392B'},
           label:{show:false} },
         {name:'合計', type:'line', data:totals, lineStyle:{color:'#333',width:2,type:'dashed'},
           label:{show:true,position:'top',fontSize:10,formatter:function(p){return p.value+'万台';}},
@@ -11190,13 +11202,12 @@ window.addEventListener('resize', function(){
       yAxis: Object.assign(baseYAxis('%'),{max:100, axisLabel:{formatter:'{value}%'}}),
       series: makers.map(function(m){
         return {
-          name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
+          name: m.name, type:'bar', stack:'s',
           itemStyle:{ color: m.color },
           data: m.data,
           label:{ show:false },
           emphasis:{
-            focus:'series',
-            label:{
+                        label:{
               show: true,
               position: 'top',
               fontSize: 11,
@@ -11247,13 +11258,12 @@ window.addEventListener('resize', function(){
       yAxis: Object.assign(baseYAxis('%'),{max:100, axisLabel:{formatter:'{value}%'}}),
       series: makers.map(function(m){
         return {
-          name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
+          name: m.name, type:'bar', stack:'s',
           itemStyle:{ color: m.color },
           data: m.data,
           label:{ show:false },
           emphasis:{
-            focus:'series',
-            label:{
+                        label:{
               show: true,
               position: 'top',
               fontSize: 11,
@@ -11300,13 +11310,12 @@ window.addEventListener('resize', function(){
       yAxis: Object.assign(baseYAxis('%'),{max:100, axisLabel:{formatter:'{value}%'}}),
       series: makers.map(function(m){
         return {
-          name: m.name, type:'bar', emphasis:{focus:'series'}, stack:'s',
+          name: m.name, type:'bar', stack:'s',
           itemStyle:{ color: m.color },
           data: m.data,
           label:{ show:false },
           emphasis:{
-            focus:'series',
-            label:{
+                        label:{
               show: true,
               position: 'top',
               fontSize: 11,
@@ -11382,7 +11391,7 @@ window.addEventListener('resize', function(){
       series: yrKeys.map(function(yr, i){
         var isLatest = (yr === '2026年');
         return {
-          name: yr, type:'line', emphasis:{focus:'series'},
+          name: yr, type:'line',
           data: years[yr],
           smooth: false,
           connectNulls: false,
@@ -11639,11 +11648,11 @@ function renderImpType() {
     yAxis: { type:'category', data:d.cats.slice().reverse(), axisLabel:{fontSize:11} },
     barCategoryGap: '40%', barMaxWidth: 20,
     series:[
-      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#93c5fd'}, emphasis:{focus:'series'},
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#93c5fd'},
         label:{show:true,position:'right',fontSize:10} },
-      { name:'2025年', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, emphasis:{focus:'series'},
+      { name:'2025年', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'},
         label:{show:true,position:'right',fontSize:10} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, emphasis:{focus:'series'},
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'},
         label:{show:true,position:'right',fontSize:10} }
     ]
   }));
@@ -11712,11 +11721,11 @@ function renderImpCountry() {
       return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
     }},
     series:[
-      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, emphasis:{focus:'series'},
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
-      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'}, emphasis:{focus:'series'},
+      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'}, emphasis:{focus:'series'},
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} }
     ]
   }));
@@ -11736,11 +11745,11 @@ function renderImpNevCountry() {
       return params.map(function(p){return p.seriesName+': '+(p.value||0).toLocaleString()+'台';}).join('<br>');
     }},
     series:[
-      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'}, emphasis:{focus:'series'},
+      { name:'2024年', type:'bar', data:d.y2024.slice().reverse(), itemStyle:{color:'#bfdbfe'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} },
-      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#10b981'}, emphasis:{focus:'series'},
+      { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#10b981'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'}, emphasis:{focus:'series'},
+      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} }
     ]
   }));
@@ -11765,7 +11774,7 @@ function renderImpBrand() {
     }},
     series: years.map(function(yr,i){
       return { name:yr, type:'bar', data:allData[i].slice().reverse(),
-               itemStyle:{color:COLORS[i]}, emphasis:{focus:'series'},
+               itemStyle:{color:COLORS[i]},
                label:{show:true,position:'right',fontSize:9,formatter:function(p){return p.value>=1000?(p.value/10000).toFixed(1)+'万':p.value>0?p.value.toLocaleString():'';}} };
     })
   }));
@@ -11790,7 +11799,7 @@ function renderImpLuxury() {
     }},
     series: years.map(function(yr,i){
       return { name:yr, type:'bar', data:allData[i].slice().reverse(),
-               itemStyle:{color:COLORS[i]}, emphasis:{focus:'series'},
+               itemStyle:{color:COLORS[i]},
                label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} };
     })
   }));
@@ -12289,7 +12298,7 @@ function discRender(id) {
       series: DISC_POWERTYPE_2026.categories.map(function(cat,ci){
         var clrs=['#3b82f6','#ef4444','#f59e0b','#22c55e','#8b5cf6'];
         var v1=DISC_POWERTYPE_2026.jan[ci], v2=DISC_POWERTYPE_2026.feb[ci], v3=DISC_POWERTYPE_2026.mar[ci];
-        return { name:cat, type:'bar', emphasis:{focus:'series'}, stack:'total', data:[v1,v2,v3,v1+v2+v3], itemStyle:{color:clrs[ci]}, barMaxWidth:40 };
+        return { name:cat, type:'bar', stack:'total', data:[v1,v2,v3,v1+v2+v3], itemStyle:{color:clrs[ci]}, barMaxWidth:40 };
       })
     };
 
@@ -12779,7 +12788,7 @@ function jhDrawMonthlyTrend() {
   var colors = ['#94a3b8','#64748b','#22c55e','#3b82f6','#f97316','#ef4444'];
   var series = JH_MONTHLY.series.map(function(s, i){
     return {
-      name: s.name, type:'line', emphasis:{focus:'series'}, smooth:true,
+      name: s.name, type:'line', smooth:true,
       data: s.data,
       connectNulls: false,
       lineStyle: { width: s.name === '2026年' ? 3 : (s.name === '2025年' ? 3 : 2) },
@@ -12790,7 +12799,7 @@ function jhDrawMonthlyTrend() {
         position:'top', fontSize:10,
         formatter: function(p){ return p.value != null ? p.value : ''; }
       },
-      emphasis: { focus:'series' }
+      emphasis:{disabled:false}
     };
   });
   ec.setOption({
@@ -12858,7 +12867,7 @@ function jhDrawRegionShare() {
       return {
         name:y, type:'bar',
         data: JH_REGION.regions.map(function(r){ return JH_REGION.data[r][yi]; }),
-        emphasis:{ focus:'series' }
+        emphasis:{disabled:false}
       };
     });
     ec.setOption({
@@ -12883,7 +12892,7 @@ function jhDrawMakerTotal() {
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
   var series = JH_MAKER.years.map(function(y, yi){
-    return { name:y, type:'bar', barMaxWidth:18, emphasis:{focus:'series'},
+    return { name:y, type:'bar', barMaxWidth:18,
       data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
   });
   ec.setOption({
@@ -12913,7 +12922,7 @@ function jhDrawMakerNev() {
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
   var series = JH_MAKER_NEV.years.map(function(y, yi){
-    return { name:y, type:'bar', barMaxWidth:18, emphasis:{focus:'series'},
+    return { name:y, type:'bar', barMaxWidth:18,
       data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };
   });
   ec.setOption({
@@ -12945,7 +12954,7 @@ function jhDrawBrandShare() {
     yAxis:{ type:'category', data: JH_BRAND_SHARE.regions },
     series: JH_BRAND_SHARE.brands.map(function(b, bi){
       return {
-        name:b, type:'bar', emphasis:{focus:'series'}, stack:'total',
+        name:b, type:'bar', stack:'total',
         color: JH_BRAND_SHARE.colors[bi],
         data: JH_BRAND_SHARE.data.map(function(row){ return row[bi]; }),
         label:{ show:true, formatter:function(p){ return p.value > 5 ? p.value+'%' : ''; }, fontSize:10 },
@@ -12970,7 +12979,7 @@ function jhDrawCountryMaker() {
     yAxis:{ type:'category', data: sortedCountries },
     series: JH_COUNTRY_MAKER.makers.map(function(m, mi){
       return {
-        name:m, type:'bar', emphasis:{focus:'series'}, stack:'total',
+        name:m, type:'bar', stack:'total',
         color: JH_COUNTRY_MAKER.colors[mi],
         data: indices.map(function(i){ return JH_COUNTRY_MAKER.data[i] ? (JH_COUNTRY_MAKER.data[i][mi]||0) : 0; }),
        
@@ -12993,7 +13002,7 @@ function jhDrawCountryMakerNev() {
     yAxis:{ type:'category', data: sortedCountries },
     series: JH_COUNTRY_MAKER_NEV.makers.map(function(m, mi){
       return {
-        name:m, type:'bar', emphasis:{focus:'series'}, stack:'total',
+        name:m, type:'bar', stack:'total',
         color: JH_COUNTRY_MAKER_NEV.colors[mi],
         data: indices.map(function(i){ return JH_COUNTRY_MAKER_NEV.data[i] ? (JH_COUNTRY_MAKER_NEV.data[i][mi]||0) : 0; }),
        

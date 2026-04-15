@@ -249,26 +249,89 @@
             : Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
         }
 
-        // ラベル表示（ホバー中の系列のみ）
+        // ラベル表示（ホバー中の系列のみ）— ハイブリッド方式
         if (isHov) {
           var sUnit = getUnitForSeries(s);
-          patched.label = {
-            show: true,
-            position: isLine ? 'top' : labelPos,
-            color: 'inherit',
-            fontSize: 11,
-            fontWeight: 'bold',
-            formatter: (function(u) { return function(p) {
-              if (p.value == null || p.value === 0) return '';
-              var v = p.value;
-              if (u === '万台' || u === '万') return v >= 0.05 ? v.toFixed(1) + u : '';
-              if (u === '台') return v > 0 ? v.toLocaleString() + '台' : '';
-              if (u === '%') return v > 0 ? v + '%' : '';
-              if (u === '億元' || u === '億ドル' || u === '億') return v.toFixed(0) + u;
-              if (u === 'GWh') return v.toFixed(1) + u;
-              return v !== 0 ? String(v) + u : '';
-            }; })(sUnit)
-          };
+
+          // ── 値フォーマッタ（文字列を返す） ──
+          var fmtVal = (function(u) { return function(v) {
+            if (v == null) return '';
+            if (u === '万台' || u === '万') return Math.abs(v) >= 0.05 ? v.toFixed(1) + u : '';
+            if (u === '台') return v !== 0 ? v.toLocaleString() + '台' : '';
+            if (u === '%') return v !== 0 ? v + '%' : '';
+            if (u === '億元' || u === '億ドル' || u === '億') return v !== 0 ? v.toFixed(0) + u : '';
+            if (u === 'GWh') return v !== 0 ? v.toFixed(1) + u : '';
+            return v !== 0 ? String(v) + u : '';
+          }; })(sUnit);
+
+          // ── ぎちぎち判定 ──
+          var dataArr = s.data || [];
+          var n = dataArr.length;
+          // サンプルからラベル1個の推定幅(px)を算出
+          var sampleText = fmtVal(dataArr[0] != null && typeof dataArr[0] === 'object' ? dataArr[0].value : dataArr[0]);
+          var estCharW = Math.max(sampleText.length, 4) * 7 + 8; // 文字幅×係数 + 余白
+          var gridL = 55, gridR = 20;
+          if (opt.grid) {
+            var g = Array.isArray(opt.grid) ? opt.grid[0] : opt.grid;
+            if (g.left != null) gridL = typeof g.left === 'number' ? g.left : 55;
+            if (g.right != null) gridR = typeof g.right === 'number' ? g.right : 20;
+          }
+          var plotWidth = instance.getWidth() - gridL - gridR;
+          var totalLabelW = n * estCharW;
+          var isCrowded = totalLabelW > plotWidth;
+
+          if (!isCrowded) {
+            // ── 余裕がある → 従来通り全ラベル表示 ──
+            patched.label = {
+              show: true,
+              position: isLine ? 'top' : labelPos,
+              color: 'inherit',
+              fontSize: 11,
+              fontWeight: 'bold',
+              formatter: function(p) {
+                var v = (p.value != null && typeof p.value === 'object') ? p.value.value : p.value;
+                if (v == null || v === 0) return '';
+                return fmtVal(v);
+              }
+            };
+          } else {
+            // ── ぎちぎち → ハイブリッド（間引き＋要点強調） ──
+            var step = Math.max(2, Math.ceil(totalLabelW / plotWidth));
+            // 要点インデックスを算出（min, max, last, first）
+            var nums = dataArr.map(function(d) {
+              var v = (d != null && typeof d === 'object') ? (d.value || 0) : (d || 0);
+              return v;
+            });
+            var maxVal = -Infinity, minVal = Infinity, maxIdx = 0, minIdx = 0;
+            nums.forEach(function(v, i) {
+              if (v > maxVal) { maxVal = v; maxIdx = i; }
+              if (v < minVal) { minVal = v; minIdx = i; }
+            });
+            var pinnedSet = {};
+            pinnedSet[0] = true;         // first
+            pinnedSet[n - 1] = true;     // last
+            pinnedSet[maxIdx] = true;     // max
+            pinnedSet[minIdx] = true;     // min
+
+            patched.label = {
+              show: true,
+              position: isLine ? 'top' : labelPos,
+              formatter: (function(fmt, ps, st) { return function(p) {
+                var v = (p.value != null && typeof p.value === 'object') ? p.value.value : p.value;
+                if (v == null || v === 0) return '';
+                var text = fmt(v);
+                if (!text) return '';
+                var isPinned = ps[p.dataIndex];
+                var isStep = (p.dataIndex % st === 0);
+                if (!isPinned && !isStep) return '';
+                return isPinned ? '{bold|' + text + '}' : '{sub|' + text + '}';
+              }; })(fmtVal, pinnedSet, step),
+              rich: {
+                bold: { fontSize: 11, fontWeight: 'bold', color: 'inherit' },
+                sub:  { fontSize: 9,  fontWeight: 'normal', color: '#888' }
+              }
+            };
+          }
         } else {
           patched.label = { show: false };
         }

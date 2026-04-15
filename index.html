@@ -52,15 +52,6 @@
       if (!_hovering) {
         _lastOption = option;
         _hiddenSeries = {};
-        // legend.selected で初期非表示に設定されたシリーズを登録
-        var legends = Array.isArray(option.legend) ? option.legend : (option.legend ? [option.legend] : []);
-        legends.forEach(function(leg) {
-          if (leg && leg.selected) {
-            Object.keys(leg.selected).forEach(function(name) {
-              if (!leg.selected[name]) _hiddenSeries[name] = true;
-            });
-          }
-        });
       }
       return _setOption(option, notMerge, lazyUpdate);
     };
@@ -8337,15 +8328,14 @@ function cdsDrawProv() {
   const ps=(CDS.provs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,15);
   const chart=cdsEc('ec-cds-prov'); if(!chart) return;
   const COLS8=[...YRCOLORS,'#1d4ed8'];
-  const sel={}; yrs.forEach((yr,i)=>{ sel[yr]=i>=3; });
-  const visN = yrs.filter((_,i)=>i>=3).length; // 初期表示系列数=5
+  const visN = yrs.length;
   const rowH = visN * 14 + 12;
   const totalH = ps.length * rowH + 120;
   const el = document.getElementById('ec-cds-prov');
   if(el){ el.style.height = totalH+'px'; chart.resize(); }
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:yrs,bottom:0,type:'scroll',selected:sel},
+    legend:{data:yrs,bottom:0,type:'scroll'},
     grid:{left:65,right:60,top:30,bottom:60,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
@@ -8362,15 +8352,14 @@ function cdsDrawNevProv() {
   const yrs=['2019','2020','2021','2022','2023','2024','2025'];
   const ps=(CDS.nevProvs||[]).sort((a,b)=>(b.v[6]||0)-(a.v[6]||0)).slice(0,12);
   const chart=cdsEc('ec-cds-nev-prov'); if(!chart) return;
-  const sel={}; yrs.forEach((yr,i)=>{ sel[yr+'年']=i>=3; });
-  const visN = yrs.filter((_,i)=>i>=3).length; // 初期表示系列数=4
+  const visN = yrs.length;
   const rowH = visN * 14 + 12;
   const totalH = ps.length * rowH + 120;
   const el = document.getElementById('ec-cds-nev-prov');
   if(el){ el.style.height = totalH+'px'; chart.resize(); }
   chart.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll',selected:sel},
+    legend:{data:yrs.map(y=>y+'年'),bottom:0,type:'scroll'},
     grid:{left:65,right:60,top:30,bottom:60,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
@@ -11733,9 +11722,8 @@ function renderImpBrand() {
   var d = IMP.brand;
   var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
   var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
-  var sel = {'2022年':false,'2023年':false,'2024年':true,'2025年':true,'2026年1-2月':true};
   c.setOption(impBase({
-    legend: { data:years, bottom:0, selected:sel },
+    legend: { data:years, bottom:0 },
     grid: { left:105, right:60, top:20, bottom:55 },
     xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
@@ -11756,9 +11744,8 @@ function renderImpLuxury() {
   var d = IMP.luxury;
   var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
   var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
-  var sel = {'2022年':false,'2023年':false,'2024年':true,'2025年':true,'2026年1-2月':true};
   c.setOption(impBase({
-    legend: { data:years, bottom:0, selected:sel },
+    legend: { data:years, bottom:0 },
     grid: { left:130, right:60, top:20, bottom:55 },
     xAxis: { type:'value', name:'台' },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
@@ -12853,8 +12840,7 @@ function jhDrawRegionShare() {
 function jhDrawMakerTotal() {
   var ec = jhEc('ec-jh-maker-total');
   if (!ec) return;
-  var sel = {}; JH_MAKER.years.forEach(function(y,i){ sel[y]=i>=2; });
-  var visibleCount = JH_MAKER.years.filter(function(y,i){ return i>=2; }).length; // 初期表示系列数
+  var visibleCount = JH_MAKER.years.length;
   // カテゴリ数×(系列数×棒高さ+間隔) + grid余白 で高さ動的計算
   var rowH = visibleCount * 14 + 10; // 1カテゴリあたりのpx
   var totalH = JH_MAKER.makers.length * rowH + 120;
@@ -12872,7 +12858,7 @@ function jhDrawMakerTotal() {
         return s;
       }
     },
-    legend:{ data:JH_MAKER.years, top:8, type:'scroll', selected:sel },
+    legend:{ data:JH_MAKER.years, top:8, type:'scroll' },
     grid:{ left:90, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: JH_MAKER.makers },
@@ -12883,8 +12869,7 @@ function jhDrawMakerTotal() {
 function jhDrawMakerNev() {
   var ec = jhEc('ec-jh-maker-nev');
   if (!ec) return;
-  var sel = {}; JH_MAKER_NEV.years.forEach(function(y,i){ sel[y]=i>=2; });
-  var visibleCount = JH_MAKER_NEV.years.filter(function(y,i){ return i>=2; }).length;
+  var visibleCount = JH_MAKER_NEV.years.length;
   var rowH = visibleCount * 14 + 10;
   var totalH = JH_MAKER_NEV.makers.length * rowH + 120;
   var el = document.getElementById('ec-jh-maker-nev');
@@ -12901,7 +12886,7 @@ function jhDrawMakerNev() {
         return s;
       }
     },
-    legend:{ data:JH_MAKER_NEV.years, top:8, type:'scroll', selected:sel },
+    legend:{ data:JH_MAKER_NEV.years, top:8, type:'scroll' },
     grid:{ left:80, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: JH_MAKER_NEV.makers },

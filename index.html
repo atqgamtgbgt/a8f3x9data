@@ -191,7 +191,7 @@
           show: true,
           position: labelPos,
           color: 'inherit',
-          fontSize: 10,
+          fontSize: 11,
           fontWeight: 'bold',
           formatter: (function(u) { return function(p) {
             if (p.value == null || p.value === 0) return '';
@@ -202,7 +202,6 @@
             return v !== 0 ? String(v) + u : '';
           }; })(unit)
         } : { show: false };
-        patched.labelLayout = isHov ? { hideOverlap: true } : {};
         return patched;
       });
 

@@ -72,33 +72,45 @@
       return null;
     }
 
-    // 凡例ホバー検出（zrender）
-    instance.getZr().on('mouseover', function(e) {
-      var relIdx = getLegendIdx(e.target);
-      if (relIdx === null) return;
-      var opt = instance.getOption();
-      if (!opt) return;
-      // legend.data から全系列名リストを取得
-      var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
-        ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
-        : (opt.series || []).map(function(s) { return s.name; });
-      // scroll凡例のページオフセットを補正
-      var scrollIdx = (opt.legend && opt.legend[0] && opt.legend[0].scrollDataIndex) || 0;
-      var absIdx = relIdx + scrollIdx;
-      var name = names[absIdx] !== undefined ? names[absIdx] : names[relIdx];
-      if (name) showHoverLabels(name);
-    });
+    var _isShowingHover = false;
 
-    // マウスアウト → リセット
-    instance.getZr().on('mouseout', function(e) {
-      if (getLegendIdx(e.target) === null) return;
+    function resetHoverLabels() {
+      if (!_isShowingHover) return;
       if (!_lastOption) return;
+      _isShowingHover = false;
       _hovering = true;
       _setOption(_lastOption, true);
       Object.keys(_hiddenSeries).forEach(function(name) {
         instance.dispatchAction({ type: 'legendUnSelect', name: name });
       });
       _hovering = false;
+    }
+
+    // 凡例ホバー検出（zrender）
+    instance.getZr().on('mouseover', function(e) {
+      var relIdx = getLegendIdx(e.target);
+      if (relIdx === null) {
+        // 凡例外に移動したらリセット
+        resetHoverLabels();
+        return;
+      }
+      var opt = instance.getOption();
+      if (!opt) return;
+      var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
+        ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
+        : (opt.series || []).map(function(s) { return s.name; });
+      var scrollIdx = (opt.legend && opt.legend[0] && opt.legend[0].scrollDataIndex) || 0;
+      var absIdx = relIdx + scrollIdx;
+      var name = names[absIdx] !== undefined ? names[absIdx] : names[relIdx];
+      if (name) {
+        _isShowingHover = true;
+        showHoverLabels(name);
+      }
+    });
+
+    // マウスアウト → 必ずリセット
+    instance.getZr().on('mouseout', function(e) {
+      resetHoverLabels();
     });
 
     // 単位を axis オブジェクトから判定

@@ -149,11 +149,13 @@
       if (!opt || !opt.series) return;
       var seriesArr = Array.isArray(opt.series) ? opt.series : [opt.series];
 
-      // bar が1つも無い場合はスキップ（line-onlyチャートはパッチ対象外）
-      var hasBar = seriesArr.some(function(s) { return s.type === 'bar'; });
-      if (!hasBar) return;
+      // pie / radar / gauge など非直交座標系はスキップ
+      var supportedTypes = { bar:1, line:1, scatter:1 };
+      var hasSupported = seriesArr.some(function(s) { return supportedTypes[s.type]; });
+      if (!hasSupported) return;
 
-      var hasStack    = seriesArr.some(function(s) { return s.type === 'bar' && s.stack; });
+      var hasBar   = seriesArr.some(function(s) { return s.type === 'bar'; });
+      var hasStack = seriesArr.some(function(s) { return s.type === 'bar' && s.stack; });
       var isHorizontal = !!(opt.xAxis && (Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis) &&
                            (Array.isArray(opt.xAxis) ? opt.xAxis[0] : opt.xAxis).type === 'value' &&
                            opt.yAxis && (Array.isArray(opt.yAxis) ? opt.yAxis[0] : opt.yAxis) &&

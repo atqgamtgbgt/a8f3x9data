@@ -398,26 +398,27 @@
 // 使い方: var h = calcHBarHeight(rowCount, seriesCount, {extra:100});
 //         el.style.height = h + 'px';
 (function(){
+  function getScale() {
+    var w = window.innerWidth || document.documentElement.clientWidth || 1024;
+    if (w < 480) return { bar: 1.8, gap: 1.5 };
+    if (w < 768) return { bar: 1.4, gap: 1.25 };
+    return { bar: 1, gap: 1 };
+  }
+
   window.calcHBarHeight = function(rowCount, seriesCount, opts) {
     opts = opts || {};
     var extra = opts.extra != null ? opts.extra : 100;    // 上下の余白（legend, title, axis等）
     var barH  = opts.barH  != null ? opts.barH  : 14;     // 1系列バーの高さ
     var gap   = opts.gap   != null ? opts.gap   : 12;     // カテゴリ間ギャップ
-    var w = window.innerWidth || document.documentElement.clientWidth || 1024;
-
-    // ブレークポイント: <480px, 480-767px, >=768px
-    var scale = 1;
-    var gapScale = 1;
-    if (w < 480) {
-      scale = 1.8;     // バー太さ1.8倍
-      gapScale = 1.5;  // ギャップも拡大
-    } else if (w < 768) {
-      scale = 1.4;
-      gapScale = 1.25;
-    }
-
-    var rowH = Math.round(seriesCount * barH * scale + gap * gapScale);
+    var sc = getScale();
+    var rowH = Math.round(seriesCount * barH * sc.bar + gap * sc.gap);
     return rowCount * rowH + extra;
+  };
+
+  // barMaxWidth をスマホでスケール拡大した値に
+  window.getBarMaxWidth = function(base) {
+    var sc = getScale();
+    return Math.round((base || 16) * sc.bar);
   };
 })();
 // ===================================================================
@@ -8609,7 +8610,7 @@ function cdsDrawProv() {
     grid:{left:65,right:60,top:50,bottom:30,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
-    barMaxWidth:16,
+    barMaxWidth: getBarMaxWidth(16),
     series:yrs.map((yr,i)=>({name:yr,type:'bar',
       data:ps.map(p=>p.v[i]??null).reverse(),itemStyle:{color:COLS8[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=5?p.value:''}}))
@@ -8635,7 +8636,7 @@ function cdsDrawNevProv() {
     grid:{left:65,right:60,top:50,bottom:30,containLabel:true},
     xAxis:{type:'value',name:'万台',axisLabel:{formatter:function(v){return v+'万';}}},
     yAxis:{type:'category',data:ps.map(p=>p.name).reverse()},
-    barMaxWidth:16,
+    barMaxWidth: getBarMaxWidth(16),
     series:yrs.map((yr,i)=>({name:yr+'年',type:'bar',
       data:ps.map(p=>p.v[i]).reverse(),itemStyle:{color:YRCOLORS[i]},
       label:{show:i===6,position:'right',fontSize:10,formatter:p=>p.value&&p.value>=3?p.value:''}}))
@@ -10335,11 +10336,11 @@ function renderProvSalesChart(){
     yAxis:{type:'category',data:sorted.map(([k])=>k),axisLabel:{fontSize:9,color:'#7eb3ff'}},
     xAxis:{type:'value',name:'万台',nameTextStyle:{color:'#6a8aaa',fontSize:9},
       axisLabel:{fontSize:9,color:'#6a8aaa'},splitLine:{lineStyle:{color:'#1e3555'}}},
-    barMaxWidth:16,
+    barMaxWidth: getBarMaxWidth(16),
     series:[
-      {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barMaxWidth:16},
-      {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barMaxWidth:16},
-      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barMaxWidth:16},
+      {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barMaxWidth:getBarMaxWidth(16)},
+      {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barMaxWidth:getBarMaxWidth(16)},
+      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barMaxWidth:getBarMaxWidth(16)},
     ]
   });
 }
@@ -12000,7 +12001,7 @@ function renderImpBrand() {
     grid: { left:105, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
-    barMaxWidth: 20,
+    barMaxWidth: getBarMaxWidth(20),
     tooltip: { formatter:function(params){
       return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
     }},
@@ -12025,7 +12026,7 @@ function renderImpLuxury() {
     grid: { left:130, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台' },
     yAxis: { type:'category', data:d.names.slice().reverse(), axisLabel:{fontSize:11} },
-    barMaxWidth: 20,
+    barMaxWidth: getBarMaxWidth(20),
     tooltip: { formatter:function(params){
       return params.map(function(p){return p.seriesName+': '+p.value.toLocaleString()+'台';}).join('<br>');
     }},
@@ -13122,7 +13123,7 @@ function jhDrawMakerTotal() {
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
   var series = JH_MAKER.years.map(function(y, yi){
-    return { name:y, type:'bar', barMaxWidth:18,
+    return { name:y, type:'bar', barMaxWidth: getBarMaxWidth(18),
       data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
   });
   ec.setOption({
@@ -13150,7 +13151,7 @@ function jhDrawMakerNev() {
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
   var series = JH_MAKER_NEV.years.map(function(y, yi){
-    return { name:y, type:'bar', barMaxWidth:18,
+    return { name:y, type:'bar', barMaxWidth: getBarMaxWidth(18),
       data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };
   });
   ec.setOption({

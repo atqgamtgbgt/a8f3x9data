@@ -4275,7 +4275,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-energy-density">
               <div class="chart-card">
                 <div class="chart-title">🔬 純電動乗用車　エネルギー密度分布（万台）</div>
-                <div class="chart-subtitle">※合格証ベース　125以下 / 125–140 / 140–160 / 160以上　2018〜2026年1Q</div>
+                <div class="chart-subtitle">※合格証ベース　125以下 / 125–140 / 140–160 / 160以上　2018〜2026年1-3月</div>
                 <div id="ec-bat-energy" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -4284,7 +4284,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-share-total">
               <div class="chart-card">
                 <div class="chart-title">🏆 電池企業 動力電池シェア推移（%）</div>
-                <div class="chart-subtitle">寧徳時代CATL・比亜迪BYD・その他　2020〜2026年1Q</div>
+                <div class="chart-subtitle">寧徳時代CATL・比亜迪BYD・その他　2020〜2026年1-3月</div>
                 <div id="ec-bat-share-total" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -4293,7 +4293,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-share-lfp">
               <div class="chart-card">
                 <div class="chart-title">🟢 LFP電池 企業シェア推移（%）</div>
-                <div class="chart-subtitle">主要企業　2022〜2026年1Q</div>
+                <div class="chart-subtitle">主要企業　2022〜2026年1-3月</div>
                 <div id="ec-bat-share-lfp" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -4302,7 +4302,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-share-nmc">
               <div class="chart-card">
                 <div class="chart-title">🔵 三元電池 企業シェア推移（%）</div>
-                <div class="chart-subtitle">主要企業　2022〜2026年1Q</div>
+                <div class="chart-subtitle">主要企業　2022〜2026年1-3月</div>
                 <div id="ec-bat-share-nmc" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -11271,8 +11271,8 @@ window.addEventListener('resize', function(){
     var ec = initOrGet('ec-bat-lfp-share'); if(!ec) return;
     // 出所: Sheet2「リン酸鉄占比」累計列
     // 2019:33%, 2020:38%, 2021:52%, 2022:62%, 2023:67%, 2024:75%, 2025:81%, 26/1月:78%, 26/2月:78%
-    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var lfpShare = [33, 38, 52, 62, 67, 75, 81, 78, 78];
+    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
+    var lfpShare = [33, 38, 52, 62, 67, 75, 81, 78, 78, 79];
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>LFP占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
@@ -11369,7 +11369,7 @@ window.addEventListener('resize', function(){
   function renderEnergyDensity(){
     var ec = initOrGet('ec-bat-energy'); if(!ec) return;
     // 出所: PDFのSheet7「純電動合格証 Wh/kg別」（年次＋26年1Qのみ）
-    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年\n1Q'];
+    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-3月'];
     var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    0.0];
     var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  48.2];
     var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  48.1];
@@ -11409,7 +11409,7 @@ window.addEventListener('resize', function(){
     var ec = initOrGet('ec-bat-share-total'); if(!ec) return;
 
     // 年次ラベル（2020〜2025通年 + 2026年1Q）
-    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','2026年\n1Q'];
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-3月'];
 
     // 画像⑩より（%）
     var makers = [
@@ -11465,7 +11465,7 @@ window.addEventListener('resize', function(){
   function renderShareLfp(){
     var ec = initOrGet('ec-bat-share-lfp'); if(!ec) return;
 
-    var labels = ['2022年','2023年','2024年','2025年','2026年\n1Q'];
+    var labels = ['2022年','2023年','2024年','2025年','26年\n1-3月'];
 
     // 画像⑪より（%）。シェアが小さい企業は「その他」にまとめ
     var makers = [
@@ -11520,7 +11520,7 @@ window.addEventListener('resize', function(){
   function renderShareNmc(){
     var ec = initOrGet('ec-bat-share-nmc'); if(!ec) return;
 
-    var labels = ['2022年','2023年','2024年','2025年','2026年\n1Q'];
+    var labels = ['2022年','2023年','2024年','2025年','26年\n1-3月'];
 
     // 画像⑫より（%）
     var makers = [

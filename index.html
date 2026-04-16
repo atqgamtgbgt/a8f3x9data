@@ -3582,7 +3582,7 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
                 </div>
                 <button id="bat-toggle-monthly-btn" onclick="batToggleMonthly()" style="
-                  display:none;
+                  display:none !important;
                   font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
                   border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);
                   color:#6b7280;transition:all .15s;white-space:nowrap;align-self:center;margin-bottom:10px;
@@ -9128,7 +9128,7 @@ function cdsSetMidTab(tab) {
 
   // 電池月次トグルボタン: batteryタブのみ表示
   var batToggleBtn = document.getElementById('bat-toggle-monthly-btn');
-  if (batToggleBtn) batToggleBtn.style.display = (tab === 'battery') ? '' : 'none';
+  if (batToggleBtn) batToggleBtn.style.setProperty('display', tab === 'battery' ? '' : 'none', 'important');
 
   if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
@@ -11168,6 +11168,7 @@ window.addEventListener('resize', function(){
       btn.style.borderColor = 'rgba(0,0,0,0.15)';
       btn.style.background = 'rgba(0,0,0,0.04)';
     }
+    // display は操作しない（cdsSetMidTab が制御する）
     var cur = window.BAT_CURRENT_ID;
     if (cur && BAT_RENDER[cur]) BAT_RENDER[cur]();
   };

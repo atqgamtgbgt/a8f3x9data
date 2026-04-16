@@ -3582,7 +3582,6 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
                 </div>
                 <button id="bat-toggle-monthly-btn" onclick="batToggleMonthly()" style="
-                  display:none !important;
                   font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
                   border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);
                   color:#6b7280;transition:all .15s;white-space:nowrap;align-self:center;margin-bottom:10px;
@@ -9126,10 +9125,6 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-jishuhaiex').style.display  = (tab === 'jishuhaiex')  ? '' : 'none';
   document.getElementById('cds-sub-price').style.display       = (tab === 'price')       ? '' : 'none';
 
-  // 電池月次トグルボタン: batteryタブのみ表示
-  var batToggleBtn = document.getElementById('bat-toggle-monthly-btn');
-  if (batToggleBtn) batToggleBtn.style.setProperty('display', tab === 'battery' ? '' : 'none', 'important');
-
   if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
     var contElZt = document.getElementById('cdsPillsContent');
@@ -11183,6 +11178,10 @@ window.addEventListener('resize', function(){
     var pane = document.getElementById(id);
     if (pane) pane.classList.add('cds-active');
     window.BAT_CURRENT_ID = id;
+    // 月次トグルボタン: 月次データがあるペインのみ表示
+    var monthlyPanes = ['bat-production','bat-install','bat-lfp-nmc'];
+    var btn = document.getElementById('bat-toggle-monthly-btn');
+    if (btn) btn.style.display = monthlyPanes.indexOf(id) >= 0 ? '' : 'none';
   };
 
   // ---------- サブナビ クリック ----------

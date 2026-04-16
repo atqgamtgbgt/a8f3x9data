@@ -3554,7 +3554,8 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- 中タブ電池: 電池 サブナビ -->
             <div id="cds-sub-battery" class="cds-sub-nav" style="display:none">
-              <div class="cds-nav-compact">
+              <div class="cds-nav-compact" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <div style="display:flex;flex-wrap:wrap;gap:0">
                 <div class="cds-gc">
                   <span class="cds-gc-label">📊 生産・装車 </span>
                   <div class="cds-gc-items" id="cds-gc-gb1">
@@ -3579,6 +3580,12 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-battery-target="#bat-companies">📊 企業数推移</button>
                   </div>
                 </div>
+                </div>
+                <button id="bat-toggle-monthly-btn" onclick="batToggleMonthly()" style="
+                  font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
+                  border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);
+                  color:#6b7280;transition:all .15s;white-space:nowrap;align-self:center;margin-bottom:10px;
+                ">▶ 2026年 月次を展開</button>
               </div>
             </div><!-- end cds-sub-battery -->
 
@@ -11099,6 +11106,67 @@ window.addEventListener('resize', function(){
   var BAT_EC = {};       // echarts instances
   window.BAT_CURRENT_ID = 'bat-production';
 
+  // ---------- 月次トグル ----------
+  var BAT_SHOW_MONTHLY = false;
+
+  // 全データ配列レイアウト:
+  //   生産推移:  [2020累計, 2021累計, 2022累計, 2023累計, 2024累計, 2025累計, 26/1月, 26/2月, 26/3月]
+  //   装車量:    [2019累計, 2020累計, 2021累計, 2022累計, 2023累計, 2024累計, 2025累計, 26/1月, 26/2月, 26/3月]
+  //   装車率:    [2021累計, 2022累計, 2023累計, 2024累計, 2025累計, 26/1月, 26/2月, 26/3月]
+  //   占比:      [2019累計, ..., 2025累計, 26/1月, 26/2月, 26/3月]
+  // compact: 末尾3点を除いた "〜2025累計" ＋ "26年累計" の1点
+  // expanded: "〜2025累計" ＋ "26年1月" "26年2月" "26年3月" の3点
+
+  // sd(arr, annualLen): annualLen=年次点数（26年累計含まず）
+  //   compact → arr.slice(0, annualLen+1) の末尾を「26年累計」相当値(arr[annualLen])で1点
+  //   expanded → arr.slice(0, annualLen).concat(arr.slice(annualLen+1))
+  function batSd(arr, annualLen) {
+    if (!arr) return [];
+    if (BAT_SHOW_MONTHLY) {
+      return arr.slice(0, annualLen).concat(arr.slice(annualLen + 1));
+    } else {
+      return arr.slice(0, annualLen + 1);
+    }
+  }
+
+  // xl(baseLabels, cumLabel): baseLabels = 年次ラベル列（26年累計を除く）
+  function batXl(baseLabels, cumLabel) {
+    if (BAT_SHOW_MONTHLY) {
+      return baseLabels.concat(['2026年\n1月','2026年\n2月','2026年\n3月']);
+    } else {
+      return baseLabels.concat([cumLabel || '2026年\n累計']);
+    }
+  }
+
+  function batMarkArea() {
+    if (!BAT_SHOW_MONTHLY) return { silent: true, data: [] };
+    return { silent: true, data: [[
+      { xAxis: '2026年\n1月',
+        itemStyle: { color: 'rgba(0,0,0,0.03)' },
+        label: { show: true, position: 'insideTopLeft', formatter: '月次',
+                 color: 'rgba(0,0,0,0.2)', fontFamily: FONT, fontSize: 9 } },
+      { xAxis: '2026年\n3月' }
+    ]]};
+  }
+
+  window.batToggleMonthly = function() {
+    BAT_SHOW_MONTHLY = !BAT_SHOW_MONTHLY;
+    var btn = document.getElementById('bat-toggle-monthly-btn');
+    if (BAT_SHOW_MONTHLY) {
+      btn.textContent = '▼ 2026年 月次を折り畳む';
+      btn.style.color = '#2563eb';
+      btn.style.borderColor = 'rgba(37,99,235,0.4)';
+      btn.style.background = 'rgba(37,99,235,0.08)';
+    } else {
+      btn.textContent = '▶ 2026年 月次を展開';
+      btn.style.color = '#6b7280';
+      btn.style.borderColor = 'rgba(0,0,0,0.15)';
+      btn.style.background = 'rgba(0,0,0,0.04)';
+    }
+    var cur = window.BAT_CURRENT_ID;
+    if (cur && BAT_RENDER[cur]) BAT_RENDER[cur]();
+  };
+
   // ---------- pane 表示 ----------
   window.batShowPane = function(id) {
     var pillEl = document.getElementById('cdsPills');
@@ -11166,9 +11234,17 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderProduction(){
     var ec = initOrGet('ec-bat-production'); if(!ec) return;
-    var labels      = ['2020\n12月累計','2021\n12月累計','2022\n12月累計','2023\n12月累計','2024\n12月累計','2025\n12月累計','2026年\n1月','2026年\n2月','2026年\n3月'];
-    var nmcData     = [49,  94,  213, 245, 278,  347.6,  31.3,  58.2,  89.5];
-    var lfpData     = [35,  125, 332, 531, 816,  1405.1, 136.7, 251.3, 397.5];
+    // layout: [2020累計, 2021累計, 2022累計, 2023累計, 2024累計, 2025累計, | 26/1月, 26/2月, 26/3月]
+    // annualLen=6（26年累計は存在しないため、compact時は「26年\n1-3月累計」= 1+2+3月の合計で1点追加）
+    var baseLabels = ['2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
+    var nmcRaw = [49, 94, 213, 245, 278, 347.6,  31.3, 58.2, 89.5];
+    var lfpRaw = [35, 125, 332, 531, 816, 1405.1, 136.7, 251.3, 397.5];
+    // compact用累計点（1+2+3月の累計GWh）
+    var nmcCum = [49, 94, 213, 245, 278, 347.6, 89.5];
+    var lfpCum = [35, 125, 332, 531, 816, 1405.1, 397.5];
+    var nmcData = BAT_SHOW_MONTHLY ? nmcRaw.slice(0,6).concat(nmcRaw.slice(6)) : nmcCum;
+    var lfpData = BAT_SHOW_MONTHLY ? lfpRaw.slice(0,6).concat(lfpRaw.slice(6)) : lfpCum;
+    var labels  = batXl(baseLabels, '26年\n1-3月累計');
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
@@ -11176,7 +11252,7 @@ window.addEventListener('resize', function(){
       xAxis:baseXAxis(labels),
       yAxis:baseYAxis('GWh'),
       series:[
-        {name:'三元電池',        type:'bar',stack:'s',data:nmcData,itemStyle:{color:C.nmc}},
+        {name:'三元電池',        type:'bar',stack:'s',data:nmcData,itemStyle:{color:C.nmc}, markArea:batMarkArea()},
         {name:'LFP（リン酸鉄）', type:'bar',stack:'s',data:lfpData,itemStyle:{color:C.lfp}}
       ]
     });
@@ -11187,9 +11263,15 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderInstall(){
     var ec = initOrGet('ec-bat-install'); if(!ec) return;
-    var labels      = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
-    var nmcData     = [42,  39,   74,  110,  126,  139,  144.1, 9.4,  15.1,  25.8];
-    var lfpData     = [20,  24,   80,  184,  261,  409,  625.3, 32.7, 53.3,  99.0];
+    // layout: [2019〜2025累計(7点), 26/1月, 26/2月, 26/3月]
+    var baseLabels = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
+    var nmcRaw = [42, 39, 74, 110, 126, 139, 144.1,  9.4, 15.1, 25.8];
+    var lfpRaw = [20, 24, 80, 184, 261, 409, 625.3, 32.7, 53.3, 99.0];
+    var nmcCum = [42, 39, 74, 110, 126, 139, 144.1, 25.8];
+    var lfpCum = [20, 24, 80, 184, 261, 409, 625.3, 99.0];
+    var nmcData = BAT_SHOW_MONTHLY ? nmcRaw.slice(0,7).concat(nmcRaw.slice(7)) : nmcCum;
+    var lfpData = BAT_SHOW_MONTHLY ? lfpRaw.slice(0,7).concat(lfpRaw.slice(7)) : lfpCum;
+    var labels  = batXl(baseLabels, '26年\n1-3月累計');
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
@@ -11197,7 +11279,7 @@ window.addEventListener('resize', function(){
       xAxis:baseXAxis(labels),
       yAxis:baseYAxis('GWh'),
       series:[
-        {name:'三元電池',        type:'bar',stack:'s',data:nmcData,itemStyle:{color:C.nmc}},
+        {name:'三元電池',        type:'bar',stack:'s',data:nmcData,itemStyle:{color:C.nmc}, markArea:batMarkArea()},
         {name:'LFP（リン酸鉄）', type:'bar',stack:'s',data:lfpData,itemStyle:{color:C.lfp}}
       ]
     });
@@ -11211,9 +11293,12 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderInstallRate(){
     var ec = initOrGet('ec-bat-install-rate'); if(!ec) return;
-    // 出所: 画像1「動力電池装車率」累計列
-    var labels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
-    var rate   = [70, 54, 50, 50, 44, 25, 22, 26];
+    // layout: [2021〜2025累計(5点), 26/1月, 26/2月, 26/3月]
+    var baseLabels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
+    var rateRaw = [70, 54, 50, 50, 44, 25, 22, 26];
+    var rateCum = [70, 54, 50, 50, 44, 26]; // 26年累計（3月時点）≒3月単月26%
+    var rate = BAT_SHOW_MONTHLY ? rateRaw.slice(0,5).concat(rateRaw.slice(5)) : rateCum;
+    var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>装車率: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30, bottom:60}),
@@ -11225,7 +11310,8 @@ window.addEventListener('resize', function(){
         itemStyle:{ color: new echarts.graphic.LinearGradient(0,0,0,1,[
           {offset:0, color:'#42A5F5'},{offset:1, color:'#1565C0'}
         ])},
-        label:{show:false}
+        label:{show:false},
+        markArea: batMarkArea()
       },{
         name:'トレンド', type:'line', data:rate, smooth:true,
         symbol:'circle', symbolSize:5,
@@ -11239,10 +11325,14 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderTypeRate(){
     var ec = initOrGet('ec-bat-type-rate'); if(!ec) return;
-    // 出所: 画像1「三元電池装車率」「磷酸鉄锂装車率」累計列
-    var labels  = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
-    var nmcRate = [79, 52, 51, 50, 41, 30, 26, 29];
-    var lfpRate = [64, 55, 49, 50, 45, 24, 21, 25];
+    var baseLabels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
+    var nmcRateRaw = [79, 52, 51, 50, 41, 30, 26, 29];
+    var lfpRateRaw = [64, 55, 49, 50, 45, 24, 21, 25];
+    var nmcRateCum = [79, 52, 51, 50, 41, 29];
+    var lfpRateCum = [64, 55, 49, 50, 45, 25];
+    var nmcRate = BAT_SHOW_MONTHLY ? nmcRateRaw.slice(0,5).concat(nmcRateRaw.slice(5)) : nmcRateCum;
+    var lfpRate = BAT_SHOW_MONTHLY ? lfpRateRaw.slice(0,5).concat(lfpRateRaw.slice(5)) : lfpRateCum;
+    var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
       tooltip: baseTooltip(),
       legend: baseLegend({top:5}),
@@ -11253,7 +11343,7 @@ window.addEventListener('resize', function(){
         { name:'三元電池装車率', type:'line', data:nmcRate, smooth:true,
           symbol:'circle', symbolSize:7, itemStyle:{color:C.nmc},
           lineStyle:{width:2.5, color:C.nmc},
-          label:{show:false} },
+          label:{show:false}, markArea:batMarkArea() },
         { name:'LFP装車率', type:'line', data:lfpRate, smooth:true,
           symbol:'circle', symbolSize:7, itemStyle:{color:C.lfp},
           lineStyle:{width:2.5, color:C.lfp},
@@ -11269,10 +11359,12 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderLfpShare(){
     var ec = initOrGet('ec-bat-lfp-share'); if(!ec) return;
-    // 出所: Sheet2「リン酸鉄占比」累計列
-    // 2019:33%, 2020:38%, 2021:52%, 2022:62%, 2023:67%, 2024:75%, 2025:81%, 26/1月:78%, 26/2月:78%
-    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
-    var lfpShare = [33, 38, 52, 62, 67, 75, 81, 78, 78, 79];
+    // layout: [2019〜2025累計(7点), 26/1月, 26/2月, 26/3月]
+    var baseLabels = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
+    var raw = [33, 38, 52, 62, 67, 75, 81, 78, 78, 79];
+    var cum = [33, 38, 52, 62, 67, 75, 81, 79];
+    var lfpShare = BAT_SHOW_MONTHLY ? raw.slice(0,7).concat(raw.slice(7)) : cum;
+    var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>LFP占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
@@ -11283,7 +11375,8 @@ window.addEventListener('resize', function(){
         itemStyle:{ color: new echarts.graphic.LinearGradient(0,0,0,1,[
           {offset:0,color:'#70c972'},{offset:1,color:'#3a8f3e'}
         ])},
-        label:{show:false}
+        label:{show:false},
+        markArea: batMarkArea()
       }]
     });
   }
@@ -11293,10 +11386,11 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderNmcShare(){
     var ec = initOrGet('ec-bat-nmc-share'); if(!ec) return;
-    // 出所: Sheet2「三元占比」累計列
-    // 2019:67%, 2020:61%, 2021:48%, 2022:37%, 2023:33%, 2024:25%, 2025:19%, 26/1月:22%, 26/2月:22%
-    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
-    var nmcShare = [67, 61, 48, 37, 33, 25, 19, 22, 22, 21];
+    var baseLabels = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
+    var raw = [67, 61, 48, 37, 33, 25, 19, 22, 22, 21];
+    var cum = [67, 61, 48, 37, 33, 25, 19, 21];
+    var nmcShare = BAT_SHOW_MONTHLY ? raw.slice(0,7).concat(raw.slice(7)) : cum;
+    var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>三元占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
@@ -11307,7 +11401,8 @@ window.addEventListener('resize', function(){
         itemStyle:{ color: new echarts.graphic.LinearGradient(0,0,0,1,[
           {offset:0,color:'#b39ddb'},{offset:1,color:'#673ab7'}
         ])},
-        label:{show:false}
+        label:{show:false},
+        markArea: batMarkArea()
       }]
     });
   }

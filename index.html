@@ -10114,8 +10114,8 @@ window.cpcaInitMap = function() {
         <div style="font-size:11px;font-weight:700;color:#7eb3ff;letter-spacing:.5px">📊 表示指標</div>
         <div id="cpca-btns" style="display:flex;flex-direction:column;gap:4px">
           ${[
-            ['sales26','📦 26年1-2月（最新）'],['sales25','📦 2025年通年'],['sales24','📦 2024年通年'],
-            ['yoy','📈 25年前年比（%）'],['yoy26','📈 26年1-2月前年比'],['nev','⚡ NEV浸透率'],
+            ['sales26','📦 26年1-2月 販売量（万台）'],['sales25','📦 2025年通年 販売量（万台）'],['sales24','📦 2024年通年 販売量（万台）'],
+            ['yoy','📈 25年 前年比（対24年）'],['yoy26','📈 26年1-2月 前年比（対25年同期）'],['nev','⚡ NEV浸透率'],
             ['suv','🚙 SUV比率'],['dom','🏷️ 自主ブランド比率'],
           ].map(([m,lbl],i)=>`<button onclick="cpcaMetric('${m}',this)" style="font-size:11px;padding:5px 8px;border-radius:5px;cursor:pointer;text-align:left;border:${i===0?'none':'1px solid #2a3f60'};background:${i===0?'#2563eb':'transparent'};color:${i===0?'#fff':'#8ab0d0'}">${lbl}</button>`).join('')}
         </div>
@@ -10238,8 +10238,8 @@ function getVisualMap() {
 
 function renderMapChart() {
   if(!mapChart||!mapReady) return;
-  const titles = {sales26:'26年1-2月販売量（万台）',sales25:'2025年販売量（万台）',sales24:'2024年販売量（万台）',
-    yoy:'2025年前年比（%）',yoy26:'26年1-2月前年比（%）',nev:'NEV浸透率（%）',suv:'SUV比率（%）',dom:'自主ブランド比率（%）'};
+  const titles = {sales26:'26年1-2月 販売量（万台）',sales25:'2025年通年 販売量（万台）',sales24:'2024年通年 販売量（万台）',
+    yoy:'2025年 前年比（対2024年・%）',yoy26:'26年1-2月 前年比（対25年同期・%）',nev:'NEV浸透率（%）',suv:'SUV比率（%）',dom:'自主ブランド比率（%）'};
   mapChart.setOption({
     backgroundColor:'#0d1b2a',
     title:{text:'中国省別乗用車市場',subtext:titles[curMetric],left:'center',top:6,
@@ -10338,8 +10338,8 @@ function showProvDetail(ja) {
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px">
         <div style="font-size:12px">2024年<br><strong style="color:#fff;font-size:18px">${p.y24}</strong><span style="font-size:10px;color:#6a8aaa">万台</span></div>
         <div style="font-size:12px">2025年<br><strong style="color:#7eb3ff;font-size:18px">${p.y25}</strong><span style="font-size:10px;color:#6a8aaa">万台</span></div>
-        <div style="font-size:12px">25年前年比<br><strong style="font-size:16px;color:${p.yoy<0?'#ef5350':'#66bb6a'}">${p.yoy>0?'+':''}${p.yoy}%</strong></div>
-        <div style="font-size:12px">26年1-2月<br><strong style="color:#ffcc02;font-size:16px">${p.t26}</strong><span style="font-size:10px;color:#6a8aaa">万台</span>${p.yoy26!=null?'<br><span style="font-size:11px;color:'+(p.yoy26<0?'#ef5350':'#66bb6a')+'">前年比: '+(p.yoy26>0?'+':'')+p.yoy26+'%</span>':''}</div>
+        <div style="font-size:12px">25年前年比（対24年）<br><strong style="font-size:16px;color:${p.yoy<0?'#ef5350':'#66bb6a'}">${p.yoy>0?'+':''}${p.yoy}%</strong></div>
+        <div style="font-size:12px">26年1-2月 販売量<br><strong style="color:#ffcc02;font-size:16px">${p.t26}</strong><span style="font-size:10px;color:#6a8aaa">万台</span>${p.yoy26!=null?'<br><span style="font-size:11px;color:'+(p.yoy26<0?'#ef5350':'#66bb6a')+'">前年比（対25年同期）: '+(p.yoy26>0?'+':'')+p.yoy26+'%</span>':''}</div>
       </div></div>`:''}
     <div id="cp-nev" style="height:185px;margin-bottom:6px"></div>
     <div id="cp-body" style="height:130px;margin-bottom:6px"></div>

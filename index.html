@@ -3317,6 +3317,9 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-price" class="cds-mid-tab" onclick="cdsSetMidTab('price')">
                 💰 価格帯分析
               </button>
+              <button id="cds-mid-btn-stats" class="cds-mid-tab" onclick="cdsSetMidTab('stats')">
+                📈 産業統計レポート
+              </button>
             </div>
 
             <hr style="border:none;border-top:2px solid #94a3b8;margin:2px 0 14px;">
@@ -3647,6 +3650,35 @@ body.tray-open { padding-bottom: 105px; }
                 ">▶ 2026年 月次を展開</button>
               </div>
             </div><!-- end cds-sub-price -->
+
+            <!-- 中タブ産業統計レポート: サブナビ -->
+            <div id="cds-sub-stats" class="cds-sub-nav" style="display:none">
+              <div class="cds-nav-compact">
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🏭 生産</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link active" data-cds-stats-target="#stats-production">📊 自動車生産推移</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-nev">⚡ 新エネ車・普及率</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-capacity">🏗️ 設備稼働率</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">💴 消費・小売</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-stats-target="#stats-consumption">🛒 自動車消費推移</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-retail-yoy">📉 消費月別前年比</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-retail-cat">📦 品目別小売比較</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">💹 投資・不動産</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-stats-target="#stats-investment">📈 固定資産投資</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-realestate">🏠 不動産×車市比較</button>
+                  </div>
+                </div>
+              </div>
+            </div><!-- end cds-sub-stats -->
 
           </div><!-- end cdsPills -->
 
@@ -4524,6 +4556,80 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-title">車格別 新エネ vs ガソリン 台数（2026年3月）</div>
                   <div class="chart-subtitle">各グレードの動力内訳（千台）</div>
                   <div id="ec-price-seg-power" class="echart-box" style="height:380px"></div>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- ===== 産業統計レポート ペイン群 ===== -->
+
+            <div class="cds-pane" id="stats-production">
+              <div class="chart-card">
+                <div class="chart-title">中国自動車生産推移（万台）</div>
+                <div class="chart-subtitle">2018〜2026年　棒グラフ＝生産台数、折れ線＝前年比増速　出典：国家統計局 / 崔東樹</div>
+                <div id="ec-stats-production" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-nev">
+              <div class="chart-card">
+                <div class="chart-title">新エネ車生産台数と普及率推移</div>
+                <div class="chart-subtitle">2018〜2026年　積み上げ棒＝新エネ車・燃油車生産台数、折れ線＝新エネ普及率（%）</div>
+                <div id="ec-stats-nev" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-capacity">
+              <div class="chart-card">
+                <div class="chart-title">自動車業界 設備稼働率推移（%）</div>
+                <div class="chart-subtitle">2018〜2026年 四半期別　折れ線グラフ　出典：崔東樹</div>
+                <div id="ec-stats-capacity" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-consumption">
+              <div class="chart-card">
+                <div class="chart-title">自動車消費額と社会消費品小売総額推移（億元）</div>
+                <div class="chart-subtitle">2023〜2026年　積み上げ棒＝小売総額内訳、折れ線＝前年比（%）</div>
+                <div id="ec-stats-consumption" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-retail-yoy">
+              <div class="chart-card">
+                <div class="chart-title">自動車消費額 月別前年比推移（%）</div>
+                <div class="chart-subtitle">2023〜2026年　折れ線グラフ　赤＝2026年　出典：崔東樹</div>
+                <div id="ec-stats-retail-yoy" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-retail-cat">
+              <div class="chart-card">
+                <div class="chart-title">主要品目別小売額 前年比比較（%）</div>
+                <div class="chart-subtitle">2026年1-3月累計 vs 3月単月　横棒グラフ　緑＝増加、赤＝減少　出典：崔東樹</div>
+                <div id="ec-stats-retail-cat" class="echart-box" style="height:500px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-investment">
+              <div class="chart-card">
+                <div class="chart-title">自動車業界 固定資産投資 累計増速推移（%）</div>
+                <div class="chart-subtitle">2022〜2026年　折れ線グラフ　赤線＝2026年　破線＝全業種平均(1.7%)　出典：崔東樹</div>
+                <div id="ec-stats-investment" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="stats-realestate">
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <div class="chart-card">
+                  <div class="chart-title">新築商品房 販売面積推移と増速（億㎡・%）</div>
+                  <div class="chart-subtitle">2017〜2026年　棒＝販売面積、折れ線＝面積・販売額増速</div>
+                  <div id="ec-stats-re-area" class="echart-box" style="height:380px"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">住宅・車比率（㎡/台）と住宅平均単価推移</div>
+                  <div class="chart-subtitle">2017〜2026年　棒＝住宅・車比率、折れ線＝住宅平均単価（元/㎡）</div>
+                  <div id="ec-stats-re-ratio" class="echart-box" style="height:380px"></div>
                 </div>
               </div>
             </div>
@@ -9101,7 +9207,8 @@ function cdsSetMidTab(tab) {
     'inventory':  'https://mp.weixin.qq.com/s/u0KRHvAP2DhaaCQeVracVQ',
     'battery':    'https://mp.weixin.qq.com/s/uKBxiZOfY2Pl8odGuuGt7g',
     'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ',
-    'price':      'https://mp.weixin.qq.com/s/dxRuOcqPkUCBjDDkiI5Fqw'
+    'price':      'https://mp.weixin.qq.com/s/dxRuOcqPkUCBjDDkiI5Fqw',
+    'stats':      'https://mp.weixin.qq.com/s/njkFJ7cCveLDzHoejK8iZg'
   };
   var srcUrl = CDS_SOURCE_URLS[tab] || '';
   var srcLink = document.getElementById('cds-source-link');
@@ -9124,6 +9231,7 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-discount').style.display    = (tab === 'discount')    ? '' : 'none';
   document.getElementById('cds-sub-jishuhaiex').style.display  = (tab === 'jishuhaiex')  ? '' : 'none';
   document.getElementById('cds-sub-price').style.display       = (tab === 'price')       ? '' : 'none';
+  document.getElementById('cds-sub-stats').style.display       = (tab === 'stats')       ? '' : 'none';
 
   if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
@@ -9224,6 +9332,13 @@ function cdsSetMidTab(tab) {
       b.classList.toggle('active', b.getAttribute('data-cds-price-target') === '#' + priceTarget);
     });
     setTimeout(function(){ priceRender(priceTarget); }, 80);
+  } else if (tab === 'stats') {
+    var statsTarget = window.STATS_CURRENT_ID || 'stats-production';
+    statsShowPane(statsTarget);
+    document.querySelectorAll('#cds-sub-stats [data-cds-stats-target]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-cds-stats-target') === '#' + statsTarget);
+    });
+    setTimeout(function(){ statsRender(statsTarget); }, 80);
   } else {
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
@@ -14422,6 +14537,394 @@ window.addEventListener('resize', function(){
 });
 
 })(); // end zenntai module
+
+// ============================================================
+//  📈 産業統計レポート モジュール (崔東樹 2026年1-3月レポート)
+// ============================================================
+(function(){
+
+  var STATS_EC = {};
+  window.STATS_CURRENT_ID = 'stats-production';
+
+  var FONT = 'Noto Sans JP, sans-serif';
+  var DARK_GRID = 'rgba(0,0,0,0.06)';
+  var DARK_AXIS = '#6b7280';
+
+  function tt(){
+    return { trigger:'axis', backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd',
+             borderWidth:1, textStyle:{fontFamily:FONT,fontSize:12,color:'#333'} };
+  }
+  function xCat(d){
+    return { type:'category', data:d,
+             axisLabel:{fontFamily:FONT,fontSize:11,color:DARK_AXIS,rotate:30},
+             axisLine:{lineStyle:{color:'#e5e7eb'}}, axisTick:{lineStyle:{color:'#e5e7eb'}} };
+  }
+  function yVal(n, extra){
+    return Object.assign({ type:'value', name:n||'',
+             nameTextStyle:{fontFamily:FONT,fontSize:11,color:DARK_AXIS},
+             axisLabel:{fontFamily:FONT,fontSize:11,color:DARK_AXIS},
+             splitLine:{lineStyle:{color:DARK_GRID}}, axisLine:{show:false} }, extra||{});
+  }
+  function leg(d){
+    return Object.assign({ top:8, textStyle:{fontFamily:FONT,fontSize:11,color:'#374151'},
+                           inactiveColor:'#9ca3af' }, d||{});
+  }
+  function grid(o){ return Object.assign({ top:55, right:65, bottom:72, left:60, containLabel:true }, o||{}); }
+
+  function initOrGet(id){
+    var dom = document.getElementById(id);
+    if (!dom) return null;
+    if (STATS_EC[id]) { try{ STATS_EC[id].dispose(); }catch(e){} }
+    STATS_EC[id] = echarts.init(dom);
+    return STATS_EC[id];
+  }
+
+  window.statsShowPane = function(id){
+    var pillEl = document.getElementById('cdsPills');
+    var contEl = document.getElementById('cdsPillsContent');
+    if (pillEl) pillEl.setAttribute('style','display:block');
+    if (contEl) contEl.setAttribute('style','display:block');
+    document.querySelectorAll('.cds-pane[id^="stats-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+    var pane = document.getElementById(id);
+    if (pane) pane.classList.add('cds-active');
+    window.STATS_CURRENT_ID = id;
+  };
+
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-cds-stats-target]');
+    if (!btn) return;
+    var targetId = btn.getAttribute('data-cds-stats-target').replace('#','');
+    statsShowPane(targetId);
+    document.querySelectorAll('#cds-sub-stats [data-cds-stats-target]').forEach(function(b){
+      b.classList.toggle('active', b === btn);
+    });
+    requestAnimationFrame(function(){
+      setTimeout(function(){ statsRender(targetId); }, 50);
+    });
+  });
+
+  // ── データ ──
+  var YEARS = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年
+1-3月','26年
+3月'];
+  var PROD = {
+    total:  [2797,2553,2463,2653,2748,3011,3156,3478,715,307],
+    sedan:  [1160,1018, 929, 977,1047,1086,1106,1335,227, 99],
+    suv:    [ 927, 876, 853, 974,1063,1183,1358,1529,340,146],
+    nev:    [ 130, 119, 146, 368, 722, 944,1317,1652,302,134],
+    ice:    [2667,2434,2317,2285,2026,2067,1839,1825,413,173],
+    nevRate:[4.6, 4.7, 5.9,  14,  26,  31,  42,  48, 42, 44],
+    yoy:    [  -4,  -8,  -1,   5,   3,   9,   5,  10,  -6,   0]
+  };
+
+  var RETAIL_YEARS = ['2023年
+通年','2024年
+通年','2025年
+通年','2026年
+1-3月','2026年
+3月'];
+  var RETAIL = {
+    auto:    [48614, 50314, 49789,  9968, 3741],
+    nonAuto: [381874,432177,451413,117727,37875],
+    totalYoy:[  6,    4,  3.7,  2.4,  1.7],
+    autoYoy: [  6,   -1,   -2,   -9,  -12],
+    nonYoy:  [  6,    5,  4.4,  3.6,  3.2]
+  };
+
+  var YOY_MONTHS = ['年累計','1-2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  var YOY_DATA = {
+    '2023年': [5.9,-9.4,11.5,38,24.2,-1.1,-2,1,3,11,14.7,4],
+    '2024年': [-0.5,8.7,-3.7,-5.6,-4.4,-6.2,-4.9,-7.3,0,4,6.6,0.5],
+    '2025年': [-1.5,-4.4,5.5,0.7,1.1,4.6,-1.5,0.8,16,null,null,null],
+    '2026年': [-9.1,-7.3,-11.8,null,null,null,null,null,null,null,null,null]
+  };
+
+  var CAT_LABELS = ['建材・内装','家電・映像音響','家具','文化・オフィス','通信器材','金銀宝飾','化粧品','中西薬品','日用品','服飾・ニット','食料・穀物','石油製品','自動車','商品小売合計'];
+  var CAT_Q1  = [-5, 0, 2, 9,21,13, 6, 2, 6, 7,10,-6,-9, 2];
+  var CAT_MAR = [-9,-5,-9,15,27,12, 8, 6, 5, 8,10, 0,-12,2];
+
+  var INV_MONTHS = ['1-2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  var INV = {
+    '2022年': [11.3,12.4,10.4,11.2,8.9,9.9,12.9,12.7,12.8,12.3,12.6],
+    '2023年': [23.8,19,18.5,17.9,20,19.2,19.1,20.4,18.7,17.9,19.4],
+    '2024年': [7,7.4,5.7,5.8,6.5,5,5.4,5.8,5.9,7.2,8],
+    '2025年': [27,24.5,23.6,23.4,22.2,21.7,20.2,19.2,17.5,15.3,11.7],
+    '2026年': [2.6,4.8,null,null,null,null,null,null,null,null,null]
+  };
+  var INV_COLORS = {'2022年':'#93c5fd','2023年':'#34d399','2024年':'#fcd34d','2025年':'#a78bfa','2026年':'#ef4444'};
+
+  var CAP_YEARS = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年
+1-3月'];
+  var CAP = {
+    '1Q': [80.7,78.3,56.9,78.5,72.1,72.0,64.9,71.9,70.3],
+    '2Q': [81.4,76.2,74.6,74.2,69.1,73.3,73.0,71.3,null],
+    '3Q': [79.6,76.1,77.6,70.5,75.7,75.6,73.2,73.3,null],
+    '4Q': [77.9,78.5,80.5,75.5,73.2,76.9,77.2,76.0,null]
+  };
+  var CAP_COLORS = {'1Q':'#3b82f6','2Q':'#10b981','3Q':'#f59e0b','4Q':'#8b5cf6'};
+
+  var RE_YEARS = ['2017年','2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年
+1-3月'];
+  var RE = {
+    area:   [16.9,17.2,17.2,17.6,17.9,13.6,11.2,9.7,8.8,2.0],
+    areaYoy:[8,1,0,3,2,-24,-9,-13,-9,-10],
+    amtYoy: [14,12,7,9,5,-27,-7,-17,-13,-17],
+    ratio:  [59,61,67,70,68,51,37,31,25,27],
+    price:  [7892,8737,9310,9860,10139,9814,10437,9935,9527,8841]
+  };
+
+  // ── 描画関数 ──
+
+  function renderProduction(){
+    var ec = initOrGet('ec-stats-production');
+    if (!ec) return;
+    ec.setOption({
+      tooltip: Object.assign(tt(),{axisPointer:{type:'cross'}}),
+      legend: leg({data:['自動車合計','うち:セダン(轎車)','うち:SUV','前年比増速(%)']}),
+      grid: grid(),
+      xAxis: xCat(YEARS),
+      yAxis: [
+        yVal('万台',{min:0}),
+        yVal('前年比(%)',{position:'right', axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
+      ],
+      series:[
+        { name:'自動車合計', type:'bar', data:PROD.total, yAxisIndex:0,
+          itemStyle:{color:'#bfdbfe'}, barMaxWidth:38,
+          label:{show:true,position:'top',fontSize:9,fontFamily:FONT,color:'#374151',
+            formatter:function(p){return p.value>=100?p.value+'':''}} },
+        { name:'うち:セダン(轎車)', type:'bar', data:PROD.sedan, yAxisIndex:0,
+          itemStyle:{color:'#60a5fa'}, barMaxWidth:38 },
+        { name:'うち:SUV', type:'bar', data:PROD.suv, yAxisIndex:0,
+          itemStyle:{color:'#2563eb'}, barMaxWidth:38 },
+        { name:'前年比増速(%)', type:'line', data:PROD.yoy, yAxisIndex:1,
+          symbol:'circle', symbolSize:6, lineStyle:{color:'#ef4444',width:2.5},
+          itemStyle:{color:'#ef4444'},
+          label:{show:true,position:'top',fontSize:10,fontFamily:FONT,color:'#ef4444',formatter:'{c}%'} }
+      ]
+    });
+  }
+
+  function renderNev(){
+    var ec = initOrGet('ec-stats-nev');
+    if (!ec) return;
+    ec.setOption({
+      tooltip: Object.assign(tt(),{axisPointer:{type:'cross'}}),
+      legend: leg({data:['燃油車','新エネ車','新エネ普及率(%)']}),
+      grid: grid(),
+      xAxis: xCat(YEARS),
+      yAxis:[
+        yVal('万台',{min:0}),
+        yVal('普及率(%)',{position:'right',min:0,max:60,
+          axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
+      ],
+      series:[
+        { name:'燃油車', type:'bar', data:PROD.ice, stack:'s', yAxisIndex:0,
+          itemStyle:{color:'#93c5fd'}, barMaxWidth:38 },
+        { name:'新エネ車', type:'bar', data:PROD.nev, stack:'s', yAxisIndex:0,
+          itemStyle:{color:'#34d399'}, barMaxWidth:38 },
+        { name:'新エネ普及率(%)', type:'line', data:PROD.nevRate, yAxisIndex:1,
+          symbol:'circle', symbolSize:7, lineStyle:{color:'#f59e0b',width:2.5},
+          itemStyle:{color:'#f59e0b'},
+          label:{show:true,position:'top',fontSize:10,fontFamily:FONT,color:'#d97706',formatter:'{c}%'} }
+      ]
+    });
+  }
+
+  function renderCapacity(){
+    var ec = initOrGet('ec-stats-capacity');
+    if (!ec) return;
+    var series = Object.keys(CAP_COLORS).map(function(q){
+      return { name:q, type:'line', data:CAP[q],
+               symbol:'circle', symbolSize:5,
+               lineStyle:{color:CAP_COLORS[q],width:2},
+               itemStyle:{color:CAP_COLORS[q]}, connectNulls:false };
+    });
+    series.push({ name:'全業種平均(25年:74.4%)', type:'line',
+      data:CAP_YEARS.map(function(_,i){return i===7?74.4:null;}),
+      symbol:'none', lineStyle:{color:'#9ca3af',width:1.5,type:'dashed'},
+      itemStyle:{color:'#9ca3af'} });
+    ec.setOption({
+      tooltip: tt(),
+      legend: leg({data:['1Q','2Q','3Q','4Q','全業種平均(25年:74.4%)']}),
+      grid: grid(),
+      xAxis: xCat(CAP_YEARS),
+      yAxis: yVal('%',{min:50,max:90}),
+      series: series
+    });
+  }
+
+  function renderConsumption(){
+    var ec = initOrGet('ec-stats-consumption');
+    if (!ec) return;
+    ec.setOption({
+      tooltip: Object.assign(tt(),{axisPointer:{type:'cross'}}),
+      legend: leg({data:['自動車以外の消費','自動車消費','自動車前年比(%)','小売総額前年比(%)']}),
+      grid: grid(),
+      xAxis: xCat(RETAIL_YEARS),
+      yAxis:[
+        yVal('億元',{min:0}),
+        yVal('前年比(%)',{position:'right',
+          axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
+      ],
+      series:[
+        { name:'自動車以外の消費', type:'bar', data:RETAIL.nonAuto, stack:'s', yAxisIndex:0,
+          itemStyle:{color:'#bfdbfe'}, barMaxWidth:50 },
+        { name:'自動車消費', type:'bar', data:RETAIL.auto, stack:'s', yAxisIndex:0,
+          itemStyle:{color:'#3b82f6'}, barMaxWidth:50 },
+        { name:'自動車前年比(%)', type:'line', data:RETAIL.autoYoy, yAxisIndex:1,
+          symbol:'circle', symbolSize:6, lineStyle:{color:'#ef4444',width:2.5},
+          itemStyle:{color:'#ef4444'},
+          label:{show:true,position:'top',fontSize:10,fontFamily:FONT,color:'#ef4444',formatter:'{c}%'} },
+        { name:'小売総額前年比(%)', type:'line', data:RETAIL.totalYoy, yAxisIndex:1,
+          symbol:'diamond', symbolSize:6, lineStyle:{color:'#10b981',width:2},
+          itemStyle:{color:'#10b981'} }
+      ]
+    });
+  }
+
+  function renderRetailYoy(){
+    var ec = initOrGet('ec-stats-retail-yoy');
+    if (!ec) return;
+    var yoyColors = {'2023年':'#f59e0b','2024年':'#3b82f6','2025年':'#374151','2026年':'#ef4444'};
+    var series = Object.keys(YOY_DATA).map(function(y){
+      return { name:y, type:'line', data:YOY_DATA[y],
+               symbol:'circle', symbolSize: y==='2026年'?7:5,
+               lineStyle:{color:yoyColors[y], width:y==='2026年'?3:2},
+               itemStyle:{color:yoyColors[y]}, connectNulls:false,
+               label:{show:y==='2026年', position:'bottom', fontSize:11,
+                      fontFamily:FONT, color:yoyColors[y],
+                      formatter:function(p){return p.value!=null?p.value:'';}} };
+    });
+    ec.setOption({
+      tooltip: tt(),
+      legend: leg({data:Object.keys(YOY_DATA)}),
+      grid: grid(),
+      xAxis: xCat(YOY_MONTHS),
+      yAxis: yVal('%'),
+      series: series,
+      markLine:{silent:true,lineStyle:{color:'#9ca3af',type:'dashed',width:1},data:[{yAxis:0}]}
+    });
+  }
+
+  function renderRetailCat(){
+    var ec = initOrGet('ec-stats-retail-cat');
+    if (!ec) return;
+    ec.setOption({
+      tooltip: Object.assign(tt(),{trigger:'axis',axisPointer:{type:'shadow'}}),
+      legend: leg({data:['1-3月累計','3月単月']}),
+      grid: Object.assign(grid(),{left:120,top:45,bottom:35,right:80}),
+      xAxis: yVal('%',{type:'value'}),
+      yAxis: { type:'category', data:CAT_LABELS,
+               axisLabel:{fontFamily:FONT,fontSize:11,color:DARK_AXIS},
+               axisLine:{lineStyle:{color:'#e5e7eb'}} },
+      series:[
+        { name:'1-3月累計', type:'bar', data:CAT_Q1, barGap:'10%', barMaxWidth:16,
+          itemStyle:{color:function(p){return CAT_Q1[p.dataIndex]>=0?'#34d399':'#f87171';}},
+          label:{show:true,position:'right',fontSize:10,fontFamily:FONT,
+                 formatter:function(p){return (p.value>0?'+':'')+p.value+'%';},
+                 color:function(p){return CAT_Q1[p.dataIndex]>=0?'#059669':'#dc2626';}} },
+        { name:'3月単月', type:'bar', data:CAT_MAR, barGap:'10%', barMaxWidth:16,
+          itemStyle:{color:function(p){return CAT_MAR[p.dataIndex]>=0?'#93c5fd':'#fca5a5';}},
+          label:{show:true,position:'right',fontSize:10,fontFamily:FONT,
+                 formatter:function(p){return (p.value>0?'+':'')+p.value+'%';},
+                 color:function(p){return CAT_MAR[p.dataIndex]>=0?'#2563eb':'#dc2626';}} }
+      ]
+    });
+  }
+
+  function renderInvestment(){
+    var ec = initOrGet('ec-stats-investment');
+    if (!ec) return;
+    var series = Object.keys(INV_COLORS).map(function(y){
+      return { name:y, type:'line', data:INV[y],
+               symbol:'circle', symbolSize:y==='2026年'?7:5,
+               lineStyle:{color:INV_COLORS[y],width:y==='2026年'?3:2},
+               itemStyle:{color:INV_COLORS[y]}, connectNulls:false,
+               label:{show:y==='2026年', position:'top', fontSize:11,
+                      fontFamily:FONT, color:INV_COLORS[y],
+                      formatter:function(p){return p.value!=null?p.value+'%':'';}
+               }};
+    });
+    series.push({ name:'全業種平均(1-3月:+1.7%)', type:'line',
+      data:[1.7,1.7,null,null,null,null,null,null,null,null,null],
+      symbol:'none', lineStyle:{color:'#9ca3af',width:1.5,type:'dashed'},
+      itemStyle:{color:'#9ca3af'} });
+    ec.setOption({
+      tooltip: tt(),
+      legend: leg({data:Object.keys(INV_COLORS).concat(['全業種平均(1-3月:+1.7%)'])}),
+      grid: grid(),
+      xAxis: xCat(INV_MONTHS),
+      yAxis: yVal('%'),
+      series: series
+    });
+  }
+
+  function renderReArea(){
+    var ec = initOrGet('ec-stats-re-area');
+    if (!ec) return;
+    ec.setOption({
+      tooltip: Object.assign(tt(),{axisPointer:{type:'cross'}}),
+      legend: leg({data:['販売面積(億㎡)','面積増速(%)','販売額増速(%)']}),
+      grid: grid(),
+      xAxis: xCat(RE_YEARS),
+      yAxis:[
+        yVal('億㎡',{min:0}),
+        yVal('増速(%)',{position:'right',
+          axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
+      ],
+      series:[
+        { name:'販売面積(億㎡)', type:'bar', data:RE.area, yAxisIndex:0,
+          itemStyle:{color:'#93c5fd'}, barMaxWidth:34,
+          label:{show:true,position:'top',fontSize:9,fontFamily:FONT,color:'#374151',formatter:'{c}'} },
+        { name:'面積増速(%)', type:'line', data:RE.areaYoy, yAxisIndex:1,
+          symbol:'circle', symbolSize:5, lineStyle:{color:'#3b82f6',width:2},
+          itemStyle:{color:'#3b82f6'} },
+        { name:'販売額増速(%)', type:'line', data:RE.amtYoy, yAxisIndex:1,
+          symbol:'diamond', symbolSize:5, lineStyle:{color:'#ef4444',width:2},
+          itemStyle:{color:'#ef4444'} }
+      ]
+    });
+  }
+
+  function renderReRatio(){
+    var ec = initOrGet('ec-stats-re-ratio');
+    if (!ec) return;
+    ec.setOption({
+      tooltip: Object.assign(tt(),{axisPointer:{type:'cross'}}),
+      legend: leg({data:['住宅・車比率(㎡/台)','住宅平均単価(元/㎡)']}),
+      grid: grid(),
+      xAxis: xCat(RE_YEARS),
+      yAxis:[
+        yVal('㎡/台',{min:0,max:80}),
+        yVal('元/㎡',{position:'right',min:6000,
+          axisLabel:{fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
+      ],
+      series:[
+        { name:'住宅・車比率(㎡/台)', type:'bar', data:RE.ratio, yAxisIndex:0,
+          itemStyle:{color:function(p){
+            var v=RE.ratio[p.dataIndex]; return v<=30?'#f87171':v<=50?'#fbbf24':'#93c5fd';
+          }}, barMaxWidth:34,
+          label:{show:true,position:'top',fontSize:10,fontFamily:FONT,color:'#374151',
+            formatter:function(p){return p.value+'㎡';}} },
+        { name:'住宅平均単価(元/㎡)', type:'line', data:RE.price, yAxisIndex:1,
+          symbol:'circle', symbolSize:6, lineStyle:{color:'#8b5cf6',width:2.5},
+          itemStyle:{color:'#8b5cf6'} }
+      ]
+    });
+  }
+
+  window.statsRender = function(id){
+    if      (id==='stats-production')  renderProduction();
+    else if (id==='stats-nev')         renderNev();
+    else if (id==='stats-capacity')    renderCapacity();
+    else if (id==='stats-consumption') renderConsumption();
+    else if (id==='stats-retail-yoy')  renderRetailYoy();
+    else if (id==='stats-retail-cat')  renderRetailCat();
+    else if (id==='stats-investment')  renderInvestment();
+    else if (id==='stats-realestate')  { renderReArea(); renderReRatio(); }
+  };
+
+})();
 </script>
   <div class="print-footer container">
     中国自動車販売ランキングや関連データ &nbsp;|&nbsp; 非公式・個人作成 &nbsp;|&nbsp; 印刷日: <span id="print-date"></span>

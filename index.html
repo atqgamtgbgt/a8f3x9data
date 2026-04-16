@@ -11166,9 +11166,9 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderProduction(){
     var ec = initOrGet('ec-bat-production'); if(!ec) return;
-    var labels      = ['2020\n12月累計','2021\n12月累計','2022\n12月累計','2023\n12月累計','2024\n12月累計','2025\n12月累計','2026年\n1月','2026年\n2月'];
-    var nmcData     = [49,  94,  213, 245, 278,  347.6,  31.3,  58.2];
-    var lfpData     = [35,  125, 332, 531, 816,  1405.1, 136.7, 251.3];
+    var labels      = ['2020\n12月累計','2021\n12月累計','2022\n12月累計','2023\n12月累計','2024\n12月累計','2025\n12月累計','2026年\n1月','2026年\n2月','2026年\n3月'];
+    var nmcData     = [49,  94,  213, 245, 278,  347.6,  31.3,  58.2,  89.5];
+    var lfpData     = [35,  125, 332, 531, 816,  1405.1, 136.7, 251.3, 397.5];
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
@@ -11187,9 +11187,9 @@ window.addEventListener('resize', function(){
   // ============================================================
   function renderInstall(){
     var ec = initOrGet('ec-bat-install'); if(!ec) return;
-    var labels      = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var nmcData     = [42,  39,   74,  110,  126,  139,  144.1, 9.4,  15.1];
-    var lfpData     = [20,  24,   80,  184,  261,  409,  625.3, 32.7, 53.3];
+    var labels      = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
+    var nmcData     = [42,  39,   74,  110,  126,  139,  144.1, 9.4,  15.1,  25.8];
+    var lfpData     = [20,  24,   80,  184,  261,  409,  625.3, 32.7, 53.3,  99.0];
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
@@ -11212,8 +11212,8 @@ window.addEventListener('resize', function(){
   function renderInstallRate(){
     var ec = initOrGet('ec-bat-install-rate'); if(!ec) return;
     // 出所: 画像1「動力電池装車率」累計列
-    var labels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var rate   = [70, 54, 50, 50, 44, 25, 22];
+    var labels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
+    var rate   = [70, 54, 50, 50, 44, 25, 22, 26];
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>装車率: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30, bottom:60}),
@@ -11240,9 +11240,9 @@ window.addEventListener('resize', function(){
   function renderTypeRate(){
     var ec = initOrGet('ec-bat-type-rate'); if(!ec) return;
     // 出所: 画像1「三元電池装車率」「磷酸鉄锂装車率」累計列
-    var labels  = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var nmcRate = [79, 52, 51, 50, 41, 30, 26];
-    var lfpRate = [64, 55, 49, 50, 45, 24, 21];
+    var labels  = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
+    var nmcRate = [79, 52, 51, 50, 41, 30, 26, 29];
+    var lfpRate = [64, 55, 49, 50, 45, 24, 21, 25];
     ec.setOption({
       tooltip: baseTooltip(),
       legend: baseLegend({top:5}),
@@ -11295,8 +11295,8 @@ window.addEventListener('resize', function(){
     var ec = initOrGet('ec-bat-nmc-share'); if(!ec) return;
     // 出所: Sheet2「三元占比」累計列
     // 2019:67%, 2020:61%, 2021:48%, 2022:37%, 2023:33%, 2024:25%, 2025:19%, 26/1月:22%, 26/2月:22%
-    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月'];
-    var nmcShare = [67, 61, 48, 37, 33, 25, 19, 22, 22];
+    var labels   = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計','2026年\n1月','2026年\n2月','2026年\n3月'];
+    var nmcShare = [67, 61, 48, 37, 33, 25, 19, 22, 22, 21];
     ec.setOption({
       tooltip: Object.assign(baseTooltip(),{formatter:function(p){ return p[0].name+'<br/>三元占比: '+p[0].value+'%'; }}),
       grid: Object.assign(baseGrid(),{top:30}),
@@ -11321,15 +11321,15 @@ window.addEventListener('resize', function(){
     var ec = initOrGet('ec-bat-vehicle'); if(!ec) return;
     // 出所: PDFのp3「装車電池MWh」表 ← 装車ベース（合格証ベースではない）
     // 全車種をPDF実値で収録。2026年は1-2月累計値
-    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-2月累計'];
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-3月累計'];
 
     // ── PDF実値（MWh）──
-    var bev_pass   = [43114,  121734, 230092, 286841, 362178, 467978, 40775];  // 純電動乗用車
-    var phev_pass  = [4151,   10434,  31148,  65328,  118911, 139316, 12909];  // 插混乗用車 ※PDF実値
-    var bev_truck  = [null,   null,   null,   null,   null,   136237, 12840];  // 純電動貨車（2025年〜）
-    var phev_truck = [null,   null,   null,   null,   null,   770,    273];    // 插混貨車（2025年〜・+284%急成長）
-    var bev_sv     = [4252,   12169,  21404,  28039,  56454,  12315,  956];    // 純電動専用車
-    var bev_bus    = [11749,  9699,   11376,  6534,   9565,   10776,  546];    // 純電動客車
+    var bev_pass   = [43114,  121734, 230092, 286841, 362178, 467978, 72942];  // 純電動乗用車
+    var phev_pass  = [4151,   10434,  31148,  65328,  118911, 139316, 22482];  // 插混乗用車 ※PDF実値
+    var bev_truck  = [null,   null,   null,   null,   null,   136237, 25854];  // 純電動貨車（2025年〜）
+    var phev_truck = [null,   null,   null,   null,   null,   770,    500];    // 插混貨車（2025年〜）
+    var bev_sv     = [4252,   12169,  21404,  28039,  56454,  12315,  2123];   // 純電動専用車
+    var bev_bus    = [11749,  9699,   11376,  6534,   9565,   10776,  874];    // 純電動客車
 
     // その他: 合計 - 上記6車種（插混客車/燃料電池客車/燃料電池貨車/插混専用車/燃料電池専用車）
     // PDF合計値から逆算（全て実値）
@@ -11340,7 +11340,7 @@ window.addEventListener('resize', function(){
       387638 - 286841- 65328 - 0     - 0    - 28039 - 6534,   // 2023: 896
       548431 - 362178- 118911- 0     - 0    - 56454 - 9565,   // 2024: 1323（燃料電池貨車1001含む）
       768869 - 467978- 139316- 136237- 770  - 12315 - 10776,  // 2025: 1477
-      68315  - 40775 - 12909 - 12840 - 273  - 956   - 546     // 26年1-2月: 16
+      124816 - 72942 - 22482 - 25854 - 500  - 2123  - 874     // 26年1-3月: 41
     ];
 
     function toGWh(arr){ return arr.map(function(v){ return v===null ? null : Math.round(v/100)/10; }); }
@@ -11371,9 +11371,9 @@ window.addEventListener('resize', function(){
     // 出所: PDFのSheet7「純電動合格証 Wh/kg別」（年次＋26年1Qのみ）
     var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年\n1Q'];
     var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    0.0];
-    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  28.1];
-    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  25.1];
-    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   9.2];
+    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  48.2];
+    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  48.1];
+    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   15.4];
     var totals   = labels.map(function(_,i){
       var v = [d125m,d125_140,d140_160,d160p].reduce(function(s,a){ return s+(a[i]||0); },0);
       return Math.round(v*10)/10;
@@ -11581,12 +11581,12 @@ window.addEventListener('resize', function(){
       '2023年': [35,39,39,36,35,43,36,33,33,35,37,43],
       '2024年': [38,35,39,40,38,40,39,37,38,39,38,41],
       '2025年': [36,38,41,40,37,37,33,33,35,33,36,40],
-      '2026年': [33,30,null,null,null,null,null,null,null,null,null,null]
+      '2026年': [33,30,31,null,null,null,null,null,null,null,null,null]
     };
 
     // 前年比（2026年各月 vs 2025年同月）
     var yoy = {
-      '2026年': { 1: 33-36, 2: 30-38 }  // 1月: -3社, 2月: -8社
+      '2026年': { 1: 33-36, 2: 30-38, 3: 31-41 }  // 1月: -3社, 2月: -8社, 3月: -10社
     };
 
     var colors = ['#BDC3C7','#95A5A6','#7F8C8D','#5D6D7E','#2E75B6','#E74C3C'];

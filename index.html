@@ -3657,24 +3657,24 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🏭 生産</span>
                   <div class="cds-gc-items">
-                    <button class="nav-link active" data-cds-stats-target="#stats-production">📊 自動車生産推移</button>
-                    <button class="nav-link" data-cds-stats-target="#stats-nev">⚡ 新エネ車・普及率</button>
-                    <button class="nav-link" data-cds-stats-target="#stats-capacity">🏗️ 設備稼働率</button>
+                    <button class="nav-link active" data-cds-stats-target="#stats-production" onclick="statsNavClick(this,'stats-production')">📊 自動車生産推移</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-nev" onclick="statsNavClick(this,'stats-nev')">⚡ 新エネ車・普及率</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-capacity" onclick="statsNavClick(this,'stats-capacity')">🏗️ 設備稼働率</button>
                   </div>
                 </div>
                 <div class="cds-gc">
                   <span class="cds-gc-label">💴 消費・小売</span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-stats-target="#stats-consumption">🛒 自動車消費推移</button>
-                    <button class="nav-link" data-cds-stats-target="#stats-retail-yoy">📉 消費月別前年比</button>
-                    <button class="nav-link" data-cds-stats-target="#stats-retail-cat">📦 品目別小売比較</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-consumption" onclick="statsNavClick(this,'stats-consumption')">🛒 自動車消費推移</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-retail-yoy" onclick="statsNavClick(this,'stats-retail-yoy')">📉 消費月別前年比</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-retail-cat" onclick="statsNavClick(this,'stats-retail-cat')">📦 品目別小売比較</button>
                   </div>
                 </div>
                 <div class="cds-gc">
                   <span class="cds-gc-label">💹 投資・不動産</span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-stats-target="#stats-investment">📈 固定資産投資</button>
-                    <button class="nav-link" data-cds-stats-target="#stats-realestate">🏠 不動産×車市比較</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-investment" onclick="statsNavClick(this,'stats-investment')">📈 固定資産投資</button>
+                    <button class="nav-link" data-cds-stats-target="#stats-realestate" onclick="statsNavClick(this,'stats-realestate')">🏠 不動産×車市比較</button>
                   </div>
                 </div>
               </div>
@@ -14590,23 +14590,18 @@ window.addEventListener('resize', function(){
     window.STATS_CURRENT_ID = id;
   };
 
-  document.addEventListener('click', function(e){
-    var btn = e.target.closest('[data-cds-stats-target]');
-    if (!btn) return;
-    var targetId = btn.getAttribute('data-cds-stats-target').replace('#','');
-    statsShowPane(targetId);
+  window.statsNavClick = function(btn, id) {
+    statsShowPane(id);
     document.querySelectorAll('#cds-sub-stats [data-cds-stats-target]').forEach(function(b){
       b.classList.toggle('active', b === btn);
     });
     requestAnimationFrame(function(){
-      setTimeout(function(){ statsRender(targetId); }, 50);
+      setTimeout(function(){ statsRender(id); }, 50);
     });
-  });
+  };
 
   // ── データ ──
-  var YEARS = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年
-1-3月','26年
-3月'];
+  var YEARS = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年1-3月','26年3月'];
   var PROD = {
     total:  [2797,2553,2463,2653,2748,3011,3156,3478,715,307],
     sedan:  [1160,1018, 929, 977,1047,1086,1106,1335,227, 99],
@@ -14617,12 +14612,7 @@ window.addEventListener('resize', function(){
     yoy:    [  -4,  -8,  -1,   5,   3,   9,   5,  10,  -6,   0]
   };
 
-  var RETAIL_YEARS = ['2023年
-通年','2024年
-通年','2025年
-通年','2026年
-1-3月','2026年
-3月'];
+  var RETAIL_YEARS = ['2023年通年','2024年通年','2025年通年','2026年1-3月','2026年3月'];
   var RETAIL = {
     auto:    [48614, 50314, 49789,  9968, 3741],
     nonAuto: [381874,432177,451413,117727,37875],
@@ -14653,8 +14643,7 @@ window.addEventListener('resize', function(){
   };
   var INV_COLORS = {'2022年':'#93c5fd','2023年':'#34d399','2024年':'#fcd34d','2025年':'#a78bfa','2026年':'#ef4444'};
 
-  var CAP_YEARS = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年
-1-3月'];
+  var CAP_YEARS = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年1-3月'];
   var CAP = {
     '1Q': [80.7,78.3,56.9,78.5,72.1,72.0,64.9,71.9,70.3],
     '2Q': [81.4,76.2,74.6,74.2,69.1,73.3,73.0,71.3,null],
@@ -14663,8 +14652,7 @@ window.addEventListener('resize', function(){
   };
   var CAP_COLORS = {'1Q':'#3b82f6','2Q':'#10b981','3Q':'#f59e0b','4Q':'#8b5cf6'};
 
-  var RE_YEARS = ['2017年','2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年
-1-3月'];
+  var RE_YEARS = ['2017年','2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年1-3月'];
   var RE = {
     area:   [16.9,17.2,17.2,17.6,17.9,13.6,11.2,9.7,8.8,2.0],
     areaYoy:[8,1,0,3,2,-24,-9,-13,-9,-10],

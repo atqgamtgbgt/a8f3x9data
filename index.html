@@ -10450,14 +10450,16 @@ function showProvDetail(ja) {
           ${p.yoy26!=null?'<span style="font-size:10px;color:'+(p.yoy26<0?'#ef5350':'#66bb6a')+'"> ('+(p.yoy26>0?'+':'')+p.yoy26+'%)</span>':''}
         </div>
       </div></div>`:''}
-    <div id="cp-nev" style="height:175px;margin-bottom:6px"></div>
+    <div id="cp-nev" style="height:${(n && n.ice != null)?'175':'0'}px;margin-bottom:6px"></div>
+    ${!(n && n.ice != null)?`<div style="font-size:10px;color:#3a5070;text-align:center;padding:4px 0">動力構成データなし（PDF未記載）</div>`:''}
     <div id="cp-body" style="height:70px;margin-bottom:6px"></div>
     <div id="cp-brand" style="height:70px;margin-bottom:6px"></div>
-    <div id="cp-grade" style="height:${g?'110':'0'}px;margin-bottom:${g?'6':'0'}px"></div>
+    <div id="cp-grade" style="height:${g?'110':'0'}px;margin-bottom:6px"></div>
+    ${!g?`<div style="font-size:10px;color:#3a5070;text-align:center;padding:4px 0">車型級別データなし（寧夏・青海はPDF未記載）</div>`:''}
   `;
 
   // NEV動力構成（2026年2月）
-  if(n && n.nev) {
+  if(n && n.ice != null) {
     const c=echarts.init(document.getElementById('cp-nev'),'dark');
     c.setOption({backgroundColor:'transparent',
       title:{text:'動力構成 2026年2月単月',subtext:n.dnev!=null?'NEV浸透率 前年比: '+sign(n.dnev)+'pp':'',

@@ -10414,8 +10414,8 @@ function showProvDetail(ja) {
   if(!panel) return;
 
   // 右パネルHTML構築
-  const nevH    = (n && n.ice != null) ? 175 : 0;
-  const gradeH  = g ? 110 : 0;
+  const nevH    = (n && n.ice != null) ? 200 : 0;
+  const gradeH  = g ? 120 : 0;
 
   panel.innerHTML =
     '<div style="font-weight:700;font-size:17px;color:#7eb3ff;border-bottom:2px solid #2563eb;padding-bottom:8px;margin-bottom:10px">'
@@ -10436,9 +10436,9 @@ function showProvDetail(ja) {
         + '<div id="cpca-pnev" style="height:' + nevH + 'px"></div>'
       : '<div style="font-size:10px;color:#3a5070;padding:4px 0">動力構成データなし（PDF未記載）</div>')
     + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🚙 車身構造 2026年2月</div>'
-    + '<div id="cp-body" style="height:60px"></div>'
+    + '<div id="cp-body" style="height:80px"></div>'
     + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏷️ ブランド構成 2026年</div>'
-    + '<div id="cpca-pbrand" style="height:60px"></div>'
+    + '<div id="cpca-pbrand" style="height:80px"></div>'
     + (gradeH > 0
       ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車型級別 2026年2月</div>'
         + '<div id="cp-grade" style="height:' + gradeH + 'px"></div>'
@@ -10453,125 +10453,135 @@ function showProvDetail(ja) {
   }
 
   setTimeout(function() {
-    // ① 動力構成（円グラフ）
+    // ① 動力構成（円グラフ）凡例下部・ラベルは%数字のみ
     if (n && n.ice != null) {
       var c = makeChart('cpca-pnev');
       if (c) c.setOption({
         backgroundColor: 'transparent',
-        title: { text: 'NEV浸透率: ' + n.nev.toFixed(1) + '%',
-                 subtext: '前年差: ' + sign(n.dnev) + 'pp',
-                 textStyle: { fontSize: 12, color: '#7eb3ff' },
-                 subtextStyle: { fontSize: 10, color: n.dnev < 0 ? '#ef5350' : '#66bb6a' }, top: 0 },
-        tooltip: { formatter: function(p) { return p.name + ': ' + (p.value != null ? p.value.toFixed(1) : 'N/A') + '%'; } },
-        series: [{ type: 'pie', radius: ['30%', '58%'], center: ['50%', '65%'],
+        title: { text: 'NEV浸透率: ' + n.nev.toFixed(1) + '%  前年差: ' + sign(n.dnev) + 'pp',
+                 textStyle: { fontSize: 11, color: '#7eb3ff' }, top: 2, left: 4 },
+        legend: { bottom: 2, left: 'center', orient: 'horizontal',
+                  textStyle: { fontSize: 10, color: '#8ab0d0' },
+                  itemWidth: 10, itemHeight: 10, itemGap: 8,
+                  data: ['BEV 純電動','PHEV 插混','HEV 混動','ICE 燃油'] },
+        tooltip: { formatter: function(p) { return p.name + ': ' + p.value.toFixed(1) + '%'; } },
+        series: [{ type: 'pie', radius: ['32%', '60%'], center: ['50%', '52%'],
           data: [
             { name: 'BEV 純電動', value: n.bev,  itemStyle: { color: '#1565c0' } },
             { name: 'PHEV 插混',  value: n.phev, itemStyle: { color: '#42a5f5' } },
             { name: 'HEV 混動',   value: n.hev,  itemStyle: { color: '#80cbc4' } },
             { name: 'ICE 燃油',   value: n.ice,  itemStyle: { color: '#546e7a' } },
           ],
-          label: { formatter: '{b}\n{d}%', fontSize: 10, color: '#c0d8f0' },
-          labelLine: { length: 6, length2: 4 },
+          label: { show: true, position: 'inside',
+                   formatter: function(p) { return p.percent >= 8 ? p.percent.toFixed(0) + '%' : ''; },
+                   fontSize: 11, color: '#fff', fontWeight: 'bold' },
+          labelLine: { show: false },
         }]
       });
     }
 
-    // ② 車身構造（横棒）
+    // ② 車身構造（横棒）凡例右・ラベルは%数字のみ
     if (b) {
       var c = makeChart('cp-body');
       if (c) c.setOption({
         backgroundColor: 'transparent',
+        legend: { right: 4, top: 'middle', orient: 'vertical',
+                  textStyle: { fontSize: 10, color: '#8ab0d0' },
+                  itemWidth: 10, itemHeight: 10, itemGap: 6,
+                  data: ['SUV','セダン','MPV'] },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-          formatter: function(ps) {
-            return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>');
-          }
+          formatter: function(ps) { return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>'); }
         },
-        grid: { left: 8, right: 8, top: 4, bottom: 4, containLabel: false },
+        grid: { left: 8, right: 72, top: 8, bottom: 8, containLabel: false },
         xAxis: { type: 'value', max: 100, show: false },
         yAxis: { type: 'category', data: [''], show: false },
         series: [
-          { name: 'SUV',   type: 'bar', stack: 's', data: [b.SUV], barMaxWidth: 40,
+          { name: 'SUV',   type: 'bar', stack: 's', data: [b.SUV], barMaxWidth: 44,
             itemStyle: { color: '#ef6c00' },
-            label: { show: true, position: 'inside', color: '#fff', fontSize: 10, fontWeight: 'bold',
-              formatter: function(p) { return 'SUV ' + p.value.toFixed(0) + '%' + (b.dSUV != null ? ' (' + sign(b.dSUV) + 'pp)' : ''); } } },
-          { name: 'セダン', type: 'bar', stack: 's', data: [b.CAR], barMaxWidth: 40,
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 11, fontWeight: 'bold',
+              formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
+          { name: 'セダン', type: 'bar', stack: 's', data: [b.CAR], barMaxWidth: 44,
             itemStyle: { color: '#5e35b1' },
-            label: { show: true, position: 'inside', color: '#fff', fontSize: 10,
-              formatter: function(p) { return 'CAR ' + p.value.toFixed(0) + '%'; } } },
-          { name: 'MPV',   type: 'bar', stack: 's', data: [b.MPV], barMaxWidth: 40,
+            label: { show: b.CAR >= 10, position: 'inside', color: '#fff', fontSize: 11,
+              formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
+          { name: 'MPV',   type: 'bar', stack: 's', data: [b.MPV], barMaxWidth: 44,
             itemStyle: { color: '#00897b' },
-            label: { show: b.MPV >= 5, position: 'inside', color: '#fff', fontSize: 10,
-              formatter: function(p) { return 'MPV ' + p.value.toFixed(0) + '%'; } } },
+            label: { show: b.MPV >= 8, position: 'inside', color: '#fff', fontSize: 11,
+              formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
         ]
       });
     }
 
-    // ③ ブランド構成（横棒）
+    // ③ ブランド構成（横棒）凡例右・ラベルは%数字のみ
     if (br) {
       var c = makeChart('cpca-pbrand');
       if (c) c.setOption({
         backgroundColor: 'transparent',
+        legend: { right: 4, top: 'middle', orient: 'vertical',
+                  textStyle: { fontSize: 10, color: '#8ab0d0' },
+                  itemWidth: 10, itemHeight: 10, itemGap: 6,
+                  data: ['自主','合資','豪華'] },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-          formatter: function(ps) {
-            return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>');
-          }
+          formatter: function(ps) { return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>'); }
         },
-        grid: { left: 8, right: 8, top: 4, bottom: 4, containLabel: false },
+        grid: { left: 8, right: 72, top: 8, bottom: 8, containLabel: false },
         xAxis: { type: 'value', max: 100, show: false },
         yAxis: { type: 'category', data: [''], show: false },
         series: [
-          { name: '自主', type: 'bar', stack: 's', data: [br.dom], barMaxWidth: 40,
+          { name: '自主', type: 'bar', stack: 's', data: [br.dom], barMaxWidth: 44,
             itemStyle: { color: '#c62828' },
-            label: { show: true, position: 'inside', color: '#fff', fontSize: 10, fontWeight: 'bold',
-              formatter: function(p) { return '自主 ' + p.value.toFixed(0) + '%' + (br.ddom != null ? ' (' + sign(br.ddom) + 'pp)' : ''); } } },
-          { name: '合資', type: 'bar', stack: 's', data: [br.jv], barMaxWidth: 40,
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 11, fontWeight: 'bold',
+              formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
+          { name: '合資', type: 'bar', stack: 's', data: [br.jv], barMaxWidth: 44,
             itemStyle: { color: '#1565c0' },
-            label: { show: true, position: 'inside', color: '#fff', fontSize: 10,
-              formatter: function(p) { return '合資 ' + p.value.toFixed(0) + '%' + (br.djv != null ? ' (' + sign(br.djv) + 'pp)' : ''); } } },
-          { name: '豪華', type: 'bar', stack: 's', data: [br.lux], barMaxWidth: 40,
+            label: { show: br.jv >= 10, position: 'inside', color: '#fff', fontSize: 11,
+              formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
+          { name: '豪華', type: 'bar', stack: 's', data: [br.lux], barMaxWidth: 44,
             itemStyle: { color: '#f9a825' },
-            label: { show: br.lux >= 5, position: 'inside', color: '#fff', fontSize: 10,
-              formatter: function(p) { return '豪 ' + p.value.toFixed(0) + '%'; } } },
+            label: { show: br.lux >= 8, position: 'inside', color: '#fff', fontSize: 11,
+              formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
         ]
       });
     }
 
-    // ④ 車型級別（横棒）
+    // ④ 車型級別（横棒）凡例右・ラベルは%数字のみ
     if (g) {
       var c = makeChart('cp-grade');
       if (c) c.setOption({
         backgroundColor: 'transparent',
         title: { text: '経済型(a00+A0): ' + g.econ + '%  前年差: ' + sign(g.da00 + g.dA0) + 'pp',
-                 textStyle: { fontSize: 10, color: '#8ab0d0' }, top: 0 },
+                 textStyle: { fontSize: 10, color: '#8ab0d0' }, top: 2, left: 4 },
+        legend: { right: 4, top: 'middle', orient: 'vertical',
+                  textStyle: { fontSize: 10, color: '#8ab0d0' },
+                  itemWidth: 10, itemHeight: 10, itemGap: 4,
+                  data: ['a00','A0','A','B','C'] },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
-          formatter: function(ps) {
-            return ps.map(function(p) { return p.seriesName + ': ' + p.value + '%'; }).join('<br>');
-          }
+          formatter: function(ps) { return ps.map(function(p) { return p.seriesName + ': ' + p.value + '%'; }).join('<br>'); }
         },
-        grid: { left: 8, right: 8, top: 22, bottom: 4, containLabel: false },
+        grid: { left: 8, right: 72, top: 22, bottom: 8, containLabel: false },
         xAxis: { type: 'value', max: 100, show: false },
         yAxis: { type: 'category', data: [''], show: false },
         series: [
-          { name: 'a00', type: 'bar', stack: 's', data: [g.a00], barMaxWidth: 32,
+          { name: 'a00', type: 'bar', stack: 's', data: [g.a00], barMaxWidth: 36,
             itemStyle: { color: '#b71c1c' },
-            label: { show: g.a00 >= 3, position: 'inside', color: '#fff', fontSize: 9,
+            label: { show: g.a00 >= 3, position: 'inside', color: '#fff', fontSize: 10,
               formatter: function(p) { return p.value + '%'; } } },
-          { name: 'A0',  type: 'bar', stack: 's', data: [g.A0],  barMaxWidth: 32,
+          { name: 'A0',  type: 'bar', stack: 's', data: [g.A0],  barMaxWidth: 36,
             itemStyle: { color: '#ef5350' },
-            label: { show: g.A0 >= 5, position: 'inside', color: '#fff', fontSize: 9,
+            label: { show: g.A0 >= 5, position: 'inside', color: '#fff', fontSize: 10,
               formatter: function(p) { return p.value + '%'; } } },
-          { name: 'A',   type: 'bar', stack: 's', data: [g.A],   barMaxWidth: 32,
+          { name: 'A',   type: 'bar', stack: 's', data: [g.A],   barMaxWidth: 36,
             itemStyle: { color: '#42a5f5' },
-            label: { show: true, position: 'inside', color: '#fff', fontSize: 9,
-              formatter: function(p) { return 'A ' + p.value + '%'; } } },
-          { name: 'B',   type: 'bar', stack: 's', data: [g.B],   barMaxWidth: 32,
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return p.value + '%'; } } },
+          { name: 'B',   type: 'bar', stack: 's', data: [g.B],   barMaxWidth: 36,
             itemStyle: { color: '#1565c0' },
-            label: { show: true, position: 'inside', color: '#fff', fontSize: 9,
-              formatter: function(p) { return 'B ' + p.value + '%' + (g.dB != null ? '(' + sign(g.dB) + 'pp)' : ''); } } },
-          { name: 'C',   type: 'bar', stack: 's', data: [g.C],   barMaxWidth: 32,
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return p.value + '%'; } } },
+          { name: 'C',   type: 'bar', stack: 's', data: [g.C],   barMaxWidth: 36,
             itemStyle: { color: '#f9a825' },
-            label: { show: g.C >= 5, position: 'inside', color: '#fff', fontSize: 9,
-              formatter: function(p) { return 'C ' + p.value + '%'; } } },
+            label: { show: g.C >= 5, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return p.value + '%'; } } },
         ]
       });
     }

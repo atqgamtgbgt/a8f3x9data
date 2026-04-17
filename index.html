@@ -10206,10 +10206,7 @@ window.cpcaInitMap = function() {
             ['sales26','📦 26年1-2月 販売量（万台）'],['sales25','📦 2025年通年 販売量（万台）'],['sales24','📦 2024年通年 販売量（万台）'],
             ['yoy','📈 25年 前年比（対24年）'],['yoy26','📈 26年2月 前年比（単月）'],
             ['nev','⚡ NEV浸透率（2月）'],['dnev','⚡ NEV浸透率 前年差（pp）'],
-            ['bev','🔋 純電動(BEV)比率'],['phev','🔌 插混(PHEV)比率'],['ice','⛽ 燃油車(ICE)比率'],
-            ['suv','🚙 SUV比率（2月）'],['dsuv','🚙 SUV比率 前年差（pp）'],
-            ['dom','🏷️ 自主ブランド比率'],['ddom','🏷️ 自主 前年差（pp）'],['lux','💎 豪華ブランド比率'],
-            ['cgrade','🏆 Cクラス比率（2月）'],['bgrade','🅱️ Bクラス比率（2月）'],['econ','📉 経済型車份額（2月）'],
+            ['dom','🏷️ 自主ブランド比率'],['econ','📉 経済型車份額（2月）'],
           ].map(([m,lbl],i)=>`<button onclick="cpcaMetric('${m}',this)" style="font-size:11px;padding:5px 8px;border-radius:5px;cursor:pointer;text-align:left;border:${i===0?'none':'1px solid #2a3f60'};background:${i===0?'#2563eb':'transparent'};color:${i===0?'#fff':'#8ab0d0'}">${lbl}</button>`).join('')}
         </div>
         <div id="cpca-vmap-legend" style="margin-top:4px"></div>
@@ -10454,9 +10451,9 @@ function showProvDetail(ja) {
         </div>
       </div></div>`:''}
     <div id="cp-nev" style="height:175px;margin-bottom:6px"></div>
-    <div id="cp-body" style="height:125px;margin-bottom:6px"></div>
-    <div id="cp-brand" style="height:125px;margin-bottom:6px"></div>
-    <div id="cp-grade" style="height:${g?'135':'0'}px;margin-bottom:${g?'6':'0'}px"></div>
+    <div id="cp-body" style="height:70px;margin-bottom:6px"></div>
+    <div id="cp-brand" style="height:70px;margin-bottom:6px"></div>
+    <div id="cp-grade" style="height:${g?'110':'0'}px;margin-bottom:${g?'6':'0'}px"></div>
   `;
 
   // NEV動力構成（2026年2月）
@@ -10481,19 +10478,19 @@ function showProvDetail(ja) {
   if(b){
     const c=echarts.init(document.getElementById('cp-body'),'dark');
     c.setOption({backgroundColor:'transparent',
-      title:{text:'車身構造 2026年2月単月',textStyle:{fontSize:11,color:'#7eb3ff'},top:0},
-      legend:{data:['SUV','セダン','MPV'],bottom:0,textStyle:{fontSize:10,color:'#8ab0d0'}},
+      title:{text:'車身構造 2026年2月',textStyle:{fontSize:11,color:'#7eb3ff'},top:0},
+      legend:{show:false},
       tooltip: unifiedStackTooltip({unit:'%'}),
-      grid:{left:10,right:65,top:28,bottom:32},
-      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
-      yAxis:{type:'category',data:['構成'],axisLabel:{show:false}},
+      grid:{left:10,right:10,top:26,bottom:14},
+      xAxis:{type:'value',max:100,axisLabel:{show:false},splitLine:{show:false},axisTick:{show:false},axisLine:{show:false}},
+      yAxis:{type:'category',data:[''],axisLabel:{show:false},axisLine:{show:false},axisTick:{show:false}},
       series:[
-        {name:'SUV',type:'bar',stack:'s',data:[b.SUV],itemStyle:{color:'#ef6c00'},
-          label:{show:true,formatter:p=>'SUV '+p.value.toFixed(0)+'%'+(b.dSUV!=null?' ('+sign(b.dSUV)+'pp)':''),fontSize:10,color:'#fff'}},
-        {name:'セダン',type:'bar',stack:'s',data:[b.CAR],itemStyle:{color:'#5e35b1'},
-          label:{show:true,formatter:p=>p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
-        {name:'MPV',type:'bar',stack:'s',data:[b.MPV],itemStyle:{color:'#00897b'},
-          label:{show:true,formatter:p=>p.value>=5?p.value.toFixed(0)+'%':'',fontSize:10,color:'#fff'}},
+        {name:'SUV',type:'bar',stack:'s',data:[b.SUV],itemStyle:{color:'#ef6c00'},barMaxWidth:36,
+          label:{show:true,position:'inside',formatter:p=>'SUV '+p.value.toFixed(0)+'%'+(b.dSUV!=null?' ('+sign(b.dSUV)+'pp)':''),fontSize:10,color:'#fff',fontWeight:'bold'}},
+        {name:'セダン',type:'bar',stack:'s',data:[b.CAR],itemStyle:{color:'#5e35b1'},barMaxWidth:36,
+          label:{show:true,position:'inside',formatter:p=>'CAR '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff',fontWeight:'bold'}},
+        {name:'MPV',type:'bar',stack:'s',data:[b.MPV],itemStyle:{color:'#00897b'},barMaxWidth:36,
+          label:{show:b.MPV>=5,position:'inside',formatter:p=>'MPV '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
       ]
     });
   }
@@ -10502,18 +10499,18 @@ function showProvDetail(ja) {
     const c=echarts.init(document.getElementById('cp-brand'),'dark');
     c.setOption({backgroundColor:'transparent',
       title:{text:'ブランド構成 2026年',textStyle:{fontSize:11,color:'#7eb3ff'},top:0},
-      legend:{data:['自主','合資','豪華'],bottom:0,textStyle:{fontSize:10,color:'#8ab0d0'}},
+      legend:{show:false},
       tooltip: unifiedStackTooltip({unit:'%'}),
-      grid:{left:10,right:65,top:28,bottom:32},
-      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
-      yAxis:{type:'category',data:['構成'],axisLabel:{show:false}},
+      grid:{left:10,right:10,top:26,bottom:14},
+      xAxis:{type:'value',max:100,axisLabel:{show:false},splitLine:{show:false},axisTick:{show:false},axisLine:{show:false}},
+      yAxis:{type:'category',data:[''],axisLabel:{show:false},axisLine:{show:false},axisTick:{show:false}},
       series:[
-        {name:'自主',type:'bar',stack:'s',data:[br.dom],itemStyle:{color:'#c62828'},
-          label:{show:true,formatter:p=>'自主 '+p.value.toFixed(0)+'%'+(br.ddom!=null?' ('+sign(br.ddom)+'pp)':''),fontSize:10,color:'#fff'}},
-        {name:'合資',type:'bar',stack:'s',data:[br.jv], itemStyle:{color:'#1565c0'},
-          label:{show:true,formatter:p=>'合資 '+p.value.toFixed(0)+'%'+(br.djv!=null?' ('+sign(br.djv)+'pp)':''),fontSize:10,color:'#fff'}},
-        {name:'豪華',type:'bar',stack:'s',data:[br.lux],itemStyle:{color:'#f9a825'},
-          label:{show:true,formatter:p=>p.value>=6?'豪華 '+p.value.toFixed(0)+'%':'',fontSize:10,color:'#fff'}},
+        {name:'自主',type:'bar',stack:'s',data:[br.dom],itemStyle:{color:'#c62828'},barMaxWidth:36,
+          label:{show:true,position:'inside',formatter:p=>'自主 '+p.value.toFixed(0)+'%'+(br.ddom!=null?' ('+sign(br.ddom)+'pp)':''),fontSize:10,color:'#fff',fontWeight:'bold'}},
+        {name:'合資',type:'bar',stack:'s',data:[br.jv], itemStyle:{color:'#1565c0'},barMaxWidth:36,
+          label:{show:true,position:'inside',formatter:p=>'合資 '+p.value.toFixed(0)+'%'+(br.djv!=null?' ('+sign(br.djv)+'pp)':''),fontSize:10,color:'#fff',fontWeight:'bold'}},
+        {name:'豪華',type:'bar',stack:'s',data:[br.lux],itemStyle:{color:'#f9a825'},barMaxWidth:36,
+          label:{show:br.lux>=5,position:'inside',formatter:p=>'豪華 '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
       ]
     });
   }
@@ -10523,9 +10520,9 @@ function showProvDetail(ja) {
     c.setOption({backgroundColor:'transparent',
       title:{text:'車型級別 2026年2月',subtext:'経済型(a00+A0): '+g.econ+'%  前年差: '+sign(g.da00+g.dA0)+'pp',
              textStyle:{fontSize:11,color:'#7eb3ff'},subtextStyle:{fontSize:10,color:'#8ab0d0'},top:0},
-      legend:{data:['a00','A0','A','B','C'],bottom:0,textStyle:{fontSize:10,color:'#8ab0d0'}},
+      legend:{show:false},
       tooltip: unifiedStackTooltip({unit:'%'}),
-      grid:{left:10,right:10,top:44,bottom:28},
+      grid:{left:10,right:10,top:44,bottom:10},
       xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
       yAxis:{type:'category',data:['構成'],axisLabel:{show:false}},
       series:[

@@ -10408,119 +10408,174 @@ function showProvDetail(ja) {
   const br = CPCA.brand[ja];
   const g  = CPCA.grade ? CPCA.grade[ja] : null;
   const reg= CPCA.regionOf[ja]||'';
+  const sign = v => (v == null) ? 'N/A' : (v > 0 ? '+' : '') + v.toFixed(1);
 
-  // 右パネルにチャート（全情報を右に集約）
   const panel = document.getElementById('cpca-detail-panel');
   if(!panel) return;
-  const sign = v => v == null ? 'N/A' : (v > 0 ? '+' : '') + v.toFixed(1);
-  panel.innerHTML = `
-    <div style="font-weight:700;font-size:17px;color:#7eb3ff;border-bottom:2px solid #2563eb;padding-bottom:8px;margin-bottom:10px">
-      ${ja} <span style="font-size:12px;color:#3a5a80;font-weight:400">${reg}</span>
-    </div>
-    ${p?`<div style="background:#1a2f50;border-radius:7px;padding:10px;margin-bottom:8px">
-      <div style="color:#5a8abc;font-size:11px;font-weight:700;margin-bottom:5px">📦 販売量（万台）</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px">
-        <div>2024年: <strong style="color:#fff">${p.y24}</strong>万台</div>
-        <div>2025年: <strong style="color:#7eb3ff">${p.y25}</strong>万台</div>
-        <div>25年前年比: <strong style="color:${p.yoy<0?'#ef5350':'#66bb6a'}">${p.yoy>0?'+':''}${p.yoy}%</strong></div>
-        <div>26年1-2月: <strong style="color:#ffcc02">${p.t26}</strong>万台
-          ${p.yoy26!=null?'<span style="font-size:10px;color:'+(p.yoy26<0?'#ef5350':'#66bb6a')+'"> ('+(p.yoy26>0?'+':'')+p.yoy26+'%)</span>':''}
-        </div>
-      </div></div>`:''}
-    <div id="cp-nev" style="height:${(n && n.ice != null)?'175':'0'}px;margin-bottom:6px"></div>
-    ${!(n && n.ice != null)?`<div style="font-size:10px;color:#3a5070;text-align:center;padding:4px 0">動力構成データなし（PDF未記載）</div>`:''}
-    <div id="cp-body" style="height:70px;margin-bottom:6px"></div>
-    <div id="cp-brand" style="height:70px;margin-bottom:6px"></div>
-    <div id="cp-grade" style="height:${g?'110':'0'}px;margin-bottom:6px"></div>
-    ${!g?`<div style="font-size:10px;color:#3a5070;text-align:center;padding:4px 0">車型級別データなし（寧夏・青海はPDF未記載）</div>`:''}
-  `;
 
-  // チャート初期化（DOM描画後に実行）
+  // 右パネルHTML構築
+  const nevH    = (n && n.ice != null) ? 175 : 0;
+  const gradeH  = g ? 110 : 0;
+
+  panel.innerHTML =
+    '<div style="font-weight:700;font-size:17px;color:#7eb3ff;border-bottom:2px solid #2563eb;padding-bottom:8px;margin-bottom:10px">'
+    + ja + ' <span style="font-size:12px;color:#3a5a80;font-weight:400">' + reg + '</span></div>'
+    + (p
+      ? '<div style="background:#1a2f50;border-radius:7px;padding:10px;margin-bottom:8px;font-size:11px">'
+        + '<div style="color:#5a8abc;font-weight:700;margin-bottom:5px">📦 販売量（万台）</div>'
+        + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">'
+        + '<div>2024年: <strong style="color:#fff">' + p.y24 + '</strong>万台</div>'
+        + '<div>2025年: <strong style="color:#7eb3ff">' + p.y25 + '</strong>万台</div>'
+        + '<div>25年前年比: <strong style="color:' + (p.yoy < 0 ? '#ef5350' : '#66bb6a') + '">' + (p.yoy > 0 ? '+' : '') + p.yoy + '%</strong></div>'
+        + '<div>26年1-2月: <strong style="color:#ffcc02">' + p.t26 + '</strong>万台'
+        + (p.yoy26 != null ? ' <span style="font-size:10px;color:' + (p.yoy26 < 0 ? '#ef5350' : '#66bb6a') + '">(' + (p.yoy26 > 0 ? '+' : '') + p.yoy26 + '%)</span>' : '')
+        + '</div></div></div>'
+      : '')
+    + (nevH > 0
+      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:6px 0 2px">⚡ 動力構成 2026年2月</div>'
+        + '<div id="cp-nev" style="height:' + nevH + 'px"></div>'
+      : '<div style="font-size:10px;color:#3a5070;padding:4px 0">動力構成データなし（PDF未記載）</div>')
+    + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🚙 車身構造 2026年2月</div>'
+    + '<div id="cp-body" style="height:60px"></div>'
+    + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏷️ ブランド構成 2026年</div>'
+    + '<div id="cp-brand" style="height:60px"></div>'
+    + (gradeH > 0
+      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車型級別 2026年2月</div>'
+        + '<div id="cp-grade" style="height:' + gradeH + 'px"></div>'
+      : '<div style="font-size:10px;color:#3a5070;padding:4px 0">車型級別データなし（寧夏・青海はPDF未記載）</div>');
+
+  // echarts 描画（DOM確定後）
+  function makeChart(id) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    try { echarts.getInstanceByDom(el).dispose(); } catch(e) {}
+    return echarts.init(el, 'dark');
+  }
+
   setTimeout(function() {
-  // NEV動力構成（2026年2月）
-  if(n && n.ice != null) {
-    const c=echarts.init(document.getElementById('cp-nev'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'動力構成 2026年2月単月',subtext:n.dnev!=null?'NEV浸透率 前年比: '+sign(n.dnev)+'pp':'',
-             textStyle:{fontSize:11,color:'#7eb3ff'},subtextStyle:{fontSize:10,color:n.dnev<0?'#ef5350':'#66bb6a'},top:0},
-      tooltip:{formatter:p=>`${p.name}: ${p.value!=null?p.value.toFixed(1):'N/A'}%`},
-      series:[{type:'pie',radius:['28%','55%'],center:['50%','62%'],
-        data:[
-          {name:'BEV 純電動', value:n.bev, itemStyle:{color:'#1565c0'}},
-          {name:'PHEV 插混',  value:n.phev,itemStyle:{color:'#42a5f5'}},
-          {name:'HEV 混動',   value:n.hev, itemStyle:{color:'#80cbc4'}},
-          {name:'ICE 燃油',   value:n.ice, itemStyle:{color:'#455a64'}},
-        ],
-        label:{formatter:'{b}: {d}%',fontSize:10,color:'#c0d8f0'},
-      }]
-    });
-  }
-  // 車身構造（2026年2月）
-  if(b){
-    const c=echarts.init(document.getElementById('cp-body'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'車身構造 2026年2月',textStyle:{fontSize:11,color:'#7eb3ff'},top:0},
-      legend:{show:false},
-      tooltip: unifiedStackTooltip({unit:'%'}),
-      grid:{left:10,right:10,top:26,bottom:14},
-      xAxis:{type:'value',max:100,axisLabel:{show:false},splitLine:{show:false},axisTick:{show:false},axisLine:{show:false}},
-      yAxis:{type:'category',data:[''],axisLabel:{show:false},axisLine:{show:false},axisTick:{show:false}},
-      series:[
-        {name:'SUV',type:'bar',stack:'s',data:[b.SUV],itemStyle:{color:'#ef6c00'},barMaxWidth:36,
-          label:{show:true,position:'inside',formatter:p=>'SUV '+p.value.toFixed(0)+'%'+(b.dSUV!=null?' ('+sign(b.dSUV)+'pp)':''),fontSize:10,color:'#fff',fontWeight:'bold'}},
-        {name:'セダン',type:'bar',stack:'s',data:[b.CAR],itemStyle:{color:'#5e35b1'},barMaxWidth:36,
-          label:{show:true,position:'inside',formatter:p=>'CAR '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff',fontWeight:'bold'}},
-        {name:'MPV',type:'bar',stack:'s',data:[b.MPV],itemStyle:{color:'#00897b'},barMaxWidth:36,
-          label:{show:b.MPV>=5,position:'inside',formatter:p=>'MPV '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
-      ]
-    });
-  }
-  // ブランド構成（2026年）
-  if(br){
-    const c=echarts.init(document.getElementById('cp-brand'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'ブランド構成 2026年',textStyle:{fontSize:11,color:'#7eb3ff'},top:0},
-      legend:{show:false},
-      tooltip: unifiedStackTooltip({unit:'%'}),
-      grid:{left:10,right:10,top:26,bottom:14},
-      xAxis:{type:'value',max:100,axisLabel:{show:false},splitLine:{show:false},axisTick:{show:false},axisLine:{show:false}},
-      yAxis:{type:'category',data:[''],axisLabel:{show:false},axisLine:{show:false},axisTick:{show:false}},
-      series:[
-        {name:'自主',type:'bar',stack:'s',data:[br.dom],itemStyle:{color:'#c62828'},barMaxWidth:36,
-          label:{show:true,position:'inside',formatter:p=>'自主 '+p.value.toFixed(0)+'%'+(br.ddom!=null?' ('+sign(br.ddom)+'pp)':''),fontSize:10,color:'#fff',fontWeight:'bold'}},
-        {name:'合資',type:'bar',stack:'s',data:[br.jv], itemStyle:{color:'#1565c0'},barMaxWidth:36,
-          label:{show:true,position:'inside',formatter:p=>'合資 '+p.value.toFixed(0)+'%'+(br.djv!=null?' ('+sign(br.djv)+'pp)':''),fontSize:10,color:'#fff',fontWeight:'bold'}},
-        {name:'豪華',type:'bar',stack:'s',data:[br.lux],itemStyle:{color:'#f9a825'},barMaxWidth:36,
-          label:{show:br.lux>=5,position:'inside',formatter:p=>'豪華 '+p.value.toFixed(0)+'%',fontSize:10,color:'#fff'}},
-      ]
-    });
-  }
-  // 車型級別構成（2026年2月）
-  if(g){
-    const c=echarts.init(document.getElementById('cp-grade'),'dark');
-    c.setOption({backgroundColor:'transparent',
-      title:{text:'車型級別 2026年2月',subtext:'経済型(a00+A0): '+g.econ+'%  前年差: '+sign(g.da00+g.dA0)+'pp',
-             textStyle:{fontSize:11,color:'#7eb3ff'},subtextStyle:{fontSize:10,color:'#8ab0d0'},top:0},
-      legend:{show:false},
-      tooltip: unifiedStackTooltip({unit:'%'}),
-      grid:{left:10,right:10,top:44,bottom:10},
-      xAxis:{type:'value',max:100,axisLabel:{fontSize:8,color:'#6a8aaa',formatter:v=>v+'%'},splitLine:{lineStyle:{color:'#1e3555'}}},
-      yAxis:{type:'category',data:['構成'],axisLabel:{show:false}},
-      series:[
-        {name:'a00',type:'bar',stack:'s',data:[g.a00],itemStyle:{color:'#b71c1c'},
-          label:{show:g.a00>=3,formatter:p=>p.value+'%',fontSize:10,color:'#fff'}},
-        {name:'A0', type:'bar',stack:'s',data:[g.A0], itemStyle:{color:'#ef5350'},
-          label:{show:g.A0>=5, formatter:p=>p.value+'%',fontSize:10,color:'#fff'}},
-        {name:'A',  type:'bar',stack:'s',data:[g.A],  itemStyle:{color:'#42a5f5'},
-          label:{show:true,formatter:p=>p.value+'%',fontSize:10,color:'#fff'}},
-        {name:'B',  type:'bar',stack:'s',data:[g.B],  itemStyle:{color:'#1565c0'},
-          label:{show:true,formatter:p=>p.value+'%'+(g.dB!=null?' ('+sign(g.dB)+'pp)':''),fontSize:10,color:'#fff'}},
-        {name:'C',  type:'bar',stack:'s',data:[g.C],  itemStyle:{color:'#f9a825'},
-          label:{show:g.C>=5,formatter:p=>p.value+'%',fontSize:10,color:'#fff'}},
-      ]
-    });
-  }
-  }, 50); // setTimeout end
+    // ① 動力構成（円グラフ）
+    if (n && n.ice != null) {
+      var c = makeChart('cp-nev');
+      if (c) c.setOption({
+        backgroundColor: 'transparent',
+        title: { text: 'NEV浸透率: ' + n.nev.toFixed(1) + '%',
+                 subtext: '前年差: ' + sign(n.dnev) + 'pp',
+                 textStyle: { fontSize: 12, color: '#7eb3ff' },
+                 subtextStyle: { fontSize: 10, color: n.dnev < 0 ? '#ef5350' : '#66bb6a' }, top: 0 },
+        tooltip: { formatter: function(p) { return p.name + ': ' + (p.value != null ? p.value.toFixed(1) : 'N/A') + '%'; } },
+        series: [{ type: 'pie', radius: ['30%', '58%'], center: ['50%', '65%'],
+          data: [
+            { name: 'BEV 純電動', value: n.bev,  itemStyle: { color: '#1565c0' } },
+            { name: 'PHEV 插混',  value: n.phev, itemStyle: { color: '#42a5f5' } },
+            { name: 'HEV 混動',   value: n.hev,  itemStyle: { color: '#80cbc4' } },
+            { name: 'ICE 燃油',   value: n.ice,  itemStyle: { color: '#546e7a' } },
+          ],
+          label: { formatter: '{b}\n{d}%', fontSize: 10, color: '#c0d8f0' },
+          labelLine: { length: 6, length2: 4 },
+        }]
+      });
+    }
+
+    // ② 車身構造（横棒）
+    if (b) {
+      var c = makeChart('cp-body');
+      if (c) c.setOption({
+        backgroundColor: 'transparent',
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
+          formatter: function(ps) {
+            return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>');
+          }
+        },
+        grid: { left: 8, right: 8, top: 4, bottom: 4, containLabel: false },
+        xAxis: { type: 'value', max: 100, show: false },
+        yAxis: { type: 'category', data: [''], show: false },
+        series: [
+          { name: 'SUV',   type: 'bar', stack: 's', data: [b.SUV], barMaxWidth: 40,
+            itemStyle: { color: '#ef6c00' },
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 10, fontWeight: 'bold',
+              formatter: function(p) { return 'SUV ' + p.value.toFixed(0) + '%' + (b.dSUV != null ? ' (' + sign(b.dSUV) + 'pp)' : ''); } } },
+          { name: 'セダン', type: 'bar', stack: 's', data: [b.CAR], barMaxWidth: 40,
+            itemStyle: { color: '#5e35b1' },
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return 'CAR ' + p.value.toFixed(0) + '%'; } } },
+          { name: 'MPV',   type: 'bar', stack: 's', data: [b.MPV], barMaxWidth: 40,
+            itemStyle: { color: '#00897b' },
+            label: { show: b.MPV >= 5, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return 'MPV ' + p.value.toFixed(0) + '%'; } } },
+        ]
+      });
+    }
+
+    // ③ ブランド構成（横棒）
+    if (br) {
+      var c = makeChart('cp-brand');
+      if (c) c.setOption({
+        backgroundColor: 'transparent',
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
+          formatter: function(ps) {
+            return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>');
+          }
+        },
+        grid: { left: 8, right: 8, top: 4, bottom: 4, containLabel: false },
+        xAxis: { type: 'value', max: 100, show: false },
+        yAxis: { type: 'category', data: [''], show: false },
+        series: [
+          { name: '自主', type: 'bar', stack: 's', data: [br.dom], barMaxWidth: 40,
+            itemStyle: { color: '#c62828' },
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 10, fontWeight: 'bold',
+              formatter: function(p) { return '自主 ' + p.value.toFixed(0) + '%' + (br.ddom != null ? ' (' + sign(br.ddom) + 'pp)' : ''); } } },
+          { name: '合資', type: 'bar', stack: 's', data: [br.jv], barMaxWidth: 40,
+            itemStyle: { color: '#1565c0' },
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return '合資 ' + p.value.toFixed(0) + '%' + (br.djv != null ? ' (' + sign(br.djv) + 'pp)' : ''); } } },
+          { name: '豪華', type: 'bar', stack: 's', data: [br.lux], barMaxWidth: 40,
+            itemStyle: { color: '#f9a825' },
+            label: { show: br.lux >= 5, position: 'inside', color: '#fff', fontSize: 10,
+              formatter: function(p) { return '豪 ' + p.value.toFixed(0) + '%'; } } },
+        ]
+      });
+    }
+
+    // ④ 車型級別（横棒）
+    if (g) {
+      var c = makeChart('cp-grade');
+      if (c) c.setOption({
+        backgroundColor: 'transparent',
+        title: { text: '経済型(a00+A0): ' + g.econ + '%  前年差: ' + sign(g.da00 + g.dA0) + 'pp',
+                 textStyle: { fontSize: 10, color: '#8ab0d0' }, top: 0 },
+        tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
+          formatter: function(ps) {
+            return ps.map(function(p) { return p.seriesName + ': ' + p.value + '%'; }).join('<br>');
+          }
+        },
+        grid: { left: 8, right: 8, top: 22, bottom: 4, containLabel: false },
+        xAxis: { type: 'value', max: 100, show: false },
+        yAxis: { type: 'category', data: [''], show: false },
+        series: [
+          { name: 'a00', type: 'bar', stack: 's', data: [g.a00], barMaxWidth: 32,
+            itemStyle: { color: '#b71c1c' },
+            label: { show: g.a00 >= 3, position: 'inside', color: '#fff', fontSize: 9,
+              formatter: function(p) { return p.value + '%'; } } },
+          { name: 'A0',  type: 'bar', stack: 's', data: [g.A0],  barMaxWidth: 32,
+            itemStyle: { color: '#ef5350' },
+            label: { show: g.A0 >= 5, position: 'inside', color: '#fff', fontSize: 9,
+              formatter: function(p) { return p.value + '%'; } } },
+          { name: 'A',   type: 'bar', stack: 's', data: [g.A],   barMaxWidth: 32,
+            itemStyle: { color: '#42a5f5' },
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 9,
+              formatter: function(p) { return 'A ' + p.value + '%'; } } },
+          { name: 'B',   type: 'bar', stack: 's', data: [g.B],   barMaxWidth: 32,
+            itemStyle: { color: '#1565c0' },
+            label: { show: true, position: 'inside', color: '#fff', fontSize: 9,
+              formatter: function(p) { return 'B ' + p.value + '%' + (g.dB != null ? '(' + sign(g.dB) + 'pp)' : ''); } } },
+          { name: 'C',   type: 'bar', stack: 's', data: [g.C],   barMaxWidth: 32,
+            itemStyle: { color: '#f9a825' },
+            label: { show: g.C >= 5, position: 'inside', color: '#fff', fontSize: 9,
+              formatter: function(p) { return 'C ' + p.value + '%'; } } },
+        ]
+      });
+    }
+  }, 80);
 }
 
 // ---- 大区域トレンドチャート ----

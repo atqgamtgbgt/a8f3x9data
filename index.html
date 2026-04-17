@@ -10433,12 +10433,12 @@ function showProvDetail(ja) {
       : '')
     + (nevH > 0
       ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:6px 0 2px">⚡ 動力構成 2026年2月</div>'
-        + '<div id="cp-nev" style="height:' + nevH + 'px"></div>'
+        + '<div id="cpca-pnev" style="height:' + nevH + 'px"></div>'
       : '<div style="font-size:10px;color:#3a5070;padding:4px 0">動力構成データなし（PDF未記載）</div>')
     + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🚙 車身構造 2026年2月</div>'
     + '<div id="cp-body" style="height:60px"></div>'
     + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏷️ ブランド構成 2026年</div>'
-    + '<div id="cp-brand" style="height:60px"></div>'
+    + '<div id="cpca-pbrand" style="height:60px"></div>'
     + (gradeH > 0
       ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車型級別 2026年2月</div>'
         + '<div id="cp-grade" style="height:' + gradeH + 'px"></div>'
@@ -10455,7 +10455,7 @@ function showProvDetail(ja) {
   setTimeout(function() {
     // ① 動力構成（円グラフ）
     if (n && n.ice != null) {
-      var c = makeChart('cp-nev');
+      var c = makeChart('cpca-pnev');
       if (c) c.setOption({
         backgroundColor: 'transparent',
         title: { text: 'NEV浸透率: ' + n.nev.toFixed(1) + '%',
@@ -10508,7 +10508,7 @@ function showProvDetail(ja) {
 
     // ③ ブランド構成（横棒）
     if (br) {
-      var c = makeChart('cp-brand');
+      var c = makeChart('cpca-pbrand');
       if (c) c.setOption({
         backgroundColor: 'transparent',
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },

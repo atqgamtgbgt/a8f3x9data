@@ -10463,14 +10463,14 @@ function showProvDetail(ja) {
         legend: { bottom: 2, left: 'center', orient: 'horizontal',
                   textStyle: { fontSize: 10, color: '#8ab0d0' },
                   itemWidth: 10, itemHeight: 10, itemGap: 8,
-                  data: ['BEV 純電動','PHEV 插混','HEV 混動','ICE 燃油'] },
+                  data: ['BEV','PHEV','HEV','ICE'] },
         tooltip: { formatter: function(p) { return p.name + ': ' + p.value.toFixed(1) + '%'; } },
         series: [{ type: 'pie', radius: ['32%', '60%'], center: ['50%', '52%'],
           data: [
-            { name: 'BEV 純電動', value: n.bev,  itemStyle: { color: '#1565c0' } },
-            { name: 'PHEV 插混',  value: n.phev, itemStyle: { color: '#42a5f5' } },
-            { name: 'HEV 混動',   value: n.hev,  itemStyle: { color: '#80cbc4' } },
-            { name: 'ICE 燃油',   value: n.ice,  itemStyle: { color: '#546e7a' } },
+            { name: 'BEV',  value: n.bev,  itemStyle: { color: '#1565c0' } },
+            { name: 'PHEV', value: n.phev, itemStyle: { color: '#42a5f5' } },
+            { name: 'HEV',  value: n.hev,  itemStyle: { color: '#80cbc4' } },
+            { name: 'ICE',  value: n.ice,  itemStyle: { color: '#546e7a' } },
           ],
           label: { show: true, position: 'inside',
                    formatter: function(p) { return p.percent >= 8 ? p.percent.toFixed(0) + '%' : ''; },
@@ -10549,8 +10549,7 @@ function showProvDetail(ja) {
       var c = makeChart('cp-grade');
       if (c) c.setOption({
         backgroundColor: 'transparent',
-        title: { text: '経済型(a00+A0): ' + g.econ + '%  前年差: ' + sign(g.da00 + g.dA0) + 'pp',
-                 textStyle: { fontSize: 10, color: '#8ab0d0' }, top: 2, left: 4 },
+        title: { show: false },
         legend: { right: 4, top: 'middle', orient: 'vertical',
                   textStyle: { fontSize: 10, color: '#8ab0d0' },
                   itemWidth: 10, itemHeight: 10, itemGap: 4,
@@ -10558,7 +10557,7 @@ function showProvDetail(ja) {
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
           formatter: function(ps) { return ps.map(function(p) { return p.seriesName + ': ' + p.value + '%'; }).join('<br>'); }
         },
-        grid: { left: 8, right: 72, top: 22, bottom: 8, containLabel: false },
+        grid: { left: 8, right: 72, top: 8,  bottom: 8, containLabel: false },
         xAxis: { type: 'value', max: 100, show: false },
         yAxis: { type: 'category', data: [''], show: false },
         series: [

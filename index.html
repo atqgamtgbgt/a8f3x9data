@@ -10436,7 +10436,6 @@ function showProvDetail(ja) {
   `;
 
   // 右パネルにチャート
-  const g  = CPCA.grade ? CPCA.grade[ja] : null;
   const panel = document.getElementById('cpca-detail-panel');
   if(!panel) return;
   const sign = v => v == null ? 'N/A' : (v > 0 ? '+' : '') + v.toFixed(1);

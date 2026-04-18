@@ -4215,8 +4215,15 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="inv-sentiment">
               <div class="chart-card">
                 <div class="chart-title">📊 乗聯会 翌月楽観度・当月満足度指数（%）</div>
-                <div class="chart-subtitle">楽観度（翌月予測）vs 満足度（当月評価）</div>
-                <div id="ec-inv-sentiment" class="echart-box" style="height:420px"></div>
+                <div class="chart-subtitle">メーカー内部スタッフによるPMI型アンケート　22.1〜26.4　出典：乗聯会（崔東樹）</div>
+                <div id="ec-inv-sentiment" class="echart-box" style="height:360px"></div>
+                <div style="margin-top:12px;padding:10px 14px;background:#f8f9fa;border-left:3px solid #fac858;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444;">
+                  <b>📖 指標の読み方</b><br>
+                  乗聯会がメーカー内部スタッフを対象に毎月実施するPMI型アンケート。<br>
+                  ・<b style="color:#5470c6">翌月楽観度</b>：月初に「来月の市場は良くなるか」を聞いた結果。数値が高いほど楽観的。<br>
+                  ・<b style="color:#e6a817">当月満足度</b>：翌月初に「先月の実績に満足できたか」を聞いた結果。実績との乖離がわかる。<br>
+                  例）2026年3月：楽観度<b>23%</b>（月初予測は悲観的）→ 満足度<b>35%</b>（ふたを開ければ予想より良かった）
+                </div>
               </div>
             </div>
 
@@ -4244,8 +4251,13 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="inv-days">
               <div class="chart-card">
                 <div class="chart-title">全国乗用車行業 在庫日数（未来3ヶ月換算）</div>
-                <div class="chart-subtitle">ブランド系別 23.3〜26.3　出典：乗聯会（崔東樹）　※総体のみ数値あり</div>
-                <div id="ec-inv-days" class="echart-box" style="height:420px"></div>
+                <div class="chart-subtitle">総体　23.3〜26.3　出典：乗聯会（崔東樹）</div>
+                <div id="ec-inv-days" class="echart-box" style="height:370px"></div>
+                <div style="margin-top:12px;padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444;">
+                  <b>📖 指標の読み方</b><br>
+                  月末在庫台数を<b>翌月〜3ヶ月後の小売販売予測</b>で割り、現在庫が何日分かを示す。「未来N+3」とは向こう3ヶ月の予測ベースという意味で、予測値が変わると日数も変動する。<br>
+                  参考：<b>米国は40〜50日</b>水準。中国で60日超は在庫過剰気味、70日超は重い状態。直近ピークは2025年10月の<b>77日</b>。
+                </div>
               </div>
             </div>
 
@@ -11329,14 +11341,14 @@ function renderInvSentiment() {
         return s;
       }
     },
-    legend: { data:['上月予測（楽観度%）','本月評価（満足度%）'], bottom:0 },
+    legend: { data:['翌月楽観度（%）','当月満足度（%）'], bottom:0 },
     grid: { left:60, right:20, top:40, bottom:60 },
     xAxis: { type:'category', data:INV.sentLabels, axisLabel:{rotate:45, fontSize:9} },
     yAxis: { type:'value', name:'%', min:0, max:110, axisLabel:{formatter:'{value}%'} },
     series: [
-      { name:'上月予測（楽観度%）', type:'line', smooth:true, symbol:'circle', symbolSize:5,
+      { name:'翌月楽観度（%）', type:'line', smooth:true, symbol:'circle', symbolSize:5,
         lineStyle:{color:'#5470c6',width:2}, itemStyle:{color:'#5470c6'}, data:INV.sentForecast, connectNulls:false },
-      { name:'本月評価（満足度%）', type:'line', smooth:true, symbol:'circle', symbolSize:5,
+      { name:'当月満足度（%）', type:'line', smooth:true, symbol:'circle', symbolSize:5,
         lineStyle:{color:'#fac858',width:2}, itemStyle:{color:'#fac858'}, data:INV.sentSatisfy, connectNulls:false }
     ]
   });
@@ -11407,6 +11419,16 @@ function renderInvDays() {
         label:{ show:true, position:'top', fontSize:10,
           formatter:function(p){ return p.value != null ? p.value : ''; },
           color:'#333'
+        },
+        markLine:{
+          silent:true,
+          symbol:['none','none'],
+          data:[
+            { yAxis:50, lineStyle:{color:'#91cc75',type:'dashed',width:1.5},
+              label:{formatter:'米国水準 50日', position:'insideEndTop', fontSize:10, color:'#91cc75'} },
+            { yAxis:70, lineStyle:{color:'#ee6666',type:'dashed',width:1.5},
+              label:{formatter:'警戒 70日', position:'insideEndTop', fontSize:10, color:'#ee6666'} }
+          ]
         }
       }
     ]

@@ -2611,6 +2611,11 @@ body.tray-open { padding-bottom: 105px; }
           <i class="fa-solid fa-ship me-1"></i>崔東樹<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
         </button>
       </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="energy-super-tab" data-bs-toggle="tab" data-bs-target="#energy-super-content" type="button" role="tab">
+          <i class="fa-solid fa-bolt me-1"></i>エネルギー別ランキング
+        </button>
+      </li>
     </ul>
 
     <!-- 大タブコンテンツ -->
@@ -4651,6 +4656,81 @@ body.tray-open { padding-bottom: 105px; }
         </div>
       </div><!-- end cds-super-content -->
 
+      <!-- ===== エネルギー別ランキング 大タブ ===== -->
+      <div class="tab-pane fade" id="energy-super-content" role="tabpanel" data-print-title="エネルギー別ランキング">
+        <!-- 小タブ -->
+        <ul class="nav nav-tabs nav-tabs-sub mt-3" id="energySubTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="energy-456-tab" data-bs-toggle="tab" data-bs-target="#energy-456-content" type="button" role="tab">
+              <i class="fa-solid fa-leaf me-1"></i>新エネルギー（総合）
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="energy-4-tab" data-bs-toggle="tab" data-bs-target="#energy-4-content" type="button" role="tab">
+              <i class="fa-solid fa-charging-station me-1"></i>BEV
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="energy-1-tab" data-bs-toggle="tab" data-bs-target="#energy-1-content" type="button" role="tab">
+              <i class="fa-solid fa-gas-pump me-1"></i>ガソリン車
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="energy-5-tab" data-bs-toggle="tab" data-bs-target="#energy-5-content" type="button" role="tab">
+              <i class="fa-solid fa-plug me-1"></i>PHEV
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="energy-6-tab" data-bs-toggle="tab" data-bs-target="#energy-6-content" type="button" role="tab">
+              <i class="fa-solid fa-rotate me-1"></i>レンジエクステンダー
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="energySubTabsContent">
+          <!-- 新エネルギー（総合）-->
+          <div class="tab-pane fade show active" id="energy-456-content" role="tabpanel">
+            <div class="table-responsive mt-3">
+              <table class="table table-hover align-middle car-table" id="energyTable456">
+                <tbody><tr><td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>読み込み中...</td></tr></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- BEV -->
+          <div class="tab-pane fade" id="energy-4-content" role="tabpanel">
+            <div class="table-responsive mt-3">
+              <table class="table table-hover align-middle car-table" id="energyTable4">
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- ガソリン車 -->
+          <div class="tab-pane fade" id="energy-1-content" role="tabpanel">
+            <div class="table-responsive mt-3">
+              <table class="table table-hover align-middle car-table" id="energyTable1">
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- PHEV -->
+          <div class="tab-pane fade" id="energy-5-content" role="tabpanel">
+            <div class="table-responsive mt-3">
+              <table class="table table-hover align-middle car-table" id="energyTable5">
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+          <!-- レンジエクステンダー -->
+          <div class="tab-pane fade" id="energy-6-content" role="tabpanel">
+            <div class="table-responsive mt-3">
+              <table class="table table-hover align-middle car-table" id="energyTable6">
+                <tbody></tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- end energySubTabsContent -->
+      </div><!-- end energy-super-content -->
+
     </div><!-- end mainTabsContent -->
   </div>
 
@@ -5891,6 +5971,100 @@ document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e
 });
 
 init();
+
+// ===== エネルギー別ランキング =====
+(function() {
+  const ENERGY_CSV = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-csvs/autohome_ranking_energy_with_maker_with_maker_ja.csv`;
+  const ENERGY_IMG_BASE = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-images/`;
+
+  // category_id → テーブルID
+  const ENERGY_TABLES = { '456': 'energyTable456', '4': 'energyTable4', '1': 'energyTable1', '5': 'energyTable5', '6': 'energyTable6' };
+
+  function energyImgTag(imageUrl, model) {
+    if (!imageUrl) return '';
+    // "public/autohome_images_energy/{cid}/{filename}" → RAW_BASE + energy-ranking-images/{cid}/{filename}
+    const m = imageUrl.match(/^public\/autohome_images_energy\/(\d+)\/(.+)$/);
+    if (!m) return '';
+    const src = `${ENERGY_IMG_BASE}${m[1]}/${m[2]}?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${src}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+
+  function renderEnergyTable(rows, tableId) {
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const globalName = r.global_name || r.name || '';
+      const originalName = r.name || '';
+      const displayName = (globalName && originalName && globalName !== originalName)
+        ? `<div class="vehicle-name-wrapper"><div class="vehicle-name-main">${globalName}</div><div class="vehicle-name-cn">${originalName}</div></div>`
+        : globalName;
+      const link = r.link || '';
+      const carId = link.match(/\/(\d+)\//)?.[1] || '';
+      const maker = r.manufacturer_ja || r.manufacturer || '';
+      const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + '台' : '';
+      const price = (r.price || '') + '元';
+      const priceJPY = convertToJPY(r.price || '');
+      const specBtn = carId
+        ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','autohome')">仕様表</button>`
+        : '';
+      const storyBtn = carId
+        ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','autohome')">口コミ</button>`
+        : '';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="rank-badge">${r.rank}</td>
+        <td class="diff-badge"></td>
+        <td>${energyImgTag(r.image_url, originalName)}</td>
+        <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
+        <td>${maker}</td>
+        <td style="white-space:nowrap;">${units}</td>
+        <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+        <td>${specBtn}${storyBtn}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function loadEnergyData() {
+    try {
+      const res = await fetch(ENERGY_CSV + `?v=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.statusText);
+      const text = await res.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+
+      // カテゴリ別に振り分け
+      const byCategory = {};
+      parsed.data.forEach(r => {
+        const cid = String(r.category_id);
+        if (!byCategory[cid]) byCategory[cid] = [];
+        byCategory[cid].push(r);
+      });
+
+      Object.entries(ENERGY_TABLES).forEach(([cid, tableId]) => {
+        const rows = byCategory[cid] || [];
+        renderEnergyTable(rows, tableId);
+      });
+
+      console.log(`✅ エネルギー別ランキング CSV 読み込み成功 (${parsed.data.length}件)`);
+    } catch (err) {
+      console.error('エネルギー別ランキング CSV 読み込みエラー: ' + err.message);
+      // エラー表示
+      Object.values(ENERGY_TABLES).forEach(tableId => {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
+      });
+    }
+  }
+
+  // エネルギータブが初めて表示されたときに読み込む
+  let energyLoaded = false;
+  document.getElementById('energy-super-tab').addEventListener('shown.bs.tab', function() {
+    if (!energyLoaded) {
+      energyLoaded = true;
+      loadEnergyData();
+    }
+  });
+})();
 
 // リサイズ時に線を再描画
 window.addEventListener('resize', () => {

@@ -4194,7 +4194,7 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🏭 総在庫（万台）とメーカー在庫率（%）</div>
+                    <div class="chart-title">🏭 厂家・渠道 在庫内訳（万台）とメーカー在庫率（%）</div>
                     <div class="chart-subtitle">棒グラフ＋折れ線の複合</div>
                     <div id="ec-inv-maker-ratio" class="echart-box" style="height:420px"></div>
                   </div>
@@ -11166,7 +11166,9 @@ INV.makerLabels = ['23.1','23.2','23.3','23.4','23.5','23.6','23.7','23.8','23.9
                    '25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12',
                    '26.1','26.2','26.3'];
 INV.makerTotal  = [333,341,361,325,339,343,348,348,359,368,392,381,337,321,333,338,329,344,333,315,302,297,305,299,308,335,350,345,332,329,316,328,341,379,365,357,333,333,345];
-INV.makerRatio  = [21.6,22.4,23.2,22.6,21.1,21.4,21.6,20.5,20.1,20.5,20.4,20.4,19.7,19.9,21.4,21.6,25.5,26.8,27.2,24.9,22.3,24.4,24.6,25.0,23.4,23.0,23.9,24.6,23.2,22.8,23.0,23.4,25.6,30.6,32.0,30.6,29.8,29.8,28.2];
+INV.makerRatio   = [21.6,22.4,23.2,24.2,22.6,21.1,21.6,21.6,20.5,20.1,21.4,20.5,21.6,20.4,19.7,20.4,19.9,25.5,26.8,28.5,27.2,24.9,25.6,22.3,24.4,23.4,24.6,25.6,25.0,23.0,23.6,23.9,24.6,23.2,23.2,30.6,32.0,29.8,28.2];
+INV.makerFactory = [72,76,84,79,77,72,75,75,74,74,84,78,73,65,66,69,65,88,89,90,82,74,82,68,73,72,82,90,86,76,78,76,81,79,88,112,114,99,97];
+INV.makerChannel = [261,265,277,246,262,271,273,273,285,294,308,303,264,256,267,269,264,256,244,225,220,223,238,237,226,236,253,260,259,256,251,240,247,262,291,253,243,234,248];
 
 // NEV専業在庫（21.9〜26.2）
 INV.nevLabels = ['21.9','21.10','21.11','21.12','22.1','22.2','22.3','22.4','22.5','22.6','22.7','22.8','22.9','22.10','22.11','22.12',
@@ -11290,20 +11292,49 @@ function renderInvCategory() {
 
 function renderInvMakerRatio() {
   var ec = invInitOrGet('ec-inv-maker-ratio'); if (!ec) return;
+  var tooltip_fn = function(params){
+    var s = '<b>' + params[0].axisValueLabel + '</b><br>';
+    var total = 0;
+    params.forEach(function(p){
+      if(p.seriesType==='bar') total += (p.value||0);
+    });
+    params.forEach(function(p){
+      if(p.value==null) return;
+      var unit = p.seriesType==='line' ? '%' : '万台';
+      s += p.marker + p.seriesName + ': <b>' + p.value + unit + '</b><br>';
+    });
+    if(params.some(function(p){return p.seriesType==='bar';}))
+      s += '<span style="color:#999">合計: ' + total + '万台</span>';
+    return s;
+  };
   ec.setOption({
-    tooltip: { trigger:'axis', axisPointer:{type:'cross'} },
-    legend: { data:['総在庫（万台）','メーカー在庫率（%）'], bottom:0 },
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'}, formatter: tooltip_fn },
+    legend: { data:['厂家在庫（万台）','渠道在庫（万台）','メーカー在庫率（%）'], bottom:0, type:'scroll' },
     grid: { left:65, right:65, top:40, bottom:60 },
     xAxis: { type:'category', data:INV.makerLabels, axisLabel:{rotate:45, fontSize:10} },
     yAxis: [
-      { type:'value', name:'万台', position:'left' },
-      { type:'value', name:'%', position:'right', axisLabel:{formatter:'{value}%'} }
+      { type:'value', name:'万台', position:'left', max:500 },
+      { type:'value', name:'%', position:'right', min:10, max:40, axisLabel:{formatter:'{value}%'} }
     ],
     series: [
-      { name:'総在庫（万台）', type:'bar', itemStyle:{color:'#91cc75', opacity:0.8}, data:INV.makerTotal },
-      { name:'メーカー在庫率（%）', type:'line',  yAxisIndex:1, smooth:true,
+      { name:'厂家在庫（万台）', type:'bar', stack:'s',
+        itemStyle:{color:'#5470c6'}, data:INV.makerFactory },
+      { name:'渠道在庫（万台）', type:'bar', stack:'s',
+        itemStyle:{color:'#fac858'}, data:INV.makerChannel,
+        label:{ show:true, position:'top', fontSize:10, color:'#333',
+          formatter:function(p){
+            var t = INV.makerTotal[p.dataIndex];
+            return t != null ? t : '';
+          }
+        }
+      },
+      { name:'メーカー在庫率（%）', type:'line', yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:5, lineStyle:{color:'#ee6666',width:2},
-        itemStyle:{color:'#ee6666'}, data:INV.makerRatio }
+        itemStyle:{color:'#ee6666'}, data:INV.makerRatio,
+        label:{ show:true, position:'top', fontSize:9, color:'#ee6666',
+          formatter:function(p){ return p.value != null ? p.value+'%' : ''; }
+        }
+      }
     ]
   });
 }

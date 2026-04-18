@@ -11304,12 +11304,12 @@ function renderInvMakerRatio() {
       s += p.marker + p.seriesName + ': <b>' + p.value + unit + '</b><br>';
     });
     if(params.some(function(p){return p.seriesType==='bar';}))
-      s += '<span style="color:#999">合計: ' + total + '万台</span>';
+      s += '<span style="color:#999">総在庫: ' + total + '万台</span>';
     return s;
   };
   ec.setOption({
     tooltip: { trigger:'axis', axisPointer:{type:'shadow'}, formatter: tooltip_fn },
-    legend: { data:['厂家在庫（万台）','渠道在庫（万台）','メーカー在庫率（%）'], bottom:0, type:'scroll' },
+    legend: { data:['メーカー在庫（万台）','ディーラー在庫（万台）','メーカー在庫率（%）'], bottom:0, type:'scroll' },
     grid: { left:65, right:65, top:40, bottom:60 },
     xAxis: { type:'category', data:INV.makerLabels, axisLabel:{rotate:45, fontSize:10} },
     yAxis: [
@@ -11317,24 +11317,13 @@ function renderInvMakerRatio() {
       { type:'value', name:'%', position:'right', min:10, max:40, axisLabel:{formatter:'{value}%'} }
     ],
     series: [
-      { name:'厂家在庫（万台）', type:'bar', stack:'s',
+      { name:'メーカー在庫（万台）', type:'bar', stack:'s',
         itemStyle:{color:'#5470c6'}, data:INV.makerFactory },
-      { name:'渠道在庫（万台）', type:'bar', stack:'s',
-        itemStyle:{color:'#fac858'}, data:INV.makerChannel,
-        label:{ show:true, position:'top', fontSize:10, color:'#333',
-          formatter:function(p){
-            var t = INV.makerTotal[p.dataIndex];
-            return t != null ? t : '';
-          }
-        }
-      },
+      { name:'ディーラー在庫（万台）', type:'bar', stack:'s',
+        itemStyle:{color:'#fac858'}, data:INV.makerChannel },
       { name:'メーカー在庫率（%）', type:'line', yAxisIndex:1, smooth:true,
         symbol:'circle', symbolSize:5, lineStyle:{color:'#ee6666',width:2},
-        itemStyle:{color:'#ee6666'}, data:INV.makerRatio,
-        label:{ show:true, position:'top', fontSize:9, color:'#ee6666',
-          formatter:function(p){ return p.value != null ? p.value+'%' : ''; }
-        }
-      }
+        itemStyle:{color:'#ee6666'}, data:INV.makerRatio }
     ]
   });
 }

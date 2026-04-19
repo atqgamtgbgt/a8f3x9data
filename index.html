@@ -212,24 +212,18 @@
         var patched = {};
         Object.keys(s).forEach(function(k) { patched[k] = s[k]; });
 
-        // stackデータゼロ化はbar系列のみ（line系列は巻き込まない）
-        if (hasStack && !isLine) {
-          patched.data = isHov ? s.data : (s.data || []).map(function() { return 0; });
-        } else {
-          patched.data = s.data;
-        }
+        // dataは触らない（mergeモードではdata書き換えが混乱を招く）
+        patched.data = s.data;
 
         // emphasis無効化
         patched.emphasis = { disabled: true };
 
-        // opacity: line系列はlineStyle.opacityで制御、bar系列はitemStyle.opacityで制御
+        // opacity で表示/非表示を制御（mergeモード対応）
         if (isLine) {
-          patched.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: isHov ? 1 : 0.15 });
-          patched.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.15 });
+          patched.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: isHov ? 1 : 0.08 });
+          patched.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.08 });
         } else {
-          patched.itemStyle = hasStack
-            ? (s.itemStyle || {})
-            : Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : 0.2 });
+          patched.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: isHov ? 1 : (hasStack ? 0.06 : 0.08) });
         }
 
         // ラベル表示（ホバー中の系列のみ）— ハイブリッド方式

@@ -281,7 +281,8 @@
           }
           var plotWidth = instance.getWidth() - gridL - gridR;
           var totalLabelW = n * estCharW;
-          var isCrowded = totalLabelW > plotWidth;
+          // 横棒グラフは行が縦に並ぶため「横方向ぎちぎち」は発生しない → 常に全表示
+          var isCrowded = isHorizontal ? false : (totalLabelW > plotWidth);
 
           if (!isCrowded) {
             // ── 余裕がある → 従来通り全ラベル表示 ──
@@ -9572,11 +9573,11 @@ var WS = {
     '現代起亜':       [8.2,7.3,7.5,7.7,7.9,8.2,8.0,7.6,7.5,7.4,7.7],
     'Stellantis':    [8.4,7.7,8.8,8.7,7.9,7.8,7.1,6.7,6.0,5.5,6.2],
     'ルノー日産':     [9.0,9.3,9.2,9.0,8.2,7.6,6.5,5.9,5.7,5.4,5.5],
-    'ジーリー Geely':       [1.5,2.0,2.3,2.4,2.7,2.7,2.9,3.1,3.8,4.6,4.8],
+    '吉利 Geely':       [1.5,2.0,2.3,2.4,2.7,2.7,2.9,3.1,3.8,4.6,4.8],
     '米国 GM':        [8.5,8.3,7.1,6.8,6.9,5.7,5.5,5.2,4.6,4.6,4.5],
     '日本 スズキ':    [3.0,3.2,3.5,3.2,3.0,3.3,3.6,3.3,3.4,3.3,4.1],
     '米国 フォード':  [6.9,6.6,6.0,5.7,5.4,4.9,4.7,4.5,4.5,4.4,4.1],
-    'チェリー Chery':       [0.8,0.7,0.8,0.8,0.9,1.3,1.7,2.6,3.5,3.7,3.9],
+    '奇瑞 Chery':       [0.8,0.7,0.8,0.8,0.9,1.3,1.7,2.6,3.5,3.7,3.9],
     'BYD':           [0.6,0.5,0.6,0.5,0.6,0.9,2.4,3.5,4.9,5.4,3.8],
     'SAIC':       [2.8,2.9,3.2,3.0,3.5,3.8,3.9,3.7,3.1,3.5,3.5],
     '日本 ホンダ':    [5.4,5.6,5.6,5.8,5.7,5.4,4.7,4.5,4.2,3.6,3.4],
@@ -9584,21 +9585,21 @@ var WS = {
     'ドイツ メルセデス':[2.8,2.9,3.0,3.2,3.2,2.9,3.0,2.9,2.8,2.5,2.3],
     'タタ Tata':       [1.1,1.1,1.3,1.1,1.0,1.2,1.6,1.4,1.4,1.3,1.8],
     'テスラ':         [0.1,0.1,0.2,0.3,0.6,1.3,1.9,2.4,2.2,1.9,1.7],
-    'グレートウォール GWM':       [1.2,1.2,1.1,1.2,1.5,1.7,1.5,1.7,1.8,1.8,1.7],
-    'チャンアン Changan':       [1.6,1.5,1.3,1.3,1.7,1.9,2.2,2.3,2.4,2.5,1.7],
+    '長城 GWM':       [1.2,1.2,1.1,1.2,1.5,1.7,1.5,1.7,1.8,1.8,1.7],
+    '長安 Changan':       [1.6,1.5,1.3,1.3,1.7,1.9,2.2,2.3,2.4,2.5,1.7],
     '日本 マツダ':    [1.6,1.6,1.7,1.6,1.6,1.5,1.3,1.4,1.3,1.3,1.4],
     'マヒンドラ':     [0.6,0.6,0.7,0.7,0.5,0.6,0.8,0.9,1.0,1.0,1.3],
     '北汽 BAIC':       [1.5,1.4,1.2,1.1,1.1,1.0,0.8,0.9,1.0,1.2,1.1],
-    'ドンフェン Dongfeng':       [1.3,1.3,1.1,1.1,1.3,1.3,1.1,0.8,0.9,1.0,1.0],
+    '東風 Dongfeng':       [1.3,1.3,1.1,1.1,1.3,1.3,1.1,0.8,0.9,1.0,1.0],
     'FAW（一汽）':       [0.5,0.6,0.6,0.7,1.0,1.0,0.7,0.8,0.9,1.0,0.8],
     '広汽 GAC':       [0.4,0.5,0.6,0.4,0.5,0.6,0.8,1.0,0.9,0.7,0.7],
     'JAC':       [0.8,0.6,0.5,0.5,0.6,0.6,0.6,0.6,0.6,0.6,0.6],
-    'リープモーター Leapmotor':       [0.0,0.0,0.0,0.0,0.0,0.1,0.1,0.2,0.3,0.7,0.5],
+    '零跑 Leapmotor':       [0.0,0.0,0.0,0.0,0.0,0.1,0.1,0.2,0.3,0.7,0.5],
     'CNHTC（中国重汽）':       [0.2,0.3,0.4,0.3,0.6,0.5,0.3,0.4,0.4,0.5,0.5]
   },
   // メーカー地域別シェア詳細
   makerRegion: {
-    names: ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','ジーリー Geely','米国 GM','日本 スズキ','米国 フォード','チェリー Chery','BYD','SAIC','日本 ホンダ','ドイツ BMW','ドイツ メルセデス','タタ Tata','テスラ','グレートウォール GWM','チャンアン Changan','日本 マツダ','マヒンドラ','北汽 BAIC','ドンフェン Dongfeng','FAW（一汽）','広汽 GAC','JAC','リープモーター Leapmotor','CNHTC（中国重汽）','日本 五十鈴','セレス Seres','伊朗霍徳罗','シャオミ Xiaomi'],
+    names: ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','吉利 Geely','米国 GM','日本 スズキ','米国 フォード','奇瑞 Chery','BYD','SAIC','日本 ホンダ','ドイツ BMW','ドイツ メルセデス','タタ Tata','テスラ','長城 GWM','長安 Changan','日本 マツダ','マヒンドラ','北汽 BAIC','東風 Dongfeng','FAW（一汽）','広汽 GAC','JAC','零跑 Leapmotor','CNHTC（中国重汽）','日本 五十鈴','賽力斯 Seres','伊朗霍徳罗','小米 Xiaomi'],
     share2026: {
       中国:      [4.6,7.4,1.5,0.2,1.6,13.0,2.1,0.0,1.1,8.7,9.6,9.0,1.1,2.0,1.3,0.0,3.1,3.9,4.7,0.3,0.0,3.2,3.1,2.5,2.1,1.3,1.4,1.7,0.0,1.4,0.0,1.4],
       北米洲:    [14.4,4.9,11.4,7.6,7.7,0.9,16.2,0.2,11.5,0.0,0.0,0.3,8.2,2.2,2.8,0.5,2.3,0.1,0.1,3.1,0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.0,0.1,0.0,0.0,0.0],
@@ -9853,8 +9854,8 @@ function wsDrawCountry(view) {
 
 // ⑤ メーカー世界シェア
 var WS_MAKER_GROUPS = {
-  top10:    ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','ジーリー Geely','米国 GM','日本 スズキ','米国 フォード','チェリー Chery'],
-  chinese:  ['ジーリー Geely','チェリー Chery','BYD','SAIC','グレートウォール GWM','チャンアン Changan','北汽 BAIC','ドンフェン Dongfeng','FAW（一汽）','広汽 GAC','JAC','CNHTC（中国重汽）'],
+  top10:    ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','吉利 Geely','米国 GM','日本 スズキ','米国 フォード','奇瑞 Chery'],
+  chinese:  ['吉利 Geely','奇瑞 Chery','BYD','SAIC','長城 GWM','長安 Changan','北汽 BAIC','東風 Dongfeng','FAW（一汽）','広汽 GAC','JAC','CNHTC（中国重汽）'],
   japanese: ['日本 トヨタ','日本 スズキ','日本 ホンダ','日本 マツダ'],
   european: ['ドイツ VW','Stellantis','ルノー日産','ドイツ BMW','ドイツ メルセデス'],
   american: ['米国 GM','米国 フォード','テスラ'],
@@ -9901,11 +9902,11 @@ function wsDrawMaker(filter) {
   }
   var SHORT = {
     '日本 トヨタ':'トヨタ','ドイツ VW':'VW','現代起亜':'現代起亜','Stellantis':'Stellantis',
-    'ルノー日産':'ルノー日産','ジーリー Geely':'吉利','米国 GM':'GM','日本 スズキ':'スズキ',
-    '米国 フォード':'フォード','チェリー Chery':'奇瑞','BYD':'BYD','SAIC':'上汽',
+    'ルノー日産':'ルノー日産','吉利 Geely':'吉利','米国 GM':'GM','日本 スズキ':'スズキ',
+    '米国 フォード':'フォード','奇瑞 Chery':'奇瑞','BYD':'BYD','SAIC':'上汽',
     '日本 ホンダ':'ホンダ','ドイツ BMW':'BMW','ドイツ メルセデス':'メルセデス',
-    'タタ Tata':'タタ','テスラ':'テスラ','グレートウォール GWM':'長城','チャンアン Changan':'長安',
-    '日本 マツダ':'マツダ','マヒンドラ':'マヒンドラ','北汽 BAIC':'北汽','ドンフェン Dongfeng':'東風',
+    'タタ Tata':'タタ','テスラ':'テスラ','長城 GWM':'長城','長安 Changan':'長安',
+    '日本 マツダ':'マツダ','マヒンドラ':'マヒンドラ','北汽 BAIC':'北汽','東風 Dongfeng':'東風',
     'FAW（一汽）':'一汽','広汽 GAC':'広汽','JAC':'江淮','CNHTC（中国重汽）':'CNHTC（中国重汽）'
   };
   var series = targets.map(function(name) {
@@ -9961,11 +9962,11 @@ var WS_MR_NAMES_JA = {
   '現代起亜':       '現代起亜（韓）',
   'Stellantis':    'Stellantis（伊/仏/米）',
   'ルノー日産':     'ルノー日産（仏/日）',
-  'ジーリー Geely':       'ジーリー Geely（中）',
+  '吉利 Geely':       '吉利 Geely（中）',
   '米国 GM':        'GM（米）',
   '日本 スズキ':    'スズキ（日）',
   '米国 フォード':  'フォード（米）',
-  'チェリー Chery':       'チェリー Chery（中）',
+  '奇瑞 Chery':       '奇瑞 Chery（中）',
   'BYD':           'BYD（中）',
   'SAIC':       'SAIC（中）',
   '日本 ホンダ':    'ホンダ（日）',
@@ -9973,21 +9974,21 @@ var WS_MR_NAMES_JA = {
   'ドイツ メルセデス':'メルセデス（独）',
   'タタ Tata':       'タタ Tata（印）',
   'テスラ':         'テスラ（米）',
-  'グレートウォール GWM':       'グレートウォール GWM（中）',
-  'チャンアン Changan':       'チャンアン Changan（中）',
+  '長城 GWM':       '長城 GWM（中）',
+  '長安 Changan':       '長安 Changan（中）',
   '日本 マツダ':    'マツダ（日）',
   'マヒンドラ':     'マヒンドラ（印）',
   '北汽 BAIC':       '北汽 BAIC（中）',
-  'ドンフェン Dongfeng':       'ドンフェン Dongfeng（中）',
+  '東風 Dongfeng':       '東風 Dongfeng（中）',
   'FAW（一汽）':       'FAW（一汽）（中）',
   '広汽 GAC':       '広汽 GAC（中）',
   'JAC':       'JAC（中）',
-  'リープモーター Leapmotor':       'リープモーター Leapmotor（中）',
+  '零跑 Leapmotor':       '零跑 Leapmotor（中）',
   'CNHTC（中国重汽）':       'CNHTC（中国重汽・中）',
   '日本 五十鈴':    'いすゞ（日）',
-  'セレス Seres':         'セレス Seres／AITO（中）',
+  '賽力斯 Seres':         '賽力斯 Seres／AITO（中）',
   '伊朗霍徳罗':     'IKCo（イラン）',
-  'シャオミ Xiaomi':       'シャオミ Xiaomi（中）'
+  '小米 Xiaomi':       '小米 Xiaomi（中）'
 };
 
 var WS_MR_GROUP = 'all';
@@ -9996,7 +9997,7 @@ var WS_MR_REGION = 'all';
 // 国系グループ定義（makerRegion.namesのインデックスに対応）
 var WS_MR_MAKER_GROUPS = {
   all:      null, // null = 全社
-  chinese:  ['ジーリー Geely','チェリー Chery','BYD','SAIC','グレートウォール GWM','チャンアン Changan','北汽 BAIC','ドンフェン Dongfeng','FAW（一汽）','広汽 GAC','JAC','リープモーター Leapmotor','CNHTC（中国重汽）','セレス Seres','シャオミ Xiaomi'],
+  chinese:  ['吉利 Geely','奇瑞 Chery','BYD','SAIC','長城 GWM','長安 Changan','北汽 BAIC','東風 Dongfeng','FAW（一汽）','広汽 GAC','JAC','零跑 Leapmotor','CNHTC（中国重汽）','賽力斯 Seres','小米 Xiaomi'],
   japanese: ['日本 トヨタ','日本 スズキ','日本 ホンダ','日本 マツダ','日本 五十鈴'],
   european: ['ドイツ VW','Stellantis','ルノー日産','ドイツ BMW','ドイツ メルセデス'],
   american: ['米国 GM','米国 フォード','テスラ'],
@@ -13336,63 +13337,63 @@ var JH_REGION = {
 
 // 画像8: メーカー別販売（台）
 var JH_MAKER = {
-  makers: ['チェリー Chery','BYD','SAIC','グレートウォール GWM','ジーリー Geely','チャンアン Changan','JAC','広汽 GAC','北汽 BAIC','リープモーター Leapmotor','ドンフェン Dongfeng','ハイマー Haima','シャオペン XPENG','FAW（一汽）','セレス Seres','CNHTC（中国重汽）','福汽 FAG','鑫源 SRM','キンロン Kinglong','リ・オート Li Auto','ユートン Yutong','AvtoVAZ','シャンチー重卡 SHACMAN','その他中国系','シャンチー SHACMAN','ネタ Neta','スカイワース Skyworth','ニオ NIO','サニー SANY'],
+  makers: ['奇瑞 Chery','BYD','SAIC','長城 GWM','吉利 Geely','長安 Changan','JAC','広汽 GAC','北汽 BAIC','零跑 Leapmotor','東風 Dongfeng','海馬 Haima','小鵬 XPENG','FAW（一汽）','賽力斯 Seres','CNHTC（中国重汽）','福汽 FAG','鑫源 SRM','金龍 Kinglong','理想 Li Auto','宇通 Yutong','AvtoVAZ','陝汽重卡 SHACMAN','その他中国系','陝汽 SHACMAN','哪吒 Neta','創維 Skyworth','蔚来 NIO','三一 SANY'],
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
   data: {
-    'チェリー Chery': [52811,133046,168172,444131,658646,848142,187888],
+    '奇瑞 Chery': [52811,133046,168172,444131,658646,848142,187888],
     'BYD':   [4510,9194,22034,111025,251290,614728,135147],
     'SAIC': [169658,325245,444938,610791,600206,651441,115732],
-    'グレートウォール GWM': [41168,117822,129961,269076,399107,426912,75590],
-    'ジーリー Geely': [22163,49603,95347,157005,268817,303595,54509],
-    'チャンアン Changan': [52333,61320,74507,101408,180273,183752,36352],
+    '長城 GWM': [41168,117822,129961,269076,399107,426912,75590],
+    '吉利 Geely': [22163,49603,95347,157005,268817,303595,54509],
+    '長安 Changan': [52333,61320,74507,101408,180273,183752,36352],
     'JAC': [16257,31848,41476,54835,95953,95276,22230],
     '広汽 GAC': [247,2804,2879,6931,32827,48420,17230],
     '北汽 BAIC': [10071,15116,18083,17562,43889,66580,15564],
-    'リープモーター Leapmotor': [null,null,58,1352,1827,36417,14267],
-    'ドンフェン Dongfeng': [9212,14176,19523,13562,40194,42887,9686],
-    'ハイマー Haima': [86,null,null,null,null,null,7132],
-    'シャオペン XPENG': [null,483,745,2071,13600,31412,6283],
+    '零跑 Leapmotor': [null,null,58,1352,1827,36417,14267],
+    '東風 Dongfeng': [9212,14176,19523,13562,40194,42887,9686],
+    '海馬 Haima': [86,null,null,null,null,null,7132],
+    '小鵬 XPENG': [null,483,745,2071,13600,31412,6283],
     'FAW（一汽）': [4979,5845,8511,15925,32043,31279,5289],
-    'セレス Seres':   [null,99,698,2300,7383,23196,3204],
+    '賽力斯 Seres':   [null,99,698,2300,7383,23196,3204],
     'CNHTC（中国重汽）': [473,612,782,1258,27112,14761,2619],
     '福汽 FAG': [166,3,3,5,111,4259,1653],
     '鑫源 SRM': [723,708,232,672,3701,8543,1638],
-    'キンロン Kinglong': [8689,7747,3995,3887,3958,8212,1420],
-    'リ・オート Li Auto': [null,null,null,null,23347,13107,1116],
-    'ユートン Yutong': [1096,229,394,1861,5010,4694,895],
+    '金龍 Kinglong': [8689,7747,3995,3887,3958,8212,1420],
+    '理想 Li Auto': [null,null,null,null,23347,13107,1116],
+    '宇通 Yutong': [1096,229,394,1861,5010,4694,895],
     'AvtoVAZ':  [null,null,null,null,null,5534,481],
-    'シャンチー重卡 SHACMAN': [133,100,118,179,641,2237,463],
+    '陝汽重卡 SHACMAN': [133,100,118,179,641,2237,463],
     'その他中国系': [54,582,2081,1959,3242,1110,418],
-    'シャンチー SHACMAN': [null,null,null,null,null,15545,331],
-    'ネタ Neta': [null,14,85,12973,9171,4115,279],
-    'スカイワース Skyworth': [null,14,748,3704,1285,2200,224],
-    'ニオ NIO': [null,201,1204,2371,1756,1860,204],
-    'サニー SANY': [6,39,54,27,2557,1471,189]
+    '陝汽 SHACMAN': [null,null,null,null,null,15545,331],
+    '哪吒 Neta': [null,14,85,12973,9171,4115,279],
+    '創維 Skyworth': [null,14,748,3704,1285,2200,224],
+    '蔚来 NIO': [null,201,1204,2371,1756,1860,204],
+    '三一 SANY': [6,39,54,27,2557,1471,189]
   }
 };
 
 // 画像9: NEVメーカー別販売（台）
 var JH_MAKER_NEV = {
-  makers: ['BYD','チェリー Chery','SAIC','ジーリー Geely','リープモーター Leapmotor','広汽 GAC','チャンアン Changan','シャオペン XPENG','グレートウォール GWM','ドンフェン Dongfeng','リ・オート Li Auto','セレス Seres','JAC','スカイワース Skyworth','ニオ NIO','ポリストーン Polestone','シャオミ Xiaomi','福汽 FAG','北汽 BAIC','JMC（江鈴）','FAW（一汽）','均瑶 Juneyao'],
+  makers: ['BYD','奇瑞 Chery','SAIC','吉利 Geely','零跑 Leapmotor','広汽 GAC','長安 Changan','小鵬 XPENG','長城 GWM','東風 Dongfeng','理想 Li Auto','賽力斯 Seres','JAC','創維 Skyworth','蔚来 NIO','極石 Polestone','小米 Xiaomi','福汽 FAG','北汽 BAIC','JMC（江鈴）','FAW（一汽）','均瑶 Juneyao'],
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
   data: {
     'BYD':   [381,1429,10772,111025,251290,614727,135147],
-    'チェリー Chery': [null,null,755,1066,10804,93685,44087],
+    '奇瑞 Chery': [null,null,755,1066,10804,93685,44087],
     'SAIC': [23061,44783,98682,171028,134373,202615,38195],
-    'ジーリー Geely': [9,6091,26442,30737,28711,50525,15832],
-    'リープモーター Leapmotor': [null,null,58,1352,1827,36417,14267],
+    '吉利 Geely': [9,6091,26442,30737,28711,50525,15832],
+    '零跑 Leapmotor': [null,null,58,1352,1827,36417,14267],
     '広汽 GAC': [null,null,null,88,5380,21247,12988],
-    'チャンアン Changan': [131,39,null,null,6802,20247,12180],
-    'シャオペン XPENG': [null,483,745,2071,13600,31412,6283],
-    'グレートウォール GWM': [2,null,4064,16959,19443,20364,6098],
-    'ドンフェン Dongfeng': [88,247,2294,2992,11875,18312,2959],
-    'リ・オート Li Auto': [null,null,null,null,23347,13107,1116],
-    'セレス Seres':   [null,99,698,1848,5707,8165,713],
+    '長安 Changan': [131,39,null,null,6802,20247,12180],
+    '小鵬 XPENG': [null,483,745,2071,13600,31412,6283],
+    '長城 GWM': [2,null,4064,16959,19443,20364,6098],
+    '東風 Dongfeng': [88,247,2294,2992,11875,18312,2959],
+    '理想 Li Auto': [null,null,null,null,23347,13107,1116],
+    '賽力斯 Seres':   [null,99,698,1848,5707,8165,713],
     'JAC': [51,648,2480,3777,5062,2819,349],
-    'スカイワース Skyworth': [null,14,748,3704,1285,2183,224],
-    'ニオ NIO': [null,201,1204,2371,1756,1860,204],
-    'ポリストーン Polestone': [null,null,null,null,419,812,172],
-    'シャオミ Xiaomi': [null,null,null,null,171,707,161],
+    '創維 Skyworth': [null,14,748,3704,1285,2183,224],
+    '蔚来 NIO': [null,201,1204,2371,1756,1860,204],
+    '極石 Polestone': [null,null,null,null,419,812,172],
+    '小米 Xiaomi': [null,null,null,null,171,707,161],
     '福汽 FAG': [null,null,null,4,null,185,86],
     '北汽 BAIC': [300,null,null,71,227,354,59],
     'JMC（江鈴）': [null,null,null,407,569,714,53],
@@ -13607,7 +13608,7 @@ var JH_COUNTRY_MAKER_NEV = {
 
 // 画像12: ロシア企業別データ
 var JH_RUSSIA = {
-  groups: ['チェリー Chery','グレートウォール GWM','ジーリー Geely','チャンアン Changan','JAC','ドンフェン Dongfeng','FAW（一汽）','CNHTC（中国重汽）','リ・オート Li Auto','広汽 GAC'],
+  groups: ['奇瑞 Chery','長城 GWM','吉利 Geely','長安 Changan','JAC','東風 Dongfeng','FAW（一汽）','CNHTC（中国重汽）','理想 Li Auto','広汽 GAC'],
   data26: [31335,23572,19643,4632,2636,3901,3189,887,1042,2182],
   data25: [245819,198205,177779,67835,26763,19632,19393,10061,13088,21330],
   growth_cum: [-5,-8,17,-52,-41,51,69,-63,-37,-11],  // %  (広汽は画像12で -11%)
@@ -13684,7 +13685,7 @@ var JH_COUNTRY_SHARE = {
 // 行: 地域、列: 主要グローバルメーカー
 var JH_WORLD_MAKER_REGION = {
   regions: ['大洋州','東南アジア','アフリカ','米加','欧州連合','露国中央アジア','日韓','アジアその他','中東','中国','中南米','世界総体'],
-  makers: ['トヨタ Toyota','フォルクスワーゲン VW','現代起亜 Hyundai-Kia','Stellantis','ルノー日産 Renault-Nissan','BYD','ジーリー Geely','GM','フォード Ford','チェリー Chery','ホンダ Honda','SAIC','スズキ Suzuki','BMW'],
+  makers: ['トヨタ Toyota','フォルクスワーゲン VW','現代起亜 Hyundai-Kia','Stellantis','ルノー日産 Renault-Nissan','BYD','吉利 Geely','GM','フォード Ford','奇瑞 Chery','ホンダ Honda','SAIC','スズキ Suzuki','BMW'],
   // 26年 シェア (%)
   share: [
     [17,  4, 14,  1,  3,  6,  2,  0,  8,  5,  2,  5,  1,  2], // 大洋州
@@ -13874,9 +13875,14 @@ function jhDrawMakerTotal() {
   var existing = echarts.getInstanceByDom(el);
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
+  // 最新年（26年1-2月）の値で降順ソート → 最多が上
+  var lastYi = JH_MAKER.years.length - 1;
+  var sortedMakers = JH_MAKER.makers.slice().sort(function(a, b){
+    return (JH_MAKER.data[a][lastYi]||0) - (JH_MAKER.data[b][lastYi]||0);
+  });
   var series = JH_MAKER.years.map(function(y, yi){
     return { name:y, type:'bar', barMaxWidth: getBarMaxWidth(18),
-      data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
+      data: sortedMakers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
   });
   ec.setOption({
     tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
@@ -13889,7 +13895,7 @@ function jhDrawMakerTotal() {
     legend:{ data:JH_MAKER.years, top:8, type:'scroll' },
     grid:{ left:90, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
-    yAxis:{ type:'category', data: JH_MAKER.makers },
+    yAxis:{ type:'category', data: sortedMakers },
     series: series
   });
 }
@@ -13902,9 +13908,14 @@ function jhDrawMakerNev() {
   var existing = echarts.getInstanceByDom(el);
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
+  // 最新年（26年1-2月）の値で降順ソート → 最多が上
+  var lastYi = JH_MAKER_NEV.years.length - 1;
+  var sortedMakers = JH_MAKER_NEV.makers.slice().sort(function(a, b){
+    return (JH_MAKER_NEV.data[a][lastYi]||0) - (JH_MAKER_NEV.data[b][lastYi]||0);
+  });
   var series = JH_MAKER_NEV.years.map(function(y, yi){
     return { name:y, type:'bar', barMaxWidth: getBarMaxWidth(18),
-      data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };
+      data: sortedMakers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };
   });
   ec.setOption({
     tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
@@ -13917,7 +13928,7 @@ function jhDrawMakerNev() {
     legend:{ data:JH_MAKER_NEV.years, top:8, type:'scroll' },
     grid:{ left:80, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
-    yAxis:{ type:'category', data: JH_MAKER_NEV.makers },
+    yAxis:{ type:'category', data: sortedMakers },
     series: series
   });
 }
@@ -13956,7 +13967,7 @@ function jhDrawCountryMaker() {
     tooltip: unifiedStackTooltip({unit:'台', digits:0, sort:'desc', hideZero:true}),
     legend:{ data: JH_COUNTRY_MAKER.makers, top:8, type:'scroll' },
     grid:{ left:100, right:30, top:55, bottom:20 },
-    xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
+    xAxis:{ type:'value', name:'台', nameTextStyle:{fontSize:1,color:'transparent'}, axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: sortedCountries },
     series: JH_COUNTRY_MAKER.makers.map(function(m, mi){
       return {
@@ -13979,7 +13990,7 @@ function jhDrawCountryMakerNev() {
     tooltip: unifiedStackTooltip({unit:'台', digits:0, sort:'desc', hideZero:true}),
     legend:{ data: JH_COUNTRY_MAKER_NEV.makers, top:8, type:'scroll' },
     grid:{ left:110, right:30, top:55, bottom:20 },
-    xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
+    xAxis:{ type:'value', name:'台', nameTextStyle:{fontSize:1,color:'transparent'}, axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: sortedCountries },
     series: JH_COUNTRY_MAKER_NEV.makers.map(function(m, mi){
       return {

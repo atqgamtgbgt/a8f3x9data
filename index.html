@@ -2627,9 +2627,6 @@ body.tray-open { padding-bottom: 105px; }
             <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">外資系ランキング</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="energy-tab" data-bs-toggle="tab" data-bs-target="#energy-content" type="button" role="tab"><i class="fa-solid fa-bolt me-1"></i>エネルギー別ランキング</button>
-          </li>
-          <li class="nav-item" role="presentation">
             <button class="nav-link" id="cnsuv-charts-tab" data-bs-toggle="tab" data-bs-target="#cnsuv-charts-content" type="button" role="tab"><i class="fa-solid fa-chart-bar me-1"></i>メーカー販売グラフ</button>
           </li>
           <li class="nav-item" role="presentation">
@@ -2654,56 +2651,6 @@ body.tray-open { padding-bottom: 105px; }
               </table>
             </div>
           </div>
-
-          <!-- エネルギー別ランキング タブ -->
-          <div class="tab-pane fade" id="energy-content" role="tabpanel">
-            <ul class="nav charts-pills mt-3 mb-2" id="energyPills" role="tablist">
-              <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="energy-456-tab" data-bs-toggle="pill" data-bs-target="#energy-456-pane" type="button" role="tab">🌿 新エネルギー（総合）</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="energy-4-tab" data-bs-toggle="pill" data-bs-target="#energy-4-pane" type="button" role="tab">⚡ BEV</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="energy-1-tab" data-bs-toggle="pill" data-bs-target="#energy-1-pane" type="button" role="tab">⛽ ガソリン車</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="energy-5-tab" data-bs-toggle="pill" data-bs-target="#energy-5-pane" type="button" role="tab">🔌 PHEV</button>
-              </li>
-              <li class="nav-item" role="presentation">
-                <button class="nav-link" id="energy-6-tab" data-bs-toggle="pill" data-bs-target="#energy-6-pane" type="button" role="tab">🔄 レンジエクステンダー</button>
-              </li>
-            </ul>
-            <div class="tab-content" id="energyPillsContent">
-              <div class="tab-pane fade show active" id="energy-456-pane" role="tabpanel">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle car-table" id="energyTable456">
-                    <tbody><tr><td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>読み込み中...</td></tr></tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="energy-4-pane" role="tabpanel">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle car-table" id="energyTable4"><tbody></tbody></table>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="energy-1-pane" role="tabpanel">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle car-table" id="energyTable1"><tbody></tbody></table>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="energy-5-pane" role="tabpanel">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle car-table" id="energyTable5"><tbody></tbody></table>
-                </div>
-              </div>
-              <div class="tab-pane fade" id="energy-6-pane" role="tabpanel">
-                <div class="table-responsive">
-                  <table class="table table-hover align-middle car-table" id="energyTable6"><tbody></tbody></table>
-                </div>
-              </div>
-            </div>
-          </div><!-- end energy-content -->
 
           <!-- メーカー販売グラフ タブ -->
 
@@ -5944,87 +5891,6 @@ document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e
 });
 
 init();
-
-// ===== エネルギー別ランキング =====
-(function() {
-  const ENERGY_CSV = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-csvs/autohome_ranking_energy_with_maker_with_maker_ja.csv`;
-  const ENERGY_IMG_BASE = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-images/`;
-  const ENERGY_TABLES = { '456': 'energyTable456', '4': 'energyTable4', '1': 'energyTable1', '5': 'energyTable5', '6': 'energyTable6' };
-
-  function energyImgTag(imageUrl, model) {
-    if (!imageUrl) return '';
-    const m = imageUrl.match(/^public\/autohome_images_energy\/(\d+)\/(.+)$/);
-    if (!m) return '';
-    const src = `${ENERGY_IMG_BASE}${m[1]}/${m[2]}?v=${Date.now()}`;
-    return `<img class="car-thumb" src="${src}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
-  }
-
-  function renderEnergyTable(rows, tableId) {
-    const tbody = document.querySelector(`#${tableId} tbody`);
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    rows.forEach(r => {
-      const globalName = r.global_name || r.name || '';
-      const originalName = r.name || '';
-      const displayName = (globalName && originalName && globalName !== originalName)
-        ? `<div class="vehicle-name-wrapper"><div class="vehicle-name-main">${globalName}</div><div class="vehicle-name-cn">${originalName}</div></div>`
-        : globalName;
-      const link = r.link || '';
-      const carId = link.match(/\/(\d+)\//)?.[1] || '';
-      const maker = r.manufacturer_ja || r.manufacturer || '';
-      const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + '台' : '';
-      const price = (r.price || '') + '元';
-      const priceJPY = convertToJPY(r.price || '');
-      const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','autohome')">仕様表</button>` : '';
-      const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','autohome')">口コミ</button>` : '';
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td class="rank-badge">${r.rank}</td>
-        <td class="diff-badge"></td>
-        <td>${energyImgTag(r.image_url, originalName)}</td>
-        <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
-        <td>${maker}</td>
-        <td style="white-space:nowrap;">${units}</td>
-        <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-        <td>${specBtn}${storyBtn}</td>`;
-      tbody.appendChild(tr);
-    });
-  }
-
-  async function loadEnergyData() {
-    try {
-      const res = await fetch(ENERGY_CSV + `?v=${Date.now()}`, { cache: 'no-store' });
-      if (!res.ok) throw new Error(res.statusText);
-      const text = await res.text();
-      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-      const byCategory = {};
-      parsed.data.forEach(r => {
-        const cid = String(r.category_id);
-        if (!byCategory[cid]) byCategory[cid] = [];
-        byCategory[cid].push(r);
-      });
-      Object.entries(ENERGY_TABLES).forEach(([cid, tableId]) => {
-        renderEnergyTable(byCategory[cid] || [], tableId);
-      });
-      console.log(`✅ エネルギー別ランキング CSV 読み込み成功 (${parsed.data.length}件)`);
-    } catch (err) {
-      console.error('エネルギー別ランキング CSV 読み込みエラー: ' + err.message);
-      Object.values(ENERGY_TABLES).forEach(tableId => {
-        const tbody = document.querySelector(`#${tableId} tbody`);
-        if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
-      });
-    }
-  }
-
-  // エネルギータブが初めて表示されたときに読み込む
-  let energyLoaded = false;
-  document.getElementById('energy-tab').addEventListener('shown.bs.tab', function() {
-    if (!energyLoaded) {
-      energyLoaded = true;
-      loadEnergyData();
-    }
-  });
-})();
 
 // リサイズ時に線を再描画
 window.addEventListener('resize', () => {
@@ -9536,6 +9402,11 @@ var WS = {
     years: ['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026年1-2月'],
     share: [30.7,30.0,28.7,32.4,32.5,33.5,33.8,34.2,35.4,29.7]
   },
+  // 世界販売前年比（画像2「世界増速」行）
+  worldGrowth: {
+    years: ['2017','2018','2019','2020','2021','2022','2023','2024','2025','2026年1-2月'],
+    rate:  [3, -1, -4, -13, 4, -1, 11, 3, 6, 0]
+  },
   monthly: {
     months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
     data: {
@@ -9608,11 +9479,11 @@ var WS = {
       南半球:    [12.7,12.1,9.3,15.8,7.1,0.7,6.5,2.2,4.3,3.6,3.0,1.6,2.1,1.1,2.0,0.2,0.5,2.4,0.5,2.1,0.3,0.6,0.2,0.1,0.0,0.4,0.0,0.1,1.3,0.2,0.0,0.0]
     },
     vs2019: {
-      中国:      [-0.9,-8.3,-2.4,-0.5,-3.6,6.9,-4.2,-0.1,0.2,6.0,7.8,-0.9,-5.1,-0.1,-1.0,-0.2,3.1,-0.2,0.3,-0.6,0.0,-0.5,-0.8,0.2,0.6,-0.2,1.4,0.6,0.0,1.4,0.0,null],
-      北米洲:    [1.3,0.3,3.3,-4.5,-0.8,0.3,0.1,0.1,-2.1,0.0,0.0,0.3,-0.8,0.1,-0.1,-0.1,1.4,0.0,0.1,1.2,0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.0,null],
-      欧州:      [1.9,1.0,-1.6,-3.7,-4.9,1.2,-0.1,-0.2,-2.2,2.7,1.5,1.7,-0.2,0.1,-1.2,-0.5,0.5,0.9,0.2,-0.3,0.0,0.1,0.2,0.1,0.1,0.2,0.5,0.0,0.0,0.0,0.0,null],
-      アジアその他:[-3.3,0.0,-0.5,0.8,-2.7,0.4,-1.8,0.2,-0.5,2.1,1.7,0.8,-3.2,0.1,-0.3,2.9,0.4,0.5,0.5,-1.0,4.0,0.1,0.0,0.0,0.4,0.2,0.0,0.0,0.0,0.0,1.7,null],
-      南半球:    [-1.3,-2.2,4.0,2.7,-4.5,0.6,-6.6,0.9,-2.8,3.9,3.7,1.3,-1.4,0.1,-0.8,-0.2,0.4,2.6,0.6,-0.5,0.0,0.8,0.3,0.1,0.1,0.3,0.1,0.1,0.3,-0.3,0.0,null]
+      中国:      [-0.9,-8.3,-2.4,-0.5,-3.6,6.9,-4.2,-0.1,0.2,6.0,7.8,-0.9,-5.1,-0.1,-1.0,-0.2,3.1,-0.2,0.3,-0.6,0.0,-0.5,-0.8,0.2,0.6,-0.2,1.4,0.6,0.0,1.4,0.0,1.4],
+      北米洲:    [1.3,0.3,3.3,-4.5,-0.8,0.3,0.1,0.1,-2.1,0.0,0.0,0.3,-0.8,0.1,-0.1,-0.1,1.4,0.0,0.1,1.2,0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.0,0.0,0.0,0.0,0.0],
+      欧州:      [1.9,1.0,-1.6,-3.7,-4.9,1.2,-0.1,-0.2,-2.2,2.7,1.5,1.7,-0.2,0.1,-1.2,-0.5,0.5,0.9,0.2,-0.3,0.0,0.1,0.2,0.1,0.1,0.2,0.5,0.0,0.0,0.0,0.0,0.0],
+      アジアその他:[-3.3,0.0,-0.5,0.8,-2.7,0.4,-1.8,0.2,-0.5,2.1,1.7,0.8,-3.2,0.1,-0.3,2.9,0.4,0.5,0.5,-1.0,4.0,0.1,0.0,0.0,0.4,0.2,0.0,0.0,0.0,0.0,1.7,0.0],
+      南半球:    [-1.3,-2.2,4.0,2.7,-4.5,0.6,-6.6,0.9,-2.8,3.9,3.7,1.3,-1.4,0.1,-0.8,-0.2,0.4,2.6,0.6,-0.5,0.0,0.8,0.3,0.1,0.1,0.3,0.1,0.1,0.3,-0.3,0.0,0.0]
     }
   }
 };
@@ -9687,20 +9558,79 @@ window.wsSetMakerRegionView = function(view, btn) {
 function wsDrawRegional(view) {
   var chart = wsEc('ec-ws-regional'); if (!chart) return;
   var regions = ['北米洲','欧州','南半球','アジアその他','中国'];
+  // 表示用の日本語ラベル（データキーは維持、凡例のみ日本語表記）
+  var DISPLAY = { '北米洲':'北米', '欧州':'欧州', '南半球':'南半球', 'アジアその他':'アジアその他', '中国':'中国' };
   var series = regions.map(function(r) {
     return {
-      name: r, type: 'bar', stack: 'total',
+      name: DISPLAY[r], type: 'bar', stack: 'total',
       data: view === 'volume' ? WS.regional[r] : WS.regionalShare[r],
       itemStyle: { color: WS_COLORS[r] },
       label: { show: false }
     };
   });
+  var legendData = regions.map(function(r){ return DISPLAY[r]; });
+
+  // 世界販売前年比ライン（画像2の「世界増速」行）を右軸で重ね表示（volume表示時のみ）
+  if (view === 'volume' && WS.worldGrowth) {
+    series.push({
+      name: '世界販売前年比', type: 'line', yAxisIndex: 1,
+      data: WS.worldGrowth.rate,
+      symbol: 'circle', symbolSize: 8,
+      lineStyle: { width: 2.5, color: '#e91e63' },
+      itemStyle: { color: '#e91e63' },
+      label: { show: true, formatter: '{c}%', position: 'top', fontSize: 11, color: '#c2185b', fontWeight: 'bold' },
+      z: 10
+    });
+    legendData.push('世界販売前年比');
+  }
+
+  var yAxis = [
+    { type: 'value', name: view==='volume'?'万台':'%', axisLabel: { formatter: view==='volume'?'{value}':'{value}%' } }
+  ];
+  if (view === 'volume') {
+    yAxis.push({
+      type: 'value', name: '前年比（%）', position: 'right',
+      min: -20, max: 20,
+      axisLabel: { formatter: '{value}%' },
+      splitLine: { show: false }
+    });
+  }
+
+  // バー系列は合計算出、ライン系列は別表示する独自ツールチップ
+  var unit = view==='volume'?'万台':'%';
+  var tooltipConf = {
+    trigger: 'axis', axisPointer: { type: 'shadow' },
+    backgroundColor: 'rgba(255,255,255,0.97)', borderColor: '#ddd', borderWidth: 1,
+    textStyle: { fontSize: 12 },
+    formatter: function(params){
+      if (!params || !params.length) return '';
+      var bars = params.filter(function(p){ return p.seriesType !== 'line' && p.value != null; });
+      var lines = params.filter(function(p){ return p.seriesType === 'line' && p.value != null; });
+      var axisLabel = params[0].axisValueLabel || params[0].axisValue || '';
+      var total = 0;
+      bars.forEach(function(p){ total += Number(p.value) || 0; });
+      var s = '<b>' + axisLabel + '</b><br/>';
+      if (bars.length > 1) {
+        s += '合計: <b>' + (Math.round(total*10)/10).toLocaleString() + '</b> ' + unit + '<br/>';
+      }
+      bars.forEach(function(p){
+        s += '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + p.color + ';margin-right:4px;vertical-align:middle"></span>';
+        s += p.seriesName + ': <b>' + p.value + '</b> ' + unit + '<br/>';
+      });
+      lines.forEach(function(p){
+        s += '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:' + p.color + ';margin-right:4px;vertical-align:middle"></span>';
+        s += p.seriesName + ': <b>' + p.value + '%</b><br/>';
+      });
+      return s;
+    }
+  };
+
   chart.setOption({
-    tooltip: unifiedStackTooltip({unit: view==='volume'?'万台':'%'}),
-    legend: { top: 0, data: regions },
-    grid: { top: 50, left: 60, right: 20, bottom: 60 },
+    tooltip: tooltipConf,
+    legend: { top: 0, data: legendData },
+    grid: { top: 50, left: 60, right: view==='volume'?60:20, bottom: 60 },
     xAxis: { type: 'category', data: WS.years, axisLabel: { rotate: 30 } },
-    yAxis: { type: 'value', name: view==='volume'?'万台':'%', axisLabel: { formatter: view==='volume'?'{value}':'{value}%' } },
+    yAxis: yAxis,
     series: series
   }, true);
 }

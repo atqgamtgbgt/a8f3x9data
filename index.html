@@ -9238,9 +9238,20 @@ function cdsShowPane(id) {
 
   // グラフ描画
   if (CDS_FNS[id]) CDS_FNS[id]();
-  setTimeout(() => {
-    Object.values(CDS_EC).forEach(c => { try { c && c.resize(); } catch(e){} });
-  }, 80);
+
+  // resizeは display:none→block のレイアウト確定後に実行する必要がある。
+  // 80ms固定だと別タブから戻った際などにペインがまだ非表示のままで
+  // EChartsがサイズ0を掴んでグラフが左端に潰れるバグが発生する。
+  // rAF×2（2フレーム後）＋念のため150ms遅延の二段階で確実に解消する。
+  function _cdsResizeAll() {
+    Object.values(CDS_EC).forEach(function(c) { try { c && c.resize(); } catch(e){} });
+  }
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      _cdsResizeAll();
+      setTimeout(_cdsResizeAll, 150);
+    });
+  });
 }
 
 // 比較ペインにグラフをクローン表示
@@ -9315,7 +9326,7 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-price').style.display       = (tab === 'price')       ? '' : 'none';
   document.getElementById('cds-sub-stats').style.display       = (tab === 'stats')       ? '' : 'none';
 
-  if (tab === 'zenntai') {
+  } else if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
     var contElZt = document.getElementById('cdsPillsContent');
     // display:none!important を強制上書き
@@ -9325,7 +9336,7 @@ function cdsSetMidTab(tab) {
     document.querySelectorAll('#cds-sub-zenntai .nav-link').forEach(function(b){
       b.classList.toggle('active', b.textContent.indexOf('月次4指標') >= 0);
     });
-    setTimeout(ztInitCharts, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ ztInitCharts(); setTimeout(ztInitCharts, 150); }); });
     // Excel未読込の場合もバックグラウンドで読み込む
     if (typeof CDS_LOADED !== 'undefined' && !CDS_LOADED && typeof loadCdsExcel === 'function') {
       loadCdsExcel();
@@ -9336,7 +9347,7 @@ function cdsSetMidTab(tab) {
     document.querySelectorAll('#cds-sub-jishuhaiex [data-cds-jh-target]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-jh-target') === '#' + jhTarget);
     });
-    setTimeout(function(){ jhRender(jhTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ jhRender(jhTarget); setTimeout(function(){ jhRender(jhTarget); }, 150); }); });
   } else if (tab === 'import') {
     var targetId = window.IMP_CURRENT_ID || 'imp-trend';
     // 1) cdsPills / cdsPillsContent を確実に表示（!important を setAttribute で上書き）
@@ -9379,48 +9390,48 @@ function cdsSetMidTab(tab) {
     document.querySelectorAll('#cds-sub-worldshare [data-cds-ws-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-ws-target') === '#' + wsTarget);
     });
-    setTimeout(function(){ wsRender(wsTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ wsRender(wsTarget); setTimeout(function(){ wsRender(wsTarget); }, 150); }); });
   } else if (tab === 'profit') {
     cdsShowPane('cds-profit-monthly');
     document.querySelectorAll('#cds-sub-profit [data-cds-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-target') === '#cds-profit-monthly');
     });
-    setTimeout(initProfitCharts, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ initProfitCharts(); setTimeout(initProfitCharts, 150); }); });
   } else if (tab === 'inventory') {
     var invTarget = window.INV_CURRENT_ID || 'inv-total';
     invShowPane(invTarget);
     document.querySelectorAll('#cds-sub-inventory [data-cds-inv-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-inv-target') === '#' + invTarget);
     });
-    setTimeout(function(){ invRender(invTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ invRender(invTarget); setTimeout(function(){ invRender(invTarget); }, 150); }); });
   } else if (tab === 'battery') {
     var batTarget = window.BAT_CURRENT_ID || 'bat-production';
     batShowPane(batTarget);
     document.querySelectorAll('#cds-sub-battery [data-cds-battery-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-battery-target') === '#' + batTarget);
     });
-    setTimeout(function(){ batRender(batTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ batRender(batTarget); setTimeout(function(){ batRender(batTarget); }, 150); }); });
   } else if (tab === 'discount') {
     var discTarget = window.DISC_CURRENT_ID || 'disc-monthly-dist';
     discShowPane(discTarget);
     document.querySelectorAll('#cds-sub-discount [data-cds-discount-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-discount-target') === '#' + discTarget);
     });
-    setTimeout(function(){ discRender(discTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ discRender(discTarget); setTimeout(function(){ discRender(discTarget); }, 150); }); });
   } else if (tab === 'price') {
     var priceTarget = window.PRICE_CURRENT_ID || 'price-avg-power';
     priceShowPane(priceTarget);
     document.querySelectorAll('#cds-sub-price [data-cds-price-target]').forEach(b => {
       b.classList.toggle('active', b.getAttribute('data-cds-price-target') === '#' + priceTarget);
     });
-    setTimeout(function(){ priceRender(priceTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ priceRender(priceTarget); setTimeout(function(){ priceRender(priceTarget); }, 150); }); });
   } else if (tab === 'stats') {
     var statsTarget = window.STATS_CURRENT_ID || 'stats-production';
     statsShowPane(statsTarget);
     document.querySelectorAll('#cds-sub-stats [data-cds-stats-target]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-stats-target') === '#' + statsTarget);
     });
-    setTimeout(function(){ statsRender(statsTarget); }, 80);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ statsRender(statsTarget); setTimeout(function(){ statsRender(statsTarget); }, 150); }); });
   } else {
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');

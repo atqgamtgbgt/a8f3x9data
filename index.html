@@ -91,23 +91,31 @@
         Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
         resetOpt.series = resetSeries;
 
-        // notMerge:true で凡例選択状態がリセットされるため、legend.selected を明示的にセット
+        // notMerge:true は凡例状態(選択・スクロール位置)をリセットするため、
+        // 現在のインスタンスから現行 legend を取得して明示的に引き継ぐ
+        var curOpt = instance.getOption();
+        var curLeg = (curOpt && curOpt.legend && curOpt.legend[0]) ? curOpt.legend[0] : null;
+        var scrollIdx = (curLeg && curLeg.scrollDataIndex) || 0;
+
+        var legObj = resetOpt.legend || {};
+        if (Array.isArray(legObj)) {
+          legObj = Object.assign({}, legObj[0] || {});
+          resetOpt.legend = [legObj];
+        } else {
+          legObj = Object.assign({}, legObj);
+          resetOpt.legend = legObj;
+        }
+        // スクロール位置を維持
+        if (scrollIdx > 0) {
+          if (Array.isArray(resetOpt.legend)) resetOpt.legend[0].scrollDataIndex = scrollIdx;
+          else resetOpt.legend.scrollDataIndex = scrollIdx;
+        }
+        // 非表示系列を維持
         if (Object.keys(_hiddenSeries).length > 0) {
-          var legObj = resetOpt.legend || {};
-          if (Array.isArray(legObj)) {
-            legObj = Object.assign({}, legObj[0] || {});
-            resetOpt.legend = [legObj];
-          } else {
-            legObj = Object.assign({}, legObj);
-            resetOpt.legend = legObj;
-          }
           var sel = {};
           seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-          if (Array.isArray(resetOpt.legend)) {
-            resetOpt.legend[0].selected = sel;
-          } else {
-            resetOpt.legend.selected = sel;
-          }
+          if (Array.isArray(resetOpt.legend)) resetOpt.legend[0].selected = sel;
+          else resetOpt.legend.selected = sel;
         }
       }
       _hovering = true;
@@ -256,16 +264,31 @@
         if (isHov) {
           var sUnit = getUnitForSeries(s);
 
+          // 軸formatter文字列に "/10000" が含まれるか = 生の台データを万単位表示している軸
+          var hovAx2 = isHorizontal ? xAxisArr[s.xAxisIndex || 0] : yAxisArr[s.yAxisIndex || 0];
+          var hovAxFmt = (hovAx2 && hovAx2.axisLabel && hovAx2.axisLabel.formatter)
+            ? hovAx2.axisLabel.formatter.toString() : '';
+          var isDiv10000 = hovAxFmt.indexOf('/10000') >= 0 || hovAxFmt.indexOf('/ 10000') >= 0;
+
           // ── 値フォーマッタ（文字列を返す） ──
-          var fmtVal = (function(u) { return function(v) {
+          // 末尾の ".0" を取り除くヘルパ（1.0→1, 1.5はそのまま）
+          function stripZero(s){ return s.replace(/\.0+(?=[^\d]|$)/, ''); }
+          var fmtVal = (function(u, div) { return function(v) {
             if (v == null) return '';
-            if (u === '万台' || u === '万') return Math.abs(v) >= 0.05 ? v.toFixed(1) + u : '';
+            // 生台データ×万表示軸: v/10000 を1桁丸めし、余分な .0 を削除
+            if (div && (u === '万台' || u === '万' || u === '台' || u === '')) {
+              if (v === 0) return '';
+              var mv = v / 10000;
+              if (Math.abs(mv) < 0.05) return '';
+              return stripZero(mv.toFixed(1)) + '万';
+            }
+            if (u === '万台' || u === '万') return Math.abs(v) >= 0.05 ? stripZero(v.toFixed(1)) + u : '';
             if (u === '台') return v !== 0 ? v.toLocaleString() + '台' : '';
             if (u === '%') return v !== 0 ? v + '%' : '';
             if (u === '億元' || u === '億ドル' || u === '億') return v !== 0 ? v.toFixed(0) + u : '';
-            if (u === 'GWh') return v !== 0 ? v.toFixed(1) + u : '';
+            if (u === 'GWh') return v !== 0 ? stripZero(v.toFixed(1)) + u : '';
             return v !== 0 ? String(v) + u : '';
-          }; })(sUnit);
+          }; })(sUnit, isDiv10000);
 
           // ── ぎちぎち判定 ──
           var dataArr = s.data || [];
@@ -281,7 +304,8 @@
           }
           var plotWidth = instance.getWidth() - gridL - gridR;
           var totalLabelW = n * estCharW;
-          var isCrowded = totalLabelW > plotWidth;
+          // /10000軸のチャートでは常に全ラベル表示（ユーザー要望）
+          var isCrowded = isDiv10000 ? false : (totalLabelW > plotWidth);
 
           if (!isCrowded) {
             // ── 余裕がある → 従来通り全ラベル表示 ──
@@ -347,23 +371,30 @@
       Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
       fullOpt.series = patchSeries;
 
-      // notMerge:true で凡例選択状態がリセットされるため、legend.selected を明示的にセット
+      // notMerge:true は凡例状態(選択・スクロール位置)をリセットするため、明示的に引き継ぐ
+      var curOpt2 = instance.getOption();
+      var curLeg2 = (curOpt2 && curOpt2.legend && curOpt2.legend[0]) ? curOpt2.legend[0] : null;
+      var scrollIdx2 = (curLeg2 && curLeg2.scrollDataIndex) || 0;
+
+      var legObj = fullOpt.legend || {};
+      if (Array.isArray(legObj)) {
+        legObj = Object.assign({}, legObj[0] || {});
+        fullOpt.legend = [legObj];
+      } else {
+        legObj = Object.assign({}, legObj);
+        fullOpt.legend = legObj;
+      }
+      // スクロール位置を維持
+      if (scrollIdx2 > 0) {
+        if (Array.isArray(fullOpt.legend)) fullOpt.legend[0].scrollDataIndex = scrollIdx2;
+        else fullOpt.legend.scrollDataIndex = scrollIdx2;
+      }
+      // 非表示系列を維持
       if (Object.keys(_hiddenSeries).length > 0) {
-        var legObj = fullOpt.legend || {};
-        if (Array.isArray(legObj)) {
-          legObj = Object.assign({}, legObj[0] || {});
-          fullOpt.legend = [legObj];
-        } else {
-          legObj = Object.assign({}, legObj);
-          fullOpt.legend = legObj;
-        }
         var sel = {};
         seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-        if (Array.isArray(fullOpt.legend)) {
-          fullOpt.legend[0].selected = sel;
-        } else {
-          fullOpt.legend.selected = sel;
-        }
+        if (Array.isArray(fullOpt.legend)) fullOpt.legend[0].selected = sel;
+        else fullOpt.legend.selected = sel;
       }
 
       // 軸max上書き：二軸配列を保持したまま、ホバー系列の軸のみ調整
@@ -13336,68 +13367,68 @@ var JH_REGION = {
 
 // 画像8: メーカー別販売（台）
 var JH_MAKER = {
-  makers: ['チェリー Chery','BYD','SAIC','グレートウォール GWM','ジーリー Geely','チャンアン Changan','JAC','広汽 GAC','北汽 BAIC','リープモーター Leapmotor','ドンフェン Dongfeng','ハイマー Haima','シャオペン XPENG','FAW（一汽）','セレス Seres','CNHTC（中国重汽）','福汽 FAG','鑫源 SRM','キンロン Kinglong','リ・オート Li Auto','ユートン Yutong','AvtoVAZ','シャンチー重卡 SHACMAN','その他中国系','シャンチー SHACMAN','ネタ Neta','スカイワース Skyworth','ニオ NIO','サニー SANY'],
+  makers: ['Chery 奇瑞','BYD 比亜迪','SAIC 上汽','GWM 長城','Geely 吉利','Changan 長安','JAC 江淮','GAC 広汽','BAIC 北汽','Leapmotor 零跑','Dongfeng 東風','Haima 海馬','Xpeng 小鵬','FAW 一汽','Seres 賽力斯','CNHTC 中国重汽','FAG 福汽','SRM 鑫源','Kinglong 金龍','Li Auto 理想','Yutong 宇通','AvtoVAZ','SHACMAN 陝汽重卡','その他中国系','SHACMAN 陝汽','Neta 哪吒','Skyworth 創維','NIO 蔚来','SANY 三一'],
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
   data: {
-    'チェリー Chery': [52811,133046,168172,444131,658646,848142,187888],
-    'BYD':   [4510,9194,22034,111025,251290,614728,135147],
-    'SAIC': [169658,325245,444938,610791,600206,651441,115732],
-    'グレートウォール GWM': [41168,117822,129961,269076,399107,426912,75590],
-    'ジーリー Geely': [22163,49603,95347,157005,268817,303595,54509],
-    'チャンアン Changan': [52333,61320,74507,101408,180273,183752,36352],
-    'JAC': [16257,31848,41476,54835,95953,95276,22230],
-    '広汽 GAC': [247,2804,2879,6931,32827,48420,17230],
-    '北汽 BAIC': [10071,15116,18083,17562,43889,66580,15564],
-    'リープモーター Leapmotor': [null,null,58,1352,1827,36417,14267],
-    'ドンフェン Dongfeng': [9212,14176,19523,13562,40194,42887,9686],
-    'ハイマー Haima': [86,null,null,null,null,null,7132],
-    'シャオペン XPENG': [null,483,745,2071,13600,31412,6283],
-    'FAW（一汽）': [4979,5845,8511,15925,32043,31279,5289],
-    'セレス Seres':   [null,99,698,2300,7383,23196,3204],
-    'CNHTC（中国重汽）': [473,612,782,1258,27112,14761,2619],
-    '福汽 FAG': [166,3,3,5,111,4259,1653],
-    '鑫源 SRM': [723,708,232,672,3701,8543,1638],
-    'キンロン Kinglong': [8689,7747,3995,3887,3958,8212,1420],
-    'リ・オート Li Auto': [null,null,null,null,23347,13107,1116],
-    'ユートン Yutong': [1096,229,394,1861,5010,4694,895],
+    'Chery 奇瑞': [52811,133046,168172,444131,658646,848142,187888],
+    'BYD 比亜迪':   [4510,9194,22034,111025,251290,614728,135147],
+    'SAIC 上汽': [169658,325245,444938,610791,600206,651441,115732],
+    'GWM 長城': [41168,117822,129961,269076,399107,426912,75590],
+    'Geely 吉利': [22163,49603,95347,157005,268817,303595,54509],
+    'Changan 長安': [52333,61320,74507,101408,180273,183752,36352],
+    'JAC 江淮': [16257,31848,41476,54835,95953,95276,22230],
+    'GAC 広汽': [247,2804,2879,6931,32827,48420,17230],
+    'BAIC 北汽': [10071,15116,18083,17562,43889,66580,15564],
+    'Leapmotor 零跑': [null,null,58,1352,1827,36417,14267],
+    'Dongfeng 東風': [9212,14176,19523,13562,40194,42887,9686],
+    'Haima 海馬': [86,null,null,null,null,null,7132],
+    'Xpeng 小鵬': [null,483,745,2071,13600,31412,6283],
+    'FAW 一汽': [4979,5845,8511,15925,32043,31279,5289],
+    'Seres 賽力斯':   [null,99,698,2300,7383,23196,3204],
+    'CNHTC 中国重汽': [473,612,782,1258,27112,14761,2619],
+    'FAG 福汽': [166,3,3,5,111,4259,1653],
+    'SRM 鑫源': [723,708,232,672,3701,8543,1638],
+    'Kinglong 金龍': [8689,7747,3995,3887,3958,8212,1420],
+    'Li Auto 理想': [null,null,null,null,23347,13107,1116],
+    'Yutong 宇通': [1096,229,394,1861,5010,4694,895],
     'AvtoVAZ':  [null,null,null,null,null,5534,481],
-    'シャンチー重卡 SHACMAN': [133,100,118,179,641,2237,463],
+    'SHACMAN 陝汽重卡': [133,100,118,179,641,2237,463],
     'その他中国系': [54,582,2081,1959,3242,1110,418],
-    'シャンチー SHACMAN': [null,null,null,null,null,15545,331],
-    'ネタ Neta': [null,14,85,12973,9171,4115,279],
-    'スカイワース Skyworth': [null,14,748,3704,1285,2200,224],
-    'ニオ NIO': [null,201,1204,2371,1756,1860,204],
-    'サニー SANY': [6,39,54,27,2557,1471,189]
+    'SHACMAN 陝汽': [null,null,null,null,null,15545,331],
+    'Neta 哪吒': [null,14,85,12973,9171,4115,279],
+    'Skyworth 創維': [null,14,748,3704,1285,2200,224],
+    'NIO 蔚来': [null,201,1204,2371,1756,1860,204],
+    'SANY 三一': [6,39,54,27,2557,1471,189]
   }
 };
 
 // 画像9: NEVメーカー別販売（台）
 var JH_MAKER_NEV = {
-  makers: ['BYD','チェリー Chery','SAIC','ジーリー Geely','リープモーター Leapmotor','広汽 GAC','チャンアン Changan','シャオペン XPENG','グレートウォール GWM','ドンフェン Dongfeng','リ・オート Li Auto','セレス Seres','JAC','スカイワース Skyworth','ニオ NIO','ポリストーン Polestone','シャオミ Xiaomi','福汽 FAG','北汽 BAIC','JMC（江鈴）','FAW（一汽）','均瑶 Juneyao'],
+  makers: ['BYD 比亜迪','Chery 奇瑞','SAIC 上汽','Geely 吉利','Leapmotor 零跑','GAC 広汽','Changan 長安','Xpeng 小鵬','GWM 長城','Dongfeng 東風','Li Auto 理想','Seres 賽力斯','JAC 江淮','Skyworth 創維','NIO 蔚来','Polestone 極石','Xiaomi 小米','FAG 福汽','BAIC 北汽','JMC 江鈴','FAW 一汽','Juneyao 均瑶'],
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
   data: {
-    'BYD':   [381,1429,10772,111025,251290,614727,135147],
-    'チェリー Chery': [null,null,755,1066,10804,93685,44087],
-    'SAIC': [23061,44783,98682,171028,134373,202615,38195],
-    'ジーリー Geely': [9,6091,26442,30737,28711,50525,15832],
-    'リープモーター Leapmotor': [null,null,58,1352,1827,36417,14267],
-    '広汽 GAC': [null,null,null,88,5380,21247,12988],
-    'チャンアン Changan': [131,39,null,null,6802,20247,12180],
-    'シャオペン XPENG': [null,483,745,2071,13600,31412,6283],
-    'グレートウォール GWM': [2,null,4064,16959,19443,20364,6098],
-    'ドンフェン Dongfeng': [88,247,2294,2992,11875,18312,2959],
-    'リ・オート Li Auto': [null,null,null,null,23347,13107,1116],
-    'セレス Seres':   [null,99,698,1848,5707,8165,713],
-    'JAC': [51,648,2480,3777,5062,2819,349],
-    'スカイワース Skyworth': [null,14,748,3704,1285,2183,224],
-    'ニオ NIO': [null,201,1204,2371,1756,1860,204],
-    'ポリストーン Polestone': [null,null,null,null,419,812,172],
-    'シャオミ Xiaomi': [null,null,null,null,171,707,161],
-    '福汽 FAG': [null,null,null,4,null,185,86],
-    '北汽 BAIC': [300,null,null,71,227,354,59],
-    'JMC（江鈴）': [null,null,null,407,569,714,53],
-    'FAW（一汽）': [null,25,2193,345,1495,1900,34],
-    '均瑶 Juneyao': [null,null,null,null,88,153,7]
+    'BYD 比亜迪':   [381,1429,10772,111025,251290,614727,135147],
+    'Chery 奇瑞': [null,null,755,1066,10804,93685,44087],
+    'SAIC 上汽': [23061,44783,98682,171028,134373,202615,38195],
+    'Geely 吉利': [9,6091,26442,30737,28711,50525,15832],
+    'Leapmotor 零跑': [null,null,58,1352,1827,36417,14267],
+    'GAC 広汽': [null,null,null,88,5380,21247,12988],
+    'Changan 長安': [131,39,null,null,6802,20247,12180],
+    'Xpeng 小鵬': [null,483,745,2071,13600,31412,6283],
+    'GWM 長城': [2,null,4064,16959,19443,20364,6098],
+    'Dongfeng 東風': [88,247,2294,2992,11875,18312,2959],
+    'Li Auto 理想': [null,null,null,null,23347,13107,1116],
+    'Seres 賽力斯':   [null,99,698,1848,5707,8165,713],
+    'JAC 江淮': [51,648,2480,3777,5062,2819,349],
+    'Skyworth 創維': [null,14,748,3704,1285,2183,224],
+    'NIO 蔚来': [null,201,1204,2371,1756,1860,204],
+    'Polestone 極石': [null,null,null,null,419,812,172],
+    'Xiaomi 小米': [null,null,null,null,171,707,161],
+    'FAG 福汽': [null,null,null,4,null,185,86],
+    'BAIC 北汽': [300,null,null,71,227,354,59],
+    'JMC 江鈴': [null,null,null,407,569,714,53],
+    'FAW 一汽': [null,25,2193,345,1495,1900,34],
+    'Juneyao 均瑶': [null,null,null,null,88,153,7]
   }
 };
 
@@ -13607,7 +13638,7 @@ var JH_COUNTRY_MAKER_NEV = {
 
 // 画像12: ロシア企業別データ
 var JH_RUSSIA = {
-  groups: ['チェリー Chery','グレートウォール GWM','ジーリー Geely','チャンアン Changan','JAC','ドンフェン Dongfeng','FAW（一汽）','CNHTC（中国重汽）','リ・オート Li Auto','広汽 GAC'],
+  groups: ['Chery 奇瑞','GWM 長城','Geely 吉利','Changan 長安','JAC 江淮','Dongfeng 東風','FAW 一汽','CNHTC 中国重汽','Li Auto 理想','GAC 広汽'],
   data26: [31335,23572,19643,4632,2636,3901,3189,887,1042,2182],
   data25: [245819,198205,177779,67835,26763,19632,19393,10061,13088,21330],
   growth_cum: [-5,-8,17,-52,-41,51,69,-63,-37,-11],  // %  (広汽は画像12で -11%)
@@ -13874,9 +13905,14 @@ function jhDrawMakerTotal() {
   var existing = echarts.getInstanceByDom(el);
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
+  // 最新期間（26年1-2月 = 末尾インデックス）の値で降順ソート後、逆転してyAxisで大きい順に上に表示
+  var latestIdx = JH_MAKER.years.length - 1;
+  var sortedMakers = JH_MAKER.makers.slice().sort(function(a, b){
+    return (JH_MAKER.data[a][latestIdx] || 0) - (JH_MAKER.data[b][latestIdx] || 0);
+  });
   var series = JH_MAKER.years.map(function(y, yi){
     return { name:y, type:'bar', barMaxWidth: getBarMaxWidth(18),
-      data: JH_MAKER.makers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
+      data: sortedMakers.map(function(m){ return JH_MAKER.data[m][yi] || 0; }) };
   });
   ec.setOption({
     tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
@@ -13889,7 +13925,7 @@ function jhDrawMakerTotal() {
     legend:{ data:JH_MAKER.years, top:8, type:'scroll' },
     grid:{ left:90, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
-    yAxis:{ type:'category', data: JH_MAKER.makers },
+    yAxis:{ type:'category', data: sortedMakers },
     series: series
   });
 }
@@ -13902,9 +13938,14 @@ function jhDrawMakerNev() {
   var existing = echarts.getInstanceByDom(el);
   if (existing) { try { existing.dispose(); } catch(e){} }
   var ec = echarts.init(el, null, {renderer:'canvas'});
+  // 最新期間（26年1-2月）で降順ソート → 逆転してyAxisで大きい順が上に
+  var latestIdxN = JH_MAKER_NEV.years.length - 1;
+  var sortedMakersN = JH_MAKER_NEV.makers.slice().sort(function(a, b){
+    return (JH_MAKER_NEV.data[a][latestIdxN] || 0) - (JH_MAKER_NEV.data[b][latestIdxN] || 0);
+  });
   var series = JH_MAKER_NEV.years.map(function(y, yi){
     return { name:y, type:'bar', barMaxWidth: getBarMaxWidth(18),
-      data: JH_MAKER_NEV.makers.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };
+      data: sortedMakersN.map(function(m){ return JH_MAKER_NEV.data[m][yi] || 0; }) };
   });
   ec.setOption({
     tooltip:{ trigger:'axis', axisPointer:{type:'shadow'},
@@ -13917,7 +13958,7 @@ function jhDrawMakerNev() {
     legend:{ data:JH_MAKER_NEV.years, top:8, type:'scroll' },
     grid:{ left:80, right:60, top:60, bottom:40 },
     xAxis:{ type:'value', name:'台', axisLabel:{ formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
-    yAxis:{ type:'category', data: JH_MAKER_NEV.makers },
+    yAxis:{ type:'category', data: sortedMakersN },
     series: series
   });
 }

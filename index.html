@@ -3515,7 +3515,6 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <div class="cds-gc-items" id="cds-gc-gws">
                     <button class="nav-link active" data-cds-ws-target="#ws-regional">🗺️ 地域別販売推移</button>
-                    <button class="nav-link" data-cds-ws-target="#ws-china-share">🇨🇳 中国シェア推移</button>
                     <button class="nav-link" data-cds-ws-target="#ws-monthly">📅 世界月次販売</button>
                     <button class="nav-link" data-cds-ws-target="#ws-country">🏳️ 国別販売台数</button>
                     <button class="nav-link" data-cds-ws-target="#ws-maker">🏭 メーカー世界シェア</button>
@@ -3986,13 +3985,6 @@ body.tray-open { padding-bottom: 105px; }
                   <button class="btn btn-sm btn-outline-secondary" onclick="wsSetRegionalView('share',this)">シェア（%）</button>
                 </div>
                 <div id="ec-ws-regional" class="echart-box" style="height:440px"></div>
-              </div>
-            </div>
-            <div class="cds-pane" id="ws-china-share">
-              <div class="chart-card">
-                <div class="chart-title">🇨🇳 中国の世界自動車シェア推移</div>
-                
-                <div id="ec-ws-china-share" class="echart-box" style="height:440px"></div>
               </div>
             </div>
             <div class="cds-pane" id="ws-monthly">
@@ -9416,11 +9408,6 @@ var WS = {
       '2026年': [722,674,null,null,null,null,null,null,null,null,null,null]
     }
   },
-  // 中国2024年月次シェア（グラフ読取）
-  china2024Monthly: {
-    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
-    share: [34,25,32,33,32,32,31,34,36,37,40,34]
-  },
   // 国別 2026年1-2月（上位25）
   country: {
     names:  ['中国','米国','インド','日本','ドイツ','ブラジル','イタリア','フランス','英国','メキシコ','韓国','カナダ','スペイン','タイ','オーストラリア','ロシア','サウジアラビア','トルコ','インドネシア','アルゼンチン','マレーシア','ポーランド','南アフリカ','ベトナム','ベルギー'],
@@ -9527,7 +9514,6 @@ document.addEventListener('click', function(e) {
 // --- レンダー ---
 window.wsRender = function(id) {
   if (id === 'ws-regional') wsDrawRegional(window.WS_REGIONAL_VIEW || 'volume');
-  else if (id === 'ws-china-share') wsDrawChinaShare();
   else if (id === 'ws-monthly') wsDrawMonthly();
   else if (id === 'ws-country') wsDrawCountry(window.WS_COUNTRY_VIEW || 'volume');
   else if (id === 'ws-maker') { wsBuildToggleButtons(WS_MAKER_GROUPS[window.WS_MAKER_FILTER||'top10']); wsDrawMaker(window.WS_MAKER_FILTER || 'top10'); }
@@ -9584,6 +9570,20 @@ function wsDrawRegional(view) {
     legendData.push('世界販売前年比');
   }
 
+  // 中国世界シェアライン（share表示時のみ、右軸で重ね表示）
+  if (view === 'share' && WS.chinaShareAnnual) {
+    series.push({
+      name: '中国世界シェア', type: 'line', yAxisIndex: 1,
+      data: WS.chinaShareAnnual.share,
+      symbol: 'circle', symbolSize: 8,
+      lineStyle: { width: 2.5, color: '#c0392b' },
+      itemStyle: { color: '#c0392b' },
+      label: { show: true, formatter: '{c}%', position: 'top', fontSize: 11, color: '#922b21', fontWeight: 'bold' },
+      z: 10
+    });
+    legendData.push('中国世界シェア');
+  }
+
   var yAxis = [
     { type: 'value', name: view==='volume'?'万台':'%', axisLabel: { formatter: view==='volume'?'{value}':'{value}%' } }
   ];
@@ -9591,6 +9591,13 @@ function wsDrawRegional(view) {
     yAxis.push({
       type: 'value', name: '前年比（%）', position: 'right',
       min: -20, max: 20,
+      axisLabel: { formatter: '{value}%' },
+      splitLine: { show: false }
+    });
+  } else if (view === 'share') {
+    yAxis.push({
+      type: 'value', name: '中国シェア（%）', position: 'right',
+      min: 24, max: 42,
       axisLabel: { formatter: '{value}%' },
       splitLine: { show: false }
     });
@@ -9628,45 +9635,14 @@ function wsDrawRegional(view) {
   chart.setOption({
     tooltip: tooltipConf,
     legend: { top: 0, data: legendData },
-    grid: { top: 50, left: 60, right: view==='volume'?60:20, bottom: 60 },
+    grid: { top: 50, left: 60, right: 60, bottom: 60 },
     xAxis: { type: 'category', data: WS.years, axisLabel: { rotate: 30 } },
     yAxis: yAxis,
     series: series
   }, true);
 }
 
-// ② 中国シェア推移（年次折れ線 + 2024年月次棒）
-function wsDrawChinaShare() {
-  var chart = wsEc('ec-ws-china-share'); if (!chart) return;
-  chart.setOption({
-    tooltip: { trigger: 'axis' },
-    legend: { top: 0, data: ['年次シェア（%）','2024年月次シェア（%）'] },
-    grid: { top: 50, left: 60, right: 20, bottom: 80 },
-    xAxis: [
-      { type: 'category', data: WS.chinaShareAnnual.years, name: '年次', nameLocation: 'middle', nameGap: 25, position: 'bottom', axisLabel: { rotate: 30 } },
-      { type: 'category', data: WS.china2024Monthly.months, name: '2024年月次', nameLocation: 'middle', nameGap: 25, position: 'bottom', offset: 30, axisLine: { lineStyle: { color: '#3498db' } }, axisLabel: { color: '#3498db', fontSize: 10 } }
-    ],
-    yAxis: { type: 'value', name: '世界シェア（%）', min: 24, max: 42, axisLabel: { formatter: '{value}%' } },
-    series: [
-      {
-        name: '年次シェア（%）', type: 'line', xAxisIndex: 0,
-        data: WS.chinaShareAnnual.share,
-        symbol: 'circle', symbolSize: 8,
-        lineStyle: { width: 3, color: '#e74c3c' },
-        itemStyle: { color: '#e74c3c' },
-        label: { show: true, formatter: '{c}%', fontSize: 11, fontWeight: 'bold' }
-      },
-      {
-        name: '2024年月次シェア（%）', type: 'bar', xAxisIndex: 1,
-        data: WS.china2024Monthly.share,
-        itemStyle: { color: 'rgba(52,152,219,0.55)', borderColor: '#3498db', borderWidth: 1 },
-        label: { show: true, position: 'top', formatter: '{c}%', fontSize: 10, color: '#2980b9' }
-      }
-    ]
-  }, true);
-}
-
-// ③ 世界月次販売
+// ② 世界月次販売
 function wsDrawMonthly() {
   var chart = wsEc('ec-ws-monthly'); if (!chart) return;
   var years = ['2023年','2024年','2025年','2026年'];

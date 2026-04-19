@@ -2627,7 +2627,7 @@ body.tray-open { padding-bottom: 105px; }
             <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">外資系ランキング</button>
           </li>
           <li class="nav-item" role="presentation">
-            <button class="nav-link" id="cnsuv-charts-tab" data-bs-toggle="tab" data-bs-target="#cnsuv-charts-content" type="button" role="tab"><i class="fa-solid fa-chart-bar me-1"></i>メーカー販売グラフ</button>
+            <button class="nav-link" id="cnsuv-charts-tab" data-bs-toggle="tab" data-bs-target="#cnsuv-charts-content" type="button" role="tab"><i class="fa-solid fa-chart-bar me-1"></i>メーカー販売ランキング</button>
           </li>
           <li class="nav-item" role="presentation">
             <button class="nav-link" id="brands-tab" data-bs-toggle="tab" data-bs-target="#brands-content" type="button" role="tab">中国内ブランド一覧（参考）</button>
@@ -8009,11 +8009,26 @@ function cnsuvGetChart(id) {
   return CNSUV_EC[id];
 }
 
+// ツールチップを値の降順でソートして表示する共通formatter
+function cnsuvSortedTooltip(unit) {
+  return {
+    trigger: 'axis',
+    formatter: function(params) {
+      var valid = params.filter(function(p){ return p.value != null; });
+      valid.sort(function(a, b){ return b.value - a.value; });
+      var header = '<b>' + (params[0] ? params[0].axisValueLabel : '') + '</b><br/>';
+      return header + valid.map(function(p){
+        return p.marker + p.seriesName + ': <b>' + p.value.toFixed(1) + unit + '</b>';
+      }).join('<br/>');
+    }
+  };
+}
+
 function cnsuvDrawLine() {
   var c = cnsuvGetChart('ec-cnsuv-line'); if (!c) return;
   var months = cnsuvGetMonths(), makers = cnsuvGetMakers();
   c.setOption({ backgroundColor:'transparent',
-    tooltip:{trigger:'axis',valueFormatter:function(v){return v!=null?v.toFixed(1)+'万台':'-';}},
+    tooltip: cnsuvSortedTooltip('万台'),
     legend:{top:8,type:'scroll',textStyle:{fontSize:11}},
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
@@ -8026,7 +8041,7 @@ function cnsuvDrawBar() {
   var c = cnsuvGetChart('ec-cnsuv-bar'); if (!c) return;
   var months = cnsuvGetMonths(), makers = cnsuvGetMakers();
   c.setOption({ backgroundColor:'transparent',
-    tooltip: unifiedStackTooltip({unit:'万台'}),
+    tooltip: cnsuvSortedTooltip('万台'),
     legend:{top:8,type:'scroll',textStyle:{fontSize:11}},
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
@@ -8039,7 +8054,7 @@ function cnsuvDrawShare() {
   var c = cnsuvGetChart('ec-cnsuv-share'); if (!c) return;
   var months = cnsuvGetMonths(), makers = cnsuvGetMakers();
   c.setOption({ backgroundColor:'transparent',
-    tooltip:{trigger:'axis',valueFormatter:function(v){return v!=null?v.toFixed(1)+'%':'-';}},
+    tooltip: cnsuvSortedTooltip('%'),
     legend:{top:8,type:'scroll',textStyle:{fontSize:11}},
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
@@ -9326,7 +9341,7 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-price').style.display       = (tab === 'price')       ? '' : 'none';
   document.getElementById('cds-sub-stats').style.display       = (tab === 'stats')       ? '' : 'none';
 
-  } else if (tab === 'zenntai') {
+  if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
     var contElZt = document.getElementById('cdsPillsContent');
     // display:none!important を強制上書き

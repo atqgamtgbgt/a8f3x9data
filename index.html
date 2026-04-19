@@ -3291,7 +3291,7 @@ body.tray-open { padding-bottom: 105px; }
                 🚢 輸出分析
               </button>
               <button id="cds-mid-btn-jishuhaiex" class="cds-mid-tab" onclick="cdsSetMidTab('jishuhaiex')">
-                🌏 自主海外販売
+                🌏 中国系海外販売
               </button>
               <button id="cds-mid-btn-import" class="cds-mid-tab" onclick="cdsSetMidTab('import')">
                 📦 輸入分析
@@ -3350,7 +3350,7 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🚗 ブランド別 </span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" onclick="ztGo('zt-brand-wholesale');ztActBtn(this)">🚗 高級・合弁・自主 卸売</button>
+                    <button class="nav-link" onclick="ztGo('zt-brand-wholesale');ztActBtn(this)">🚗 高級・合弁・中国系 卸売</button>
                     <button class="nav-link" onclick="ztGo('zt-nation-share');ztActBtn(this)">🌐 国籍別シェア</button>
                   </div>
                 </div>
@@ -3431,7 +3431,7 @@ body.tray-open { padding-bottom: 105px; }
               </div><!-- end cds-nav-compact -->
             </div><!-- end cds-sub-export -->
 
-            <!-- 中タブ自主海外販売: 自主海外販売 サブナビ -->
+            <!-- 中タブ中国系海外販売: 中国系海外販売 サブナビ -->
             <div id="cds-sub-jishuhaiex" class="cds-sub-nav" style="display:none">
               <div class="cds-nav-compact">
                 <div class="cds-gc">
@@ -3455,7 +3455,7 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">🏳️ シェア・国別 </span>
                   <div class="cds-gc-items" id="cds-gc-jh3">
                     <button class="nav-link" data-cds-jh-target="#jh-brand-share">🏷️ ブランド系シェア（地域別）</button>
-                    <button class="nav-link" data-cds-jh-target="#jh-country-share">🌐 国別自主シェア</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-country-share">🌐 国別 中国系シェア</button>
                     <button class="nav-link" data-cds-jh-target="#jh-world-maker-region">🏭 メーカー×地域マトリクス</button>
                     <button class="nav-link" data-cds-jh-target="#jh-country-maker">🗺️ 国別×メーカー（全体）</button>
                     <button class="nav-link" data-cds-jh-target="#jh-country-maker-nev">⚡ 国別×メーカー（NEV）</button>
@@ -3732,7 +3732,7 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="zt-nev-brand">
               <div class="chart-card">
-                <div class="chart-title">NEV浸透率 ブランド別（高級・合弁・自主）月次推移（%）</div>
+                <div class="chart-title">NEV浸透率 ブランド別（高級・合弁・中国系）月次推移（%）</div>
                 <div class="chart-subtitle">出荷ベース浸透率　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-nev-brand" class="echart-box" style="height:420px"></div>
               </div>
@@ -3740,14 +3740,14 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-brand-wholesale">
               <div class="chart-card">
                 <div class="chart-title">国籍別 ブランド層別 卸売 月次推移（万台）</div>
-                <div class="chart-subtitle">高級車・合弁・自主ブランド　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-brand-wholesale" class="echart-box" style="height:420px"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-nation-share">
               <div class="chart-card">
                 <div class="chart-title">国籍別 卸売シェア推移（%）</div>
-                <div class="chart-subtitle">自主・独・日・米・韓・欧　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">中国系・独・日・米・韓・欧　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-nation-share" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -3877,17 +3877,17 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-r12"> <div id="rk-wrap-r12"></div></div>
             <div class="cds-pane" id="cds-r12b"><div id="rk-wrap-r12b"></div></div>
 
-            <!-- ===== 自主海外販売 ペイン群 ===== -->
+            <!-- ===== 中国系海外販売 ペイン群 ===== -->
             <div class="cds-pane" id="jh-monthly-trend">
               <div class="chart-card">
-                <div class="chart-title">📈 自主ブランド 海外部分地区 月次小売推移（万台）</div>
+                <div class="chart-title">📈 中国系ブランド 海外部分地区 月次小売推移（万台）</div>
                 <div class="chart-subtitle">2021〜2026年</div>
                 <div id="ec-jh-monthly-trend" class="echart-box" style="height:440px"></div>
               </div>
             </div>
             <div class="cds-pane" id="jh-yoy-trend">
               <div class="chart-card">
-                <div class="chart-title">📊 自主ブランド 海外販売 年次YoY増速</div>
+                <div class="chart-title">📊 中国系ブランド 海外販売 年次YoY増速</div>
                 <div class="chart-subtitle">2020〜2026年　1月・2月・1-2月累計・3-12月・全年</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="jh-yoy-trend-tabs">
                   <button class="btn btn-sm btn-primary active" onclick="jhSetYoyView('growth',this)">前年比増速（%）</button>
@@ -3898,14 +3898,14 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="jh-region-volume">
               <div class="chart-card">
-                <div class="chart-title">🌍 地域別 自主海外販売台数推移（万台）</div>
+                <div class="chart-title">🌍 地域別 中国系海外販売台数推移（万台）</div>
                 <div class="chart-subtitle">2020〜2026年1-2月累計</div>
                 <div id="ec-jh-region-volume" class="echart-box" style="height:460px"></div>
               </div>
             </div>
             <div class="cds-pane" id="jh-region-share">
               <div class="chart-card">
-                <div class="chart-title">🥧 地域別 自主海外販売構成比（2026年1-2月）</div>
+                <div class="chart-title">🥧 地域別 中国系海外販売構成比（2026年1-2月）</div>
                 <div class="chart-subtitle">地域別シェア比較</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="jh-region-share-tabs">
                   <button class="btn btn-sm btn-primary active" onclick="jhSetRegionShareView('pie26',this)">2026年1-2月（円グラフ）</button>
@@ -3916,14 +3916,14 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="jh-maker-total">
               <div class="chart-card">
-                <div class="chart-title">🚗 メーカー別 自主海外販売台数（台）</div>
+                <div class="chart-title">🚗 メーカー別 中国系海外販売台数（台）</div>
                 <div class="chart-subtitle">2020〜2026年1-2月　主要メーカー</div>
                 <div id="ec-jh-maker-total" class="echart-box" style="height:1200px"></div>
               </div>
             </div>
             <div class="cds-pane" id="jh-maker-nev">
               <div class="chart-card">
-                <div class="chart-title">⚡ NEVメーカー別 自主海外販売台数（台）</div>
+                <div class="chart-title">⚡ NEVメーカー別 中国系海外販売台数（台）</div>
                 <div class="chart-subtitle">2020〜2026年1-2月　主要メーカー</div>
                 <div id="ec-jh-maker-nev" class="echart-box" style="height:1100px"></div>
               </div>
@@ -3932,17 +3932,17 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="jh-brand-share">
               <div class="chart-card">
                 <div class="chart-title">🏷️ 地域別 ブランド系シェア（2026年1-2月）</div>
-                <div class="chart-subtitle">自主・日系・独系・米系・欧系・韓系・アジア系・ロシア系</div>
+                <div class="chart-subtitle">中国系・日系・独系・米系・欧系・韓系・アジア系・ロシア系</div>
                 <div id="ec-jh-brand-share" class="echart-box" style="height:480px"></div>
               </div>
             </div>
             <div class="cds-pane" id="jh-country-share">
               <div class="chart-card">
-                <div class="chart-title">🌐 国別・地域別 自主シェア推移（%）</div>
-                <div class="chart-subtitle">2021〜2026年1-2月　自主ブランドの海外各市場シェア</div>
+                <div class="chart-title">🌐 国別・地域別 中国系シェア推移（%）</div>
+                <div class="chart-subtitle">2021〜2026年1-2月　中国系ブランドの海外各市場シェア</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="jh-country-share-tabs">
-                  <button class="btn btn-sm btn-primary active" onclick="jhSetCountryShareView('total',this)">全体（自主海外份額）</button>
-                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetCountryShareView('nev',this)">新能源（自主新能源海外份額）</button>
+                  <button class="btn btn-sm btn-primary active" onclick="jhSetCountryShareView('total',this)">全体（中国系海外シェア）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetCountryShareView('nev',this)">新能源（中国系NEV海外シェア）</button>
                 </div>
                 <div id="ec-jh-country-share" class="echart-box" style="height:560px"></div>
               </div>
@@ -3974,12 +3974,12 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="jh-russia-detail">
               <div class="chart-card">
-                <div class="chart-title">🇷🇺 ロシア市場 中国自主ブランド詳細（集団別・ブランド別）</div>
+                <div class="chart-title">🇷🇺 ロシア市場 中国系ブランド詳細（企業別・ブランド別）</div>
                 <div class="chart-subtitle">2024年〜2026年1-2月　前年比増速付き</div>
                 <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="jh-russia-tabs">
-                  <button class="btn btn-sm btn-primary active" onclick="jhSetRussiaView('group',this)">集団別シェア（2026年1-2月）</button>
-                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRussiaView('trend',this)">集団別月次推移</button>
-                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRussiaView('growth',this)">集団別前年比</button>
+                  <button class="btn btn-sm btn-primary active" onclick="jhSetRussiaView('group',this)">企業別シェア（2026年1-2月）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRussiaView('trend',this)">企業別月次推移</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="jhSetRussiaView('growth',this)">企業別前年比</button>
                 </div>
                 <div id="ec-jh-russia-detail" class="echart-box" style="height:480px"></div>
               </div>
@@ -4212,7 +4212,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="inv-category">
               <div class="chart-card">
                 <div class="chart-title">🏷️ カテゴリ別 月次在庫推移（万台）</div>
-                <div class="chart-subtitle">自主・合資・新勢力・高級・外資・その他</div>
+                <div class="chart-subtitle">中国系・合資・新勢力・高級・外資・その他</div>
                 <div id="ec-inv-category" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -6266,8 +6266,8 @@ function parseMonthSheet(rows, sheetYm) {
         const map = {
           '乗用車出口合計（整車+CKD）':'cada_exp_total', 'うちNEV出口':'cada_nev_exp',
           'うちBEV':'cada_bev_exp', 'うちPHEV/EREV':'cada_phev_exp',
-          '自主ブランド出口':'cada_zizhu_exp', '合弁・外資ブランド出口':'cada_jv_exp',
-          '中国ブランドICE車輸出':'cada_ice_exp', '自主NEV乗用車出口':'cada_nev_zizhu',
+          '中国系ブランド出口':'cada_zizhu_exp', '合弁・外資ブランド出口':'cada_jv_exp',
+          '中国ブランドICE車輸出':'cada_ice_exp', '中国系NEV乗用車輸出':'cada_nev_zizhu',
           '乗用車出口 NEV普及率':'cada_nev_pen_exp',
         };
         if (map[h]) { const v = h.includes('普及率') ? numPct : numWan; if (v!=null) d.cada_summary[map[h]]=v; }
@@ -6326,7 +6326,7 @@ function parseMonthSheet(rows, sheetYm) {
       return period === sheetYm; // 期間がシートymと一致する場合のみ採用
     });
     if (h==='中国の世界自動車販売シェア') d.world.cn_world_share    = worldOk(raw) ? pct(raw) : null;
-    if (h==='自主ブランドNEV 海外市場シェア')  d.world.zizhu_nev_overseas = worldOk(raw) ? pct(raw) : null;
+    if (h==='中国系ブランドNEV 海外市場シェア')  d.world.zizhu_nev_overseas = worldOk(raw) ? pct(raw) : null;
     if (h==='世界NEV普及率')              d.world.world_nev_pen      = worldOk(raw) ? pct(raw) : null;
     if (h==='中国NEV 世界シェア')          d.world.cn_nev_world_share = worldOk(raw) ? pct(raw) : null;
     if (h==='世界NEV月間販売台数')         d.world.world_nev_monthly  = worldOk(raw) ? wan(raw) : null;
@@ -6742,6 +6742,8 @@ function unifiedStackTooltip(opts) {
   var digits = opts.digits != null ? opts.digits : 1;
   var note = opts.note || '';
   var showTotal = opts.showTotal !== false;
+  var sort = opts.sort || null;   // null（系列順）|'desc'|'asc' —  opt-in
+  var hideZero = opts.hideZero === true;  // opt-in: 0の系列を非表示
   function fmtNum(v){
     if (v == null || isNaN(v)) return '−';
     var n = Number(v);
@@ -6756,12 +6758,19 @@ function unifiedStackTooltip(opts) {
     textStyle: { fontSize: 12 },
     formatter: function(params){
       if (!params || !params.length) return '';
-      var valid = params.filter(function(p){ return p.value != null && !isNaN(p.value); });
+      var valid = params.filter(function(p){
+        if (p.value == null || isNaN(p.value)) return false;
+        if (hideZero && Number(p.value) === 0) return false;
+        return true;
+      });
       if (!valid.length) return '';
       var axisLabel = (params[0].axisValueLabel || params[0].axisValue || '');
       if (typeof axisLabel === 'string') axisLabel = axisLabel.replace(/\n/g, ' ');
       var total = 0;
       valid.forEach(function(p){ total += Number(p.value) || 0; });
+      // オプションで値の大小にソート
+      if (sort === 'desc') valid.sort(function(a,b){ return Number(b.value) - Number(a.value); });
+      else if (sort === 'asc') valid.sort(function(a,b){ return Number(a.value) - Number(b.value); });
       var s = '<b>' + axisLabel + '</b><br/>';
       if (showTotal && valid.length > 1) {
         s += '合計: <b>' + fmtNum(total) + '</b> ' + unit + '<br/>';
@@ -7317,7 +7326,7 @@ function initCadaSummary() {
     opt.tooltip = unifiedStackTooltip({unit:'万台'});
     opt.series = [
       { name:'中国ブランドICE輸出', type:'bar', stack:'s', data:CD.cada_ice_exp,   itemStyle:{color:'#adb5bd'} },
-      { name:'自主NEV輸出',         type:'bar', stack:'s', data:CD.cada_nev_zizhu, itemStyle:{color:'#4e79a7'} },
+      { name:'中国系NEV輸出',         type:'bar', stack:'s', data:CD.cada_nev_zizhu, itemStyle:{color:'#4e79a7'} },
       { name:'JV・外資輸出',        type:'bar', stack:'s', data:CD.cada_jv_exp,    itemStyle:{color:'#f28e2b'} },
       { name:'CADA出口合計',        type:'line', data:CD.cada_exp_total,
         symbol:'circle', symbolSize:7, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'} },
@@ -7391,7 +7400,7 @@ function initWorld() {
     opt.series = [
       { name:'中国乗用車世界シェア', type:'line', data:CD.cn_world_share,
         symbol:'circle', symbolSize:6, lineStyle:{width:2.5,color:'#e15759'}, itemStyle:{color:'#e15759'} },
-      { name:'自主NEV海外市場シェア', type:'line', data:CD.zizhu_nev_overseas,
+      { name:'中国系NEV海外市場シェア', type:'line', data:CD.zizhu_nev_overseas,
         symbol:'diamond', symbolSize:6, lineStyle:{width:2,color:'#59a14f',type:'dashed'}, itemStyle:{color:'#59a14f'} },
     ];
     chart.setOption(opt);
@@ -9563,33 +9572,33 @@ var WS = {
     '現代起亜':       [8.2,7.3,7.5,7.7,7.9,8.2,8.0,7.6,7.5,7.4,7.7],
     'Stellantis':    [8.4,7.7,8.8,8.7,7.9,7.8,7.1,6.7,6.0,5.5,6.2],
     'ルノー日産':     [9.0,9.3,9.2,9.0,8.2,7.6,6.5,5.9,5.7,5.4,5.5],
-    '吉利集団':       [1.5,2.0,2.3,2.4,2.7,2.7,2.9,3.1,3.8,4.6,4.8],
+    'ジーリー Geely':       [1.5,2.0,2.3,2.4,2.7,2.7,2.9,3.1,3.8,4.6,4.8],
     '米国 GM':        [8.5,8.3,7.1,6.8,6.9,5.7,5.5,5.2,4.6,4.6,4.5],
     '日本 スズキ':    [3.0,3.2,3.5,3.2,3.0,3.3,3.6,3.3,3.4,3.3,4.1],
     '米国 フォード':  [6.9,6.6,6.0,5.7,5.4,4.9,4.7,4.5,4.5,4.4,4.1],
-    '奇瑞集団':       [0.8,0.7,0.8,0.8,0.9,1.3,1.7,2.6,3.5,3.7,3.9],
+    'チェリー Chery':       [0.8,0.7,0.8,0.8,0.9,1.3,1.7,2.6,3.5,3.7,3.9],
     'BYD':           [0.6,0.5,0.6,0.5,0.6,0.9,2.4,3.5,4.9,5.4,3.8],
-    '上汽集団':       [2.8,2.9,3.2,3.0,3.5,3.8,3.9,3.7,3.1,3.5,3.5],
+    'SAIC':       [2.8,2.9,3.2,3.0,3.5,3.8,3.9,3.7,3.1,3.5,3.5],
     '日本 ホンダ':    [5.4,5.6,5.6,5.8,5.7,5.4,4.7,4.5,4.2,3.6,3.4],
     'ドイツ BMW':     [2.3,2.3,2.4,2.6,2.7,2.8,2.7,2.7,2.5,2.5,2.3],
     'ドイツ メルセデス':[2.8,2.9,3.0,3.2,3.2,2.9,3.0,2.9,2.8,2.5,2.3],
-    'タタ集団':       [1.1,1.1,1.3,1.1,1.0,1.2,1.6,1.4,1.4,1.3,1.8],
+    'タタ Tata':       [1.1,1.1,1.3,1.1,1.0,1.2,1.6,1.4,1.4,1.3,1.8],
     'テスラ':         [0.1,0.1,0.2,0.3,0.6,1.3,1.9,2.4,2.2,1.9,1.7],
-    '長城汽車':       [1.2,1.2,1.1,1.2,1.5,1.7,1.5,1.7,1.8,1.8,1.7],
-    '長安集団':       [1.6,1.5,1.3,1.3,1.7,1.9,2.2,2.3,2.4,2.5,1.7],
+    'グレートウォール GWM':       [1.2,1.2,1.1,1.2,1.5,1.7,1.5,1.7,1.8,1.8,1.7],
+    'チャンアン Changan':       [1.6,1.5,1.3,1.3,1.7,1.9,2.2,2.3,2.4,2.5,1.7],
     '日本 マツダ':    [1.6,1.6,1.7,1.6,1.6,1.5,1.3,1.4,1.3,1.3,1.4],
     'マヒンドラ':     [0.6,0.6,0.7,0.7,0.5,0.6,0.8,0.9,1.0,1.0,1.3],
-    '北汽集団':       [1.5,1.4,1.2,1.1,1.1,1.0,0.8,0.9,1.0,1.2,1.1],
-    '東風集団':       [1.3,1.3,1.1,1.1,1.3,1.3,1.1,0.8,0.9,1.0,1.0],
-    '一汽集団':       [0.5,0.6,0.6,0.7,1.0,1.0,0.7,0.8,0.9,1.0,0.8],
-    '広汽集団':       [0.4,0.5,0.6,0.4,0.5,0.6,0.8,1.0,0.9,0.7,0.7],
-    '江淮集団':       [0.8,0.6,0.5,0.5,0.6,0.6,0.6,0.6,0.6,0.6,0.6],
-    '零跑汽車':       [0.0,0.0,0.0,0.0,0.0,0.1,0.1,0.2,0.3,0.7,0.5],
-    '中国重汽':       [0.2,0.3,0.4,0.3,0.6,0.5,0.3,0.4,0.4,0.5,0.5]
+    '北汽 BAIC':       [1.5,1.4,1.2,1.1,1.1,1.0,0.8,0.9,1.0,1.2,1.1],
+    'ドンフェン Dongfeng':       [1.3,1.3,1.1,1.1,1.3,1.3,1.1,0.8,0.9,1.0,1.0],
+    'FAW（一汽）':       [0.5,0.6,0.6,0.7,1.0,1.0,0.7,0.8,0.9,1.0,0.8],
+    '広汽 GAC':       [0.4,0.5,0.6,0.4,0.5,0.6,0.8,1.0,0.9,0.7,0.7],
+    'JAC':       [0.8,0.6,0.5,0.5,0.6,0.6,0.6,0.6,0.6,0.6,0.6],
+    'リープモーター Leapmotor':       [0.0,0.0,0.0,0.0,0.0,0.1,0.1,0.2,0.3,0.7,0.5],
+    'CNHTC（中国重汽）':       [0.2,0.3,0.4,0.3,0.6,0.5,0.3,0.4,0.4,0.5,0.5]
   },
   // メーカー地域別シェア詳細
   makerRegion: {
-    names: ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','吉利集団','米国 GM','日本 スズキ','米国 フォード','奇瑞集団','BYD','上汽集団','日本 ホンダ','ドイツ BMW','ドイツ メルセデス','タタ集団','テスラ','長城汽車','長安集団','日本 マツダ','マヒンドラ','北汽集団','東風集団','一汽集団','広汽集団','江淮集団','零跑汽車','中国重汽','日本 五十鈴','賽力斯','伊朗霍徳罗','小米汽車'],
+    names: ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','ジーリー Geely','米国 GM','日本 スズキ','米国 フォード','チェリー Chery','BYD','SAIC','日本 ホンダ','ドイツ BMW','ドイツ メルセデス','タタ Tata','テスラ','グレートウォール GWM','チャンアン Changan','日本 マツダ','マヒンドラ','北汽 BAIC','ドンフェン Dongfeng','FAW（一汽）','広汽 GAC','JAC','リープモーター Leapmotor','CNHTC（中国重汽）','日本 五十鈴','セレス Seres','伊朗霍徳罗','シャオミ Xiaomi'],
     share2026: {
       中国:      [4.6,7.4,1.5,0.2,1.6,13.0,2.1,0.0,1.1,8.7,9.6,9.0,1.1,2.0,1.3,0.0,3.1,3.9,4.7,0.3,0.0,3.2,3.1,2.5,2.1,1.3,1.4,1.7,0.0,1.4,0.0,1.4],
       北米洲:    [14.4,4.9,11.4,7.6,7.7,0.9,16.2,0.2,11.5,0.0,0.0,0.3,8.2,2.2,2.8,0.5,2.3,0.1,0.1,3.1,0.0,0.0,0.0,0.0,0.0,0.1,0.0,0.0,0.1,0.0,0.0,0.0],
@@ -9844,8 +9853,8 @@ function wsDrawCountry(view) {
 
 // ⑤ メーカー世界シェア
 var WS_MAKER_GROUPS = {
-  top10:    ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','吉利集団','米国 GM','日本 スズキ','米国 フォード','奇瑞集団'],
-  chinese:  ['吉利集団','奇瑞集団','BYD','上汽集団','長城汽車','長安集団','北汽集団','東風集団','一汽集団','広汽集団','江淮集団','中国重汽'],
+  top10:    ['日本 トヨタ','ドイツ VW','現代起亜','Stellantis','ルノー日産','ジーリー Geely','米国 GM','日本 スズキ','米国 フォード','チェリー Chery'],
+  chinese:  ['ジーリー Geely','チェリー Chery','BYD','SAIC','グレートウォール GWM','チャンアン Changan','北汽 BAIC','ドンフェン Dongfeng','FAW（一汽）','広汽 GAC','JAC','CNHTC（中国重汽）'],
   japanese: ['日本 トヨタ','日本 スズキ','日本 ホンダ','日本 マツダ'],
   european: ['ドイツ VW','Stellantis','ルノー日産','ドイツ BMW','ドイツ メルセデス'],
   american: ['米国 GM','米国 フォード','テスラ'],
@@ -9892,12 +9901,12 @@ function wsDrawMaker(filter) {
   }
   var SHORT = {
     '日本 トヨタ':'トヨタ','ドイツ VW':'VW','現代起亜':'現代起亜','Stellantis':'Stellantis',
-    'ルノー日産':'ルノー日産','吉利集団':'吉利','米国 GM':'GM','日本 スズキ':'スズキ',
-    '米国 フォード':'フォード','奇瑞集団':'奇瑞','BYD':'BYD','上汽集団':'上汽',
+    'ルノー日産':'ルノー日産','ジーリー Geely':'吉利','米国 GM':'GM','日本 スズキ':'スズキ',
+    '米国 フォード':'フォード','チェリー Chery':'奇瑞','BYD':'BYD','SAIC':'上汽',
     '日本 ホンダ':'ホンダ','ドイツ BMW':'BMW','ドイツ メルセデス':'メルセデス',
-    'タタ集団':'タタ','テスラ':'テスラ','長城汽車':'長城','長安集団':'長安',
-    '日本 マツダ':'マツダ','マヒンドラ':'マヒンドラ','北汽集団':'北汽','東風集団':'東風',
-    '一汽集団':'一汽','広汽集団':'広汽','江淮集団':'江淮','中国重汽':'中国重汽'
+    'タタ Tata':'タタ','テスラ':'テスラ','グレートウォール GWM':'長城','チャンアン Changan':'長安',
+    '日本 マツダ':'マツダ','マヒンドラ':'マヒンドラ','北汽 BAIC':'北汽','ドンフェン Dongfeng':'東風',
+    'FAW（一汽）':'一汽','広汽 GAC':'広汽','JAC':'江淮','CNHTC（中国重汽）':'CNHTC（中国重汽）'
   };
   var series = targets.map(function(name) {
     var colorIdx = Object.keys(WS.makers).indexOf(name);
@@ -9952,33 +9961,33 @@ var WS_MR_NAMES_JA = {
   '現代起亜':       '現代起亜（韓）',
   'Stellantis':    'Stellantis（伊/仏/米）',
   'ルノー日産':     'ルノー日産（仏/日）',
-  '吉利集団':       '吉利集団（中）',
+  'ジーリー Geely':       'ジーリー Geely（中）',
   '米国 GM':        'GM（米）',
   '日本 スズキ':    'スズキ（日）',
   '米国 フォード':  'フォード（米）',
-  '奇瑞集団':       '奇瑞集団（中）',
+  'チェリー Chery':       'チェリー Chery（中）',
   'BYD':           'BYD（中）',
-  '上汽集団':       '上汽集団（中）',
+  'SAIC':       'SAIC（中）',
   '日本 ホンダ':    'ホンダ（日）',
   'ドイツ BMW':     'BMW（独）',
   'ドイツ メルセデス':'メルセデス（独）',
-  'タタ集団':       'タタ集団（印）',
+  'タタ Tata':       'タタ Tata（印）',
   'テスラ':         'テスラ（米）',
-  '長城汽車':       '長城汽車（中）',
-  '長安集団':       '長安集団（中）',
+  'グレートウォール GWM':       'グレートウォール GWM（中）',
+  'チャンアン Changan':       'チャンアン Changan（中）',
   '日本 マツダ':    'マツダ（日）',
   'マヒンドラ':     'マヒンドラ（印）',
-  '北汽集団':       '北汽集団（中）',
-  '東風集団':       '東風集団（中）',
-  '一汽集団':       '一汽集団（中）',
-  '広汽集団':       '広汽集団（中）',
-  '江淮集団':       '江淮集団（中）',
-  '零跑汽車':       '零跑汽車（中）',
-  '中国重汽':       '中国重汽（中）',
+  '北汽 BAIC':       '北汽 BAIC（中）',
+  'ドンフェン Dongfeng':       'ドンフェン Dongfeng（中）',
+  'FAW（一汽）':       'FAW（一汽）（中）',
+  '広汽 GAC':       '広汽 GAC（中）',
+  'JAC':       'JAC（中）',
+  'リープモーター Leapmotor':       'リープモーター Leapmotor（中）',
+  'CNHTC（中国重汽）':       'CNHTC（中国重汽・中）',
   '日本 五十鈴':    'いすゞ（日）',
-  '賽力斯':         '賽力斯/AITO（中）',
+  'セレス Seres':         'セレス Seres／AITO（中）',
   '伊朗霍徳罗':     'IKCo（イラン）',
-  '小米汽車':       '小米汽車（中）'
+  'シャオミ Xiaomi':       'シャオミ Xiaomi（中）'
 };
 
 var WS_MR_GROUP = 'all';
@@ -9987,11 +9996,11 @@ var WS_MR_REGION = 'all';
 // 国系グループ定義（makerRegion.namesのインデックスに対応）
 var WS_MR_MAKER_GROUPS = {
   all:      null, // null = 全社
-  chinese:  ['吉利集団','奇瑞集団','BYD','上汽集団','長城汽車','長安集団','北汽集団','東風集団','一汽集団','広汽集団','江淮集団','零跑汽車','中国重汽','賽力斯','小米汽車'],
+  chinese:  ['ジーリー Geely','チェリー Chery','BYD','SAIC','グレートウォール GWM','チャンアン Changan','北汽 BAIC','ドンフェン Dongfeng','FAW（一汽）','広汽 GAC','JAC','リープモーター Leapmotor','CNHTC（中国重汽）','セレス Seres','シャオミ Xiaomi'],
   japanese: ['日本 トヨタ','日本 スズキ','日本 ホンダ','日本 マツダ','日本 五十鈴'],
   european: ['ドイツ VW','Stellantis','ルノー日産','ドイツ BMW','ドイツ メルセデス'],
   american: ['米国 GM','米国 フォード','テスラ'],
-  others:   ['現代起亜','タタ集団','マヒンドラ','伊朗霍徳罗']
+  others:   ['現代起亜','タタ Tata','マヒンドラ','伊朗霍徳罗']
 };
 
 window.wsSetMrGroup = function(group, btn) {
@@ -10252,7 +10261,7 @@ const CPCA = {
   },
   brand: {
     // 出典：CPCA「2026年2月乗用車区域市場流向分析」6章
-    // lux=豪華%, jv=合資%, dom=自主% / dlux/djv/ddom = 較25年変化(pp)
+    // lux=豪華%, jv=合資%, dom=中国系% / dlux/djv/ddom = 較25年変化(pp)
     '上海':  {lux:18.4,jv:25.9,dom:55.7, dlux:-5.4,djv:4.0, ddom:1.4},
     '北京':  {lux:22.0,jv:24.8,dom:53.2, dlux:4.4, djv:-1.8,ddom:-2.6},
     '甘粛':  {lux:5.8, jv:26.7,dom:67.5, dlux:0.5, djv:2.5, ddom:-3.0},
@@ -10407,7 +10416,7 @@ window.cpcaInitMap = function() {
             ['sales26','📦 26年1-2月 販売量（万台）'],['sales25','📦 2025年通年 販売量（万台）'],['sales24','📦 2024年通年 販売量（万台）'],
             ['yoy','📈 25年 前年比（対24年）'],['yoy26','📈 26年2月 前年比（単月）'],
             ['nev','⚡ NEV新車比率（2月）'],['dnev','⚡ NEV新車比率 前年差（pp）'],
-            ['dom','🏷️ 自主ブランド比率'],['econ','📉 経済型車份額（2月）'],
+            ['dom','🏷️ 中国系ブランド比率'],['econ','📉 経済型車份額（2月）'],
           ].map(([m,lbl],i)=>`<button onclick="cpcaMetric('${m}',this)" style="font-size:11px;padding:5px 8px;border-radius:5px;cursor:pointer;text-align:left;border:${i===0?'none':'1px solid #2a3f60'};background:${i===0?'#2563eb':'transparent'};color:${i===0?'#fff':'#8ab0d0'}">${lbl}</button>`).join('')}
         </div>
         <div id="cpca-vmap-legend" style="margin-top:4px"></div>
@@ -10535,7 +10544,7 @@ function renderMapChart() {
     hev:'HEV比率 2月（%）',  ice:'燃油車(ICE)比率 2月（%）',
     suv:'SUV比率 2月単月（%）', dsuv:'SUV比率 前年増減（pp）',
     car:'セダン(CAR)比率 2月（%）',
-    dom:'自主ブランド比率 2026年1-2月（%）', ddom:'自主ブランド 前年差（pp）',
+    dom:'中国系ブランド比率 2026年1-2月（%）', ddom:'中国系ブランド 前年差（pp）',
     lux:'高級車比率 2026年1-2月（%）', dlux:'豪華ブランド 前年差（pp）',
     cgrade:'Cクラス比率 2月（%）', bgrade:'Bクラス比率 2月（%）',
     econ:'経済型車份額 2月（%）',
@@ -10721,7 +10730,7 @@ function showProvDetail(ja) {
         legend: { right: 4, top: 'middle', orient: 'vertical',
                   textStyle: { fontSize: 10, color: '#8ab0d0' },
                   itemWidth: 10, itemHeight: 10, itemGap: 6,
-                  data: ['自主','合資','高級車'] },
+                  data: ['中国系','合資','高級車'] },
         tooltip: { trigger: 'axis', axisPointer: { type: 'shadow' },
           formatter: function(ps) { return ps.map(function(p) { return p.seriesName + ': ' + p.value.toFixed(1) + '%'; }).join('<br>'); }
         },
@@ -10729,7 +10738,7 @@ function showProvDetail(ja) {
         xAxis: { type: 'value', max: 100, show: false },
         yAxis: { type: 'category', data: [''], show: false },
         series: [
-          { name: '自主', type: 'bar', stack: 's', data: [br.dom], barMaxWidth: 44,
+          { name: '中国系', type: 'bar', stack: 's', data: [br.dom], barMaxWidth: 44,
             itemStyle: { color: '#c62828' },
             label: { show: true, position: 'inside', color: '#fff', fontSize: 11, fontWeight: 'bold',
               formatter: function(p) { return p.value.toFixed(0) + '%'; } } },
@@ -13289,7 +13298,7 @@ window.discShowPane = discShowPane;
 
 <script>
 // ============================================================
-// 🌏 自主海外販売 タブ
+// 🌏 中国系海外販売 タブ
 // ============================================================
 (function(){
 
@@ -13327,78 +13336,78 @@ var JH_REGION = {
 
 // 画像8: メーカー別販売（台）
 var JH_MAKER = {
-  makers: ['奇瑞集団','比亜迪','上汽集団','長城汽車','吉利集団','長安集団','江淮集団','広汽集団','北汽集団','零跑汽車','東風集団','海馬集団','小鵬汽車','一汽集団','賽力斯','中国重汽','福汽集団','鑫源集団','厦門金龍','理想汽車','宇通集団','AvtoVAZ','陝汽重卡','自主品牌','陝汽集団','哪吒汽車','創維汽車','蔚来汽車','三一集団'],
+  makers: ['チェリー Chery','BYD','SAIC','グレートウォール GWM','ジーリー Geely','チャンアン Changan','JAC','広汽 GAC','北汽 BAIC','リープモーター Leapmotor','ドンフェン Dongfeng','ハイマー Haima','シャオペン XPENG','FAW（一汽）','セレス Seres','CNHTC（中国重汽）','福汽 FAG','鑫源 SRM','キンロン Kinglong','リ・オート Li Auto','ユートン Yutong','AvtoVAZ','シャンチー重卡 SHACMAN','その他中国系','シャンチー SHACMAN','ネタ Neta','スカイワース Skyworth','ニオ NIO','サニー SANY'],
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
   data: {
-    '奇瑞集団': [52811,133046,168172,444131,658646,848142,187888],
-    '比亜迪':   [4510,9194,22034,111025,251290,614728,135147],
-    '上汽集団': [169658,325245,444938,610791,600206,651441,115732],
-    '長城汽車': [41168,117822,129961,269076,399107,426912,75590],
-    '吉利集団': [22163,49603,95347,157005,268817,303595,54509],
-    '長安集団': [52333,61320,74507,101408,180273,183752,36352],
-    '江淮集団': [16257,31848,41476,54835,95953,95276,22230],
-    '広汽集団': [247,2804,2879,6931,32827,48420,17230],
-    '北汽集団': [10071,15116,18083,17562,43889,66580,15564],
-    '零跑汽車': [null,null,58,1352,1827,36417,14267],
-    '東風集団': [9212,14176,19523,13562,40194,42887,9686],
-    '海馬集団': [86,null,null,null,null,null,7132],
-    '小鵬汽車': [null,483,745,2071,13600,31412,6283],
-    '一汽集団': [4979,5845,8511,15925,32043,31279,5289],
-    '賽力斯':   [null,99,698,2300,7383,23196,3204],
-    '中国重汽': [473,612,782,1258,27112,14761,2619],
-    '福汽集団': [166,3,3,5,111,4259,1653],
-    '鑫源集団': [723,708,232,672,3701,8543,1638],
-    '厦門金龍': [8689,7747,3995,3887,3958,8212,1420],
-    '理想汽車': [null,null,null,null,23347,13107,1116],
-    '宇通集団': [1096,229,394,1861,5010,4694,895],
+    'チェリー Chery': [52811,133046,168172,444131,658646,848142,187888],
+    'BYD':   [4510,9194,22034,111025,251290,614728,135147],
+    'SAIC': [169658,325245,444938,610791,600206,651441,115732],
+    'グレートウォール GWM': [41168,117822,129961,269076,399107,426912,75590],
+    'ジーリー Geely': [22163,49603,95347,157005,268817,303595,54509],
+    'チャンアン Changan': [52333,61320,74507,101408,180273,183752,36352],
+    'JAC': [16257,31848,41476,54835,95953,95276,22230],
+    '広汽 GAC': [247,2804,2879,6931,32827,48420,17230],
+    '北汽 BAIC': [10071,15116,18083,17562,43889,66580,15564],
+    'リープモーター Leapmotor': [null,null,58,1352,1827,36417,14267],
+    'ドンフェン Dongfeng': [9212,14176,19523,13562,40194,42887,9686],
+    'ハイマー Haima': [86,null,null,null,null,null,7132],
+    'シャオペン XPENG': [null,483,745,2071,13600,31412,6283],
+    'FAW（一汽）': [4979,5845,8511,15925,32043,31279,5289],
+    'セレス Seres':   [null,99,698,2300,7383,23196,3204],
+    'CNHTC（中国重汽）': [473,612,782,1258,27112,14761,2619],
+    '福汽 FAG': [166,3,3,5,111,4259,1653],
+    '鑫源 SRM': [723,708,232,672,3701,8543,1638],
+    'キンロン Kinglong': [8689,7747,3995,3887,3958,8212,1420],
+    'リ・オート Li Auto': [null,null,null,null,23347,13107,1116],
+    'ユートン Yutong': [1096,229,394,1861,5010,4694,895],
     'AvtoVAZ':  [null,null,null,null,null,5534,481],
-    '陝汽重卡': [133,100,118,179,641,2237,463],
-    '自主品牌': [54,582,2081,1959,3242,1110,418],
-    '陝汽集団': [null,null,null,null,null,15545,331],
-    '哪吒汽車': [null,14,85,12973,9171,4115,279],
-    '創維汽車': [null,14,748,3704,1285,2200,224],
-    '蔚来汽車': [null,201,1204,2371,1756,1860,204],
-    '三一集団': [6,39,54,27,2557,1471,189]
+    'シャンチー重卡 SHACMAN': [133,100,118,179,641,2237,463],
+    'その他中国系': [54,582,2081,1959,3242,1110,418],
+    'シャンチー SHACMAN': [null,null,null,null,null,15545,331],
+    'ネタ Neta': [null,14,85,12973,9171,4115,279],
+    'スカイワース Skyworth': [null,14,748,3704,1285,2200,224],
+    'ニオ NIO': [null,201,1204,2371,1756,1860,204],
+    'サニー SANY': [6,39,54,27,2557,1471,189]
   }
 };
 
 // 画像9: NEVメーカー別販売（台）
 var JH_MAKER_NEV = {
-  makers: ['比亜迪','奇瑞集団','上汽集団','吉利集団','零跑汽車','広汽集団','長安集団','小鵬汽車','長城汽車','東風集団','理想汽車','賽力斯','江淮集団','創維汽車','蔚来汽車','極石汽車','小米汽車','福汽集団','北汽集団','江鈴集団','一汽集団','均瑶集団'],
+  makers: ['BYD','チェリー Chery','SAIC','ジーリー Geely','リープモーター Leapmotor','広汽 GAC','チャンアン Changan','シャオペン XPENG','グレートウォール GWM','ドンフェン Dongfeng','リ・オート Li Auto','セレス Seres','JAC','スカイワース Skyworth','ニオ NIO','ポリストーン Polestone','シャオミ Xiaomi','福汽 FAG','北汽 BAIC','JMC（江鈴）','FAW（一汽）','均瑶 Juneyao'],
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','26年1-2月'],
   data: {
-    '比亜迪':   [381,1429,10772,111025,251290,614727,135147],
-    '奇瑞集団': [null,null,755,1066,10804,93685,44087],
-    '上汽集団': [23061,44783,98682,171028,134373,202615,38195],
-    '吉利集団': [9,6091,26442,30737,28711,50525,15832],
-    '零跑汽車': [null,null,58,1352,1827,36417,14267],
-    '広汽集団': [null,null,null,88,5380,21247,12988],
-    '長安集団': [131,39,null,null,6802,20247,12180],
-    '小鵬汽車': [null,483,745,2071,13600,31412,6283],
-    '長城汽車': [2,null,4064,16959,19443,20364,6098],
-    '東風集団': [88,247,2294,2992,11875,18312,2959],
-    '理想汽車': [null,null,null,null,23347,13107,1116],
-    '賽力斯':   [null,99,698,1848,5707,8165,713],
-    '江淮集団': [51,648,2480,3777,5062,2819,349],
-    '創維汽車': [null,14,748,3704,1285,2183,224],
-    '蔚来汽車': [null,201,1204,2371,1756,1860,204],
-    '極石汽車': [null,null,null,null,419,812,172],
-    '小米汽車': [null,null,null,null,171,707,161],
-    '福汽集団': [null,null,null,4,null,185,86],
-    '北汽集団': [300,null,null,71,227,354,59],
-    '江鈴集団': [null,null,null,407,569,714,53],
-    '一汽集団': [null,25,2193,345,1495,1900,34],
-    '均瑶集団': [null,null,null,null,88,153,7]
+    'BYD':   [381,1429,10772,111025,251290,614727,135147],
+    'チェリー Chery': [null,null,755,1066,10804,93685,44087],
+    'SAIC': [23061,44783,98682,171028,134373,202615,38195],
+    'ジーリー Geely': [9,6091,26442,30737,28711,50525,15832],
+    'リープモーター Leapmotor': [null,null,58,1352,1827,36417,14267],
+    '広汽 GAC': [null,null,null,88,5380,21247,12988],
+    'チャンアン Changan': [131,39,null,null,6802,20247,12180],
+    'シャオペン XPENG': [null,483,745,2071,13600,31412,6283],
+    'グレートウォール GWM': [2,null,4064,16959,19443,20364,6098],
+    'ドンフェン Dongfeng': [88,247,2294,2992,11875,18312,2959],
+    'リ・オート Li Auto': [null,null,null,null,23347,13107,1116],
+    'セレス Seres':   [null,99,698,1848,5707,8165,713],
+    'JAC': [51,648,2480,3777,5062,2819,349],
+    'スカイワース Skyworth': [null,14,748,3704,1285,2183,224],
+    'ニオ NIO': [null,201,1204,2371,1756,1860,204],
+    'ポリストーン Polestone': [null,null,null,null,419,812,172],
+    'シャオミ Xiaomi': [null,null,null,null,171,707,161],
+    '福汽 FAG': [null,null,null,4,null,185,86],
+    '北汽 BAIC': [300,null,null,71,227,354,59],
+    'JMC（江鈴）': [null,null,null,407,569,714,53],
+    'FAW（一汽）': [null,25,2193,345,1495,1900,34],
+    '均瑶 Juneyao': [null,null,null,null,88,153,7]
   }
 };
 
 // 画像6: 地域別ブランド系シェア（2026年1-2月）
 var JH_BRAND_SHARE = {
   regions: ['中国国内','米加','欧州連合','アジアその他','日韓','中南米','中東','東南アジア','旧ソ連圏','オセアニア','アフリカ'],
-  brands: ['自主系','日系','独系','米系','欧系','韓系','アジア系','ロシア系'],
+  brands: ['中国系','日系','独系','米系','欧系','韓系','アジア系','ロシア系'],
   colors: ['#ee4444','#4488ee','#f5a623','#22bb55','#9b59b6','#1abc9c','#e67e22','#95a5a6'],
   data: [
-    // 自主, 日, 独, 米, 欧, 韓, 亜, 俄
+    // 中国系, 日, 独, 米, 欧, 韓, 亜, 俄
     [73,8,10,6,1,1,0,0],   // 中国
     [0,38,9,37,5,11,0,0],  // 米加
     [6,12,34,7,34,6,0,0],  // 欧州連合
@@ -13596,9 +13605,9 @@ var JH_COUNTRY_MAKER_NEV = {
   ]
 };
 
-// 画像12: ロシア集団別データ
+// 画像12: ロシア企業別データ
 var JH_RUSSIA = {
-  groups: ['奇瑞集団','長城汽車','吉利集団','長安集団','江淮集団','東風集団','一汽集団','中国重汽','理想汽車','広汽集団'],
+  groups: ['チェリー Chery','グレートウォール GWM','ジーリー Geely','チャンアン Changan','JAC','ドンフェン Dongfeng','FAW（一汽）','CNHTC（中国重汽）','リ・オート Li Auto','広汽 GAC'],
   data26: [31335,23572,19643,4632,2636,3901,3189,887,1042,2182],
   data25: [245819,198205,177779,67835,26763,19632,19393,10061,13088,21330],
   growth_cum: [-5,-8,17,-52,-41,51,69,-63,-37,-11],  // %  (広汽は画像12で -11%)
@@ -13606,7 +13615,7 @@ var JH_RUSSIA = {
   feb26: [15300,11530,10524,2182,1152,2154,1527,440,404,1089]
 };
 
-// 画像2: 年次YoY増速（海外部分市場 自主車小売）
+// 画像2: 年次YoY増速（海外部分市場 中国系乗用車小売）
 // 各年の 1月/2月/1-2月累計/3-12月/全年 の販売量(万台)と前年比(%)
 var JH_YOY = {
   years: ['2020年','2021年','2022年','2023年','2024年','2025年','2026年'],
@@ -13627,11 +13636,11 @@ var JH_YOY = {
   }
 };
 
-// 画像3・4: 自主海外份額（国別・地域別） — 自主ブランドが各市場に占めるシェア(%)
+// 画像3・4: 中国系海外シェア（国別・地域別） — 中国系ブランドが各市場に占めるシェア(%)
 // 列: 2021年度, 2022年度, 2023年度, 2024年度, 2025年1Q, 2025年2Q, 2025年3Q, 2025年4Q, 2025年総, 2026年1-2月
 var JH_COUNTRY_SHARE = {
   periods: ['2021年','2022年','2023年','2024年','2025Q1','2025Q2','2025Q3','2025Q4','2025年','26年1-2月'],
-  // 画像4: 自主 海外份額（全体、ICE+NEV）
+  // 画像4: 中国系 海外份額（全体、ICE+NEV）
   total: {
     'ドイツ':       [0.1,0.8,1.2,1.0,1.2,2.0,2.1,3.0,2.1,2.8],
     'フランス':     [0.2,0.8,1.7,1.5,1.9,2.5,2.9,3.8,2.8,2.4],
@@ -13650,7 +13659,7 @@ var JH_COUNTRY_SHARE = {
     '南半球 合計':  [6.7,7.4,7.4,9.5,11.6,12.8,13.9,15.3,13.5,18.0],
     '総計':         [1.4,2.0,3.1,4.6,4.6,5.3,6.0,6.7,5.7,7.4]
   },
-  // 画像3: 自主 新能源 海外份額
+  // 画像3: 中国系 新能源 海外份額
   nev: {
     'ドイツ':       [0.2,1.9,4.4,3.7,3.2,5.7,5.7,7.7,5.8,7.3],
     'フランス':     [1.7,3.9,7.0,4.2,4.4,7.4,7.2,7.5,6.7,5.1],
@@ -13675,7 +13684,7 @@ var JH_COUNTRY_SHARE = {
 // 行: 地域、列: 主要グローバルメーカー
 var JH_WORLD_MAKER_REGION = {
   regions: ['大洋州','東南アジア','アフリカ','米加','欧州連合','露国中央アジア','日韓','アジアその他','中東','中国','中南米','世界総体'],
-  makers: ['日本 トヨタ','独 フォルクスワーゲン','現代 起亜','Stellantis','雷諾 日産','比亜迪','吉利 集団','米国 GM','米国 フォード','奇瑞 集団','日本 ホンダ','上汽 集団','日本 スズキ','独 BMW'],
+  makers: ['トヨタ Toyota','フォルクスワーゲン VW','現代起亜 Hyundai-Kia','Stellantis','ルノー日産 Renault-Nissan','BYD','ジーリー Geely','GM','フォード Ford','チェリー Chery','ホンダ Honda','SAIC','スズキ Suzuki','BMW'],
   // 26年 シェア (%)
   share: [
     [17,  4, 14,  1,  3,  6,  2,  0,  8,  5,  2,  5,  1,  2], // 大洋州
@@ -13944,7 +13953,7 @@ function jhDrawCountryMaker() {
   var indices = totals.map(function(_,i){ return i; }).sort(function(a,b){ return totals[a]-totals[b]; });
   var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER.countries[i]; });
   ec.setOption({
-    tooltip: unifiedStackTooltip({unit:'台', digits:0}),
+    tooltip: unifiedStackTooltip({unit:'台', digits:0, sort:'desc', hideZero:true}),
     legend:{ data: JH_COUNTRY_MAKER.makers, top:8, type:'scroll' },
     grid:{ left:100, right:30, top:55, bottom:20 },
     xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
@@ -13967,7 +13976,7 @@ function jhDrawCountryMakerNev() {
   var indices = totals.map(function(_,i){ return i; }).sort(function(a,b){ return totals[a]-totals[b]; });
   var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER_NEV.countries[i]; });
   ec.setOption({
-    tooltip: unifiedStackTooltip({unit:'台', digits:0}),
+    tooltip: unifiedStackTooltip({unit:'台', digits:0, sort:'desc', hideZero:true}),
     legend:{ data: JH_COUNTRY_MAKER_NEV.makers, top:8, type:'scroll' },
     grid:{ left:110, right:30, top:55, bottom:20 },
     xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
@@ -14222,7 +14231,7 @@ function jhDrawRussiaDetail() {
   var colors = ['#ef4444','#22c55e','#3b82f6','#f97316','#a855f7','#06b6d4','#f59e0b','#64748b','#ec4899','#14b8a6'];
 
   if (JH_RUSSIA_VIEW === 'group') {
-    // 円グラフ：2026年1-2月集団別シェア
+    // 円グラフ：2026年1-2月企業別シェア
     var pieData = groups.map(function(g, i){
       return { name:g, value:JH_RUSSIA.data26[i], itemStyle:{color:colors[i]} };
     });
@@ -14234,14 +14243,14 @@ function jhDrawRussiaDetail() {
         label:{ formatter:function(p){ return p.name+'\n'+p.value.toLocaleString()+'台'; }, fontSize:11 },
         emphasis:{ itemStyle:{shadowBlur:8,shadowColor:'rgba(0,0,0,0.2)'} }
       }]
-    });
+    }, true /* notMerge: タブ切替時に軸/系列型の残留を防止 */);
   } else if (JH_RUSSIA_VIEW === 'trend') {
     // 棒グラフ：1月・2月別
     ec.setOption({
       tooltip:{ trigger:'axis', axisPointer:{type:'shadow'} },
       legend:{ data:['2026年1月','2026年2月'], top:8 },
-      grid:{ left:90, right:30, top:50, bottom:40 },
-      xAxis:{ type:'category', data:groups },
+      grid:{ left:90, right:30, top:50, bottom:40, containLabel:true },
+      xAxis:{ type:'category', data:groups, axisLabel:{ rotate:25, fontSize:10 } },
       yAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(1)+'万'; } } },
       series:[
         { name:'2026年1月', type:'bar', data:JH_RUSSIA.jan26, color:'#3b82f6' },
@@ -14249,20 +14258,20 @@ function jhDrawRussiaDetail() {
           label:{ show:true, position:'top', formatter:function(p){ return p.value.toLocaleString(); }, fontSize:10 }
         }
       ]
-    });
+    }, true /* notMerge: タブ切替時に軸/系列型の残留を防止 */);
   } else {
     // 前年比棒グラフ
     var paired = groups.map(function(g,i){ return {g:g, v:JH_RUSSIA.growth_cum[i]}; }).sort(function(a,b){ return a.v-b.v; });
     ec.setOption({
       tooltip:{ trigger:'axis', formatter:function(params){ return params[0].name+': <b>'+params[0].value+'%</b>'; } },
-      grid:{ left:90, right:60, top:20, bottom:40 },
+      grid:{ left:90, right:60, top:20, bottom:40, containLabel:true },
       xAxis:{ type:'value', name:'前年比（%）' },
       yAxis:{ type:'category', data:paired.map(function(p){ return p.g; }) },
       series:[{ type:'bar',
         data:paired.map(function(p){ return { value:p.v, itemStyle:{color:p.v>=0?'#22c55e':'#ef4444'} }; }),
         label:{ show:true, position:function(p){ return p.value>=0?'right':'left'; }, formatter:function(p){ return p.value+'%'; } }
       }]
-    });
+    }, true /* notMerge: タブ切替時に軸/系列型の残留を防止 */);
   }
 }
 
@@ -14456,7 +14465,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
       {name:'高級車',d:[35.5,36.1,37.0,37.6,35.8,34.2,34.4,34.4,33.9],       c:'#d97706'},
       {name:'合弁（合資）',    d:[16.2,16.8,17.4,17.9,17.2,17.4,17.5,17.3,17.3],       c:COLORS.gas},
       {name:'新興EV',      d:[22.1,22.6,28.5,28.1,24.1,25.8,27.5,25.9,24.1],       c:COLORS.erev},
-      {name:'自主ブランド',d:[10.3,11.9,13.0,13.4,12.2,12.7,12.8,12.7,12.5],       c:COLORS.hev},
+      {name:'中国系ブランド',d:[10.3,11.9,13.0,13.4,12.2,12.7,12.8,12.7,12.5],       c:COLORS.hev},
       {name:'全体',        d:[16.5,17.3,18.3,18.4,17.0,17.9,18.4,18.0,17.5],       c:COLORS.total, dash:true, w:3},
     ];
     ec.setOption({
@@ -14495,17 +14504,17 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
       {name:'合弁/BEV',      c:'#1e3a8a', d:[24,24,22,21,14,14,13,13,14]},
       {name:'新興EV/EREV',   c:'#fca5a5', d:[32,33,34,32,31,30,31,30,29]},
       {name:'新興EV/BEV',    c:'#ef4444', d:[20,19,23,24,21,24,26,25,23]},
-      {name:'自主/ガソリン', c:'#6ee7b7', d:[10,10,11,11,11,11,11,11,11]},
-      {name:'自主/HEV',      c:'#34d399', d:[15,18,14,13,18,14,13,16,14]},
-      {name:'自主/PHEV',     c:'#10b981', d:[16,16,18,16,16,18,18,18,17]},
-      {name:'自主/EREV',     c:'#059669', d:[31,22,19,21,19,19,20,20,18]},
-      {name:'自主/BEV',      c:'#047857', d:[10,12,13,13,10,11,11,11,10]},
+      {name:'中国系/ガソリン', c:'#6ee7b7', d:[10,10,11,11,11,11,11,11,11]},
+      {name:'中国系/HEV',      c:'#34d399', d:[15,18,14,13,18,14,13,16,14]},
+      {name:'中国系/PHEV',     c:'#10b981', d:[16,16,18,16,16,18,18,18,17]},
+      {name:'中国系/EREV',     c:'#059669', d:[31,22,19,21,19,19,20,20,18]},
+      {name:'中国系/BEV',      c:'#047857', d:[10,12,13,13,10,11,11,11,10]},
     ];
     var TOTALS = [
       {name:'高級 合計',  c:'#d97706', w:2.5, d:[35.5,36.1,37.0,37.6,35.8,34.2,34.4,34.4,33.9]},
       {name:'合弁 合計',  c:'#5b8fff', w:2.5, d:[16.2,16.8,17.4,17.9,17.2,17.4,17.5,17.3,17.3]},
       {name:'新興EV 合計',c:'#f97316', w:2.5, d:[22.1,22.6,28.5,28.1,24.1,25.8,27.5,25.9,24.1]},
-      {name:'自主 合計',  c:'#10b981', w:2.5, d:[10.3,11.9,13.0,13.4,12.2,12.7,12.8,12.7,12.5]},
+      {name:'中国系 合計',  c:'#10b981', w:2.5, d:[10.3,11.9,13.0,13.4,12.2,12.7,12.8,12.7,12.5]},
     ];
     function getD(d9){
       if(!d9) return d9;
@@ -15134,7 +15143,7 @@ function renderNevBrand(){
   var data = {
     '高級車': [36.0,38.4,39.2,32.6,43.5,41.9,40.0,36.9,42.5,39.8,48.2,43.3,43.3],
     '合弁メーカー': [4.9,6.9,5.7,6.6,6.6,7.1,6.6,7.0,7.2,3.6,4.6,6.4,6.4],
-    '自主ブランド': [63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,61.7],
+    '中国系ブランド': [63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,61.7],
     '全体': [46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.0,44.3,47.6,48.1,48.1]
   };
   // 最後の月(26.3)のデータは未掲載のためnull
@@ -15158,13 +15167,13 @@ function renderNevBrand(){
 function renderBrandWholesale(){
   var ec = makeEc('ec-zt-brand-wholesale'); if(!ec) return;
   var months = MONTHS_LABEL;
-  // 各月の高級・合弁・自主ブランド 卸売
+  // 各月の高級・合弁・中国系ブランド 卸売
   var gouhua = [27.2,21.1,23.7,25.6,20.4,25.9,28.9,23.3,28,30.2,22.8,16.1,27.2];
   var heizi  = [49.5,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58,57.4,42,28.3,49.5];
   var ziZhu  = [161, 154.2,160.6,167, 157.8,172.1,197.5,214.2,214,191.2,132.6,107.4,161];
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'万台'}),
-    legend: leg({data:['高級車','合弁メーカー','自主ブランド']}),
+    legend: leg({data:['高級車','合弁メーカー','中国系ブランド']}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
     yAxis: yVal('万台',{min:0,max:320}),
@@ -15172,7 +15181,7 @@ function renderBrandWholesale(){
       {name:'高級車', type:'bar', stack:'s', color:'#8b5cf6', data:gouhua,
         label:{show:false}},
       {name:'合弁メーカー', type:'bar', stack:'s', color:'#06b6d4', data:heizi},
-      {name:'自主ブランド', type:'bar', stack:'s', color:'#ef4444', data:ziZhu}
+      {name:'中国系ブランド', type:'bar', stack:'s', color:'#ef4444', data:ziZhu}
     ]
   });
 }
@@ -15182,7 +15191,7 @@ function renderNationShare(){
   var ec = makeEc('ec-zt-nation-share'); if(!ec) return;
   var months = MONTHS_LABEL;
   // 各月の国籍別卸売実績からシェア計算
-  // 自主ブランドシェア
+  // 中国系ブランドシェア
   
   var totals= [241,219,232,248,222,246,280,293,300,279,197,152,238];
   var ziZhu = [161,154.2,160.6,167,157.8,172.1,197.5,214.2,214,191.2,132.6,107.4,161];
@@ -15196,12 +15205,12 @@ function renderNationShare(){
   function pct(a,t){ return a.map(function(v,i){ return t[i]>0?+(v/t[i]*100).toFixed(1):0; }); }
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'%'}),
-    legend: leg({data:['自主ブランド','独系','日系','米系','韓系','欧州系']}),
+    legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系']}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
     yAxis: yVal('%',{min:0,max:100}),
     series:[
-      {name:'自主ブランド', type:'bar',stack:'s',color:'#ef4444',data:pct(ziZhu,totals)},
+      {name:'中国系ブランド', type:'bar',stack:'s',color:'#ef4444',data:pct(ziZhu,totals)},
       {name:'独系', type:'bar',stack:'s',color:'#3b82f6',data:pct(doku,totals)},
       {name:'日系', type:'bar',stack:'s',color:'#f59e0b',data:pct(nichi,totals)},
       {name:'米系', type:'bar',stack:'s',color:'#10b981',data:pct(bei,totals)},

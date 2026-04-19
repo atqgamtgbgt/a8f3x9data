@@ -79,54 +79,20 @@
       if (!_isShowingHover) return;
       if (!_lastOption) return;
       _isShowingHover = false;
-      // opacityを明示的に1に戻したoptionでリセット
-      var resetOpt = _lastOption;
-      if (resetOpt.series) {
-        var seriesArr = Array.isArray(resetOpt.series) ? resetOpt.series : [resetOpt.series];
-        var resetSeries = seriesArr.map(function(s) {
-          var r = {};
-          Object.keys(s).forEach(function(k) { r[k] = s[k]; });
-          r.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: 1 });
-          // line系列のlineStyleも復元
-          if (s.type === 'line' || s.type === 'scatter') {
-            r.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: 1 });
-          }
-          r.emphasis = { disabled: false };
-          return r;
-        });
-        resetOpt = {};
-        Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
-        resetOpt.series = resetSeries;
-
-        // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、独自追跡値で保持
-        {
-          var rLegObj = resetOpt.legend || {};
-          if (Array.isArray(rLegObj)) {
-            rLegObj = Object.assign({}, rLegObj[0] || {});
-            resetOpt.legend = [rLegObj];
-          } else {
-            rLegObj = Object.assign({}, rLegObj);
-            resetOpt.legend = rLegObj;
-          }
-          // _scrollDataIndex（legendscrollイベントで追跡）で上書き
-          if (Array.isArray(resetOpt.legend)) {
-            resetOpt.legend[0].scrollDataIndex = _scrollDataIndex;
-          } else {
-            resetOpt.legend.scrollDataIndex = _scrollDataIndex;
-          }
-          if (Object.keys(_hiddenSeries).length > 0) {
-            var sel2 = {};
-            seriesArr.forEach(function(s) { sel2[s.name] = !_hiddenSeries[s.name]; });
-            if (Array.isArray(resetOpt.legend)) {
-              resetOpt.legend[0].selected = sel2;
-            } else {
-              resetOpt.legend.selected = sel2;
-            }
-          }
+      var seriesArr = Array.isArray(_lastOption.series) ? _lastOption.series : (_lastOption.series ? [_lastOption.series] : []);
+      // seriesのみmergeモードで更新 → 凡例スクロール位置等の内部状態を一切触らない
+      var resetSeries = seriesArr.map(function(s) {
+        var r = {};
+        Object.keys(s).forEach(function(k) { r[k] = s[k]; });
+        r.itemStyle = Object.assign({}, s.itemStyle || {}, { opacity: 1 });
+        if (s.type === 'line' || s.type === 'scatter') {
+          r.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: 1 });
         }
-      }
+        r.emphasis = { disabled: false };
+        return r;
+      });
       _hovering = true;
-      _setOption(resetOpt, true);
+      _setOption({ series: resetSeries }, false);
       _hovering = false;
     }
 
@@ -357,58 +323,27 @@
         return patched;
       });
 
-      // 元optionのコピーにseriesだけ差し替えてnotMerge:trueで再セット
-      var fullOpt = {};
-      Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
-      fullOpt.series = patchSeries;
+      // seriesのみmergeモードで更新 → 凡例スクロール位置等の内部状態を一切触らない
+      var mergeOpt = { series: patchSeries };
 
-      // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、独自追跡値で保持
-      {
-        var legObj2 = fullOpt.legend || {};
-        if (Array.isArray(legObj2)) {
-          legObj2 = Object.assign({}, legObj2[0] || {});
-          fullOpt.legend = [legObj2];
-        } else {
-          legObj2 = Object.assign({}, legObj2);
-          fullOpt.legend = legObj2;
-        }
-        // _scrollDataIndex（legendscrollイベントで追跡）で上書き
-        if (Array.isArray(fullOpt.legend)) {
-          fullOpt.legend[0].scrollDataIndex = _scrollDataIndex;
-        } else {
-          fullOpt.legend.scrollDataIndex = _scrollDataIndex;
-        }
-        // selected を保持
-        if (Object.keys(_hiddenSeries).length > 0) {
-          var sel = {};
-          seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-          if (Array.isArray(fullOpt.legend)) {
-            fullOpt.legend[0].selected = sel;
-          } else {
-            fullOpt.legend.selected = sel;
-          }
-        }
-      }
-
-      // 軸max上書き：二軸配列を保持したまま、ホバー系列の軸のみ調整
-      // line系列ホバー時は軸上書きしない
+      // 軸maxのみ必要に応じて上書き（mergeモードでも軸は更新できる）
       if (niceMax && !isHovLine) {
         if (isHorizontal) {
           var newXArr = xAxisArr.map(function(a, i) {
             return (i === (hovSeries ? (hovSeries.xAxisIndex||0) : 0))
               ? Object.assign({}, a, { max: niceMax }) : a;
           });
-          fullOpt.xAxis = newXArr;
+          mergeOpt.xAxis = newXArr;
         } else {
           var newYArr = yAxisArr.map(function(a, i) {
             return (i === hovAxisIdx) ? Object.assign({}, a, { max: niceMax }) : a;
           });
-          fullOpt.yAxis = newYArr;
+          mergeOpt.yAxis = newYArr;
         }
       }
 
       _hovering = true;
-      _setOption(fullOpt, true);
+      _setOption(mergeOpt, false);
       _hovering = false;
     }
 

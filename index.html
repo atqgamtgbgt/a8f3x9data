@@ -91,22 +91,34 @@
         Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
         resetOpt.series = resetSeries;
 
-        // notMerge:true で凡例選択状態がリセットされるため、legend.selected を明示的にセット
-        if (Object.keys(_hiddenSeries).length > 0) {
-          var legObj = resetOpt.legend || {};
-          if (Array.isArray(legObj)) {
-            legObj = Object.assign({}, legObj[0] || {});
-            resetOpt.legend = [legObj];
+        // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、現在の状態を保持
+        {
+          var curOpt2 = instance.getOption();
+          var curLeg2 = curOpt2 && curOpt2.legend && curOpt2.legend[0];
+          var rLegObj = resetOpt.legend || {};
+          if (Array.isArray(rLegObj)) {
+            rLegObj = Object.assign({}, rLegObj[0] || {});
+            resetOpt.legend = [rLegObj];
           } else {
-            legObj = Object.assign({}, legObj);
-            resetOpt.legend = legObj;
+            rLegObj = Object.assign({}, rLegObj);
+            resetOpt.legend = rLegObj;
           }
-          var sel = {};
-          seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-          if (Array.isArray(resetOpt.legend)) {
-            resetOpt.legend[0].selected = sel;
-          } else {
-            resetOpt.legend.selected = sel;
+          // scrollDataIndex を現在値で上書き（リセット後も2ページ目を維持）
+          if (curLeg2 && curLeg2.scrollDataIndex != null) {
+            if (Array.isArray(resetOpt.legend)) {
+              resetOpt.legend[0].scrollDataIndex = curLeg2.scrollDataIndex;
+            } else {
+              resetOpt.legend.scrollDataIndex = curLeg2.scrollDataIndex;
+            }
+          }
+          if (Object.keys(_hiddenSeries).length > 0) {
+            var sel2 = {};
+            seriesArr.forEach(function(s) { sel2[s.name] = !_hiddenSeries[s.name]; });
+            if (Array.isArray(resetOpt.legend)) {
+              resetOpt.legend[0].selected = sel2;
+            } else {
+              resetOpt.legend.selected = sel2;
+            }
           }
         }
       }
@@ -348,22 +360,35 @@
       Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
       fullOpt.series = patchSeries;
 
-      // notMerge:true で凡例選択状態がリセットされるため、legend.selected を明示的にセット
-      if (Object.keys(_hiddenSeries).length > 0) {
-        var legObj = fullOpt.legend || {};
-        if (Array.isArray(legObj)) {
-          legObj = Object.assign({}, legObj[0] || {});
-          fullOpt.legend = [legObj];
+      // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、現在の状態を保持
+      {
+        var curOpt = instance.getOption();
+        var curLeg = curOpt && curOpt.legend && curOpt.legend[0];
+        var legObj2 = fullOpt.legend || {};
+        if (Array.isArray(legObj2)) {
+          legObj2 = Object.assign({}, legObj2[0] || {});
+          fullOpt.legend = [legObj2];
         } else {
-          legObj = Object.assign({}, legObj);
-          fullOpt.legend = legObj;
+          legObj2 = Object.assign({}, legObj2);
+          fullOpt.legend = legObj2;
         }
-        var sel = {};
-        seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-        if (Array.isArray(fullOpt.legend)) {
-          fullOpt.legend[0].selected = sel;
-        } else {
-          fullOpt.legend.selected = sel;
+        // scrollDataIndex を現在値で上書き（2ページ目以降のホバー対応）
+        if (curLeg && curLeg.scrollDataIndex != null) {
+          if (Array.isArray(fullOpt.legend)) {
+            fullOpt.legend[0].scrollDataIndex = curLeg.scrollDataIndex;
+          } else {
+            fullOpt.legend.scrollDataIndex = curLeg.scrollDataIndex;
+          }
+        }
+        // selected を保持（凡例クリックで非表示にしたシリーズを維持）
+        if (Object.keys(_hiddenSeries).length > 0) {
+          var sel = {};
+          seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
+          if (Array.isArray(fullOpt.legend)) {
+            fullOpt.legend[0].selected = sel;
+          } else {
+            fullOpt.legend.selected = sel;
+          }
         }
       }
 

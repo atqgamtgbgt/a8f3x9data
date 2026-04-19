@@ -3859,7 +3859,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-nev-ctry"><div class="chart-card"><div class="chart-title">NEV 国別輸出量 Top15（万台）</div><div id="ec-cds-nev-ctry" class="echart-box" style="height:500px"></div></div></div>
             <div class="cds-pane" id="cds-prov"><div class="chart-card"><div class="chart-title">省別輸出量 Top15（万台）</div><div id="ec-cds-prov" class="echart-box" style="height:900px"></div></div></div>
             <div class="cds-pane" id="cds-nev-prov"><div class="chart-card"><div class="chart-title">NEV省別輸出量 Top12（万台）</div><div id="ec-cds-nev-prov" class="echart-box" style="height:650px"></div></div></div>
-            <div class="cds-pane" id="cds-rank"><div class="chart-card"><div class="chart-title">年次推移 主要輸出先ランキング</div><div id="ec-cds-rank" class="echart-box" style="height:500px"></div></div></div>
+            <div class="cds-pane" id="cds-rank"><div class="chart-card"><div class="chart-title">歴年 主力市場ランキング推移（バンプチャート）</div><div id="ec-cds-rank" class="echart-box" style="height:600px"></div></div></div>
             <div class="cds-pane" id="cds-r3">  <div id="rk-wrap-r3"></div></div>
             <div class="cds-pane" id="cds-r4">  <div id="rk-wrap-r4"></div></div>
             <div class="cds-pane" id="cds-r5">  <div id="rk-wrap-r5"></div></div>
@@ -8764,28 +8764,131 @@ function cdsDrawNevProv() {
 
 function cdsDrawRank() {
   if (!CDS_LOADED) return;
-  const chart=cdsEc('ec-cds-rank'); if(!chart) return;
-  const yrs=CDS.rankYears||[], rd=CDS.rankData||[];
-  // ランキング逆表示（1位が上）
-  chart.setOption({tooltip:{trigger:'axis',axisPointer:{type:'cross'},formatter:p=>`<b>${p[0].axisValueLabel}</b><br/>`+p.map(s=>`${s.marker}${s.seriesName}: <b>${s.value!=null?s.value+'位':'—'}</b>`).join('<br/>')},
-    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:55,right:20,top:20,bottom:60,containLabel:true},
-    xAxis:{type:'category',data:yrs},
-    yAxis:{type:'value',name:'順位',inverse:true,min:1,max:rd.length,interval:1,axisLabel:{formatter:v=>v+'位'}},
-    series:rd.map((row,i)=>({name:`${row.rank}位グループ`,type:'line',smooth:false,symbol:'circle',symbolSize:8,data:row.vals.map((v,j)=>{
-      // 国名→順位に変換（同じ国が何位か）
-      const country=v;
-      if(!country) return null;
-      const pos=rd.findIndex(r=>r.vals[j]===country);
-      return pos>=0?pos+1:null;
-    }),label:{show:true,formatter:p=>{const row2=rd.find(r=>r.vals[yrs.indexOf(yrs[p.dataIndex])]===r.vals[yrs.indexOf(yrs[p.dataIndex])]); return v?String(v):'';}}}))[0]||[]});
-  // 代わりにヒートマップ形式で表示
-  const countries=[...new Set(rd.flatMap(r=>r.vals).filter(Boolean))];
-  chart.setOption({tooltip:{trigger:'item',formatter:p=>`${p.name}<br/>${p.seriesName}: <b>${p.value}位</b>`},
-    legend:{data:yrs,bottom:0,type:'scroll'},grid:{left:100,right:20,top:20,bottom:60,containLabel:true},
-    xAxis:{type:'category',data:yrs},
-    yAxis:{type:'category',data:countries.slice(0,15)},
-    series:[{type:'heatmap',data:rd.flatMap(r=>r.vals.map((country,j)=>country?[j,countries.indexOf(country),r.rank]:null)).filter(Boolean),label:{show:true,formatter:p=>`${p.data[2]}位`},itemStyle:{borderWidth:1,borderColor:'#fff'},emphasis:{itemStyle:{shadowBlur:5}}}],
-    visualMap:{min:1,max:rd.length,calculable:true,orient:'horizontal',left:'center',top:'top',inRange:{color:['#10b981','#f59e0b','#ef4444']}}});
+  const chart = cdsEc('ec-cds-rank');
+  if (!chart) return;
+
+  // ── ハードコードデータ（⑬歴年主力市場ランキング 画像より） ──
+  // Excelシートが読めない場合のフォールバック兼メインデータ
+  const RANK_HARDCODE = {
+    years: ['20年','21年','22年','23年','24年','25年','26.1-2月'],
+    // 各順位ごとの国名（1位〜15位）
+    data: [
+      {rank:1,  vals:['サウジアラビア','チリ',      'メキシコ',    'ロシア',      'ロシア',      'メキシコ',    'ロシア']},
+      {rank:2,  vals:['バングラデシュ', 'サウジアラビア','サウジアラビア','メキシコ',    'メキシコ',    'ロシア',      'UAE']},
+      {rank:3,  vals:['エジプト',      'ロシア',      'チリ',        'ベルギー',    'UAE',         'UAE',         'ブラジル']},
+      {rank:4,  vals:['チリ',          'ベルギー',    'ベルギー',    'オーストラリア','ベルギー',   '英国',        '英国']},
+      {rank:5,  vals:['インド',        'オーストラリア','オーストラリア','サウジアラビア','ブラジル','ブラジル',    'イタリア']},
+      {rank:6,  vals:['ロシア',        'メキシコ',    '英国',        '英国',        'サウジアラビア','サウジアラビア','ベルギー']},
+      {rank:7,  vals:['オーストラリア','エジプト',    'フィリピン',  'フィリピン',  '英国',        'ベルギー',    'サウジアラビア']},
+      {rank:8,  vals:['米国',          'バングラデシュ','ロシア',     'タイ',        'オーストラリア','オーストラリア','メキシコ']},
+      {rank:9,  vals:['マレーシア',    '英国',        'マレーシア',  'UAE',         'フィリピン',  'フィリピン',  'オーストラリア']},
+      {rank:10, vals:['メキシコ',      'フィリピン',  'UAE',         'スペイン',    'トルコ',      'カザフスタン','スペイン']},
+      {rank:11, vals:['ベトナム',      'ペルー',      'タイ',        'トルコ',      'タイ',        'マレーシア',  'アルジェリア']},
+      {rank:12, vals:['フィリピン',    'インド',      '米国',        'ウズベキスタン','マレーシア', 'アルジェリア','マレーシア']},
+      {rank:13, vals:['ペルー',        '米国',        'ペルー',      'ブラジル',    'ベラルーシ',  'タイ',        'エジプト']},
+      {rank:14, vals:['英国',          'タイ',        'エクアドル',  'カザフスタン', 'チリ',       'イタリア',    'ドイツ']},
+      {rank:15, vals:['ブラジル',      'ベトナム',    'ベトナム',    'チリ',        'スペイン',    'インドネシア', 'タイ']},
+    ]
+  };
+
+  // Excelから読んだデータがあれば優先、なければハードコード使用
+  let yrs = CDS.rankYears && CDS.rankYears.length > 0 ? CDS.rankYears : RANK_HARDCODE.years;
+  let rd  = CDS.rankData  && CDS.rankData.length  > 0 ? CDS.rankData  : RANK_HARDCODE.data;
+
+  // ── 国ごとにシリーズを作成（バンプチャート） ──
+  // 全国名を収集
+  const allCountries = [...new Set(rd.flatMap(r => r.vals).filter(Boolean))];
+
+  // 国ごとの色パレット（主要国を強調）
+  const COUNTRY_COLORS = {
+    'ロシア':'#e63946','メキシコ':'#2a9d8f','UAE':'#457b9d','サウジアラビア':'#f4a261',
+    '英国':'#1d3557','オーストラリア':'#a8dadc','ベルギー':'#e9c46a','ブラジル':'#52b788',
+    'タイ':'#6a4c93','チリ':'#f77f00','フィリピン':'#fcbf49','マレーシア':'#7209b7',
+    'スペイン':'#c77dff','カザフスタン':'#b5838d','イタリア':'#6d6875','インドネシア':'#80b918',
+    'トルコ':'#d62828','アルジェリア':'#023e8a','エジプト':'#ffb703','バングラデシュ':'#219ebc',
+    'インド':'#fb8500','ベトナム':'#606c38','米国':'#9e0059','ドイツ':'#343a40',
+    'ペルー':'#6a994e','ベラルーシ':'#8ecae6','ウズベキスタン':'#a2d2ff','エクアドル':'#cdb4db',
+  };
+  const DEFAULT_COLORS = ['#4e79a7','#f28e2b','#e15759','#76b7b2','#59a14f',
+    '#edc948','#b07aa1','#ff9da7','#9c755f','#bab0ac'];
+  let colorIdx = 0;
+  function getColor(country) {
+    return COUNTRY_COLORS[country] || DEFAULT_COLORS[colorIdx++ % DEFAULT_COLORS.length];
+  }
+
+  // 年インデックスごとに「国名→順位」マップを作成
+  const yearRankMaps = yrs.map((_, ji) => {
+    const map = {};
+    rd.forEach(row => { if (row.vals[ji]) map[row.vals[ji]] = row.rank; });
+    return map;
+  });
+
+  // 国ごとのシリーズ
+  const series = allCountries.map(country => {
+    const color = getColor(country);
+    const data = yrs.map((_, ji) => yearRankMaps[ji][country] != null ? yearRankMaps[ji][country] : null);
+    // 最後に登場した年のインデックス（ラベル用）
+    const lastIdx = data.reduceRight((acc, v, i) => acc === -1 && v != null ? i : acc, -1);
+    return {
+      name: country,
+      type: 'line',
+      smooth: false,
+      symbol: 'circle',
+      symbolSize: 10,
+      color: color,
+      lineStyle: { width: 2.5, color },
+      itemStyle: { color },
+      data: data,
+      label: {
+        show: true,
+        formatter: p => {
+          if (p.dataIndex !== lastIdx || p.value == null) return '';
+          return country;
+        },
+        position: 'right',
+        fontSize: 10,
+        color: color,
+      },
+      emphasis: { lineStyle: { width: 4 } },
+    };
+  });
+
+  chart.setOption({
+    backgroundColor: 'transparent',
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: { type: 'line' },
+      formatter: params => {
+        const yr = params[0]?.axisValueLabel || '';
+        const valid = params.filter(p => p.value != null).sort((a, b) => a.value - b.value);
+        return `<b>${yr}</b><br/>` +
+          valid.map(p => `${p.marker}<b>${p.value}位</b> ${p.seriesName}`).join('<br/>');
+      }
+    },
+    legend: { show: false },
+    grid: { left: 20, right: 110, top: 30, bottom: 40, containLabel: true },
+    xAxis: {
+      type: 'category',
+      data: yrs,
+      boundaryGap: true,
+      axisLabel: { fontSize: 12, fontWeight: 'bold' },
+      axisLine: { lineStyle: { color: '#888' } },
+    },
+    yAxis: {
+      type: 'value',
+      name: '順位',
+      nameLocation: 'start',
+      inverse: true,
+      min: 1,
+      max: 15,
+      interval: 1,
+      axisLabel: { formatter: v => v + '位', fontSize: 11 },
+      splitLine: { lineStyle: { color: '#e0e0e0', type: 'dashed' } },
+    },
+    series,
+  }, true);
+
+  setTimeout(() => { try { cdsEc('ec-cds-rank')?.resize(); } catch(e) {} }, 80);
 }
 
 function cdsDrawRussia() {

@@ -3383,9 +3383,10 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="cds-gc-items">
                     <button class="nav-link" onclick="ztGo('zt-brand-wholesale');ztActBtn(this)">🚗 高級・合弁・中国系 卸売</button>
                     <button class="nav-link" onclick="ztGo('zt-nation-share');ztActBtn(this)">🌐 国籍別シェア</button>
+                    <button class="nav-link" onclick="ztGo('zt-nation-volume');ztActBtn(this)">🌐 国籍別台数</button>
                     <button class="nav-link" onclick="ztGo('zt-brand-4indicator');ztActBtn(this)">📊 ブランド層別4指標</button>
-                    <button class="nav-link" onclick="ztGo('zt-brand-ice-nev-wh');ztActBtn(this)">⚡ 批發 伝統/新エネ内訳</button>
-                    <button class="nav-link" onclick="ztGo('zt-brand-ice-nev-rt');ztActBtn(this)">⚡ 零售 伝統/新エネ内訳</button>
+                    <button class="nav-link" onclick="ztGo('zt-brand-ice-nev-wh');ztActBtn(this)">⚡ 卸売 伝統/新エネ内訳</button>
+                    <button class="nav-link" onclick="ztGo('zt-brand-ice-nev-rt');ztActBtn(this)">⚡ 小売 伝統/新エネ内訳</button>
                   </div>
                 </div>
 
@@ -3785,6 +3786,13 @@ body.tray-open { padding-bottom: 105px; }
                 <div id="ec-zt-nation-share" class="echart-box" style="height:420px"></div>
               </div>
             </div>
+            <div class="cds-pane" id="zt-nation-volume">
+              <div class="chart-card">
+                <div class="chart-title">国籍別 卸売台数推移（万台）</div>
+                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div id="ec-zt-nation-volume" class="echart-box" style="height:420px"></div>
+              </div>
+            </div>
             <div class="cds-pane" id="zt-discount">
               <div class="chart-card">
                 <div class="chart-title">動力種別 値引き率 月次推移（%）</div>
@@ -3801,22 +3809,22 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="zt-brand-4indicator">
               <div class="chart-card">
-                <div class="chart-title">ブランド層別 4指標比較（産量・批發・零售・出口、万台）</div>
-                <div class="chart-subtitle">豪華車・合弁・中国系ブランド　25年実績・26年1-3月累計・26年3月単月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-title">ブランド層別 4指標比較（生産・卸売・小売・輸出、万台）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド　25年通年・26年1-3月累計　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-brand-4indicator" class="echart-box" style="height:460px"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-brand-ice-nev-wh">
               <div class="chart-card">
-                <div class="chart-title">ブランド層別 批發 伝統/新エネ内訳（万台）</div>
-                <div class="chart-subtitle">豪華車・合弁・中国系ブランド × 伝統エンジン/新エネ車　26年3月単月・26年1-3月累計・25年実績・24年実績　出典：乗聯会（崔東樹）</div>
+                <div class="chart-title">ブランド層別 卸売 伝統/新エネ内訳（万台）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 伝統エンジン/新エネ車　26年1-3月累計・25年通年・24年通年　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-brand-ice-nev-wh" class="echart-box" style="height:460px"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-brand-ice-nev-rt">
               <div class="chart-card">
-                <div class="chart-title">ブランド層別 零售 伝統/新エネ内訳（万台）</div>
-                <div class="chart-subtitle">豪華車・合弁・中国系ブランド × 伝統エンジン/新エネ車　26年3月単月・26年1-3月累計・25年実績・24年実績　出典：乗聯会（崔東樹）</div>
+                <div class="chart-title">ブランド層別 小売 伝統/新エネ内訳（万台）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 伝統エンジン/新エネ車　26年1-3月累計・25年通年・24年通年　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-brand-ice-nev-rt" class="echart-box" style="height:460px"></div>
               </div>
             </div>
@@ -15296,6 +15304,34 @@ function renderNationShare(){
   });
 }
 
+// ── ⑧-b 国籍別 卸売台数推移（万台） ──
+function renderNationVolume(){
+  var ec = makeEc('ec-zt-nation-volume'); if(!ec) return;
+  var months = MONTHS_LABEL;
+  // 台数は zt-nation-share と同じソース（他月分は乗聯会別資料、26.3月のみ画像6で確認済）
+  var ziZhu = [161.1,154.2,160.6,167,157.8,172.1,197.5,214.2,214,191.2,132.6,107.4,161];
+  var doku  = [27,24,30,35,26,30,34,31,33,33,28,17,29];
+  var nichi = [22,19,23,26,22,24,27,28,29,30,18,13,26];
+  var bei   = [15,13,13,15,11,15,16,14,17,18,14,11,16];
+  var kan   = [3,4,4,4,3,4,4,4,4,4,3,3,3];
+  var ou    = [3,3,2,2,2,2,2,2,2,3,2,1,2];
+  ec.setOption({
+    tooltip: unifiedStackTooltip({unit:'万台'}),
+    legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系']}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
+    xAxis: xCat(months),
+    yAxis: yVal('万台',{min:0,max:320}),
+    series:[
+      {name:'中国系ブランド', type:'bar',stack:'s',color:'#ef4444',data:ziZhu},
+      {name:'独系', type:'bar',stack:'s',color:'#3b82f6',data:doku},
+      {name:'日系', type:'bar',stack:'s',color:'#f59e0b',data:nichi},
+      {name:'米系', type:'bar',stack:'s',color:'#10b981',data:bei},
+      {name:'韓国系', type:'bar',stack:'s',color:'#8b5cf6',data:kan},
+      {name:'欧州系', type:'bar',stack:'s',color:'#06b6d4',data:ou}
+    ]
+  });
+}
+
 // ── ⑨ 値引き率 ──
 function renderDiscount(){
   var ec = makeEc('ec-zt-discount'); if(!ec) return;
@@ -15359,89 +15395,81 @@ function renderInventory(){
   });
 }
 
-// ── ⑪ ブランド層別 4指標比較（産量/批發/零售/出口） ──
+// ── ⑪ ブランド層別 4指標比較（生産/卸売/小売/輸出） ──
 function renderBrand4Indicator(){
   var ec = makeEc('ec-zt-brand-4indicator'); if(!ec) return;
-  // 画像7より：豪華/合資/自主 × 4指標（産量・批發・零售・出口）× 3期間（25年・26年1-3月累計・26年3月）
-  // 縦軸：万台、グルーピング：指標ごとに豪華/合資/自主を横並び、期間は色分け
-  var indicators = ['産量','批發','零售','出口'];
-  // 26年3月（単月）
-  var data_2603 = {
-    '豪華車':    [28,   27.2, 21,   4.8],
-    '合弁':      [52,   49.5, 41,   4.0],
-    '中国系':    [156,  161.1,102,  60.6]
-  };
+  // 画像7より：豪華/合資/自主 × 4指標（生産・卸売・小売・輸出）× 2期間（25年通年・26年1-3月累計）
+  var indicators = ['生産','卸売','小売','輸出'];
   // 26年1-3月累計
   var data_26q1 = {
-    '豪華車':    [71,   66,   52,   15],
+    '高級車':    [71,   66,   52,   15],
     '合弁':      [119,  120,  116,  11],
     '中国系':    [384,  401,  255,  156]
   };
   // 25年通年
   var data_25 = {
-    '豪華車':    [294,  296,  255,  42],
+    '高級車':    [294,  296,  255,  42],
     '合弁':      [608,  601,  567,  41],
     '中国系':    [2065, 2058, 1552, 491]
   };
 
-  // 指標×ブランド×期間で行を作る。x軸は「指標×ブランド」の組合せ（12項目）、シリーズは期間（3本）
+  // 指標×ブランド×期間で行を作る。x軸は「指標×ブランド」の組合せ（12項目）、シリーズは期間（2本）
   var xCats = [];
   indicators.forEach(function(ind){
-    ['豪華車','合弁','中国系'].forEach(function(br){
+    ['高級車','合弁','中国系'].forEach(function(br){
       xCats.push(ind+'\n'+br);
     });
   });
   function flat(obj){
     var arr=[];
     indicators.forEach(function(_,i){
-      ['豪華車','合弁','中国系'].forEach(function(br){ arr.push(obj[br][i]); });
+      ['高級車','合弁','中国系'].forEach(function(br){ arr.push(obj[br][i]); });
     });
     return arr;
   }
   ec.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
       formatter:function(p){ return '<b>'+p[0].name.replace('\n',' / ')+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>'); }},
-    legend: leg({data:['25年通年','26年1-3月累計','26年3月単月']}),
+    legend: leg({data:['25年通年','26年1-3月累計']}),
     grid: grid({bottom:75,top:55,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
     yAxis: yVal('万台'),
     series:[
-      {name:'25年通年',      type:'bar', color:'#94a3b8', data:flat(data_25),   barMaxWidth:18},
-      {name:'26年1-3月累計', type:'bar', color:'#3b82f6', data:flat(data_26q1), barMaxWidth:18},
-      {name:'26年3月単月',   type:'bar', color:'#ef4444', data:flat(data_2603), barMaxWidth:18}
+      {name:'25年通年',      type:'bar', color:'#94a3b8', data:flat(data_25),   barMaxWidth:22},
+      {name:'26年1-3月累計', type:'bar', color:'#3b82f6', data:flat(data_26q1), barMaxWidth:22}
     ]
   });
 }
 
-// ── ⑫ ブランド層別 批發 伝統/新エネ内訳 ──
+// ── ⑫ ブランド層別 卸売 伝統/新エネ内訳 ──
 function renderBrandIceNevWh(){
   var ec = makeEc('ec-zt-brand-ice-nev-wh'); if(!ec) return;
   // 画像9より
-  // 豪華/主流合資/自主 × 伝統/新エネ、期間 = 26.3月, 26年1-3月累計, 25年, 24年
-  var periods = ['26年3月単月','26年1-3月累計','25年通年','24年通年'];
+  // 高級車/合弁/中国系 × 伝統/新エネ、期間 = 26年1-3月累計, 25年通年, 24年通年
+  var periods = ['26年1-3月累計','25年通年','24年通年'];
   // [伝統, 新エネ]
   var data = {
-    '豪華車': {
-      '伝統':   [15,  37,  181, 201],
-      '新エネ': [12,  29,  115, 121]
+    '高級車': {
+      '伝統':   [37,  181, 201],
+      '新エネ': [29,  115, 121]
     },
     '合弁': {
-      '伝統':   [46,  114, 565, 587],
-      '新エネ': [3,   6,   37,  41]
+      '伝統':   [114, 565, 587],
+      '新エネ': [6,   37,  41]
     },
     '中国系': {
-      '伝統':   [62,  162, 678, 704],
-      '新エネ': [99,  239, 1380,1061]
+      '伝統':   [162, 678, 704],
+      '新エネ': [239, 1380,1061]
     }
   };
-  // x軸はブランド×期間の12項目
+  // x軸はブランド×期間の9項目
   var xCats = [];
-  ['豪華車','合弁','中国系'].forEach(function(br){
+  ['高級車','合弁','中国系'].forEach(function(br){
     periods.forEach(function(pr){ xCats.push(br+'\n'+pr); });
   });
   function flat(kind){
     var arr=[];
-    ['豪華車','合弁','中国系'].forEach(function(br){
+    ['高級車','合弁','中国系'].forEach(function(br){
       periods.forEach(function(_,i){ arr.push(data[br][kind][i]); });
     });
     return arr;
@@ -15457,38 +15485,38 @@ function renderBrandIceNevWh(){
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
     yAxis: yVal('万台'),
     series:[
-      {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:22},
-      {name:'新エネ車',     type:'bar', stack:'s', color:'#10b981', data:flat('新エネ'), barMaxWidth:22}
+      {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:26},
+      {name:'新エネ車',     type:'bar', stack:'s', color:'#10b981', data:flat('新エネ'), barMaxWidth:26}
     ]
   });
 }
 
-// ── ⑬ ブランド層別 零售 伝統/新エネ内訳 ──
+// ── ⑬ ブランド層別 小売 伝統/新エネ内訳 ──
 function renderBrandIceNevRt(){
   var ec = makeEc('ec-zt-brand-ice-nev-rt'); if(!ec) return;
   // 画像11より
-  var periods = ['26年3月単月','26年1-3月累計','25年通年','24年通年'];
+  var periods = ['26年1-3月累計','25年通年','24年通年'];
   var data = {
-    '豪華車': {
-      '伝統':   [14, 38,  177, 199],
-      '新エネ': [7,  14,  78,  81]
+    '高級車': {
+      '伝統':   [38,  177, 199],
+      '新エネ': [14,  78,  81]
     },
     '合弁': {
-      '伝統':   [39, 110, 531, 585],
-      '新エネ': [3,  6,   36,  42]
+      '伝統':   [110, 531, 585],
+      '新エネ': [6,   36,  42]
     },
     '中国系': {
-      '伝統':   [27, 84,  385, 415],
-      '新エネ': [75, 171, 1167,967]
+      '伝統':   [84,  385, 415],
+      '新エネ': [171, 1167,967]
     }
   };
   var xCats = [];
-  ['豪華車','合弁','中国系'].forEach(function(br){
+  ['高級車','合弁','中国系'].forEach(function(br){
     periods.forEach(function(pr){ xCats.push(br+'\n'+pr); });
   });
   function flat(kind){
     var arr=[];
-    ['豪華車','合弁','中国系'].forEach(function(br){
+    ['高級車','合弁','中国系'].forEach(function(br){
       periods.forEach(function(_,i){ arr.push(data[br][kind][i]); });
     });
     return arr;
@@ -15504,8 +15532,8 @@ function renderBrandIceNevRt(){
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
     yAxis: yVal('万台'),
     series:[
-      {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:22},
-      {name:'新エネ車',     type:'bar', stack:'s', color:'#ef4444', data:flat('新エネ'), barMaxWidth:22}
+      {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:26},
+      {name:'新エネ車',     type:'bar', stack:'s', color:'#ef4444', data:flat('新エネ'), barMaxWidth:26}
     ]
   });
 }
@@ -15526,6 +15554,7 @@ window.ztInitCharts = function(){
   renderNevBrand();
   renderBrandWholesale();
   renderNationShare();
+  renderNationVolume();
   renderDiscount();
   renderInventory();
   renderBrand4Indicator();
@@ -15547,6 +15576,7 @@ window.ztGo = function(id){
       'zt-nev-brand': renderNevBrand,
       'zt-brand-wholesale': renderBrandWholesale,
       'zt-nation-share': renderNationShare,
+      'zt-nation-volume': renderNationVolume,
       'zt-discount': renderDiscount,
       'zt-inventory': renderInventory,
       'zt-brand-4indicator': renderBrand4Indicator,

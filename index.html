@@ -13995,8 +13995,8 @@ function jhDrawCountryMaker() {
   var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER.countries[i]; });
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'台', digits:0, sort:'desc', hideZero:true}),
-    legend:{ data: JH_COUNTRY_MAKER.makers, top:8, type:'scroll' },
-    grid:{ left:100, right:30, top:55, bottom:20 },
+    legend:{ data: JH_COUNTRY_MAKER.makers, top:8, type:'plain', width:'95%', left:'center' },
+    grid:{ left:100, right:30, top:75, bottom:20 },
     xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: sortedCountries },
     series: JH_COUNTRY_MAKER.makers.map(function(m, mi){
@@ -14018,8 +14018,8 @@ function jhDrawCountryMakerNev() {
   var sortedCountries = indices.map(function(i){ return JH_COUNTRY_MAKER_NEV.countries[i]; });
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'台', digits:0, sort:'desc', hideZero:true}),
-    legend:{ data: JH_COUNTRY_MAKER_NEV.makers, top:8, type:'scroll' },
-    grid:{ left:110, right:30, top:55, bottom:20 },
+    legend:{ data: JH_COUNTRY_MAKER_NEV.makers, top:8, type:'plain', width:'95%', left:'center' },
+    grid:{ left:110, right:30, top:75, bottom:20 },
     xAxis:{ type:'value', axisLabel:{ formatter:function(v){ return (v/10000).toFixed(0)+'万'; } } },
     yAxis:{ type:'category', data: sortedCountries },
     series: JH_COUNTRY_MAKER_NEV.makers.map(function(m, mi){

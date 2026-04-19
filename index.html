@@ -48,6 +48,13 @@
       return _setOption(option, notMerge, lazyUpdate);
     };
 
+    // 凡例スクロール位置を独自追跡（getOption()依存を排除）
+    instance.on('legendscroll', function(params) {
+      if (params && params.scrollDataIndex != null) {
+        _scrollDataIndex = params.scrollDataIndex;
+      }
+    });
+
     // 凡例クリックで非表示シリーズを記録
     instance.on('legendselectchanged', function(params) {
       // パッチ内部のsetOption起因の発火では上書きしない
@@ -91,10 +98,8 @@
         Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
         resetOpt.series = resetSeries;
 
-        // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、現在の状態を保持
+        // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、独自追跡値で保持
         {
-          var curOpt2 = instance.getOption();
-          var curLeg2 = curOpt2 && curOpt2.legend && curOpt2.legend[0];
           var rLegObj = resetOpt.legend || {};
           if (Array.isArray(rLegObj)) {
             rLegObj = Object.assign({}, rLegObj[0] || {});
@@ -103,13 +108,11 @@
             rLegObj = Object.assign({}, rLegObj);
             resetOpt.legend = rLegObj;
           }
-          // scrollDataIndex を現在値で上書き（リセット後も2ページ目を維持）
-          if (curLeg2 && curLeg2.scrollDataIndex != null) {
-            if (Array.isArray(resetOpt.legend)) {
-              resetOpt.legend[0].scrollDataIndex = curLeg2.scrollDataIndex;
-            } else {
-              resetOpt.legend.scrollDataIndex = curLeg2.scrollDataIndex;
-            }
+          // _scrollDataIndex（legendscrollイベントで追跡）で上書き
+          if (Array.isArray(resetOpt.legend)) {
+            resetOpt.legend[0].scrollDataIndex = _scrollDataIndex;
+          } else {
+            resetOpt.legend.scrollDataIndex = _scrollDataIndex;
           }
           if (Object.keys(_hiddenSeries).length > 0) {
             var sel2 = {};
@@ -137,13 +140,12 @@
           resetHoverLabels();
           return;
         }
-        var opt = instance.getOption();
-        if (!opt) return;
-        var names = (opt.legend && opt.legend[0] && opt.legend[0].data && opt.legend[0].data.length)
-          ? opt.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
-          : (opt.series || []).map(function(s) { return s.name; });
-        var scrollIdx = (opt.legend && opt.legend[0] && opt.legend[0].scrollDataIndex) || 0;
-        var absIdx = relIdx + scrollIdx;
+        if (!_lastOption) return;
+        var names = (_lastOption.legend && _lastOption.legend[0] && _lastOption.legend[0].data && _lastOption.legend[0].data.length)
+          ? _lastOption.legend[0].data.map(function(d) { return typeof d === 'object' ? d.name : d; })
+          : (_lastOption.series || []).map(function(s) { return s.name; });
+        // getOption()ではなく独自追跡の_scrollDataIndexを使用（flickを防止）
+        var absIdx = relIdx + _scrollDataIndex;
         var name = names[absIdx] !== undefined ? names[absIdx] : names[relIdx];
         if (name) {
           _isShowingHover = true;
@@ -360,10 +362,8 @@
       Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
       fullOpt.series = patchSeries;
 
-      // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、現在の状態を保持
+      // notMerge:true で凡例のscrollDataIndex/selectedがリセットされるため、独自追跡値で保持
       {
-        var curOpt = instance.getOption();
-        var curLeg = curOpt && curOpt.legend && curOpt.legend[0];
         var legObj2 = fullOpt.legend || {};
         if (Array.isArray(legObj2)) {
           legObj2 = Object.assign({}, legObj2[0] || {});
@@ -372,15 +372,13 @@
           legObj2 = Object.assign({}, legObj2);
           fullOpt.legend = legObj2;
         }
-        // scrollDataIndex を現在値で上書き（2ページ目以降のホバー対応）
-        if (curLeg && curLeg.scrollDataIndex != null) {
-          if (Array.isArray(fullOpt.legend)) {
-            fullOpt.legend[0].scrollDataIndex = curLeg.scrollDataIndex;
-          } else {
-            fullOpt.legend.scrollDataIndex = curLeg.scrollDataIndex;
-          }
+        // _scrollDataIndex（legendscrollイベントで追跡）で上書き
+        if (Array.isArray(fullOpt.legend)) {
+          fullOpt.legend[0].scrollDataIndex = _scrollDataIndex;
+        } else {
+          fullOpt.legend.scrollDataIndex = _scrollDataIndex;
         }
-        // selected を保持（凡例クリックで非表示にしたシリーズを維持）
+        // selected を保持
         if (Object.keys(_hiddenSeries).length > 0) {
           var sel = {};
           seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });

@@ -2688,7 +2688,19 @@ body.tray-open { padding-bottom: 105px; }
 
           <!-- エネルギー別ランキング タブ -->
           <div class="tab-pane fade" id="energy-content" role="tabpanel">
-            <ul class="nav charts-pills mt-3 mb-2" id="energyPills" role="tablist">
+            <!-- 出所トグル -->
+            <div class="d-flex align-items-center gap-2 mt-3 mb-1">
+              <span class="text-muted small fw-semibold">出所：</span>
+              <div class="btn-group btn-group-sm" id="energySourceToggle" role="group">
+                <button type="button" class="btn btn-primary active" data-source="guochan" id="energySourceGuochan">
+                  🏠 国産
+                </button>
+                <button type="button" class="btn btn-outline-primary" data-source="hezi" id="energySourceHezi">
+                  🌍 外資
+                </button>
+              </div>
+            </div>
+            <ul class="nav charts-pills mt-2 mb-2" id="energyPills" role="tablist">
               <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="energy-456-tab" data-bs-toggle="pill" data-bs-target="#energy-456-pane" type="button" role="tab">🌿 新エネルギー（総合）</button>
               </li>
@@ -6052,22 +6064,40 @@ init();
 
 // ===== エネルギー別ランキング =====
 (function() {
-  const ENERGY_CSV = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-csvs/autohome_ranking_energy_with_maker_with_maker_ja.csv`;
-  const ENERGY_IMG_BASE = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-images/`;
+  // 出所ごとのCSVパス
+  const ENERGY_SOURCES = {
+    guochan: `${RAW_BASE}output/pipeline/energy/autohome-energy-guochan/autohome_ranking_energy_with_maker_with_maker_ja.csv`,
+    hezi:    `${RAW_BASE}output/pipeline/energy/autohome-energy-hezi/autohome_ranking_energy_with_maker_with_maker_ja.csv`,
+  };
+  // 出所ごとの画像ベースパス
+  const ENERGY_IMG_BASES = {
+    guochan: `${RAW_BASE}output/pipeline/energy/autohome-energy-guochan/images/`,
+    hezi:    `${RAW_BASE}output/pipeline/energy/autohome-energy-hezi/images/`,
+  };
   const ENERGY_TABLES = { '456': 'energyTable456', '4': 'energyTable4', '1': 'energyTable1', '5': 'energyTable5', '6': 'energyTable6' };
 
-  function energyImgTag(imageUrl, model) {
+  // ロード済みキャッシュ（出所別）
+  const energyCache = {};
+  let currentSource = 'guochan';
+
+  function energyImgTag(imageUrl, model, source) {
     if (!imageUrl) return '';
-    const m = imageUrl.match(/^public\/autohome_images_energy\/(\d+)\/(.+)$/);
+    // image_url形式: public/autohome_energy/{source}/images/{catId}/{file}
+    const m = imageUrl.match(/^public\/autohome_energy\/(?:guochan|hezi)\/images\/(\d+)\/(.+)$/);
     if (!m) return '';
-    const src = `${ENERGY_IMG_BASE}${m[1]}/${m[2]}?v=${Date.now()}`;
+    const base = ENERGY_IMG_BASES[source] || ENERGY_IMG_BASES.guochan;
+    const src = `${base}${m[1]}/${m[2]}?v=${Date.now()}`;
     return `<img class="car-thumb" src="${src}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
   }
 
-  function renderEnergyTable(rows, tableId) {
+  function renderEnergyTable(rows, tableId, source) {
     const tbody = document.querySelector(`#${tableId} tbody`);
     if (!tbody) return;
     tbody.innerHTML = '';
+    if (!rows || rows.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4">データなし</td></tr>`;
+      return;
+    }
     rows.forEach(r => {
       const globalName = r.global_name || r.name || '';
       const originalName = r.name || '';
@@ -6086,7 +6116,7 @@ init();
       tr.innerHTML = `
         <td class="rank-badge">${r.rank}</td>
         <td class="diff-badge"></td>
-        <td>${energyImgTag(r.image_url, originalName)}</td>
+        <td>${energyImgTag(r.image_url, originalName, source)}</td>
         <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
         <td>${maker}</td>
         <td style="white-space:nowrap;">${units}</td>
@@ -6096,9 +6126,37 @@ init();
     });
   }
 
-  async function loadEnergyData() {
+  function showLoadingAll() {
+    Object.values(ENERGY_TABLES).forEach(tableId => {
+      const tbody = document.querySelector(`#${tableId} tbody`);
+      if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>読み込み中...</td></tr>`;
+    });
+  }
+
+  function showErrorAll() {
+    Object.values(ENERGY_TABLES).forEach(tableId => {
+      const tbody = document.querySelector(`#${tableId} tbody`);
+      if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
+    });
+  }
+
+  function renderAllTables(source) {
+    const byCategory = energyCache[source] || {};
+    Object.entries(ENERGY_TABLES).forEach(([cid, tableId]) => {
+      renderEnergyTable(byCategory[cid] || [], tableId, source);
+    });
+  }
+
+  async function loadEnergyData(source) {
+    // キャッシュ済みならそのまま描画
+    if (energyCache[source]) {
+      renderAllTables(source);
+      return;
+    }
+    showLoadingAll();
     try {
-      const res = await fetch(ENERGY_CSV + `?v=${Date.now()}`, { cache: 'no-store' });
+      const csvUrl = ENERGY_SOURCES[source];
+      const res = await fetch(csvUrl + `?v=${Date.now()}`, { cache: 'no-store' });
       if (!res.ok) throw new Error(res.statusText);
       const text = await res.text();
       const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
@@ -6108,24 +6166,40 @@ init();
         if (!byCategory[cid]) byCategory[cid] = [];
         byCategory[cid].push(r);
       });
-      Object.entries(ENERGY_TABLES).forEach(([cid, tableId]) => {
-        renderEnergyTable(byCategory[cid] || [], tableId);
-      });
-      console.log(`✅ エネルギー別ランキング CSV 読み込み成功 (${parsed.data.length}件)`);
+      energyCache[source] = byCategory;
+      renderAllTables(source);
+      console.log(`✅ エネルギー別ランキング [${source}] CSV 読み込み成功 (${parsed.data.length}件)`);
     } catch (err) {
-      console.error('エネルギー別ランキング CSV 読み込みエラー: ' + err.message);
-      Object.values(ENERGY_TABLES).forEach(tableId => {
-        const tbody = document.querySelector(`#${tableId} tbody`);
-        if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
-      });
+      console.error(`エネルギー別ランキング [${source}] CSV 読み込みエラー: ` + err.message);
+      showErrorAll();
     }
   }
+
+  // トグルボタンのイベント
+  document.getElementById('energySourceToggle').addEventListener('click', function(e) {
+    const btn = e.target.closest('[data-source]');
+    if (!btn) return;
+    const source = btn.dataset.source;
+    if (source === currentSource) return;
+    currentSource = source;
+    // ボタンのアクティブ状態を切り替え
+    this.querySelectorAll('button').forEach(b => {
+      if (b.dataset.source === source) {
+        b.classList.remove('btn-outline-primary');
+        b.classList.add('btn-primary', 'active');
+      } else {
+        b.classList.remove('btn-primary', 'active');
+        b.classList.add('btn-outline-primary');
+      }
+    });
+    loadEnergyData(source);
+  });
 
   let energyLoaded = false;
   document.getElementById('energy-tab').addEventListener('shown.bs.tab', function() {
     if (!energyLoaded) {
       energyLoaded = true;
-      loadEnergyData();
+      loadEnergyData(currentSource);
     }
   });
 })();

@@ -2658,6 +2658,9 @@ body.tray-open { padding-bottom: 105px; }
             <button class="nav-link" id="hezi-tab" data-bs-toggle="tab" data-bs-target="#hezi-content" type="button" role="tab">外資系ランキング</button>
           </li>
           <li class="nav-item" role="presentation">
+            <button class="nav-link" id="energy-tab" data-bs-toggle="tab" data-bs-target="#energy-content" type="button" role="tab"><i class="fa-solid fa-bolt me-1"></i>エネルギー別ランキング</button>
+          </li>
+          <li class="nav-item" role="presentation">
             <button class="nav-link" id="cnsuv-charts-tab" data-bs-toggle="tab" data-bs-target="#cnsuv-charts-content" type="button" role="tab"><i class="fa-solid fa-chart-bar me-1"></i>メーカー販売ランキング</button>
           </li>
           <li class="nav-item" role="presentation">
@@ -2682,6 +2685,56 @@ body.tray-open { padding-bottom: 105px; }
               </table>
             </div>
           </div>
+
+          <!-- エネルギー別ランキング タブ -->
+          <div class="tab-pane fade" id="energy-content" role="tabpanel">
+            <ul class="nav charts-pills mt-3 mb-2" id="energyPills" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="energy-456-tab" data-bs-toggle="pill" data-bs-target="#energy-456-pane" type="button" role="tab">🌿 新エネルギー（総合）</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="energy-4-tab" data-bs-toggle="pill" data-bs-target="#energy-4-pane" type="button" role="tab">⚡ BEV</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="energy-1-tab" data-bs-toggle="pill" data-bs-target="#energy-1-pane" type="button" role="tab">⛽ ガソリン車</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="energy-5-tab" data-bs-toggle="pill" data-bs-target="#energy-5-pane" type="button" role="tab">🔌 PHEV</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="energy-6-tab" data-bs-toggle="pill" data-bs-target="#energy-6-pane" type="button" role="tab">🔄 レンジエクステンダー</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="energyPillsContent">
+              <div class="tab-pane fade show active" id="energy-456-pane" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle car-table" id="energyTable456">
+                    <tbody><tr><td colspan="8" class="text-center text-muted py-4"><i class="fa-solid fa-spinner fa-spin me-2"></i>読み込み中...</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="energy-4-pane" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle car-table" id="energyTable4"><tbody></tbody></table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="energy-1-pane" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle car-table" id="energyTable1"><tbody></tbody></table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="energy-5-pane" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle car-table" id="energyTable5"><tbody></tbody></table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="energy-6-pane" role="tabpanel">
+                <div class="table-responsive">
+                  <table class="table table-hover align-middle car-table" id="energyTable6"><tbody></tbody></table>
+                </div>
+              </div>
+            </div>
+          </div><!-- end energy-content -->
 
           <!-- メーカー販売グラフ タブ -->
 
@@ -5996,6 +6049,86 @@ document.getElementById('hezi-tab').addEventListener('shown.bs.tab', function (e
 });
 
 init();
+
+// ===== エネルギー別ランキング =====
+(function() {
+  const ENERGY_CSV = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-csvs/autohome_ranking_energy_with_maker_with_maker_ja.csv`;
+  const ENERGY_IMG_BASE = `${RAW_BASE}output/pipeline/energy/autohome-energy-ranking-images/`;
+  const ENERGY_TABLES = { '456': 'energyTable456', '4': 'energyTable4', '1': 'energyTable1', '5': 'energyTable5', '6': 'energyTable6' };
+
+  function energyImgTag(imageUrl, model) {
+    if (!imageUrl) return '';
+    const m = imageUrl.match(/^public\/autohome_images_energy\/(\d+)\/(.+)$/);
+    if (!m) return '';
+    const src = `${ENERGY_IMG_BASE}${m[1]}/${m[2]}?v=${Date.now()}`;
+    return `<img class="car-thumb" src="${src}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+
+  function renderEnergyTable(rows, tableId) {
+    const tbody = document.querySelector(`#${tableId} tbody`);
+    if (!tbody) return;
+    tbody.innerHTML = '';
+    rows.forEach(r => {
+      const globalName = r.global_name || r.name || '';
+      const originalName = r.name || '';
+      const displayName = (globalName && originalName && globalName !== originalName)
+        ? `<div class="vehicle-name-wrapper"><div class="vehicle-name-main">${globalName}</div><div class="vehicle-name-cn">${originalName}</div></div>`
+        : globalName;
+      const link = r.link || '';
+      const carId = link.match(/\/(\d+)\//)?.[1] || '';
+      const maker = r.manufacturer_ja || r.manufacturer || '';
+      const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + '台' : '';
+      const price = (r.price || '') + '元';
+      const priceJPY = convertToJPY(r.price || '');
+      const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','autohome')">仕様表</button>` : '';
+      const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','autohome')">口コミ</button>` : '';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td class="rank-badge">${r.rank}</td>
+        <td class="diff-badge"></td>
+        <td>${energyImgTag(r.image_url, originalName)}</td>
+        <td><a href="${link}" target="_blank" rel="noopener">${displayName}</a></td>
+        <td>${maker}</td>
+        <td style="white-space:nowrap;">${units}</td>
+        <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
+        <td>${specBtn}${storyBtn}</td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  async function loadEnergyData() {
+    try {
+      const res = await fetch(ENERGY_CSV + `?v=${Date.now()}`, { cache: 'no-store' });
+      if (!res.ok) throw new Error(res.statusText);
+      const text = await res.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      const byCategory = {};
+      parsed.data.forEach(r => {
+        const cid = String(r.category_id);
+        if (!byCategory[cid]) byCategory[cid] = [];
+        byCategory[cid].push(r);
+      });
+      Object.entries(ENERGY_TABLES).forEach(([cid, tableId]) => {
+        renderEnergyTable(byCategory[cid] || [], tableId);
+      });
+      console.log(`✅ エネルギー別ランキング CSV 読み込み成功 (${parsed.data.length}件)`);
+    } catch (err) {
+      console.error('エネルギー別ランキング CSV 読み込みエラー: ' + err.message);
+      Object.values(ENERGY_TABLES).forEach(tableId => {
+        const tbody = document.querySelector(`#${tableId} tbody`);
+        if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
+      });
+    }
+  }
+
+  let energyLoaded = false;
+  document.getElementById('energy-tab').addEventListener('shown.bs.tab', function() {
+    if (!energyLoaded) {
+      energyLoaded = true;
+      loadEnergyData();
+    }
+  });
+})();
 
 // リサイズ時に線を再描画
 window.addEventListener('resize', () => {

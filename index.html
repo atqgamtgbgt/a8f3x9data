@@ -3902,9 +3902,14 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="cds-pane" id="zt-segment">
               <div class="chart-card">
-                <div class="chart-title">車型×クラス別 販売（万台）</div>
-                <div class="chart-subtitle">CAR（a00/A0/A/B/C）・MPV（A0/A/B/C）・SUV（A00/A0/A/B/C）　26年3月単月　出典：乗聯会（崔東樹）</div>
-                <div id="ec-zt-segment" class="echart-box" style="height:520px"></div>
+                <div class="chart-title">車型×クラス別 月次販売推移（万台）</div>
+                <div class="chart-subtitle">CAR（a00/A0/A/B/C）・MPV（A0/A/B/C）・SUV（A0/A/B/C）　出典：乗聯会（崔東樹）</div>
+                <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                  <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
+                  <button id="seg-btn-wh" class="btn btn-sm btn-primary active" onclick="segSetView('wh',this)" style="font-size:11px;padding:2px 10px;">卸売</button>
+                  <button id="seg-btn-rt" class="btn btn-sm btn-outline-secondary" onclick="segSetView('rt',this)" style="font-size:11px;padding:2px 10px;">小売</button>
+                </div>
+                <div id="ec-zt-segment" class="echart-box" style="height:480px"></div>
               </div>
             </div>
 
@@ -15435,10 +15440,10 @@ function renderNevBrand(){
   var ec = makeEc('ec-zt-nev-brand'); if(!ec) return;
   var months = MONTHS_LABEL;
   var data = {
-    '高級車': [36.0,38.4,39.2,32.6,43.5,41.9,40.0,36.9,42.5,39.8,48.2,43.3,43.3],
+    '高級車':       [36.0,38.4,39.2,32.6,43.5,41.9,40.0,36.9,42.5,39.8,48.2,43.3,43.3],
     '合弁メーカー': [4.9,6.9,5.7,6.6,6.6,7.1,6.6,7.0,7.2,3.6,4.6,6.4,6.4],
-    '中国系ブランド': [63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,61.7],
-    '全体': [46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.0,44.3,47.6,48.1,48.1]
+    '中国系ブランド':[63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,61.7],
+    '全体':         [46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.0,44.3,47.6,48.1,48.1]
   };
   // 最後の月(26.3)のデータは未掲載のためnull
   var colors = ['#8b5cf6','#06b6d4','#ef4444','#3b82f6'];
@@ -15759,62 +15764,120 @@ function renderBrandIceNevRt(){
   });
 }
 
-// ── ⑭ 車型×クラス別 販売（26年3月単月、横棒） ──
+// ── ⑭ 車型×クラス別 月次販売推移 ──
+// データ構造: SEG_DATA[月ラベル] = { wh: {CAR_a00:..., CAR_A0:..., ...}, rt: {...} }
+// 月追加時はここにデータを足すだけ
+var SEG_MONTHS = ['26.2','26.3'];  // 現在登録済み月
+var SEG_KEYS   = ['CAR_a00','CAR_A0','CAR_A','CAR_B','CAR_C','MPV_A0','MPV_A','MPV_B','MPV_C','SUV_A0','SUV_A','SUV_B','SUV_C'];
+var SEG_LABELS = ['CAR a00','CAR A0','CAR A','CAR B','CAR C','MPV A0','MPV A','MPV B','MPV C','SUV A0','SUV A','SUV B','SUV C'];
+// 各クラスの積み上げ用グループ色
+var SEG_COLORS = {
+  CAR_a00:'#93c5fd', CAR_A0:'#60a5fa', CAR_A:'#3b82f6', CAR_B:'#1d4ed8', CAR_C:'#1e3a8a',
+  MPV_A0:'#c4b5fd', MPV_A:'#a78bfa', MPV_B:'#8b5cf6', MPV_C:'#6d28d9',
+  SUV_A0:'#fde68a', SUV_A:'#fbbf24', SUV_B:'#f59e0b', SUV_C:'#b45309'
+};
+
+var SEG_DATA = {
+  '26.2': {
+    wh: {CAR_a00:5,  CAR_A0:11, CAR_A:19, CAR_B:15, CAR_C:3,  MPV_A0:0, MPV_A:0, MPV_B:3, MPV_C:2, SUV_A0:13, SUV_A:49, SUV_B:26, SUV_C:4.5},
+    rt: {CAR_a00:2,  CAR_A0:5,  CAR_A:15, CAR_B:16, CAR_C:4,  MPV_A0:0, MPV_A:0, MPV_B:2, MPV_C:2, SUV_A0:4,  SUV_A:27, SUV_B:20, SUV_C:4}
+  },
+  '26.3': {
+    wh: {CAR_a00:6,  CAR_A0:15, CAR_A:31, CAR_B:26, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:4, MPV_C:4, SUV_A0:19, SUV_A:81, SUV_B:37, SUV_C:7.5},
+    rt: {CAR_a00:5,  CAR_A0:10, CAR_A:25, CAR_B:23, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:3, MPV_C:4, SUV_A0:10, SUV_A:44, SUV_B:28, SUV_C:6}
+  }
+};
+
+var _segView = 'wh';
+window.segSetView = function(v, btn){
+  _segView = v;
+  document.querySelectorAll('#seg-btn-wh,#seg-btn-rt').forEach(function(b){
+    b.className = b.className.replace('btn-primary','btn-outline-secondary').replace('btn-outline-secondary','btn-outline-secondary');
+  });
+  document.getElementById('seg-btn-wh').className = 'btn btn-sm ' + (v==='wh'?'btn-primary active':'btn-outline-secondary');
+  document.getElementById('seg-btn-rt').className = 'btn btn-sm ' + (v==='rt'?'btn-primary active':'btn-outline-secondary');
+  renderSegment();
+};
+
 function renderSegment(){
   var ec = makeEc('ec-zt-segment'); if(!ec) return;
-  // 画像5より：26年3月単月のみ（卸売・小売）
-  // [車型, クラス, 卸売, 小売]
-  var rows = [
-    ['CAR','a00',6,5],
-    ['CAR','A0', 15,10],
-    ['CAR','A',  31,25],
-    ['CAR','B',  26,23],
-    ['CAR','C',  5, 5],
-    ['MPV','A0', 1, 1],
-    ['MPV','A',  1, 0],
-    ['MPV','B',  4, 3],
-    ['MPV','C',  4, 4],
-    ['SUV','A00',0, 0],
-    ['SUV','A0', 19,10],
-    ['SUV','A',  81,44],
-    ['SUV','B',  37,28],
-    ['SUV','C',  7.5,6]
-  ];
-  // 車型で色分けするため、y軸ラベルに車型名を付ける
-  var yCats = rows.map(function(r){ return r[0]+' '+r[1]; });
-  var whData = rows.map(function(r){ return r[2]; });
-  var rtData = rows.map(function(r){ return r[3]; });
+  var vk = _segView;  // 'wh' or 'rt'
+  var months = SEG_MONTHS;
 
-  // 車型ごとの背景色（Lv別色）
-  var typeColor = {CAR:'#3b82f6', MPV:'#8b5cf6', SUV:'#f59e0b'};
+  // 積み上げ棒：x軸=月、series=クラス別
+  var series = SEG_KEYS.map(function(k,i){
+    var grp = k.split('_')[0];
+    return {
+      name: SEG_LABELS[i],
+      type: 'bar',
+      stack: 's',
+      color: SEG_COLORS[k],
+      barMaxWidth: 36,
+      data: months.map(function(m){ return (SEG_DATA[m] && SEG_DATA[m][vk]) ? (SEG_DATA[m][vk][k]||0) : null; }),
+      label: {
+        show: false
+      },
+      emphasis: { focus: 'series' }
+    };
+  });
+
+  // 合計ライン（折れ線）
+  var totalLine = {
+    name: '合計',
+    type: 'line',
+    color: '#374151',
+    symbol: 'circle',
+    symbolSize: 5,
+    lineStyle: { width: 2, type: 'dashed' },
+    itemStyle: { color: '#374151' },
+    data: months.map(function(m){
+      if (!SEG_DATA[m] || !SEG_DATA[m][vk]) return null;
+      return +(SEG_KEYS.reduce(function(s,k){ return s + (SEG_DATA[m][vk][k]||0); },0).toFixed(1));
+    }),
+    label: { show: true, position: 'top', formatter: function(p){ return p.value!=null?p.value+'万':''; }, fontSize: 11, fontFamily: FONT, color: '#374151' }
+  };
+
+  var indName = vk === 'wh' ? '卸売' : '小売';
 
   ec.setOption({
-    tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
-      formatter:function(p){
-        return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>');
-      }},
-    legend: leg({data:['卸売（26年3月）','小売（26年3月）'],top:8}),
-    grid: {top:50, bottom:40, left:90, right:60, containLabel:false},
-    xAxis: yVal('万台',{min:0,max:90}),
-    yAxis: {type:'category',data:yCats,inverse:true,axisLabel:{fontFamily:FONT,fontSize:11,color:'#333',
-      formatter:function(v){
-        // 車型名の部分を色付け（ラベルは ECharts の rich text を使わないと色付け難しいので、通常ラベル）
-        return v;
-      }},axisLine:{lineStyle:{color:'#ddd'}}},
-    series:[
-      {name:'卸売（26年3月）', type:'bar', color:'#ef4444', data:whData, barMaxWidth:14,
-        label:{show:true,position:'right',formatter:'{c}',fontFamily:FONT,fontSize:11,color:'#555'}},
-      {name:'小売（26年3月）', type:'bar', color:'#64748b', data:rtData, barMaxWidth:14,
-        label:{show:true,position:'right',formatter:'{c}',fontFamily:FONT,fontSize:11,color:'#555'}}
-    ],
-    graphic: [
-      // CAR/MPV/SUV の区切り線（y軸範囲インデックスで）
-      {type:'group',children:[
-        {type:'text',left:10,top:55, style:{text:'CAR',font:'bold 12px '+FONT,fill:typeColor.CAR}},
-        {type:'text',left:10,top:170,style:{text:'MPV',font:'bold 12px '+FONT,fill:typeColor.MPV}},
-        {type:'text',left:10,top:260,style:{text:'SUV',font:'bold 12px '+FONT,fill:typeColor.SUV}}
-      ]}
-    ]
+    tooltip: {
+      trigger: 'axis', axisPointer: {type:'shadow'},
+      backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
+      textStyle:{fontFamily:FONT,fontSize:12},
+      formatter: function(p){
+        var grpTotals = {CAR:0,MPV:0,SUV:0};
+        p.forEach(function(x){
+          if(x.seriesName==='合計'||x.value==null) return;
+          var grp = x.seriesName.split(' ')[0];
+          if(grpTotals[grp]!==undefined) grpTotals[grp]+=x.value;
+        });
+        var lines = ['<b>'+p[0].name+'　'+indName+'</b>'];
+        var lastGrp='';
+        p.forEach(function(x){
+          if(x.seriesName==='合計') return;
+          var grp = x.seriesName.split(' ')[0];
+          if(grp!==lastGrp){
+            lines.push('<span style="font-size:10px;color:#888">── '+grp+' 計'+grpTotals[grp].toFixed(1)+'万台 ──</span>');
+            lastGrp=grp;
+          }
+          if(x.value) lines.push(x.marker+x.seriesName+': <b>'+x.value+'万台</b>');
+        });
+        var tot = p.find(function(x){return x.seriesName==='合計';});
+        if(tot&&tot.value!=null) lines.push('<b>合計: '+tot.value+'万台</b>');
+        return lines.join('<br>');
+      }
+    },
+    legend: {
+      data: SEG_LABELS.concat(['合計']),
+      top: 8, right: 12,
+      textStyle: {fontFamily:FONT, fontSize:10},
+      itemWidth: 12, itemHeight: 8,
+      // グループ別に視覚的に整理（凡例は小さめ）
+    },
+    grid: grid({bottom:40, top:70, left:55, right:20}),
+    xAxis: xCat(months),
+    yAxis: yVal('万台',{min:0, max:220}),
+    series: series.concat([totalLine])
   });
 }
 

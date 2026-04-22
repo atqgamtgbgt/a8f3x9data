@@ -3882,7 +3882,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-brand-4indicator">
               <div class="chart-card">
                 <div class="chart-title">ブランド層別 4指標比較（生産・卸売・小売・輸出、万台）</div>
-                <div class="chart-subtitle">高級車・合弁・中国系ブランド　25年通年・26年1-3月累計　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 生産/卸売/小売/輸出　22〜25年通年・26年1-3月累計　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-brand-4indicator" class="echart-box" style="height:460px"></div>
               </div>
             </div>
@@ -15624,27 +15624,43 @@ function renderInventory(){
 // ── ⑪ ブランド層別 4指標比較（生産/卸売/小売/輸出） ──
 function renderBrand4Indicator(){
   var ec = makeEc('ec-zt-brand-4indicator'); if(!ec) return;
-  // 画像7より：豪華/合資/自主 × 4指標（生産・卸売・小売・輸出）× 2期間（25年通年・26年1-3月累計）
+  // 出典：乗聯会（崔東樹）　生産・卸売・小売・輸出
   var indicators = ['生産','卸売','小売','輸出'];
+
   // 26年1-3月累計
   var data_26q1 = {
-    '高級車':    [71,   66,   52,   15],
-    '合弁':      [119,  120,  116,  11],
-    '中国系':    [384,  401,  255,  156]
+    '高級車': [71,   66,   52,   15],
+    '合弁':   [119,  120,  116,  11],
+    '中国系': [384,  401,  255,  156]
   };
   // 25年通年
   var data_25 = {
-    '高級車':    [294,  296,  255,  42],
-    '合弁':      [608,  601,  567,  41],
-    '中国系':    [2065, 2058, 1552, 491]
+    '高級車': [294,  296,  255,  42],
+    '合弁':   [608,  601,  567,  41],
+    '中国系': [2065, 2058, 1552, 491]
+  };
+  // 24年通年
+  var data_24 = {
+    '高級車': [322,  323,  280,  50],
+    '合弁':   [615,  628,  627,  36],
+    '中国系': [1746, 1765, 1382, 393]
+  };
+  // 23年通年
+  var data_23 = {
+    '高級車': [336,  339,  305,  35],
+    '合弁':   [772,  776,  743,  30],
+    '中国系': [1448, 1441, 1123, 319]
+  };
+  // 22年通年
+  var data_22 = {
+    '高級車': [311,  309,  278,  27],
+    '合弁':   [861,  853,  816,  26],
+    '中国系': [1157, 1144, 952,  183]
   };
 
-  // 指標×ブランド×期間で行を作る。x軸は「指標×ブランド」の組合せ（12項目）、シリーズは期間（2本）
   var xCats = [];
   indicators.forEach(function(ind){
-    ['高級車','合弁','中国系'].forEach(function(br){
-      xCats.push(ind+'\n'+br);
-    });
+    ['高級車','合弁','中国系'].forEach(function(br){ xCats.push(ind+'\n'+br); });
   });
   function flat(obj){
     var arr=[];
@@ -15656,13 +15672,16 @@ function renderBrand4Indicator(){
   ec.setOption({
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
       formatter:function(p){ return '<b>'+p[0].name.replace('\n',' / ')+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value+'万台</b>';}).join('<br>'); }},
-    legend: leg({data:['25年通年','26年1-3月累計']}),
-    grid: grid({bottom:75,top:55,left:60,right:20}),
+    legend: leg({data:['22年通年','23年通年','24年通年','25年通年','26年1-3月累計'], top:8}),
+    grid: grid({bottom:75,top:65,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
     yAxis: yVal('万台'),
     series:[
-      {name:'25年通年',      type:'bar', color:'#94a3b8', data:flat(data_25),   barMaxWidth:22},
-      {name:'26年1-3月累計', type:'bar', color:'#3b82f6', data:flat(data_26q1), barMaxWidth:22}
+      {name:'22年通年',     type:'bar', color:'#cbd5e1', data:flat(data_22),   barMaxWidth:16},
+      {name:'23年通年',     type:'bar', color:'#94a3b8', data:flat(data_23),   barMaxWidth:16},
+      {name:'24年通年',     type:'bar', color:'#64748b', data:flat(data_24),   barMaxWidth:16},
+      {name:'25年通年',     type:'bar', color:'#3b82f6', data:flat(data_25),   barMaxWidth:16},
+      {name:'26年1-3月累計',type:'bar', color:'#ef4444', data:flat(data_26q1), barMaxWidth:16}
     ]
   });
 }
@@ -15767,7 +15786,7 @@ function renderBrandIceNevRt(){
 // ── ⑭ 車型×クラス別 月次販売推移 ──
 // データ構造: SEG_DATA[月ラベル] = { wh: {CAR_a00:..., CAR_A0:..., ...}, rt: {...} }
 // 月追加時はここにデータを足すだけ
-var SEG_MONTHS = ['25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];  // 現在登録済み月
+var SEG_MONTHS = ['25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];  // 現在登録済み月
 var SEG_KEYS   = ['CAR_a00','CAR_A0','CAR_A','CAR_B','CAR_C','MPV_A0','MPV_A','MPV_B','MPV_C','SUV_A0','SUV_A','SUV_B','SUV_C'];
 var SEG_LABELS = ['CAR a00','CAR A0','CAR A','CAR B','CAR C','MPV A0','MPV A','MPV B','MPV C','SUV A0','SUV A','SUV B','SUV C'];
 // 各クラスの積み上げ用グループ色
@@ -15778,26 +15797,6 @@ var SEG_COLORS = {
 };
 
 var SEG_DATA = {
-  '25.3': {
-    wh: {CAR_a00:13, CAR_A0:12, CAR_A:38, CAR_B:35, CAR_C:6,  MPV_A0:2, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:18, SUV_A:73, SUV_B:31, SUV_C:3.2},
-    rt: {CAR_a00:13, CAR_A0:8,  CAR_A:32, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:12, SUV_A:52, SUV_B:28, SUV_C:3}
-  },
-  '25.4': {
-    wh: {CAR_a00:15, CAR_A0:13, CAR_A:31, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:16, SUV_A:64, SUV_B:28, SUV_C:5.3},
-    rt: {CAR_a00:11, CAR_A0:8,  CAR_A:30, CAR_B:28, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:10, SUV_A:46, SUV_B:24, SUV_C:4}
-  },
-  '25.5': {
-    wh: {CAR_a00:16, CAR_A0:13, CAR_A:32, CAR_B:33, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:16, SUV_A:68, SUV_B:32, SUV_C:7.8},
-    rt: {CAR_a00:11, CAR_A0:9,  CAR_A:31, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:10, SUV_A:54, SUV_B:27, SUV_C:7}
-  },
-  '25.6': {
-    wh: {CAR_a00:14, CAR_A0:13, CAR_A:35, CAR_B:34, CAR_C:7,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:3, SUV_A0:16, SUV_A:74, SUV_B:34, SUV_C:8.7},
-    rt: {CAR_a00:11, CAR_A0:10, CAR_A:34, CAR_B:33, CAR_C:7,  MPV_A0:1, MPV_A:0, MPV_B:6, MPV_C:3, SUV_A0:10, SUV_A:56, SUV_B:30, SUV_C:8}
-  },
-  '25.7': {
-    wh: {CAR_a00:12, CAR_A0:14, CAR_A:35, CAR_B:34, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:16, SUV_A:72, SUV_B:32, SUV_C:7.8},
-    rt: {CAR_a00:9,  CAR_A0:11, CAR_A:32, CAR_B:29, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:9,  SUV_A:50, SUV_B:26, SUV_C:7}
-  },
   '25.8': {
     wh: {CAR_a00:12, CAR_A0:14, CAR_A:36, CAR_B:35, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:18, SUV_A:74, SUV_B:35, SUV_C:7.2},
     rt: {CAR_a00:10, CAR_A0:10, CAR_A:33, CAR_B:32, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:11, SUV_A:54, SUV_B:29, SUV_C:7}
@@ -15920,7 +15919,7 @@ function renderSegment(){
     },
     grid: grid({bottom:40, top:70, left:55, right:20}),
     xAxis: xCat(months),
-    yAxis: yVal('万台',{min:0, max:220}),
+    yAxis: yVal('万台',{min:0}),
     series: series.concat([totalLine])
   });
 }

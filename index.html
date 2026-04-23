@@ -15469,7 +15469,7 @@ function renderBrandWholesale(){
   // 各月の高級・合弁・中国系ブランド 卸売
   var gouhua = [27.2,21.1,23.7,25.6,20.4,25.9,28.9,23.3,28,30.2,22.8,16.1,27.2];
   var heizi  = [49.5,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58,57.4,42,28.3,49.5];
-  var ziZhu  = [159,   153,  160,  166,  158,  172.1,197.5,214.2,213,191.2,132.6,107.4,161.1];
+  var ziZhu  = [159,153,160,166,158,171,197,214,214,191,132,107,162];
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: leg({data:['高級車','合弁メーカー','中国系ブランド']}),
@@ -15493,9 +15493,9 @@ function renderNationShare(){
   // 中国系ブランドシェア
   
   var totals= [241,219,232,248,222,246,280,293,300,279,197,152,238];
-  var ziZhu = [159,  153,  160,  166, 158,  172.1,197.5,214.2,213,191.2,132.6,107.4,161.1];
+  var ziZhu = [159,153,160,166,158,171,197,214,214,191,132,107,162]
   // 独系・日系・米系・韓系・欧系: 各月のデータ（国籍別シートより抽出）
-  var doku  = [35,27,30,35,26,30,34,31,33,33,28,17,29];
+  var doku  = [35,27,30,35,26,30,34,31,34,33,28,17,29];
   var nichi = [27,19,23,26,22,24,27,28,29,30,18,13,26];
   var bei   = [14,13,13,15,11,15,16,14,17,18,14,11,16];
   var kan   = [4,4,4,4,3,4,4,4,4,4,3,3,3];
@@ -15535,8 +15535,8 @@ function renderNationVolume(){
   var ec = makeEc('ec-zt-nation-volume'); if(!ec) return;
   var months = MONTHS_LABEL;
   // 台数は zt-nation-share と同じソース（他月分は乗聯会別資料、26.3月のみ画像6で確認済）
-  var ziZhu = [159,  153,  160,  166, 158,  172.1,197.5,214.2,213,191.2,132.6,107.4,161];
-  var doku  = [35,27,30,35,26,30,34,31,33,33,28,17,29];
+  var ziZhu = [159,153,160,166,158,171,197,214,214,191,132,107,162]
+  var doku  = [35,27,30,35,26,30,34,31,34,33,28,17,29];
   var nichi = [27,19,23,26,22,24,27,28,29,30,18,13,26];
   var bei   = [14,13,13,15,11,15,16,14,17,18,14,11,16];
   var kan   = [4,4,4,4,3,4,4,4,4,4,3,3,3];
@@ -15799,59 +15799,59 @@ var SEG_COLORS = {
 var SEG_DATA = {
   '25.2': {
     wh: {CAR_a00:12, CAR_A0:9,  CAR_A:24, CAR_B:26, CAR_C:4,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:1, SUV_A0:14, SUV_A:57, SUV_B:21, SUV_C:2.2},
-    rt: {CAR_a00:9,  CAR_A0:6,  CAR_A:25, CAR_B:22, CAR_C:4,  MPV_A0:1, MPV_A:0, MPV_B:3, MPV_C:2, SUV_A0:8,  SUV_A:38, SUV_B:18, SUV_C:2}
+    rt: {CAR_a00:9,  CAR_A0:6,  CAR_A:25, CAR_B:22, CAR_C:4,  MPV_A0:1, MPV_A:0, MPV_B:3, MPV_C:2, SUV_A0:8,  SUV_A:38, SUV_B:18, SUV_C:3}
   },
   '25.3': {
-    wh: {CAR_a00:13, CAR_A0:12, CAR_A:38, CAR_B:35, CAR_C:6,  MPV_A0:2, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:18, SUV_A:73, SUV_B:31, SUV_C:3.2},
+    wh: {CAR_a00:13, CAR_A0:12, CAR_A:38, CAR_B:35, CAR_C:6,  MPV_A0:2, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:18, SUV_A:73, SUV_B:31, SUV_C:4.0},
     rt: {CAR_a00:13, CAR_A0:8,  CAR_A:32, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:12, SUV_A:52, SUV_B:28, SUV_C:3}
   },
   '25.4': {
-    wh: {CAR_a00:15, CAR_A0:13, CAR_A:31, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:16, SUV_A:64, SUV_B:28, SUV_C:5.3},
-    rt: {CAR_a00:11, CAR_A0:8,  CAR_A:30, CAR_B:28, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:10, SUV_A:46, SUV_B:24, SUV_C:4}
+    wh: {CAR_a00:15, CAR_A0:13, CAR_A:31, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:16, SUV_A:64, SUV_B:28, SUV_C:6.0},
+    rt: {CAR_a00:11, CAR_A0:8,  CAR_A:30, CAR_B:28, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:10, SUV_A:46, SUV_B:24, SUV_C:4}
   },
   '25.5': {
-    wh: {CAR_a00:16, CAR_A0:13, CAR_A:32, CAR_B:33, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:16, SUV_A:68, SUV_B:32, SUV_C:7.8},
-    rt: {CAR_a00:11, CAR_A0:9,  CAR_A:31, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:10, SUV_A:54, SUV_B:27, SUV_C:7}
+    wh: {CAR_a00:16, CAR_A0:13, CAR_A:31, CAR_B:33, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:16, SUV_A:68, SUV_B:32, SUV_C:7.8},
+    rt: {CAR_a00:11, CAR_A0:9,  CAR_A:30, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:10, SUV_A:54, SUV_B:27, SUV_C:7}
   },
   '25.6': {
-    wh: {CAR_a00:14, CAR_A0:13, CAR_A:35, CAR_B:34, CAR_C:7,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:3, SUV_A0:16, SUV_A:74, SUV_B:34, SUV_C:8.7},
-    rt: {CAR_a00:11, CAR_A0:10, CAR_A:34, CAR_B:33, CAR_C:7,  MPV_A0:1, MPV_A:0, MPV_B:6, MPV_C:3, SUV_A0:10, SUV_A:56, SUV_B:30, SUV_C:8}
+    wh: {CAR_a00:14, CAR_A0:13, CAR_A:36, CAR_B:34, CAR_C:7,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:3, SUV_A0:16, SUV_A:74, SUV_B:34, SUV_C:9.0},
+    rt: {CAR_a00:11, CAR_A0:10, CAR_A:33, CAR_B:33, CAR_C:7,  MPV_A0:1, MPV_A:0, MPV_B:6, MPV_C:3, SUV_A0:10, SUV_A:56, SUV_B:30, SUV_C:8}
   },
   '25.7': {
-    wh: {CAR_a00:12, CAR_A0:13, CAR_A:34, CAR_B:29, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:14, SUV_A:69, SUV_B:30, SUV_C:6.1},
-    rt: {CAR_a00:10, CAR_A0:9,  CAR_A:32, CAR_B:28, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:9,  SUV_A:49, SUV_B:25, SUV_C:6}
+    wh: {CAR_a00:12, CAR_A0:13, CAR_A:34, CAR_B:29, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:14, SUV_A:69, SUV_B:30, SUV_C:7.0},
+    rt: {CAR_a00:10, CAR_A0:9,  CAR_A:32, CAR_B:28, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:9,  SUV_A:50, SUV_B:25, SUV_C:6}
   },
   '25.8': {
-    wh: {CAR_a00:12, CAR_A0:14, CAR_A:36, CAR_B:35, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:18, SUV_A:74, SUV_B:35, SUV_C:7.2},
-    rt: {CAR_a00:10, CAR_A0:10, CAR_A:33, CAR_B:32, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:11, SUV_A:54, SUV_B:29, SUV_C:7}
+    wh: {CAR_a00:12, CAR_A0:14, CAR_A:36, CAR_B:35, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:18, SUV_A:74, SUV_B:35, SUV_C:8.0},
+    rt: {CAR_a00:10, CAR_A0:10, CAR_A:33, CAR_B:32, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:11, SUV_A:55, SUV_B:29, SUV_C:7}
   },
   '25.9': {
-    wh: {CAR_a00:15, CAR_A0:16, CAR_A:37, CAR_B:37, CAR_C:8,  MPV_A0:1, MPV_A:1, MPV_B:7, MPV_C:3, SUV_A0:19, SUV_A:87, SUV_B:42, SUV_C:7.8},
-    rt: {CAR_a00:14, CAR_A0:12, CAR_A:35, CAR_B:34, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:12, SUV_A:59, SUV_B:34, SUV_C:8}
+    wh: {CAR_a00:15, CAR_A0:16, CAR_A:37, CAR_B:37, CAR_C:8,  MPV_A0:1, MPV_A:1, MPV_B:7, MPV_C:2, SUV_A0:19, SUV_A:87, SUV_B:42, SUV_C:8.0},
+    rt: {CAR_a00:14, CAR_A0:12, CAR_A:36, CAR_B:34, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:3, SUV_A0:12, SUV_A:59, SUV_B:34, SUV_C:8}
   },
   '25.10': {
-    wh: {CAR_a00:17, CAR_A0:17, CAR_A:41, CAR_B:37, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:8, MPV_C:2, SUV_A0:21, SUV_A:89, SUV_B:46, SUV_C:8.1},
-    rt: {CAR_a00:15, CAR_A0:12, CAR_A:34, CAR_B:33, CAR_C:7,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:2, SUV_A0:11, SUV_A:59, SUV_B:36, SUV_C:8}
+    wh: {CAR_a00:17, CAR_A0:17, CAR_A:40, CAR_B:37, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:7, MPV_C:2, SUV_A0:21, SUV_A:89, SUV_B:46, SUV_C:9.0},
+    rt: {CAR_a00:15, CAR_A0:12, CAR_A:34, CAR_B:33, CAR_C:7,  MPV_A0:1, MPV_A:0, MPV_B:6, MPV_C:2, SUV_A0:11, SUV_A:59, SUV_B:36, SUV_C:8}
   },
   '25.11': {
-    wh: {CAR_a00:17, CAR_A0:18, CAR_A:45, CAR_B:38, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:5, SUV_A0:20, SUV_A:88, SUV_B:45, SUV_C:10.6},
+    wh: {CAR_a00:18, CAR_A0:18, CAR_A:45, CAR_B:38, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:5, MPV_C:4, SUV_A0:20, SUV_A:88, SUV_B:45, SUV_C:12},
     rt: {CAR_a00:13, CAR_A0:13, CAR_A:36, CAR_B:32, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:4, MPV_C:4, SUV_A0:10, SUV_A:55, SUV_B:39, SUV_C:9}
   },
   '25.12': {
-    wh: {CAR_a00:11, CAR_A0:16, CAR_A:37, CAR_B:37, CAR_C:8,  MPV_A0:1, MPV_A:0, MPV_B:4, MPV_C:6, SUV_A0:20, SUV_A:78, SUV_B:48, SUV_C:11.7},
-    rt: {CAR_a00:7,  CAR_A0:12, CAR_A:37, CAR_B:35, CAR_C:8,  MPV_A0:1, MPV_A:0, MPV_B:4, MPV_C:6, SUV_A0:11, SUV_A:50, SUV_B:45, SUV_C:12}
+    wh: {CAR_a00:11, CAR_A0:16, CAR_A:37, CAR_B:37, CAR_C:8,  MPV_A0:1, MPV_A:0, MPV_B:4, MPV_C:6, SUV_A0:20, SUV_A:78, SUV_B:48, SUV_C:13.0},
+    rt: {CAR_a00:7,  CAR_A0:12, CAR_A:36, CAR_B:35, CAR_C:8,  MPV_A0:1, MPV_A:0, MPV_B:4, MPV_C:5, SUV_A0:11, SUV_A:50, SUV_B:45, SUV_C:12}
   },
   '26.1': {
     wh: {CAR_a00:4,  CAR_A0:13, CAR_A:29, CAR_B:25, CAR_C:4,  MPV_A0:0, MPV_A:0, MPV_B:3, MPV_C:3, SUV_A0:15, SUV_A:59, SUV_B:34, SUV_C:8},
-    rt: {CAR_a00:2,  CAR_A0:7,  CAR_A:24, CAR_B:25, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:2, MPV_C:4, SUV_A0:6,  SUV_A:42, SUV_B:29, SUV_C:8}
+    rt: {CAR_a00:2,  CAR_A0:7,  CAR_A:23, CAR_B:25, CAR_C:6,  MPV_A0:1, MPV_A:0, MPV_B:2, MPV_C:4, SUV_A0:6,  SUV_A:42, SUV_B:29, SUV_C:8}
   },
   '26.2': {
-    wh: {CAR_a00:5,  CAR_A0:11, CAR_A:19, CAR_B:15, CAR_C:3,  MPV_A0:0, MPV_A:0, MPV_B:3, MPV_C:2, SUV_A0:13, SUV_A:49, SUV_B:26, SUV_C:4.5},
-    rt: {CAR_a00:2,  CAR_A0:5,  CAR_A:15, CAR_B:16, CAR_C:4,  MPV_A0:0, MPV_A:0, MPV_B:2, MPV_C:2, SUV_A0:4,  SUV_A:27, SUV_B:20, SUV_C:4}
+    wh: {CAR_a00:5,  CAR_A0:11, CAR_A:19, CAR_B:15, CAR_C:3,  MPV_A0:0, MPV_A:0, MPV_B:4, MPV_C:2, SUV_A0:13, SUV_A:49, SUV_B:26, SUV_C:4.5},
+    rt: {CAR_a00:2,  CAR_A0:5,  CAR_A:15, CAR_B:16, CAR_C:4,  MPV_A0:0, MPV_A:0, MPV_B:3, MPV_C:2, SUV_A0:4,  SUV_A:28, SUV_B:20, SUV_C:4}
   },
   '26.3': {
-    wh: {CAR_a00:6,  CAR_A0:15, CAR_A:31, CAR_B:26, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:4, MPV_C:4, SUV_A0:19, SUV_A:81, SUV_B:37, SUV_C:7.5},
-    rt: {CAR_a00:5,  CAR_A0:10, CAR_A:25, CAR_B:23, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:3, MPV_C:4, SUV_A0:10, SUV_A:44, SUV_B:28, SUV_C:6}
+    wh: {CAR_a00:6,  CAR_A0:15, CAR_A:31, CAR_B:26, CAR_C:5,  MPV_A0:1, MPV_A:1, MPV_B:4, MPV_C:4, SUV_A0:19, SUV_A:81, SUV_B:37, SUV_C:8},
+    rt: {CAR_a00:5,  CAR_A0:10, CAR_A:25, CAR_B:23, CAR_C:5,  MPV_A0:1, MPV_A:0, MPV_B:3, MPV_C:4, SUV_A0:10, SUV_A:44, SUV_B:28, SUV_C:7}
   }
 };
 

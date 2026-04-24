@@ -85,6 +85,16 @@
             r.lineStyle = Object.assign({}, s.lineStyle || {}, { opacity: 1 });
           }
           r.emphasis = { disabled: false };
+          // ラベルを元の設定に戻す（未定義の場合は明示的にshow:falseにしてホバー時ラベルを消す）
+          // マージ時にホバー中のformatter/richが残らないよう、元のlabelにない項目は明示的にnullで消す
+          if (s.label) {
+            r.label = Object.assign(
+              { formatter: null, rich: null, color: null, fontSize: null, fontWeight: null, position: null },
+              s.label
+            );
+          } else {
+            r.label = { show: false, formatter: null, rich: null, color: null, fontSize: null, fontWeight: null, position: null };
+          }
           return r;
         });
         resetOpt = {};
@@ -3773,29 +3783,29 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">📊 概観</span>
                   <div class="cds-gc-items">
                     <button class="nav-link active" data-cds-target="#dc-overview">📊 総合推移</button>
-                    <button class="nav-link" data-cds-target="#dc-compliance">⚖️ 達標率</button>
+                    <button class="nav-link" data-cds-target="#dc-compliance">⚖️ 目標達成率</button>
                   </div>
                 </div>
                 <div class="cds-gc">
                   <span class="cds-gc-label">💎 積分推移</span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-target="#dc-nev-credits">🔋 NEV積分</button>
-                    <button class="nav-link" data-cds-target="#dc-fuel-credits">⛽ 油耗積分</button>
+                    <button class="nav-link" data-cds-target="#dc-fuel-credits">⛽ 燃費積分</button>
                   </div>
                 </div>
                 <div class="cds-gc">
                   <span class="cds-gc-label">🏢 集団・企業</span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-target="#dc-group">🏢 集団別</button>
-                    <button class="nav-link" data-cds-target="#dc-central">🏛️ 央企詳細</button>
-                    <button class="nav-link" data-cds-target="#dc-local">🏭 地方国企詳細</button>
-                    <button class="nav-link" data-cds-target="#dc-newforces">🚀 新勢力</button>
+                    <button class="nav-link" data-cds-target="#dc-central">🏛️ 中央国有</button>
+                    <button class="nav-link" data-cds-target="#dc-local">🏭 地方国有</button>
+                    <button class="nav-link" data-cds-target="#dc-newforces">🚀 新興EV</button>
                   </div>
                 </div>
                 <div class="cds-gc">
-                  <span class="cds-gc-label">🌐 進口車</span>
+                  <span class="cds-gc-label">🌐 輸入車</span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-target="#dc-import">🌐 進口車ブランド別</button>
+                    <button class="nav-link" data-cds-target="#dc-import">🌐 輸入車ブランド別</button>
                   </div>
                 </div>
               </div>
@@ -4841,48 +4851,48 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">📊 双積分 総合推移（2012〜2025年）</div>
-                    <div class="chart-subtitle">乗用車生産数量（万台）× 油耗積分・新能源積分（万点）の全体像</div>
+                    <div class="chart-subtitle">乗用車生産数量（万台）× 燃費積分・NEV積分（万点）の全体像</div>
                     <div id="ec-dc-overview" class="echart-box" style="height:440px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">⚡ 新能源生産 vs 新能源積分</div>
+                    <div class="chart-title">⚡ 新能源生産 vs NEV積分</div>
                     <div class="chart-subtitle">2016〜2025年　1台あたりの積分効率（万点/万台）</div>
                     <div id="ec-dc-overview-nev" class="echart-box" style="height:340px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">⛽ 燃油車生産 vs 油耗積分</div>
-                    <div class="chart-subtitle">2016〜2025年　油耗積分の悪化→好転の軌跡</div>
+                    <div class="chart-title">⛽ 燃油車生産 vs 燃費積分</div>
+                    <div class="chart-subtitle">2016〜2025年　燃費積分の悪化→好転の軌跡</div>
                     <div id="ec-dc-overview-fuel" class="echart-box" style="height:340px"></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- (2) 達標率 -->
+            <!-- (2) 目標達成率 -->
             <div class="cds-pane" id="dc-compliance">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">⚖️ 新能源積分 達標率推移（2016〜2025年、%）</div>
-                    <div class="chart-subtitle">自主ブランドは高位維持、合資は3年連続で50%超まで改善、外資進口は2025年74%</div>
+                    <div class="chart-title">⚖️ NEV積分 目標達成率推移（2016〜2025年、%）</div>
+                    <div class="chart-subtitle">自主ブランドは高位維持、合資は3年連続で50%超まで改善、外資輸入は2025年74%</div>
                     <div id="ec-dc-compliance" class="echart-box" style="height:400px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📊 自主ブランド 達標・非達標 企業数推移</div>
-                    <div class="chart-subtitle">非達標社が微増</div>
+                    <div class="chart-title">📊 自主ブランド 達成・非達成 企業数推移</div>
+                    <div class="chart-subtitle">非達成社が微増</div>
                     <div id="ec-dc-compliance-jishu" class="echart-box" style="height:320px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📊 合資ブランド 達標・非達標 企業数</div>
-                    <div class="chart-subtitle">2018年以前は全社達標、2019年以降負積分圧力</div>
+                    <div class="chart-title">📊 合資ブランド 達成・非達成 企業数</div>
+                    <div class="chart-subtitle">2018年以前は全社達成、2019年以降負積分圧力</div>
                     <div id="ec-dc-compliance-goshi" class="echart-box" style="height:320px"></div>
                   </div>
                 </div>
@@ -4894,7 +4904,7 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🔋 新能源積分 カテゴリ別推移（2018〜2025年、万点）</div>
+                    <div class="chart-title">🔋 NEV積分 カテゴリ別推移（2018〜2025年、万点）</div>
                     <div class="chart-subtitle">自主・米/欧/韓/日/独 の積分内訳。負積分＝日独欧韓系</div>
                     <div id="ec-dc-nev-credits" class="echart-box" style="height:420px"></div>
                   </div>
@@ -4908,7 +4918,7 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">🥧 2025年 新能源積分シェア（正積分のみ）</div>
+                    <div class="chart-title">🥧 2025年 NEV積分シェア（正積分のみ）</div>
                     <div class="chart-subtitle">自主の圧倒的優位を可視化</div>
                     <div id="ec-dc-nev-credits-pie" class="echart-box" style="height:340px"></div>
                   </div>
@@ -4916,19 +4926,19 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <!-- (4) 油耗積分（カテゴリ別） -->
+            <!-- (4) 燃費積分（カテゴリ別） -->
             <div class="cds-pane" id="dc-fuel-credits">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">⛽ 油耗積分 カテゴリ別推移（2018〜2025年、万点）</div>
-                    <div class="chart-subtitle">自主の油耗積分急増（NEVによる平均燃費改善効果）</div>
+                    <div class="chart-title">⛽ 燃費積分 カテゴリ別推移（2018〜2025年、万点）</div>
+                    <div class="chart-subtitle">自主の燃費積分急増（NEVによる平均燃費改善効果）</div>
                     <div id="ec-dc-fuel-credits" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 外資カテゴリの油耗積分推移</div>
+                    <div class="chart-title">📈 外資カテゴリの燃費積分推移</div>
                     <div class="chart-subtitle">独系は2025年過去最大の▲489万点</div>
                     <div id="ec-dc-fuel-credits-foreign" class="echart-box" style="height:340px"></div>
                   </div>
@@ -4948,22 +4958,22 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🏢 集団別 2025年 新能源積分 vs 油耗積分</div>
-                    <div class="chart-subtitle">バブル＝国内総数量（万台）。右上が健全（両方プラス）</div>
+                    <div class="chart-title">🏢 集団別 2025年 NEV積分 vs 燃費積分</div>
+                    <div class="chart-subtitle">バブル＝国内生産台数（万台）。右上が健全（両方プラス）</div>
                     <div id="ec-dc-group-scatter" class="echart-box" style="height:440px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">📊 集団別 新能源総積分 推移（2021〜2025年、万点）</div>
-                    <div class="chart-subtitle">比亞迪・新勢力・吉利の加速が顕著</div>
+                    <div class="chart-title">📊 集団別 NEV積分 推移（2021〜2025年、万点）</div>
+                    <div class="chart-subtitle">比亜迪（BYD）・新興EV・吉利の加速が顕著</div>
                     <div id="ec-dc-group-nev" class="echart-box" style="height:400px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">📊 集団別 油耗積分 推移（2021〜2025年、万点）</div>
-                    <div class="chart-subtitle">比亞迪・新勢力は油耗積分も大幅プラス</div>
+                    <div class="chart-title">📊 集団別 燃費積分 推移（2021〜2025年、万点）</div>
+                    <div class="chart-subtitle">比亜迪（BYD）・新興EVは燃費積分も大幅プラス</div>
                     <div id="ec-dc-group-fuel" class="echart-box" style="height:400px"></div>
                   </div>
                 </div>
@@ -4977,33 +4987,33 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <!-- (6) 央企詳細 -->
+            <!-- (6) 中央国有詳細 -->
             <div class="cds-pane" id="dc-central">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🏛️ 央企集団 2025年 傘下企業別 積分状況</div>
-                    <div class="chart-subtitle">一汽・長安・東風　各傘下企業の新能源積分・油耗積分</div>
+                    <div class="chart-title">🏛️ 中央国有集団 2025年 傘下企業別 積分状況</div>
+                    <div class="chart-subtitle">一汽・長安・東風　各傘下企業のNEV積分・燃費積分</div>
                     <div id="ec-dc-central-2025" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 一汽集団 傘下企業別 油耗積分推移</div>
+                    <div class="chart-title">📈 一汽集団 傘下企業別 燃費積分推移</div>
                     <div class="chart-subtitle">一汽大衆が2025年▲211万点まで悪化</div>
                     <div id="ec-dc-central-yiqi" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 長安集団 傘下企業別 油耗積分推移</div>
-                    <div class="chart-subtitle">長安汽車の油耗積分は大幅増、長安福特は負積分継続</div>
+                    <div class="chart-title">📈 長安集団 傘下企業別 燃費積分推移</div>
+                    <div class="chart-subtitle">長安汽車の燃費積分は大幅増、長安福特は負積分継続</div>
                     <div id="ec-dc-central-changan" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">📈 東風集団 傘下企業別 油耗積分推移</div>
+                    <div class="chart-title">📈 東風集団 傘下企業別 燃費積分推移</div>
                     <div class="chart-subtitle">賽力斯（SERES）の急成長、東風本田の崩れ</div>
                     <div id="ec-dc-central-dongfeng" class="echart-box" style="height:360px"></div>
                   </div>
@@ -5011,53 +5021,53 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <!-- (7) 地方国企詳細 -->
+            <!-- (7) 地方国有詳細 -->
             <div class="cds-pane" id="dc-local">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🏭 地方国企集団 2025年 傘下企業別 積分状況</div>
-                    <div class="chart-subtitle">上汽・広汽・奇瑞・北汽・江淮　各傘下企業の新能源・油耗積分</div>
+                    <div class="chart-title">🏭 地方国有集団 2025年 傘下企業別 積分状況</div>
+                    <div class="chart-subtitle">上汽・広汽・奇瑞・北汽・江淮　各傘下企業の新能源・燃費積分</div>
                     <div id="ec-dc-local-2025" class="echart-box" style="height:460px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 上汽集団 傘下企業別 油耗積分推移</div>
+                    <div class="chart-title">📈 上汽集団 傘下企業別 燃費積分推移</div>
                     <div class="chart-subtitle">上汽大衆のNEV積分は2025年に▲22万点まで悪化</div>
                     <div id="ec-dc-local-saic" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 広汽集団 傘下企業別 油耗積分推移</div>
+                    <div class="chart-title">📈 広汽集団 傘下企業別 燃費積分推移</div>
                     <div class="chart-subtitle">広汽埃安の急成長（2024年以降）</div>
                     <div id="ec-dc-local-gac" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 奇瑞集団 傘下企業別 油耗積分推移</div>
-                    <div class="chart-subtitle">奇瑞汽車の油耗積分は回復基調</div>
+                    <div class="chart-title">📈 奇瑞集団 傘下企業別 燃費積分推移</div>
+                    <div class="chart-subtitle">奇瑞汽車の燃費積分は回復基調</div>
                     <div id="ec-dc-local-chery" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📈 北汽集団 傘下企業別 油耗積分推移</div>
-                    <div class="chart-subtitle">北京奔馳の油耗積分が2025年▲47万点</div>
+                    <div class="chart-title">📈 北汽集団 傘下企業別 燃費積分推移</div>
+                    <div class="chart-subtitle">北京奔馳の燃費積分が2025年▲47万点</div>
                     <div id="ec-dc-local-baic" class="echart-box" style="height:360px"></div>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- (8) 新勢力 -->
+            <!-- (8) 新興EV -->
             <div class="cds-pane" id="dc-newforces">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🚀 新勢力車企 国内内販台数推移（2020〜2024年、万台）</div>
+                    <div class="chart-title">🚀 新興EV勢 国内販売台数推移（2020〜2024年、万台）</div>
                     <div class="chart-subtitle">理想・零跑・蔚来・小鵬・小米<br>
                       <span style="color:#888;font-size:11px">※ 原資料では2024年までの記載</span></div>
                     <div id="ec-dc-newforces-sales" class="echart-box" style="height:380px"></div>
@@ -5065,14 +5075,14 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">🔋 新勢力 新能源総積分推移（万点）</div>
+                    <div class="chart-title">🔋 新興EV NEV積分推移（万点）</div>
                     <div class="chart-subtitle">蔚来・零跑が2024年に急拡大</div>
                     <div id="ec-dc-newforces-nev" class="echart-box" style="height:340px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">⛽ 新勢力 油耗積分推移（万点）</div>
+                    <div class="chart-title">⛽ 新興EV 燃費積分推移（万点）</div>
                     <div class="chart-subtitle">理想が2024年330万点と独走</div>
                     <div id="ec-dc-newforces-fuel" class="echart-box" style="height:340px"></div>
                   </div>
@@ -5080,12 +5090,12 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
-            <!-- (9) 進口車 -->
+            <!-- (9) 輸入車 -->
             <div class="cds-pane" id="dc-import">
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🌐 進口車ブランド別 輸入台数推移（2020〜2025年、台）</div>
+                    <div class="chart-title">🌐 輸入車ブランド別 輸入台数推移（2020〜2025年、台）</div>
                     <div class="chart-subtitle">トヨタのみ安定、欧州勢（BMW・ベンツ・ポルシェ）は剧烈下滑</div>
                     <div id="ec-dc-import-trend" class="echart-box" style="height:440px"></div>
                   </div>
@@ -5093,13 +5103,13 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
                     <div class="chart-title">📊 2020年 vs 2025年 変化率</div>
-                    <div class="chart-subtitle">進口車市場の構造変化</div>
+                    <div class="chart-subtitle">輸入車市場の構造変化</div>
                     <div id="ec-dc-import-change" class="echart-box" style="height:380px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">🏆 2025年 進口車ランキング</div>
+                    <div class="chart-title">🏆 2025年 輸入車ランキング</div>
                     <div class="chart-subtitle">トヨタ独走、BMWは半減</div>
                     <div id="ec-dc-import-rank" class="echart-box" style="height:380px"></div>
                   </div>
@@ -10629,7 +10639,7 @@ var DC = {
   qty_domestic: [737,1715,1901,2016,2359,2367,2220,2001,1897,1976,2097,2175,2256,2405],
   qty_import:   [45,107,129,96,91,102,94,92,87,89,79,72,63,47],
   qty_total:    [783,1822,2030,2111,2449,2469,2314,2093,1984,2065,2176,2246,2319,2452],
-  // 油耗積分（万分）
+  // 燃費積分（万分）
   fuel_domestic: [473,977,968,1044,1011,1052,717,150,-659,1112,2964,3648,4802,4516],
   fuel_import:   [32,63,92,82,21,17,-19,-21,-78,-81,-74,-59,-91,-93],
   fuel_total:    [505,1040,1060,1126,1032,1069,698,129,-737,1031,2890,3589,4711,4424],
@@ -10641,12 +10651,12 @@ var DC = {
   nev_prod_domestic: [null,null,null,null,32,56,101,101,118,305,600,839,1177,1377],
   nev_prod_import:   [null,null,null,null,1,3,4,6,2,4,4,14,12,10],
   nev_prod_total:    [null,null,null,null,33,58,104,108,120,309,604,853,1189,1387],
-  // 新能源積分（万分、2016年以降）
+  // NEV積分（万分、2016年以降）
   nev_domestic: [null,null,null,null,93,169,394,604,332,604,1480,2062,1610,2002],
   nev_import:   [null,null,null,null,6,11,10,25,-1,-5,-2,4,-10,-13],
   nev_total:    [null,null,null,null,99,179,404,327,330,599,1478,2067,1600,1990],
 
-  // (2) 達標率 (img_01): 2016〜2025年
+  // (2) 目標達成率 (img_01): 2016〜2025年
   compliance_years: ['2016','2017','2018','2019','2020','2021','2022','2023','2024','2025'],
   comp_jishu_tatsu: [65,70,82,84,80,75,73,64,60,56],
   comp_jishu_hi:    [null,null,null,9,9,6,5,4,3,2],
@@ -10669,7 +10679,7 @@ var DC = {
   nev_de:       [9,-29,-30,-1,58,59,-19,-90],
   nev_sousei:   [404,332,330,599,1478,2067,1600,1990],
 
-  // (4) 油耗積分 カテゴリ別 (img_03): 2018〜2025年（万点）
+  // (4) 燃費積分 カテゴリ別 (img_03): 2018〜2025年（万点）
   fuel_jishu:   [797,436,-169,933,2445,3277,4442,4592],
   fuel_gaishi:  [0,1,80,214,291,380,389,339],
   fuel_us:      [-96,-88,-109,135,249,157,279,225],
@@ -10681,14 +10691,14 @@ var DC = {
 
   // (5) 集団別 (img_04): 2021〜2025年
   group_years: ['2021','2022','2023','2024','2025'],
-  groups: ['比亞迪','上汽','一汽','吉利','新勢力','長安','東風','広汽','奇瑞','外資','北汽','長城','華晨','起亞','北汽制造','江淮','福汽'],
-  // 各集団 [数量, NEV積分, 油耗積分] の 2021〜2025
+  groups: ['比亜迪（BYD）','上汽','一汽','吉利','新興EV','長安','東風','広汽','奇瑞','外資','北汽','長城','華晨','起亞','北汽制造','江淮','福汽'],
+  // 各集団 [数量, NEV積分, 燃費積分] の 2021〜2025
   group_data: {
-    '比亞迪':   { qty:[71,181,270,382,326], nev:[166,512,765,580,548], fuel:[355,1030,1458,1855,1482] },
+    '比亜迪（BYD）':   { qty:[71,181,270,382,326], nev:[166,512,765,580,548], fuel:[355,1030,1458,1855,1482] },
     '上汽':     { qty:[411,384,324,266,314], nev:[33,90,182,110,103], fuel:[202,360,300,343,223] },
     '一汽':     { qty:[311,299,317,294,301], nev:[0,24,40,2,-23],     fuel:[-25,16,-10,-46,-154] },
     '吉利':     { qty:[136,141,163,204,288], nev:[11,91,119,164,241], fuel:[-31,199,302,485,588] },
-    '新勢力':   { qty:[35,59,78,131,207],    nev:[102,177,195,228,523], fuel:[218,367,508,813,1195] },
+    '新興EV':   { qty:[35,59,78,131,207],    nev:[102,177,195,228,523], fuel:[218,367,508,813,1195] },
     '長安':     { qty:[166,166,181,175,184], nev:[10,43,57,63,118],   fuel:[8,125,155,216,264] },
     '東風':     { qty:[234,218,175,178,182], nev:[3,65,44,62,112],    fuel:[-12,138,77,294,374] },
     '広汽':     { qty:[212,245,245,177,161], nev:[29,95,191,70,61],   fuel:[67,197,304,160,84] },
@@ -10703,11 +10713,11 @@ var DC = {
     '福汽':     { qty:[4,3,3,2,2],           nev:[0,0,-1,0,0],        fuel:[-4,-5,-4,null,null] }
   },
 
-  // (6) 央企集団詳細 (img_05): 2021〜2025年
+  // (6) 中央国有集団詳細 (img_05): 2021〜2025年
   central_companies: {
     '一汽': ['一汽大衆','一汽豊田','中国一汽','一汽奥迪','一汽吉林'],
     '長安': ['長安汽車','長安鈴木','長安福特','長安馬自達','江鈴汽車','江西五十鈴','長安PSA'],
-    '東風': ['東風日産','賽力斯','東風汽車','東風本田','東風柳州','東風小康','神龍汽車','鄭州日産']
+    '東風': ['東風日産','賽力斯（SERES）','東風汽車','東風本田','東風柳州','東風小康','神龍汽車','鄭州日産']
   },
   central_data: {
     // 一汽
@@ -10726,7 +10736,7 @@ var DC = {
     '長安PSA':    { qty:[0,0,0,0,0],           nev:[0,0,0,0,0],         fuel:[0,0,0,0,0] },
     // 東風
     '東風日産':   { qty:[109,92,74,62,62],     nev:[-10,4,-1,-10,6],    fuel:[-44,-12,-29,-57,-42] },
-    '賽力斯':     { qty:[1,8,10,38,43],        nev:[1,15,19,42,55],     fuel:[6,58,69,251,263] },
+    '賽力斯（SERES）':     { qty:[1,8,10,38,43],        nev:[1,15,19,42,55],     fuel:[6,58,69,251,263] },
     '東風汽車':   { qty:[14,24,18,25,34],      nev:[14,35,23,31,52],    fuel:[40,88,70,127,187] },
     '東風本田':   { qty:[76,68,59,39,32],      nev:[-5,-1,-3,-7,-10],   fuel:[-5,-19,-35,-42,-54] },
     '東風柳州':   { qty:[12,10,6,4,4],         nev:[3,8,3,3,6],         fuel:[-1,14,0,6,12] },
@@ -10735,7 +10745,7 @@ var DC = {
     '鄭州日産':   { qty:[2,1,1,1,0],           nev:[0,0,0,0,0],         fuel:[0,0,0,0,0] }
   },
 
-  // (7) 地方国企詳細 (img_06): 2021〜2025年
+  // (7) 地方国有詳細 (img_06): 2021〜2025年
   local_companies: {
     '上汽': ['上汽通用五菱','上汽大衆','上汽通用','上汽乗用車','上汽大通','上汽依維柯'],
     '広汽': ['広汽豊田','広汽本田','広汽埃安','広汽伝祺'],
@@ -10773,7 +10783,7 @@ var DC = {
     '江淮汽車':     { qty:[19,22,21,6,3],      nev:[40,63,65,10,3],    fuel:[98,132,122,29,9] }
   },
 
-  // (8) 新勢力 (img_07): 2020〜2024年（2024年まで）
+  // (8) 新興EV (img_07): 2020〜2024年（2024年まで）
   nf_years: ['2020','2021','2022','2023','2024'],
   nf_companies: ['理想','零跑','蔚来','小鵬','小米'],
   nf_data: {
@@ -10784,11 +10794,11 @@ var DC = {
     '小米':  { qty:[null,null,null,null,9],  nev:[null,null,null,null,29],  fuel:[null,null,null,null,57],  rate:[null,null,null,null,null] }
   },
 
-  // (9) 進口車 (img_08): 2020〜2025年（台）
+  // (9) 輸入車 (img_08): 2020〜2025年（台）
   import_years: ['2020','2021','2022','2023','2024','2025'],
   import_brands: [
     { name:'日本トヨタ',     data:[256740,239495,210259,188430,196723,196570] },
-    { name:'独メルセデス',   data:[144849,170006,159256,139374,128283,87221] },
+    { name:'独ベンツ',   data:[144849,170006,159256,139374,128283,87221] },
     { name:'独BMW',          data:[168704,187490,149516,116760,103619,53666] },
     { name:'英ジャガー',     data:[40968,41374,43299,51937,51558,39199] },
     { name:'独ポルシェ',     data:[86968,94025,96847,77968,53618,35694] },
@@ -10828,24 +10838,24 @@ function dcDrawOverview() {
   if (!ch) return;
   ch.setOption({
     tooltip: { trigger:'axis', axisPointer:{ type:'shadow' } },
-    legend: { top: 8, type:'scroll' },
-    grid: { left: 60, right: 60, top: 50, bottom: 60 },
+    legend: { top: 30, type:'scroll' },
+    grid: { left: 60, right: 60, top: 100, bottom: 60 },
     xAxis: { type: 'category', data: DC.years_full },
     yAxis: [
-      { type: 'value', name: '万台', position: 'left', axisLabel: { fontSize: 10 } },
-      { type: 'value', name: '万点', position: 'right', axisLabel: { fontSize: 10 } }
+      { type: 'value', name: '万台', nameGap: 18, nameLocation: 'end', position: 'left', axisLabel: { fontSize: 10 } },
+      { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end', position: 'right', axisLabel: { fontSize: 10 } }
     ],
     series: [
       { name: '総生産台数（万台）', type: 'bar', data: DC.qty_total, yAxisIndex: 0,
         itemStyle: { color: DC_COLORS.qty, opacity: 0.6 } },
       { name: '新能源生産（万台）', type: 'bar', data: DC.nev_prod_total, yAxisIndex: 0,
         itemStyle: { color: DC_COLORS.nev, opacity: 0.6 } },
-      { name: '油耗積分（万点）', type: 'line', data: DC.fuel_total, yAxisIndex: 1,
+      { name: '燃費積分（万点）', type: 'line', data: DC.fuel_total, yAxisIndex: 1,
         smooth: true, lineStyle: { width: 3 }, itemStyle: { color: DC_COLORS.fuel } },
-      { name: '新能源積分（万点）', type: 'line', data: DC.nev_total, yAxisIndex: 1,
+      { name: 'NEV積分（万点）', type: 'line', data: DC.nev_total, yAxisIndex: 1,
         smooth: true, lineStyle: { width: 3 }, itemStyle: { color: '#d53f8c' } }
     ]
-  }, { notMerge: true });
+  }, true);
 
   // NEV サブチャート
   var ch2 = dcEc('ec-dc-overview-nev');
@@ -10855,12 +10865,12 @@ function dcDrawOverview() {
     var nevCr = DC.nev_total.slice(4);
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 60, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 60, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: years },
       yAxis: [
-        { type: 'value', name: '万台', position: 'left' },
-        { type: 'value', name: '万点', position: 'right' }
+        { type: 'value', name: '万台', nameGap: 18, nameLocation: 'end', position: 'left' },
+        { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end', position: 'right' }
       ],
       series: [
         { name: 'NEV生産（万台）', type: 'bar', data: nevProd, yAxisIndex: 0,
@@ -10868,7 +10878,7 @@ function dcDrawOverview() {
         { name: 'NEV積分（万点）', type: 'line', data: nevCr, yAxisIndex: 1,
           smooth: true, lineStyle: { width: 3 }, itemStyle: { color: '#d53f8c' } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 
   // 燃油サブチャート
@@ -10879,33 +10889,33 @@ function dcDrawOverview() {
     var fCr = DC.fuel_total.slice(4);
     ch3.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 60, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 60, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: years },
       yAxis: [
-        { type: 'value', name: '万台', position: 'left' },
-        { type: 'value', name: '万点', position: 'right' }
+        { type: 'value', name: '万台', nameGap: 18, nameLocation: 'end', position: 'left' },
+        { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end', position: 'right' }
       ],
       series: [
         { name: '燃油車生産（万台）', type: 'bar', data: fProd, yAxisIndex: 0,
           itemStyle: { color: DC_COLORS.qty } },
-        { name: '油耗積分（万点）', type: 'line', data: fCr, yAxisIndex: 1,
+        { name: '燃費積分（万点）', type: 'line', data: fCr, yAxisIndex: 1,
           smooth: true, lineStyle: { width: 3 }, itemStyle: { color: DC_COLORS.fuel } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 }
 
-// === (2) 達標率 ===
+// === (2) 目標達成率 ===
 function dcDrawCompliance() {
   var ch = dcEc('ec-dc-compliance');
   if (!ch) return;
   ch.setOption({
     tooltip: { trigger:'axis', valueFormatter: function(v){ return v==null?'-':v+'%'; } },
-    legend: { top: 8 },
-    grid: { left: 60, right: 40, top: 50, bottom: 40 },
+    legend: { top: 30, type:'scroll' },
+    grid: { left: 60, right: 40, top: 100, bottom: 40 },
     xAxis: { type: 'category', data: DC.compliance_years },
-    yAxis: { type: 'value', name: '%', max: 100, axisLabel: { formatter: '{value}%' } },
+    yAxis: { type: 'value', name: '%', nameGap: 18, nameLocation: 'end', max: 100, axisLabel: { formatter: '{value}%' } },
     series: [
       { name: '自主', type: 'line', data: DC.comp_jishu_rate, smooth: true,
         lineStyle: { width: 3 }, itemStyle: { color: DC_COLORS.jishu },
@@ -10913,44 +10923,44 @@ function dcDrawCompliance() {
       { name: '合資', type: 'line', data: DC.comp_goshi_rate, smooth: true,
         lineStyle: { width: 3 }, itemStyle: { color: DC_COLORS.us },
         label: { show: true, position: 'top', formatter: '{c}%', fontSize: 10 } },
-      { name: '外資（進口）', type: 'line', data: DC.comp_gaishi_rate, smooth: true,
+      { name: '外資（輸入）', type: 'line', data: DC.comp_gaishi_rate, smooth: true,
         lineStyle: { width: 3 }, itemStyle: { color: DC_COLORS.jp },
         label: { show: true, position: 'bottom', formatter: '{c}%', fontSize: 10 } }
     ]
-  }, { notMerge: true });
+  }, true);
 
   var ch2 = dcEc('ec-dc-compliance-jishu');
   if (ch2) {
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 50, right: 30, top: 50, bottom: 30 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 50, right: 30, top: 100, bottom: 30 },
       xAxis: { type: 'category', data: DC.compliance_years },
-      yAxis: { type: 'value', name: '社数' },
+      yAxis: { type: 'value', name: '社数', nameGap: 18, nameLocation: 'end' },
       series: [
-        { name: '達標', type: 'bar', stack: 'a', data: DC.comp_jishu_tatsu,
+        { name: '達成', type: 'bar', stack: 'a', data: DC.comp_jishu_tatsu,
           itemStyle: { color: '#38a169' } },
-        { name: '非達標', type: 'bar', stack: 'a', data: DC.comp_jishu_hi,
+        { name: '非達成', type: 'bar', stack: 'a', data: DC.comp_jishu_hi,
           itemStyle: { color: '#e53e3e' } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 
   var ch3 = dcEc('ec-dc-compliance-goshi');
   if (ch3) {
     ch3.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 50, right: 30, top: 50, bottom: 30 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 50, right: 30, top: 100, bottom: 30 },
       xAxis: { type: 'category', data: DC.compliance_years },
-      yAxis: { type: 'value', name: '社数' },
+      yAxis: { type: 'value', name: '社数', nameGap: 18, nameLocation: 'end' },
       series: [
-        { name: '達標', type: 'bar', stack: 'a', data: DC.comp_goshi_tatsu,
+        { name: '達成', type: 'bar', stack: 'a', data: DC.comp_goshi_tatsu,
           itemStyle: { color: '#38a169' } },
-        { name: '非達標', type: 'bar', stack: 'a', data: DC.comp_goshi_hi,
+        { name: '非達成', type: 'bar', stack: 'a', data: DC.comp_goshi_hi,
           itemStyle: { color: '#e53e3e' } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 }
 
@@ -10960,12 +10970,12 @@ function dcDrawNevCredits() {
   if (!ch) return;
   ch.setOption({
     tooltip: { trigger:'axis' },
-    legend: { top: 8, type:'scroll' },
-    grid: { left: 60, right: 60, top: 50, bottom: 40 },
+    legend: { top: 30, type:'scroll' },
+    grid: { left: 60, right: 60, top: 100, bottom: 40 },
     xAxis: { type: 'category', data: DC.credit_years },
     yAxis: [
-      { type: 'value', name: '万点（自主）', position: 'left' },
-      { type: 'value', name: '万点（外資）', position: 'right' }
+      { type: 'value', name: '万点（自主）', nameGap: 18, nameLocation: 'end', position: 'left' },
+      { type: 'value', name: '万点（外資）', nameGap: 18, nameLocation: 'end', position: 'right' }
     ],
     series: [
       { name: '自主', type: 'bar', data: DC.nev_jishu, yAxisIndex: 0,
@@ -10983,17 +10993,17 @@ function dcDrawNevCredits() {
       { name: '総計', type: 'line', data: DC.nev_sousei, yAxisIndex: 0,
         smooth:true, lineStyle: { width: 3, type:'dashed' }, itemStyle: { color: '#000' } }
     ]
-  }, { notMerge: true });
+  }, true);
 
   // 外資のみ拡大
   var ch2 = dcEc('ec-dc-nev-credits-foreign');
   if (ch2) {
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.credit_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: [
         { name: '米', type: 'line', data: DC.nev_us, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.us} },
         { name: '欧', type: 'line', data: DC.nev_eu, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.eu} },
@@ -11001,7 +11011,7 @@ function dcDrawNevCredits() {
         { name: '日', type: 'line', data: DC.nev_jp, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.jp} },
         { name: '独', type: 'line', data: DC.nev_de, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.de} }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 
   // 2025年シェア
@@ -11017,28 +11027,28 @@ function dcDrawNevCredits() {
     ].filter(function(d){ return d.value > 0; });
     ch3.setOption({
       tooltip: { trigger: 'item', formatter: '{b}: {c}万点 ({d}%)' },
-      legend: { top: 8, type:'scroll' },
+      legend: { top: 30, type:'scroll' },
       series: [{
         name: '2025年NEV積分', type: 'pie', radius: ['40%','70%'],
         data: pieData,
         label: { formatter: '{b}\n{d}%' }
       }]
-    }, { notMerge: true });
+    }, true);
   }
 }
 
-// === (4) 油耗積分カテゴリ別 ===
+// === (4) 燃費積分カテゴリ別 ===
 function dcDrawFuelCredits() {
   var ch = dcEc('ec-dc-fuel-credits');
   if (!ch) return;
   ch.setOption({
     tooltip: { trigger:'axis' },
-    legend: { top: 8, type:'scroll' },
-    grid: { left: 60, right: 60, top: 50, bottom: 40 },
+    legend: { top: 30, type:'scroll' },
+    grid: { left: 60, right: 60, top: 100, bottom: 40 },
     xAxis: { type: 'category', data: DC.credit_years },
     yAxis: [
-      { type: 'value', name: '万点（自主）', position: 'left' },
-      { type: 'value', name: '万点（外資）', position: 'right' }
+      { type: 'value', name: '万点（自主）', nameGap: 18, nameLocation: 'end', position: 'left' },
+      { type: 'value', name: '万点（外資）', nameGap: 18, nameLocation: 'end', position: 'right' }
     ],
     series: [
       { name: '自主', type: 'bar', data: DC.fuel_jishu, yAxisIndex: 0,
@@ -11056,16 +11066,16 @@ function dcDrawFuelCredits() {
       { name: '総計', type: 'line', data: DC.fuel_sousei, yAxisIndex: 0,
         smooth:true, lineStyle: { width: 3, type:'dashed' }, itemStyle: { color: '#000' } }
     ]
-  }, { notMerge: true });
+  }, true);
 
   var ch2 = dcEc('ec-dc-fuel-credits-foreign');
   if (ch2) {
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.credit_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: [
         { name: '米', type: 'line', data: DC.fuel_us, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.us} },
         { name: '欧', type: 'line', data: DC.fuel_eu, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.eu} },
@@ -11073,7 +11083,7 @@ function dcDrawFuelCredits() {
         { name: '日', type: 'line', data: DC.fuel_jp, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.jp} },
         { name: '独', type: 'line', data: DC.fuel_de, smooth:true, lineStyle:{width:2.5}, itemStyle:{color:DC_COLORS.de} }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 
   var ch3 = dcEc('ec-dc-fuel-credits-contrast');
@@ -11084,17 +11094,17 @@ function dcDrawFuelCredits() {
     });
     ch3.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.credit_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: [
         { name: '自主', type: 'bar', data: DC.fuel_jishu,
           itemStyle: { color: DC_COLORS.jishu } },
         { name: '外資合計（米+欧+韓+日+独）', type: 'bar', data: foreignTotal,
           itemStyle: { color: DC_COLORS.gaishi } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 }
 
@@ -11112,12 +11122,12 @@ function dcDrawGroup() {
       tooltip: {
         trigger: 'item',
         formatter: function(p){
-          return p.name+'<br/>NEV積分: '+p.value[0]+'万点<br/>油耗積分: '+p.value[1]+'万点<br/>数量: '+p.value[2]+'万台';
+          return p.name+'<br/>NEV積分: '+p.value[0]+'万点<br/>燃費積分: '+p.value[1]+'万点<br/>数量: '+p.value[2]+'万台';
         }
       },
-      grid: { left: 60, right: 40, top: 40, bottom: 50 },
-      xAxis: { type: 'value', name: 'NEV積分（万点）', axisLine:{onZero:true} },
-      yAxis: { type: 'value', name: '油耗積分（万点）', axisLine:{onZero:true} },
+      grid: { left: 60, right: 40, top: 90, bottom: 50 },
+      xAxis: { type: 'value', name: 'NEV積分（万点）', nameGap: 18, nameLocation: 'end', axisLine:{onZero:true} },
+      yAxis: { type: 'value', name: '燃費積分（万点）', nameGap: 18, nameLocation: 'end', axisLine:{onZero:true} },
       series: [{
         type: 'scatter', data: scatter,
         symbolSize: function(d){ return Math.max(10, Math.min(60, Math.sqrt(Math.abs(d[2]||1))*3)); },
@@ -11137,7 +11147,7 @@ function dcDrawGroup() {
           data: [{ xAxis: 0 }, { yAxis: 0 }]
         }
       }]
-    }, { notMerge: true });
+    }, true);
   }
 
   // NEV積分推移
@@ -11149,15 +11159,15 @@ function dcDrawGroup() {
     });
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
-  // 油耗積分推移
+  // 燃費積分推移
   var ch3 = dcEc('ec-dc-group-fuel');
   if (ch3) {
     var series = DC.groups.map(function(g){
@@ -11166,12 +11176,12 @@ function dcDrawGroup() {
     });
     ch3.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
   // 数量推移
@@ -11183,16 +11193,16 @@ function dcDrawGroup() {
     });
     ch4.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万台' },
+      yAxis: { type: 'value', name: '万台', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 }
 
-// === (6) 央企詳細 ===
+// === (6) 中央国有詳細 ===
 function dcDrawCentral() {
   // 2025年 全傘下企業の積分状況（グループ化棒）
   var ch = dcEc('ec-dc-central-2025');
@@ -11209,17 +11219,17 @@ function dcDrawCentral() {
     });
     ch.setOption({
       tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
-      legend: { top: 8 },
-      grid: { left: 120, right: 30, top: 50, bottom: 40 },
-      xAxis: { type: 'value', name: '万点' },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 120, right: 30, top: 100, bottom: 40 },
+      xAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       yAxis: { type: 'category', data: allCompanies, inverse: true, axisLabel: { fontSize: 10 } },
       series: [
         { name: 'NEV積分', type: 'bar', data: nevData,
           itemStyle: { color: DC_COLORS.nev } },
-        { name: '油耗積分', type: 'bar', data: fuelData,
+        { name: '燃費積分', type: 'bar', data: fuelData,
           itemStyle: { color: DC_COLORS.fuel } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 
   // 一汽
@@ -11231,12 +11241,12 @@ function dcDrawCentral() {
     });
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
   // 長安
@@ -11248,12 +11258,12 @@ function dcDrawCentral() {
     });
     ch3.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type: 'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type: 'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
   // 東風
@@ -11265,16 +11275,16 @@ function dcDrawCentral() {
     });
     ch4.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type: 'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type: 'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 }
 
-// === (7) 地方国企詳細 ===
+// === (7) 地方国有詳細 ===
 function dcDrawLocal() {
   var ch = dcEc('ec-dc-local-2025');
   if (ch) {
@@ -11290,17 +11300,17 @@ function dcDrawLocal() {
     });
     ch.setOption({
       tooltip: { trigger:'axis', axisPointer:{type:'shadow'} },
-      legend: { top: 8 },
-      grid: { left: 130, right: 30, top: 50, bottom: 40 },
-      xAxis: { type: 'value', name: '万点' },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 130, right: 30, top: 100, bottom: 40 },
+      xAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       yAxis: { type: 'category', data: allCompanies, inverse: true, axisLabel: { fontSize: 10 } },
       series: [
         { name: 'NEV積分', type: 'bar', data: nevData,
           itemStyle: { color: DC_COLORS.nev } },
-        { name: '油耗積分', type: 'bar', data: fuelData,
+        { name: '燃費積分', type: 'bar', data: fuelData,
           itemStyle: { color: DC_COLORS.fuel } }
       ]
-    }, { notMerge: true });
+    }, true);
   }
 
   ['saic','gac','chery','baic'].forEach(function(key, idx){
@@ -11313,16 +11323,16 @@ function dcDrawLocal() {
     });
     ch.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.group_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   });
 }
 
-// === (8) 新勢力 ===
+// === (8) 新興EV ===
 function dcDrawNewForces() {
   var ch = dcEc('ec-dc-newforces-sales');
   if (ch) {
@@ -11333,12 +11343,12 @@ function dcDrawNewForces() {
     });
     ch.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.nf_years },
-      yAxis: { type: 'value', name: '万台' },
+      yAxis: { type: 'value', name: '万台', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
   var ch2 = dcEc('ec-dc-newforces-nev');
@@ -11349,12 +11359,12 @@ function dcDrawNewForces() {
     });
     ch2.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.nf_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
   var ch3 = dcEc('ec-dc-newforces-fuel');
@@ -11365,16 +11375,16 @@ function dcDrawNewForces() {
     });
     ch3.setOption({
       tooltip: { trigger:'axis' },
-      legend: { top: 8 },
-      grid: { left: 60, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 60, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.nf_years },
-      yAxis: { type: 'value', name: '万点' },
+      yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 }
 
-// === (9) 進口車 ===
+// === (9) 輸入車 ===
 function dcDrawImport() {
   var ch = dcEc('ec-dc-import-trend');
   if (ch) {
@@ -11384,12 +11394,12 @@ function dcDrawImport() {
     });
     ch.setOption({
       tooltip: { trigger:'axis', valueFormatter: function(v){ return v==null?'-':v.toLocaleString()+'台'; } },
-      legend: { top: 8, type:'scroll' },
-      grid: { left: 80, right: 30, top: 50, bottom: 40 },
+      legend: { top: 30, type:'scroll' },
+      grid: { left: 80, right: 30, top: 100, bottom: 40 },
       xAxis: { type: 'category', data: DC.import_years },
-      yAxis: { type: 'value', name: '台', axisLabel: { formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
+      yAxis: { type: 'value', name: '台', nameGap: 18, nameLocation: 'end', axisLabel: { formatter: function(v){ return (v/10000).toFixed(0)+'万'; } } },
       series: series
-    }, { notMerge: true });
+    }, true);
   }
 
   // 2020 vs 2025 変化率
@@ -11404,8 +11414,8 @@ function dcDrawImport() {
       .sort(function(a,b){ return b.value - a.value; });
     ch2.setOption({
       tooltip: { trigger:'axis', valueFormatter: function(v){ return v==null?'-':v.toFixed(1)+'%'; } },
-      grid: { left: 120, right: 40, top: 30, bottom: 40 },
-      xAxis: { type: 'value', name: '%', axisLabel: { formatter: '{value}%' } },
+      grid: { left: 120, right: 40, top: 110, bottom: 40 },
+      xAxis: { type: 'value', name: '%', nameGap: 18, nameLocation: 'end', axisLabel: { formatter: '{value}%' } },
       yAxis: { type: 'category', data: changes.map(function(c){ return c.name; }), inverse: true,
         axisLabel: { fontSize: 10 } },
       series: [{
@@ -11416,7 +11426,7 @@ function dcDrawImport() {
         },
         label: { show: true, position: 'right', formatter: function(p){ return p.value.toFixed(0)+'%'; }, fontSize: 10 }
       }]
-    }, { notMerge: true });
+    }, true);
   }
 
   // 2025年ランキング
@@ -11428,8 +11438,8 @@ function dcDrawImport() {
       .sort(function(a,b){ return b.value - a.value; });
     ch3.setOption({
       tooltip: { trigger:'axis', valueFormatter: function(v){ return v.toLocaleString()+'台'; } },
-      grid: { left: 120, right: 60, top: 30, bottom: 40 },
-      xAxis: { type: 'value', name: '台', axisLabel: { formatter: function(v){ return (v/10000).toFixed(1)+'万'; } } },
+      grid: { left: 120, right: 60, top: 110, bottom: 40 },
+      xAxis: { type: 'value', name: '台', nameGap: 18, nameLocation: 'end', axisLabel: { formatter: function(v){ return (v/10000).toFixed(1)+'万'; } } },
       yAxis: { type: 'category', data: ranked.map(function(c){ return c.name; }), inverse: true,
         axisLabel: { fontSize: 10 } },
       series: [{
@@ -11438,7 +11448,7 @@ function dcDrawImport() {
         itemStyle: { color: '#2b6cb0' },
         label: { show: true, position: 'right', formatter: function(p){ return p.value.toLocaleString(); }, fontSize: 10 }
       }]
-    }, { notMerge: true });
+    }, true);
   }
 }
 

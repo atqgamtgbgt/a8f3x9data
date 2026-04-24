@@ -9119,24 +9119,24 @@ function cdsDrawDisplace() {
   const series = [];
   years.forEach(yr=>{
     powers.forEach((pw,pi)=>{
+      const pwName = DISP_POWER_MAP[pw]||pw;
+      const seriesName = pwName + ' ' + yrLabels[yr];
       const data = ranges.map(rng=>{
         const item = rawData.find(x=>x.power===pw&&(DISP_RANGE_MAP[x.range]||x.range)===rng);
         const v = item ? (item.vals[yr]??null) : null;
         return v != null && v > 0 ? v : null;
       });
       series.push({
-        name: (DISP_POWER_MAP[pw]||pw) + ' ' + yrLabels[yr],
+        name: seriesName,
         type:'bar',
         stack: 'yr_'+yr,
         barMaxWidth: 16,
         data,
         itemStyle:{color: pwYrColor(pw,yr)},
-        // ラベルは最終系列（柴油 or 最後のpower）のみ合計を表示
         label: pi===powers.length-1 ? {
           show:true, position:'right', fontSize:9, color:'#555',
           formatter: p => {
             if(!p.value) return '';
-            // この年のこの排量帯の合計を計算
             const rng = ranges[p.dataIndex];
             let sum=0;
             powers.forEach(pw2=>{
@@ -9144,18 +9144,23 @@ function cdsDrawDisplace() {
               const v=it?(it.vals[yr]??0):0;
               if(v>0) sum+=v;
             });
-            return sum>=0.5 ? sum.toFixed(0) : '';
+            return sum>=0.5 ? yrLabels[yr]+'\n'+sum.toFixed(0) : '';
           }
         } : {show:false}
       });
     });
   });
 
-  // 凡例: 動力種別のみ（年ごとには作らない）
-  const legendData = powers.map(pw=>({
-    name: DISP_POWER_MAP[pw]||pw,
-    itemStyle:{color: pwYrColor(pw,'2025')}
-  }));
+  // 凡例: 動力種別×年の全組み合わせ（シリーズ名と完全一致）
+  const legendData = [];
+  years.forEach(yr=>{
+    powers.forEach(pw=>{
+      legendData.push({
+        name: (DISP_POWER_MAP[pw]||pw) + ' ' + yrLabels[yr],
+        itemStyle:{color: pwYrColor(pw,yr)}
+      });
+    });
+  });
 
   // 年ラベルを Y軸の各グループに補助線として入れるため
   // 実際は xAxis(値軸) yAxis(排量帯) の横棒
@@ -9164,20 +9169,20 @@ function cdsDrawDisplace() {
       trigger:'axis', axisPointer:{type:'shadow'},
       formatter: p => {
         const rng = p[0]?.axisValueLabel || '';
-        // 年ごとにグループ化して表示
+        // 年ごとにグループ化して表示（seriesName = "動力\u00a0年ラベル"）
         const byYr = {};
         p.forEach(s=>{
           if(!s.value) return;
-          // name = "ガソリン 25年(1-3月)" などからyr抽出
-          const m = s.seriesName.match(/(\d{2}年(\(1-3月\))?)/);
-          if(!m) return;
-          const yrKey = m[1];
+          const parts = s.seriesName.split('\u00a0');
+          const pwKey = parts[0] || s.seriesName;
+          const yrKey = parts[1] || '';
           if(!byYr[yrKey]) byYr[yrKey]=[];
-          byYr[yrKey].push(`${s.marker}${s.seriesName.replace(' '+yrKey,'')}: <b>${s.value}万台</b>`);
+          byYr[yrKey].push(`${s.marker}${pwKey}: <b>${s.value}万台</b>`);
         });
         let html = `<b>${rng}</b><br/>`;
         Object.keys(byYr).forEach(yrKey=>{
-          html += `<span style="color:#666;font-size:11px">${yrKey}</span><br/>${byYr[yrKey].join('<br/>')}<br/>`;
+          const total = p.filter(s=>s.value && s.seriesName.split('\u00a0')[1]===yrKey).reduce((a,s)=>a+s.value,0);
+          html += `<span style="color:#666;font-size:11px;font-weight:bold">${yrKey} 計${total.toFixed(0)}万台</span><br/>${byYr[yrKey].join('<br/>')}<br/>`;
         });
         return html;
       }

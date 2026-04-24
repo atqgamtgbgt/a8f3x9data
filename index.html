@@ -91,35 +91,25 @@
         Object.keys(_lastOption).forEach(function(k) { resetOpt[k] = _lastOption[k]; });
         resetOpt.series = resetSeries;
 
-        // notMerge:true は凡例状態(選択・スクロール位置)をリセットするため、
-        // 現在のインスタンスから現行 legend を取得して明示的に引き継ぐ
-        var curOpt = instance.getOption();
-        var curLeg = (curOpt && curOpt.legend && curOpt.legend[0]) ? curOpt.legend[0] : null;
-        var scrollIdx = (curLeg && curLeg.scrollDataIndex) || 0;
-
-        var legObj = resetOpt.legend || {};
-        if (Array.isArray(legObj)) {
-          legObj = Object.assign({}, legObj[0] || {});
-          resetOpt.legend = [legObj];
-        } else {
-          legObj = Object.assign({}, legObj);
-          resetOpt.legend = legObj;
-        }
-        // スクロール位置を維持
-        if (scrollIdx > 0) {
-          if (Array.isArray(resetOpt.legend)) resetOpt.legend[0].scrollDataIndex = scrollIdx;
-          else resetOpt.legend.scrollDataIndex = scrollIdx;
-        }
-        // 非表示系列を維持
-        if (Object.keys(_hiddenSeries).length > 0) {
-          var sel = {};
-          seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-          if (Array.isArray(resetOpt.legend)) resetOpt.legend[0].selected = sel;
-          else resetOpt.legend.selected = sel;
-        }
+        // series のみマージモード(notMerge:false)で戻す → 凡例スクロール位置を保持
+        var mergeReset = { series: resetSeries };
+        // 軸maxを元に戻す（元optionの軸をそのまま渡す）
+        if (resetOpt.xAxis) mergeReset.xAxis = resetOpt.xAxis;
+        if (resetOpt.yAxis) mergeReset.yAxis = resetOpt.yAxis;
+        // 凡例のスクロール位置を明示的に保持（2ページ目以降でホバーしても1ページ目に戻らないように）
+        try {
+          var curOpt = instance.getOption();
+          if (curOpt && curOpt.legend && curOpt.legend[0]) {
+            var curScrollIdx = curOpt.legend[0].scrollDataIndex;
+            if (curScrollIdx != null) {
+              mergeReset.legend = [{ scrollDataIndex: curScrollIdx }];
+            }
+          }
+        } catch(e) {}
+        resetOpt = mergeReset;
       }
       _hovering = true;
-      _setOption(resetOpt, true);
+      _setOption(resetOpt, false);
       _hovering = false;
     }
 
@@ -366,36 +356,8 @@
         return patched;
       });
 
-      // 元optionのコピーにseriesだけ差し替えてnotMerge:trueで再セット
-      var fullOpt = {};
-      Object.keys(opt).forEach(function(k) { fullOpt[k] = opt[k]; });
-      fullOpt.series = patchSeries;
-
-      // notMerge:true は凡例状態(選択・スクロール位置)をリセットするため、明示的に引き継ぐ
-      var curOpt2 = instance.getOption();
-      var curLeg2 = (curOpt2 && curOpt2.legend && curOpt2.legend[0]) ? curOpt2.legend[0] : null;
-      var scrollIdx2 = (curLeg2 && curLeg2.scrollDataIndex) || 0;
-
-      var legObj = fullOpt.legend || {};
-      if (Array.isArray(legObj)) {
-        legObj = Object.assign({}, legObj[0] || {});
-        fullOpt.legend = [legObj];
-      } else {
-        legObj = Object.assign({}, legObj);
-        fullOpt.legend = legObj;
-      }
-      // スクロール位置を維持
-      if (scrollIdx2 > 0) {
-        if (Array.isArray(fullOpt.legend)) fullOpt.legend[0].scrollDataIndex = scrollIdx2;
-        else fullOpt.legend.scrollDataIndex = scrollIdx2;
-      }
-      // 非表示系列を維持
-      if (Object.keys(_hiddenSeries).length > 0) {
-        var sel = {};
-        seriesArr.forEach(function(s) { sel[s.name] = !_hiddenSeries[s.name]; });
-        if (Array.isArray(fullOpt.legend)) fullOpt.legend[0].selected = sel;
-        else fullOpt.legend.selected = sel;
-      }
+      // series だけマージモード(notMerge:false)で更新 → 凡例スクロール位置を保持
+      var mergeOpt = { series: patchSeries };
 
       // 軸max上書き：二軸配列を保持したまま、ホバー系列の軸のみ調整
       // line系列ホバー時は軸上書きしない
@@ -405,17 +367,28 @@
             return (i === (hovSeries ? (hovSeries.xAxisIndex||0) : 0))
               ? Object.assign({}, a, { max: niceMax }) : a;
           });
-          fullOpt.xAxis = newXArr;
+          mergeOpt.xAxis = newXArr;
         } else {
           var newYArr = yAxisArr.map(function(a, i) {
             return (i === hovAxisIdx) ? Object.assign({}, a, { max: niceMax }) : a;
           });
-          fullOpt.yAxis = newYArr;
+          mergeOpt.yAxis = newYArr;
         }
       }
 
+      // 凡例のスクロール位置を明示的に保持（2ページ目以降でホバーしても1ページ目に戻らないように）
+      try {
+        var curOpt2 = instance.getOption();
+        if (curOpt2 && curOpt2.legend && curOpt2.legend[0]) {
+          var curScrollIdx2 = curOpt2.legend[0].scrollDataIndex;
+          if (curScrollIdx2 != null) {
+            mergeOpt.legend = [{ scrollDataIndex: curScrollIdx2 }];
+          }
+        }
+      } catch(e) {}
+
       _hovering = true;
-      _setOption(fullOpt, true);
+      _setOption(mergeOpt, false);
       _hovering = false;
     }
 

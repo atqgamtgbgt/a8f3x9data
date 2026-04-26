@@ -21,6 +21,61 @@
 // ===== ECharts パッチ: 凡例ホバー時にラベル表示 =====
 // v88 原文のまま (detectUnit の認識単位のみ拡張)
 (function() {
+  // ===== スマホ判定（初期値、resize時に再評価） =====
+  function _checkMobile() {
+    return (window.matchMedia && window.matchMedia('(max-width: 768px)').matches)
+        || (window.innerWidth < 769);
+  }
+  var _isMobileLayout = _checkMobile();
+  window.addEventListener('resize', function() { _isMobileLayout = _checkMobile(); });
+
+  // ===== 上配置凡例 ⇔ grid.top の重なり対策 =====
+  // スマホで「凡例が上 / grid.top が小さい」場合、grid.top を底上げして
+  // 凡例とY軸ラベルの重なりを防ぐ。option はシャローコピーして書き換える。
+  function _adjustTopMarginForMobile(option) {
+    if (!_isMobileLayout) return option;
+    if (!option || !option.grid || !option.legend) return option;
+
+    // 凡例が「上」配置か判定（bottom指定があれば上ではない）
+    var legendArr = Array.isArray(option.legend) ? option.legend : [option.legend];
+    var hasTopLegend = legendArr.some(function(lg) {
+      if (!lg) return false;
+      if (lg.show === false) return false;
+      if (lg.bottom != null && lg.bottom !== 'auto' && lg.bottom !== '') return false;
+      if (lg.top == null) return true;                      // 未指定 → デフォルトで上
+      if (typeof lg.top === 'number') return lg.top < 60;   // 数値で60未満 → 上配置とみなす
+      if (lg.top === 'top') return true;
+      var n = parseInt(lg.top, 10);
+      return !isNaN(n) && n < 60;
+    });
+    if (!hasTopLegend) return option;
+
+    // grid.top を最低 MIN_TOP に
+    var MIN_TOP = 70; // 凡例2行分 + 余白
+    var grids = Array.isArray(option.grid) ? option.grid : [option.grid];
+    var modified = false;
+    var newGrids = grids.map(function(g) {
+      if (!g) return g;
+      var curTop = (typeof g.top === 'number') ? g.top
+                 : (typeof g.top === 'string' ? (parseInt(g.top, 10) || 0) : 0);
+      if (curTop < MIN_TOP) {
+        modified = true;
+        var copy = {};
+        Object.keys(g).forEach(function(k) { copy[k] = g[k]; });
+        copy.top = MIN_TOP;
+        return copy;
+      }
+      return g;
+    });
+    if (!modified) return option;
+
+    // option もシャローコピーしてから差し替え（呼び出し元の元オブジェクトを汚さない）
+    var newOpt = {};
+    Object.keys(option).forEach(function(k) { newOpt[k] = option[k]; });
+    newOpt.grid = Array.isArray(option.grid) ? newGrids : newGrids[0];
+    return newOpt;
+  }
+
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
@@ -40,6 +95,10 @@
           if (t.extraCssText == null)
             t.extraCssText = 'max-width:min(88vw,320px);white-space:normal;word-break:break-word;font-size:12px;';
         });
+      }
+      // ★ スマホ時：上配置の凡例が縦軸と重ならないようgrid.topを底上げ
+      if (!_hovering && option) {
+        option = _adjustTopMarginForMobile(option);
       }
       if (!_hovering) {
         _lastOption = option;

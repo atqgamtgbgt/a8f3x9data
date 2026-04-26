@@ -29,9 +29,43 @@
   var _isMobileLayout = _checkMobile();
   window.addEventListener('resize', function() { _isMobileLayout = _checkMobile(); });
 
+  // ===== 凡例の行数を推定（折り返しを見越した余白計算用） =====
+  // type:'scroll' なら常に1行。それ以外は名称合計幅とコンテナ幅から推定。
+  function _estimateLegendRows(option) {
+    var legendArr = Array.isArray(option.legend) ? option.legend : [option.legend];
+    var firstLegend = legendArr && legendArr[0];
+    if (!firstLegend || firstLegend.show === false) return 1;
+    if (firstLegend.type === 'scroll') return 1;  // スクロール型は1行で収まる
+
+    // 凡例名を集める（legend.data 優先、なければ series.name から）
+    var names = [];
+    if (firstLegend.data && firstLegend.data.length) {
+      firstLegend.data.forEach(function(d) {
+        var n = (d && typeof d === 'object') ? d.name : d;
+        if (n != null) names.push(String(n));
+      });
+    } else if (option.series) {
+      var seriesArr = Array.isArray(option.series) ? option.series : [option.series];
+      seriesArr.forEach(function(s) { if (s && s.name) names.push(String(s.name)); });
+    }
+    if (!names.length) return 1;
+
+    // 1アイテムあたり: アイコン+余白(28px) + 文字数 × 約12px (スマホfont-size)
+    var perItemPad = 28;
+    var charPx = 12;
+    var totalWidth = names.reduce(function(sum, name) {
+      return sum + perItemPad + name.length * charPx;
+    }, 0);
+    // スマホの平均内側幅 ~ 340px、左右余白 -20
+    var widthHint = (typeof window !== 'undefined' && window.innerWidth)
+                    ? Math.max(window.innerWidth - 40, 280) : 320;
+    var rows = Math.ceil(totalWidth / widthHint);
+    return Math.max(1, Math.min(rows, 6));  // 1〜6行に制限
+  }
+
   // ===== 上配置凡例 ⇔ grid.top の重なり対策 =====
-  // スマホで「凡例が上 / grid.top が小さい」場合、grid.top を底上げして
-  // 凡例とY軸ラベルの重なりを防ぐ。option はシャローコピーして書き換える。
+  // スマホで「凡例が上 / grid.top が小さい」場合、凡例の推定行数に応じて
+  // grid.top を底上げして重なりを防ぐ。option はシャローコピーして書き換える。
   function _adjustTopMarginForMobile(option) {
     if (!_isMobileLayout) return option;
     if (!option || !option.grid || !option.legend) return option;
@@ -43,15 +77,18 @@
       if (lg.show === false) return false;
       if (lg.bottom != null && lg.bottom !== 'auto' && lg.bottom !== '') return false;
       if (lg.top == null) return true;                      // 未指定 → デフォルトで上
-      if (typeof lg.top === 'number') return lg.top < 60;   // 数値で60未満 → 上配置とみなす
+      if (typeof lg.top === 'number') return lg.top < 60;
       if (lg.top === 'top') return true;
       var n = parseInt(lg.top, 10);
       return !isNaN(n) && n < 60;
     });
     if (!hasTopLegend) return option;
 
-    // grid.top を最低 MIN_TOP に
-    var MIN_TOP = 70; // 凡例2行分 + 余白
+    // 推定行数 → 必要な top 余白を算出
+    // 凡例上余白(8) + 行数 × 行高(24) + 凡例とgridの間隔(10)
+    var rows = _estimateLegendRows(option);
+    var MIN_TOP = 8 + rows * 24 + 10;  // 1行=42, 2行=66, 3行=90, 4行=114, 5行=138
+
     var grids = Array.isArray(option.grid) ? option.grid : [option.grid];
     var modified = false;
     var newGrids = grids.map(function(g) {

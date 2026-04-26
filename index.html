@@ -113,6 +113,80 @@
     return newOpt;
   }
 
+  // ===== X軸ラベル重なり対策（スマホ時のみ） =====
+  // category 型のX軸でラベル数が多い場合、ラベルを45度回転させ
+  // grid.bottom も追加確保して重なりを防ぐ。
+  // 既に rotate が指定されているグラフは触らない（既存の意図を尊重）。
+  function _adjustXAxisForMobile(option) {
+    if (!_isMobileLayout) return option;
+    if (!option || !option.xAxis) return option;
+
+    var xAxisArr = Array.isArray(option.xAxis) ? option.xAxis : [option.xAxis];
+    var xModified = false;
+    var newXAxis = xAxisArr.map(function(ax) {
+      if (!ax) return ax;
+      // type 明示で 'value'/'log'/'time' は対象外（数値軸はラベル少なめで重ならない）
+      if (ax.type && ax.type !== 'category') return ax;
+      // ラベル数が少ない場合は重ならない（閾値: 8個未満はそのまま）
+      if (!ax.data || ax.data.length < 8) return ax;
+
+      var axisLabel = ax.axisLabel || {};
+      // 既に rotate 指定（0以外）があれば触らない
+      if (axisLabel.rotate != null && axisLabel.rotate !== 0) return ax;
+
+      xModified = true;
+      var copyAx = {};
+      Object.keys(ax).forEach(function(k) { copyAx[k] = ax[k]; });
+      var copyLabel = {};
+      Object.keys(axisLabel).forEach(function(k) { copyLabel[k] = axisLabel[k]; });
+      copyLabel.rotate = 45;
+      // フォントサイズ未指定なら少し小さめに
+      if (copyLabel.fontSize == null) copyLabel.fontSize = 10;
+      // ラベル間引きを auto に（ECharts任せ）
+      if (copyLabel.interval == null) copyLabel.interval = 'auto';
+      copyAx.axisLabel = copyLabel;
+      return copyAx;
+    });
+    if (!xModified) return option;
+
+    // ラベルが斜めになると下に追加スペースが必要 → grid.bottom を底上げ
+    // 文字数が長いほど必要スペース増（最大ラベル長を見て調整）
+    var maxLabelLen = 0;
+    xAxisArr.forEach(function(ax) {
+      if (ax && ax.data) {
+        ax.data.forEach(function(d) {
+          var s = (d && typeof d === 'object') ? (d.value || '') : (d || '');
+          var len = String(s).length;
+          if (len > maxLabelLen) maxLabelLen = len;
+        });
+      }
+    });
+    // 45度回転で必要な高さ ≈ 文字数 × charPx × sin(45°) + 軸名スペース
+    var BOTTOM_NEED = Math.min(20 + Math.ceil(maxLabelLen * 10 * 0.71), 70);
+
+    var grids = Array.isArray(option.grid) ? option.grid : [option.grid];
+    var gModified = false;
+    var newGrids = grids.map(function(g) {
+      if (!g) return g;
+      var curBottom = (typeof g.bottom === 'number') ? g.bottom
+                    : (typeof g.bottom === 'string' ? (parseInt(g.bottom, 10) || 0) : 0);
+      if (curBottom < BOTTOM_NEED) {
+        gModified = true;
+        var copy = {};
+        Object.keys(g).forEach(function(k) { copy[k] = g[k]; });
+        copy.bottom = BOTTOM_NEED;
+        return copy;
+      }
+      return g;
+    });
+
+    var newOpt = {};
+    Object.keys(option).forEach(function(k) { newOpt[k] = option[k]; });
+    newOpt.xAxis = Array.isArray(option.xAxis) ? newXAxis : newXAxis[0];
+    if (gModified) newOpt.grid = Array.isArray(option.grid) ? newGrids : newGrids[0];
+    return newOpt;
+  }
+
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
@@ -134,8 +208,10 @@
         });
       }
       // ★ スマホ時：上配置の凡例が縦軸と重ならないようgrid.topを底上げ
+      //   X軸ラベルが多いグラフは45度回転して重なりを防ぐ
       if (!_hovering && option) {
         option = _adjustTopMarginForMobile(option);
+        option = _adjustXAxisForMobile(option);
       }
       if (!_hovering) {
         _lastOption = option;

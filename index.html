@@ -13817,8 +13817,8 @@ const IMP = {
   // ①輸入量推移（万台）
   trend: {
     years: ['2019','2020','2021','2022','2023','2024','2025','2026累計'],
-    total: [113, 93, 93, 88, 80, 71, 48, 7],
-    yoy:   [-8, -18, 0, -5, -10, -12, -32, 25]
+    total: [113, 93, 93, 88, 80, 71, 48, 10],
+    yoy:   [-8, -18, 0, -5, -10, -12, -32, 3]
   },
 
   // ①月別推移（万台）
@@ -13829,7 +13829,7 @@ const IMP = {
       '2023年': [6.1,4.5,5.7,6.2,5.8,6.3,6.6,7.5,6.9,8.0,8.3,8.0],
       '2024年': [5.6,4.7,5.3,5.1,6.3,6.1,7.0,7.6,5.5,4.4,6.0,6.8],
       '2025年': [2.0,3.6,3.9,4.0,4.7,4.3,5.0,4.6,4.1,4.3,4.3,3.0],
-      '2026年': [3.8,3.2,null,null,null,null,null,null,null,null,null,null]
+      '2026年': [3.8,3.2,2.8,null,null,null,null,null,null,null,null,null]
     }
   },
 
@@ -13838,53 +13838,54 @@ const IMP = {
     years: ['2022年','2023年','2024年','2025年','2026年'],
     jan:   [8.9, 6.8, 9.3, 5.3, 4.5],
     feb:   [4.3, 6.6, 3.9, 3.1, 2.6],
-    cumul: [13.2, 13.4, 13.2, 8.4, 7.1],
-    yoy:   [-14, 1,  -1, -37, -15]
+    mar:   [6.5, 7.8, 6.7, 4.9, 3.5],
+    cumul: [20.0, 21.0, 20.0, 13.0, 11.0],
+    yoy:   [-19, 8,  -6, -33, -19]
   },
 
-  // ③車種別輸入（万台、2026年1-2月計）
+  // ③車種別輸入（万台、2026年1-3月計）
   typeComp: {
     cats: ['セダン','小型MPV','四駆SUV','その他乗用','大型TR','小型TR','中型TR','トレーラー','ダンプ他','小型バス'],
-    y2024: [30.5, 14.4, 22.7, 1.7,  2.0, 0.5, 0.1, 0.1, 0.1, 0.1],
+    y2024: [30.5, 14.4, 22.7, 1.7,  0.2, 0.5, 0.1, 0.1, 0.1, 0.1],
     y2025: [21.9, 11.0, 13.6, 0.3,  0.1, 0.3, 0.0, 0.1, 0.1, 0.1],
-    y2026: [ 3.2,  2.0,  1.7, 0.0,  0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    y2026: [ 4.7,  2.6,  2.2, 0.07, 0.02, 0.03, 0.00, 0.00, 0.00, 0.01]
   },
 
   // ④燃料種別（乗用車・万台、年計）
   fuel: {
     years: ['2021','2022','2023','2024','2025','2026累計'],
-    gasoline: [78.4, 72.9, 62.8, 56.3, 38.2, 6.1],
-    hybrid:   [11.0,  9.7,  9.7, 10.0,  7.5, 0.8],
-    phev:      [2.2,  2.5,  2.3,  1.0,  0.5, 0.0],
-    diesel:    [0.1,  0.3,  0.4,  0.4,  0.4, 0.1],
-    bev:       [0.8,  1.8,  3.0,  1.7,  0.3, 0.0]
+    gasoline: [78.4, 72.9, 62.8, 56.3, 38.2, 8.4],
+    hybrid:   [11.0,  9.7,  9.7, 10.0,  7.5, 1.1],
+    phev:      [2.2,  2.5,  2.3,  1.0,  0.5, 0.04],
+    diesel:    [0.1,  0.3,  0.4,  0.4,  0.4, 0.08],
+    bev:       [0.8,  1.8,  3.0,  1.7,  0.3, 0.07]
   },
 
   // ⑤排気量別（乗用車・万台、年計）
   displace: {
     years: ['2021','2022','2023','2024','2025','2026累計'],
-    gt4:    [0.5, 1.0, 0.6, 0.5, 0.1, 0.0],
-    d3to4:  [2.5, 3.6, 2.6, 2.6, 1.5, 0.3],
-    d25to3: [24.9,21.1,22.1,17.8,11.5, 1.7],
-    d2to25: [3.6, 6.6, 6.8, 5.7, 2.4, 0.2],
-    d15to2: [42.2,36.9,29.1,28.6,21.8, 3.8],
-    d1to15: [4.7, 3.7, 1.6, 1.1, 1.0, 0.1]
+    gt4:    [0.5, 1.0, 0.6, 0.5, 0.1, 0.03],
+    d3to4:  [2.5, 3.6, 2.6, 2.6, 1.5, 0.37],
+    d25to3: [24.9,21.1,22.1,17.8,11.5, 2.16],
+    d2to25: [3.6, 6.6, 6.8, 5.7, 2.4, 0.24],
+    d15to2: [42.2,36.9,29.1,28.6,21.8, 5.49],
+    d1to15: [4.7, 3.7, 1.6, 1.1, 1.0, 0.08]
   },
 
-  // ⑥国別輸入（台、2025年合計・2026年1-2月計）
+  // ⑥国別輸入（台、2025年合計・2026年1-3月計）
   country: {
-    names: ['日本','ドイツ','アメリカ','イギリス','スロバキア','タイ','オーストリア','メキシコ','スウェーデン','フィンランド'],
-    y2024: [227836,192597,109338,45073,62412,1384,10764,8018,21542,177],
-    y2025: [203107,104436,48549,36393,51226,390,3031,5001,13693,1215],
-    y2026: [34221,14511,7859,5056,4363,832,737,677,453,285]
+    names: ['日本','ドイツ','アメリカ','イギリス','スロバキア','メキシコ','タイ','オーストリア','スウェーデン','フィンランド'],
+    y2024: [227836,192597,109338,45073,62412,8018,1384,10764,21542,177],
+    y2025: [203107,104436,48549,36393,51226,5001,390,3031,13693,1215],
+    y2026: [52382,18446,9085,6034,5653,1451,1374,1081,489,299]
   },
 
-  // ⑦新エネ国別（台、2025年合計・2026年1-2月計）
+  // ⑦新エネ国別（台、2025年合計・2026年1-3月計）
   nevCountry: {
-    names: ['ドイツ','アメリカ','スウェーデン','日本','イタリア','韓国','イギリス','タイ','ベトナム'],
-    y2024: [8618,7202,1257,4845,722,240,962,7,68],
-    y2025: [3136,1133,1779,914,717,41,61,33,100],
-    y2026: [46,44,68,25,46,3,null,8,2]
+    names: ['アメリカ','イギリス','ドイツ','イタリア','スウェーデン','日本','韓国','トルコ'],
+    y2024: [7202,304,8618,722,1257,4845,240,1],
+    y2025: [1133,962,3136,717,1779,914,41,7],
+    y2026: [558,222,163,87,76,31,12,2]
   },
 
   // ⑨ブランド別販売（台）
@@ -13894,7 +13895,7 @@ const IMP = {
     y2023: [180792,187261,174273,80860,62212,53357,22251,2393,149],
     y2024: [180472,171019,151277,54519,51049,49683,18229,2489,205],
     y2025: [184069,64371,94777,41798,29927,42088,12640,252,191],
-    y2026: [25192,8436,13485,3914,3514,4918,1224,2,28]
+    y2026: [39124,12678,19036,6026,4932,6929,1731,4,42]
   },
 
   // ⑩超高級車（台）
@@ -13904,7 +13905,7 @@ const IMP = {
     y2023: [4264,3480,1324,1196,837,532,219],
     y2024: [1228,2608,789,881,608,297,38],
     y2025: [1374,2030,675,664,512,300,46],
-    y2026: [137,258,83,105,44,48,2]
+    y2026: [181,389,118,140,70,61,3]
   },
 
   // ⑪レクサス車種別（台）
@@ -13995,16 +13996,18 @@ function renderImpSales() {
   var c = mkImpChart('ec-imp-sales'); if(!c) return;
   var d = IMP.sales;
   c.setOption(impBase({
-    legend: { data:['1月販売','2月販売','1-2月合計'], bottom:0 },
+    legend: { data:['1月販売','2月販売','3月販売','1-3月合計'], bottom:0 },
     grid: { left:55, right:20, top:20, bottom:55 },
     xAxis: { type:'category', data:d.years },
     yAxis: { type:'value', min:0, axisLabel:{formatter:function(v){return v+'万';}} },
     series:[
-      { name:'1月販売', type:'bar', data:d.jan, itemStyle:{color:'#3b82f6'}, barMaxWidth:30,
+      { name:'1月販売', type:'bar', data:d.jan, itemStyle:{color:'#3b82f6'}, barMaxWidth:25,
         label:{show:true,position:'top',fontSize:10} },
-      { name:'2月販売', type:'bar', data:d.feb, itemStyle:{color:'#93c5fd'}, barMaxWidth:30,
+      { name:'2月販売', type:'bar', data:d.feb, itemStyle:{color:'#93c5fd'}, barMaxWidth:25,
         label:{show:true,position:'top',fontSize:10} },
-      { name:'1-2月合計', type:'line', data:d.cumul,
+      { name:'3月販売', type:'bar', data:d.mar, itemStyle:{color:'#60a5fa'}, barMaxWidth:25,
+        label:{show:true,position:'top',fontSize:10} },
+      { name:'1-3月合計', type:'line', data:d.cumul,
         smooth:true, symbol:'circle', symbolSize:7,
         lineStyle:{width:2.5,color:'#f59e0b'}, itemStyle:{color:'#f59e0b'},
         label:{show:true,position:'top',fontSize:11, formatter:function(p){return p.data.toFixed(1)+'万台';}} }
@@ -14016,7 +14019,7 @@ function renderImpType() {
   var c = mkImpChart('ec-imp-type'); if(!c) return;
   var d = IMP.typeComp;
   c.setOption(impBase({
-    legend: { data:['2024年','2025年','2026年1-2月'], top:8 },
+    legend: { data:['2024年','2025年','2026年1-3月'], top:8 },
     grid: { left:110, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'万台' },
     yAxis: { type:'category', data:d.cats.slice().reverse(), axisLabel:{fontSize:11} },
@@ -14026,7 +14029,7 @@ function renderImpType() {
         label:{show:true,position:'right',fontSize:10} },
       { name:'2025年', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'},
         label:{show:true,position:'right',fontSize:10} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'},
+      { name:'2026年1-3月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'},
         label:{show:true,position:'right',fontSize:10} }
     ]
   }));
@@ -14086,7 +14089,7 @@ function renderImpCountry() {
   var d = IMP.country;
   var rev = d.names.slice().reverse();
   c.setOption(impBase({
-    legend: { data:['2024年','2025年合計','2026年1-2月'], top:8 },
+    legend: { data:['2024年','2025年合計','2026年1-3月'], top:8 },
     grid: { left:100, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台', axisLabel:{formatter:function(v){return (v/10000).toFixed(0)+'万';}} },
     yAxis: { type:'category', data:rev, axisLabel:{fontSize:11} },
@@ -14099,7 +14102,7 @@ function renderImpCountry() {
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
       { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#3b82f6'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'},
+      { name:'2026年1-3月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#1d4ed8'},
         label:{show:true,position:'right',fontSize:9,formatter:function(p){return (p.value/10000).toFixed(1)+'万';}} }
     ]
   }));
@@ -14110,7 +14113,7 @@ function renderImpNevCountry() {
   var d = IMP.nevCountry;
   var rev = d.names.slice().reverse();
   c.setOption(impBase({
-    legend: { data:['2024年','2025年合計','2026年1-2月'], top:8 },
+    legend: { data:['2024年','2025年合計','2026年1-3月'], top:8 },
     grid: { left:110, right:60, top:45, bottom:20 },
     xAxis: { type:'value', name:'台' },
     yAxis: { type:'category', data:rev, axisLabel:{fontSize:11} },
@@ -14123,7 +14126,7 @@ function renderImpNevCountry() {
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} },
       { name:'2025年合計', type:'bar', data:d.y2025.slice().reverse(), itemStyle:{color:'#10b981'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} },
-      { name:'2026年1-2月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'},
+      { name:'2026年1-3月', type:'bar', data:d.y2026.slice().reverse(), itemStyle:{color:'#065f46'},
         label:{show:true,position:'right',fontSize:10,formatter:function(p){return p.value>0?p.value.toLocaleString():'';}} }
     ]
   }));
@@ -14132,7 +14135,7 @@ function renderImpNevCountry() {
 function renderImpBrand() {
   var c = mkImpChart('ec-imp-brand'); if(!c) return;
   var d = IMP.brand;
-  var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
+  var years = ['2022年','2023年','2024年','2025年','2026年1-3月'];
   var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
   // 動的高さ: ブランド数×(系列数×14px+12px) + 余白
   var el = document.getElementById('ec-imp-brand');
@@ -14157,7 +14160,7 @@ function renderImpBrand() {
 function renderImpLuxury() {
   var c = mkImpChart('ec-imp-luxury'); if(!c) return;
   var d = IMP.luxury;
-  var years = ['2022年','2023年','2024年','2025年','2026年1-2月'];
+  var years = ['2022年','2023年','2024年','2025年','2026年1-3月'];
   var allData = [d.y2022,d.y2023,d.y2024,d.y2025,d.y2026];
   // 動的高さ
   var el = document.getElementById('ec-imp-luxury');

@@ -17135,34 +17135,15 @@ function renderSegment(){
       textStyle:{fontFamily:FONT,fontSize:12},
       formatter: function(p){
         if(!p || !p.length) return '';
-        // グループ別に振り分け（並び順非依存）
-        var grpItems = {CAR:[], MPV:[], SUV:[]};
-        var grpTotals = {CAR:0, MPV:0, SUV:0};
-        var totItem = null;
-        p.forEach(function(x){
-          if(x.seriesName==='合計'){ totItem = x; return; }
-          var grp = x.seriesName.split(' ')[0];
-          if(grpItems[grp]){
-            grpItems[grp].push(x);
-            if(typeof x.value === 'number') grpTotals[grp] += x.value;
-          }
-        });
         var lines = ['<b>'+p[0].name+'　'+indName+'</b>'];
-        ['CAR','MPV','SUV'].forEach(function(grp){
-          var items = grpItems[grp];
-          if(!items || !items.length) return;
-          // グループ内に1つでも値があればヘッダー表示
-          var hasValue = items.some(function(x){ return typeof x.value === 'number' && x.value > 0; });
-          if(!hasValue) return;
-          lines.push('<span style="font-size:10px;color:#888">── '+grp+' 計 '+grpTotals[grp].toFixed(1)+'万台 ──</span>');
-          items.forEach(function(x){
-            if(typeof x.value !== 'number' || x.value === 0) return;
-            lines.push(x.marker+x.seriesName+': <b>'+x.value+'万台</b>');
-          });
+        var total = 0;
+        p.forEach(function(x){
+          if(x.seriesName==='合計') return;
+          if(x.value==null) return;
+          total += x.value;
+          lines.push(x.marker+x.seriesName+': <b>'+x.value+'万台</b>');
         });
-        if(totItem && typeof totItem.value === 'number'){
-          lines.push('<b>合計: '+totItem.value+'万台</b>');
-        }
+        lines.push('<hr style="margin:4px 0">合計: <b>'+total.toFixed(1)+'万台</b>');
         return lines.join('<br>');
       }
     },

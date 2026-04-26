@@ -17093,71 +17093,24 @@ function renderSegment(){
   var vk = _segView;  // 'wh' or 'rt'
   var months = SEG_MONTHS;
 
-  // 積み上げ棒：x軸=月、series=クラス別
+  // 積み上げ棒：x軸=月、series=クラス別（「国籍別 卸売台数推移」と同等のシンプル構造）
   var series = SEG_KEYS.map(function(k,i){
-    var grp = k.split('_')[0];
     return {
       name: SEG_LABELS[i],
       type: 'bar',
       stack: 's',
       color: SEG_COLORS[k],
-      barMaxWidth: 36,
-      data: months.map(function(m){ return (SEG_DATA[m] && SEG_DATA[m][vk]) ? (SEG_DATA[m][vk][k]||0) : null; }),
-      label: {
-        show: false
-      },
-      emphasis: { focus: 'series' }
+      data: months.map(function(m){ return (SEG_DATA[m] && SEG_DATA[m][vk]) ? (SEG_DATA[m][vk][k]||0) : null; })
     };
   });
 
-  // 合計ライン（折れ線）
-  var totalLine = {
-    name: '合計',
-    type: 'line',
-    color: '#374151',
-    symbol: 'circle',
-    symbolSize: 5,
-    lineStyle: { width: 2, type: 'dashed' },
-    itemStyle: { color: '#374151' },
-    data: months.map(function(m){
-      if (!SEG_DATA[m] || !SEG_DATA[m][vk]) return null;
-      return +(SEG_KEYS.reduce(function(s,k){ return s + (SEG_DATA[m][vk][k]||0); },0).toFixed(1));
-    }),
-    label: { show: true, position: 'top', formatter: function(p){ return p.value!=null?p.value+'万':''; }, fontSize: 11, fontFamily: FONT, color: '#374151' }
-  };
-
-  var indName = vk === 'wh' ? '卸売' : '小売';
-
   ec.setOption({
-    tooltip: {
-      trigger: 'axis', axisPointer: {type:'shadow'},
-      backgroundColor:'rgba(255,255,255,0.97)', borderColor:'#ddd', borderWidth:1,
-      textStyle:{fontFamily:FONT,fontSize:12},
-      formatter: function(p){
-        if(!p || !p.length) return '';
-        var lines = ['<b>'+p[0].name+'　'+indName+'</b>'];
-        var total = 0;
-        p.forEach(function(x){
-          if(x.seriesName==='合計') return;
-          if(x.value==null) return;
-          total += x.value;
-          lines.push(x.marker+x.seriesName+': <b>'+x.value+'万台</b>');
-        });
-        lines.push('<hr style="margin:4px 0">合計: <b>'+total.toFixed(1)+'万台</b>');
-        return lines.join('<br>');
-      }
-    },
-    legend: {
-      data: SEG_LABELS.concat(['合計']),
-      top: 8, right: 12,
-      textStyle: {fontFamily:FONT, fontSize:10},
-      itemWidth: 12, itemHeight: 8,
-      // グループ別に視覚的に整理（凡例は小さめ）
-    },
-    grid: grid({bottom:40, top:70, left:55, right:20}),
+    tooltip: unifiedStackTooltip({unit:'万台'}),
+    legend: leg({data: SEG_LABELS}),
+    grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
     yAxis: yVal('万台',{min:0}),
-    series: series.concat([totalLine])
+    series: series
   });
 }
 

@@ -2300,8 +2300,10 @@ img.car-thumb {
     padding: 10px 8px !important;
   }
 
-  /* CPCAの省詳細チャート */
-  #cp-nev, #cp-body, #cp-brand {
+  /* CPCAの省詳細チャート（cp-bodyのみ対象。
+     cp-nev / cp-brand はCADAタブのID（NEV販売内訳 / ブランド系シェア）と
+     衝突しチャートを潰すため除外） */
+  #cp-body {
     height: 140px !important;
   }
 }
@@ -2329,9 +2331,10 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
     font-size: 0.78rem !important;
     padding: 0.4rem 0.6rem !important;
   }
-  /* グラフの凡例テキストが詰まらないよう調整 */
+  /* グラフの凡例テキストが詰まらないよう調整
+     （768px以下で260px → 576px以下ではさらに低い240pxへ） */
   .echart-box {
-    height: 280px !important;
+    height: 240px !important;
   }
 }
 

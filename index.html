@@ -16699,8 +16699,7 @@ function renderBrandWholesale(){
     xAxis: xCat(months),
     yAxis: yVal('万台',{min:0,max:320}),
     series:[
-      {name:'高級車', type:'bar', stack:'s', color:'#8b5cf6', data:gouhua,
-        label:{show:false}},
+      {name:'高級車', type:'bar', stack:'s', color:'#8b5cf6', data:gouhua},
       {name:'合弁メーカー', type:'bar', stack:'s', color:'#06b6d4', data:heizi},
       {name:'中国系ブランド', type:'bar', stack:'s', color:'#ef4444', data:ziZhu}
     ]
@@ -16897,7 +16896,7 @@ function renderBrand4Indicator(){
     legend: leg({data:['22年通年','23年通年','24年通年','25年通年','26年1-3月累計'], top:8}),
     grid: grid({bottom:75,top:65,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
-    yAxis: yVal('万台'),
+    yAxis: yVal('万台',{min:0,max:2200}),
     series:[
       {name:'22年通年',     type:'bar', color:'#cbd5e1', data:flat(data_22),   barMaxWidth:16},
       {name:'23年通年',     type:'bar', color:'#94a3b8', data:flat(data_23),   barMaxWidth:16},
@@ -16950,7 +16949,7 @@ function renderBrandIceNevWh(){
     legend: leg({data:['伝統エンジン','新エネ車']}),
     grid: grid({bottom:75,top:55,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
-    yAxis: yVal('万台'),
+    yAxis: yVal('万台',{min:0,max:2200}),
     series:[
       {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:26},
       {name:'新エネ車',     type:'bar', stack:'s', color:'#10b981', data:flat('新エネ'), barMaxWidth:26}
@@ -16997,7 +16996,7 @@ function renderBrandIceNevRt(){
     legend: leg({data:['伝統エンジン','新エネ車']}),
     grid: grid({bottom:75,top:55,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
-    yAxis: yVal('万台'),
+    yAxis: yVal('万台',{min:0,max:1700}),
     series:[
       {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:26},
       {name:'新エネ車',     type:'bar', stack:'s', color:'#ef4444', data:flat('新エネ'), barMaxWidth:26}

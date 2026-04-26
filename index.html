@@ -103,9 +103,23 @@
 
         // series のみマージモード(notMerge:false)で戻す → 凡例スクロール位置を保持
         var mergeReset = { series: resetSeries };
-        // 軸maxを元に戻す（元optionの軸をそのまま渡す）
-        if (resetOpt.xAxis) mergeReset.xAxis = resetOpt.xAxis;
-        if (resetOpt.yAxis) mergeReset.yAxis = resetOpt.yAxis;
+        // 軸を元に戻す：元axisに max/min が未指定なら明示的にnullを入れて
+        // ホバー時に上書きされた値を自動計算に戻す（積み上げ棒のy軸残留問題対策）
+        function _normalizeAxis(axes) {
+          if (!axes) return axes;
+          var arr = Array.isArray(axes) ? axes : [axes];
+          return arr.map(function(a) {
+            if (!a) return a;
+            var copy = {};
+            Object.keys(a).forEach(function(k) { copy[k] = a[k]; });
+            // null/undefined どちらの場合も null で埋めて auto に戻す
+            if (copy.max == null) copy.max = null;
+            if (copy.min == null) copy.min = null;
+            return copy;
+          });
+        }
+        if (resetOpt.xAxis) mergeReset.xAxis = _normalizeAxis(resetOpt.xAxis);
+        if (resetOpt.yAxis) mergeReset.yAxis = _normalizeAxis(resetOpt.yAxis);
         // 凡例のスクロール位置を明示的に保持（2ページ目以降でホバーしても1ページ目に戻らないように）
         try {
           var curOpt = instance.getOption();
@@ -16896,7 +16910,7 @@ function renderBrand4Indicator(){
     legend: leg({data:['22年通年','23年通年','24年通年','25年通年','26年1-3月累計'], top:8}),
     grid: grid({bottom:75,top:65,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
-    yAxis: yVal('万台',{min:0,max:2200}),
+    yAxis: yVal('万台',{min:0}),
     series:[
       {name:'22年通年',     type:'bar', color:'#cbd5e1', data:flat(data_22),   barMaxWidth:16},
       {name:'23年通年',     type:'bar', color:'#94a3b8', data:flat(data_23),   barMaxWidth:16},
@@ -16949,7 +16963,7 @@ function renderBrandIceNevWh(){
     legend: leg({data:['伝統エンジン','新エネ車']}),
     grid: grid({bottom:75,top:55,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
-    yAxis: yVal('万台',{min:0,max:2200}),
+    yAxis: yVal('万台',{min:0}),
     series:[
       {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:26},
       {name:'新エネ車',     type:'bar', stack:'s', color:'#10b981', data:flat('新エネ'), barMaxWidth:26}
@@ -16996,7 +17010,7 @@ function renderBrandIceNevRt(){
     legend: leg({data:['伝統エンジン','新エネ車']}),
     grid: grid({bottom:75,top:55,left:60,right:20}),
     xAxis: {type:'category',data:xCats,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',interval:0,lineHeight:14},axisLine:{lineStyle:{color:'#ddd'}}},
-    yAxis: yVal('万台',{min:0,max:1700}),
+    yAxis: yVal('万台',{min:0}),
     series:[
       {name:'伝統エンジン', type:'bar', stack:'s', color:'#64748b', data:flat('伝統'),   barMaxWidth:26},
       {name:'新エネ車',     type:'bar', stack:'s', color:'#ef4444', data:flat('新エネ'), barMaxWidth:26}
@@ -17108,7 +17122,7 @@ function renderSegment(){
     legend: leg({data: SEG_LABELS}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
-    yAxis: yVal('万台',{min:0,max:340}),
+    yAxis: yVal('万台',{min:0}),
     series: series
   });
 }

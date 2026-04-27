@@ -114,24 +114,42 @@
   }
 
   // ===== X軸ラベル重なり対策（スマホ時のみ） =====
-  // category 型のX軸でラベル数が多い場合、ラベルを45度回転させ
-  // grid.bottom も追加確保して重なりを防ぐ。
+  // ラベルの「文字数」「改行有無」を分析し、最適な回転角度・間引き・grid.bottomを算出。
+  //  - 改行ラベル(\n含む)   → 回転せず、行数分bottomを確保し、必要なら間引き
+  //  - 文字数が多いラベル  → 回転角度を強める（45° → 60° → 75°）
   // 既に rotate が指定されているグラフは触らない（既存の意図を尊重）。
   function _adjustXAxisForMobile(option) {
     if (!_isMobileLayout) return option;
     if (!option || !option.xAxis) return option;
 
     var xAxisArr = Array.isArray(option.xAxis) ? option.xAxis : [option.xAxis];
+
+    // 全X軸を分析：最大文字長・最大行数・データ件数
+    var maxLabelLen = 0;
+    var maxLabelLines = 1;
+    var maxDataCount = 0;
+    function _analyzeLabels(dataArr) {
+      dataArr.forEach(function(d) {
+        var s = String((d && typeof d === 'object') ? (d.value != null ? d.value : '') : (d != null ? d : ''));
+        var lines = s.split('\n');
+        lines.forEach(function(l) {
+          if (l.length > maxLabelLen) maxLabelLen = l.length;
+        });
+        if (lines.length > maxLabelLines) maxLabelLines = lines.length;
+      });
+    }
+
     var xModified = false;
     var newXAxis = xAxisArr.map(function(ax) {
       if (!ax) return ax;
-      // type 明示で 'value'/'log'/'time' は対象外（数値軸はラベル少なめで重ならない）
       if (ax.type && ax.type !== 'category') return ax;
-      // ラベル数が少ない場合は重ならない（閾値: 8個未満はそのまま）
       if (!ax.data || ax.data.length < 8) return ax;
 
+      // 既存rotate指定があっても、改行・文字数の計測だけは行う（grid.bottom算出のため）
+      _analyzeLabels(ax.data);
+      if (ax.data.length > maxDataCount) maxDataCount = ax.data.length;
+
       var axisLabel = ax.axisLabel || {};
-      // 既に rotate 指定（0以外）があれば触らない
       if (axisLabel.rotate != null && axisLabel.rotate !== 0) return ax;
 
       xModified = true;
@@ -139,30 +157,46 @@
       Object.keys(ax).forEach(function(k) { copyAx[k] = ax[k]; });
       var copyLabel = {};
       Object.keys(axisLabel).forEach(function(k) { copyLabel[k] = axisLabel[k]; });
-      copyLabel.rotate = 45;
-      // フォントサイズ未指定なら少し小さめに
+
+      // ラベルの最大文字長と改行有無で挙動分岐
+      var hasMultiline = maxLabelLines > 1;
+      if (hasMultiline) {
+        // 改行ラベルは回転しない（元から複数行表示の想定）
+        copyLabel.rotate = 0;
+        // ラベル数が画面幅に対して多すぎる場合は間引きを明示
+        var widthHint = Math.max((window.innerWidth || 375) - 100, 240);
+        var perLabelW = Math.max(maxLabelLen * 9, 24);
+        var maxFit = Math.max(2, Math.floor(widthHint / perLabelW));
+        if (ax.data.length > maxFit && copyLabel.interval == null) {
+          copyLabel.interval = Math.max(1, Math.ceil(ax.data.length / maxFit) - 1);
+        }
+      } else {
+        // 1行ラベル：文字数に応じて回転角度を強める
+        var rotateAngle = 45;
+        if (maxLabelLen >= 8)  rotateAngle = 60;
+        if (maxLabelLen >= 12) rotateAngle = 75;
+        copyLabel.rotate = rotateAngle;
+        if (copyLabel.interval == null) copyLabel.interval = 'auto';
+      }
       if (copyLabel.fontSize == null) copyLabel.fontSize = 10;
-      // ラベル間引きを auto に（ECharts任せ）
-      if (copyLabel.interval == null) copyLabel.interval = 'auto';
+
       copyAx.axisLabel = copyLabel;
       return copyAx;
     });
-    if (!xModified) return option;
 
-    // ラベルが斜めになると下に追加スペースが必要 → grid.bottom を底上げ
-    // 文字数が長いほど必要スペース増（最大ラベル長を見て調整）
-    var maxLabelLen = 0;
-    xAxisArr.forEach(function(ax) {
-      if (ax && ax.data) {
-        ax.data.forEach(function(d) {
-          var s = (d && typeof d === 'object') ? (d.value || '') : (d || '');
-          var len = String(s).length;
-          if (len > maxLabelLen) maxLabelLen = len;
-        });
-      }
-    });
-    // 45度回転で必要な高さ ≈ 文字数 × charPx × sin(45°) + 軸名スペース
-    var BOTTOM_NEED = Math.min(20 + Math.ceil(maxLabelLen * 10 * 0.71), 70);
+    if (!xModified && maxDataCount === 0) return option;
+
+    // grid.bottom 必要量を計算
+    var BOTTOM_NEED;
+    if (maxLabelLines > 1) {
+      // 改行ラベル：(行数 × 行高) + 軸名スペース
+      BOTTOM_NEED = Math.min(20 + maxLabelLines * 14, 80);
+    } else {
+      // 1行回転ラベル：文字数 × charPx × sin(angle) + 軸名スペース
+      var angle = maxLabelLen >= 12 ? 75 : (maxLabelLen >= 8 ? 60 : 45);
+      var sinAng = Math.sin(angle * Math.PI / 180);
+      BOTTOM_NEED = Math.min(20 + Math.ceil(maxLabelLen * 9 * sinAng), 90);
+    }
 
     var grids = Array.isArray(option.grid) ? option.grid : [option.grid];
     var gModified = false;
@@ -180,10 +214,11 @@
       return g;
     });
 
+    if (!xModified && !gModified) return option;
     var newOpt = {};
     Object.keys(option).forEach(function(k) { newOpt[k] = option[k]; });
-    newOpt.xAxis = Array.isArray(option.xAxis) ? newXAxis : newXAxis[0];
-    if (gModified) newOpt.grid = Array.isArray(option.grid) ? newGrids : newGrids[0];
+    if (xModified) newOpt.xAxis = Array.isArray(option.xAxis) ? newXAxis : newXAxis[0];
+    if (gModified) newOpt.grid  = Array.isArray(option.grid)  ? newGrids  : newGrids[0];
     return newOpt;
   }
 

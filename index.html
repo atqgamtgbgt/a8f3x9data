@@ -2199,6 +2199,49 @@ img.car-thumb {
   font-weight: 500;
 }
 
+/* 境系ブランドカード（車BU主導）*/
+.huawei-brand-card.kyokei {
+  background: #e8f4fd;
+  border-color: #90caf9;
+}
+.huawei-brand-card.kyokei:hover {
+  border-color: #1565c0;
+  background: #bbdefb;
+  box-shadow: 0 4px 8px rgba(21, 101, 192, 0.2);
+}
+.huawei-brand-card.kyokei .huawei-brand-name {
+  color: #1565c0;
+}
+.huawei-brand-card.kyokei .huawei-oem-info {
+  border-top-color: #90caf9;
+}
+.huawei-brand-card.kyokei .huawei-oem-label {
+  background: #e3f2fd;
+}
+.huawei-subsection-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 0.6rem;
+}
+.huawei-subsection-label.hima {
+  background: #fff3e0;
+  color: #e65100;
+  border: 1px solid #ffcc80;
+}
+.huawei-subsection-label.carbu {
+  background: #e3f2fd;
+  color: #1565c0;
+  border: 1px solid #90caf9;
+}
+.huawei-section-divider {
+  margin: 1rem 0 0.75rem;
+  border-top: 1px dashed #e0e0e0;
+}
+
 /* スマホ調整 */
 @media (max-width: 576px) {
   .company-card {
@@ -3332,18 +3375,22 @@ body.tray-open { padding-bottom: 105px; }
 
           <!-- Huaweiエコシステム -->
           <section class="huawei-section">
-            <h5 class="brand-section-title section-huawei"><i class="fa-solid fa-microchip me-2"></i>Huawei 鸿蒙智行エコシステム</h5>
+            <h5 class="brand-section-title section-huawei"><i class="fa-solid fa-microchip me-2"></i>Huawei 五界三境エコシステム</h5>
             
             <!-- 説明エリア -->
             <div class="huawei-header">
               <div class="huawei-logo-main" data-logo="鸿蒙智行.webp"></div>
               <div class="huawei-description">
-                <div class="huawei-title">华为 鸿蒙智行</div>
-                <div class="huawei-subtitle">Huawei主導の統一ブランド方式（智選車）。<br>Huaweiが企画・OS/UX・自動運転を担い、各自動車メーカーが製造を担当。</div>
+                <div class="huawei-title">华为 五界三境</div>
+                <div class="huawei-subtitle">
+                  <b>五界（鴻蒙智行・HIMA）</b>：終端BG主導。Huaweiが企画・OS/UX・販売まで深く関与する智選車方式。<br>
+                  <b>三境（華為車BU）</b>：車BU主導。車企がブランド主権を持ち、Huaweiが技術を深く共創する新モデル。
+                </div>
               </div>
             </div>
-            
-            <!-- ブランドグリッド -->
+
+            <!-- 五界：鴻蒙智行 -->
+            <span class="huawei-subsection-label hima">🔶 五界 — 鸿蒙智行（HIMA）終端BG主導</span>
             <div class="huawei-grid">
               <div class="huawei-brand-card" data-logo="AITO 问界.png" data-oem-logo="蓝电.png">
                 <div class="huawei-brand-logo"></div>
@@ -3356,7 +3403,7 @@ body.tray-open { padding-bottom: 105px; }
               </div>
               <div class="huawei-brand-card" data-logo="智界.png" data-oem-logo="奇瑞.png">
                 <div class="huawei-brand-logo"></div>
-                <div class="huawei-brand-name">智界</div>
+                <div class="huawei-brand-name">智界 LUXEED</div>
                 <div class="huawei-oem-info">
                   <span class="huawei-oem-label">製造</span>
                   <div class="huawei-oem-logo"></div>
@@ -3365,7 +3412,7 @@ body.tray-open { padding-bottom: 105px; }
               </div>
               <div class="huawei-brand-card" data-logo="享界.png" data-oem-logo="北京汽车.png">
                 <div class="huawei-brand-logo"></div>
-                <div class="huawei-brand-name">享界</div>
+                <div class="huawei-brand-name">享界 STELATO</div>
                 <div class="huawei-oem-info">
                   <span class="huawei-oem-label">製造</span>
                   <div class="huawei-oem-logo"></div>
@@ -3374,7 +3421,7 @@ body.tray-open { padding-bottom: 105px; }
               </div>
               <div class="huawei-brand-card" data-logo="尊界.png" data-oem-logo="江淮瑞风.png">
                 <div class="huawei-brand-logo"></div>
-                <div class="huawei-brand-name">尊界</div>
+                <div class="huawei-brand-name">尊界 MAEXTRO</div>
                 <div class="huawei-oem-info">
                   <span class="huawei-oem-label">製造</span>
                   <div class="huawei-oem-logo"></div>
@@ -3383,11 +3430,44 @@ body.tray-open { padding-bottom: 105px; }
               </div>
               <div class="huawei-brand-card" data-logo="尚界.png" data-oem-logo="SAIC_resized.png.png">
                 <div class="huawei-brand-logo"></div>
-                <div class="huawei-brand-name">尚界</div>
+                <div class="huawei-brand-name">尚界 SHANGJIE</div>
                 <div class="huawei-oem-info">
                   <span class="huawei-oem-label">製造</span>
                   <div class="huawei-oem-logo"></div>
                   <span class="huawei-oem-name">上汽</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 三境：華為車BU -->
+            <div class="huawei-section-divider"></div>
+            <span class="huawei-subsection-label carbu">🔵 三境 — 华为车BU主導（新模式）</span>
+            <div class="huawei-grid">
+              <div class="huawei-brand-card kyokei" data-oem-logo="上汽通用五菱.png">
+                <div class="huawei-brand-logo" style="background:#e3f2fd;font-size:1.3rem;line-height:50px;">华</div>
+                <div class="huawei-brand-name">华境</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">上汽通用五菱</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card kyokei" data-oem-logo="广汽.png">
+                <div class="huawei-brand-logo" style="background:#e3f2fd;font-size:1.3rem;line-height:50px;">启</div>
+                <div class="huawei-brand-name">启境</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">广汽集团</span>
+                </div>
+              </div>
+              <div class="huawei-brand-card kyokei" data-oem-logo="东风汽车.png">
+                <div class="huawei-brand-logo" style="background:#e3f2fd;font-size:1.3rem;line-height:50px;">奕</div>
+                <div class="huawei-brand-name">奕境</div>
+                <div class="huawei-oem-info">
+                  <span class="huawei-oem-label">製造</span>
+                  <div class="huawei-oem-logo"></div>
+                  <span class="huawei-oem-name">东风汽车</span>
                 </div>
               </div>
             </div>

@@ -6437,7 +6437,7 @@ function loadLogos() {
     });
   }
   
-  // Huaweiセクションのロゴ
+  // Huaweiセクションのロゴ（ブランドロゴ）
   document.querySelectorAll('.huawei-brand-card[data-logo]').forEach(card => {
     const logoFile = card.dataset.logo;
     const logoContainer = card.querySelector('.huawei-brand-logo');
@@ -6448,8 +6448,10 @@ function loadLogos() {
       img.onerror = () => { img.style.display = 'none'; };
       logoContainer.appendChild(img);
     }
-    
-    // OEMロゴ
+  });
+
+  // OEMロゴ（data-logoの有無に関わらず全カード対象）
+  document.querySelectorAll('.huawei-brand-card[data-oem-logo]').forEach(card => {
     const oemLogoFile = card.dataset.oemLogo;
     const oemLogoContainer = card.querySelector('.huawei-oem-logo');
     if (oemLogoFile && oemLogoContainer && !oemLogoContainer.querySelector('img')) {

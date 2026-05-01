@@ -3994,6 +3994,17 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-battery-target="#bat-companies">📊 企業数推移</button>
                   </div>
                 </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🚢 電池輸出 </span>
+                  <div class="cds-gc-items" id="cds-gc-gb4">
+                    <button class="nav-link" data-cds-battery-target="#bat-export-trend">📈 月次輸出推移</button>
+                    <button class="nav-link" data-cds-battery-target="#bat-export-detail">💰 単価・数量推移</button>
+                    <button class="nav-link" data-cds-battery-target="#bat-export-region-share">🌍 地域別シェア</button>
+                    <button class="nav-link" data-cds-battery-target="#bat-export-region-monthly">🗺️ 地域別月次比較</button>
+                    <button class="nav-link" data-cds-battery-target="#bat-export-eu">🇪🇺 対欧州詳細</button>
+                    <button class="nav-link" data-cds-battery-target="#bat-export-us">🇺🇸 対米国詳細</button>
+                  </div>
+                </div>
                 </div>
                 <button id="bat-toggle-monthly-btn" onclick="batToggleMonthly()" style="
                   font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
@@ -4886,6 +4897,145 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="chart-title">📊 動力電池サプライヤー企業数（社）</div>
                 <div class="chart-subtitle">月別企業数　2021〜2026年</div>
                 <div id="ec-bat-companies" class="echart-box" style="height:380px"></div>
+              </div>
+            </div>
+
+            <!-- ===== 🚢 電池輸出 ペイン群 ===== -->
+
+            <!-- 輸出-1: リチウム / ソーラー 月次推移 -->
+            <div class="cds-pane" id="bat-export-trend">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🔋 リチウム電池 月次輸出額推移（億ドル）</div>
+                    <div class="chart-subtitle">2022〜2026年　2026年3月：97億ドル（前年同月比+69%）　1-3月累計：240億ドル（+55%）　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-li-monthly" class="echart-box" style="height:360px"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">☀️ 太陽能電池 月次輸出額推移（億ドル）</div>
+                    <div class="chart-subtitle">2022〜2026年　2026年3月：91億ドル（前年同月比+84%）　1-3月累計：172億ドル（+34%）　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-solar-monthly" class="echart-box" style="height:360px"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">📊 リチウム電池 vs 太陽能電池 年度輸出額（億ドル）</div>
+                    <div class="chart-subtitle">2021〜2025年通年・2026年1-3月累計　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-annual-compare" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 輸出-2: 単価・数量推移 -->
+            <div class="cds-pane" id="bat-export-detail">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">💰 リチウム電池 月次平均単価推移（万ドル/トン）</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：1.43万ドル/トン（前年同月比-15%）　通年-12%　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-price-monthly" class="echart-box" style="height:360px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📦 リチウム電池 月次輸出重量(万トン)</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：68万トン　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-volume" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📉 単価 前年同期比 推移（%）</div>
+                    <div class="chart-subtitle">2022〜2026年月次　マイナス＝価格下落　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-price-yoy" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 輸出-3: 地域別シェア推移 -->
+            <div class="cds-pane" id="bat-export-region-share">
+              <div class="chart-card">
+                <div class="chart-title">🌍 リチウム電池 地域別 輸出シェア推移（%）</div>
+                <div class="chart-subtitle">欧州・東南アジア・米国・カナダ・日韓ほか　2021〜2025年通年・2026年通年（1-3月時点）・26/1〜26/3月　出典：中国税関総署（崔東樹）</div>
+                <div id="ec-bat-export-region-share" class="echart-box" style="height:520px"></div>
+              </div>
+            </div>
+
+            <!-- 輸出-4: 地域別月次比較 -->
+            <div class="cds-pane" id="bat-export-region-monthly">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🗺️ 地域別 1-3月累計 輸出額比較（億ドル）</div>
+                    <div class="chart-subtitle">2025年同期 vs 2026年1-3月累計　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-region-q1" class="echart-box" style="height:380px"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">📈 地域別 1-3月累計 前年同期比（%）</div>
+                    <div class="chart-subtitle">対米国・カナダ大幅減・他地域は概ね高成長　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-region-yoy" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 輸出-5: 対欧州詳細 -->
+            <div class="cds-pane" id="bat-export-eu">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🇪🇺 対欧州 リチウム電池 月次輸出額推移（億ドル）</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：39.7億ドル　最大の輸出市場（シェア42%前後）　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-eu-amount" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📦 対欧州 月次輸出重量（万トン）</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：25.5万トン　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-eu-volume" class="echart-box" style="height:320px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">💰 対欧州 平均単価（万ドル/トン）</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：1.56万ドル/トン（前年同月比-13%）　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-eu-price" class="echart-box" style="height:320px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 輸出-6: 対米国詳細 -->
+            <div class="cds-pane" id="bat-export-us">
+              <div class="row g-3">
+                <div class="col-12">
+                  <div class="chart-card">
+                    <div class="chart-title">🇺🇸 対米国 リチウム電池 月次輸出額推移（億ドル）</div>
+                    <div class="chart-subtitle">2021〜2026年　1Q：23億ドル（-29%）　関税影響で大幅縮小（シェア9.6%）　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-us-amount" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">📦 対米国 月次輸出重量（万トン）</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：7.4万トン　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-us-volume" class="echart-box" style="height:320px"></div>
+                  </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                  <div class="chart-card">
+                    <div class="chart-title">💰 対米国 平均単価（万ドル/トン）</div>
+                    <div class="chart-subtitle">2021〜2026年　2026年3月：1.24万ドル/トン（前年同月比-7%）　出典：中国税関総署（崔東樹）</div>
+                    <div id="ec-bat-export-us-price" class="echart-box" style="height:320px"></div>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -13491,6 +13641,15 @@ window.addEventListener('resize', function(){
     var monthlyPanes = ['bat-production','bat-install','bat-lfp-nmc'];
     var btn = document.getElementById('bat-toggle-monthly-btn');
     if (btn) btn.style.display = monthlyPanes.indexOf(id) >= 0 ? '' : 'none';
+    // 引用元リンク切替: 電池輸出系は別URL、それ以外は電池タブのデフォルトURL
+    var srcLink = document.getElementById('cds-source-link');
+    if (srcLink) {
+      var isExport = id && id.indexOf('bat-export-') === 0;
+      var url = isExport
+        ? 'https://mp.weixin.qq.com/s/A2vnk1q1rP7NkO4P8_aJFg'
+        : 'https://mp.weixin.qq.com/s/uKBxiZOfY2Pl8odGuuGt7g';
+      srcLink.href = url; srcLink.textContent = url;
+    }
   };
 
   // ---------- サブナビ クリック ----------
@@ -14013,6 +14172,379 @@ window.addEventListener('resize', function(){
     });
   }
 
+  // ============================================================
+  //  🚢 電池輸出 モジュール
+  //  出所: 海関総署（崔東樹レポート 2026年4月版）
+  // ============================================================
+
+  // ---------- 共通：月ラベル / 年カラー ----------
+  var EXP_MONTHS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+  var EXP_YEAR_COLORS = {
+    '2021': '#9CA3AF',  // gray
+    '2022': '#5B9BD5',  // blue (matches img)
+    '2023': '#5CB85C',  // green
+    '2024': '#F39C12',  // orange/yellow
+    '2025': '#000000',  // black (matches img)
+    '2026': '#E74C3C'   // red (matches img)
+  };
+
+  // ---------- データ：リチウム電池 月次出口額（億ドル） ----------
+  var EXP_LI_MONTHLY = {
+    '2022': [33,23,33,34,38,41,47,50,50,48,53,59],
+    '2023': [56,46,57,53,55,52,50,57,59,56,55,53],
+    '2024': [50,37,45,43,46,51,54,58,53,56,58,60],
+    '2025': [56,41,58,61,59,66,70,72,71,70,68,76],
+    '2026': [74,68,97,null,null,null,null,null,null,null,null,null]
+  };
+  var EXP_LI_ANNUAL = { '2022':509, '2023':649, '2024':611, '2025':768, '2026':240 }; // 2026は1-3月累計
+
+  // ---------- データ：太陽能電池 月次出口額（億ドル） ----------
+  var EXP_SOLAR_MONTHLY = {
+    '2022': [65,82,82,70,86,91,94,86,75,70,64,63],
+    '2023': [81,75,107,89,92,82,63,67,67,54,51,47],
+    '2024': [61,56,64,57,57,58,52,49,40,43,36,39],
+    '2025': [46,33,49,45,48,44,44,58,56,45,48,46],
+    '2026': [41,41,91,null,null,null,null,null,null,null,null,null]
+  };
+  var EXP_SOLAR_ANNUAL = { '2022':928, '2023':876, '2024':612, '2025':564, '2026':172 };
+
+  // ---------- データ：リチウム電池 月次平均単価（万ドル/トン）画像⑥ ----------
+  var EXP_LI_PRICE_MONTHLY = {
+    '2021': [3.08,3.05,3.03,2.92,2.90,2.98,2.98,2.98,2.98,2.96,2.88,2.86],
+    '2022': [3.00,2.97,2.74,3.09,2.81,2.84,2.89,2.86,2.92,2.86,2.78,2.80],
+    '2023': [2.86,3.04,2.88,2.88,2.81,2.83,2.73,2.73,2.72,2.59,2.44,2.44],
+    '2024': [2.47,2.40,2.35,2.23,2.12,2.05,1.90,1.91,1.90,1.84,1.80,1.75],
+    '2025': [1.71,1.71,1.68,1.65,1.60,1.51,1.53,1.64,1.58,1.45,1.51,1.45],
+    '2026': [1.55,1.51,1.43,null,null,null,null,null,null,null,null,null]
+  };
+
+  // ---------- データ：リチウム電池 月次出口重量（万トン）画像⑥ ----------
+  // 元データはトン単位、万トンに換算（÷10000）
+  var EXP_LI_VOLUME_MONTHLY = {
+    '2021': [6.28,5.40,6.83,6.59,6.69,6.41,7.21,9.06,8.98,9.15,11.08,12.13],
+    '2022': [11.07,7.64,11.95,10.91,13.66,14.43,16.13,17.64,17.10,16.95,18.99,21.01],
+    '2023': [19.75,15.18,19.85,18.45,19.67,18.49,18.30,20.83,21.60,21.61,22.71,21.64],
+    '2024': [20.29,15.46,19.00,19.30,21.91,25.00,28.12,30.26,27.83,30.34,32.20,34.61],
+    '2025': [32.64,24.16,34.34,37.28,36.62,43.62,46.16,43.74,44.86,48.11,45.00,52.15],
+    '2026': [47.99,44.71,68.07,null,null,null,null,null,null,null,null,null]
+  };
+
+  // ---------- データ：単価 前年同期比（%）画像⑥ ----------
+  var EXP_LI_YOY_MONTHLY = {
+    '2022': [-3,-3,-10,6,-3,-5,-3,-4,-2,-4,-4,-2],
+    '2023': [-5,2,5,-7,0,-1,-5,-5,-7,-9,-12,-13],
+    '2024': [-13,-21,-18,-23,-25,-28,-30,-30,-30,-29,-26,-28],
+    '2025': [-31,-29,-29,-26,-24,-26,-20,-15,-17,-21,-16,-17],
+    '2026': [-9,-12,-15,null,null,null,null,null,null,null,null,null]
+  };
+
+  // ---------- データ：地域別シェア推移（%）画像④ ----------
+  // 列: 2021,2022,2023,2024,2025,2026年(1-3月時点),26/1,26/2,26/3
+  var EXP_REGION_SHARE_LABELS = ['2021年','2022年','2023年','2024年','2025年','2026年\n1-3月','26/1月','26/2月','26/3月'];
+  var EXP_REGION_SHARE = [
+    { name:'欧州',     color:'#1F4E79', data:[33.1,41.2,38.5,36.3,40.5,42.1,44.4,41.6,40.7] },
+    { name:'東南アジア', color:'#ED7D31', data:[21.9,13.0,10.0,11.9,12.1,11.6,11.9,11.4,11.6] },
+    { name:'米国・カナダ',     color:'#2E7D32', data:[17.9,20.3,21.7,25.9,16.1,9.6, 8.9,10.5, 9.4] },
+    { name:'日韓',     color:'#5BC0DE', data:[15.1,13.6,15.8,10.0, 7.7, 8.5, 7.7, 8.7, 9.0] },
+    { name:'中東',     color:'#C71585', data:[ 1.1, 1.7, 2.2, 2.9, 4.5, 5.2, 3.6, 5.1, 6.5] },
+    { name:'南アジア',   color:'#7CB342', data:[ 4.8, 3.9, 3.6, 3.9, 5.4, 6.3, 6.3, 6.6, 6.1] },
+    { name:'大洋州',   color:'#1565C0', data:[ 1.2, 1.4, 2.7, 3.0, 4.6, 5.9, 5.4, 6.2, 6.1] },
+    { name:'中南米',   color:'#A0522D', data:[ 2.6, 2.2, 1.4, 2.6, 4.2, 4.0, 4.8, 3.7, 3.7] },
+    { name:'露・中央亜', color:'#0F4C5C', data:[ 2.1, 2.1, 3.0, 3.0, 3.4, 3.8, 3.1, 3.1, 3.6] },
+    { name:'アフリカ',  color:'#9CA3AF', data:[ 1.7, 2.1, 3.5, 2.2, 3.0, 3.3, 3.7, 3.0, 3.2] }
+  ];
+
+  // ---------- データ：地域別 1-3月累計 出口額（億ドル）画像⑤ ----------
+  var EXP_REGION_Q1_NAMES = ['欧州','米国・カナダ','東南アジア','日韓','南アジア','大洋州','中東','中南米','アフリカ','露・中央亜'];
+  var EXP_REGION_Q1_2025 = [60,33,18,12, 7, 4, 8, 4, 4, 2];   // 25年1-3月累計
+  var EXP_REGION_Q1_2026 = [101,23,28,21,15,14,12,10, 8, 7];  // 26年1-3月累計
+  var EXP_REGION_Q1_YOY  = [68,-29,52,59,88,235,43,152,88,294]; // %
+
+  // ---------- データ：対欧州 月次（画像⑧） ----------
+  var EXP_EU_AMOUNT = {  // 万ドル → 億ドル換算（÷10000）
+    '2021': [5.89,5.52,6.88,5.94,7.09,6.99,6.91,8.36,8.24,9.15,10.61,12.10],
+    '2022': [11.13,8.75,12.02,12.29,14.60,16.35,21.13,21.18,21.55,23.41,22.90,24.44],
+    '2023': [22.84,20.44,24.61,20.66,21.11,18.72,18.13,23.46,24.60,20.98,17.00,17.52],
+    '2024': [19.79,16.05,17.39,15.76,17.72,18.66,18.25,22.59,20.10,19.95,17.14,18.55],
+    '2025': [19.28,17.04,23.79,26.35,25.69,24.59,26.93,32.17,30.09,27.80,24.42,31.51],
+    '2026': [33.05,28.15,39.70,null,null,null,null,null,null,null,null,null]
+  };
+  var EXP_EU_VOLUME = {  // トン → 万トン換算（÷10000）
+    '2021': [1.96,1.76,2.31,2.12,2.49,2.44,2.47,2.92,2.92,3.26,3.86,4.31],
+    '2022': [3.79,3.09,4.23,4.25,5.10,5.71,7.41,7.15,7.22,7.89,7.86,8.14],
+    '2023': [7.37,6.53,8.11,6.71,6.89,6.15,6.15,8.28,8.55,7.63,6.29,6.94],
+    '2024': [7.64,6.54,7.14,6.87,8.12,8.92,8.87,10.82,9.84,10.03,8.64,9.46],
+    '2025': [10.24,9.33,13.31,14.05,14.02,13.09,14.25,17.82,17.95,17.55,14.74,20.52],
+    '2026': [20.25,17.12,25.51,null,null,null,null,null,null,null,null,null]
+  };
+  var EXP_EU_PRICE = {
+    '2021': [3.01,3.13,2.98,2.81,2.85,2.87,2.81,2.87,2.82,2.81,2.75,2.81],
+    '2022': [2.93,2.83,2.84,2.89,2.86,2.86,2.85,2.96,2.98,2.97,2.91,3.00],
+    '2023': [3.10,3.13,3.03,3.08,3.06,3.05,2.95,2.83,2.88,2.75,2.70,2.52],
+    '2024': [2.59,2.45,2.44,2.29,2.18,2.09,2.06,2.09,2.04,1.99,1.98,1.96],
+    '2025': [1.88,1.83,1.79,1.88,1.83,1.88,1.89,1.81,1.72,1.58,1.66,1.54],
+    '2026': [1.63,1.64,1.56,null,null,null,null,null,null,null,null,null]
+  };
+
+  // ---------- データ：対米国 月次（画像⑦） ----------
+  var EXP_US_AMOUNT = {
+    '2021': [3.27,2.89,3.93,3.48,2.62,2.86,3.56,4.93,4.71,5.00,5.98,7.48],
+    '2022': [6.37,4.53,7.66,5.41,8.75,8.90,7.32,9.95,9.45,8.78,11.03,15.05],
+    '2023': [13.64,8.33,11.18,10.79,10.47,8.91,10.04,11.03,12.78,15.35,15.48,12.87],
+    '2024': [11.74,8.46,10.58,10.98,8.83,11.26,15.88,14.10,13.68,14.70,18.90,19.42],
+    '2025': [13.23,7.65,11.55,11.62,6.97,11.18,14.46,7.08,8.42,10.72,10.62, 9.73],
+    '2026': [6.64,7.09,9.19,null,null,null,null,null,null,null,null,null]
+  };
+  var EXP_US_VOLUME = {
+    '2021': [1.12,1.03,1.50,1.41,0.90,0.95,1.29,1.87,1.95,1.96,2.54,3.20],
+    '2022': [2.66,1.83,3.72,2.27,3.96,3.74,2.93,4.31,3.98,4.08,5.22,7.05],
+    '2023': [6.51,3.85,5.42,5.09,4.89,4.03,4.81,4.89,5.97,7.35,8.00,6.39],
+    '2024': [6.03,4.30,5.25,5.33,4.73,5.81,9.69,8.85,8.65,9.55,12.59,13.52],
+    '2025': [9.34,5.56,8.70,8.96,5.10,8.79,12.54,5.01,6.37,9.68,9.08,7.26],
+    '2026': [4.42,5.69,7.43,null,null,null,null,null,null,null,null,null]
+  };
+  var EXP_US_PRICE = {
+    '2021': [2.91,2.80,2.63,2.47,2.91,3.01,2.75,2.64,2.42,2.55,2.35,2.34],
+    '2022': [2.39,2.47,2.06,2.38,2.21,2.38,2.50,2.31,2.37,2.15,2.11,2.13],
+    '2023': [2.10,2.16,2.06,2.12,2.14,2.21,2.09,2.25,2.14,2.09,1.94,2.03],
+    '2024': [1.95,1.97,2.01,2.06,1.87,1.94,1.64,1.59,1.58,1.54,1.50,1.44],
+    '2025': [1.42,1.38,1.33,1.30,1.37,1.27,1.15,1.41,1.32,1.11,1.17,1.34],
+    '2026': [1.50,1.25,1.24,null,null,null,null,null,null,null,null,null]
+  };
+
+  // ============================================================
+  //  共通描画ヘルパー：年比較ラインチャート
+  // ============================================================
+  function _renderYearLineChart(ecId, dataByYear, opts) {
+    opts = opts || {};
+    var ec = initOrGet(ecId); if(!ec) return;
+    var unit = opts.unit || '';
+    var years = Object.keys(dataByYear);
+    var series = years.map(function(y){
+      var isLatest = (y === '2026');
+      return {
+        name: y + '年',
+        type: 'line',
+        data: dataByYear[y],
+        connectNulls: false,
+        smooth: false,
+        symbol: 'circle',
+        symbolSize: isLatest ? 7 : 5,
+        lineStyle: {
+          width: isLatest ? 3 : (y==='2025' ? 2.5 : 1.8),
+          color: EXP_YEAR_COLORS[y]
+        },
+        itemStyle: { color: EXP_YEAR_COLORS[y] },
+        z: isLatest ? 10 : 1,
+        label: isLatest ? {
+          show: true, position:'top', fontSize:11, fontWeight:'bold',
+          color: EXP_YEAR_COLORS[y],
+          formatter: function(p){ return p.value != null ? p.value : ''; }
+        } : { show:false }
+      };
+    });
+    ec.setOption({
+      tooltip: Object.assign(baseTooltip(), {
+        formatter: function(params){
+          if (!params || !params.length) return '';
+          var s = '<b>' + params[0].axisValueLabel + '</b><br/>';
+          // 値の大きい順
+          var sorted = params.slice().filter(function(p){return p.value != null;}).sort(function(a,b){return b.value - a.value;});
+          sorted.forEach(function(p){
+            s += '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+p.color+';margin-right:4px;vertical-align:middle"></span>';
+            s += p.seriesName + ': <b>' + p.value + '</b> ' + unit + '<br/>';
+          });
+          return s;
+        }
+      }),
+      legend: baseLegend({top:8}),
+      grid: Object.assign(baseGrid(), {top:50, bottom:55}),
+      xAxis: Object.assign(baseXAxis(EXP_MONTHS), {axisLabel:{fontFamily:FONT,fontSize:11,rotate:0,color:C.axis}}),
+      yAxis: baseYAxis(unit),
+      series: series
+    });
+  }
+
+  // ============================================================
+  //  E1. リチウム電池 月次出口額
+  // ============================================================
+  function renderExportLiMonthly(){
+    _renderYearLineChart('ec-bat-export-li-monthly', EXP_LI_MONTHLY, {unit:'億ドル'});
+  }
+
+  // E1-2. ソーラー電池 月次出口額
+  function renderExportSolarMonthly(){
+    _renderYearLineChart('ec-bat-export-solar-monthly', EXP_SOLAR_MONTHLY, {unit:'億ドル'});
+  }
+
+  // E1-3. リチウム vs ソーラー 年度比較
+  function renderExportAnnualCompare(){
+    var ec = initOrGet('ec-bat-export-annual-compare'); if(!ec) return;
+    var labels = ['2021年','2022年','2023年','2024年','2025年','2026年\n1-3月累計'];
+    var li    = [284, 509, 649, 611, 768, 240];
+    var solar = [null, 928, 876, 612, 564, 172];
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'億ドル', showTotal:false}),
+      legend: baseLegend({top:8}),
+      grid: Object.assign(baseGrid(), {top:50, bottom:55}),
+      xAxis: Object.assign(baseXAxis(labels), {axisLabel:{fontFamily:FONT,fontSize:11,rotate:0,color:C.axis}}),
+      yAxis: baseYAxis('億ドル'),
+      series: [
+        { name:'リチウム電池', type:'bar', barGap:'10%', itemStyle:{color:'#E74C3C'},
+          label:{show:true, position:'top', fontSize:11, fontWeight:'bold', color:'#E74C3C', formatter:function(p){return p.value!=null?p.value:'';}},
+          data: li },
+        { name:'太陽能電池', type:'bar', itemStyle:{color:'#F39C12'},
+          label:{show:true, position:'top', fontSize:11, fontWeight:'bold', color:'#F39C12', formatter:function(p){return p.value!=null?p.value:'';}},
+          data: solar }
+      ]
+    });
+  }
+
+  // ============================================================
+  //  E2. 単価・数量推移
+  // ============================================================
+  function renderExportPriceMonthly(){
+    _renderYearLineChart('ec-bat-export-price-monthly', EXP_LI_PRICE_MONTHLY, {unit:'万ドル/トン'});
+  }
+
+  function renderExportVolume(){
+    _renderYearLineChart('ec-bat-export-volume', EXP_LI_VOLUME_MONTHLY, {unit:'万トン'});
+  }
+
+  function renderExportPriceYoy(){
+    var ec = initOrGet('ec-bat-export-price-yoy'); if(!ec) return;
+    var years = Object.keys(EXP_LI_YOY_MONTHLY);
+    var series = years.map(function(y){
+      var isLatest = (y === '2026');
+      return {
+        name: y + '年',
+        type: 'line',
+        data: EXP_LI_YOY_MONTHLY[y],
+        connectNulls: false,
+        smooth: false,
+        symbol: 'circle',
+        symbolSize: isLatest ? 7 : 5,
+        lineStyle: { width: isLatest ? 3 : 1.8, color: EXP_YEAR_COLORS[y] },
+        itemStyle: { color: EXP_YEAR_COLORS[y] },
+        z: isLatest ? 10 : 1,
+        label: isLatest ? {
+          show: true, position:'top', fontSize:11, fontWeight:'bold',
+          color: EXP_YEAR_COLORS[y],
+          formatter: function(p){ return p.value != null ? p.value+'%' : ''; }
+        } : { show:false }
+      };
+    });
+    ec.setOption({
+      tooltip: Object.assign(baseTooltip(), {
+        formatter: function(params){
+          if (!params || !params.length) return '';
+          var s = '<b>' + params[0].axisValueLabel + '</b><br/>';
+          params.slice().filter(function(p){return p.value != null;}).forEach(function(p){
+            s += '<span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:'+p.color+';margin-right:4px;vertical-align:middle"></span>';
+            s += p.seriesName + ': <b>' + p.value + '%</b><br/>';
+          });
+          return s;
+        }
+      }),
+      legend: baseLegend({top:8}),
+      grid: Object.assign(baseGrid(), {top:50, bottom:55}),
+      xAxis: Object.assign(baseXAxis(EXP_MONTHS), {axisLabel:{fontFamily:FONT,fontSize:11,rotate:0,color:C.axis}}),
+      yAxis: Object.assign(baseYAxis('%'), {axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:11, color:C.axis}}),
+      series: series
+    });
+  }
+
+  // ============================================================
+  //  E3. 地域別シェア推移（積み上げ100%）
+  // ============================================================
+  function renderExportRegionShare(){
+    var ec = initOrGet('ec-bat-export-region-share'); if(!ec) return;
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'%', showTotal:false}),
+      legend: baseLegend({type:'scroll', top:8}),
+      grid: Object.assign(baseGrid(), {top:55, bottom:70}),
+      xAxis: Object.assign(baseXAxis(EXP_REGION_SHARE_LABELS), {axisLabel:{fontFamily:FONT,fontSize:10,rotate:0,color:C.axis}}),
+      yAxis: Object.assign(baseYAxis('%'), {max:100, axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:11, color:C.axis}}),
+      series: EXP_REGION_SHARE.map(function(m){
+        return {
+          name: m.name,
+          type: 'bar',
+          stack: 's',
+          itemStyle: { color: m.color },
+          data: m.data,
+          label: { show: false }
+        };
+      })
+    });
+  }
+
+  // ============================================================
+  //  E4. 地域別 1-3月累計 出口額比較・前年同期比
+  // ============================================================
+  function renderExportRegionQ1(){
+    var ec = initOrGet('ec-bat-export-region-q1'); if(!ec) return;
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'億ドル', showTotal:false}),
+      legend: baseLegend({top:8}),
+      grid: Object.assign(baseGrid(), {top:50, bottom:55}),
+      xAxis: Object.assign(baseXAxis(EXP_REGION_Q1_NAMES), {axisLabel:{fontFamily:FONT,fontSize:11,rotate:0,color:C.axis}}),
+      yAxis: baseYAxis('億ドル'),
+      series: [
+        { name:'2025年 1-3月累計', type:'bar', itemStyle:{color:'#9CA3AF'}, data: EXP_REGION_Q1_2025,
+          label:{show:true, position:'top', fontSize:10, color:'#6b7280', formatter:function(p){return p.value;}} },
+        { name:'2026年 1-3月累計', type:'bar', itemStyle:{color:'#E74C3C'}, data: EXP_REGION_Q1_2026,
+          label:{show:true, position:'top', fontSize:11, fontWeight:'bold', color:'#E74C3C', formatter:function(p){return p.value;}} }
+      ]
+    });
+  }
+
+  function renderExportRegionYoy(){
+    var ec = initOrGet('ec-bat-export-region-yoy'); if(!ec) return;
+    // 増は赤、減は青
+    var data = EXP_REGION_Q1_YOY.map(function(v){
+      return { value: v, itemStyle: { color: v >= 0 ? '#E74C3C' : '#5B9BD5' } };
+    });
+    ec.setOption({
+      tooltip: Object.assign(baseTooltip(), {
+        formatter: function(params){
+          if (!params || !params.length) return '';
+          var p = params[0];
+          return '<b>' + p.axisValueLabel + '</b><br/>前年同期比: <b>' + (p.value>=0?'+':'') + p.value + '%</b>';
+        }
+      }),
+      grid: Object.assign(baseGrid(), {top:30, bottom:55}),
+      xAxis: Object.assign(baseXAxis(EXP_REGION_Q1_NAMES), {axisLabel:{fontFamily:FONT,fontSize:11,rotate:0,color:C.axis}}),
+      yAxis: Object.assign(baseYAxis('%'), {axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:11, color:C.axis}}),
+      series: [{
+        name: '前年同期比',
+        type: 'bar',
+        data: data,
+        label: { show: true, position: 'top', fontSize: 11, fontWeight: 'bold',
+                 formatter: function(p){ return (p.value>=0?'+':'') + p.value + '%'; },
+                 color: '#333' },
+        markLine: {
+          silent: true, symbol: 'none',
+          lineStyle: { type: 'dashed', color: '#888', width: 1 },
+          data: [{ yAxis: 0 }]
+        }
+      }]
+    });
+  }
+
+  // ============================================================
+  //  E5. 対欧州詳細
+  // ============================================================
+  function renderExportEuAmount(){  _renderYearLineChart('ec-bat-export-eu-amount', EXP_EU_AMOUNT, {unit:'億ドル'}); }
+  function renderExportEuVolume(){  _renderYearLineChart('ec-bat-export-eu-volume', EXP_EU_VOLUME, {unit:'万トン'}); }
+  function renderExportEuPrice(){   _renderYearLineChart('ec-bat-export-eu-price',  EXP_EU_PRICE,  {unit:'万ドル/トン'}); }
+
+  // ============================================================
+  //  E6. 対米国詳細
+  // ============================================================
+  function renderExportUsAmount(){  _renderYearLineChart('ec-bat-export-us-amount', EXP_US_AMOUNT, {unit:'億ドル'}); }
+  function renderExportUsVolume(){  _renderYearLineChart('ec-bat-export-us-volume', EXP_US_VOLUME, {unit:'万トン'}); }
+  function renderExportUsPrice(){   _renderYearLineChart('ec-bat-export-us-price',  EXP_US_PRICE,  {unit:'万ドル/トン'}); }
+
   // ---------- 公開 API ----------
   var BAT_RENDER = {
     'bat-production':     function(){ renderProduction(); },
@@ -14023,7 +14555,14 @@ window.addEventListener('resize', function(){
     'bat-share-total':    function(){ renderShareTotal(); },
     'bat-share-lfp':      function(){ renderShareLfp(); },
     'bat-share-nmc':      function(){ renderShareNmc(); },
-    'bat-companies':      function(){ renderCompanies(); }
+    'bat-companies':      function(){ renderCompanies(); },
+    // ---- 🚢 電池輸出 ----
+    'bat-export-trend':           function(){ renderExportLiMonthly(); renderExportSolarMonthly(); renderExportAnnualCompare(); },
+    'bat-export-detail':          function(){ renderExportPriceMonthly(); renderExportVolume(); renderExportPriceYoy(); },
+    'bat-export-region-share':    function(){ renderExportRegionShare(); },
+    'bat-export-region-monthly':  function(){ renderExportRegionQ1(); renderExportRegionYoy(); },
+    'bat-export-eu':              function(){ renderExportEuAmount(); renderExportEuVolume(); renderExportEuPrice(); },
+    'bat-export-us':              function(){ renderExportUsAmount(); renderExportUsVolume(); renderExportUsPrice(); }
   };
 
   window.batRender = function(id) {

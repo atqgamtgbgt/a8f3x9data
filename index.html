@@ -3774,6 +3774,13 @@ body.tray-open { padding-bottom: 105px; }
                   </div>
                 </div>
 
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📝 解説 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" onclick="ztGo('zt-monthly-comment');ztActBtn(this)">📝 月次コメント</button>
+                  </div>
+                </div>
+
               </div>
             </div>
 
@@ -4298,6 +4305,124 @@ body.tray-open { padding-bottom: 105px; }
                   <button id="seg-btn-rt" class="btn btn-sm btn-outline-secondary" onclick="segSetView('rt',this)" style="font-size:11px;padding:2px 10px;">小売</button>
                 </div>
                 <div id="ec-zt-segment" class="echart-box" style="height:480px"></div>
+              </div>
+            </div>
+
+            <!-- ===== 月次コメント（崔東樹 分析家視点） ===== -->
+            <div class="cds-pane" id="zt-monthly-comment">
+              <div class="chart-card">
+                <div class="chart-title">📝 月次コメント — 分析家視点</div>
+                <div class="chart-subtitle">2025年1月〜7月　数字に表れない政策・市場心理・季節性などの解釈　出典：乗聯会（崔東樹）</div>
+                <style>
+                  .cds-cmt-list { display:flex; flex-direction:column; gap:14px; padding:8px 0; font-family:'Noto Sans JP',sans-serif; }
+                  .cds-cmt-card { background:#fafbfc; border-left:4px solid #3b82f6; border-radius:6px; padding:14px 18px; }
+                  .cds-cmt-card[data-mood="weak"]    { border-left-color:#94a3b8; }
+                  .cds-cmt-card[data-mood="recover"] { border-left-color:#84cc16; }
+                  .cds-cmt-card[data-mood="strong"]  { border-left-color:#10b981; }
+                  .cds-cmt-card[data-mood="caution"] { border-left-color:#f59e0b; }
+                  .cds-cmt-card[data-mood="brake"]   { border-left-color:#ef4444; }
+                  .cds-cmt-month { font-size:12px; font-weight:600; color:#6b7280; letter-spacing:0.05em; }
+                  .cds-cmt-headline { font-size:15px; font-weight:700; color:#1e3a8a; margin:4px 0 10px; line-height:1.45; }
+                  .cds-cmt-points { margin:0; padding-left:20px; color:#374151; font-size:13px; line-height:1.75; }
+                  .cds-cmt-points li { margin-bottom:5px; }
+                  .cds-cmt-points li:last-child { margin-bottom:0; }
+                  .cds-cmt-points strong { color:#dc2626; font-weight:600; }
+                  .cds-cmt-points em { font-style:normal; color:#0f766e; font-weight:600; }
+                </style>
+                <div class="cds-cmt-list">
+
+                  <article class="cds-cmt-card" data-mood="weak">
+                    <div class="cds-cmt-month">2025年 1月</div>
+                    <div class="cds-cmt-headline">春節前置で零售減速、政策過渡期は「購車最適時」</div>
+                    <ul class="cds-cmt-points">
+                      <li>ラニーニャで東部地区は降水少・気温高、用車需求が弱め。さらに春節1/29で多くの消費者が2024年末に前倒し購入し、1月の有効販売日数も4日以上短縮 → <strong>零售マイナスは織り込み済み</strong>と分析家は評価</li>
+                      <li>2024年報廃更新政策の年度終了直後、1月は政策過渡期 — <em>「2025年購車補貼を享受する最適時間」</em>として位置付け</li>
+                      <li>春節前は伝統的に低産・販売期、零售火爆＋進貨少 = 実質的な春節在庫一掃の節目</li>
+                      <li>自主品牌の<strong>「全面遥遥領先」</strong>を強調 — 製品力と渠道管理のモデル革新が継続支持を獲得する構造へ</li>
+                      <li>通期で<em>「低開高走」</em>（低くスタート→高く走る）の潜在力大きいと予測</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="recover">
+                    <div class="cds-cmt-month">2025年 2月</div>
+                    <div class="cds-cmt-headline">春節後の開局月、低基数効果で開門紅</div>
+                    <ul class="cds-cmt-points">
+                      <li>春節1/29を経た春節後最初の月、2025年報廃更新・置換更新政策が段階的に始動</li>
+                      <li>価格戦は往年より相対的に温和。<strong>車企が主動的に価格期待を安定化</strong>、燃油車市場の促銷は基本平穏</li>
+                      <li>国内外マクロ環境が想定より好転、消費者心理良好、車企の春節期間マーケティング継続発力</li>
+                      <li>2024年2月の販売基数が低い効果 + 春節後の販売エンジン早期始動で<em>「2月開門紅」</em>を実現</li>
+                      <li>1-2月累計が前年比正成長へ復帰 — 政策始動による市場信頼回復が背景</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="strong">
+                    <div class="cds-cmt-month">2025年 3月</div>
+                    <div class="cds-cmt-headline">過去10年で最高の3月同比、「双新」が内卷を緩和</div>
+                    <ul class="cds-cmt-points">
+                      <li><strong>「双新政策」</strong>（報廃更新・以旧換新）推進で価格戦が温和化、業界内卷状態が改善</li>
+                      <li>3月零售は2018年3月以来の歴史2番手、<strong>3月同比増速は過去10年で最高</strong> — 過去10年の3月低成長特徴を逆転</li>
+                      <li>価格戦は表面的には落ち着いたが「年款増配・車主権益調整」など<em>隠形優惠が層出不窮</em> — 単純な値引きから実質値引きへ重心シフト</li>
+                      <li>厂家発力による積極的な在庫蓄積期入り — 渠道補充が本格化</li>
+                      <li>NEV零售浸透率は「報廃更新＋以旧換新＋NEV免征購置税」の<em>普恵托底</em>背景で強勢回復</li>
+                      <li>1Q対露出口は減少も、自主ロシア市場份額55%以上を依然維持</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="strong">
+                    <div class="cds-cmt-month">2025年 4月</div>
+                    <div class="cds-cmt-headline">降価潮の明顕降温、増換購が購車消費の「絶対主流」へ</div>
+                    <ul class="cds-cmt-points">
+                      <li>以旧換新政策の<strong>「啓動早・補貼一歩到位」</strong>で年初市場成長良好、価格戦の温和化が継続</li>
+                      <li>4月同比増速は近10年正常年同期最高 — <em>季度循環波動の構造的弱体化</em>を示唆（季節性が薄れる）</li>
+                      <li>降価車型が前年4月比で大幅減 — <em>降価潮の明顕降温</em>が鮮明、「年款増配」型の隠形優惠へ完全シフト</li>
+                      <li>燃油車促銷が10ヶ月連続22%前後で安定 — 業界の自律規律化が進行</li>
+                      <li>私人購車用户の<strong>約70%が以旧換新受益者</strong>、私人首購は31%まで低下 → 「消費昇級の増換購が購車の絶対主流」化</li>
+                      <li>1-4月の在庫が前年比で正常化 — 過去5年続いた1-4月在庫減少パターンが転換</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="strong">
+                    <div class="cds-cmt-month">2025年 5月</div>
+                    <div class="cds-cmt-headline">淡季不淡、両新政策の零售消費への巨大貢献</div>
+                    <ul class="cds-cmt-points">
+                      <li>「両新」政策の引っ張りで春節後車市の熱度が継続強化、各省市が地方促消費政策を出台</li>
+                      <li>車展などオフラインイベントの全面始動が需要押し上げに寄与</li>
+                      <li>以旧換新申請が4月から+13% — 私人購車の約70%が受益者、首購が30%まで低下する構造が定着</li>
+                      <li>換購需求の継続成長で<strong>「淡季不淡」</strong>（オフシーズンが薄くない）が明顕に</li>
+                      <li>5月零售が3月の高位水準に接近 — <em>以旧換新の国内零售消費への巨大貢献</em>を体現</li>
+                      <li>厂商零售・批发・生産すべて当月歴史最高記録、自主品牌の強勢成長継続</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="caution">
+                    <div class="cds-cmt-month">2025年 6月</div>
+                    <div class="cds-cmt-headline">家電は「6.18」前倒しで爆発、汽車は信貸縮減で乖離</div>
+                    <ul class="cds-cmt-points">
+                      <li>「両新」補貼の加力扩围で<strong>「政策红包」</strong>効果が顕著化</li>
+                      <li>主流eコマースが「6·18」を5月13日へ前倒し → 家電核心品類は爆発成長、業界零售額が全面加速</li>
+                      <li>一方で<strong>汽車は信貸政策が引き締まる</strong>：各地高息高返政策の収縮、貸款返利補貼車価力度の大幅縮小 → 経銷商の販売運営圧力が劇増</li>
+                      <li>一部都市で以旧換新補貼資金が段階性緊張、置換補貼申請を暫停する都市も</li>
+                      <li><em>同じ「以旧換新」フレームでも汽車類消費増速が家電類より大幅低い</em> — 分析家が明顕なコントラストを指摘</li>
+                      <li>政策到期を利用した経銷商の<strong>「末班车効應」</strong>（駆け込み需要喚起）が短期増量を提供</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="brake">
+                    <div class="cds-cmt-month">2025年 7月</div>
+                    <div class="cds-cmt-headline">「前低中高後平」へ修正 — 観望情緒で15%増速が6%へ急減速</div>
+                    <ul class="cds-cmt-points">
+                      <li>外部衝撃増大・内部困難挑戦の重畳という複雑局面で、国家の<em>「強有力な対冲平衡措置」</em>が上半年の強成長を支撑</li>
+                      <li>1月-12% → 1-6月+11% という<strong>V字回復軌道</strong>で「前低中高」走勢を実現</li>
+                      <li>しかし<strong>第3批補貼資金下発の空挡期</strong>が出現 → 消費者の感知購車コスト上昇 → <strong>新一輪の観望情緒</strong>形成</li>
+                      <li>高息高返政策の収縮・貸款返利補貼力度の大幅縮小で経銷商の販売圧力が劇増</li>
+                      <li>結果、車市増速が3-6月の15%から7月の6%へ急減速 — 高基数下の減速特徴</li>
+                      <li><strong>通期見通しを「前低中高後平」に修正</strong> — 後半は安定推移と予測</li>
+                      <li>豪華車零售-20%（環比-29%）— <em>「伝統豪華車市場が合資より圧力大」</em>と分析家が初めて警鐘</li>
+                      <li>頭部車企の顔ぶれが微変化：BYD抜けて<em>吉利・奇瑞・長安・長城</em>を列挙 — 自主間競争の構造シフトを示唆</li>
+                    </ul>
+                  </article>
+
+                </div>
               </div>
             </div>
 

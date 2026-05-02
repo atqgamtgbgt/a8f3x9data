@@ -4188,7 +4188,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-summary">
               <div class="chart-card">
                 <div class="chart-title">月次 小売・卸売・生産・輸出（万台）</div>
-                <div class="chart-subtitle">2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">2025年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-summary" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -4223,14 +4223,19 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-nev-brand">
               <div class="chart-card">
                 <div class="chart-title">NEV浸透率 ブランド別（高級・合弁・中国系）月次推移（%）</div>
-                <div class="chart-subtitle">出荷ベース浸透率　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">2025年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                  <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
+                  <button id="nbrand-btn-wh" class="btn btn-sm btn-primary active" onclick="nbrandSetView('wh',this)" style="font-size:11px;padding:2px 10px;">出荷</button>
+                  <button id="nbrand-btn-rt" class="btn btn-sm btn-outline-secondary" onclick="nbrandSetView('rt',this)" style="font-size:11px;padding:2px 10px;">小売</button>
+                </div>
                 <div id="ec-zt-nev-brand" class="echart-box" style="height:420px"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-brand-wholesale">
               <div class="chart-card">
                 <div class="chart-title">国籍別 ブランド層別 卸売 月次推移（万台）</div>
-                <div class="chart-subtitle">高級車・合弁・中国系ブランド　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド　2025年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-brand-wholesale" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -4244,7 +4249,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-nation-volume">
               <div class="chart-card">
                 <div class="chart-title">国籍別 卸売台数推移（万台）</div>
-                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2025年3月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2025年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-nation-volume" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -17957,7 +17962,7 @@ window.ztShowPane = function(id) {
 // ── ヘルパー（既存グローバルと同一パターン） ──
 var FONT = 'Noto Sans JP, Helvetica Neue, Arial, sans-serif';
 var MONTHS = ['3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
-var MONTHS_LABEL = ['25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];
+var MONTHS_LABEL = ['25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];
 var MONTHS_TREND = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
 function leg(opt){ return Object.assign({top:8,right:12,textStyle:{fontFamily:FONT,fontSize:11},itemWidth:14,itemHeight:10}, opt||{}); }
@@ -17991,13 +17996,13 @@ function renderSummary(){
     ],
     series:[
       {name:'小売', type:'line', yAxisIndex:0, color:PAL[0], symbol:'circle', symbolSize:5,
-       data:[194,176,194,208,183,200,224,224,222,230,154.8,103.4,164.8], lineStyle:{width:2}},
+       data:[179,138.5,194,176,194,208,183,200,224,224,222,230,154.8,103.4,164.8], lineStyle:{width:2}},
       {name:'卸売（出荷）', type:'line', yAxisIndex:0, color:PAL[1], symbol:'circle', symbolSize:5,
-       data:[242,219,232,248,222,246,280,293,300,279,197,152,238], lineStyle:{width:2}},
+       data:[210,176.5,242,219,232,248,222,246,280,293,300,279,197,152,238], lineStyle:{width:2}},
       {name:'生産', type:'line', yAxisIndex:0, color:PAL[2], symbol:'diamond', symbolSize:5,
-       data:[249,223,228,241,221,241,284,295,309,279,201,137,236], lineStyle:{width:2,type:'dashed'}},
+       data:[209.1,172.9,249,223,228,241,221,241,284,295,309,279,201,137,236], lineStyle:{width:2,type:'dashed'}},
       {name:'輸出', type:'bar', yAxisIndex:1, color:'rgba(245,158,11,0.6)', barMaxWidth:20,
-       data:[39.1,42.3,44.8,47.2,47.5,49.9,52.8,56.8,60,58.8,57.6,55.5,69]}
+       data:[41,34.9,39.1,42.3,44.8,47.2,47.5,49.9,52.8,56.8,60,58.8,57.6,55.5,69]}
     ]
   });
 }
@@ -18116,22 +18121,41 @@ function renderNevPenetration(){
   });
 }
 
-// ── ⑥ NEV浸透率 ブランド別 ──
+// ── ⑥ NEV浸透率 ブランド別（出荷/小売トグル対応） ──
+var _nbrView = 'wh';
+window.nbrandSetView = function(v, btn){
+  _nbrView = v;
+  document.getElementById('nbrand-btn-wh').className = 'btn btn-sm ' + (v==='wh'?'btn-primary active':'btn-outline-secondary');
+  document.getElementById('nbrand-btn-rt').className = 'btn btn-sm ' + (v==='rt'?'btn-primary active':'btn-outline-secondary');
+  renderNevBrand();
+};
+
 function renderNevBrand(){
   var ec = makeEc('ec-zt-nev-brand'); if(!ec) return;
   var months = MONTHS_LABEL;
-  var data = {
-    '高級車':       [36.0,38.4,39.2,32.6,43.5,41.9,40.0,36.9,42.5,39.8,48.2,43.3,43.3],
-    '合弁メーカー': [4.9,6.9,5.7,6.6,6.6,7.1,6.6,7.0,7.2,3.6,4.6,6.4,6.4],
-    '中国系ブランド':[63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,61.7],
-    '全体':         [46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.0,44.3,47.6,48.1,48.1]
+  // 出荷ベース：25.1月〜26.3月の月次データ
+  // 25.1月 出典：崔東樹1月記事「9.全国新能源渗透率-批发」（批发渗透率41.5%、自主54%、豪华34%、合资2%）
+  // 25.2月 出典：崔東樹2月記事「9.全国新能源渗透率-批发」（批发渗透率47%、自主62.1%、豪华26.5%、合资3.2%）
+  var dataWh = {
+    '高級車':       [34,26.5,36.0,38.4,39.2,32.6,43.5,41.9,40.0,36.9,42.5,39.8,48.2,43.3,43.3],
+    '合弁メーカー': [2,3.2,4.9,6.9,5.7,6.6,6.6,7.1,6.6,7.0,7.2,3.6,4.6,6.4,6.4],
+    '中国系ブランド':[54,62.1,63.2,66.2,68.6,66.7,67.4,66.2,68.3,69.8,72.8,57.9,58.9,61.7,61.7],
+    '全体':         [41.5,47.0,46.8,51.7,52.8,49.8,53.2,52.2,53.5,55.3,56.0,44.3,47.6,48.1,48.1]
   };
-  // 最後の月(26.3)のデータは未掲載のためnull
+  // 小売ベース：25.1月・25.2月のみ実値（その他は今後の月次記事で順次追加）
+  // 25.1月 出典：崔東樹1月記事「10.全国新能源渗透率-零售」（零售渗透率41%、自主60.6%、豪华20%、合资3%）
+  // 25.2月 出典：崔東樹2月記事「10.全国新能源渗透率-零售」（零售渗透率49.5%、自主70%、豪华23%、合资4%）
+  var dataRt = {
+    '高級車':       [20,23,null,null,null,null,null,null,null,null,null,null,null,null,null],
+    '合弁メーカー': [3,4,null,null,null,null,null,null,null,null,null,null,null,null,null],
+    '中国系ブランド':[60.6,70,null,null,null,null,null,null,null,null,null,null,null,null,null],
+    '全体':         [41,49.5,null,null,null,null,null,null,null,null,null,null,null,null,null]
+  };
+  var data = (_nbrView === 'rt') ? dataRt : dataWh;
   var colors = ['#8b5cf6','#06b6d4','#ef4444','#3b82f6'];
   var series = Object.keys(data).map(function(nm,i){
     return {name:nm, type:'line', color:colors[i], symbol:'circle', symbolSize:5, data:data[nm], connectNulls:false, lineStyle:{width:2}};
   });
-  // 26年1月のラベルにX表示（春節月）
   ec.setOption({
     tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
       formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.filter(function(x){return x.value!=null;}).map(function(x){return x.marker+x.seriesName+': <b>'+x.value.toFixed(1)+'%</b>';}).join('<br>'); }},
@@ -18148,9 +18172,10 @@ function renderBrandWholesale(){
   var ec = makeEc('ec-zt-brand-wholesale'); if(!ec) return;
   var months = MONTHS_LABEL;
   // 各月の高級・合弁・中国系ブランド 卸売
-  var gouhua = [27.2,21.1,23.7,25.6,20.4,25.9,28.9,23.3,28,30.2,22.8,16.1,27.2];
-  var heizi  = [49.5,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58,57.4,42,28.3,49.5];
-  var ziZhu  = [159,153,160,166,158,171,197,214,214,191,132,107,162];
+  // 25.1月：崔東樹2月記事の25年累批（高級38/合弁79/自主269）− 25.2月分から逆算
+  var gouhua = [22,16.0,27.2,21.1,23.7,25.6,20.4,25.9,28.9,23.3,28,30.2,22.8,16.1,27.2];
+  var heizi  = [43.5,35.5,49.5,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58,57.4,42,28.3,49.5];
+  var ziZhu  = [144,125,159,153,160,166,158,171,197,214,214,191,132,107,162];
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: leg({data:['高級車','合弁メーカー','中国系ブランド']}),
@@ -18172,20 +18197,20 @@ function renderNationShare(){
   // 各月の国籍別卸売実績からシェア計算
   // 中国系ブランドシェア
   
-  var totals= [241,219,232,248,222,246,280,293,300,279,197,152,238];
-  var ziZhu = [159,153,160,166,158,171,197,214,214,191,132,107,162]
+  var totals= [210,177,241,219,232,248,222,246,280,293,300,279,197,152,238];
+  var ziZhu = [145,125,159,153,160,166,158,171,197,214,214,191,132,107,162]
   // 独系・日系・米系・韓系・欧系: 各月のデータ（国籍別シートより抽出）
-  var doku  = [35,27,30,35,26,30,34,31,34,33,28,17,29];
-  var nichi = [27,19,23,26,22,24,27,28,29,30,18,13,26];
-  var bei   = [14,13,13,15,11,15,16,14,17,18,14,11,16];
-  var kan   = [4,4,4,4,3,4,4,4,4,4,3,3,3];
-  var ou    = [2,3,2,2,2,2,2,2,2,3,2,1,2];
+  var doku  = [29,23,35,27,30,35,26,30,34,31,34,33,28,17,29];
+  var nichi = [19,16,27,19,23,26,22,24,27,28,29,30,18,13,26];
+  var bei   = [12,8,14,13,13,15,11,15,16,14,17,18,14,11,16];
+  var kan   = [3,3,4,4,4,4,3,4,4,4,4,4,3,3,3];
+  var ou    = [2,2,2,3,2,2,2,2,2,2,2,3,2,1,2];
 
   function pct(a,t){ return a.map(function(v,i){ return t[i]>0?+(v/t[i]*100).toFixed(1):0; }); }
 
   // 画像6（崔東樹公式公表値）26.3月の％を直接上書き（合計99.5%）
   // 自主67.5 / 独12.1 / 日11.1 / 米6.8 / 韓1.5 / 欧1.0 = 99.5
-  var LAST = 12;  // 26.3月のインデックス
+  var LAST = 14;  // 26.3月のインデックス（25.1+25.2を前置したため12→14）
   var ziZhuPct = pct(ziZhu,totals);  ziZhuPct[LAST] = 67.5;
   var dokuPct  = pct(doku,totals);   dokuPct[LAST]  = 12.1;
   var nichiPct = pct(nichi,totals);  nichiPct[LAST] = 11.1;
@@ -18215,12 +18240,12 @@ function renderNationVolume(){
   var ec = makeEc('ec-zt-nation-volume'); if(!ec) return;
   var months = MONTHS_LABEL;
   // 台数は zt-nation-share と同じソース（他月分は乗聯会別資料、26.3月のみ画像6で確認済）
-  var ziZhu = [159,153,160,166,158,171,197,214,214,191,132,107,162]
-  var doku  = [35,27,30,35,26,30,34,31,34,33,28,17,29];
-  var nichi = [27,19,23,26,22,24,27,28,29,30,18,13,26];
-  var bei   = [14,13,13,15,11,15,16,14,17,18,14,11,16];
-  var kan   = [4,4,4,4,3,4,4,4,4,4,3,3,3];
-  var ou    = [2,3,2,2,2,2,2,2,2,3,2,1,2];
+  var ziZhu = [145,125,159,153,160,166,158,171,197,214,214,191,132,107,162]
+  var doku  = [29,23,35,27,30,35,26,30,34,31,34,33,28,17,29];
+  var nichi = [19,16,27,19,23,26,22,24,27,28,29,30,18,13,26];
+  var bei   = [12,8,14,13,13,15,11,15,16,14,17,18,14,11,16];
+  var kan   = [3,3,4,4,4,4,3,4,4,4,4,4,3,3,3];
+  var ou    = [2,2,2,3,2,2,2,2,2,2,2,3,2,1,2];
   ec.setOption({
     tooltip: unifiedStackTooltip({unit:'万台'}),
     legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系']}),

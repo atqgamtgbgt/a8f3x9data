@@ -3717,6 +3717,9 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-dc" class="cds-mid-tab" onclick="cdsSetMidTab('dc')">
                 ⚖️ ダブルクレジット
               </button>
+              <button id="cds-mid-btn-nev" class="cds-mid-tab" onclick="cdsSetMidTab('nev')">
+                ⚡ NEV
+              </button>
             </div>
 
             <hr style="border:none;border-top:2px solid #94a3b8;margin:2px 0 14px;">
@@ -4136,6 +4139,39 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
               </div>
             </div><!-- end cds-sub-dc -->
+
+            <!-- 中タブNEV: 新エネルギー車（減税・免税・続航・電池密度） サブナビ -->
+            <div id="cds-sub-nev" class="cds-sub-nav" style="display:none">
+              <div class="cds-nav-compact" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
+                <div style="display:flex;flex-wrap:wrap;gap:0">
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📋 減税・免税 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link active" data-cds-nev-target="#nev-tax-reduction">📋 減税目録（四半期別）</button>
+                    <button class="nav-link" data-cds-nev-target="#nev-tax-exempt">🆓 免税目録（車種・動力別）</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">🛣️ 性能分布 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-nev-target="#nev-range">🛣️ 続航距離分布</button>
+                    <button class="nav-link" data-cds-nev-target="#nev-density">🔬 電池エネルギー密度分布</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">📊 最新車型 </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-nev-target="#nev-batch29">📊 26年第29批 新エネ車型</button>
+                  </div>
+                </div>
+                </div>
+                <button id="nev-toggle-monthly-btn" onclick="nevToggleMonthly()" style="
+                  font-family:'Noto Sans JP',sans-serif;font-size:11px;padding:4px 14px;border-radius:5px;cursor:pointer;
+                  border:1px solid rgba(0,0,0,0.15);background:rgba(0,0,0,0.04);
+                  color:#6b7280;transition:all .15s;white-space:nowrap;align-self:center;margin-bottom:10px;
+                ">▶ 2026年 月次を展開</button>
+              </div>
+            </div><!-- end cds-sub-nev -->
 
           </div><!-- end cdsPills -->
 
@@ -5579,6 +5615,94 @@ body.tray-open { padding-bottom: 105px; }
                     <div class="chart-subtitle">トヨタ独走、BMWは半減</div>
                     <div id="ec-dc-import-rank" class="echart-box" style="height:380px"></div>
                   </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- ===== NEV ペイン群 ===== -->
+            <!-- 1: 減税目録（四半期合計） -->
+            <div class="cds-pane" id="nev-tax-reduction">
+              <div class="chart-card">
+                <div class="chart-title">📋 新エネルギー車 減税目録 登録台数（四半期別）</div>
+                <div class="chart-subtitle">2021〜2026年　1Q／2Q／3Q／4Q　※2026年は1Q＋4月のみ判明　出典：乗聯会（崔東樹）</div>
+                <div id="ec-nev-tax-reduction" class="echart-box" style="height:440px"></div>
+              </div>
+            </div>
+
+            <!-- 2: 免税目録（車種×動力別） -->
+            <div class="cds-pane" id="nev-tax-exempt">
+              <div class="chart-card">
+                <div class="chart-title">🆓 新エネルギー車 免税目録 車種・動力別 登録台数</div>
+                <div class="chart-subtitle">乗用車・客車・専用車 × 純電動／プラグインHV／レンジエクステンダー／水素　2021〜2026年　出典：乗聯会（崔東樹）</div>
+                <div id="ec-nev-tax-exempt" class="echart-box" style="height:480px"></div>
+              </div>
+            </div>
+
+            <!-- 3: 続航距離分布 -->
+            <div class="cds-pane" id="nev-range">
+              <div class="chart-card">
+                <div class="chart-title">🛣️ 続航距離分布（動力別シェア・%）</div>
+                <div class="chart-subtitle">純電動／プラグインHV／レンジエクステンダー　2021〜2026年　平均続航距離（km）併記　出典：乗聯会（崔東樹）</div>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <div style="font-weight:600;color:#1565C0;margin:4px 0 2px;font-size:13px">⚡ 純電動（BEV）</div>
+                    <div id="ec-nev-range-bev" class="echart-box" style="height:340px"></div>
+                  </div>
+                  <div class="col-12">
+                    <div style="font-weight:600;color:#5BA4CF;margin:4px 0 2px;font-size:13px">🔌 プラグインHV（狭義PHEV）</div>
+                    <div id="ec-nev-range-phev" class="echart-box" style="height:340px"></div>
+                  </div>
+                  <div class="col-12">
+                    <div style="font-weight:600;color:#F39C12;margin:4px 0 2px;font-size:13px">🔋 レンジエクステンダー（増程）</div>
+                    <div id="ec-nev-range-erev" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 4: 電池エネルギー密度分布 -->
+            <div class="cds-pane" id="nev-density">
+              <div class="chart-card">
+                <div class="chart-title">🔬 電池エネルギー密度分布（動力別シェア・%）</div>
+                <div class="chart-subtitle">純電動／プラグインHV／レンジエクステンダー　2021〜2026年　平均密度（Wh/kg）併記　出典：乗聯会（崔東樹）</div>
+                <div class="row g-3">
+                  <div class="col-12">
+                    <div style="font-weight:600;color:#1565C0;margin:4px 0 2px;font-size:13px">⚡ 純電動（BEV）</div>
+                    <div id="ec-nev-density-bev" class="echart-box" style="height:340px"></div>
+                  </div>
+                  <div class="col-12">
+                    <div style="font-weight:600;color:#5BA4CF;margin:4px 0 2px;font-size:13px">🔌 プラグインHV（狭義PHEV）</div>
+                    <div id="ec-nev-density-phev" class="echart-box" style="height:340px"></div>
+                  </div>
+                  <div class="col-12">
+                    <div style="font-weight:600;color:#F39C12;margin:4px 0 2px;font-size:13px">🔋 レンジエクステンダー（増程）</div>
+                    <div id="ec-nev-density-erev" class="echart-box" style="height:340px"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 5: 26年29批 新エネ車型 -->
+            <div class="cds-pane" id="nev-batch29">
+              <div class="chart-card">
+                <div class="chart-title">📊 2026年 第29批 新エネルギー車型 性能サマリ</div>
+                <div class="chart-subtitle">続航距離区分別の整備質量・電池容量・エネルギー密度・百km電費・燃費・車型数　出典：乗聯会（崔東樹）</div>
+                <div id="ec-nev-batch29" class="echart-box" style="height:560px"></div>
+                <div style="margin-top:10px;overflow-x:auto">
+                  <table id="nev-batch29-table" style="width:100%;border-collapse:collapse;font-size:11px;font-family:'Noto Sans JP',sans-serif">
+                    <thead><tr style="background:#fff8e1">
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px;text-align:left">区分</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">続航(km)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">整備質量(kg)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">電池総質量(kg)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">百km電費(kWh)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">電池容量(kWh)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">密度(Wh/kg)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">燃費(L)</th>
+                      <th style="border:1px solid #e2e8f0;padding:4px 6px">車型数</th>
+                    </tr></thead>
+                    <tbody id="nev-batch29-tbody"></tbody>
+                  </table>
                 </div>
               </div>
             </div>
@@ -10328,7 +10452,8 @@ function cdsSetMidTab(tab) {
     'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ',
     'price':      'https://mp.weixin.qq.com/s/dxRuOcqPkUCBjDDkiI5Fqw',
     'stats':      'https://mp.weixin.qq.com/s/njkFJ7cCveLDzHoejK8iZg',
-    'dc':         'https://mp.weixin.qq.com/s/E91BkEc_iomunzKwdxs7jg'
+    'dc':         'https://mp.weixin.qq.com/s/E91BkEc_iomunzKwdxs7jg',
+    'nev':        'https://mp.weixin.qq.com/s/uKBxiZOfY2Pl8odGuuGt7g'
   };
   var srcUrl = CDS_SOURCE_URLS[tab] || '';
   var srcLink = document.getElementById('cds-source-link');
@@ -10354,6 +10479,8 @@ function cdsSetMidTab(tab) {
   document.getElementById('cds-sub-stats').style.display       = (tab === 'stats')       ? '' : 'none';
   var dcSubEl = document.getElementById('cds-sub-dc');
   if (dcSubEl) dcSubEl.style.display = (tab === 'dc') ? '' : 'none';
+  var nevSubEl = document.getElementById('cds-sub-nev');
+  if (nevSubEl) nevSubEl.style.display = (tab === 'nev') ? '' : 'none';
 
   if (tab === 'zenntai') {
     var pillElZt = document.getElementById('cdsPills');
@@ -10472,6 +10599,13 @@ function cdsSetMidTab(tab) {
       var fn = CDS_FNS[dcTarget]; if (fn) fn();
       setTimeout(function(){ var fn2 = CDS_FNS[dcTarget]; if (fn2) fn2(); }, 150);
     }); });
+  } else if (tab === 'nev') {
+    var nevTarget = window.NEV_CURRENT_ID || 'nev-tax-reduction';
+    nevShowPane(nevTarget);
+    document.querySelectorAll('#cds-sub-nev [data-cds-nev-target]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-cds-nev-target') === '#' + nevTarget);
+    });
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ nevRender(nevTarget); setTimeout(function(){ nevRender(nevTarget); }, 150); }); });
   } else {
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
@@ -14576,6 +14710,560 @@ window.addEventListener('resize', function(){
   };
 
 })(); // end battery module
+</script>
+
+<script>
+// ============================================================
+//  ⚡ NEV モジュール（減税・免税・続航・電池密度・29批車型）
+// ============================================================
+(function(){
+
+  var NEV_EC = {};
+  window.NEV_CURRENT_ID = 'nev-tax-reduction';
+
+  // ---------- 月次トグル ----------
+  var NEV_SHOW_MONTHLY = false;
+
+  window.nevToggleMonthly = function() {
+    NEV_SHOW_MONTHLY = !NEV_SHOW_MONTHLY;
+    var btn = document.getElementById('nev-toggle-monthly-btn');
+    if (NEV_SHOW_MONTHLY) {
+      btn.textContent = '▼ 2026年 月次を折り畳む';
+      btn.style.color = '#2563eb';
+      btn.style.borderColor = 'rgba(37,99,235,0.4)';
+      btn.style.background = 'rgba(37,99,235,0.08)';
+    } else {
+      btn.textContent = '▶ 2026年 月次を展開';
+      btn.style.color = '#6b7280';
+      btn.style.borderColor = 'rgba(0,0,0,0.15)';
+      btn.style.background = 'rgba(0,0,0,0.04)';
+    }
+    var cur = window.NEV_CURRENT_ID;
+    if (cur && NEV_RENDER[cur]) NEV_RENDER[cur]();
+  };
+
+  // ---------- pane 表示 ----------
+  window.nevShowPane = function(id) {
+    var pillEl = document.getElementById('cdsPills');
+    var contEl = document.getElementById('cdsPillsContent');
+    if (pillEl) pillEl.setAttribute('style','display:block');
+    if (contEl) contEl.setAttribute('style','display:block');
+    document.querySelectorAll('.cds-pane[id^="nev-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+    var pane = document.getElementById(id);
+    if (pane) pane.classList.add('cds-active');
+    window.NEV_CURRENT_ID = id;
+    // 月次トグルボタン表示制御（月次切替が意味のあるペインのみ表示）
+    var monthlyPanes = ['nev-tax-exempt','nev-range','nev-density'];
+    var btn = document.getElementById('nev-toggle-monthly-btn');
+    if (btn) btn.style.display = monthlyPanes.indexOf(id) >= 0 ? '' : 'none';
+  };
+
+  // ---------- サブナビ クリック ----------
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('[data-cds-nev-target]');
+    if (!btn) return;
+    var targetId = btn.getAttribute('data-cds-nev-target').replace('#','');
+    nevShowPane(targetId);
+    document.querySelectorAll('#cds-sub-nev [data-cds-nev-target]').forEach(function(b){
+      b.classList.toggle('active', b === btn);
+    });
+    requestAnimationFrame(function(){
+      setTimeout(function(){ nevRender(targetId); }, 50);
+    });
+  });
+
+  // ---------- カラーパレット ----------
+  var C = {
+    bev:'#1565C0', phev:'#5BA4CF', erev:'#F39C12', h2:'#9B59B6',
+    pass:'#1565C0', bus:'#5BA4CF', sv:'#F39C12',
+    axis:'#555', grid:'rgba(0,0,0,0.06)'
+  };
+  var FONT = 'Noto Sans JP, sans-serif';
+
+  // 続航・密度のグラデーション色（短→長／低→高）
+  var GRAD_BEV  = ['#FFE082','#FFB74D','#FF8A65','#E57373','#E53935','#B71C1C'];
+  var GRAD_PHEV = ['#B3E5FC','#81D4FA','#4FC3F7','#29B6F6','#039BE5','#0277BD','#01579B'];
+  var GRAD_EREV = ['#C5E1A5','#AED581','#9CCC65','#7CB342','#558B2F','#33691E','#1B5E20'];
+
+  function baseGrid(){ return { top:50, right:20, bottom:60, left:60, containLabel:true }; }
+  function baseLegend(d){ return Object.assign({ top:8, textStyle:{fontFamily:FONT,fontSize:11} }, d||{}); }
+  function baseXAxis(data){
+    return { type:'category', data:data, axisLabel:{fontFamily:FONT,fontSize:10,rotate:0,color:C.axis}, axisLine:{lineStyle:{color:'#ccc'}} };
+  }
+  function baseYAxis(name){
+    return { type:'value', name:name||'', nameTextStyle:{fontFamily:FONT,fontSize:11}, axisLabel:{fontFamily:FONT,fontSize:11,color:C.axis}, splitLine:{lineStyle:{color:C.grid}} };
+  }
+  function initOrGet(id){
+    var dom = document.getElementById(id);
+    if (!dom) return null;
+    if (NEV_EC[id]) { try{ NEV_EC[id].dispose(); }catch(e){} }
+    NEV_EC[id] = echarts.init(dom);
+    return NEV_EC[id];
+  }
+
+  // ============================================================
+  //  1. 減税目録（四半期合計）
+  //  画像1：21-26年×4四半期＋総計　※26年は1Q＋4月のみ
+  // ============================================================
+  function renderTaxReduction(){
+    var ec = initOrGet('ec-nev-tax-reduction'); if(!ec) return;
+
+    // 画像1の四半期データ（万台）
+    // 21年:1Q=158+111+182=451, 2Q=235+152+214=601, 3Q=842, 4Q=721, 計=2615
+    // 22年:1Q=173+176+202=551, 2Q=268+207+268=743, 3Q=859, 4Q=643, 計=2796
+    // 23年:1Q=485+226+227=938, 2Q=316+344+368=1028,3Q=991, 4Q=1031,計=3988
+    // 24年:1Q=13523+213+356=14092,2Q=567+829+1419=2815,3Q=1458,4Q=1264,計=19629
+    // 25年:1Q=456+365+319=1140, 2Q=385+487+521=1393,3Q=1513,4Q=1960,計=6006
+    // 26年:1Q=19178+408+391=19977,4月=272(2Qの一部だけ)→ Q2/3/4は不明
+    var labels = ['2021年','2022年','2023年','2024年','2025年','2026年'];
+    var Q1 = [451,  551,  938,  14092, 1140, 19977];
+    var Q2 = [601,  743,  1028, 2815,  1393, 272 ]; // 26年は4月のみ
+    var Q3 = [842,  859,  991,  1458,  1513, null];
+    var Q4 = [721,  643,  1031, 1264,  1960, null];
+    var total = [2615,2796,3988,19629,6006,20249];
+
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'台', digits:0, note:'※2026年 第2Qは4月分のみ・3Q/4Qは未集計'}),
+      legend: baseLegend(),
+      grid: Object.assign(baseGrid(),{bottom:80}),
+      xAxis: baseXAxis(labels),
+      yAxis: baseYAxis('台数'),
+      series:[
+        {name:'第1四半期', type:'bar', stack:'q', data:Q1, itemStyle:{color:'#1565C0'}},
+        {name:'第2四半期', type:'bar', stack:'q', data:Q2, itemStyle:{color:'#5BA4CF'}},
+        {name:'第3四半期', type:'bar', stack:'q', data:Q3, itemStyle:{color:'#F39C12'}},
+        {name:'第4四半期', type:'bar', stack:'q', data:Q4, itemStyle:{color:'#E74C3C'}},
+        {name:'年間合計', type:'line', data:total, lineStyle:{color:'#333',width:2,type:'dashed'},
+          label:{show:true,position:'top',fontSize:10,fontFamily:FONT,formatter:function(p){return p.value!=null?p.value.toLocaleString():'';}},
+          itemStyle:{color:'#333'}, symbol:'circle', symbolSize:6 }
+      ]
+    });
+  }
+
+  // ============================================================
+  //  2. 免税目録（車種×動力別）  画像2
+  //  21-25年通年 + 26年合計 / 26年各月（1-4月）
+  // ============================================================
+  // データ: [21,22,23,24,25,26汇总,26-1月,26-2月,26-3月,26-4月]
+  var TAXEXEMPT = {
+    pass: {
+      bev   :[507,468,607,3158,780,2242,2079,51,66,46],
+      phev  :[93, 111,184,487, 350,520, 451, 20,22,27],
+      erev  :[19, 12, 40, 186, 150,320, 291, 12,12, 5],
+      h2    :[3,  3,  1,  16,  null,6,  null,null,null,6]   // 25年は空白扱い→null
+    },
+    bus: {
+      bev   :[458,259,260,3278,499,3164,3070,43,25,26],
+      phev  :[19, 10, 2,  100, 5,  100, 99,  1, null,null],
+      erev  :[null,2, 2,  15,  12, 31,  27,  1, 2, 1],
+      h2    :[84, 70, 40, 375, 23, 70,  68,  1, null,1]
+    },
+    sv: {
+      bev   :[1279,1584,2497,10615,3653,12439,11816,248,230,145],
+      phev  :[34,  62,  116, 344,  179, 544,  496, 18, 20, 10],
+      erev  :[2,   10,  50,  164,  207, 387,  357, 11, 12, 7],
+      blank :[null,null,null,null, null,1,    null,null,null,1],
+      h2    :[117, 205, 189, 891,  148, 425,  418, 2,  1,  4]
+    }
+  };
+
+  // 月次展開: [21,22,23,24,25,26-1月,26-2月,26-3月,26-4月]
+  // 通常表示: [21,22,23,24,25,26汇总]
+  function nevExpandTax(arr){
+    if (!arr) return [];
+    if (NEV_SHOW_MONTHLY) {
+      // 0-4 (21-25) + 6-9 (26年1-4月)
+      return arr.slice(0,5).concat(arr.slice(6,10));
+    } else {
+      // 0-4 (21-25) + 5 (26汇总)
+      return arr.slice(0,6);
+    }
+  }
+  function nevTaxLabels(){
+    var base = ['2021年','2022年','2023年','2024年','2025年'];
+    if (NEV_SHOW_MONTHLY) {
+      return base.concat(['2026年\n1月','2026年\n2月','2026年\n3月','2026年\n4月']);
+    } else {
+      return base.concat(['2026年\n累計']);
+    }
+  }
+
+  function renderTaxExempt(){
+    var ec = initOrGet('ec-nev-tax-exempt'); if(!ec) return;
+    var labels = nevTaxLabels();
+
+    // 全12系列（乗用車4 + 客車4 + 専用車4）
+    var series = [
+      // 乗用車
+      {name:'乗用車・純電動',           type:'bar', stack:'pass', data:nevExpandTax(TAXEXEMPT.pass.bev),  itemStyle:{color:'#0D47A1'}},
+      {name:'乗用車・プラグインHV',      type:'bar', stack:'pass', data:nevExpandTax(TAXEXEMPT.pass.phev), itemStyle:{color:'#1976D2'}},
+      {name:'乗用車・レンジエクステンダー',type:'bar', stack:'pass', data:nevExpandTax(TAXEXEMPT.pass.erev), itemStyle:{color:'#42A5F5'}},
+      {name:'乗用車・水素',             type:'bar', stack:'pass', data:nevExpandTax(TAXEXEMPT.pass.h2),   itemStyle:{color:'#90CAF9'}},
+      // 客車
+      {name:'客車・純電動',             type:'bar', stack:'bus', data:nevExpandTax(TAXEXEMPT.bus.bev),   itemStyle:{color:'#1B5E20'}},
+      {name:'客車・プラグインHV',        type:'bar', stack:'bus', data:nevExpandTax(TAXEXEMPT.bus.phev),  itemStyle:{color:'#388E3C'}},
+      {name:'客車・レンジエクステンダー', type:'bar', stack:'bus', data:nevExpandTax(TAXEXEMPT.bus.erev),  itemStyle:{color:'#66BB6A'}},
+      {name:'客車・水素',               type:'bar', stack:'bus', data:nevExpandTax(TAXEXEMPT.bus.h2),    itemStyle:{color:'#A5D6A7'}},
+      // 専用車
+      {name:'専用車・純電動',           type:'bar', stack:'sv', data:nevExpandTax(TAXEXEMPT.sv.bev),    itemStyle:{color:'#E65100'}},
+      {name:'専用車・プラグインHV',      type:'bar', stack:'sv', data:nevExpandTax(TAXEXEMPT.sv.phev),   itemStyle:{color:'#F57C00'}},
+      {name:'専用車・レンジエクステンダー',type:'bar', stack:'sv', data:nevExpandTax(TAXEXEMPT.sv.erev),  itemStyle:{color:'#FFB74D'}},
+      {name:'専用車・水素',             type:'bar', stack:'sv', data:nevExpandTax(TAXEXEMPT.sv.h2),     itemStyle:{color:'#FFE0B2'}}
+    ];
+
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'台', digits:0, hideZero:true}),
+      legend: baseLegend({type:'scroll'}),
+      grid: Object.assign(baseGrid(),{bottom:90, top:60}),
+      xAxis: baseXAxis(labels),
+      yAxis: baseYAxis('台数'),
+      series: series
+    });
+  }
+
+  // ============================================================
+  //  3. 続航距離分布  画像3
+  // ============================================================
+  // データ:  [21,22,23,24,25, 26汇总, 26-1月, 26-2月, 26-3月, 26-4月]
+  var RANGE = {
+    bev: {
+      bands: ['300-399','400-499','500-599','600-699','700以上'],
+      rows: [
+        [16,11,9, 16,20,10,11, 4,12,13],
+        [35,19,18,27,19,17,17,14, 8,15],
+        [23,24,29,22,24,29,30,20,15,20],
+        [9, 18,21,14,19,24,24,25,18,24],
+        [2,  7, 9, 6,14,16,14,37,47,26]
+      ],
+      avg: [441,471,509,468,523,555,551,628,630,579]
+    },
+    phev: {
+      bands: ['50-79','80-99','100-149','150-199','200-249','250-299','300-399'],
+      rows: [
+        [44,33,20,28, 6, null,null,null,null,null],
+        [12,24,27,26,11, 1, 1, null,null,null],
+        [32,13,32,26,49,53,57,40,45, 7],
+        [11,24,18,16,26,33,32,35,32,33],
+        [1,  5, 2, 3, 6, 8, 7, 5, 9,33],
+        [null,null,null,null, 1, 2, 1,10, 5, 4],
+        [null,null,null,null, 2, 3, 1,10, 9,22]
+      ],
+      avg: [101,114,115,110,142,158,152,185,177,231]
+    },
+    erev: {
+      bands: ['50-79','80-99','100-149','150-199','200-249','250-299','300-399'],
+      rows: [
+        [null,null,null, 2, null,null,null,null,null,null],
+        [null,17, 3, 4, 3, 0, 0, null,null,null],
+        [95,25,18,26,15,13,14,null,null,null],
+        [5, 58,73,55,43,53,56,33, 8,20],
+        [null,null,8, 13,21,20,20,17,25,null],
+        [null,null,null,null,11, 7, 6,17,25,20],
+        [null,null,null,null, 7, 7, 4,33,42,60]
+      ],
+      avg: [128,148,168,163,200,198,190,258,285,300]
+    }
+  };
+
+  function nevExpandRange(arr){
+    if (!arr) return [];
+    if (NEV_SHOW_MONTHLY) {
+      // 21-25年(0-4) + 26年1-4月(6-9)
+      return arr.slice(0,5).concat(arr.slice(6,10));
+    } else {
+      // 21-25年(0-4) + 26年汇总(5)
+      return arr.slice(0,6);
+    }
+  }
+  function nevRangeLabels(){
+    var base = ['2021年','2022年','2023年','2024年','2025年'];
+    if (NEV_SHOW_MONTHLY) {
+      return base.concat(['2026年\n1月','2026年\n2月','2026年\n3月','2026年\n4月']);
+    } else {
+      return base.concat(['2026年\n累計']);
+    }
+  }
+
+  function _renderRangeOrDensity(ecId, defObj, palette){
+    var ec = initOrGet(ecId); if(!ec) return;
+    var labels = nevRangeLabels();
+    var series = defObj.bands.map(function(b, i){
+      return {
+        name: b + ' km',
+        type:'bar', stack:'s',
+        data: nevExpandRange(defObj.rows[i]),
+        itemStyle:{ color: palette[i % palette.length] }
+      };
+    });
+    // 平均ラインを追加（右Y軸）
+    var avgData = nevExpandRange(defObj.avg);
+    series.push({
+      name:'平均続航距離', type:'line', yAxisIndex:1,
+      data: avgData,
+      lineStyle:{color:'#333',width:2,type:'dashed'},
+      itemStyle:{color:'#333'},
+      symbol:'circle', symbolSize:6,
+      label:{show:true,position:'top',fontSize:10,fontFamily:FONT,
+             formatter:function(p){return p.value!=null?p.value+'km':'';}}
+    });
+
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'%', digits:0, hideZero:true, showTotal:false}),
+      legend: baseLegend({type:'scroll'}),
+      grid: Object.assign(baseGrid(),{bottom:70, top:50}),
+      xAxis: baseXAxis(labels),
+      yAxis: [
+        Object.assign(baseYAxis('シェア(%)'),{max:100, axisLabel:{formatter:'{value}%'}}),
+        Object.assign(baseYAxis('平均(km)'),{position:'right', splitLine:{show:false}})
+      ],
+      series: series
+    });
+  }
+
+  function renderRange(){
+    _renderRangeOrDensity('ec-nev-range-bev',  RANGE.bev,  GRAD_BEV);
+    _renderRangeOrDensity('ec-nev-range-phev', RANGE.phev, GRAD_PHEV);
+    _renderRangeOrDensity('ec-nev-range-erev', RANGE.erev, GRAD_EREV);
+  }
+
+  // ============================================================
+  //  4. 電池エネルギー密度分布  画像4
+  // ============================================================
+  // 注：26年1月のデータは画像4には記載なし → null
+  // データ列: [21,22,23,24,25, 26汇总, 26-1月, 26-2月, 26-3月, 26-4月]
+  var DENSITY = {
+    bev: {
+      bands: ['110','120','130','140','150','160','170','180','190'],
+      rows: [
+        [4,  9,  6, 2, 1, 1, null,null, 2, 2],
+        [9, 11, 14,13,15, 8, null, 8,11, 4],
+        [19,20, 23,26,34,26, null,24,21,35],
+        [14,10, 12,21,28,39, null,45,33,39],
+        [18,12, 11,10, 7, 6, null,10, 8, null],
+        [14,13, 18,13, 4, 9, null, 6,15, 2],
+        [10,14, 9, 8, 7, 7, null, 6, 9, 7],
+        [4, 4, 4, 5, 3, 2, null, 2, 3, null],
+        [0, 0, 1, 1, 0, 3, null,null,null,11]
+      ],
+      avg:[142,142,142,143,138,142, null,141,143,143]
+    },
+    phev: {
+      bands: ['80','90','100','110','120','130','140','150','160','170','180'],
+      rows: [
+        [22,10, 4, 2, 3, null,null,null,null,null,null],
+        [5, 6, 6, 10,8, null,null,null,null,null,null],
+        [22,9, 23,34,24, 4, null,10, 5, null,null],
+        [10,20,29,18,22, 6, null,10, 5, 4, null],
+        [6, 18, 8, 9,19,29, null,25,32,30, null],
+        [15,8, 3, 5, 9,38, null,25,32,52, null],
+        [20,17, 9, 8, 2, null,null,null,null,null,null],
+        [null,6, 13, 7, 3, 3, null,10,null,null,null],
+        [null, 6, 3, 5, 3, 6, null,10, 5, 4, null],
+        [null,null,1, 5, 5,10, null, 5,14,11, null],
+        [null,null,null, 1, 2, 4, null, 5, 9, null,null]
+      ],
+      avg:[109,118,115,113,116,133, null,132,136,132]
+    },
+    erev: {
+      bands: ['110','120','130','140','150','160','170','180'],
+      rows: [
+        [null,null,14,15, 9, 3, null, 8, null,null],
+        [null,null,null,33,47,14, null,17,17, null],
+        [5, 17,null,12, 8,14, null,17,17, null],
+        [53,25,26, 5, 8,24, null,17,25,40],
+        [42,17,14,10, 4, 3, null,null,null,20],
+        [null,42,46,12, 6,14, null,17,17, null],
+        [null, null,5,12, 5,24, null,25,25,20],
+        [null,null,null,null,null,3, null,null,null,20]
+      ],
+      avg:[144,148,146,129,129,147, null,143,146,156]
+    }
+  };
+
+  function renderDensity(){
+    _renderRangeOrDensity('ec-nev-density-bev',  DENSITY.bev,  GRAD_BEV);
+    _renderRangeOrDensity('ec-nev-density-phev', DENSITY.phev, GRAD_PHEV);
+    _renderRangeOrDensity('ec-nev-density-erev', DENSITY.erev, GRAD_EREV);
+  }
+  // ※密度の関数は単位が%とWh/kgで違うので、専用関数を作る方がベターだが、
+  //   汎用の_renderRangeOrDensityを少し改造して対応する
+  // → 単位を切り替えるためにoverride
+  function _renderDensityOne(ecId, defObj, palette){
+    var ec = initOrGet(ecId); if(!ec) return;
+    var labels = nevRangeLabels();
+    var series = defObj.bands.map(function(b, i){
+      return {
+        name: b + ' Wh/kg',
+        type:'bar', stack:'s',
+        data: nevExpandRange(defObj.rows[i]),
+        itemStyle:{ color: palette[i % palette.length] }
+      };
+    });
+    var avgData = nevExpandRange(defObj.avg);
+    series.push({
+      name:'平均密度', type:'line', yAxisIndex:1,
+      data: avgData,
+      lineStyle:{color:'#333',width:2,type:'dashed'},
+      itemStyle:{color:'#333'},
+      symbol:'circle', symbolSize:6,
+      label:{show:true,position:'top',fontSize:10,fontFamily:FONT,
+             formatter:function(p){return p.value!=null?p.value+'Wh/kg':'';}}
+    });
+    ec.setOption({
+      tooltip: unifiedStackTooltip({unit:'%', digits:0, hideZero:true, showTotal:false}),
+      legend: baseLegend({type:'scroll'}),
+      grid: Object.assign(baseGrid(),{bottom:70, top:50}),
+      xAxis: baseXAxis(labels),
+      yAxis: [
+        Object.assign(baseYAxis('シェア(%)'),{max:100, axisLabel:{formatter:'{value}%'}}),
+        Object.assign(baseYAxis('平均(Wh/kg)'),{position:'right', splitLine:{show:false}})
+      ],
+      series: series
+    });
+  }
+  function renderDensity(){
+    _renderDensityOne('ec-nev-density-bev',  DENSITY.bev,  GRAD_BEV);
+    _renderDensityOne('ec-nev-density-phev', DENSITY.phev, GRAD_PHEV);
+    _renderDensityOne('ec-nev-density-erev', DENSITY.erev, GRAD_EREV);
+  }
+
+  // ============================================================
+  //  5. 26年29批 新エネ車型 サマリ  画像5
+  // ============================================================
+  // 列: [区分(動力), 続航区分, 整備質量, 電池総質量, 百km電費, 電池容量, 密度, 燃費, 車型数]
+  var BATCH29 = [
+    {pw:'純電動', range:'250-299',  mass:1540, bat:300, kwh100:12, cap:35, dens:117, fuel:null, n:1},
+    {pw:'純電動', range:'300-399',  mass:1912, bat:394, kwh100:16, cap:55, dens:139, fuel:null, n:6},
+    {pw:'純電動', range:'400-499',  mass:1809, bat:398, kwh100:13, cap:56, dens:139, fuel:null, n:7},
+    {pw:'純電動', range:'500-599',  mass:1594, bat:388, kwh100:10, cap:53, dens:136, fuel:null, n:9},
+    {pw:'純電動', range:'600-699',  mass:2046, bat:529, kwh100:12, cap:76, dens:143, fuel:null, n:11},
+    {pw:'純電動', range:'700以上',   mass:2465, bat:593, kwh100:13, cap:99, dens:169, fuel:null, n:12},
+    {pw:'純電動', range:'合計',      mass:2002, bat:476, kwh100:13, cap:71, dens:147, fuel:null, n:46, total:true},
+
+    {pw:'増程',   range:'150-199',  mass:2860, bat:310, kwh100:30, cap:49, dens:159, fuel:8,    n:1},
+    {pw:'増程',   range:'250-299',  mass:2920, bat:344, kwh100:23, cap:60, dens:174, fuel:null, n:1},
+    {pw:'増程',   range:'300-399',  mass:2883, bat:502, kwh100:23, cap:79, dens:159, fuel:7,    n:3},
+    {pw:'増程',   range:'合計',      mass:2886, bat:432, kwh100:24, cap:69, dens:162, fuel:7,    n:5, total:true},
+
+    {pw:'プラグインHV', range:'100-149', mass:2288, bat:223, kwh100:27, cap:32, dens:143, fuel:7, n:2},
+    {pw:'プラグインHV', range:'150-199', mass:2351, bat:274, kwh100:22, cap:36, dens:131, fuel:6, n:13},
+    {pw:'プラグインHV', range:'200-249', mass:2027, bat:272, kwh100:17, cap:42, dens:143, fuel:5, n:1},
+    {pw:'プラグインHV', range:'250-299', mass:2270, bat:340, kwh100:17, cap:45, dens:133, fuel:5, n:1},
+    {pw:'プラグインHV', range:'300-399', mass:2815, bat:483, kwh100:21, cap:66, dens:136, fuel:6, n:10},
+    {pw:'プラグインHV', range:'合計',    mass:2338, bat:318, kwh100:21, cap:44, dens:137, fuel:6, n:27, total:true}
+  ];
+
+  function renderBatch29(){
+    var ec = initOrGet('ec-nev-batch29'); if(!ec) return;
+
+    // グラフは合計行を除いた個別行のみ表示
+    var rows = BATCH29.filter(function(r){ return !r.total; });
+    var labels = rows.map(function(r){ return r.pw + '\n' + r.range; });
+    var massData  = rows.map(function(r){ return r.mass; });
+    var capData   = rows.map(function(r){ return r.cap; });
+    var densData  = rows.map(function(r){ return r.dens; });
+    var nData     = rows.map(function(r){ return r.n; });
+
+    // バーの色（動力別）
+    var barColors = rows.map(function(r){
+      if (r.pw === '純電動') return '#1565C0';
+      if (r.pw === '増程') return '#F39C12';
+      return '#5BA4CF';
+    });
+
+    ec.setOption({
+      tooltip: {
+        trigger:'axis', axisPointer:{type:'shadow'},
+        backgroundColor:'rgba(255,255,255,0.97)',
+        borderColor:'#ddd', borderWidth:1,
+        textStyle:{ fontFamily: FONT, fontSize:12 },
+        formatter: function(params){
+          if (!params || !params.length) return '';
+          var idx = params[0].dataIndex;
+          var r = rows[idx];
+          var s = '<b>' + r.pw + ' / ' + r.range + ' km</b><br/>';
+          s += '車型数: <b>' + r.n + '</b><br/>';
+          s += '整備質量: <b>' + r.mass + '</b> kg<br/>';
+          s += '電池総質量: <b>' + r.bat + '</b> kg<br/>';
+          s += '百km電費: <b>' + r.kwh100 + '</b> kWh<br/>';
+          s += '電池容量: <b>' + r.cap + '</b> kWh<br/>';
+          s += 'エネルギー密度: <b>' + r.dens + '</b> Wh/kg';
+          if (r.fuel != null) s += '<br/>燃費: <b>' + r.fuel + '</b> L';
+          return s;
+        }
+      },
+      legend: baseLegend(),
+      grid: [
+        { left:60, right:60, top:50,  height:'18%', containLabel:true },
+        { left:60, right:60, top:'33%', height:'18%', containLabel:true },
+        { left:60, right:60, top:'58%', height:'18%', containLabel:true },
+        { left:60, right:60, top:'83%', height:'12%', containLabel:true }
+      ],
+      xAxis:[
+        Object.assign(baseXAxis(labels),{gridIndex:0, axisLabel:{show:false}}),
+        Object.assign(baseXAxis(labels),{gridIndex:1, axisLabel:{show:false}}),
+        Object.assign(baseXAxis(labels),{gridIndex:2, axisLabel:{show:false}}),
+        Object.assign(baseXAxis(labels),{gridIndex:3, axisLabel:{fontFamily:FONT,fontSize:10,rotate:0,color:C.axis,interval:0}})
+      ],
+      yAxis:[
+        Object.assign(baseYAxis('整備質量(kg)'),{gridIndex:0}),
+        Object.assign(baseYAxis('電池容量(kWh)'),{gridIndex:1}),
+        Object.assign(baseYAxis('密度(Wh/kg)'),{gridIndex:2}),
+        Object.assign(baseYAxis('車型数'),{gridIndex:3})
+      ],
+      series:[
+        {name:'整備質量', type:'bar', xAxisIndex:0, yAxisIndex:0,
+          data: massData.map(function(v,i){return {value:v, itemStyle:{color:barColors[i]}};}),
+          label:{show:true,position:'top',fontSize:9,fontFamily:FONT,formatter:'{c}'}},
+        {name:'電池容量', type:'bar', xAxisIndex:1, yAxisIndex:1,
+          data: capData.map(function(v,i){return {value:v, itemStyle:{color:barColors[i]}};}),
+          label:{show:true,position:'top',fontSize:9,fontFamily:FONT,formatter:'{c}'}},
+        {name:'エネルギー密度', type:'bar', xAxisIndex:2, yAxisIndex:2,
+          data: densData.map(function(v,i){return {value:v, itemStyle:{color:barColors[i]}};}),
+          label:{show:true,position:'top',fontSize:9,fontFamily:FONT,formatter:'{c}'}},
+        {name:'車型数', type:'bar', xAxisIndex:3, yAxisIndex:3,
+          data: nData.map(function(v,i){return {value:v, itemStyle:{color:barColors[i]}};}),
+          label:{show:true,position:'top',fontSize:9,fontFamily:FONT,formatter:'{c}'}}
+      ]
+    });
+
+    // 表
+    var tbody = document.getElementById('nev-batch29-tbody');
+    if (tbody) {
+      var html = '';
+      BATCH29.forEach(function(r){
+        var bg = r.total ? 'background:#fff8e1;font-weight:600' : '';
+        html += '<tr style="'+bg+'">';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:left">'+r.pw+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:center">'+r.range+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.mass!=null?r.mass.toLocaleString():'')+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.bat!=null?r.bat:'')+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.kwh100!=null?r.kwh100:'')+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.cap!=null?r.cap:'')+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.dens!=null?r.dens:'')+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.fuel!=null?r.fuel:'-')+'</td>';
+        html += '<td style="border:1px solid #e2e8f0;padding:4px 6px;text-align:right">'+(r.n!=null?r.n:'')+'</td>';
+        html += '</tr>';
+      });
+      tbody.innerHTML = html;
+    }
+  }
+
+  // ---------- 公開 API ----------
+  var NEV_RENDER = {
+    'nev-tax-reduction': function(){ renderTaxReduction(); },
+    'nev-tax-exempt'   : function(){ renderTaxExempt(); },
+    'nev-range'        : function(){ renderRange(); },
+    'nev-density'      : function(){ renderDensity(); },
+    'nev-batch29'      : function(){ renderBatch29(); }
+  };
+
+  window.nevRender = function(id) {
+    var fn = NEV_RENDER[id];
+    if (fn) fn();
+  };
+
+})(); // end NEV module
 </script>
 
 <script>

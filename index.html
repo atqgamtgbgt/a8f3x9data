@@ -4261,9 +4261,14 @@ body.tray-open { padding-bottom: 105px; }
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="natshare-btn-wh" class="btn btn-sm btn-primary active"   onclick="natSetView('wh')" style="font-size:11px;padding:2px 10px;">卸売</button>
                   <button id="natshare-btn-rt" class="btn btn-sm btn-outline-secondary" onclick="natSetView('rt')" style="font-size:11px;padding:2px 10px;">小売</button>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:14px;font-size:11px;color:#555;font-family:Noto Sans JP,sans-serif;cursor:pointer;">
+                    <input type="checkbox" id="natshare-cmp" onchange="natSetCompare(this.checked)" style="cursor:pointer;">
+                    <span>📊 卸売・小売 並列比較</span>
+                  </label>
                   <span style="font-size:10px;color:#aaa;font-family:Noto Sans JP,sans-serif;margin-left:8px;">※ 全月登録済み（24.12月〜26.3月）</span>
                 </div>
                 <div id="ec-zt-nation-share" class="echart-box" style="height:420px"></div>
+                <div id="ec-zt-nation-share-2" class="echart-box" style="height:300px;margin-top:6px;display:none"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-nation-volume">
@@ -18604,12 +18609,38 @@ window.natSetView = function(v){
   renderNationVolume();
 };
 
-function renderNationShare(){
-  var ec = makeEc('ec-zt-nation-share'); if(!ec) return;
-  var months = MONTHS_LABEL;
-  var d = NAT_DATA[_natView];
+// 比較モード state
+var _natCompare = false;
+window.natSetCompare = function(checked){
+  _natCompare = checked;
+  // 卸売/小売トグルボタンの有効/無効切り替え
+  ['natshare','natvol'].forEach(function(prefix){
+    ['wh','rt'].forEach(function(k){
+      var el = document.getElementById(prefix+'-btn-'+k);
+      if(el){
+        el.disabled = checked;
+        el.style.opacity = checked ? '0.4' : '1';
+        el.style.cursor = checked ? 'not-allowed' : 'pointer';
+      }
+    });
+  });
+  // セカンドチャート枠の表示/非表示
+  var ec2 = document.getElementById('ec-zt-nation-share-2');
+  if(ec2) ec2.style.display = checked ? 'block' : 'none';
+  // メインチャート高さを比較モード時は縮める
+  var ec1 = document.getElementById('ec-zt-nation-share');
+  if(ec1) ec1.style.height = checked ? '300px' : '420px';
+  renderNationShare();
+};
 
-  // 数量がnull or totals[i]がnull/0 → null（バー非表示）
+// 国籍別シェアの内部レンダー（任意の指標とecho instance idを受け取る）
+function _renderNationShareInner(elId, view, titleSuffix){
+  var ec = makeEc(elId); if(!ec) return;
+  // makeEc が既存インスタンスを返すケースもあるので、レンダー前にリサイズ
+  if(ec.resize) setTimeout(function(){ ec.resize(); }, 0);
+  var months = MONTHS_LABEL;
+  var d = NAT_DATA[view];
+
   function pct(arr){
     return arr.map(function(v,i){
       if(v===null || d.totals[i]===null || !d.totals[i]) return null;
@@ -18624,7 +18655,6 @@ function renderNationShare(){
   var kanPct   = pct(d.kan);
   var ouPct    = pct(d.ou);
 
-  // 公表値上書き（崔東樹公式の本期份額）
   Object.keys(d.overrides).forEach(function(idx){
     var i = +idx, o = d.overrides[idx];
     ziZhuPct[i] = o.ziZhu;
@@ -18635,10 +18665,18 @@ function renderNationShare(){
     ouPct[i]    = o.ou;
   });
 
+  // 比較モード時は title でラベル表示
+  var titleOpt = titleSuffix ? {
+    text: titleSuffix,
+    left: 8, top: 4,
+    textStyle: {fontFamily:FONT, fontSize:12, fontWeight:600, color:'#475569'}
+  } : null;
+
   ec.setOption({
+    title: titleOpt,
     tooltip: unifiedStackTooltip({unit:'%'}),
-    legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系']}),
-    grid: grid({bottom:50,top:55,left:55,right:20}),
+    legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系'], top: titleSuffix ? 22 : undefined}),
+    grid: grid({bottom:50, top: titleSuffix ? 75 : 55, left:55, right:20}),
     xAxis: xCat(months),
     yAxis: yVal('%',{min:0,max:100}),
     series:[
@@ -18649,7 +18687,17 @@ function renderNationShare(){
       {name:'韓国系', type:'bar',stack:'s',color:'#8b5cf6',data:kanPct},
       {name:'欧州系', type:'bar',stack:'s',color:'#06b6d4',data:ouPct}
     ]
-  }, true);  // notMerge:true でviewトグル時に系列リセット
+  }, true);
+}
+
+function renderNationShare(){
+  if(_natCompare){
+    // 比較モード：上=卸売、下=小売
+    _renderNationShareInner('ec-zt-nation-share',   'wh', '卸売（出荷）シェア');
+    _renderNationShareInner('ec-zt-nation-share-2', 'rt', '小売シェア');
+  } else {
+    _renderNationShareInner('ec-zt-nation-share', _natView, null);
+  }
 }
 
 // ── ⑧-b 国籍別 台数推移（万台） ──

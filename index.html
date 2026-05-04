@@ -4279,9 +4279,14 @@ body.tray-open { padding-bottom: 105px; }
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="natvol-btn-wh" class="btn btn-sm btn-primary active"   onclick="natSetView('wh')" style="font-size:11px;padding:2px 10px;">卸売</button>
                   <button id="natvol-btn-rt" class="btn btn-sm btn-outline-secondary" onclick="natSetView('rt')" style="font-size:11px;padding:2px 10px;">小売</button>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:14px;font-size:11px;color:#555;font-family:Noto Sans JP,sans-serif;cursor:pointer;">
+                    <input type="checkbox" id="natvol-cmp" onchange="natSetCompare(this.checked)" style="cursor:pointer;">
+                    <span>📊 卸売・小売 並列比較</span>
+                  </label>
                   <span style="font-size:10px;color:#aaa;font-family:Noto Sans JP,sans-serif;margin-left:8px;">※ 全月登録済み（24.12月〜26.3月）</span>
                 </div>
                 <div id="ec-zt-nation-volume" class="echart-box" style="height:420px"></div>
+                <div id="ec-zt-nation-volume-2" class="echart-box" style="height:300px;margin-top:6px;display:none"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-discount">
@@ -4316,9 +4321,14 @@ body.tray-open { padding-bottom: 105px; }
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;margin-left:14px;">表示：</span>
                   <button id="binx-btn-volume" class="btn btn-sm btn-primary active"   onclick="binxSetMode('volume')" style="font-size:11px;padding:2px 10px;">台数（積み上げ）</button>
                   <button id="binx-btn-pct"    class="btn btn-sm btn-outline-secondary" onclick="binxSetMode('pct')"    style="font-size:11px;padding:2px 10px;">NEV比率（％）</button>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:14px;font-size:11px;color:#555;font-family:Noto Sans JP,sans-serif;cursor:pointer;">
+                    <input type="checkbox" id="binx-cmp" onchange="binxSetCompare(this.checked)" style="cursor:pointer;">
+                    <span>📊 卸売・小売 並列比較</span>
+                  </label>
                   <span id="binx-note" style="font-size:10px;color:#aaa;font-family:Noto Sans JP,sans-serif;margin-left:8px;">※ 全月登録済み（24.12月〜26.3月）</span>
                 </div>
                 <div id="ec-zt-brand-ice-nev" class="echart-box" style="height:460px"></div>
+                <div id="ec-zt-brand-ice-nev-2" class="echart-box" style="height:340px;margin-top:6px;display:none"></div>
               </div>
             </div>
             <div class="cds-pane" id="zt-segment">
@@ -4329,8 +4339,13 @@ body.tray-open { padding-bottom: 105px; }
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="seg-btn-wh" class="btn btn-sm btn-primary active" onclick="segSetView('wh',this)" style="font-size:11px;padding:2px 10px;">卸売</button>
                   <button id="seg-btn-rt" class="btn btn-sm btn-outline-secondary" onclick="segSetView('rt',this)" style="font-size:11px;padding:2px 10px;">小売</button>
+                  <label style="display:inline-flex;align-items:center;gap:4px;margin-left:14px;font-size:11px;color:#555;font-family:Noto Sans JP,sans-serif;cursor:pointer;">
+                    <input type="checkbox" id="seg-cmp" onchange="segSetCompare(this.checked)" style="cursor:pointer;">
+                    <span>📊 卸売・小売 並列比較</span>
+                  </label>
                 </div>
                 <div id="ec-zt-segment" class="echart-box" style="height:480px"></div>
+                <div id="ec-zt-segment-2" class="echart-box" style="height:340px;margin-top:6px;display:none"></div>
               </div>
             </div>
 
@@ -18609,10 +18624,15 @@ window.natSetView = function(v){
   renderNationVolume();
 };
 
-// 比較モード state
+// 比較モード state（zt-nation-share と zt-nation-volume で共有）
 var _natCompare = false;
 window.natSetCompare = function(checked){
   _natCompare = checked;
+  // checkboxを両タブで同期
+  ['natshare-cmp','natvol-cmp'].forEach(function(id){
+    var cb = document.getElementById(id);
+    if(cb) cb.checked = checked;
+  });
   // 卸売/小売トグルボタンの有効/無効切り替え
   ['natshare','natvol'].forEach(function(prefix){
     ['wh','rt'].forEach(function(k){
@@ -18625,12 +18645,17 @@ window.natSetCompare = function(checked){
     });
   });
   // セカンドチャート枠の表示/非表示
-  var ec2 = document.getElementById('ec-zt-nation-share-2');
-  if(ec2) ec2.style.display = checked ? 'block' : 'none';
-  // メインチャート高さを比較モード時は縮める
-  var ec1 = document.getElementById('ec-zt-nation-share');
-  if(ec1) ec1.style.height = checked ? '300px' : '420px';
+  ['ec-zt-nation-share-2','ec-zt-nation-volume-2'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.style.display = checked ? 'block' : 'none';
+  });
+  // メインチャート高さ調整
+  var ec1a = document.getElementById('ec-zt-nation-share');
+  if(ec1a) ec1a.style.height = checked ? '300px' : '420px';
+  var ec1b = document.getElementById('ec-zt-nation-volume');
+  if(ec1b) ec1b.style.height = checked ? '300px' : '420px';
   renderNationShare();
+  renderNationVolume();
 };
 
 // 国籍別シェアの内部レンダー（任意の指標とecho instance idを受け取る）
@@ -18701,18 +18726,26 @@ function renderNationShare(){
 }
 
 // ── ⑧-b 国籍別 台数推移（万台） ──
-function renderNationVolume(){
-  var ec = makeEc('ec-zt-nation-volume'); if(!ec) return;
+function _renderNationVolumeInner(elId, view, titleSuffix){
+  var ec = makeEc(elId); if(!ec) return;
+  if(ec.resize) setTimeout(function(){ ec.resize(); }, 0);
   var months = MONTHS_LABEL;
-  var d = NAT_DATA[_natView];
-  // 卸売は最大320まで（自主214程度+独33+日30+米18+韓4+欧3=302）
-  // 小売は最大280まで（自主164+独43+日35+米18+韓2+欧2=264）
-  var yMax = (_natView==='wh') ? 320 : 280;
+  var d = NAT_DATA[view];
+  // 卸売は最大320、小売は最大280に揃える（比較モード時の見やすさ統一）
+  // 比較モード時は両方320に揃えると小売の積み上げが見にくいので、各々独立スケール
+  var yMax = (view==='wh') ? 320 : 280;
+
+  var titleOpt = titleSuffix ? {
+    text: titleSuffix,
+    left: 8, top: 4,
+    textStyle: {fontFamily:FONT, fontSize:12, fontWeight:600, color:'#475569'}
+  } : null;
 
   ec.setOption({
+    title: titleOpt,
     tooltip: unifiedStackTooltip({unit:'万台'}),
-    legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系']}),
-    grid: grid({bottom:50,top:55,left:55,right:20}),
+    legend: leg({data:['中国系ブランド','独系','日系','米系','韓系','欧州系'], top: titleSuffix ? 22 : undefined}),
+    grid: grid({bottom:50, top: titleSuffix ? 75 : 55, left:55, right:20}),
     xAxis: xCat(months),
     yAxis: yVal('万台',{min:0,max:yMax}),
     series:[
@@ -18723,7 +18756,16 @@ function renderNationVolume(){
       {name:'韓国系', type:'bar',stack:'s',color:'#8b5cf6',data:d.kan},
       {name:'欧州系', type:'bar',stack:'s',color:'#06b6d4',data:d.ou}
     ]
-  }, true);  // notMerge:true でviewトグル時にリセット
+  }, true);
+}
+
+function renderNationVolume(){
+  if(_natCompare){
+    _renderNationVolumeInner('ec-zt-nation-volume',   'wh', '卸売（出荷）台数');
+    _renderNationVolumeInner('ec-zt-nation-volume-2', 'rt', '小売台数');
+  } else {
+    _renderNationVolumeInner('ec-zt-nation-volume', _natView, null);
+  }
 }
 
 // ── ⑨ 値引き率 ──
@@ -18876,22 +18918,16 @@ var BIN_RT = {
   '自主_新エネ': [117,69,64,88,84,95,101,91,100,118, 120, 119, 118, 55, 41, 75]
 };
 
-// 表示モード切替: 'wh'/'rt'（指標） & 'volume'/'pct'（表示）
+// 表示モード切替: 'wh'/'rt'（指標） & 'volume'/'pct'（表示） & 比較モード
 var _binxView = 'wh';
 var _binxMode = 'volume';
+var _binxCompare = false;
 window.binxSetView = function(v){
   _binxView = v;
   ['wh','rt'].forEach(function(k){
     var el = document.getElementById('binx-btn-'+k);
     if(el) el.className = 'btn btn-sm ' + (v===k?'btn-primary active':'btn-outline-secondary');
   });
-  // 26.3 は小売内訳が単月未公開なので注記を切り替え
-  var note = document.getElementById('binx-note');
-  if(note){
-    note.textContent = (v==='rt')
-      ? '※ 全月登録済み（24.12月〜26.3月）'
-      : '※ 全月登録済み（24.12月〜26.3月）';
-  }
   renderBrandIceNev();
 };
 window.binxSetMode = function(m){
@@ -18902,15 +18938,42 @@ window.binxSetMode = function(m){
   });
   renderBrandIceNev();
 };
+window.binxSetCompare = function(checked){
+  _binxCompare = checked;
+  // 卸売/小売トグルボタンの有効/無効
+  ['wh','rt'].forEach(function(k){
+    var el = document.getElementById('binx-btn-'+k);
+    if(el){
+      el.disabled = checked;
+      el.style.opacity = checked ? '0.4' : '1';
+      el.style.cursor = checked ? 'not-allowed' : 'pointer';
+    }
+  });
+  // セカンドチャート枠の表示/非表示
+  var ec2 = document.getElementById('ec-zt-brand-ice-nev-2');
+  if(ec2) ec2.style.display = checked ? 'block' : 'none';
+  // メインチャート高さ調整
+  var ec1 = document.getElementById('ec-zt-brand-ice-nev');
+  if(ec1) ec1.style.height = checked ? '340px' : '460px';
+  renderBrandIceNev();
+};
 
-function renderBrandIceNev(){
-  var ec = makeEc('ec-zt-brand-ice-nev'); if(!ec) return;
+function _renderBrandIceNevInner(elId, view, mode, titleSuffix){
+  var ec = makeEc(elId); if(!ec) return;
+  if(ec.resize) setTimeout(function(){ ec.resize(); }, 0);
   var months = MONTHS_LABEL;
-  var dataObj = (_binxView==='wh') ? BIN_WH : BIN_RT;
-  var kindLabel = (_binxView==='wh') ? '卸売' : '小売';
+  var dataObj = (view==='wh') ? BIN_WH : BIN_RT;
+  var kindLabel = (view==='wh') ? '卸売' : '小売';
 
-  if(_binxMode === 'pct'){
-    // 各層ごとに NEV比率(%) を出して3本の折れ線で表示
+  var titleOpt = titleSuffix ? {
+    text: titleSuffix,
+    left: 8, top: 4,
+    textStyle: {fontFamily:FONT, fontSize:12, fontWeight:600, color:'#475569'}
+  } : null;
+  var topGrid = titleSuffix ? 75 : (mode==='pct' ? 55 : 60);
+  var topLeg  = titleSuffix ? 22 : undefined;
+
+  if(mode === 'pct'){
     function nevPct(layer){
       var ice = dataObj[layer+'_伝統'];
       var nev = dataObj[layer+'_新エネ'];
@@ -18921,12 +18984,13 @@ function renderBrandIceNev(){
       });
     }
     ec.setOption({
+      title: titleOpt,
       tooltip:{trigger:'axis',axisPointer:{type:'line'},backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
         formatter:function(p){
           return '<b>'+p[0].name+'月（'+kindLabel+'）</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+(x.value==null?'-':x.value+'%')+'</b>';}).join('<br>');
         }},
-      legend: leg({data:['高級車 NEV比率','合弁 NEV比率','中国系 NEV比率']}),
-      grid: grid({bottom:50,top:55,left:55,right:20}),
+      legend: leg({data:['高級車 NEV比率','合弁 NEV比率','中国系 NEV比率'], top: topLeg}),
+      grid: grid({bottom:50, top: topGrid, left:55, right:20}),
       xAxis: xCat(months),
       yAxis: yVal('NEV比率(%)',{min:0,max:100}),
       series:[
@@ -18936,11 +19000,11 @@ function renderBrandIceNev(){
       ]
     }, true);
   } else {
-    // 積み上げバー：6系列（伝統/NEV × 高級/合資/自主）
     ec.setOption({
+      title: titleOpt,
       tooltip: unifiedStackTooltip({unit:'万台'}),
-      legend: leg({data:['高級車 伝統','高級車 新エネ','合弁 伝統','合弁 新エネ','中国系 伝統','中国系 新エネ']}),
-      grid: grid({bottom:50,top:60,left:55,right:20}),
+      legend: leg({data:['高級車 伝統','高級車 新エネ','合弁 伝統','合弁 新エネ','中国系 伝統','中国系 新エネ'], top: topLeg}),
+      grid: grid({bottom:50, top: topGrid, left:55, right:20}),
       xAxis: xCat(months),
       yAxis: yVal('万台',{min:0}),
       series:[
@@ -18952,6 +19016,15 @@ function renderBrandIceNev(){
         {name:'中国系 新エネ', type:'bar', stack:'s', color:'#dc2626', data:dataObj['自主_新エネ']}
       ]
     }, true);
+  }
+}
+
+function renderBrandIceNev(){
+  if(_binxCompare){
+    _renderBrandIceNevInner('ec-zt-brand-ice-nev',   'wh', _binxMode, '卸売（出荷）');
+    _renderBrandIceNevInner('ec-zt-brand-ice-nev-2', 'rt', _binxMode, '小売');
+  } else {
+    _renderBrandIceNevInner('ec-zt-brand-ice-nev', _binxView, _binxMode, null);
   }
 }
 
@@ -19036,22 +19109,39 @@ var SEG_DATA = {
 };
 
 var _segView = 'wh';
+var _segCompare = false;
 window.segSetView = function(v, btn){
   _segView = v;
-  document.querySelectorAll('#seg-btn-wh,#seg-btn-rt').forEach(function(b){
-    b.className = b.className.replace('btn-primary','btn-outline-secondary').replace('btn-outline-secondary','btn-outline-secondary');
-  });
   document.getElementById('seg-btn-wh').className = 'btn btn-sm ' + (v==='wh'?'btn-primary active':'btn-outline-secondary');
   document.getElementById('seg-btn-rt').className = 'btn btn-sm ' + (v==='rt'?'btn-primary active':'btn-outline-secondary');
   renderSegment();
 };
+window.segSetCompare = function(checked){
+  _segCompare = checked;
+  // 卸売/小売トグルボタンの有効/無効
+  ['wh','rt'].forEach(function(k){
+    var el = document.getElementById('seg-btn-'+k);
+    if(el){
+      el.disabled = checked;
+      el.style.opacity = checked ? '0.4' : '1';
+      el.style.cursor = checked ? 'not-allowed' : 'pointer';
+    }
+  });
+  // セカンドチャート枠の表示/非表示
+  var ec2 = document.getElementById('ec-zt-segment-2');
+  if(ec2) ec2.style.display = checked ? 'block' : 'none';
+  // メインチャート高さ調整
+  var ec1 = document.getElementById('ec-zt-segment');
+  if(ec1) ec1.style.height = checked ? '340px' : '480px';
+  renderSegment();
+};
 
-function renderSegment(){
-  var ec = makeEc('ec-zt-segment'); if(!ec) return;
-  var vk = _segView;  // 'wh' or 'rt'
+function _renderSegmentInner(elId, view, titleSuffix){
+  var ec = makeEc(elId); if(!ec) return;
+  if(ec.resize) setTimeout(function(){ ec.resize(); }, 0);
+  var vk = view;  // 'wh' or 'rt'
   var months = SEG_MONTHS;
 
-  // 積み上げ棒：x軸=月、series=クラス別（「国籍別 卸売台数推移」と同等のシンプル構造）
   var series = SEG_KEYS.map(function(k,i){
     return {
       name: SEG_LABELS[i],
@@ -19062,14 +19152,30 @@ function renderSegment(){
     };
   });
 
+  var titleOpt = titleSuffix ? {
+    text: titleSuffix,
+    left: 8, top: 4,
+    textStyle: {fontFamily:FONT, fontSize:12, fontWeight:600, color:'#475569'}
+  } : null;
+
   ec.setOption({
+    title: titleOpt,
     tooltip: unifiedStackTooltip({unit:'万台'}),
-    legend: leg({data: SEG_LABELS}),
-    grid: grid({bottom:50,top:55,left:55,right:20}),
+    legend: leg({data: SEG_LABELS, top: titleSuffix ? 22 : undefined}),
+    grid: grid({bottom:50, top: titleSuffix ? 75 : 55, left:55, right:20}),
     xAxis: xCat(months),
     yAxis: yVal('万台',{min:0}),
     series: series
-  });
+  }, true);
+}
+
+function renderSegment(){
+  if(_segCompare){
+    _renderSegmentInner('ec-zt-segment',   'wh', '卸売（出荷）');
+    _renderSegmentInner('ec-zt-segment-2', 'rt', '小売');
+  } else {
+    _renderSegmentInner('ec-zt-segment', _segView, null);
+  }
 }
 
 // ── 全グラフ初期化（初回のみ） ──

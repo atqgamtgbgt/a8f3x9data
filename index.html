@@ -5193,37 +5193,37 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">⚖️ 応付-応収 ギャップ ランキング（日数）</div>
+                    <div class="chart-title">⚖️ 仕入債務 − 売上債権 回転日数差 ランキング（日）</div>
                     <div class="chart-subtitle">2025年 全70社／差額順　大きいほどサプライヤー資金繰りに依存　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-gap-rank" class="echart-box" style="height:1450px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📥 応収账款・票据周転日数（セクター別平均）</div>
-                    <div class="chart-subtitle">2021〜2025年　矿/电池/整车/经销商　出典：崔東樹（乗聯会）</div>
+                    <div class="chart-title">📥 売上債権 回転日数（セクター別平均）</div>
+                    <div class="chart-subtitle">2021〜2025年　鉱業／電池／完成車／ディーラー　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-ar-sector" class="echart-box" style="height:380px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">📤 応付账款・票据周転日数（セクター別平均）</div>
-                    <div class="chart-subtitle">2021〜2025年　矿/电池/整车/经销商　出典：崔東樹（乗聯会）</div>
+                    <div class="chart-title">📤 仕入債務 回転日数（セクター別平均）</div>
+                    <div class="chart-subtitle">2021〜2025年　鉱業／電池／完成車／ディーラー　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-ap-sector" class="echart-box" style="height:380px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">🚗 主要OEM 応付周転日数 推移（日）</div>
+                    <div class="chart-title">🚗 主要OEM 仕入債務 回転日数 推移（日）</div>
                     <div class="chart-subtitle">2021〜2025年　長いほど支払い遅延（取引条件強気）　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-ap-trend" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">📐 応収 vs 応付 散布図（2025年）</div>
+                    <div class="chart-title">📐 売上債権 vs 仕入債務 回転日数 散布図（2025年）</div>
                     <div class="chart-subtitle">右下＝買い手としての支払力強・売り手としての回収速い　出典：崔東樹（乗聯会）</div>
-                    <div id="ec-wfin-arap-scatter" class="echart-box" style="height:480px"></div>
+                    <div id="ec-wfin-arap-scatter" class="echart-box" style="height:640px"></div>
                   </div>
                 </div>
               </div>
@@ -5234,21 +5234,21 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">📦 2025年 存货周転日数ランキング（日）</div>
+                    <div class="chart-title">📦 2025年 在庫回転日数ランキング（日）</div>
                     <div class="chart-subtitle">2025年 全70社／在庫日数順（長いほど在庫滞留＝効率悪化）　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-inv-rank" class="echart-box" style="height:1450px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">🏭 セクター別 存货周転日数推移</div>
-                    <div class="chart-subtitle">2021〜2025年　矿/电池/整车/经销商　出典：崔東樹（乗聯会）</div>
+                    <div class="chart-title">🏭 セクター別 在庫回転日数推移</div>
+                    <div class="chart-subtitle">2021〜2025年　鉱業／電池／完成車／ディーラー　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-inv-sector" class="echart-box" style="height:380px"></div>
                   </div>
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">🚗 主要OEM 存货周転日数推移</div>
+                    <div class="chart-title">🚗 主要OEM 在庫回転日数推移</div>
                     <div class="chart-subtitle">2021〜2025年　日米欧韓中　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-inv-trend" class="echart-box" style="height:380px"></div>
                   </div>
@@ -20277,7 +20277,7 @@ function renderWfinPmScatter() {
 // 運転資本 ペイン
 // ============================================================
 
-// Chart 9: 応付-応収ギャップ ランキング
+// Chart 9: 仕入債務−売上債権 差 ランキング
 function renderWfinGapRank() {
   var ec = wfinInitOrGet('ec-wfin-gap-rank'); if (!ec) return;
   // 全個別企業を抽出(セクター集計除外)
@@ -20288,10 +20288,10 @@ function renderWfinGapRank() {
     tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
       formatter: function(p){
         var d = arr.find(function(x){ return x.jp === p[0].name; });
-        var s = '<b>' + p[0].name + '</b><br>応付-応収差(25年): <b>' + p[0].value + '日</b>';
+        var s = '<b>' + p[0].name + '</b><br>仕入債務−売上債権 差(25年): <b>' + p[0].value + '日</b>';
         if (d) {
-          if (d.ap[4] != null) s += '<br>応付周転: ' + d.ap[4] + '日';
-          if (d.ar[4] != null) s += '<br>応収周転: ' + d.ar[4] + '日';
+          if (d.ap[4] != null) s += '<br>仕入債務 回転: ' + d.ap[4] + '日';
+          if (d.ar[4] != null) s += '<br>売上債権 回転: ' + d.ar[4] + '日';
         }
         return s;
       }
@@ -20300,7 +20300,7 @@ function renderWfinGapRank() {
     xAxis: { type:'value', name:'日', axisLabel:{formatter:'{value}'} },
     yAxis: { type:'category', data: arr.map(function(r){return r.jp;}), axisLabel:{fontSize:10} },
     series: [{
-      name:'応付-応収 差(25年)', type:'bar',
+      name:'仕入債務 − 売上債権 差(25年)', type:'bar',
       data: arr.map(function(r){
         var col = '#3b82f6';
         if (r.gap25 >= 200)     col = '#dc2626';
@@ -20314,7 +20314,7 @@ function renderWfinGapRank() {
   });
 }
 
-// Chart 10: 応収账款 セクター別推移
+// Chart 10: 売上債権 セクター別推移
 function renderWfinArSector() {
   var ec = wfinInitOrGet('ec-wfin-ar-sector'); if (!ec) return;
   var sectors = ['总计','矿','电池','整车','经销商'];
@@ -20342,7 +20342,7 @@ function renderWfinArSector() {
   });
 }
 
-// Chart 11: 応付账款 セクター別推移
+// Chart 11: 仕入債務 セクター別推移
 function renderWfinApSector() {
   var ec = wfinInitOrGet('ec-wfin-ap-sector'); if (!ec) return;
   var sectors = ['总计','矿','电池','整车','经销商'];
@@ -20370,7 +20370,7 @@ function renderWfinApSector() {
   });
 }
 
-// Chart 12: OEM 応付周転 推移
+// Chart 12: OEM 仕入債務回転 推移
 function renderWfinApTrend() {
   var ec = wfinInitOrGet('ec-wfin-ap-trend'); if (!ec) return;
   var sel = ['比亚迪股份','上汽集团','吉利汽车','奇瑞汽车','长城汽车','长安汽车','赛力斯','理想汽车','蔚来','丰田汽车','大众汽车','现代汽车'];
@@ -20400,7 +20400,7 @@ function renderWfinApTrend() {
   });
 }
 
-// Chart 13: 応収 vs 応付 散布図
+// Chart 13: 売上債権 vs 仕入債務 散布図
 function renderWfinArapScatter() {
   var ec = wfinInitOrGet('ec-wfin-arap-scatter'); if (!ec) return;
   var arr = WFIN_DATA.arap.filter(function(r){
@@ -20418,7 +20418,14 @@ function renderWfinArapScatter() {
     if (matchDealer.some(function(k){ return name.indexOf(k) >= 0; })) return 'ディーラー';
     return 'その他';
   }
-  var SECTOR_COLORS = {'完成車':'#3b82f6','電池':'#f59e0b','鉱業':'#8b4513','ディーラー':'#10b981','その他':'#94a3b8'};
+  // セクター別の色＋シンボル形状(重なり時の識別性向上)
+  var SECTOR_STYLE = {
+    '完成車':   { color:'#3b82f6', symbol:'circle' },
+    '電池':     { color:'#f59e0b', symbol:'rect' },
+    '鉱業':     { color:'#8b4513', symbol:'triangle' },
+    'ディーラー': { color:'#10b981', symbol:'diamond' },
+    'その他':   { color:'#94a3b8', symbol:'pin' }
+  };
   var bySector = {};
   arr.forEach(function(r){
     var s = classify(r.name);
@@ -20426,17 +20433,28 @@ function renderWfinArapScatter() {
     bySector[s].push([r.ar[4], r.ap[4], r.jp]);
   });
   var series = Object.keys(bySector).map(function(s){
+    var st = SECTOR_STYLE[s];
     return {
       name: s, type:'scatter',
+      symbol: st.symbol,
       data: bySector[s],
-      symbolSize: 11,
-      itemStyle: { color: SECTOR_COLORS[s], opacity:0.7 },
+      symbolSize: 10,
+      itemStyle: {
+        color: st.color,
+        opacity: 0.75,
+        borderColor: '#fff',
+        borderWidth: 1.5
+      },
+      emphasis: {
+        itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
+        scale: 1.5
+      },
       label: {
-        show:true, position:'top', fontSize:9,
+        show:true, position:'top', fontSize:9, color:'#333',
         formatter: function(p){
           // 主要企業＋極端値のみラベル表示
           if (p.value[0] >= 100 || p.value[1] >= 200) return p.value[2];
-          if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)'].indexOf(p.value[2]) >= 0) return p.value[2];
+          if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)','XPENG(小鵬)','Geely(吉利)','上汽集団','ホンダ','日産','GM','メルセデス・ベンツ','BMW'].indexOf(p.value[2]) >= 0) return p.value[2];
           return '';
         }
       }
@@ -20445,13 +20463,28 @@ function renderWfinArapScatter() {
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
-        return '<b>' + p.value[2] + '</b>(' + p.seriesName + ')<br>応収周転: ' + p.value[0] + '日<br>応付周転: ' + p.value[1] + '日';
+        return '<b>' + p.value[2] + '</b>(' + p.seriesName + ')<br>売上債権 回転: ' + p.value[0] + '日<br>仕入債務 回転: ' + p.value[1] + '日';
       }
     },
-    legend: { bottom:0, textStyle:{fontSize:11} },
-    grid: { left:55, right:25, top:25, bottom:55 },
-    xAxis: { type:'value', name:'応収周転 日数(2025年)', nameGap:35, nameLocation:'middle' },
-    yAxis: { type:'value', name:'応付周転 日数(2025年)', splitLine:{lineStyle:{color:'#eee'}} },
+    legend: {
+      top:5, right:10, orient:'vertical',
+      textStyle:{fontSize:11},
+      icon:'roundRect',
+      backgroundColor:'rgba(255,255,255,0.85)',
+      borderColor:'#ddd', borderWidth:1, padding:[6,10,6,10],
+      itemGap:6
+    },
+    grid: { left:65, right:30, top:30, bottom:60 },
+    xAxis: {
+      type:'value', name:'売上債権 回転日数(2025年)',
+      nameGap:35, nameLocation:'middle',
+      splitLine:{lineStyle:{color:'#eee'}}
+    },
+    yAxis: {
+      type:'value', name:'仕入債務 回転日数(2025年)',
+      nameGap:48, nameLocation:'middle',
+      splitLine:{lineStyle:{color:'#eee'}}
+    },
     series: series
   });
 }
@@ -20460,10 +20493,10 @@ function renderWfinArapScatter() {
 // 在庫効率 ペイン
 // ============================================================
 
-// Chart 14: 在庫日数ランキング(2025)
+// Chart 14: 在庫回転日数ランキング(2025)
 function renderWfinInvRank() {
   var ec = wfinInitOrGet('ec-wfin-inv-rank'); if (!ec) return;
-  // 全個別企業を抽出(在庫日数昇順、長い側=上端)
+  // 全個別企業を抽出(在庫回転日数昇順、長い側=上端)
   var arr = WFIN_DATA.inv
     .filter(function(r){ return !r.isSector && r.inv[4] != null && r.inv[4] < 300; })
     .slice().sort(function(a,b){ return a.inv[4] - b.inv[4]; });
@@ -20471,7 +20504,7 @@ function renderWfinInvRank() {
     tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
       formatter: function(p){
         var d = arr.find(function(x){ return x.jp === p[0].name; });
-        var s = '<b>' + p[0].name + '</b><br>25年存货周転: <b>' + p[0].value + '日</b>';
+        var s = '<b>' + p[0].name + '</b><br>25年在庫回転: <b>' + p[0].value + '日</b>';
         if (d && d.inv[3] != null) s += '<br>24年: ' + d.inv[3] + '日';
         if (d && d.chg25 != null)  s += '<br>変化: ' + (d.chg25>0?'+':'') + d.chg25 + '日';
         return s;
@@ -20481,7 +20514,7 @@ function renderWfinInvRank() {
     xAxis: { type:'value', name:'日' },
     yAxis: { type:'category', data: arr.map(function(r){return r.jp;}), axisLabel:{fontSize:10} },
     series: [{
-      name:'2025年 存货周転', type:'bar',
+      name:'2025年 在庫回転日数', type:'bar',
       data: arr.map(function(r){
         var v = r.inv[4];
         var col = '#3b82f6';

@@ -20354,9 +20354,11 @@ function renderWfinRevGrowth() {
 }
 
 // Chart 4: 規模 vs 成長率 散布図
+// X軸はlog10変換した値で type:'value' を使用 (type:'log'+dataZoomだとパン時にティックが
+// 再計算されてスケールが揺れて見えるため。事前変換で他の散布図と同じ挙動にする)
 function renderWfinRevScatter() {
   var ec = wfinInitOrGet('ec-wfin-rev-scatter'); if (!ec) return;
-  var N = WFIN_LABEL_N['ec-wfin-rev-scatter'] || 25;
+  var N = WFIN_LABEL_N['ec-wfin-rev-scatter'] || 71;
   var arr = WFIN_DATA.revenue.filter(function(r){
     return r.rev[6] != null && r.g25 != null && r.rev[6] >= 50;
   });
@@ -20369,15 +20371,36 @@ function renderWfinRevScatter() {
   var labelSet = {};
   ranked.slice(0, N).forEach(function(r){ labelSet[r.jp] = true; });
 
-  var dataPts = arr.map(function(r){ return [r.rev[6], r.g25, r.jp]; });
+  // [logRev, growth, name, originalRev] - 4要素タプルにして元値も保持
+  var dataPts = arr.map(function(r){ return [Math.log10(r.rev[6]), r.g25, r.jp, r.rev[6]]; });
+
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
-        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[0]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
+        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[3]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
       }
     },
     grid: { left:55, right:25, top:35, bottom:55 },
-    xAxis: { type:'log', name:'2025年営収（億元・対数）', logBase:10, nameGap:35, nameLocation:'middle' },
+    xAxis: {
+      type:'value',
+      name:'2025年営収（億元・対数）',
+      nameGap:35, nameLocation:'middle',
+      min: 1.5,    // ≈ 31.6 億元
+      max: 4.7,    // ≈ 50,118 億元（最大データ約25,000を十分包含）
+      interval: 1, // 整数log値で目盛り (=10, 100, 1000, 10000)
+      axisLabel: {
+        formatter: function(v){
+          var orig = Math.pow(10, v);
+          if (orig >= 10000) return Math.round(orig/10000) + '万';
+          if (orig >= 1000)  return Math.round(orig/1000) + 'k';
+          return Math.round(orig).toString();
+        }
+      },
+      splitLine: { lineStyle: { color:'#eee' } },
+      // 副目盛り (10の累乗の中間)
+      minorTick: { show: true, splitNumber: 9 },
+      minorSplitLine: { show: true, lineStyle: { color:'#f5f5f5' } }
+    },
     yAxis: { type:'value', name:'25年成長率(%)', axisLabel:{formatter:'{value}%'},
       splitLine:{lineStyle:{color:'#eee'}} },
     dataZoom: [
@@ -20388,7 +20411,8 @@ function renderWfinRevScatter() {
       type:'scatter',
       data: dataPts,
       symbolSize: function(v){
-        var s = Math.sqrt(v[0]) * 0.7;
+        // v[3] = 元の営収値を使用してサイズを決定
+        var s = Math.sqrt(v[3]) * 0.7;
         return Math.max(8, Math.min(40, s));
       },
       itemStyle: { color: function(p){

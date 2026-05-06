@@ -5261,6 +5261,13 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
+                    <div class="chart-title">📋 純利益＋利潤率 マトリクス（2020〜2025年）</div>
+                    <div class="chart-subtitle">全43社＋整車企業合計／純利益（億元）と利潤率（%）を6年分表示　ヒートマップ色分け　出典：崔東樹（乗聯会）</div>
+                    <div id="wfin-profit-matrix" style="overflow-x:auto"></div>
+                  </div>
+                </div>
+                <div class="col-12">
+                  <div class="chart-card">
                     <div class="chart-title">💎 2025年 売上総利益率（粗利率）ランキング（%）</div>
                     <div class="chart-subtitle">2025年 全42社／粗利率順　高収益ブランド ⇄ 価格競争　出典：崔東樹（乗聯会）</div>
                     <div id="ec-wfin-gross-rank" class="echart-box" style="height:880px"></div>
@@ -20770,6 +20777,125 @@ function renderWfinInvChange() {
 }
 
 // ============================================================
+// 整车企业（業界合計）行を profit データの先頭に追加
+// 出典: 崔東樹(乗聯会) 表「净利润」「利润率」上段の合計行
+// ============================================================
+WFIN_DATA.profit.unshift({
+  name: '整车企业', jp: '整車企業（合計）',
+  np: [4196, 9817, 10190, 11669, 10100, 4448],
+  pm: [3.0, 7.0, 7.0, 6.0, 5.0, 2.0],
+  isTotal: true
+});
+
+// ============================================================
+// 純利益＋利潤率 マトリクス（HTML テーブル）
+// 画像（崔東樹レポート）と同じレイアウトで色付き表示
+// ============================================================
+function renderWfinProfitMatrix() {
+  var host = document.getElementById('wfin-profit-matrix');
+  if (!host) return;
+  var years = ['2020', '2021', '2022', '2023', '2024', '2025'];
+
+  // 純利益（億元）→ 背景色: 0以下=赤系、>0=白〜緑系
+  function colorNp(v) {
+    if (v == null) return { bg: '#fff', fg: '#999' };
+    if (v < -100) return { bg: '#dc2626', fg: '#fff' };
+    if (v < -50)  return { bg: '#ef4444', fg: '#fff' };
+    if (v < 0)   return { bg: '#fecaca', fg: '#991b1b' };
+    if (v === 0) return { bg: '#fff',    fg: '#666' };
+    if (v < 100)  return { bg: '#fff',    fg: '#111' };
+    if (v < 500)  return { bg: '#dcfce7', fg: '#111' };
+    if (v < 1000) return { bg: '#86efac', fg: '#111' };
+    return { bg: '#22c55e', fg: '#fff' };
+  }
+  // 利潤率(%) → 画像と同じ赤〜黄〜緑グラデ
+  function colorPm(v) {
+    if (v == null) return { bg: '#fff',    fg: '#999' };
+    if (v <= -20)  return { bg: '#b91c1c', fg: '#fff' };
+    if (v <= -10)  return { bg: '#dc2626', fg: '#fff' };
+    if (v < 0)     return { bg: '#fca5a5', fg: '#7f1d1d' };
+    if (v < 2)     return { bg: '#fde68a', fg: '#78350f' };
+    if (v < 5)     return { bg: '#fef08a', fg: '#713f12' };
+    if (v < 8)     return { bg: '#bbf7d0', fg: '#14532d' };
+    if (v < 15)    return { bg: '#86efac', fg: '#14532d' };
+    return { bg: '#22c55e', fg: '#fff' };
+  }
+  function fmt(v) { return v == null ? '−' : v; }
+  function fmtPm(v) { return v == null ? '−' : (v + '%'); }
+
+  var html = '';
+  html += '<style>';
+  html += '.wfin-pmtx{width:100%;border-collapse:collapse;font-size:11px;font-family:-apple-system,sans-serif;text-align:right}';
+  html += '.wfin-pmtx th{background:#f1f5f9;border:1px solid #cbd5e1;padding:4px 6px;font-weight:600;text-align:center;font-size:10px;color:#334155;position:sticky;top:0;z-index:2}';
+  html += '.wfin-pmtx td{border:1px solid #e2e8f0;padding:3px 6px;white-space:nowrap}';
+  html += '.wfin-pmtx td.wfin-idx{text-align:center;color:#94a3b8;font-size:10px;background:#f8fafc}';
+  html += '.wfin-pmtx td.wfin-name{text-align:left;font-weight:500;background:#f8fafc;color:#0f172a;position:sticky;left:0;z-index:1}';
+  html += '.wfin-pmtx tr.wfin-total td{font-weight:700;background:#fef3c7 !important;border-top:2px solid #f59e0b;border-bottom:2px solid #f59e0b}';
+  html += '.wfin-pmtx tr.wfin-total td.wfin-name{background:#fde68a !important}';
+  html += '.wfin-pmtx tr:hover td:not(.wfin-name):not(.wfin-idx){outline:1px solid #3b82f6}';
+  html += '.wfin-pmtx-wrap{max-height:760px;overflow:auto;border:1px solid #e2e8f0;border-radius:6px}';
+  html += '.wfin-pmtx-legend{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 6px;font-size:11px;color:#475569}';
+  html += '.wfin-pmtx-legend span{display:inline-flex;align-items:center;gap:4px}';
+  html += '.wfin-pmtx-legend i{display:inline-block;width:14px;height:14px;border:1px solid #cbd5e1;vertical-align:middle}';
+  html += '</style>';
+
+  // 凡例
+  html += '<div class="wfin-pmtx-legend">';
+  html += '<span><b>純利益(億元)：</b></span>';
+  html += '<span><i style="background:#dc2626"></i>大赤字 &lt; -100</span>';
+  html += '<span><i style="background:#fecaca"></i>赤字</span>';
+  html += '<span><i style="background:#fff"></i>0〜100</span>';
+  html += '<span><i style="background:#dcfce7"></i>100〜500</span>';
+  html += '<span><i style="background:#86efac"></i>500〜1000</span>';
+  html += '<span><i style="background:#22c55e"></i>1000+</span>';
+  html += '<span style="margin-left:18px"><b>利潤率：</b></span>';
+  html += '<span><i style="background:#dc2626"></i>≤ -10%</span>';
+  html += '<span><i style="background:#fca5a5"></i>赤字</span>';
+  html += '<span><i style="background:#fde68a"></i>0〜2%</span>';
+  html += '<span><i style="background:#fef08a"></i>2〜5%</span>';
+  html += '<span><i style="background:#bbf7d0"></i>5〜8%</span>';
+  html += '<span><i style="background:#86efac"></i>8〜15%</span>';
+  html += '<span><i style="background:#22c55e"></i>15%+</span>';
+  html += '</div>';
+
+  html += '<div class="wfin-pmtx-wrap">';
+  html += '<table class="wfin-pmtx">';
+  html += '<thead>';
+  html += '<tr>';
+  html += '<th rowspan="2" style="width:34px">序号</th>';
+  html += '<th rowspan="2" style="width:160px;text-align:left;padding-left:8px">企業</th>';
+  html += '<th colspan="6" style="background:#dbeafe">純利益（億人民元）</th>';
+  html += '<th colspan="6" style="background:#fef3c7">利潤率</th>';
+  html += '</tr>';
+  html += '<tr>';
+  years.forEach(function(y){ html += '<th style="background:#dbeafe">' + y + '</th>'; });
+  years.forEach(function(y){ html += '<th style="background:#fef3c7">' + y + '</th>'; });
+  html += '</tr>';
+  html += '</thead><tbody>';
+
+  WFIN_DATA.profit.forEach(function(r, i){
+    var isTotal = r.isTotal === true;
+    html += '<tr class="' + (isTotal ? 'wfin-total' : '') + '">';
+    html += '<td class="wfin-idx">' + (isTotal ? '−' : i) + '</td>';
+    html += '<td class="wfin-name" title="' + r.name + '">' + r.jp + '</td>';
+    // 純利益
+    r.np.forEach(function(v){
+      var c = colorNp(v);
+      html += '<td style="background:' + c.bg + ';color:' + c.fg + '">' + fmt(v) + '</td>';
+    });
+    // 利潤率
+    r.pm.forEach(function(v){
+      var c = colorPm(v);
+      html += '<td style="background:' + c.bg + ';color:' + c.fg + '">' + fmtPm(v) + '</td>';
+    });
+    html += '</tr>';
+  });
+
+  html += '</tbody></table></div>';
+  host.innerHTML = html;
+}
+
+// ============================================================
 // メイン描画ディスパッチャ
 // ============================================================
 function wfinRender(id) {
@@ -20779,6 +20905,7 @@ function wfinRender(id) {
     renderWfinRevGrowth();
     renderWfinRevScatter();
   } else if (id === 'wfin-profitability') {
+    renderWfinProfitMatrix();
     renderWfinGrossRank();
     renderWfinNpRank();
     renderWfinGrossTrend();

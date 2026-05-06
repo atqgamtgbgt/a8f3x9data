@@ -5261,8 +5261,8 @@ body.tray-open { padding-bottom: 105px; }
               <div class="row g-3">
                 <div class="col-12">
                   <div class="chart-card">
-                    <div class="chart-title">📋 純利益＋利潤率 マトリクス（2020〜2025年）</div>
-                    <div class="chart-subtitle">全43社＋整車企業合計／純利益（億元）と利潤率（%）を6年分表示　ヒートマップ色分け　出典：崔東樹（乗聯会）</div>
+                    <div class="chart-title">📋 純利益＋利益率 マトリクス（2020〜2025年）</div>
+                    <div class="chart-subtitle">全43社＋整車企業合計／純利益（億元）と利益率（%）を6年分表示　ヒートマップ色分け　出典：崔東樹（乗聯会）</div>
                     <div id="wfin-profit-matrix" style="overflow-x:auto"></div>
                   </div>
                 </div>
@@ -20788,7 +20788,26 @@ WFIN_DATA.profit.unshift({
 });
 
 // ============================================================
-// 純利益＋利潤率 マトリクス（HTML テーブル）
+// 中国系OEMの jp 表記を統一（既存ダッシュボードの英略称+漢字慣例に合わせる）
+// 既存: BAIC(北京汽車), Geely(吉利), Chery(奇瑞), GAC(広汽) など
+// ============================================================
+var WFIN_JP_FIX = {
+  '上汽集团':  'SAIC(上汽集団)',
+  '长城汽车':  'GWM(長城汽車)',
+  '长安汽车':  'Changan(長安汽車)',
+  '一汽解放':  'FAW(一汽解放)',
+  '华晨中国':  'Brilliance(華晨)',
+  '北汽蓝谷':  'BluePark(北汽藍谷)',
+  '曙光股份':  'Shuguang(曙光)'
+};
+['revenue','gross','profit','arap','inv'].forEach(function(k){
+  if (WFIN_DATA[k]) WFIN_DATA[k].forEach(function(r){
+    if (WFIN_JP_FIX[r.name]) r.jp = WFIN_JP_FIX[r.name];
+  });
+});
+
+// ============================================================
+// 純利益＋利益率 マトリクス（HTML テーブル）
 // 画像（崔東樹レポート）と同じレイアウトで色付き表示
 // ============================================================
 function renderWfinProfitMatrix() {
@@ -20808,7 +20827,7 @@ function renderWfinProfitMatrix() {
     if (v < 1000) return { bg: '#86efac', fg: '#111' };
     return { bg: '#22c55e', fg: '#fff' };
   }
-  // 利潤率(%) → 画像と同じ赤〜黄〜緑グラデ
+  // 利益率(%) → 画像と同じ赤〜黄〜緑グラデ
   function colorPm(v) {
     if (v == null) return { bg: '#fff',    fg: '#999' };
     if (v <= -20)  return { bg: '#b91c1c', fg: '#fff' };
@@ -20848,7 +20867,7 @@ function renderWfinProfitMatrix() {
   html += '<span><i style="background:#dcfce7"></i>100〜500</span>';
   html += '<span><i style="background:#86efac"></i>500〜1000</span>';
   html += '<span><i style="background:#22c55e"></i>1000+</span>';
-  html += '<span style="margin-left:18px"><b>利潤率：</b></span>';
+  html += '<span style="margin-left:18px"><b>利益率：</b></span>';
   html += '<span><i style="background:#dc2626"></i>≤ -10%</span>';
   html += '<span><i style="background:#fca5a5"></i>赤字</span>';
   html += '<span><i style="background:#fde68a"></i>0〜2%</span>';
@@ -20865,7 +20884,7 @@ function renderWfinProfitMatrix() {
   html += '<th rowspan="2" style="width:34px">序号</th>';
   html += '<th rowspan="2" style="width:160px;text-align:left;padding-left:8px">企業</th>';
   html += '<th colspan="6" style="background:#dbeafe">純利益（億人民元）</th>';
-  html += '<th colspan="6" style="background:#fef3c7">利潤率</th>';
+  html += '<th colspan="6" style="background:#fef3c7">利益率</th>';
   html += '</tr>';
   html += '<tr>';
   years.forEach(function(y){ html += '<th style="background:#dbeafe">' + y + '</th>'; });
@@ -20883,7 +20902,7 @@ function renderWfinProfitMatrix() {
       var c = colorNp(v);
       html += '<td style="background:' + c.bg + ';color:' + c.fg + '">' + fmt(v) + '</td>';
     });
-    // 利潤率
+    // 利益率
     r.pm.forEach(function(v){
       var c = colorPm(v);
       html += '<td style="background:' + c.bg + ';color:' + c.fg + '">' + fmtPm(v) + '</td>';

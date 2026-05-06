@@ -20254,7 +20254,7 @@ function renderWfinRevScatter() {
         return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[0]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
       }
     },
-    grid: { left:55, right:25, top:25, bottom:55 },
+    grid: { left:55, right:25, top:35, bottom:55 },
     xAxis: { type:'log', name:'2025年営収（億元・対数）', logBase:10, nameGap:35, nameLocation:'middle' },
     yAxis: { type:'value', name:'25年成長率(%)', axisLabel:{formatter:'{value}%'},
       splitLine:{lineStyle:{color:'#eee'}} },
@@ -20267,12 +20267,20 @@ function renderWfinRevScatter() {
       },
       itemStyle: { color: function(p){
         return p.value[1] >= 20 ? '#dc2626' : (p.value[1] >= 0 ? '#3b82f6' : '#94a3b8');
-      }, opacity:0.7 },
+      }, opacity:0.7, borderColor:'#fff', borderWidth:1 },
       label: {
-        show:true, position:'top', fontSize:9,
-        formatter: function(p){
-          if (p.value[0] >= 5000 || p.value[1] >= 30 || p.value[1] <= -10) return p.value[2];
-          return '';
+        show:true, position:'top', fontSize:10, color:'#334155',
+        formatter: function(p){ return p.value[2]; }
+      },
+      labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
+      emphasis: {
+        focus:'self', scale:1.4,
+        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
+        label: {
+          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
+          backgroundColor:'rgba(255,255,255,0.95)',
+          borderColor:'#0f172a', borderWidth:1, borderRadius:3,
+          padding:[2,5,2,5]
         }
       },
       markLine: {
@@ -20389,6 +20397,7 @@ function renderWfinPmScatter() {
   var ec = wfinInitOrGet('ec-wfin-pm-scatter'); if (!ec) return;
   var dataPts = [];
   WFIN_DATA.profit.forEach(function(p){
+    if (p.isTotal) return;  // 合計行はスキップ
     var g = WFIN_DATA.gross.find(function(x){ return x.name === p.name; });
     if (g && g.gm[5] != null && p.pm[5] != null) {
       dataPts.push([g.gm[5], p.pm[5], p.jp]);
@@ -20400,7 +20409,7 @@ function renderWfinPmScatter() {
         return '<b>' + p.value[2] + '</b><br>粗利率: ' + p.value[0].toFixed(1) + '%<br>純利率: ' + p.value[1].toFixed(1) + '%';
       }
     },
-    grid: { left:55, right:25, top:25, bottom:55 },
+    grid: { left:55, right:25, top:35, bottom:55 },
     xAxis: { type:'value', name:'2025年 粗利率(%)', nameGap:35, nameLocation:'middle',
       axisLabel:{formatter:'{value}%'} },
     yAxis: { type:'value', name:'純利益率(%)',
@@ -20408,22 +20417,36 @@ function renderWfinPmScatter() {
     series: [{
       type:'scatter',
       data: dataPts,
-      symbolSize: 12,
+      symbolSize: 11,
       itemStyle: { color: function(p){
         return p.value[1] >= 10 ? '#10b981' :
                p.value[1] >= 0  ? '#3b82f6' :
                                   '#ef4444';
-      }, opacity:0.75 },
+      }, opacity:0.8, borderColor:'#fff', borderWidth:1 },
+      // 全企業のラベルを表示候補にし、重なるものは自動で間引き／ずらす
       label: {
-        show:true, position:'top', fontSize:9,
-        formatter: function(p){
-          if (p.value[0] >= 30 || p.value[1] >= 8 || p.value[1] <= -5) return p.value[2];
-          return '';
+        show:true, position:'top', fontSize:10, color:'#334155',
+        formatter: function(p){ return p.value[2]; }
+      },
+      labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
+      // ホバー時：ラベルを強調表示（隠れていたものも確実に見える）
+      emphasis: {
+        focus:'self',
+        scale:1.6,
+        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
+        label: {
+          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
+          backgroundColor:'rgba(255,255,255,0.95)',
+          borderColor:'#0f172a', borderWidth:1, borderRadius:3,
+          padding:[2,5,2,5]
         }
       },
       markLine: {
         silent:true, symbol:'none',
-        data: [{ yAxis:0, lineStyle:{color:'#aaa', type:'dashed'} }],
+        data: [
+          { yAxis:0, lineStyle:{color:'#aaa', type:'dashed'} },
+          { xAxis:20, lineStyle:{color:'#cbd5e1', type:'dotted'} }
+        ],
         label:{show:false}
       }
     }]
@@ -20595,24 +20618,27 @@ function renderWfinArapScatter() {
       name: s, type:'scatter',
       symbol: st.symbol,
       data: bySector[s],
-      symbolSize: 10,
+      symbolSize: 11,
       itemStyle: {
         color: st.color,
-        opacity: 0.75,
+        opacity: 0.78,
         borderColor: '#fff',
         borderWidth: 1.5
       },
-      emphasis: {
-        itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
-        scale: 1.5
-      },
+      // 全企業のラベルを表示候補にし、重なるものは自動で間引き／ずらす
       label: {
-        show:true, position:'top', fontSize:9, color:'#333',
-        formatter: function(p){
-          // 主要企業＋極端値のみラベル表示
-          if (p.value[0] >= 100 || p.value[1] >= 200) return p.value[2];
-          if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)','XPENG(小鵬)','Geely(吉利)','上汽集団','ホンダ','日産','GM','メルセデス・ベンツ','BMW'].indexOf(p.value[2]) >= 0) return p.value[2];
-          return '';
+        show:true, position:'top', fontSize:10, color:'#334155',
+        formatter: function(p){ return p.value[2]; }
+      },
+      labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
+      emphasis: {
+        focus:'self', scale:1.5,
+        itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
+        label: {
+          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
+          backgroundColor:'rgba(255,255,255,0.95)',
+          borderColor:'#0f172a', borderWidth:1, borderRadius:3,
+          padding:[2,5,2,5]
         }
       }
     };
@@ -20627,9 +20653,11 @@ function renderWfinArapScatter() {
       top:5, right:10, orient:'vertical',
       textStyle:{fontSize:11},
       icon:'roundRect',
-      backgroundColor:'rgba(255,255,255,0.85)',
-      borderColor:'#ddd', borderWidth:1, padding:[6,10,6,10],
-      itemGap:6
+      backgroundColor:'rgba(255,255,255,0.92)',
+      borderColor:'#cbd5e1', borderWidth:1, padding:[6,10,6,10],
+      itemGap:6,
+      // 凡例クリックでセクター絞り込み（既存の挙動を強調）
+      formatter: function(name){ return name + ' (クリックで表示切替)'; }
     },
     grid: { left:65, right:30, top:30, bottom:60 },
     xAxis: {

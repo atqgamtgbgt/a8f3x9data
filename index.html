@@ -20247,6 +20247,17 @@ function renderWfinRevScatter() {
   var arr = WFIN_DATA.revenue.filter(function(r){
     return r.rev[6] != null && r.g25 != null && r.rev[6] >= 50;
   });
+  // ラベル優先度：営収が大きい or 成長率が極端 ほど優先（hideOverlap時に残りやすくする）
+  function priority(rev, g) {
+    return Math.log10(rev) * 30 + Math.abs(g) * 0.8;
+  }
+  // 上位N件のみラベル候補にする（密集対策の本丸）
+  var ranked = arr.slice().sort(function(a,b){
+    return priority(b.rev[6], b.g25) - priority(a.rev[6], a.g25);
+  });
+  var labelSet = {};
+  ranked.slice(0, 25).forEach(function(r){ labelSet[r.jp] = true; });
+
   var dataPts = arr.map(function(r){ return [r.rev[6], r.g25, r.jp]; });
   ec.setOption({
     tooltip: { trigger:'item',
@@ -20269,18 +20280,22 @@ function renderWfinRevScatter() {
         return p.value[1] >= 20 ? '#dc2626' : (p.value[1] >= 0 ? '#3b82f6' : '#94a3b8');
       }, opacity:0.7, borderColor:'#fff', borderWidth:1 },
       label: {
-        show:true, position:'top', fontSize:10, color:'#334155',
-        formatter: function(p){ return p.value[2]; }
+        show:true, position:'top', distance:6, fontSize:10, color:'#1e293b',
+        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
+        formatter: function(p){
+          return labelSet[p.value[2]] ? p.value[2] : '';
+        }
       },
-      labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
+      labelLayout: { hideOverlap: true },
       emphasis: {
         focus:'self', scale:1.4,
         itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
         label: {
           show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,255,0.95)',
-          borderColor:'#0f172a', borderWidth:1, borderRadius:3,
-          padding:[2,5,2,5]
+          backgroundColor:'rgba(255,255,180,0.98)',
+          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
+          padding:[3,6,3,6],
+          formatter: function(p){ return p.value[2]; }  // ホバー時は必ず表示
         }
       },
       markLine: {
@@ -20397,12 +20412,22 @@ function renderWfinPmScatter() {
   var ec = wfinInitOrGet('ec-wfin-pm-scatter'); if (!ec) return;
   var dataPts = [];
   WFIN_DATA.profit.forEach(function(p){
-    if (p.isTotal) return;  // 合計行はスキップ
+    if (p.isTotal) return;
     var g = WFIN_DATA.gross.find(function(x){ return x.name === p.name; });
     if (g && g.gm[5] != null && p.pm[5] != null) {
       dataPts.push([g.gm[5], p.pm[5], p.jp]);
     }
   });
+  // ラベル優先度: 利益率の絶対値が大きい or 粗利率が極端 ほど目立つので優先
+  function priority(gm, pm) {
+    return Math.abs(pm) * 1.5 + Math.max(0, gm - 15) * 0.5;
+  }
+  var ranked = dataPts.slice().sort(function(a,b){
+    return priority(b[0], b[1]) - priority(a[0], a[1]);
+  });
+  var labelSet = {};
+  ranked.slice(0, 22).forEach(function(d){ labelSet[d[2]] = true; });
+
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
@@ -20423,22 +20448,23 @@ function renderWfinPmScatter() {
                p.value[1] >= 0  ? '#3b82f6' :
                                   '#ef4444';
       }, opacity:0.8, borderColor:'#fff', borderWidth:1 },
-      // 全企業のラベルを表示候補にし、重なるものは自動で間引き／ずらす
       label: {
-        show:true, position:'top', fontSize:10, color:'#334155',
-        formatter: function(p){ return p.value[2]; }
+        show:true, position:'top', distance:6, fontSize:10, color:'#1e293b',
+        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
+        formatter: function(p){
+          return labelSet[p.value[2]] ? p.value[2] : '';
+        }
       },
-      labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
-      // ホバー時：ラベルを強調表示（隠れていたものも確実に見える）
+      labelLayout: { hideOverlap: true },
       emphasis: {
-        focus:'self',
-        scale:1.6,
+        focus:'self', scale:1.6,
         itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
         label: {
           show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,255,0.95)',
-          borderColor:'#0f172a', borderWidth:1, borderRadius:3,
-          padding:[2,5,2,5]
+          backgroundColor:'rgba(255,255,180,0.98)',
+          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
+          padding:[3,6,3,6],
+          formatter: function(p){ return p.value[2]; }
         }
       },
       markLine: {
@@ -20612,6 +20638,20 @@ function renderWfinArapScatter() {
     if (!bySector[s]) bySector[s] = [];
     bySector[s].push([r.ar[4], r.ap[4], r.jp]);
   });
+  // ラベル優先度（全シリーズ通しで上位N件のみラベル表示）
+  function priority(ar, ap) {
+    return Math.abs(ap - ar) * 0.5 + Math.max(ar, ap) * 0.3;
+  }
+  var allPts = [];
+  Object.keys(bySector).forEach(function(s){
+    bySector[s].forEach(function(d){ allPts.push({ar:d[0], ap:d[1], jp:d[2]}); });
+  });
+  var rankedAll = allPts.slice().sort(function(a,b){
+    return priority(b.ar, b.ap) - priority(a.ar, a.ap);
+  });
+  var labelSet = {};
+  rankedAll.slice(0, 30).forEach(function(d){ labelSet[d.jp] = true; });
+
   var series = Object.keys(bySector).map(function(s){
     var st = SECTOR_STYLE[s];
     return {
@@ -20625,20 +20665,23 @@ function renderWfinArapScatter() {
         borderColor: '#fff',
         borderWidth: 1.5
       },
-      // 全企業のラベルを表示候補にし、重なるものは自動で間引き／ずらす
       label: {
-        show:true, position:'top', fontSize:10, color:'#334155',
-        formatter: function(p){ return p.value[2]; }
+        show:true, position:'top', distance:6, fontSize:10, color:'#1e293b',
+        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
+        formatter: function(p){
+          return labelSet[p.value[2]] ? p.value[2] : '';
+        }
       },
-      labelLayout: { hideOverlap: true, moveOverlap: 'shiftY' },
+      labelLayout: { hideOverlap: true },
       emphasis: {
         focus:'self', scale:1.5,
         itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
         label: {
           show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,255,0.95)',
-          borderColor:'#0f172a', borderWidth:1, borderRadius:3,
-          padding:[2,5,2,5]
+          backgroundColor:'rgba(255,255,180,0.98)',
+          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
+          padding:[3,6,3,6],
+          formatter: function(p){ return p.value[2]; }
         }
       }
     };
@@ -20833,6 +20876,54 @@ var WFIN_JP_FIX = {
     if (WFIN_JP_FIX[r.name]) r.jp = WFIN_JP_FIX[r.name];
   });
 });
+
+// ============================================================
+// revenue データ補強：Image 4(営業総収入)から31社を追加
+// 鉱業5社、電池14社、OEM 4社(法拉第未来/阿斯顿马丁/曙光/华晨)、ディーラー8社
+// ============================================================
+// 31社のrevenue追加データ (Image 4 営業総収入より)
+var WFIN_REV_ADD = [
+  {name:"赣锋锂业",jp:"Ganfeng(贛鋒)",rev:[null,null,110,414,328,187,228],g25:21.9},
+  {name:"天齐锂业",jp:"Tianqi(天斉)",rev:[null,null,76,402,404,130,103],g25:-20.8},
+  {name:"盛新锂能",jp:"Shengxin(盛新)",rev:[null,null,29,119,79,45,50],g25:11.1},
+  {name:"藏格矿业",jp:"Zangge(藏格鉱業)",rev:[null,null,34,78,49,29,33],g25:13.8},
+  {name:"西藏矿业",jp:"Tibet Mining(チベット鉱業)",rev:[null,null,6,21,8,6,3],g25:-50.0},
+  {name:"LG新能源",jp:"LG ES(LGエナジー)",rev:[null,null,957,1414,1861,1265,1150],g25:-9.1},
+  {name:"宁德时代",jp:"CATL(寧徳時代)",rev:[null,null,1299,3286,4009,3620,4237],g25:17.0},
+  {name:"欣旺达",jp:"Sunwoda(欣旺達)",rev:[null,null,372,522,479,560,630],g25:12.5},
+  {name:"亿纬锂能",jp:"EVE(億緯)",rev:[null,null,168,363,488,486,613],g25:26.1},
+  {name:"国轩高科",jp:"Gotion(国軒高科)",rev:[null,null,103,229,314,351,448],g25:27.6},
+  {name:"中创新航",jp:"CALB(中創新航)",rev:[null,null,68,204,270,278,444],g25:59.7},
+  {name:"瑞浦兰钧",jp:"REPT(瑞浦蘭鈞)",rev:[null,null,21,146,137,178,243],g25:36.5},
+  {name:"德赛电池",jp:"Desay(徳賽電池)",rev:[null,null,194,217,202,208,223],g25:7.2},
+  {name:"天赐材料",jp:"Tinci(天賜材料)",rev:[null,null,110,223,154,125,167],g25:33.6},
+  {name:"恩捷股份",jp:"SEMCORP(恩捷)",rev:[null,null,79,125,120,101,135],g25:33.7},
+  {name:"鹏辉能源",jp:"Penghui(鵬輝)",rev:[null,null,57,65,69,80,119],g25:48.8},
+  {name:"当升科技",jp:"Easpring(当升)",rev:[null,null,82,212,151,76,103],g25:35.5},
+  {name:"德方纳米",jp:"Defang Nano(徳方)",rev:[null,null,48,225,169,76,86],g25:13.2},
+  {name:"正力新能",jp:"Zenergy(正力)",rev:[null,null,15,33,42,51,81],g25:58.8},
+  {name:"法拉第未来",jp:"Faraday Future(FF)",rev:[null,null,0,0,0,0,0],g25:null},
+  {name:"阿斯顿马丁",jp:"Aston Martin(アストンマーティン)",rev:[null,null,94,116,148,144,119],g25:-17.4},
+  {name:"曙光股份",jp:"Shuguang(曙光)",rev:[null,null,24,16,13,14,15],g25:7.1},
+  {name:"华晨中国",jp:"Brilliance(華晨)",rev:[null,null,21,11,8,9,12],g25:33.3},
+  {name:"利西亚车行",jp:"Lithia",rev:[null,null,1456,1963,2199,2601,2645],g25:1.7},
+  {name:"美国汽车行",jp:"AutoNation等(米系)",rev:[null,null,41,80,97,99,73],g25:-26.3},
+  {name:"中升控股",jp:"Zhongsheng(中升控股)",rev:[null,null,1751,1799,1793,1681,1644],g25:-2.2},
+  {name:"永达汽车",jp:"Yongda(永達汽車)",rev:[null,null,779,720,726,634,546],g25:-13.9},
+  {name:"和谐汽车",jp:"Harmony(和諧汽車)",rev:[null,null,185,168,171,156,200],g25:28.2},
+  {name:"美东汽车",jp:"Meidong(美東汽車)",rev:[null,null,236,287,286,222,200],g25:-9.9},
+  {name:"正通汽车",jp:"Zhengtong(正通汽車)",rev:[null,null,210,226,241,207,187],g25:-9.7},
+  {name:"广汇宝信",jp:"GA Baoxin(広匯宝信)",rev:[null,null,387,326,332,138,138],g25:0.0},
+];
+
+(function(){
+  var existing = {};
+  WFIN_DATA.revenue.forEach(function(r){ existing[r.name] = true; });
+  WFIN_REV_ADD.forEach(function(r){
+    if (!existing[r.name]) WFIN_DATA.revenue.push(r);
+  });
+})();
+
 
 // ============================================================
 // 純利益＋利益率 マトリクス（HTML テーブル）

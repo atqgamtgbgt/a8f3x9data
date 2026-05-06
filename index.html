@@ -2914,6 +2914,17 @@ body.tray-open { padding-bottom: 105px; }
 @media (max-width: 768px) {
   .wfin-zoom-hint { display: none; }
 }
+/* 散布図エリア: ドラッグ可能を示すカーソル */
+#ec-wfin-rev-scatter,
+#ec-wfin-pm-scatter,
+#ec-wfin-arap-scatter {
+  cursor: grab;
+}
+#ec-wfin-rev-scatter:active,
+#ec-wfin-pm-scatter:active,
+#ec-wfin-arap-scatter:active {
+  cursor: grabbing;
+}
 </style>
 </head>
 <body>
@@ -5330,7 +5341,7 @@ body.tray-open { padding-bottom: 105px; }
                       <span class="wfin-zoom-label">ラベル: <b class="wfin-zoom-n">25</b>社</span>
                       <button type="button" class="wfin-zoom-btn" data-act="in" title="ラベルを増やす">＋</button>
                       <button type="button" class="wfin-zoom-btn wfin-zoom-reset" data-act="reset" title="リセット">⟲</button>
-                      <span class="wfin-zoom-hint">スクロールでも拡大/縮小</span>
+                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
                     </div>
                     <div id="ec-wfin-rev-scatter" class="echart-box" style="height:420px"></div>
                   </div>
@@ -5378,7 +5389,7 @@ body.tray-open { padding-bottom: 105px; }
                       <span class="wfin-zoom-label">ラベル: <b class="wfin-zoom-n">22</b>社</span>
                       <button type="button" class="wfin-zoom-btn" data-act="in" title="ラベルを増やす">＋</button>
                       <button type="button" class="wfin-zoom-btn wfin-zoom-reset" data-act="reset" title="リセット">⟲</button>
-                      <span class="wfin-zoom-hint">スクロールでも拡大/縮小</span>
+                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
                     </div>
                     <div id="ec-wfin-pm-scatter" class="echart-box" style="height:420px"></div>
                   </div>
@@ -5426,7 +5437,7 @@ body.tray-open { padding-bottom: 105px; }
                       <span class="wfin-zoom-label">ラベル: <b class="wfin-zoom-n">30</b>社</span>
                       <button type="button" class="wfin-zoom-btn" data-act="in" title="ラベルを増やす">＋</button>
                       <button type="button" class="wfin-zoom-btn wfin-zoom-reset" data-act="reset" title="リセット">⟲</button>
-                      <span class="wfin-zoom-hint">スクロールでも拡大/縮小</span>
+                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
                     </div>
                     <div id="ec-wfin-arap-scatter" class="echart-box" style="height:640px"></div>
                   </div>
@@ -20379,8 +20390,8 @@ function renderWfinRevScatter() {
     yAxis: { type:'value', name:'25年成長率(%)', axisLabel:{formatter:'{value}%'},
       splitLine:{lineStyle:{color:'#eee'}} },
     dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:false, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:false, moveOnMouseWheel:false }
+      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
+      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
     ],
     series: [{
       type:'scatter',
@@ -20553,8 +20564,8 @@ function renderWfinPmScatter() {
     yAxis: { type:'value', name:'純利益率(%)',
       axisLabel:{formatter:'{value}%'}, splitLine:{lineStyle:{color:'#eee'}} },
     dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:false, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:false, moveOnMouseWheel:false }
+      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
+      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
     ],
     series: [{
       type:'scatter',
@@ -20832,8 +20843,8 @@ function renderWfinArapScatter() {
       splitLine:{lineStyle:{color:'#eee'}}
     },
     dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:false, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:false, moveOnMouseWheel:false }
+      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
+      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
     ],
     series: series
   });

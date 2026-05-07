@@ -2839,92 +2839,6 @@ body.tray-open { padding-bottom: 105px; }
 .print-footer {
   display: none;
 }
-
-/* 散布図 ラベル拡大/縮小コントロール */
-.wfin-scatter-ctrl {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 6px 0 8px;
-  padding: 4px 10px;
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12px;
-  color: #334155;
-  flex-wrap: wrap;
-}
-.wfin-zoom-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 28px;
-  height: 26px;
-  padding: 0 6px;
-  background: #fff;
-  border: 1px solid #94a3b8;
-  border-radius: 4px;
-  color: #0f172a;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.12s;
-  user-select: none;
-}
-.wfin-zoom-btn:hover {
-  background: #3b82f6;
-  border-color: #2563eb;
-  color: #fff;
-}
-.wfin-zoom-btn:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
-  background: #fff;
-  color: #94a3b8;
-}
-.wfin-zoom-btn.wfin-zoom-reset {
-  font-size: 13px;
-  margin-left: 4px;
-  background: #fef3c7;
-  border-color: #f59e0b;
-}
-.wfin-zoom-btn.wfin-zoom-reset:hover {
-  background: #f59e0b;
-  color: #fff;
-}
-.wfin-zoom-label {
-  font-size: 12px;
-  color: #475569;
-  white-space: nowrap;
-  margin: 0 4px;
-}
-.wfin-zoom-label b {
-  color: #0f172a;
-  font-size: 13px;
-  display: inline-block;
-  min-width: 20px;
-  text-align: center;
-}
-.wfin-zoom-hint {
-  margin-left: auto;
-  font-size: 11px;
-  color: #94a3b8;
-  font-style: italic;
-}
-@media (max-width: 768px) {
-  .wfin-zoom-hint { display: none; }
-}
-/* 散布図エリア: ドラッグ可能を示すカーソル */
-#ec-wfin-rev-scatter,
-#ec-wfin-pm-scatter,
-#ec-wfin-arap-scatter {
-  cursor: grab;
-}
-#ec-wfin-rev-scatter:active,
-#ec-wfin-pm-scatter:active,
-#ec-wfin-arap-scatter:active {
-  cursor: grabbing;
-}
 </style>
 </head>
 <body>
@@ -3851,6 +3765,7 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">📐 車型別 </span>
                   <div class="cds-gc-items">
                     <button class="nav-link" onclick="ztGo('zt-segment');ztActBtn(this)">📐 車型×クラス別</button>
+                    <button class="nav-link" onclick="ztGo('zt-class-nev-16y');ztActBtn(this)">📊 クラス別NEV 16年推移</button>
                   </div>
                 </div>
 
@@ -4297,7 +4212,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-summary">
               <div class="chart-card">
                 <div class="chart-title">月次 小売・卸売・生産・輸出（万台）</div>
-                <div class="chart-subtitle">2024年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">2023年12月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div id="ec-zt-summary" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -4332,7 +4247,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-nev-brand">
               <div class="chart-card">
                 <div class="chart-title">NEV浸透率 ブランド別（高級・合弁・中国系）月次推移（%）</div>
-                <div class="chart-subtitle">2024年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">2023年12月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="nbrand-btn-wh" class="btn btn-sm btn-primary active" onclick="nbrandSetView('wh',this)" style="font-size:11px;padding:2px 10px;">出荷</button>
@@ -4344,7 +4259,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-brand-wholesale">
               <div class="chart-card">
                 <div class="chart-title">国籍別 ブランド層別 月次推移（万台）</div>
-                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 産量/卸売/小売/輸出　2024年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 産量/卸売/小売/輸出　2023年12月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="brwh-btn-pr" class="btn btn-sm btn-outline-secondary" onclick="brWhSetView('pr',this)" style="font-size:11px;padding:2px 10px;">産量</button>
@@ -4359,7 +4274,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-nation-share">
               <div class="chart-card">
                 <div class="chart-title">国籍別 シェア推移（%）</div>
-                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2024年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2023年12月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="natshare-btn-wh" class="btn btn-sm btn-primary active"   onclick="natSetView('wh')" style="font-size:11px;padding:2px 10px;">卸売</button>
@@ -4377,7 +4292,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-nation-volume">
               <div class="chart-card">
                 <div class="chart-title">国籍別 台数推移（万台）</div>
-                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2024年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">中国系・独・日・米・韓・欧　2023年12月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示指標：</span>
                   <button id="natvol-btn-wh" class="btn btn-sm btn-primary active"   onclick="natSetView('wh')" style="font-size:11px;padding:2px 10px;">卸売</button>
@@ -4416,7 +4331,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-brand-ice-nev">
               <div class="chart-card">
                 <div class="chart-title">ブランド層別 伝統/新エネ内訳（月次）</div>
-                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 伝統エンジン/新エネ車　2024年1月〜2026年3月　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">高級車・合弁・中国系ブランド × 伝統エンジン/新エネ車　2023年12月〜2026年3月　出典：乗聯会（崔東樹）</div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">指標：</span>
                   <button id="binx-btn-wh" class="btn btn-sm btn-primary active"   onclick="binxSetView('wh')" style="font-size:11px;padding:2px 10px;">卸売</button>
@@ -4452,11 +4367,37 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div>
 
+            <!-- ===== クラス別NEV浸透率 16年推移 ===== -->
+            <div class="cds-pane" id="zt-class-nev-16y">
+              <div class="chart-card">
+                <div class="chart-title">📊 クラス別NEV浸透率と構成シェア（16年推移・小売ベース）</div>
+                <div class="chart-subtitle">2011年〜2026年累計　乗用車総量に占める c / B / A / A0 / a00 各クラスの構成比およびNEV浸透率の長期構造変化
+                  　出典：乗聯会（崔東樹）<a href="https://mp.weixin.qq.com/s/bRHUzr3gL6yHkxJC4sDzDw" target="_blank" rel="noopener noreferrer" style="color:#3b82f6;text-decoration:underline;margin-left:4px;">原文記事 ↗</a></div>
+                <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+                  <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示モード：</span>
+                  <button id="cnv-btn-share" class="btn btn-sm btn-primary active" onclick="cnvSetMode('share',this)" style="font-size:11px;padding:2px 10px;">📐 クラス構成シェア</button>
+                  <button id="cnv-btn-nev" class="btn btn-sm btn-outline-secondary" onclick="cnvSetMode('nev',this)" style="font-size:11px;padding:2px 10px;">⚡ クラス別NEV浸透率</button>
+                  <button id="cnv-btn-vol" class="btn btn-sm btn-outline-secondary" onclick="cnvSetMode('vol',this)" style="font-size:11px;padding:2px 10px;">📊 クラス別販売台数（万台）</button>
+                </div>
+                <div id="ec-zt-class-nev-16y" class="echart-box" style="height:480px"></div>
+                <div style="margin-top:8px;padding:10px 14px;background:#f8fafc;border-left:3px solid #3b82f6;border-radius:4px;font-size:12px;line-height:1.65;color:#374151;font-family:Noto Sans JP,sans-serif;">
+                  <strong style="color:#1e3a8a;">📌 構造変化の要点：</strong>
+                  <ul style="margin:6px 0 0;padding-left:20px;">
+                    <li><strong style="color:#dc2626;">a00（ミニ）</strong>：2018年に新エネが76%へ急伸、2020年以降は<strong>ほぼ完全に新エネ化</strong>（98〜99%）。販売シェアは2020-25年で2-9%レンジ</li>
+                    <li><strong style="color:#dc2626;">A0（小型）</strong>：2022年に新エネ35%突破、<em>2024年66% / 2025年74%</em>と急進。総シェアは10-13%で安定</li>
+                    <li><strong style="color:#dc2626;">A（コンパクト）</strong>：販売量最大セグメント（42-61%）だが、近年は<em>シェア低下（53→42%）</em>。新エネ化は2025年で40%</li>
+                    <li><strong style="color:#dc2626;">B（中大型）</strong>：シェアは<em>19→35%へ拡大継続</em>、新エネ化も2025年52%へ加速</li>
+                    <li><strong style="color:#dc2626;">c（大型）</strong>：シェアは4→10%へ拡大、<em>新エネ化は2024年に過半（56%）</em>を超える</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
             <!-- ===== 月次コメント（崔東樹 分析家視点） ===== -->
             <div class="cds-pane" id="zt-monthly-comment">
               <div class="chart-card">
                 <div class="chart-title">📝 月次コメント — 分析家視点</div>
-                <div class="chart-subtitle">2024年1月〜2026年3月　数字に表れない政策・市場心理・季節性などの解釈　出典：乗聯会（崔東樹）</div>
+                <div class="chart-subtitle">2023年10月〜2026年3月　数字に表れない政策・市場心理・季節性などの解釈　出典：乗聯会（崔東樹）</div>
                 <style>
                   .cds-cmt-list { display:flex; flex-direction:column; gap:14px; padding:8px 0; font-family:'Noto Sans JP',sans-serif; }
                   .cds-cmt-card { background:#fafbfc; border-left:4px solid #3b82f6; border-radius:6px; padding:14px 18px; }
@@ -4474,6 +4415,64 @@ body.tray-open { padding-bottom: 105px; }
                   .cds-cmt-points em { font-style:normal; color:#0f766e; font-weight:600; }
                 </style>
                 <div class="cds-cmt-list">
+
+                  <article class="cds-cmt-card" data-mood="strong">
+                    <div class="cds-cmt-month">2023年 10月</div>
+                    <div class="cds-cmt-headline">「銀九金十」（銀色の9月→金色の10月）走勢、双11と冬季農村消費熱で年末加熱、卸売・生産が当月歴代最高更新</div>
+                    <ul class="cds-cmt-points">
+                      <li>10月小売<strong>203.3万台、前年同月比 +10% / 前月比 +1%</strong>、累計1,727万 +3%。<em>1-10月で連続環比成長</em>し10月が今年新高 — 崔氏は<strong>「本世紀以来かつて出現しなかった環比成長持続走勢」</strong>と評価（この観察が初めて登場した月）</li>
+                      <li>2023年走勢の独立特徴：① 春節が本世紀最早だった基数効果、② 期待刺激政策がもたらす<em>消費観望</em>、③ 国六老库存の促販戦、④ 不動産降温による車市消費促進、⑤ 政策促販などの総合作用</li>
+                      <li>10月は「<strong>銀九金十</strong>」（銀色の9月・金色の10月＝中国の伝統的な車市最盛期）走勢が継続 — NEVの成長動力が環比走強を駆動。値引き持続増大で燃油車もNEVも環比増、購車消費需求が逐步釈放</li>
+                      <li><strong>双11電商大促浪潮</strong>で需求が逐步釈放、冬季入りで気温下がり<strong>秋収完了で農村購車熱情が逐步釈放</strong>、共同富裕政策推進で<em>県乡市場の出行需求潜力巨大</em> → 年末車市が逐步走強の見込み</li>
+                      <li>10月卸売<strong>244.5万台 +11% / +0.1%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>更新。年累計2,027万 +7%、厂家販売は出口とNEVで好調牽引</li>
+                      <li>10月生産<strong>245万台 +7% / +1%</strong> — 環比走勢比較平穏、<em>暴増の回升局面なし</em>。1-10月累計2,023万 +6%。生産能力超強で市場圧力加劇、<em>10月主力企業が生産強力調整で経銷商体系の在庫均衡を確保</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV産販相対慎重</em></li>
+                      <li>10月輸出<strong>39.1万台 +49% / +9%</strong> — 中国系メーカー輸出 +69%（31.8万）、合弁 +44%（2.9万）、豪華 −20%（4.4万）。累計輸出307.1万 +66%</li>
+                      <li>NEV卸売浸透率<strong>36.1%（前年比 +5.2pt）</strong>、NEV小売浸透率<strong>37.7%（前年比 +7.5pt）</strong>。中国系メーカーNEV小売<strong>60.2%</strong> vs 合弁<strong>6.3%</strong>、<em>豪華車中のNEVは小売わずか19.4%</em>（卸売側は33.8%）— 豪華NEVは輸入中心で国内小売は限定的</li>
+                      <li>「<strong>増庫存</strong>」（在庫補充）走勢継続：生産＞卸売1万、卸売＞小売2万 — 厂家・販売網ともに在庫増。<em>22年12月〜23年10月で持続的に−42万台の在庫圧縮</em>を経て、渠道在庫圧力が大幅緩和。<em>22年10月は渠道大幅加庫存時期だったが、今年は部分主力車企の産販慎重</em>と崔氏</li>
+                      <li>値引き状況：NEV値引きが歴史高位、<strong>10月のNEV値引き拡大が特に明顕</strong>で2022年10月後の歴史高位水準到達。燃油車も2-10月で再び大幅反発し<strong>近期最高位水準</strong>到達。各車系で値引き分化、<strong>合弁の値引き較大、自主燃油車も追隨</strong>、欧系・韓系最強。<strong>豪華車値引き18.2%歴史新高</strong>。自主車企はNEV値引き&lt;燃油車かつ出口比率拡大で促販総体安定</li>
+                      <li>車型別：<em>燃油車批発増速がやや零售上回る</em>（11月とは逆）、MPV零售が好調（10月+11%、累計+17%）。<em>燃油車偏弱で轿車需求占比下降、轿車零售&lt;SUV零售</em>。A0級轿車が好表現、微型轿車损失大。SUV高端化強で<strong>B級・C級SUVが同比強含み</strong></li>
+                      <li>中国系メーカー圧勝：10月小売<strong>113万台 +19% / +5%</strong>、小売シェア<strong>55.6%（+4.0pt）</strong>、卸売シェア<strong>60.1%（+6.4pt）</strong>。23年累計小売シェア<strong>51%（+4.9pt）</strong>。<em>NEVと出口で増分獲得、BYD・奇瑞・長安・吉利等の頭部伝統車企の転型升級表現が優異</em></li>
+                      <li>合弁減速継続：合弁小売66万 <strong>前年比 −2% / 前月比 +1%</strong>。独系小売シェア<strong>18.1%（−1.2pt）</strong>、日系<strong>17.7%（−1.2pt）</strong>、米系<strong>6.1%（−0.8pt）</strong>。豪華車零售22万 +8% / −16%。<em>22年の半導体供給逼迫による合弁缺貨問題は逐步改善されたが、合弁・伝統豪華車市場の需求は強くない</em>と崔氏</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="strong">
+                    <div class="cds-cmt-month">2023年 11月</div>
+                    <div class="cds-cmt-headline">「冬季時間升温」の持続走強、本世紀初の「1-11月連続環比成長」走勢、卸売・生産が当月歴代最高更新</div>
+                    <ul class="cds-cmt-points">
+                      <li>11月小売<strong>208万台、前年同月比 +26% / 前月比 +2.4%</strong>、累計1,935万 +5%。<em>1-11月で連続環比成長</em>し11月が今年新高 — 崔氏は<strong>「本世紀以来かつて出現しなかった環比成長持続走勢」</strong>と評価</li>
+                      <li>2023年走勢の独立特徴：① 春節が本世紀最早だった基数効果、② 期待刺激政策がもたらす<em>消費観望</em>、③ 国六老库存の促販戦、④ 不動産降温による車市消費促進、⑤ 政策促販などの総合作用</li>
+                      <li>11月は冬季気温が冷えるなか<strong>「冬季時間升温」（冬季は気温下がるが車市は温まる）走勢が継続</strong> — NEVの成長動力 + 小ロット燃油車の<strong>国六A車型清庫</strong>が環比走強を駆動。<em>歴年の年末「促販企穏縮小」とは対照的に、今年11月は燃油車もNEVも値引き持続増大</em>、増換購促販と地方補助金で消費需求を釈放</li>
+                      <li>11月卸売<strong>254.8万台 +26% / +4%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>更新。年間累計2,282万 +9%、厂家販売は出口とNEVで好調牽引</li>
+                      <li>11月生産<strong>264万台 +25% / +8%</strong> — 各地の「稳增长」（成長安定）任務が重く、メーカーが努力。1-11月累計2,288万 +8%。生産能力超強で市場圧力加劇、<em>11月主力企業が生産強力調整で経銷商体系の在庫均衡を確保</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV産販相対慎重</em></li>
+                      <li>11月輸出<strong>37.8万台 +50% / −3%</strong> — 中国系メーカー輸出 +75%（33.3万）、合弁 +12%（2.7万）、豪華 −51%（1.8万）。累計輸出344.9万 +64%</li>
+                      <li>NEV卸売浸透率<strong>37.7%（前年比 +1.9pt）</strong>、NEV小売浸透率<strong>40.4%（前年比 +4pt）</strong>。中国系メーカーNEV小売<strong>62.1%</strong> vs 合弁<strong>6.6%</strong>、豪華30.9%。卸売側は中国系52.6% vs 合弁7.9%、豪華35.2%</li>
+                      <li>「<strong>増庫存</strong>」（在庫補充）走勢へ転換：生産＞卸売9.6万、卸売＞小売9万 — 厂家・販売網ともに在庫増。<em>22年12月〜23年10月で持続的に−42万台の在庫圧縮を経て、11月の在庫増は春節前の「旺销备货」（最盛期向け備蓄）</em>。<em>去年11月は渠道大幅加庫存時期だったが、今年は部分主力車企の産販慎重で11月生産で渠道在庫補充して正常販売に対応</em>と崔氏</li>
+                      <li>値引き状況：NEV値引きが歴史高位、<strong>11月のNEV値引き拡大が特に明顕</strong>で2022年11月後の歴史高位水準到達。燃油車も2-11月で再び大幅反発し<strong>近期最高位水準</strong>到達。各車系で値引き分化、<strong>合弁の値引き較大、自主燃油車も追隨</strong>、欧系・韓系最強。<strong>豪華車値引き19%歴史新高</strong>。自主車企はNEV値引き&lt;燃油車かつ出口比率拡大で促販総体安定</li>
+                      <li>車型別：燃油車零售増速が批発をやや上回る、MPV零售が放緩（累計 +17%と依然強い）。<em>燃油車偏弱で轿車需求占比下降、轿車零售&lt;SUV零售</em>。A0級轿車が好表現、微型轿車损失大。SUV高端化強で<strong>B級・C級SUVが同比強含み</strong></li>
+                      <li>中国系メーカー圧勝：11月小売<strong>115万台 +30% / +1.8%</strong>、小売シェア<strong>55.3%（+1.9pt）</strong>、卸売<strong>152万 +36% / +3%</strong>、卸売シェア<strong>59.7%（+4.6pt）</strong>。23年累計小売シェア<strong>52%（+4.7pt）</strong>。<em>NEVと出口で増分獲得、奇瑞・BYD・長安・吉利等の頭部伝統車企の転型升級表現が優異</em></li>
+                      <li>合弁減速：合弁小売66万 <strong>前年比 +23% / 前月比 −3%</strong>。独系小売シェア<strong>18.7%（−0.4pt）</strong>、日系<strong>15.5%（+0.2pt）</strong>、米系<strong>7.9%（−1.5pt）</strong>。合弁卸売73.6万 +18% / +3%、豪華卸売29万 −1% / +12%</li>
+                    </ul>
+                  </article>
+
+                  <article class="cds-cmt-card" data-mood="strong">
+                    <div class="cds-cmt-month">2023年 12月</div>
+                    <div class="cds-cmt-headline">「劲爆促販」（爆発的販促）と国六A清庫で12月小売が今年新高、年間累計2,170万 +6%、本世紀初の「環比成長持続」走勢</div>
+                    <ul class="cds-cmt-points">
+                      <li>12月小売<strong>235万台、前年同月比 +8.5% / 前月比 +13%</strong>、年間累計2,170万 +6%。<em>1-12月で持続的に環比成長</em>し12月が今年新高 — 崔氏は<strong>「本世紀以来かつて出現しなかった環比成長持続走勢」</strong>と評価</li>
+                      <li>2023年走勢の独立特徴：① 春節が本世紀最早だった基数効果、② 期待刺激政策がもたらす<em>消費観望</em>、③ 国六老库存の促販戦、④ 不動産降温による車市消費促進、⑤ 政策促販などの総合作用</li>
+                      <li>12月は冬季気温が冷えるなか<strong>「升温走勢」継続</strong> — NEVの成長動力 + 小ロット燃油車の<strong>国六A車型清庫</strong>が環比走強を駆動。<em>歴年の年末「促販企穏縮小」とは対照的に、今年12月は燃油車もNEVも値引き続伸</em>、増換購促販と地方補助金で消費需求を釈放</li>
+                      <li>12月卸売<strong>271万台 +22% / +7%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>。年間累計2,553万 +10%、2017年高点を130万上回る<strong>歴代新高</strong></li>
+                      <li>12月生産<strong>267万台 +28% / +1%</strong> — 各地の「稳增长」（成長安定）任務が重く、メーカーが努力。年間累計2,555万 +9%。生産能力超強で市場圧力加劇、12月主力企業は生産調整で在庫安定化、米FRB利上げ・上流資源価格下落で<em>NEV産販相対慎重</em></li>
+                      <li>12月輸出<strong>38.5万台 +49% / +3%</strong> — 中国系メーカー輸出+45%（33.1万）、合弁+76%、豪華+87%。累計輸出383.1万 +62%</li>
+                      <li>NEV卸売浸透率<strong>40.8%</strong>（持続走強）、NEV小売浸透率<strong>40.2%（前年比 +10.6pt、年間35.7% +8.1pt）</strong>。中国系メーカーNEV小売<strong>64.6%</strong> vs 合弁<strong>6.0%</strong>、豪華29.5%</li>
+                      <li>「<strong>補庫存</strong>」（在庫補充）走勢：生産＜卸売4万、卸売＜小売2万 — <em>「劲爆促販」（爆発的販促）</em>が小売を強く牽引、メーカー＆販売網ともに在庫減。<em>2023年9月〜年末の販売網在庫増加が猛烈、春節前旺販備蓄</em></li>
+                      <li>2023年乗用車企業の販売額は<strong>4.26万億元</strong>、単価は<strong>16.71万元</strong>に上昇 — <em>促販費用の効果明顕</em>と崔氏</li>
+                      <li>値引き状況：NEV値引きが歴史高位、燃油車も2-12月で再び大幅反発し<strong>近期最高位水準</strong>到達。<strong>豪華車値引き19%歴史新高</strong>、合弁が圧力最大、欧系・韓系が値引き強い</li>
+                      <li>中国系メーカー圧勝：12月小売<strong>124万台 +17% / +8%</strong>、小売シェア<strong>52.9%（+4.0pt）</strong>、卸売シェア<strong>58.2%（+0.8pt）</strong>。23年累計小売シェア<strong>52%（+4.6pt）</strong>。<em>BYD・奇瑞・長安・吉利等のシェアが顕著上昇</em></li>
+                      <li>合弁危機継続：合弁小売79万 <strong>前年比 −7% / 前月比 +20%</strong>。独系小売シェア<strong>20.5%（持平）</strong>、日系<strong>16.5%（−2.3pt）</strong>、米系<strong>7.3%（−1.1pt）</strong>。崔氏は<em>「合弁が総体的に圧力最大、自主が表現最良、豪華は総体不錯」</em>と評価</li>
+                    </ul>
+                  </article>
 
                   <article class="cds-cmt-card" data-mood="neutral">
                     <div class="cds-cmt-month">2024年 1月</div>
@@ -5336,10 +5335,6 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">📐 規模 vs 成長率 散布図</div>
                     <div class="chart-subtitle">X軸: 2025年営収（対数）／Y軸: 25年成長率（%）　出典：崔東樹（乗聯会）</div>
-                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-rev-scatter">
-                      <button type="button" class="wfin-zoom-btn wfin-zoom-reset" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
-                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
-                    </div>
                     <div id="ec-wfin-rev-scatter" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
@@ -5349,13 +5344,6 @@ body.tray-open { padding-bottom: 105px; }
             <!-- wfin-2: 収益性 -->
             <div class="cds-pane" id="wfin-profitability">
               <div class="row g-3">
-                <div class="col-12">
-                  <div class="chart-card">
-                    <div class="chart-title">📋 純利益＋利益率 マトリクス（2020〜2025年）</div>
-                    <div class="chart-subtitle">全43社＋整車企業合計／純利益（億元）と利益率（%）を6年分表示　ヒートマップ色分け　出典：崔東樹（乗聯会）</div>
-                    <div id="wfin-profit-matrix" style="overflow-x:auto"></div>
-                  </div>
-                </div>
                 <div class="col-12">
                   <div class="chart-card">
                     <div class="chart-title">💎 2025年 売上総利益率（粗利率）ランキング（%）</div>
@@ -5381,10 +5369,6 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">🔁 粗利率 vs 純利益率 散布図（2025年）</div>
                     <div class="chart-subtitle">粗利が高くても純利が薄い構造を可視化　出典：崔東樹（乗聯会）</div>
-                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-pm-scatter">
-                      <button type="button" class="wfin-zoom-btn wfin-zoom-reset" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
-                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
-                    </div>
                     <div id="ec-wfin-pm-scatter" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
@@ -5426,10 +5410,6 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">📐 売上債権 vs 仕入債務 回転日数 散布図（2025年）</div>
                     <div class="chart-subtitle">右下＝買い手としての支払力強・売り手としての回収速い　出典：崔東樹（乗聯会）</div>
-                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-arap-scatter">
-                      <button type="button" class="wfin-zoom-btn wfin-zoom-reset" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
-                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
-                    </div>
                     <div id="ec-wfin-arap-scatter" class="echart-box" style="height:640px"></div>
                   </div>
                 </div>
@@ -18711,7 +18691,7 @@ window.ztShowPane = function(id) {
 // ── ヘルパー（既存グローバルと同一パターン） ──
 var FONT = 'Noto Sans JP, Helvetica Neue, Arial, sans-serif';
 var MONTHS = ['3月','4月','5月','6月','7月','8月','9月','10月','11月','12月','1月','2月','3月'];
-var MONTHS_LABEL = ['24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12','25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];
+var MONTHS_LABEL = ['23.10','23.11','23.12','24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12','25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];
 var MONTHS_TREND = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
 function leg(opt){ return Object.assign({top:8,right:12,textStyle:{fontFamily:FONT,fontSize:11},itemWidth:14,itemHeight:10}, opt||{}); }
@@ -18745,13 +18725,13 @@ function renderSummary(){
     ],
     series:[
       {name:'小売', type:'line', yAxisIndex:0, color:PAL[0], symbol:'circle', symbolSize:5,
-       data:[203.5,110,168.7,153.0,171.0,176.2,171.9,190.2,211.2,225.9,240.9,263.5,179.4,138.5,194.0,175.5,193.8,208,183,200,224,224,222,226,155.0,103,165], lineStyle:{width:2}},
+       data:[203,208,235,203.5,110,168.7,153.0,171.0,176.2,171.9,190.2,211.2,225.9,240.9,263.5,179.4,138.5,194.0,175.5,193.8,208,183,200,224,224,222,226,155.0,103,165], lineStyle:{width:2}},
       {name:'卸売（出荷）', type:'line', yAxisIndex:0, color:PAL[1], symbol:'circle', symbolSize:5,
-       data:[208.9,129,218.9,194.9,203.1,216.9,196.2,214.9,250.9,273.0,293.0,307.5,210.1,176.5,241.2,219.0,231.6,248,222,246,280,293,300,279,197,152,238], lineStyle:{width:2}},
+       data:[244.5,255,271,208.9,129,218.9,194.9,203.1,216.9,196.2,214.9,250.9,273.0,293.0,307.5,210.1,176.5,241.2,219.0,231.6,248,222,246,280,293,300,279,197,152,238], lineStyle:{width:2}},
       {name:'生産', type:'line', yAxisIndex:0, color:PAL[2], symbol:'diamond', symbolSize:5,
-       data:[202.1,123,219.2,198.4,199.7,213.4,197.9,215.5,242.4,264.5,300.8,294.1,210.7,172.9,247,223,228,241,221,241,284,295,309,279,201,137,236], lineStyle:{width:2,type:'dashed'}},
+       data:[245,264,267,202.1,123,219.2,198.4,199.7,213.4,197.9,215.5,242.4,264.5,300.8,294.1,210.7,172.9,247,223,228,241,221,241,284,295,309,279,201,137,236], lineStyle:{width:2,type:'dashed'}},
       {name:'輸出', type:'bar', yAxisIndex:1, color:'rgba(245,158,11,0.6)', barMaxWidth:20,
-       data:[35.5,29.8,40.6,41.2,37.8,37.8,37.3,41.3,43.5,44.1,39.5,40.4,38.0,34.9,39.1,42.3,44.8,47.2,47.5,49.9,52.8,56.8,60.1,58.8,57.6,55.5,69.5]}
+       data:[39.1,37.8,38.5,35.5,29.8,40.6,41.2,37.8,37.8,37.3,41.3,43.5,44.1,39.5,40.4,38.0,34.9,39.1,42.3,44.8,47.2,47.5,49.9,52.8,56.8,60.1,58.8,57.6,55.5,69.5]}
     ]
   });
 }
@@ -18761,7 +18741,7 @@ function renderRetailTrend(){
   var ec = makeEc('ec-zt-retail-trend'); if(!ec) return;
   var years = {
     '2022年': [207,127,158,104,135,190,180,187,188,194,183,217],
-    '2023年': [129,136,193,162,175,188,177,191,190,205,208,234],
+    '2023年': [129,136,193,162,175,188,177,191,190,205,208,235],
     '2024年': [203.5,110,168.7,153,171,176,172,190,211,226,240.9,263.5],
     '2025年': [179,137,194,176,194,208,183,200,224,224,222,230],
     '2026年': [154,103,165,null,null,null,null,null,null,null,null,null]
@@ -18813,7 +18793,7 @@ function renderExportTrend(){
   var ec = makeEc('ec-zt-export-trend'); if(!ec) return;
   var years = {
     '2022年': [17,14,10,12,19,19,26,25,24,25,25,27],
-    '2023年': [24,24,29,32,30,30,32,33,35,39,38,39],
+    '2023年': [24,24,29,32,30,30,32,33,35,39,38,38.5],
     '2024年': [35.5,29.8,40.6,41.2,37.8,37.8,38,41.3,43.5,44.1,39.5,40.4],
     '2025年': [38,36,39,42,45,47,48,50,53,57,60,59],
     '2026年': [58,56,69,null,null,null,null,null,null,null,null,null]
@@ -18839,13 +18819,13 @@ function renderNevPenetration(){
   var ec = makeEc('ec-zt-nev-penetration'); if(!ec) return;
   // 出荷ベース浸透率
   var wh = {
-    '2023年（出荷）': [26.8,30.7,31.1,34.0,33.9,34.0,35.9,35.6,33.9,36.0,37.7,40.7],
+    '2023年（出荷）': [26.8,30.7,31.1,34.0,33.9,34.0,35.9,35.6,33.9,36.0,37.7,40.8],
     '2024年（出荷）': [32.6,34.5,36.8,39.9,44.2,45.3,48.1,48.9,49.1,50.1,48.9,49.2],
     '2025年（出荷）': [43,47,47,52,53,50,53,52,53,55,57,56],
     '2026年（出荷）': [44,48,48,null,null,null,null,null,null,null,null,null]
   };
   var rt = {
-    '2023年（小売）': [26,32,34,32,33,35,36,37,37,38,40,40],
+    '2023年（小売）': [26,32,34,32,33,35,36,37,37,38,40,40.2],
     '2024年（小売）': [32.8,35.8,41.6,43.7,47.0,48.5,51.1,54.0,53.2,52.8,52.2,49.4],
     '2025年（小売）': [41,49,51,52,53,53,54,55,58,57,59,59.1],
     '2026年（小売）': [39,45,51,null,null,null,null,null,null,null,null,null]
@@ -18882,20 +18862,20 @@ window.nbrandSetView = function(v, btn){
 function renderNevBrand(){
   var ec = makeEc('ec-zt-nev-brand'); if(!ec) return;
   var months = MONTHS_LABEL;
-  // 出荷ベース：24.1月〜26.3月の月次データ（各月記事第9節「全国新能源渗透率-批发」より）※24.2含む全27ヶ月
-  // 月インデックス: 24.1, 24.2, 24.3, 24.4, 24.5, 24.6, 24.7, 24.8, 24.9, 24.10, 24.11, 24.12, 25.1, 25.2, 25.3, 25.4, 25.5, 25.6, 25.7, 25.8, 25.9, 25.10, 25.11, 25.12, 26.1, 26.2, 26.3
+  // 出荷ベース：23.10月〜26.3月の月次データ（各月記事第9節「全国新能源渗透率-批发」より）※全30ヶ月連続
+  // 月インデックス: 23.10, 23.11, 23.12, 24.1, 24.2, 24.3, 24.4, 24.5, 24.6, 24.7, 24.8, 24.9, 24.10, 24.11, 24.12, 25.1, 25.2, 25.3, 25.4, 25.5, 25.6, 25.7, 25.8, 25.9, 25.10, 25.11, 25.12, 26.1, 26.2, 26.3
   var dataWh = {
-    '高級車':       [34.5, 37.1, 33.6, 31.5, 32.7, 34.4, 37.2, 43.2, 40.6, 34.7, 34.7, 36.1, 34.4, 26.5, 36.0, 38.4, 39.2, 32.6, 43.5, 41.9, 40,   36.9, 42.8, 42.5, 39.8, 48.2, 43.3],
-    '合弁メーカー': [7.2,  7.1,  6.1,  6.8,  8.0,  7.4,  8.1,  7.8,  6.2,  5.9,  5.8,  4.3,  2,    3.2,  4.9,  6.9,  5.7,  6.6,  6.6,  7.1,  6.6,  7.0,  7.5,  7.2,  3.6,  4.6,  6.4],
-    '中国系ブランド':[43.8, 45.1, 51.1, 53.6, 59.8, 60.7, 62.6, 63.0, 64.2, 65.4, 64.7, 67.3, 54,   62.1, 63.2, 66.2, 68.6, 66.7, 67.4, 66.2, 68.3, 69.8, 72.2, 72.8, 57.9, 58.9, 61.7],
-    '全体':         [32.6, 34.5, 36.8, 39.9, 44.2, 45.3, 48.1, 48.9, 49.1, 50.1, 48.9, 49.2, 41.5, 47.0, 46.8, 51.7, 52.8, 49.8, 53.2, 52.2, 53.5, 55.3, 56.9, 56.0, 44.3, 47.6, 48.1]
+    '高級車':       [33.8, 35.2, 33.2, 34.5, 37.1, 33.6, 31.5, 32.7, 34.4, 37.2, 43.2, 40.6, 34.7, 34.7, 36.1, 34.4, 26.5, 36.0, 38.4, 39.2, 32.6, 43.5, 41.9, 40,   36.9, 42.8, 42.5, 39.8, 48.2, 43.3],
+    '合弁メーカー': [6.3,  7.9,  7.4,  7.2,  7.1,  6.1,  6.8,  8.0,  7.4,  8.1,  7.8,  6.2,  5.9,  5.8,  4.3,  2,    3.2,  4.9,  6.9,  5.7,  6.6,  6.6,  7.1,  6.6,  7.0,  7.5,  7.2,  3.6,  4.6,  6.4],
+    '中国系ブランド':[51.0, 52.6, 59.3, 43.8, 45.1, 51.1, 53.6, 59.8, 60.7, 62.6, 63.0, 64.2, 65.4, 64.7, 67.3, 54,   62.1, 63.2, 66.2, 68.6, 66.7, 67.4, 66.2, 68.3, 69.8, 72.2, 72.8, 57.9, 58.9, 61.7],
+    '全体':         [36.1, 37.7, 40.8, 32.6, 34.5, 36.8, 39.9, 44.2, 45.3, 48.1, 48.9, 49.1, 50.1, 48.9, 49.2, 41.5, 47.0, 46.8, 51.7, 52.8, 49.8, 53.2, 52.2, 53.5, 55.3, 56.9, 56.0, 44.3, 47.6, 48.1]
   };
-  // 小売ベース：24.1〜26.3月の月次データ（各月記事第10/11節「全国新能源渗透率-零售」より）※24.2含む全27ヶ月
+  // 小売ベース：23.10〜26.3月の月次データ（各月記事第10/11節「全国新能源渗透率-零售」より）※全30ヶ月連続
   var dataRt = {
-    '高級車':       [22.3, 24.0, 28.4, 22.6, 28.4, 29.8, 27.0, 33.5, 33.5, 24.9, 32.9, 33.9, 19.9, 22.8, 34.6, 22.8, 26.3, 30.3, 30.0, 31.9, 34.5, 22.2, 38.8, 39.1, 16.1, 32.6, 33.9],
-    '合弁メーカー': [5.1,  4.9,  7.4,  7.5,  7.5,  7.4,  8.3,  8.0,  7.2,  6.2,  6.8,  4.8,  3,    4.1,  5.7,  6.8,  6.2,  5.3,  6.7,  6.6,  7.4,  7.0,  8.0,  8.2,  4.3,  4.5,  6.2],
-    '中国系ブランド':[51.8, 55.3, 63.3, 66.8, 71.2, 72.5, 73.9, 75.9, 74.9, 74.6, 73.1, 71.3, 60.6, 70.3, 72.3, 72.8, 74.9, 75.4, 74.9, 76,   78.1, 77.9, 79.6, 80.9, 61.7, 64.5, 73.5],
-    '全体':         [32.8, 35.8, 41.6, 43.7, 47.0, 48.5, 51.1, 54.0, 53.2, 52.8, 52.2, 49.4, 40.6, 49.5, 51.1, 51.5, 53.0, 53.3, 54.0, 55,   57.8, 57.2, 59.4, 59.1, 38.8, 44.9, 51.5]
+    '高級車':       [19.4, 30.9, 29.5, 22.3, 24.0, 28.4, 22.6, 28.4, 29.8, 27.0, 33.5, 33.5, 24.9, 32.9, 33.9, 19.9, 22.8, 34.6, 22.8, 26.3, 30.3, 30.0, 31.9, 34.5, 22.2, 38.8, 39.1, 16.1, 32.6, 33.9],
+    '合弁メーカー': [6.3,  6.6,  6.0,  5.1,  4.9,  7.4,  7.5,  7.5,  7.4,  8.3,  8.0,  7.2,  6.2,  6.8,  4.8,  3,    4.1,  5.7,  6.8,  6.2,  5.3,  6.7,  6.6,  7.4,  7.0,  8.0,  8.2,  4.3,  4.5,  6.2],
+    '中国系ブランド':[60.2, 62.1, 64.6, 51.8, 55.3, 63.3, 66.8, 71.2, 72.5, 73.9, 75.9, 74.9, 74.6, 73.1, 71.3, 60.6, 70.3, 72.3, 72.8, 74.9, 75.4, 74.9, 76,   78.1, 77.9, 79.6, 80.9, 61.7, 64.5, 73.5],
+    '全体':         [37.7, 40.4, 40.2, 32.8, 35.8, 41.6, 43.7, 47.0, 48.5, 51.1, 54.0, 53.2, 52.8, 52.2, 49.4, 40.6, 49.5, 51.1, 51.5, 53.0, 53.3, 54.0, 55,   57.8, 57.2, 59.4, 59.1, 38.8, 44.9, 51.5]
   };
   var data = (_nbrView === 'rt') ? dataRt : dataWh;
   var colors = ['#8b5cf6','#06b6d4','#ef4444','#3b82f6'];
@@ -18928,28 +18908,28 @@ function renderBrandWholesale(){
   var ec = makeEc('ec-zt-brand-wholesale'); if(!ec) return;
   var months = MONTHS_LABEL;
   // ── 月次データ：高級/合弁/中国系 × 産量/卸売/小売/輸出 ──
-  // 月インデックス: 24.1, 24.2, 24.3, 24.4, 24.5, 24.6, 24.7, 24.8, 24.9, 24.10, 24.11, 24.12, 25.1, 25.2, 25.3, 25.4, 25.5, 25.6, 25.7, 25.8, 25.9, 25.10, 25.11, 25.12, 26.1, 26.2, 26.3 (全27ヶ月)
+  // 月インデックス: 23.10, 23.11, 23.12, 24.1, 24.2, 24.3, 24.4, 24.5, 24.6, 24.7, 24.8, 24.9, 24.10, 24.11, 24.12, 25.1, 25.2, 25.3, 25.4, 25.5, 25.6, 25.7, 25.8, 25.9, 25.10, 25.11, 25.12, 26.1, 26.2, 26.3 (全30ヶ月)
   // 出典: 各月記事画像3「乘联会数据」表より
 
   // 卸売
-  var wh_gouhua = [25.4,19.4,31.0,24.0,25.5,26.7,24.2,25.4,27.8,24.8,28.2,31.8,21.8,16.0,27.5,21.1,23.7,25.6,20.4,25.9,28.9,23.3,27.9,30.2,22.8,16.1,27.2];
-  var wh_heizi  = [57.3,32.0,58.3,46.2,47.7,49.6,41.0,45.8,53.8,57.4,64.8,72.8,43.8,35.5,55.2,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58.1,57.4,42.0,28.3,49.5];
-  var wh_ziZhu  = [126.1,78.1,129.6,124.6,129.8,140.6,131.0,143.8,169.2,190.8,200.0,202.8,144.5,125.0,158.4,154.2,160.6,167.0,157.8,172.1,197.5,214.2,213.8,191.2,132.6,107.4,161.1];
+  var wh_gouhua = [26.0,29.1,34.0,25.4,19.4,31.0,24.0,25.5,26.7,24.2,25.4,27.8,24.8,28.2,31.8,21.8,16.0,27.5,21.1,23.7,25.6,20.4,25.9,28.9,23.3,27.9,30.2,22.8,16.1,27.2];
+  var wh_heizi  = [71.4,73.6,79.6,57.3,32.0,58.3,46.2,47.7,49.6,41.0,45.8,53.8,57.4,64.8,72.8,43.8,35.5,55.2,43.8,47.4,55.3,43.9,47.8,53.9,55.7,58.1,57.4,42.0,28.3,49.5];
+  var wh_ziZhu  = [147.2,152.1,157.8,126.1,78.1,129.6,124.6,129.8,140.6,131.0,143.8,169.2,190.8,200.0,202.8,144.5,125.0,158.4,154.2,160.6,167.0,157.8,172.1,197.5,214.2,213.8,191.2,132.6,107.4,161.1];
 
   // 小売
-  var rt_gouhua = [24,    16,    27,    20,    24,    25,    22,    22,    25,    21,    26,    29,    21,   15,   25,   17,   20,   23,   17,   21,   24,   19,   24,   29,   18,   13,  21];
-  var rt_heizi  = [67,    33,    50,    45,    49,    48,    44,    48,    53,    57,    60,    71,    49,   33,   48,   44,   48,   51,   45,   47,   49,   51,   49,   51,   47,   27,  41];
-  var rt_ziZhu  = [112,   62,    92,    88,    98,    103,   106,   120,   134,   148,   154,   164,   109,  91,   122,  115,  126,  134,  121,  132,  150,  155,  149,  146,  89,   63,  102];
+  var rt_gouhua = [22,    27,    32,    24,    16,    27,    20,    24,    25,    22,    22,    25,    21,    26,    29,    21,   15,   25,   17,   20,   23,   17,   21,   24,   19,   24,   29,   18,   13,  21];
+  var rt_heizi  = [68,    66,    79,    67,    33,    50,    45,    49,    48,    44,    48,    53,    57,    60,    71,    49,   33,   48,   44,   48,   51,   45,   47,   49,   51,   49,   51,   47,   27,  41];
+  var rt_ziZhu  = [113,   115,   124,   112,   62,    92,    88,    98,    103,   106,   120,   134,   148,   154,   164,   109,  91,   122,  115,  126,  134,  121,  132,  150,  155,  149,  146,  89,   63,  102];
 
   // 産量
-  var pr_gouhua = [27,    20,    30,    26,    26,    28,    29,    29,    25,    22,    28,    24,    24,   18,   28,   23,   23,   24,   22,   25,   27,   24,   28,   26,   27,   16,  28];
-  var pr_heizi  = [56,    31,    57,    47,    48,    50,    41,    46,    51,    55,    69,    65,    48,   35,   57,   45,   48,   54,   45,   46,   57,   54,   60,   52,   41,   27,  52];
-  var pr_ziZhu  = [119,   73,    132,   125,   126,   136,   128,   141,   166,   188,   204,   204,   139,  121,  162,  155,  157,  163,  154,  170,  200,  217,  220,  201,  133,  94,  156];
+  var pr_gouhua = [25,    32,    30,    27,    20,    30,    26,    26,    28,    29,    29,    25,    22,    28,    24,    24,   18,   28,   23,   23,   24,   22,   25,   27,   24,   28,   26,   27,   16,  28];
+  var pr_heizi  = [70,    78,    79,    56,    31,    57,    47,    48,    50,    41,    46,    51,    55,    69,    65,    48,   35,   57,   45,   48,   54,   45,   46,   57,   54,   60,   52,   41,   27,  52];
+  var pr_ziZhu  = [150,   155,   158,   119,   73,    132,   125,   126,   136,   128,   141,   166,   188,   204,   204,   139,  121,  162,  155,  157,  163,  154,  170,  200,  217,  220,  201,  133,  94,  156];
 
   // 輸出
-  var ex_gouhua = [3.8,   3.5,   3.4,   3.8,   2.4,   2.4,   4.0,   4.5,   3.6,   4.0,   1.8,   2.3,   3.8,  1.1,  1.8,  4.8,  4.1,  2.0,  3.8,  4.5,  3.7,  4.8,  2.9,  2.0,  6.5,  3.8, 4.8];
-  var ex_heizi  = [2.1,   1.5,   3.1,   3.2,   3.4,   3.0,   2.8,   3.5,   3.7,   3.0,   3.7,   3.5,   2.2,  2.4,  2.9,  3.5,  3.2,  4.2,  2.2,  2.5,  2.8,  4.4,  4.7,  5.3,  3.5,  3.9, 4.0];
-  var ex_ziZhu  = [29.6,  24.8,  34.1,  34.3,  31.9,  32.5,  30.6,  33.3,  36.2,  37.1,  34.0,  34.5,  32.0, 31.4, 34.4, 34.0, 37.4, 41.0, 41.5, 42.9, 46.3, 47.6, 52.5, 51.5, 47.6, 47.8,60.6];
+  var ex_gouhua = [4.4,   1.8,   2.6,   3.8,   3.5,   3.4,   3.8,   2.4,   2.4,   4.0,   4.5,   3.6,   4.0,   1.8,   2.3,   3.8,  1.1,  1.8,  4.8,  4.1,  2.0,  3.8,  4.5,  3.7,  4.8,  2.9,  2.0,  6.5,  3.8, 4.8];
+  var ex_heizi  = [2.9,   2.7,   2.8,   2.1,   1.5,   3.1,   3.2,   3.4,   3.0,   2.8,   3.5,   3.7,   3.0,   3.7,   3.5,   2.2,  2.4,  2.9,  3.5,  3.2,  4.2,  2.2,  2.5,  2.8,  4.4,  4.7,  5.3,  3.5,  3.9, 4.0];
+  var ex_ziZhu  = [31.8,  33.3,  33.1,  29.6,  24.8,  34.1,  34.3,  31.9,  32.5,  30.6,  33.3,  36.2,  37.1,  34.0,  34.5,  32.0, 31.4, 34.4, 34.0, 37.4, 41.0, 41.5, 42.9, 46.3, 47.6, 52.5, 51.5, 47.6, 47.8,60.6];
 
   var dataMap = {
     pr: {gouhua:pr_gouhua, heizi:pr_heizi, ziZhu:pr_ziZhu, label:'産量', max:320},
@@ -18978,14 +18958,17 @@ function renderBrandWholesale(){
 // 卸売はフル時系列、小売は24.12と26.3のみ（他月は今後追加）
 var NAT_DATA = {
   wh: {
-    totals:[209,129,219,195,203,217,196,215,251,273,293,308,210,177,241,219,232,248,222,246,280,293,300,279,197,152,238],
-    ziZhu :[126, 78,130,125,130,141,131,144,169,191,200,203,145,125,158,154,160,166,157,171,197,214,213,190,132,107,161],
-    doku  :[ 36, 22, 37, 30, 30, 33, 29, 30, 34, 35, 40, 42, 29, 23, 35, 27, 30, 35, 26, 30, 34, 31, 34, 33, 28, 17, 29],
-    nichi :[ 28, 16, 28, 22, 24, 25, 21, 22, 26, 28, 30, 36, 19, 16, 27, 19, 23, 26, 22, 24, 27, 28, 29, 30, 18, 13, 26],
-    bei   :[ 13,  9, 18, 13, 13, 12, 11, 13, 14, 13, 16, 19, 12,  8, 14, 13, 13, 15, 11, 15, 16, 14, 17, 18, 14, 11, 16],
-    kan   :[  3,  2,  4,  3,  4,  4,  3,  4,  4,  3,  4,  4,  3,  3,  4,  4,  4,  4,  3,  4,  4,  4,  4,  4,  3,  3,  3],
-    ou    :[  2,  1,  2,  2,  2,  3,  2,  3,  3,  2,  3,  3,  2,  2,  2,  3,  2,  2,  2,  2,  2,  2,  2,  3,  2,  1,  2],
-    // 公表値の上書き（崔東樹本期份額をそのまま使用）※全27ヶ月（24.1〜26.3連続）
+    totals:[245,255,271,209,129,219,195,203,217,196,215,251,273,293,308,210,177,241,219,232,248,222,246,280,293,300,279,197,152,238],
+    ziZhu :[147,152,158,126, 78,130,125,130,141,131,144,169,191,200,203,145,125,158,154,160,166,157,171,197,214,213,190,132,107,161],
+    doku  :[ 38, 41, 46, 36, 22, 37, 30, 30, 33, 29, 30, 34, 35, 40, 42, 29, 23, 35, 27, 30, 35, 26, 30, 34, 31, 34, 33, 28, 17, 29],
+    nichi :[ 36, 36, 38, 28, 16, 28, 22, 24, 25, 21, 22, 26, 28, 30, 36, 19, 16, 27, 19, 23, 26, 22, 24, 27, 28, 29, 30, 18, 13, 26],
+    bei   :[ 18, 19, 22, 13,  9, 18, 13, 13, 12, 11, 13, 14, 13, 16, 19, 12,  8, 14, 13, 13, 15, 11, 15, 16, 14, 17, 18, 14, 11, 16],
+    kan   :[  4,  4,  5,  3,  2,  4,  3,  4,  4,  3,  4,  4,  3,  4,  4,  3,  3,  4,  4,  4,  4,  3,  4,  4,  4,  4,  4,  3,  3,  3],
+    ou    :[  2,  2,  2,  2,  1,  2,  2,  2,  3,  2,  3,  3,  2,  3,  3,  2,  2,  2,  3,  2,  2,  2,  2,  2,  2,  2,  3,  2,  1,  2],
+    // 公表値の上書き（崔東樹本期份額をそのまま使用）※全30ヶ月（23.10〜26.3連続）
+    // 23.10: 自主60.1 / 独15.5 / 日14.6 / 米7.4  / 韓1.5 / 欧0.9 = 100.0%
+    // 23.11: 自主59.7 / 独16.1 / 日14.3 / 米7.4  / 韓1.6 / 欧0.9 = 100.0%
+    // 23.12: 自主58.2 / 独17.1 / 日13.9 / 米8.2  / 韓1.8 / 欧0.8 = 100.0%
     // 24.1 : 自主60.5 / 独17.4 / 日13.3 / 米6.3  / 韓1.4 / 欧1.1 = 100.0%
     // 24.2 : 自主60.4 / 独17.1 / 日12.7 / 米6.9  / 韓1.8 / 欧1.1 = 100.0%
     // 24.3 : 自主59.3 / 独16.8 / 日12.8 / 米8.0  / 韓2.0 / 欧1.0 = 99.9%
@@ -19014,45 +18997,51 @@ var NAT_DATA = {
     // 26.2 : 自主70.7 / 独11.2 / 日8.3  / 米7.1  / 韓1.8 / 欧0.9 = 100.0%
     // 26.3 : 自主67.5 / 独12.1 / 日11.1 / 米6.8  / 韓1.5 / 欧1.0 = 100.0%
     overrides: {
-      0:  {ziZhu:60.5, doku:17.4, nichi:13.3, bei:6.3, kan:1.4, ou:1.1},
-      1:  {ziZhu:60.4, doku:17.1, nichi:12.7, bei:6.9, kan:1.8, ou:1.1},
-      2:  {ziZhu:59.3, doku:16.8, nichi:12.8, bei:8.0, kan:2.0, ou:1.0},
-      3:  {ziZhu:64.1, doku:15.4, nichi:11.1, bei:6.8, kan:1.7, ou:1.0},
-      4:  {ziZhu:64.0, doku:14.7, nichi:11.9, bei:6.5, kan:1.8, ou:1.1},
-      5:  {ziZhu:64.8, doku:15.3, nichi:11.5, bei:5.5, kan:1.6, ou:1.3},
-      6:  {ziZhu:66.8, doku:14.6, nichi:10.5, bei:5.5, kan:1.5, ou:1.1},
-      7:  {ziZhu:66.9, doku:13.8, nichi:10.4, bei:5.8, kan:1.7, ou:1.4},
-      8:  {ziZhu:67.6, doku:13.6, nichi:10.5, bei:5.5, kan:1.5, ou:1.3},
-      9:  {ziZhu:69.9, doku:12.9, nichi:10.3, bei:4.7, kan:1.3, ou:0.9},
-      10: {ziZhu:68.3, doku:13.5, nichi:10.3, bei:5.6, kan:1.4, ou:0.9},
-      11: {ziZhu:66.0, doku:13.7, nichi:11.8, bei:6.3, kan:1.3, ou:0.9},
-      12: {ziZhu:68.8, doku:13.9, nichi:9.2,  bei:5.6, kan:1.5, ou:0.9},
-      13: {ziZhu:70.8, doku:13.2, nichi:9.1,  bei:4.3, kan:1.6, ou:1.0},
-      14: {ziZhu:65.7, doku:14.7, nichi:11.1, bei:6.0, kan:1.6, ou:0.9},
-      15: {ziZhu:70.3, doku:12.2, nichi:8.9,  bei:5.7, kan:1.7, ou:1.2},
-      16: {ziZhu:69.1, doku:12.8, nichi:9.8,  bei:5.6, kan:1.8, ou:1.0},
-      17: {ziZhu:67.1, doku:14.1, nichi:10.6, bei:6.0, kan:1.6, ou:0.7},
-      18: {ziZhu:70.8, doku:11.9, nichi:9.9,  bei:5.1, kan:1.6, ou:0.8},
-      19: {ziZhu:69.7, doku:12.3, nichi:9.7,  bei:5.9, kan:1.5, ou:1.0},
-      20: {ziZhu:70.3, doku:12.0, nichi:9.7,  bei:5.7, kan:1.4, ou:0.8},
-      21: {ziZhu:72.9, doku:10.5, nichi:9.7,  bei:4.8, kan:1.4, ou:0.8},
-      22: {ziZhu:71.1, doku:11.2, nichi:9.8,  bei:5.7, kan:1.3, ou:0.8},
-      23: {ziZhu:68.3, doku:11.9, nichi:10.8, bei:6.5, kan:1.4, ou:1.1},
-      24: {ziZhu:67.0, doku:14.1, nichi:9.3,  bei:7.0, kan:1.6, ou:1.0},
-      25: {ziZhu:70.7, doku:11.2, nichi:8.3,  bei:7.1, kan:1.8, ou:0.9},
-      26: {ziZhu:67.5, doku:12.1, nichi:11.1, bei:6.8, kan:1.5, ou:1.0}
+      0:  {ziZhu:60.1, doku:15.5, nichi:14.6, bei:7.4, kan:1.5, ou:0.9},
+      1:  {ziZhu:59.7, doku:16.1, nichi:14.3, bei:7.4, kan:1.6, ou:0.9},
+      2:  {ziZhu:58.2, doku:17.1, nichi:13.9, bei:8.2, kan:1.8, ou:0.8},
+      3:  {ziZhu:60.5, doku:17.4, nichi:13.3, bei:6.3, kan:1.4, ou:1.1},
+      4:  {ziZhu:60.4, doku:17.1, nichi:12.7, bei:6.9, kan:1.8, ou:1.1},
+      5:  {ziZhu:59.3, doku:16.8, nichi:12.8, bei:8.0, kan:2.0, ou:1.0},
+      6:  {ziZhu:64.1, doku:15.4, nichi:11.1, bei:6.8, kan:1.7, ou:1.0},
+      7:  {ziZhu:64.0, doku:14.7, nichi:11.9, bei:6.5, kan:1.8, ou:1.1},
+      8:  {ziZhu:64.8, doku:15.3, nichi:11.5, bei:5.5, kan:1.6, ou:1.3},
+      9:  {ziZhu:66.8, doku:14.6, nichi:10.5, bei:5.5, kan:1.5, ou:1.1},
+      10: {ziZhu:66.9, doku:13.8, nichi:10.4, bei:5.8, kan:1.7, ou:1.4},
+      11: {ziZhu:67.6, doku:13.6, nichi:10.5, bei:5.5, kan:1.5, ou:1.3},
+      12: {ziZhu:69.9, doku:12.9, nichi:10.3, bei:4.7, kan:1.3, ou:0.9},
+      13: {ziZhu:68.3, doku:13.5, nichi:10.3, bei:5.6, kan:1.4, ou:0.9},
+      14: {ziZhu:66.0, doku:13.7, nichi:11.8, bei:6.3, kan:1.3, ou:0.9},
+      15: {ziZhu:68.8, doku:13.9, nichi:9.2,  bei:5.6, kan:1.5, ou:0.9},
+      16: {ziZhu:70.8, doku:13.2, nichi:9.1,  bei:4.3, kan:1.6, ou:1.0},
+      17: {ziZhu:65.7, doku:14.7, nichi:11.1, bei:6.0, kan:1.6, ou:0.9},
+      18: {ziZhu:70.3, doku:12.2, nichi:8.9,  bei:5.7, kan:1.7, ou:1.2},
+      19: {ziZhu:69.1, doku:12.8, nichi:9.8,  bei:5.6, kan:1.8, ou:1.0},
+      20: {ziZhu:67.1, doku:14.1, nichi:10.6, bei:6.0, kan:1.6, ou:0.7},
+      21: {ziZhu:70.8, doku:11.9, nichi:9.9,  bei:5.1, kan:1.6, ou:0.8},
+      22: {ziZhu:69.7, doku:12.3, nichi:9.7,  bei:5.9, kan:1.5, ou:1.0},
+      23: {ziZhu:70.3, doku:12.0, nichi:9.7,  bei:5.7, kan:1.4, ou:0.8},
+      24: {ziZhu:72.9, doku:10.5, nichi:9.7,  bei:4.8, kan:1.4, ou:0.8},
+      25: {ziZhu:71.1, doku:11.2, nichi:9.8,  bei:5.7, kan:1.3, ou:0.8},
+      26: {ziZhu:68.3, doku:11.9, nichi:10.8, bei:6.5, kan:1.4, ou:1.1},
+      27: {ziZhu:67.0, doku:14.1, nichi:9.3,  bei:7.0, kan:1.6, ou:1.0},
+      28: {ziZhu:70.7, doku:11.2, nichi:8.3,  bei:7.1, kan:1.8, ou:0.9},
+      29: {ziZhu:67.5, doku:12.1, nichi:11.1, bei:6.8, kan:1.5, ou:1.0}
     }
   },
   rt: {
-    // 小売：全27ヶ月登録済み（24.1〜26.3、24.2含む連続）
-    totals:[203,110,169,153,171,176,172,190,211,226,241,264,179,139,194,175,194,208,183,200,224,224,222,226,155,103,165],
-    ziZhu :[112, 62, 93, 88, 98,103,106,121,134,148,154,164,109, 91,122,115,126,134,120,131,150,154,149,145, 89, 63,102],
-    doku  :[ 39, 23, 34, 29, 32, 33, 30, 32, 35, 36, 38, 43, 33, 24, 32, 27, 30, 34, 27, 28, 32, 30, 31, 34, 31, 19, 26],
-    nichi :[ 34, 16, 23, 23, 25, 25, 22, 24, 27, 29, 30, 35, 24, 15, 24, 21, 24, 25, 24, 25, 26, 28, 26, 27, 24, 13, 22],
-    bei   :[ 13,  7, 14,  9, 11, 11, 10, 11, 12,  9, 15, 18, 10,  7, 13,  8, 10, 12,  9, 12, 13,  8, 13, 15,  8,  7, 11],
-    kan   :[  3,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  2,  1,  2,  2,  2,  1,  2,  2,  2,  2,  1,  2],
-    ou    :[  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  1,  2,  2,  2,  1,  2,  2,  2,  2,  2,  2,  1,  2],
-    // 公表値の上書き ※全27ヶ月（24.1〜26.3連続）
+    // 小売：全30ヶ月登録済み（23.10〜26.3、連続）
+    totals:[203,208,235,203,110,169,153,171,176,172,190,211,226,241,264,179,139,194,175,194,208,183,200,224,224,222,226,155,103,165],
+    ziZhu :[113,115,124,112, 62, 93, 88, 98,103,106,121,134,148,154,164,109, 91,122,115,126,134,120,131,150,154,149,145, 89, 63,102],
+    doku  :[ 37, 39, 48, 39, 23, 34, 29, 32, 33, 30, 32, 35, 36, 38, 43, 33, 24, 32, 27, 30, 34, 27, 28, 32, 30, 31, 34, 31, 19, 26],
+    nichi :[ 36, 32, 39, 34, 16, 23, 23, 25, 25, 22, 24, 27, 29, 30, 35, 24, 15, 24, 21, 24, 25, 24, 25, 26, 28, 26, 27, 24, 13, 22],
+    bei   :[ 12, 16, 17, 13,  7, 14,  9, 11, 11, 10, 11, 12,  9, 15, 18, 10,  7, 13,  8, 10, 12,  9, 12, 13,  8, 13, 15,  8,  7, 11],
+    kan   :[  3,  3,  4,  3,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  2,  2,  1,  2,  2,  2,  1,  2,  2,  2,  2,  1,  2],
+    ou    :[  2,  3,  3,  2,  1,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  2,  1,  1,  2,  2,  2,  1,  2,  2,  2,  2,  2,  2,  1,  2],
+    // 公表値の上書き ※全30ヶ月（23.10〜26.3連続）
+    // 23.10: 自主55.6 / 独18.1 / 日17.7 / 米6.1  / 韓1.3 / 欧1.2 = 100.0%
+    // 23.11: 自主55.3 / 独18.7 / 日15.5 / 米7.9  / 韓1.3 / 欧1.3 = 100.0%
+    // 23.12: 自主52.9 / 独20.5 / 日16.5 / 米7.3  / 韓1.5 / 欧1.2 = 99.9%
     // 24.1 : 自主55.1 / 独19.2 / 日16.7 / 米6.5  / 韓1.5 / 欧1.2 = 100.2%
     // 24.2 : 自主56.1 / 独20.5 / 日14.4 / 米6.4  / 韓1.6 / 欧1.0 = 100.0%
     // 24.3 : 自主54.8 / 独20.4 / 日13.8 / 米8.2  / 韓1.5 / 欧1.3 = 100.0%
@@ -19081,33 +19070,36 @@ var NAT_DATA = {
     // 26.2 : 自主61.2 / 独18.2 / 日12.1 / 米6.8  / 韓1.0 / 欧0.6 = 99.9%
     // 26.3 : 自主61.8 / 独16.0 / 日13.3 / 米6.9  / 韓0.9 / 欧1.1 = 100.0%
     overrides: {
-      0:  {ziZhu:55.1, doku:19.2, nichi:16.7, bei:6.5, kan:1.5, ou:1.2},
-      1:  {ziZhu:56.1, doku:20.5, nichi:14.4, bei:6.4, kan:1.6, ou:1.0},
-      2:  {ziZhu:54.8, doku:20.4, nichi:13.8, bei:8.2, kan:1.5, ou:1.3},
-      3:  {ziZhu:57.4, doku:19.0, nichi:15.2, bei:5.9, kan:1.4, ou:1.1},
-      4:  {ziZhu:57.6, doku:18.6, nichi:14.8, bei:6.7, kan:1.3, ou:1.1},
-      5:  {ziZhu:58.5, doku:18.6, nichi:14.3, bei:6.3, kan:1.1, ou:1.2},
-      6:  {ziZhu:61.8, doku:17.6, nichi:12.9, bei:5.8, kan:1.0, ou:0.9},
-      7:  {ziZhu:63.4, doku:16.6, nichi:12.6, bei:5.7, kan:0.9, ou:0.8},
-      8:  {ziZhu:63.5, doku:16.5, nichi:12.6, bei:5.7, kan:0.7, ou:0.9},
-      9:  {ziZhu:65.7, doku:15.8, nichi:12.9, bei:4.0, kan:0.7, ou:0.8},
-      10: {ziZhu:64.1, doku:15.6, nichi:12.4, bei:6.4, kan:0.7, ou:0.7},
-      11: {ziZhu:62.3, doku:16.2, nichi:13.4, bei:6.7, kan:0.7, ou:0.8},
-      12: {ziZhu:61.0, doku:18.4, nichi:13.4, bei:5.3, kan:0.9, ou:0.9},
-      13: {ziZhu:65.6, doku:17.0, nichi:10.7, bei:5.0, kan:0.8, ou:0.9},
-      14: {ziZhu:62.7, doku:16.6, nichi:12.2, bei:6.8, kan:0.9, ou:0.7},
-      15: {ziZhu:65.5, doku:15.6, nichi:12.2, bei:4.8, kan:1.0, ou:1.0},
-      16: {ziZhu:64.9, doku:15.7, nichi:12.6, bei:5.2, kan:0.7, ou:0.9},
-      17: {ziZhu:64.2, doku:16.1, nichi:12.0, bei:5.8, kan:1.0, ou:0.8},
-      18: {ziZhu:65.9, doku:14.5, nichi:12.9, bei:4.7, kan:1.1, ou:0.8},
-      19: {ziZhu:65.7, doku:14.2, nichi:12.5, bei:6.0, kan:0.8, ou:0.8},
-      20: {ziZhu:66.9, doku:14.3, nichi:11.6, bei:5.8, kan:0.7, ou:0.7},
-      21: {ziZhu:68.7, doku:13.5, nichi:12.3, bei:3.7, kan:0.9, ou:0.8},
-      22: {ziZhu:66.9, doku:14.0, nichi:11.7, bei:5.7, kan:0.9, ou:0.8},
-      23: {ziZhu:64.3, doku:14.9, nichi:12.1, bei:6.8, kan:0.9, ou:0.9},
-      24: {ziZhu:57.6, doku:19.8, nichi:15.5, bei:5.0, kan:1.2, ou:1.0},
-      25: {ziZhu:61.2, doku:18.2, nichi:12.1, bei:6.8, kan:1.0, ou:0.6},
-      26: {ziZhu:61.8, doku:16.0, nichi:13.3, bei:6.9, kan:0.9, ou:1.1}
+      0:  {ziZhu:55.6, doku:18.1, nichi:17.7, bei:6.1, kan:1.3, ou:1.2},
+      1:  {ziZhu:55.3, doku:18.7, nichi:15.5, bei:7.9, kan:1.3, ou:1.3},
+      2:  {ziZhu:52.9, doku:20.5, nichi:16.5, bei:7.3, kan:1.5, ou:1.2},
+      3:  {ziZhu:55.1, doku:19.2, nichi:16.7, bei:6.5, kan:1.5, ou:1.2},
+      4:  {ziZhu:56.1, doku:20.5, nichi:14.4, bei:6.4, kan:1.6, ou:1.0},
+      5:  {ziZhu:54.8, doku:20.4, nichi:13.8, bei:8.2, kan:1.5, ou:1.3},
+      6:  {ziZhu:57.4, doku:19.0, nichi:15.2, bei:5.9, kan:1.4, ou:1.1},
+      7:  {ziZhu:57.6, doku:18.6, nichi:14.8, bei:6.7, kan:1.3, ou:1.1},
+      8:  {ziZhu:58.5, doku:18.6, nichi:14.3, bei:6.3, kan:1.1, ou:1.2},
+      9:  {ziZhu:61.8, doku:17.6, nichi:12.9, bei:5.8, kan:1.0, ou:0.9},
+      10: {ziZhu:63.4, doku:16.6, nichi:12.6, bei:5.7, kan:0.9, ou:0.8},
+      11: {ziZhu:63.5, doku:16.5, nichi:12.6, bei:5.7, kan:0.7, ou:0.9},
+      12: {ziZhu:65.7, doku:15.8, nichi:12.9, bei:4.0, kan:0.7, ou:0.8},
+      13: {ziZhu:64.1, doku:15.6, nichi:12.4, bei:6.4, kan:0.7, ou:0.7},
+      14: {ziZhu:62.3, doku:16.2, nichi:13.4, bei:6.7, kan:0.7, ou:0.8},
+      15: {ziZhu:61.0, doku:18.4, nichi:13.4, bei:5.3, kan:0.9, ou:0.9},
+      16: {ziZhu:65.6, doku:17.0, nichi:10.7, bei:5.0, kan:0.8, ou:0.9},
+      17: {ziZhu:62.7, doku:16.6, nichi:12.2, bei:6.8, kan:0.9, ou:0.7},
+      18: {ziZhu:65.5, doku:15.6, nichi:12.2, bei:4.8, kan:1.0, ou:1.0},
+      19: {ziZhu:64.9, doku:15.7, nichi:12.6, bei:5.2, kan:0.7, ou:0.9},
+      20: {ziZhu:64.2, doku:16.1, nichi:12.0, bei:5.8, kan:1.0, ou:0.8},
+      21: {ziZhu:65.9, doku:14.5, nichi:12.9, bei:4.7, kan:1.1, ou:0.8},
+      22: {ziZhu:65.7, doku:14.2, nichi:12.5, bei:6.0, kan:0.8, ou:0.8},
+      23: {ziZhu:66.9, doku:14.3, nichi:11.6, bei:5.8, kan:0.7, ou:0.7},
+      24: {ziZhu:68.7, doku:13.5, nichi:12.3, bei:3.7, kan:0.9, ou:0.8},
+      25: {ziZhu:66.9, doku:14.0, nichi:11.7, bei:5.7, kan:0.9, ou:0.8},
+      26: {ziZhu:64.3, doku:14.9, nichi:12.1, bei:6.8, kan:0.9, ou:0.9},
+      27: {ziZhu:57.6, doku:19.8, nichi:15.5, bei:5.0, kan:1.2, ou:1.0},
+      28: {ziZhu:61.2, doku:18.2, nichi:12.1, bei:6.8, kan:1.0, ou:0.6},
+      29: {ziZhu:61.8, doku:16.0, nichi:13.3, bei:6.9, kan:0.9, ou:1.1}
     }
   }
 };
@@ -19401,23 +19393,23 @@ function renderBrand4Indicator(){
 
 // ── ⑫ ブランド層別 卸売 伝統/新エネ内訳 ──
 // ── ⑫ ブランド層別 卸売 伝統/新エネ内訳（月次推移） ──
-// MONTHS_LABEL = ['24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12','25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3']（全27ヶ月、24.1〜26.3連続）
+// MONTHS_LABEL = ['23.10','23.11','23.12','24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12','25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3']（全30ヶ月、23.10〜26.3連続）
 // 各月の崔東樹「乘用车批发」表（伝統/新エネ × 豪華/合資/自主）から抽出
 var BIN_WH = {
-  '豪華_伝統':   [17,12,21,16,17,18,15,14,17,16,18,20,14,12,18,13,14,17,12,15,17, 15, 16, 17, 14, 8, 15],
-  '豪華_新エネ': [ 9, 7, 10, 8, 8, 9, 9,11,11, 9,10,11, 7, 4,10, 8, 9, 8, 9,11,12,  9, 12, 13,  9, 8, 12],
-  '合資_伝統':   [53,30,55,43,44,46,38,42,51,54,61,70,43,34,53,41,45,52,41,44,50, 52, 54, 53, 40,27, 46],
-  '合資_新エネ': [ 4, 2, 4, 3, 4, 4, 3, 4, 3, 3, 4, 3, 1, 1, 3, 3, 3, 4, 3, 3, 4,  4,  4,  4,  1, 1,  3],
-  '自主_伝統':   [71,43,64,59,52,55,49,53,61,66,71,66,69,47,58,52,50,56,51,58,63, 65, 60, 52, 56,44, 62],
-  '自主_新エネ': [55,35,67,68,78,85,82,91,109,125,130,137,81,78,100,102,110,111,106,114,135, 150, 154, 139, 77, 63, 99]
+  '豪華_伝統':   [17,19,23,17,12,21,16,17,18,15,14,17,16,18,20,14,12,18,13,14,17,12,15,17, 15, 16, 17, 14, 8, 15],
+  '豪華_新エネ': [ 9,10,11, 9, 7, 10, 8, 8, 9, 9,11,11, 9,10,11, 7, 4,10, 8, 9, 8, 9,11,12,  9, 12, 13,  9, 8, 12],
+  '合資_伝統':   [67,68,74,53,30,55,43,44,46,38,42,51,54,61,70,43,34,53,41,45,52,41,44,50, 52, 54, 53, 40,27, 46],
+  '合資_新エネ': [ 4, 6, 6, 4, 2, 4, 3, 4, 4, 3, 4, 3, 3, 4, 3, 1, 1, 3, 3, 3, 4, 3, 3, 4,  4,  4,  4,  1, 1,  3],
+  '自主_伝統':   [72,72,64,71,43,64,59,52,55,49,53,61,66,71,66,69,47,58,52,50,56,51,58,63, 65, 60, 52, 56,44, 62],
+  '自主_新エネ': [75,80,94,55,35,67,68,78,85,82,91,109,125,130,137,81,78,100,102,110,111,106,114,135, 150, 154, 139, 77, 63, 99]
 };
 var BIN_RT = {
-  '豪華_伝統':   [19,12,19,16,17,18,16,15,16,16,18,19,17,11,16,13,15,16,12,14,16, 15, 15, 17, 15,  9, 14],
-  '豪華_新エネ': [ 5, 4, 8, 5, 7, 7, 6, 7, 8, 5, 9,10, 4, 3, 9, 4, 5, 7, 5, 7, 8,  4,  9, 11,  3,  4,  7],
-  '合資_伝統':   [64,31,46,42,45,45,41,44,49,53,56,67,48,32,45,41,45,48,42,44,46, 47, 45, 47, 45, 26, 39],
-  '合資_新エネ': [ 3, 2, 4, 3, 4, 4, 4, 4, 4, 3, 4, 3, 1, 1, 3, 3, 3, 3, 3, 3, 4,  4,  4,  4,  2,  1,  3],
-  '自主_伝統':   [54,28,35,30,28,28,28,29,34,38,42,47,45,27,34,31,32,33,30,32,33, 34, 30, 28, 34, 22, 27],
-  '自主_新エネ': [58,34,60,60,70,74,78,91,100,111,113,117,69,64,88,84,95,101,91,100,118, 120, 119, 118, 55, 41, 75]
+  '豪華_伝統':   [18,19,23,19,12,19,16,17,18,16,15,16,16,18,19,17,11,16,13,15,16,12,14,16, 15, 15, 17, 15,  9, 14],
+  '豪華_新エネ': [ 4, 8,10, 5, 4, 8, 5, 7, 7, 6, 7, 8, 5, 9,10, 4, 3, 9, 4, 5, 7, 5, 7, 8,  4,  9, 11,  3,  4,  7],
+  '合資_伝統':   [64,62,74,64,31,46,42,45,45,41,44,49,53,56,67,48,32,45,41,45,48,42,44,46, 47, 45, 47, 45, 26, 39],
+  '合資_新エネ': [ 4, 4, 5, 3, 2, 4, 3, 4, 4, 4, 4, 4, 3, 4, 3, 1, 1, 3, 3, 3, 3, 3, 3, 4,  4,  4,  4,  2,  1,  3],
+  '自主_伝統':   [45,43,44,54,28,35,30,28,28,28,29,34,38,42,47,45,27,34,31,32,33,30,32,33, 34, 30, 28, 34, 22, 27],
+  '自主_新エネ': [68,71,80,58,34,60,60,70,74,78,91,100,111,113,117,69,64,88,84,95,101,91,100,118, 120, 119, 118, 55, 41, 75]
 };
 
 // 表示モード切替: 'wh'/'rt'（指標） & 'volume'/'pct'（表示） & 比較モード
@@ -19533,7 +19525,7 @@ function renderBrandIceNev(){
 // ── ⑭ 車型×クラス別 月次販売推移 ──
 // データ構造: SEG_DATA[月ラベル] = { wh: {CAR_a00:..., CAR_A0:..., ...}, rt: {...} }
 // 月追加時はここにデータを足すだけ
-var SEG_MONTHS = ['24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12','25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];  // 現在登録済み月（全27ヶ月、24.1〜26.3連続）
+var SEG_MONTHS = ['23.10','23.11','23.12','24.1','24.2','24.3','24.4','24.5','24.6','24.7','24.8','24.9','24.10','24.11','24.12','25.1','25.2','25.3','25.4','25.5','25.6','25.7','25.8','25.9','25.10','25.11','25.12','26.1','26.2','26.3'];  // 現在登録済み月（全30ヶ月、23.10〜26.3連続）
 var SEG_KEYS   = ['CAR_a00','CAR_A0','CAR_A','CAR_B','CAR_C','MPV_A0','MPV_A','MPV_B','MPV_C','SUV_A0','SUV_A','SUV_B','SUV_C'];
 var SEG_LABELS = ['CAR a00','CAR A0','CAR A','CAR B','CAR C','MPV A0','MPV A','MPV B','MPV C','SUV A0','SUV A','SUV B','SUV C'];
 // 各クラスの積み上げ用グループ色
@@ -19544,6 +19536,18 @@ var SEG_COLORS = {
 };
 
 var SEG_DATA = {
+  '23.10': {
+    wh: {CAR_a00:10, CAR_A0:13, CAR_A:47, CAR_B:29, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:22, SUV_A:72, SUV_B:32, SUV_C:2.7},
+    rt: {CAR_a00:11, CAR_A0:9,  CAR_A:40, CAR_B:26, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:14, SUV_A:56, SUV_B:28, SUV_C:3}
+  },
+  '23.11': {
+    wh: {CAR_a00:12, CAR_A0:15, CAR_A:47, CAR_B:31, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:23, SUV_A:73, SUV_B:35, SUV_C:2.9},
+    rt: {CAR_a00:12, CAR_A0:9,  CAR_A:42, CAR_B:28, CAR_C:7,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:14, SUV_A:53, SUV_B:31, SUV_C:3}
+  },
+  '23.12': {
+    wh: {CAR_a00:16, CAR_A0:16, CAR_A:47, CAR_B:35, CAR_C:7,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:3, SUV_A0:22, SUV_A:73, SUV_B:40, SUV_C:3.6},
+    rt: {CAR_a00:12, CAR_A0:10, CAR_A:46, CAR_B:34, CAR_C:8,  MPV_A0:1, MPV_A:1, MPV_B:6, MPV_C:2, SUV_A0:14, SUV_A:60, SUV_B:39, SUV_C:3}
+  },
   '24.1': {
     wh: {CAR_a00:8,  CAR_A0:7,  CAR_A:39, CAR_B:28, CAR_C:5,  MPV_A0:0, MPV_A:1, MPV_B:4, MPV_C:2, SUV_A0:16, SUV_A:63, SUV_B:32, SUV_C:2.8},
     rt: {CAR_a00:8,  CAR_A0:6,  CAR_A:42, CAR_B:28, CAR_C:6,  MPV_A0:1, MPV_A:1, MPV_B:5, MPV_C:2, SUV_A0:11, SUV_A:59, SUV_B:30, SUV_C:3}
@@ -19724,6 +19728,139 @@ function renderSegment(){
   }
 }
 
+// ── ⑬ クラス別NEV浸透率 16年推移（小売ベース）──
+// 出典: 乗聯会 崔東樹 https://mp.weixin.qq.com/s/bRHUzr3gL6yHkxJC4sDzDw
+// 16年データ: 2011年〜2025年（年間）+ 2026年1-3月累計
+var CLASS_NEV_16Y = {
+  years: ['11年','12年','13年','14年','15年','16年','17年','18年','19年','20年','21年','22年','23年','24年','25年','26年累'],
+  total: [1152, 1290, 1570, 1776, 1964, 2323, 2373, 2239, 2069, 1929, 2016, 2055, 2170, 2288, 2374, 423],
+  // c (大型/Cクラス): 伝統%, 新エネ%, 全体に占める販売シェア%
+  c:   { trad:[100,100,100,100,100,100, 98, 96, 95, 92, 82, 68, 56, 44, 45, 45],
+         nev: [  0,  0,  0,  0,  0,  0,  2,  4,  5,  8, 18, 32, 44, 56, 55, 55],
+         share:[ 4,  4,  3,  3,  3,  3,  4,  4,  4,  5,  5,  7,  7,  8, 10, 10] },
+  // B (中大型)
+  B:   { trad:[100,100,100,100,100, 99, 99, 98, 98, 97, 92, 82, 71, 60, 48, 43],
+         nev: [  0,  0,  0,  0,  0,  1,  1,  2,  2,  3,  8, 18, 29, 40, 52, 57],
+         share:[19, 19, 19, 17, 16, 14, 17, 17, 17, 21, 24, 26, 28, 31, 32, 35] },
+  // A (コンパクト) — 中国市場の主力セグメント
+  A:   { trad:[100,100,100,100, 99, 99, 99, 97, 96, 97, 92, 88, 78, 65, 60, 60],
+         nev: [  0,  0,  0,  0,  1,  1,  1,  3,  4,  3,  8, 12, 22, 35, 40, 40],
+         share:[53, 54, 57, 56, 56, 61, 60, 61, 61, 59, 54, 52, 48, 46, 44, 42] },
+  // A0 (小型)
+  A0:  { trad:[100,100,100,100,100, 99, 99, 99, 99, 97, 88, 65, 44, 34, 26, 29],
+         nev: [  0,  0,  0,  0,  0,  1,  1,  1,  1,  3, 12, 35, 56, 66, 74, 71],
+         share:[19, 20, 19, 22, 24, 22, 19, 17, 16, 14, 13, 11, 12, 10, 11, 10] },
+  // a00 (ミニ・微型) — 最も早く新エネ化
+  a00: { trad:[100,100,100,100, 97, 89, 64, 24,  9,  6,  2,  1,  1,  1,  1,  1],
+         nev: [  0,  0,  0,  0,  3, 11, 36, 76, 91, 94, 98, 99, 99, 99, 99, 99],
+         share:[ 5,  4,  3,  2,  1,  1,  2,  4,  2,  2,  5,  5,  6,  6,  9,  2] }
+};
+
+var _cnvMode = 'share';
+window.cnvSetMode = function(mode, btn){
+  _cnvMode = mode;
+  ['cnv-btn-share','cnv-btn-nev','cnv-btn-vol'].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b){ b.classList.remove('btn-primary','active'); b.classList.add('btn-outline-secondary'); }
+  });
+  if(btn){ btn.classList.remove('btn-outline-secondary'); btn.classList.add('btn-primary','active'); }
+  renderClassNev16y();
+};
+
+function renderClassNev16y(){
+  var ec = makeEc('ec-zt-class-nev-16y'); if(!ec) return;
+  var D = CLASS_NEV_16Y;
+  var classes = ['a00','A0','A','B','c'];           // 小→大の順（積み上げ用）
+  var labels  = {a00:'a00（ミニ）', A0:'A0（小型）', A:'A（コンパクト）', B:'B（中大型）', c:'c（大型）'};
+  // クラス毎カラー：a00=パープル、A0=シアン、A=ブルー、B=オレンジ、c=レッド
+  var colors  = {a00:'#a855f7', A0:'#06b6d4', A:'#3b82f6', B:'#f59e0b', c:'#ef4444'};
+
+  var series = [], yAxis, title, tooltipFmt;
+
+  if(_cnvMode === 'share'){
+    // クラス構成シェア（積み上げエリア、合計約100%）
+    title = 'クラス構成シェアの長期変化（合計≈100%）';
+    classes.forEach(function(k){
+      series.push({
+        name: labels[k], type:'line', stack:'share',
+        areaStyle:{opacity:0.85}, lineStyle:{width:1}, symbol:'circle', symbolSize:4,
+        emphasis:{focus:'series'},
+        color: colors[k],
+        data: D[k].share
+      });
+    });
+    yAxis = yVal('シェア (%)', {min:0, max:110});
+    tooltipFmt = function(p){
+      var s = '<b>' + p[0].axisValue + '</b><br/>乗用車総量: ' + D.total[p[0].dataIndex] + '万台<br/>';
+      var sum = 0;
+      p.forEach(function(x){ sum += x.value || 0; s += x.marker + x.seriesName + ': <b>' + x.value + '%</b><br/>'; });
+      s += '<span style="color:#888;font-size:11px;">合計: ' + sum.toFixed(0) + '%（端数で100%にならない年あり）</span>';
+      return s;
+    };
+  } else if(_cnvMode === 'nev'){
+    // クラス別NEV浸透率（折れ線、各クラス独立 0-100%）
+    title = 'クラス別NEV浸透率の長期推移（小→大の順で新エネ化が進行）';
+    classes.forEach(function(k){
+      series.push({
+        name: labels[k] + ' のNEV浸透率', type:'line',
+        smooth:true, lineStyle:{width:2.5}, symbol:'circle', symbolSize:5,
+        emphasis:{focus:'series'},
+        color: colors[k],
+        data: D[k].nev
+      });
+    });
+    yAxis = yVal('NEV浸透率 (%)', {min:0, max:100});
+    tooltipFmt = function(p){
+      var s = '<b>' + p[0].axisValue + '</b><br/>乗用車総量: ' + D.total[p[0].dataIndex] + '万台<br/>';
+      p.forEach(function(x){ s += x.marker + x.seriesName + ': <b>' + x.value + '%</b><br/>'; });
+      return s;
+    };
+  } else {
+    // クラス別販売台数（万台、伝統+新エネ別の積み上げ）
+    title = 'クラス別販売台数（万台、伝統/新エネ内訳）';
+    var stackOrder = ['c','B','A','A0','a00']; // 大→小（凡例の順）
+    var typeStyle = {trad:{name:'伝統', dash:false}, nev:{name:'NEV', dash:true}};
+    stackOrder.forEach(function(k){
+      // 伝統
+      var trad = D[k].trad.map(function(t,i){
+        return Math.round(D.total[i] * D[k].share[i] / 100 * t / 100 * 10) / 10;
+      });
+      // 新エネ
+      var nev = D[k].nev.map(function(t,i){
+        return Math.round(D.total[i] * D[k].share[i] / 100 * t / 100 * 10) / 10;
+      });
+      series.push({
+        name: labels[k] + '・伝統', type:'bar', stack: k,
+        color: colors[k], itemStyle:{opacity:0.55, borderColor:'#fff', borderWidth:0.5},
+        emphasis:{focus:'series'},
+        data: trad
+      });
+      series.push({
+        name: labels[k] + '・NEV', type:'bar', stack: k,
+        color: colors[k], itemStyle:{opacity:1, borderColor:'#fff', borderWidth:0.5},
+        emphasis:{focus:'series'},
+        data: nev
+      });
+    });
+    yAxis = yVal('販売台数 (万台)', {min:0});
+    tooltipFmt = function(p){
+      var s = '<b>' + p[0].axisValue + '</b><br/>乗用車総量: ' + D.total[p[0].dataIndex] + '万台<br/>';
+      p.forEach(function(x){ if(x.value > 0) s += x.marker + x.seriesName + ': <b>' + x.value + '万台</b><br/>'; });
+      return s;
+    };
+  }
+
+  ec.setOption({
+    title: { text: title, left:'center', top:6, textStyle:{fontSize:13, fontWeight:600, color:'#1e3a8a', fontFamily:'Noto Sans JP,sans-serif'} },
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'}, formatter: tooltipFmt, textStyle:{fontFamily:'Noto Sans JP,sans-serif'} },
+    legend: { top: 32, type:'scroll', textStyle:{fontFamily:'Noto Sans JP,sans-serif',fontSize:11} },
+    grid: { left:50, right:30, top: _cnvMode==='vol'? 90:70, bottom: 50 },
+    xAxis: { type:'category', data: D.years, axisLabel:{fontFamily:'Noto Sans JP,sans-serif',fontSize:11} },
+    yAxis: yAxis,
+    series: series
+  }, true);
+}
+
 // ── 全グラフ初期化（初回のみ） ──
 window.ztInitCharts = function(){
   if (ZT_INITIALIZED) {
@@ -19746,6 +19883,7 @@ window.ztInitCharts = function(){
   renderBrand4Indicator();
   renderBrandIceNev();
   renderSegment();
+  renderClassNev16y();
 };
 
 // ── サブナビ切替（全体タブ内ナビはHTMLボタンで制御） ──
@@ -19767,7 +19905,8 @@ window.ztGo = function(id){
       'zt-inventory': renderInventory,
       'zt-brand-4indicator': renderBrand4Indicator,
       'zt-brand-ice-nev': renderBrandIceNev,
-      'zt-segment': renderSegment
+      'zt-segment': renderSegment,
+      'zt-class-nev-16y': renderClassNev16y
     }[id];
     if (fn) fn();
     setTimeout(function(){
@@ -20176,20 +20315,6 @@ window.addEventListener('resize', function(){
 (function(){
 
 // ---- データ埋め込み ----
-// ---- 散布図ラベル数の状態管理 (全件表示固定 / リセットボタン用に残置) ----
-var WFIN_LABEL_N_DEFAULT = {
-  'ec-wfin-rev-scatter':  71,
-  'ec-wfin-pm-scatter':   43,
-  'ec-wfin-arap-scatter': 70
-};
-var WFIN_LABEL_N_MAX = {
-  'ec-wfin-rev-scatter':  71,
-  'ec-wfin-pm-scatter':   43,
-  'ec-wfin-arap-scatter': 70
-};
-var WFIN_LABEL_N_STEP = 8;
-var WFIN_LABEL_N = Object.assign({}, WFIN_LABEL_N_DEFAULT);
-
 var WFIN_DATA = {"revenue":[{"name":"大众汽车","jp":"VW","rev":[19744,17886,18064,20727,25329,24433,26511],"g25":9.0},{"name":"丰田汽车","jp":"トヨタ","rev":[18397,19617,16207,16306,19206,21266,23228],"g25":9.0},{"name":"福特汽车","jp":"フォード","rev":[10876,8296,8693,11008,12479,13298,13163],"g25":-1.0},{"name":"通用汽车","jp":"GM","rev":[9574,7992,8097,10916,12171,13474,13005],"g25":-3.0},{"name":"STELLANTIS","jp":"Stellantis","rev":[8455,6956,10788,13331,14897,11806,12642],"g25":7.0},{"name":"宝马集团","jp":"BMW","rev":[8145,7944,8031,10586,12221,10715,10991],"g25":3.0},{"name":"德国奔驰","jp":"メルセデス・ベンツ","rev":[13501,12383,9667,11136,12042,10957,10888],"g25":-1.0},{"name":"本田汽车","jp":"ホンダ","rev":[9671,9786,7844,7562,8740,9634,10488],"g25":9.0},{"name":"现代汽车","jp":"現代(ヒョンデ)","rev":[6379,6237,6304,7872,8969,8653,9052],"g25":5.0},{"name":"比亚迪股份","jp":"BYD","rev":[1230,1535,2113,4241,6023,7771,8040],"g25":3.0},{"name":"特斯拉","jp":"テスラ","rev":[1715,2058,3432,5674,6854,7022,6665],"g25":-5.0},{"name":"上汽集团","jp":"上汽集団","rev":[8367,7364,7743,7388,7397,6227,6506],"g25":4.0},{"name":"日产汽车","jp":"日産","rev":[7045,6475,4682,4378,5478,5982,6109],"g25":2.0},{"name":"起亚汽车","jp":"起亜(キア)","rev":[3507,3548,3745,4781,5503,5306,5547],"g25":5.0},{"name":"雷诺","jp":"ルノー","rev":[4340,3489,3336,3444,4116,4232,4770],"g25":13.0},{"name":"吉利汽车","jp":"Geely(吉利)","rev":[977,921,1016,1480,1792,2402,3452],"g25":44.0},{"name":"奇瑞汽车","jp":"Chery(奇瑞)","rev":[0,0,0,926,1632,2699,3003],"g25":11.0},{"name":"保时捷","jp":"ポルシェ","rev":[2229,2303,2392,2793,3185,3017,2987],"g25":-1.0},{"name":"铃木汽车","jp":"スズキ","rev":[2356,2286,1893,1854,2399,2534,2817],"g25":11.0},{"name":"马自达","jp":"マツダ","rev":[2170,2248,1716,1621,1978,2277,2427],"g25":7.0},{"name":"斯巴鲁","jp":"スバル","rev":[1924,2192,1686,1426,1951,2218,2266],"g25":2.0},{"name":"长城汽车","jp":"長城汽車","rev":[952,1033,1364,1373,1732,2022,2228],"g25":10.0},{"name":"赛力斯","jp":"SERES(賽力斯)","rev":[176,139,164,341,358,1451,1649],"g25":14.0},{"name":"北京汽车","jp":"BAIC(北京汽車)","rev":[1748,1770,1759,1905,1979,1925,1640],"g25":-15.0},{"name":"长安汽车","jp":"長安汽車","rev":[681,813,1012,1172,1465,1554,1604],"g25":3.0},{"name":"三菱汽车","jp":"三菱自動車","rev":[1531,1488,867,1060,1271,1316,1348],"g25":2.0},{"name":"理想汽车","jp":"Li Auto(理想)","rev":[3,95,270,453,1239,1445,1123],"g25":-22.0},{"name":"广汽集团","jp":"GAC(広汽)","rev":[597,632,757,1100,1297,1078,965],"g25":-10.0},{"name":"蔚来","jp":"NIO(蔚来)","rev":[78,163,361,493,556,657,875],"g25":33.0},{"name":"小鹏汽车","jp":"XPENG(小鵬)","rev":[23,58,210,269,307,409,767],"g25":88.0},{"name":"零跑汽车","jp":"Leapmotor(零跑)","rev":[1,6,31,124,167,322,647],"g25":101.0},{"name":"一汽解放","jp":"一汽解放","rev":[263,1130,984,381,636,584,624],"g25":7.0},{"name":"福田汽车","jp":"Foton(福田)","rev":[466,573,546,462,557,474,609],"g25":29.0},{"name":"法拉利","jp":"フェラーリ","rev":[294,278,308,378,469,502,588],"g25":17.0},{"name":"江淮汽车","jp":"JAC(江淮)","rev":[469,424,398,362,446,419,460],"g25":10.0},{"name":"宇通客车","jp":"宇通バス","rev":[302,215,230,216,267,368,410],"g25":11.0},{"name":"北汽蓝谷","jp":"北汽藍谷","rev":[235,52,86,95,143,144,276],"g25":91.0},{"name":"金龙汽车","jp":"金龍バス","rev":[178,139,153,182,193,229,244],"g25":7.0},{"name":"双龙汽车","jp":"雙龍(KGM)","rev":[219,177,130,189,206,193,209],"g25":8.0},{"name":"中通客车","jp":"中通バス","rev":[67,44,46,53,42,57,73],"g25":28.0}],"gross":[{"name":"法拉利","jp":"フェラーリ","gm":[51.3,51.3,48.0,49.8,50.1,51.7,51.7]},{"name":"阿斯顿马丁","jp":"アストンマーティン","gm":[18.2,31.4,32.6,39.2,36.9,29.4,29.4]},{"name":"赛力斯","jp":"SERES(賽力斯)","gm":[4.6,3.8,11.3,10.4,26.2,29.1,26.2]},{"name":"铃木汽车","jp":"スズキ","gm":[27.9,27.3,24.0,24.8,26.3,26.9,26.0]},{"name":"丰田汽车","jp":"トヨタ","gm":[18.1,22.1,22.7,21.6,25.5,26.1,23.8]},{"name":"宇通客车","jp":"宇通バス","gm":[17.5,18.7,22.8,25.7,22.9,24.1,23.6]},{"name":"特斯拉","jp":"テスラ","gm":[21.0,25.3,25.6,18.3,17.9,18.0,21.1]},{"name":"本田汽车","jp":"ホンダ","gm":[20.6,20.7,20.5,19.7,21.6,21.5,20.1]},{"name":"起亚汽车","jp":"起亜(キア)","gm":[16.8,18.5,20.8,22.7,23.1,19.7,19.7]},{"name":"通用汽车","jp":"GM","gm":[20.4,20.8,19.0,17.8,19.4,14.0,19.7]},{"name":"保时捷","jp":"ポルシェ","gm":[24.7,26.7,28.0,28.6,25.8,13.9,19.3]},{"name":"小鹏汽车","jp":"XPENG(小鵬)","gm":[4.6,12.5,11.5,1.5,14.3,18.9,18.9]},{"name":"比亚迪股份","jp":"BYD","gm":[17.8,11.2,17.0,20.2,19.4,17.7,18.8]},{"name":"理想汽车","jp":"Li Auto(理想)","gm":[16.4,21.3,19.4,22.2,20.5,18.7,18.7]},{"name":"长城汽车","jp":"長城汽車","gm":[17.2,16.2,19.4,18.7,19.5,18.0,18.5]},{"name":"现代汽车","jp":"現代(ヒョンデ)","gm":[17.8,18.7,19.9,20.6,20.4,18.4,18.4]},{"name":"福特汽车","jp":"フォード","gm":[11.3,15.9,15.0,14.6,14.4,6.8,18.4]},{"name":"中通客车","jp":"中通バス","gm":[14.6,11.9,17.5,23.9,18.6,17.6,17.8]},{"name":"斯巴鲁","jp":"スバル","gm":[18.4,17.4,18.4,19.5,21.1,20.9,17.8]},{"name":"吉利汽车","jp":"Geely(吉利)","gm":[16.0,17.1,14.1,15.3,15.9,16.6,17.5]},{"name":"德国奔驰","jp":"メルセデス・ベンツ","gm":[16.6,22.9,22.7,22.4,19.6,16.9,16.9]},{"name":"奇瑞汽车","jp":"Chery(奇瑞)","gm":[0.0,0.0,13.8,16.0,13.5,13.8,16.0]},{"name":"大众汽车","jp":"VW","gm":[17.5,18.9,18.7,18.9,18.3,15.9,15.9]},{"name":"三菱汽车","jp":"三菱自動車","gm":[14.9,10.8,17.8,21.3,20.4,19.3,15.5]},{"name":"宝马集团","jp":"BMW","gm":[13.7,19.8,17.2,19.1,16.1,15.4,15.4]},{"name":"马自达","jp":"マツダ","gm":[21.8,21.3,22.0,21.0,21.5,21.5,15.3]},{"name":"零跑汽车","jp":"Leapmotor(零跑)","gm":[-50.6,-44.3,-15.4,0.5,8.4,14.5,14.5]},{"name":"长安汽车","jp":"長安汽車","gm":[14.3,16.6,20.5,18.4,14.9,15.5,14.1]},{"name":"华晨中国","jp":"華晨中国","gm":[0.6,8.4,20.8,25.7,17.7,13.8,13.8]},{"name":"蔚来","jp":"NIO(蔚来)","gm":[11.5,18.9,10.4,5.5,9.9,13.6,13.6]},{"name":"北京汽车","jp":"BAIC(北京汽車)","gm":[23.8,21.4,22.2,20.2,16.1,11.6,13.4]},{"name":"上汽集团","jp":"上汽集団","gm":[10.8,9.6,9.6,10.2,9.4,10.1,12.8]},{"name":"金龙汽车","jp":"金龍バス","gm":[12.4,8.8,9.6,11.6,10.2,12.7,11.8]},{"name":"江淮汽车","jp":"JAC(江淮)","gm":[9.3,8.2,8.4,11.3,10.5,12.3,11.4]},{"name":"福田汽车","jp":"Foton(福田)","gm":[12.0,10.2,11.4,11.4,12.6,10.0,10.9]},{"name":"双龙汽车","jp":"雙龍(KGM)","gm":[2.7,2.4,8.4,10.9,8.9,10.7,10.7]},{"name":"日产汽车","jp":"日産","gm":[14.5,13.4,16.1,16.2,16.3,13.4,8.7]},{"name":"一汽解放","jp":"一汽解放","gm":[9.2,10.1,8.0,8.3,6.3,7.1,5.3]},{"name":"北汽蓝谷","jp":"北汽藍谷","gm":[-28.8,0.8,-5.2,-5.7,-11.6,0.4,3.0]},{"name":"曙光股份","jp":"曙光股份","gm":[1.1,0.5,8.5,1.5,0.4,1.8,2.8]},{"name":"广汽集团","jp":"GAC(広汽)","gm":[6.5,7.9,7.0,6.9,5.8,-1.3,-0.9]},{"name":"STELLANTIS","jp":"Stellantis","gm":[12.4,19.7,19.6,20.1,13.1,-1.4,-1.4]}],"profit":[{"name":"丰田汽车","jp":"トヨタ","np":[1404,1359,1494,1289,2392,2316],"pm":[7.0,8.0,9.0,7.0,11.0,10.0]},{"name":"宝马集团","jp":"BMW","np":[310,900,1379,956,578,614],"pm":[4.0,11.0,13.0,8.0,5.0,6.0]},{"name":"大众汽车","jp":"VW","np":[708,1114,1175,1409,933,569],"pm":[4.0,6.0,6.0,6.0,4.0,2.0]},{"name":"现代汽车","jp":"現代(ヒョンデ)","np":[115,305,441,716,653,504],"pm":[2.0,5.0,6.0,8.0,8.0,6.0]},{"name":"德国奔驰","jp":"メルセデス・ベンツ","np":[322,1689,1099,1142,783,439],"pm":[3.0,17.0,10.0,9.0,7.0,4.0]},{"name":"本田汽车","jp":"ホンダ","np":[334,414,395,371,558,437],"pm":[3.0,5.0,5.0,4.0,6.0,4.0]},{"name":"起亚汽车","jp":"起亜(キア)","np":[89,255,299,484,483,367],"pm":[3.0,7.0,6.0,9.0,9.0,7.0]},{"name":"比亚迪股份","jp":"BYD","np":[60,40,177,313,416,338],"pm":[4.0,2.0,4.0,5.0,5.0,4.0]},{"name":"特斯拉","jp":"テスラ","np":[56,360,877,1061,514,271],"pm":[3.0,10.0,15.0,15.0,7.0,4.0]},{"name":"铃木汽车","jp":"スズキ","np":[107,101,104,142,162,256],"pm":[5.0,5.0,6.0,6.0,6.0,9.0]},{"name":"通用汽车","jp":"GM","np":[412,634,676,697,429,195],"pm":[5.0,8.0,6.0,6.0,3.0,2.0]},{"name":"奇瑞汽车","jp":"Chery(奇瑞)","np":[0,0,58,104,143,195],"pm":[null,null,6.0,6.0,5.0,6.0]},{"name":"上汽集团","jp":"上汽集団","np":[292,339,228,201,58,174],"pm":[4.0,4.0,3.0,3.0,1.0,3.0]},{"name":"吉利汽车","jp":"Geely(吉利)","np":[56,44,47,49,168,166],"pm":[6.0,4.0,3.0,3.0,7.0,5.0]},{"name":"斯巴鲁","jp":"スバル","np":[100,46,37,103,181,164],"pm":[5.0,3.0,3.0,5.0,8.0,7.0]},{"name":"法拉利","jp":"フェラーリ","np":[49,60,70,99,115,132],"pm":[18.0,20.0,18.0,21.0,23.0,22.0]},{"name":"长城汽车","jp":"長城汽車","np":[54,67,83,70,127,99],"pm":[5.0,5.0,6.0,5.0,6.0,4.0]},{"name":"赛力斯","jp":"SERES(賽力斯)","np":[-22,-26,-52,-42,47,61],"pm":[-16.0,-16.0,-15.0,-12.0,3.0,4.0]},{"name":"北京汽车","jp":"BAIC(北京汽車)","np":[130,152,163,136,98,58],"pm":[7.0,9.0,9.0,7.0,5.0,4.0]},{"name":"宇通客车","jp":"宇通バス","np":[5,6,8,18,42,56],"pm":[2.0,3.0,4.0,7.0,11.0,14.0]},{"name":"马自达","jp":"マツダ","np":[9,-19,43,75,99,56],"pm":[0.0,-1.0,3.0,4.0,4.0,2.0]},{"name":"长安汽车","jp":"長安汽車","np":[33,36,77,95,61,32],"pm":[4.0,4.0,7.0,6.0,4.0,2.0]},{"name":"保时捷","jp":"ポルシェ","np":[254,292,368,405,271,26],"pm":[11.0,12.0,13.0,13.0,9.0,1.0]},{"name":"三菱汽车","jp":"三菱自動車","np":[-14,-184,41,91,76,24],"pm":[-1.0,-21.0,4.0,7.0,6.0,2.0]},{"name":"华晨中国","jp":"華晨中国","np":[-10,104,71,77,30,19],"pm":[-31.0,487.0,632.0,690.0,278.0,158.0]},{"name":"福田汽车","jp":"Foton(福田)","np":[1,-51,0,9,0,13],"pm":[0.0,-9.0,0.0,2.0,0.0,2.0]},{"name":"理想汽车","jp":"Li Auto(理想)","np":[-2,-3,-20,118,80,11],"pm":[-2.0,-1.0,-4.0,10.0,6.0,1.0]},{"name":"一汽解放","jp":"一汽解放","np":[26,39,4,8,7,8],"pm":[2.0,4.0,1.0,1.0,1.0,1.0]},{"name":"金龙汽车","jp":"金龍バス","np":[1,-8,-5,2,3,6],"pm":[0.0,-5.0,-3.0,1.0,1.0,2.0]},{"name":"零跑汽车","jp":"Leapmotor(零跑)","np":[-11,-28,-51,-42,-28,5],"pm":[null,-91.0,-41.0,-25.0,-9.0,1.0]},{"name":"中通客车","jp":"中通バス","np":[0,-2,1,2,1,4],"pm":[1.0,-5.0,2.0,2.0,4.0,5.0]},{"name":"双龙汽车","jp":"雙龍(KGM)","np":[-30,-14,-3,0,2,2],"pm":[-17.0,-11.0,-2.0,0.0,1.0,1.0]},{"name":"曙光股份","jp":"曙光股份","np":[1,-5,-3,-5,-3,-4],"pm":[2.0,-19.0,-21.0,-36.0,-24.0,-24.0]},{"name":"小鹏汽车","jp":"XPENG(小鵬)","np":[-27,-49,-91,-104,-58,-11],"pm":[-47.0,-23.0,-34.0,-34.0,-14.0,-1.0]},{"name":"江淮汽车","jp":"JAC(江淮)","np":[2,0,-17,-1,-20,-18],"pm":[1.0,0.0,-5.0,0.0,-5.0,-4.0]},{"name":"法拉第未来","jp":"ファラデーフューチャー","np":[-6,-28,-38,-31,-26,-28],"pm":[null,null,null,null,null,null]},{"name":"阿斯顿马丁","jp":"アストンマーティン","np":[-36,-16,-44,-21,-29,-47],"pm":[-67.0,-17.0,-38.0,-14.0,-20.0,-39.0]},{"name":"北汽蓝谷","jp":"北汽藍谷","np":[-65,-52,-54,-54,-69,-64],"pm":[null,-60.0,-57.0,-38.0,-48.0,-23.0]},{"name":"广汽集团","jp":"GAC(広汽)","np":[60,76,79,37,-5,-115],"pm":[10.0,10.0,7.0,3.0,0.0,-12.0]},{"name":"蔚来","jp":"NIO(蔚来)","np":[-53,-40,-144,-207,-224,-149],"pm":[-33.0,-11.0,-29.0,-37.0,-34.0,-17.0]},{"name":"日产汽车","jp":"日産","np":[-437,-257,124,125,212,-319],"pm":[-7.0,-5.0,3.0,2.0,4.0,-5.0]},{"name":"福特汽车","jp":"フォード","np":[-83,1142,-150,307,424,-574],"pm":[-1.0,13.0,-2.0,2.0,4.0,-15.0]},{"name":"STELLANTIS","jp":"Stellantis","np":[2,1026,1245,1464,415,-1839],"pm":[0.0,10.0,9.0,10.0,4.0,-15.0]}],"arap":[{"name":"总计","jp":"総計","isSector":true,"ar":[37,38,37,40,40],"ap":[69,69,70,75,72],"gap25":32},{"name":"矿","jp":"鉱業","isSector":true,"ar":[43,37,56,67,60],"ap":[85,77,81,121,154],"gap25":93},{"name":"自主-矿","jp":"中国系-鉱業","isSector":true,"ar":[43,37,56,67,60],"ap":[85,77,81,121,154],"gap25":93},{"name":"赣锋锂业","jp":"Ganfeng(贛鋒)","isSector":false,"ar":[63,45,69,83,87],"ap":[85,83,80,144,192],"gap25":105},{"name":"天齐锂业","jp":"Tianqi(天斉)","isSector":false,"ar":[42,40,55,71,33],"ap":[101,97,116,70,61],"gap25":28},{"name":"盛新锂能","jp":"Shengxin(盛新)","isSector":false,"ar":[25,22,42,37,38],"ap":[84,36,45,106,118],"gap25":81},{"name":"藏格矿业","jp":"藏格鉱業","isSector":false,"ar":[7,6,7,3,3],"ap":[66,61,62,79,98],"gap25":95},{"name":"西藏矿业","jp":"チベット鉱業","isSector":false,"ar":[5,10,27,0,0],"ap":[33,22,399,455,490],"gap25":490},{"name":"电池","jp":"電池","isSector":true,"ar":[79,62,72,85,91],"ap":[173,154,161,184,205],"gap25":114},{"name":"韩-电池","jp":"韓系-電池","isSector":true,"ar":[62,53,53,75,71],"ap":[66,50,43,50,45],"gap25":-26},{"name":"LG新能源","jp":"LGエナジー","isSector":false,"ar":[62,53,53,75,71],"ap":[66,50,43,50,45],"gap25":-26},{"name":"自主-电池","jp":"中国系-電池","isSector":true,"ar":[85,64,77,88,94],"ap":[213,179,194,213,230],"gap25":137},{"name":"宁德时代","jp":"CATL(寧徳時代)","isSector":false,"ar":[64,47,57,65,79],"ap":[259,193,193,219,255],"gap25":177},{"name":"欣旺达","jp":"Sunwoda(欣旺達)","isSector":false,"ar":[78,77,102,98,106],"ap":[131,143,182,166,185],"gap25":80},{"name":"亿纬锂能","jp":"EVE(億緯)","isSector":false,"ar":[99,82,92,112,106],"ap":[236,195,198,213,219],"gap25":113},{"name":"国轩高科","jp":"Gotion(国軒)","isSector":false,"ar":[243,123,125,153,146],"ap":[369,262,253,282,275],"gap25":129},{"name":"中创新航","jp":"CALB(中創新航)","isSector":false,"ar":[126,87,89,102,96],"ap":[251,275,319,304,227],"gap25":132},{"name":"瑞浦兰钧","jp":"REPT(瑞浦)","isSector":false,"ar":[147,82,141,108,104],"ap":[236,119,190,207,247],"gap25":143},{"name":"德赛电池","jp":"Desay(徳賽)","isSector":false,"ar":[91,81,86,97,91],"ap":[98,86,91,101,95],"gap25":4},{"name":"天赐材料","jp":"Tinci(天賜)","isSector":false,"ar":[77,85,146,157,144],"ap":[82,92,128,120,110],"gap25":-34},{"name":"恩捷股份","jp":"SEMCORP(恩捷)","isSector":false,"ar":[170,172,221,250,194],"ap":[104,95,113,98,91],"gap25":-103},{"name":"鹏辉能源","jp":"Penghui(鵬輝)","isSector":false,"ar":[111,101,109,136,129],"ap":[219,238,269,297,259],"gap25":130},{"name":"当升科技","jp":"Easpring(当升)","isSector":false,"ar":[74,72,107,125,88],"ap":[161,137,177,151,160],"gap25":73},{"name":"德方纳米","jp":"Defang Nano(徳方)","isSector":false,"ar":[59,46,71,93,81],"ap":[190,98,122,194,166],"gap25":85},{"name":"正力新能","jp":"Zenergy(正力)","isSector":false,"ar":[37,35,64,97,74],"ap":[234,289,315,298,238],"gap25":165},{"name":"整车","jp":"完成車","isSector":true,"ar":[37,37,36,38,38],"ap":[68,67,68,71,67],"gap25":29},{"name":"日","jp":"日系","isSector":true,"ar":[50,72,62,63,63],"ap":[59,63,54,55,51],"gap25":-12},{"name":"丰田汽车","jp":"トヨタ","isSector":false,"ar":[80,123,108,111,111],"ap":[57,66,57,57,54],"gap25":-57},{"name":"本田汽车","jp":"ホンダ","isSector":false,"ar":[20,22,21,21,20],"ap":[37,39,36,36,34],"gap25":15},{"name":"日产汽车","jp":"日産","isSector":false,"ar":[13,14,12,14,13],"ap":[79,84,73,77,73],"gap25":60},{"name":"铃木汽车","jp":"スズキ","isSector":false,"ar":[52,47,35,36,35],"ap":[60,51,35,39,36],"gap25":1},{"name":"马自达","jp":"マツダ","isSector":false,"ar":[22,19,15,13,11],"ap":[67,64,55,51,46],"gap25":35},{"name":"斯巴鲁","jp":"スバル","isSector":false,"ar":[47,48,33,29,30],"ap":[49,47,39,39,39],"gap25":9},{"name":"三菱汽车","jp":"三菱自動車","isSector":false,"ar":[37,25,21,22,19],"ap":[171,134,114,108,97],"gap25":78},{"name":"韩-整车","jp":"韓系-完成車","isSector":true,"ar":[82,68,68,77,79],"ap":[58,51,51,53,49],"gap25":-30},{"name":"现代汽车","jp":"現代(ヒョンデ)","isSector":false,"ar":[120,101,100,114,119],"ap":[61,54,54,57,53],"gap25":-66},{"name":"起亚汽车","jp":"起亜(キア)","isSector":false,"ar":[20,17,17,20,16],"ap":[51,46,47,48,42],"gap25":25},{"name":"双龙汽车","jp":"雙龍(KGM)","isSector":false,"ar":[1,1,2,14,31],"ap":[146,66,40,34,47],"gap25":16},{"name":"美-整车","jp":"米系-完成車","isSector":true,"ar":[23,23,25,24,25],"ap":[72,65,66,60,56],"gap25":30},{"name":"福特汽车","jp":"フォード","isSector":false,"ar":[29,30,32,29,29],"ap":[71,62,61,57,52],"gap25":23},{"name":"通用汽车","jp":"GM","isSector":false,"ar":[22,23,27,24,25],"ap":[73,65,70,64,57],"gap25":31},{"name":"特斯拉","jp":"テスラ","isSector":false,"ar":[13,10,12,15,17],"ap":[73,73,67,60,61],"gap25":43},{"name":"法拉第未来","jp":"ファラデーフューチャー","isSector":false,"ar":[null,null,0,180,null],"ap":[null,null,1239,583,271],"gap25":91},{"name":"欧","jp":"欧州系","isSector":true,"ar":[17,15,16,18,17],"ap":[50,47,48,51,45],"gap25":28},{"name":"大众汽车","jp":"VW","isSector":false,"ar":[24,22,22,24,22],"ap":[43,41,40,42,38],"gap25":16},{"name":"STELLANTIS","jp":"Stellantis","isSector":false,"ar":[6,8,11,14,13],"ap":[77,74,75,85,66],"gap25":54},{"name":"宝马集团","jp":"BMW","isSector":false,"ar":[8,8,9,9,7],"ap":[41,38,41,46,41],"gap25":33},{"name":"德国奔驰","jp":"メルセデス・ベンツ","isSector":false,"ar":[26,19,18,18,19],"ap":[43,35,37,38,34],"gap25":18},{"name":"保时捷","jp":"ポルシェ","isSector":false,"ar":[13,12,12,13,12],"ap":[37,35,39,42,36],"gap25":24},{"name":"法拉利","jp":"フェラーリ","isSector":false,"ar":[16,15,14,17,17],"ap":[138,114,107,104,89],"gap25":72},{"name":"阿斯顿马丁","jp":"アストンマーティン","isSector":false,"ar":[40,36,38,39,46],"ap":[58,56,51,45,153],"gap25":107},{"name":"自主-整车","jp":"中国系-完成車","isSector":true,"ar":[51,44,41,41,38],"ap":[125,132,140,149,149],"gap25":111},{"name":"比亚迪股份","jp":"BYD","isSector":false,"ar":[79,41,36,32,26],"ap":[124,114,128,127,123],"gap25":98},{"name":"上汽集团","jp":"上汽集団","isSector":false,"ar":[23,29,36,44,45],"ap":[106,122,140,164,156],"gap25":111},{"name":"吉利汽车","jp":"Geely(吉利)","isSector":false,"ar":[92,69,65,62,49],"ap":[133,110,124,130,118],"gap25":69},{"name":"奇瑞汽车","jp":"Chery(奇瑞)","isSector":false,"ar":[null,30,42,27,31],"ap":[null,117,166,136,147],"gap25":117},{"name":"长城汽车","jp":"長城汽車","isSector":false,"ar":[128,94,73,80,69],"ap":[179,200,163,164,157],"gap25":88},{"name":"赛力斯","jp":"SERES(賽力斯)","isSector":false,"ar":[18,15,22,6,5],"ap":[278,227,302,160,210],"gap25":205},{"name":"北京汽车","jp":"BAIC(北京汽車)","isSector":false,"ar":[39,32,33,35,47],"ap":[114,84,75,84,103],"gap25":56},{"name":"长安汽车","jp":"長安汽車","isSector":false,"ar":[100,100,97,103,97],"ap":[182,185,205,198,198],"gap25":101},{"name":"理想汽车","jp":"Li Auto(理想)","isSector":false,"ar":[0,0,0,0,0],"ap":[106,138,134,165,186],"gap25":185},{"name":"广汽集团","jp":"GAC(広汽)","isSector":false,"ar":[36,22,20,15,16],"ap":[72,59,67,108,113],"gap25":97},{"name":"蔚来","jp":"NIO(蔚来)","isSector":false,"ar":[19,29,32,17,6],"ap":[117,154,188,195,209],"gap25":203},{"name":"小鹏汽车","jp":"XPENG(小鵬)","isSector":false,"ar":[33,44,39,23,10],"ap":[171,201,217,233,174],"gap25":164},{"name":"零跑汽车","jp":"Leapmotor(零跑)","isSector":false,"ar":[58,36,28,16,20],"ap":[133,108,171,176,169],"gap25":149},{"name":"一汽解放","jp":"一汽解放","isSector":false,"ar":[4,11,9,28,37],"ap":[95,239,146,200,207],"gap25":170},{"name":"福田汽车","jp":"Foton(福田)","isSector":false,"ar":[28,32,28,41,36],"ap":[156,189,152,197,167],"gap25":132},{"name":"江淮汽车","jp":"JAC(江淮)","isSector":false,"ar":[21,26,24,26,24],"ap":[115,155,155,190,211],"gap25":187},{"name":"宇通客车","jp":"宇通バス","isSector":false,"ar":[116,84,58,43,44],"ap":[169,169,131,89,60],"gap25":16},{"name":"北汽蓝谷","jp":"北汽藍谷","isSector":false,"ar":[683,416,185,201,105],"ap":[285,266,179,248,160],"gap25":56},{"name":"金龙汽车","jp":"金龍バス","isSector":false,"ar":[152,113,78,62,70],"ap":[288,278,274,227,236],"gap25":166},{"name":"中通客车","jp":"中通バス","isSector":false,"ar":[275,256,322,184,130],"ap":[361,336,408,253,230],"gap25":99},{"name":"曙光股份","jp":"曙光股份","isSector":false,"ar":[66,104,168,151,120],"ap":[151,200,209,201,193],"gap25":73},{"name":"华晨中国","jp":"華晨中国","isSector":false,"ar":[120,127,132,153,161],"ap":[443,394,228,211,212],"gap25":51},{"name":"经销商","jp":"ディーラー","isSector":true,"ar":[9,10,12,15,15],"ap":[20,23,27,34,37],"gap25":22},{"name":"美-经销商","jp":"米系-ディーラー","isSector":true,"ar":[20,18,21,21,22],"ap":[10,11,17,24,28],"gap25":6},{"name":"利西亚车行","jp":"Lithia","isSector":false,"ar":[12,11,11,11,11],"ap":[10,10,16,24,28],"gap25":16},{"name":"美国汽车行","jp":"米国系ディーラー","isSector":false,"ar":[300,208,242,277,394],"ap":[18,10,11,18,18],"gap25":-376},{"name":"自主-经销商","jp":"中国系-ディーラー","isSector":true,"ar":[4,5,6,9,9],"ap":[24,28,32,42,46],"gap25":37},{"name":"中升控股","jp":"中升控股","isSector":false,"ar":[3,4,6,9,8],"ap":[12,15,21,27,34],"gap25":25},{"name":"永达汽车","jp":"永達汽車","isSector":false,"ar":[4,4,4,6,6],"ap":[24,33,42,64,73],"gap25":68},{"name":"和谐汽车","jp":"和諧汽車","isSector":false,"ar":[3,4,4,5,6],"ap":[19,23,17,23,15],"gap25":9},{"name":"美东汽车","jp":"美東汽車","isSector":false,"ar":[3,4,6,8,8],"ap":[24,24,41,50,48],"gap25":40},{"name":"正通汽车","jp":"正通汽車","isSector":false,"ar":[18,15,14,18,15],"ap":[52,52,67,72,74],"gap25":59},{"name":"广汇宝信","jp":"広匯宝信","isSector":false,"ar":[4,4,4,5,5],"ap":[70,76,60,93,79],"gap25":74}],"inv":[{"name":"总计","jp":"総計","isSector":true,"inv":[55,53,55,58,55],"chg25":-3},{"name":"电池","jp":"電池","isSector":true,"inv":[89,79,73,70,77],"chg25":7},{"name":"韩-电池","jp":"韓系-電池","isSector":true,"inv":[94,91,78,86,83],"chg25":-3},{"name":"LG新能源","jp":"LGエナジー","isSector":false,"inv":[94,91,78,86,83],"chg25":-3},{"name":"自主-电池","jp":"中国系-電池","isSector":true,"inv":[87,76,72,66,76],"chg25":10},{"name":"宁德时代","jp":"CATL(寧徳時代)","isSector":false,"inv":[100,75,66,65,89],"chg25":23},{"name":"欣旺达","jp":"Sunwoda(欣旺達)","isSector":false,"inv":[72,69,73,55,60],"chg25":8},{"name":"亿纬锂能","jp":"EVE(億緯)","isSector":false,"inv":[74,73,66,52,47],"chg25":-5},{"name":"国轩高科","jp":"Gotion(国軒)","isSector":false,"inv":[165,115,91,79,80],"chg25":1},{"name":"中创新航","jp":"CALB(中創新航)","isSector":false,"inv":[70,134,145,96,60],"chg25":-35},{"name":"瑞浦兰钧","jp":"REPT(瑞浦)","isSector":false,"inv":[71,53,86,65,52],"chg25":-12},{"name":"德赛电池","jp":"Desay(徳賽)","isSector":false,"inv":[44,50,46,41,43],"chg25":2},{"name":"天赐材料","jp":"Tinci(天賜)","isSector":false,"inv":[45,47,56,45,41],"chg25":-3},{"name":"恩捷股份","jp":"SEMCORP(恩捷)","isSector":false,"inv":[128,114,131,119,85],"chg25":-34},{"name":"鹏辉能源","jp":"Penghui(鵬輝)","isSector":false,"inv":[94,137,169,152,123],"chg25":-29},{"name":"当升科技","jp":"Easpring(当升)","isSector":false,"inv":[52,44,52,47,79],"chg25":31},{"name":"德方纳米","jp":"Defang Nano(徳方)","isSector":false,"inv":[95,67,64,41,47],"chg25":5},{"name":"正力新能","jp":"Zenergy(正力)","isSector":false,"inv":[92,103,80,54,52],"chg25":-2},{"name":"矿","jp":"鉱業","isSector":true,"inv":[137,114,128,170,182],"chg25":11},{"name":"自主-矿","jp":"中国系-鉱業","isSector":true,"inv":[137,114,128,170,182],"chg25":11},{"name":"赣锋锂业","jp":"Ganfeng(贛鋒)","isSector":false,"inv":[148,115,117,183,203],"chg25":20},{"name":"天齐锂业","jp":"Tianqi(天斉)","isSector":false,"inv":[107,90,156,139,135],"chg25":-4},{"name":"盛新锂能","jp":"Shengxin(盛新)","isSector":false,"inv":[138,127,147,205,183],"chg25":-23},{"name":"藏格矿业","jp":"藏格鉱業","isSector":false,"inv":[128,126,105,93,107],"chg25":14},{"name":"西藏矿业","jp":"チベット鉱業","isSector":false,"inv":[239,265,276,160,139],"chg25":-21},{"name":"整车","jp":"完成車","isSector":true,"inv":[55,53,55,57,54],"chg25":-3},{"name":"日-整车","jp":"日系-完成車","isSector":true,"inv":[56,58,54,55,51],"chg25":-4},{"name":"丰田汽车","jp":"トヨタ","isSector":false,"inv":[47,53,50,50,46],"chg25":-3},{"name":"本田汽车","jp":"ホンダ","isSector":false,"inv":[56,57,54,54,51],"chg25":-3},{"name":"日产汽车","jp":"日産","isSector":false,"inv":[69,68,62,66,61],"chg25":-6},{"name":"铃木汽车","jp":"スズキ","isSector":false,"inv":[58,52,44,51,49],"chg25":-3},{"name":"马自达","jp":"マツダ","isSector":false,"inv":[73,66,64,67,60],"chg25":-7},{"name":"斯巴鲁","jp":"スバル","isSector":false,"inv":[71,77,60,60,60],"chg25":0},{"name":"三菱汽车","jp":"三菱自動車","isSector":false,"inv":[76,63,61,65,61],"chg25":-3},{"name":"韩-整车","jp":"韓系-完成車","isSector":true,"inv":[46,41,45,52,50],"chg25":-2},{"name":"现代汽车","jp":"現代(ヒョンデ)","isSector":false,"inv":[46,44,44,51,48],"chg25":-2},{"name":"起亚汽车","jp":"起亜(キア)","isSector":false,"inv":[47,42,48,54,54],"chg25":-1},{"name":"双龙汽车","jp":"雙龍(KGM)","isSector":false,"inv":[28,23,44,59,52],"chg25":-7},{"name":"美-整车","jp":"米系-完成車","isSector":true,"inv":[40,39,42,40,37],"chg25":-3},{"name":"福特汽车","jp":"フォード","isSector":false,"inv":[36,34,35,35,32],"chg25":-3},{"name":"通用汽车","jp":"GM","isSector":false,"inv":[42,39,40,37,33],"chg25":-3},{"name":"特斯拉","jp":"テスラ","isSector":false,"inv":[45,54,60,57,57],"chg25":0},{"name":"法拉第未来","jp":"ファラデーフューチャー","isSector":false,"inv":[null,null,144,131,58],"chg25":-74},{"name":"欧-整车","jp":"欧州系-完成車","isSector":true,"inv":[69,61,65,74,67],"chg25":-7},{"name":"大众汽车","jp":"VW","isSector":false,"inv":[82,75,71,76,72],"chg25":-5},{"name":"STELLANTIS","jp":"Stellantis","isSector":false,"inv":[31,45,45,57,48],"chg25":-9},{"name":"宝马集团","jp":"BMW","isSector":false,"inv":[66,54,61,74,69],"chg25":-5},{"name":"德国奔驰","jp":"メルセデス・ベンツ","isSector":false,"inv":[89,72,78,84,78],"chg25":-6},{"name":"保时捷","jp":"ポルシェ","isSector":false,"inv":[67,66,69,75,67],"chg25":-8},{"name":"法拉利","jp":"フェラーリ","isSector":false,"inv":[91,82,95,112,110],"chg25":-2},{"name":"阿斯顿马丁","jp":"アストンマーティン","isSector":false,"inv":[98,94,98,103,115],"chg25":12},{"name":"自主-整车","jp":"中国系-完成車","isSector":true,"inv":[42,46,51,50,50],"chg25":0},{"name":"比亚迪股份","jp":"BYD","isSector":false,"inv":[77,64,62,59,69],"chg25":11},{"name":"上汽集团","jp":"上汽集団","isSector":false,"inv":[33,40,53,47,49],"chg25":-8},{"name":"吉利汽车","jp":"Geely(吉利)","isSector":false,"inv":[18,20,23,31,34],"chg25":-1},{"name":"奇瑞汽车","jp":"Chery(奇瑞)","isSector":false,"inv":[null,29,58,52,51],"chg25":-1},{"name":"长城汽车","jp":"長城汽車","isSector":false,"inv":[34,59,63,53,51],"chg25":-7},{"name":"北京汽车","jp":"BAIC(北京汽車)","isSector":false,"inv":[54,57,57,58,61],"chg25":-1},{"name":"长安汽车","jp":"長安汽車","isSector":false,"inv":[26,24,28,40,51],"chg25":11},{"name":"赛力斯","jp":"SERES(賽力斯)","isSector":false,"inv":[53,39,41,10,7],"chg25":-2},{"name":"广汽集团","jp":"GAC(広汽)","isSector":false,"inv":[37,36,43,56,57],"chg25":1},{"name":"理想汽车","jp":"Li Auto(理想)","isSector":false,"inv":[23,42,26,24,33],"chg25":10},{"name":"蔚来","jp":"NIO(蔚来)","isSector":false,"inv":[19,42,46,38,37],"chg25":0},{"name":"小鹏汽车","jp":"XPENG(小鵬)","isSector":false,"inv":[39,54,60,57,46],"chg25":-11},{"name":"一汽解放","jp":"一汽解放","isSector":false,"inv":[49,80,48,63,73],"chg25":10},{"name":"零跑汽车","jp":"Leapmotor(零跑)","isSector":false,"inv":[37,31,37,23,21],"chg25":-1},{"name":"福田汽车","jp":"Foton(福田)","isSector":false,"inv":[42,52,42,58,46],"chg25":-11},{"name":"江淮汽车","jp":"JAC(江淮)","isSector":false,"inv":[22,32,37,40,29],"chg25":-11},{"name":"宇通客车","jp":"宇通バス","isSector":false,"inv":[106,118,84,50,40],"chg25":-10},{"name":"北汽蓝谷","jp":"北汽藍谷","isSector":false,"inv":[111,78,57,37,22],"chg25":-15},{"name":"金龙汽车","jp":"金龍バス","isSector":false,"inv":[57,57,52,37,41],"chg25":4},{"name":"中通客车","jp":"中通バス","isSector":false,"inv":[46,37,55,55,54],"chg25":-1},{"name":"曙光股份","jp":"曙光股份","isSector":false,"inv":[63,91,79,65,102],"chg25":36},{"name":"华晨中国","jp":"華晨中国","isSector":false,"inv":[74,97,67,77,138],"chg25":60},{"name":"经销商","jp":"ディーラー","isSector":true,"inv":[31,34,41,49,53],"chg25":4},{"name":"美-经销商","jp":"米系-ディーラー","isSector":true,"inv":[48,44,56,62,69],"chg25":7},{"name":"利西亚车行","jp":"Lithia","isSector":false,"inv":[48,44,57,67,69],"chg25":1},{"name":"美国汽车行","jp":"米国系ディーラー","isSector":false,"inv":[59,49,49,51,85],"chg25":34},{"name":"自主-经销商","jp":"中国系-ディーラー","isSector":true,"inv":[25,29,33,39,40],"chg25":1},{"name":"中升控股","jp":"中升控股","isSector":false,"inv":[23,29,34,40,42],"chg25":2},{"name":"永达汽车","jp":"永達汽車","isSector":false,"inv":[23,24,24,26,28],"chg25":2},{"name":"美东汽车","jp":"美東汽車","isSector":false,"inv":[7,10,14,15,16],"chg25":1},{"name":"和谐汽车","jp":"和諧汽車","isSector":false,"inv":[25,32,33,41,41],"chg25":0},{"name":"正通汽车","jp":"正通汽車","isSector":false,"inv":[41,57,61,64,60],"chg25":-4},{"name":"广汇宝信","jp":"広匯宝信","isSector":false,"inv":[34,35,54,66,83],"chg25":17}]};
 
 // ---- 共通設定 ----
@@ -20354,87 +20479,37 @@ function renderWfinRevGrowth() {
 }
 
 // Chart 4: 規模 vs 成長率 散布図
-// X軸はlog10変換した値で type:'value' を使用 (type:'log'+dataZoomだとパン時にティックが
-// 再計算されてスケールが揺れて見えるため。事前変換で他の散布図と同じ挙動にする)
 function renderWfinRevScatter() {
   var ec = wfinInitOrGet('ec-wfin-rev-scatter'); if (!ec) return;
-  var N = WFIN_LABEL_N['ec-wfin-rev-scatter'] || 71;
   var arr = WFIN_DATA.revenue.filter(function(r){
     return r.rev[6] != null && r.g25 != null && r.rev[6] >= 50;
   });
-  function priority(rev, g) {
-    return Math.log10(rev) * 30 + Math.abs(g) * 0.8;
-  }
-  var ranked = arr.slice().sort(function(a,b){
-    return priority(b.rev[6], b.g25) - priority(a.rev[6], a.g25);
-  });
-  var labelSet = {};
-  ranked.slice(0, N).forEach(function(r){ labelSet[r.jp] = true; });
-
-  // [logRev, growth, name, originalRev] - 4要素タプルにして元値も保持
-  var dataPts = arr.map(function(r){ return [Math.log10(r.rev[6]), r.g25, r.jp, r.rev[6]]; });
-
+  var dataPts = arr.map(function(r){ return [r.rev[6], r.g25, r.jp]; });
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
-        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[3]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
+        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[0]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
       }
     },
-    grid: { left:55, right:25, top:35, bottom:55 },
-    xAxis: {
-      type:'value',
-      name:'2025年営収（億元・対数）',
-      nameGap:35, nameLocation:'middle',
-      min: 1.5,    // ≈ 31.6 億元
-      max: 4.7,    // ≈ 50,118 億元（最大データ約25,000を十分包含）
-      interval: 1, // 整数log値で目盛り (=10, 100, 1000, 10000)
-      axisLabel: {
-        formatter: function(v){
-          var orig = Math.pow(10, v);
-          if (orig >= 10000) return Math.round(orig/10000) + '万';
-          if (orig >= 1000)  return Math.round(orig/1000) + 'k';
-          return Math.round(orig).toString();
-        }
-      },
-      splitLine: { lineStyle: { color:'#eee' } },
-      // 副目盛り (10の累乗の中間)
-      minorTick: { show: true, splitNumber: 9 },
-      minorSplitLine: { show: true, lineStyle: { color:'#f5f5f5' } }
-    },
+    grid: { left:55, right:25, top:25, bottom:55 },
+    xAxis: { type:'log', name:'2025年営収（億元・対数）', logBase:10, nameGap:35, nameLocation:'middle' },
     yAxis: { type:'value', name:'25年成長率(%)', axisLabel:{formatter:'{value}%'},
       splitLine:{lineStyle:{color:'#eee'}} },
-    dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
-    ],
     series: [{
       type:'scatter',
       data: dataPts,
       symbolSize: function(v){
-        // v[3] = 元の営収値を使用してサイズを決定
-        var s = Math.sqrt(v[3]) * 0.7;
+        var s = Math.sqrt(v[0]) * 0.7;
         return Math.max(8, Math.min(40, s));
       },
       itemStyle: { color: function(p){
         return p.value[1] >= 20 ? '#dc2626' : (p.value[1] >= 0 ? '#3b82f6' : '#94a3b8');
-      }, opacity:0.7, borderColor:'#fff', borderWidth:1 },
+      }, opacity:0.7 },
       label: {
-        show:true, position:'top', distance:6, fontSize:10, color:'#1e293b',
-        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
+        show:true, position:'top', fontSize:9,
         formatter: function(p){
-          return labelSet[p.value[2]] ? p.value[2] : '';
-        }
-      },
-      labelLayout: { hideOverlap: true },
-      emphasis: {
-        focus:'self', scale:1.4,
-        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
-        label: {
-          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,180,0.98)',
-          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
-          padding:[3,6,3,6],
-          formatter: function(p){ return p.value[2]; }
+          if (p.value[0] >= 5000 || p.value[1] >= 30 || p.value[1] <= -10) return p.value[2];
+          return '';
         }
       },
       markLine: {
@@ -20549,73 +20624,43 @@ function renderWfinGrossTrend() {
 // Chart 8: 粗利率 vs 純利益率 散布図
 function renderWfinPmScatter() {
   var ec = wfinInitOrGet('ec-wfin-pm-scatter'); if (!ec) return;
-  var N = WFIN_LABEL_N['ec-wfin-pm-scatter'] || 22;
   var dataPts = [];
   WFIN_DATA.profit.forEach(function(p){
-    if (p.isTotal) return;
     var g = WFIN_DATA.gross.find(function(x){ return x.name === p.name; });
     if (g && g.gm[5] != null && p.pm[5] != null) {
       dataPts.push([g.gm[5], p.pm[5], p.jp]);
     }
   });
-  function priority(gm, pm) {
-    return Math.abs(pm) * 1.5 + Math.max(0, gm - 15) * 0.5;
-  }
-  var ranked = dataPts.slice().sort(function(a,b){
-    return priority(b[0], b[1]) - priority(a[0], a[1]);
-  });
-  var labelSet = {};
-  ranked.slice(0, N).forEach(function(d){ labelSet[d[2]] = true; });
-
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
         return '<b>' + p.value[2] + '</b><br>粗利率: ' + p.value[0].toFixed(1) + '%<br>純利率: ' + p.value[1].toFixed(1) + '%';
       }
     },
-    grid: { left:55, right:25, top:35, bottom:55 },
+    grid: { left:55, right:25, top:25, bottom:55 },
     xAxis: { type:'value', name:'2025年 粗利率(%)', nameGap:35, nameLocation:'middle',
       axisLabel:{formatter:'{value}%'} },
     yAxis: { type:'value', name:'純利益率(%)',
       axisLabel:{formatter:'{value}%'}, splitLine:{lineStyle:{color:'#eee'}} },
-    dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
-    ],
     series: [{
       type:'scatter',
       data: dataPts,
-      symbolSize: 11,
+      symbolSize: 12,
       itemStyle: { color: function(p){
         return p.value[1] >= 10 ? '#10b981' :
                p.value[1] >= 0  ? '#3b82f6' :
                                   '#ef4444';
-      }, opacity:0.8, borderColor:'#fff', borderWidth:1 },
+      }, opacity:0.75 },
       label: {
-        show:true, position:'top', distance:6, fontSize:10, color:'#1e293b',
-        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
+        show:true, position:'top', fontSize:9,
         formatter: function(p){
-          return labelSet[p.value[2]] ? p.value[2] : '';
-        }
-      },
-      labelLayout: { hideOverlap: true },
-      emphasis: {
-        focus:'self', scale:1.6,
-        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
-        label: {
-          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,180,0.98)',
-          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
-          padding:[3,6,3,6],
-          formatter: function(p){ return p.value[2]; }
+          if (p.value[0] >= 30 || p.value[1] >= 8 || p.value[1] <= -5) return p.value[2];
+          return '';
         }
       },
       markLine: {
         silent:true, symbol:'none',
-        data: [
-          { yAxis:0, lineStyle:{color:'#aaa', type:'dashed'} },
-          { xAxis:20, lineStyle:{color:'#cbd5e1', type:'dotted'} }
-        ],
+        data: [{ yAxis:0, lineStyle:{color:'#aaa', type:'dashed'} }],
         label:{show:false}
       }
     }]
@@ -20752,7 +20797,6 @@ function renderWfinApTrend() {
 // Chart 13: 売上債権 vs 仕入債務 散布図
 function renderWfinArapScatter() {
   var ec = wfinInitOrGet('ec-wfin-arap-scatter'); if (!ec) return;
-  var N = WFIN_LABEL_N['ec-wfin-arap-scatter'] || 30;
   var arr = WFIN_DATA.arap.filter(function(r){
     return !r.isSector && r.ar[4] != null && r.ap[4] != null
       && r.ar[4] < 400 && r.ap[4] < 400; // 異常値除外(西藏鉱業490など)
@@ -20782,50 +20826,30 @@ function renderWfinArapScatter() {
     if (!bySector[s]) bySector[s] = [];
     bySector[s].push([r.ar[4], r.ap[4], r.jp]);
   });
-  // ラベル優先度（全シリーズ通しで上位N件のみラベル表示）
-  function priority(ar, ap) {
-    return Math.abs(ap - ar) * 0.5 + Math.max(ar, ap) * 0.3;
-  }
-  var allPts = [];
-  Object.keys(bySector).forEach(function(s){
-    bySector[s].forEach(function(d){ allPts.push({ar:d[0], ap:d[1], jp:d[2]}); });
-  });
-  var rankedAll = allPts.slice().sort(function(a,b){
-    return priority(b.ar, b.ap) - priority(a.ar, a.ap);
-  });
-  var labelSet = {};
-  rankedAll.slice(0, N).forEach(function(d){ labelSet[d.jp] = true; });
-
   var series = Object.keys(bySector).map(function(s){
     var st = SECTOR_STYLE[s];
     return {
       name: s, type:'scatter',
       symbol: st.symbol,
       data: bySector[s],
-      symbolSize: 11,
+      symbolSize: 10,
       itemStyle: {
         color: st.color,
-        opacity: 0.78,
+        opacity: 0.75,
         borderColor: '#fff',
         borderWidth: 1.5
       },
-      label: {
-        show:true, position:'top', distance:6, fontSize:10, color:'#1e293b',
-        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
-        formatter: function(p){
-          return labelSet[p.value[2]] ? p.value[2] : '';
-        }
-      },
-      labelLayout: { hideOverlap: true },
       emphasis: {
-        focus:'self', scale:1.5,
         itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
-        label: {
-          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,180,0.98)',
-          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
-          padding:[3,6,3,6],
-          formatter: function(p){ return p.value[2]; }
+        scale: 1.5
+      },
+      label: {
+        show:true, position:'top', fontSize:9, color:'#333',
+        formatter: function(p){
+          // 主要企業＋極端値のみラベル表示
+          if (p.value[0] >= 100 || p.value[1] >= 200) return p.value[2];
+          if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)','XPENG(小鵬)','Geely(吉利)','上汽集団','ホンダ','日産','GM','メルセデス・ベンツ','BMW'].indexOf(p.value[2]) >= 0) return p.value[2];
+          return '';
         }
       }
     };
@@ -20840,11 +20864,9 @@ function renderWfinArapScatter() {
       top:5, right:10, orient:'vertical',
       textStyle:{fontSize:11},
       icon:'roundRect',
-      backgroundColor:'rgba(255,255,255,0.92)',
-      borderColor:'#cbd5e1', borderWidth:1, padding:[6,10,6,10],
-      itemGap:6,
-      // 凡例クリックでセクター絞り込み（既存の挙動を強調）
-      formatter: function(name){ return name + ' (クリックで表示切替)'; }
+      backgroundColor:'rgba(255,255,255,0.85)',
+      borderColor:'#ddd', borderWidth:1, padding:[6,10,6,10],
+      itemGap:6
     },
     grid: { left:65, right:30, top:30, bottom:60 },
     xAxis: {
@@ -20857,10 +20879,6 @@ function renderWfinArapScatter() {
       nameGap:48, nameLocation:'middle',
       splitLine:{lineStyle:{color:'#eee'}}
     },
-    dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
-    ],
     series: series
   });
 }
@@ -20996,243 +21014,6 @@ function renderWfinInvChange() {
 }
 
 // ============================================================
-// 整车企业（業界合計）行を profit データの先頭に追加
-// 出典: 崔東樹(乗聯会) 表「净利润」「利润率」上段の合計行
-// ============================================================
-WFIN_DATA.profit.unshift({
-  name: '整车企业', jp: '整車企業（合計）',
-  np: [4196, 9817, 10190, 11669, 10100, 4448],
-  pm: [3.0, 7.0, 7.0, 6.0, 5.0, 2.0],
-  isTotal: true
-});
-
-// ============================================================
-// 中国系OEMの jp 表記を統一（既存ダッシュボードの英略称+漢字慣例に合わせる）
-// 既存: BAIC(北京汽車), Geely(吉利), Chery(奇瑞), GAC(広汽) など
-// ============================================================
-var WFIN_JP_FIX = {
-  '上汽集团':  'SAIC(上汽集団)',
-  '长城汽车':  'GWM(長城汽車)',
-  '长安汽车':  'Changan(長安汽車)',
-  '一汽解放':  'FAW(一汽解放)',
-  '华晨中国':  'Brilliance(華晨)',
-  '北汽蓝谷':  'BluePark(北汽藍谷)',
-  '曙光股份':  'Shuguang(曙光)'
-};
-['revenue','gross','profit','arap','inv'].forEach(function(k){
-  if (WFIN_DATA[k]) WFIN_DATA[k].forEach(function(r){
-    if (WFIN_JP_FIX[r.name]) r.jp = WFIN_JP_FIX[r.name];
-  });
-});
-
-// ============================================================
-// revenue データ補強：Image 4(営業総収入)から31社を追加
-// 鉱業5社、電池14社、OEM 4社(法拉第未来/阿斯顿马丁/曙光/华晨)、ディーラー8社
-// ============================================================
-// 31社のrevenue追加データ (Image 4 営業総収入より)
-var WFIN_REV_ADD = [
-  {name:"赣锋锂业",jp:"Ganfeng(贛鋒)",rev:[null,null,110,414,328,187,228],g25:21.9},
-  {name:"天齐锂业",jp:"Tianqi(天斉)",rev:[null,null,76,402,404,130,103],g25:-20.8},
-  {name:"盛新锂能",jp:"Shengxin(盛新)",rev:[null,null,29,119,79,45,50],g25:11.1},
-  {name:"藏格矿业",jp:"Zangge(藏格鉱業)",rev:[null,null,34,78,49,29,33],g25:13.8},
-  {name:"西藏矿业",jp:"Tibet Mining(チベット鉱業)",rev:[null,null,6,21,8,6,3],g25:-50.0},
-  {name:"LG新能源",jp:"LG ES(LGエナジー)",rev:[null,null,957,1414,1861,1265,1150],g25:-9.1},
-  {name:"宁德时代",jp:"CATL(寧徳時代)",rev:[null,null,1299,3286,4009,3620,4237],g25:17.0},
-  {name:"欣旺达",jp:"Sunwoda(欣旺達)",rev:[null,null,372,522,479,560,630],g25:12.5},
-  {name:"亿纬锂能",jp:"EVE(億緯)",rev:[null,null,168,363,488,486,613],g25:26.1},
-  {name:"国轩高科",jp:"Gotion(国軒高科)",rev:[null,null,103,229,314,351,448],g25:27.6},
-  {name:"中创新航",jp:"CALB(中創新航)",rev:[null,null,68,204,270,278,444],g25:59.7},
-  {name:"瑞浦兰钧",jp:"REPT(瑞浦蘭鈞)",rev:[null,null,21,146,137,178,243],g25:36.5},
-  {name:"德赛电池",jp:"Desay(徳賽電池)",rev:[null,null,194,217,202,208,223],g25:7.2},
-  {name:"天赐材料",jp:"Tinci(天賜材料)",rev:[null,null,110,223,154,125,167],g25:33.6},
-  {name:"恩捷股份",jp:"SEMCORP(恩捷)",rev:[null,null,79,125,120,101,135],g25:33.7},
-  {name:"鹏辉能源",jp:"Penghui(鵬輝)",rev:[null,null,57,65,69,80,119],g25:48.8},
-  {name:"当升科技",jp:"Easpring(当升)",rev:[null,null,82,212,151,76,103],g25:35.5},
-  {name:"德方纳米",jp:"Defang Nano(徳方)",rev:[null,null,48,225,169,76,86],g25:13.2},
-  {name:"正力新能",jp:"Zenergy(正力)",rev:[null,null,15,33,42,51,81],g25:58.8},
-  {name:"法拉第未来",jp:"Faraday Future(FF)",rev:[null,null,0,0,0,0,0],g25:null},
-  {name:"阿斯顿马丁",jp:"Aston Martin(アストンマーティン)",rev:[null,null,94,116,148,144,119],g25:-17.4},
-  {name:"曙光股份",jp:"Shuguang(曙光)",rev:[null,null,24,16,13,14,15],g25:7.1},
-  {name:"华晨中国",jp:"Brilliance(華晨)",rev:[null,null,21,11,8,9,12],g25:33.3},
-  {name:"利西亚车行",jp:"Lithia",rev:[null,null,1456,1963,2199,2601,2645],g25:1.7},
-  {name:"美国汽车行",jp:"AutoNation等(米系)",rev:[null,null,41,80,97,99,73],g25:-26.3},
-  {name:"中升控股",jp:"Zhongsheng(中升控股)",rev:[null,null,1751,1799,1793,1681,1644],g25:-2.2},
-  {name:"永达汽车",jp:"Yongda(永達汽車)",rev:[null,null,779,720,726,634,546],g25:-13.9},
-  {name:"和谐汽车",jp:"Harmony(和諧汽車)",rev:[null,null,185,168,171,156,200],g25:28.2},
-  {name:"美东汽车",jp:"Meidong(美東汽車)",rev:[null,null,236,287,286,222,200],g25:-9.9},
-  {name:"正通汽车",jp:"Zhengtong(正通汽車)",rev:[null,null,210,226,241,207,187],g25:-9.7},
-  {name:"广汇宝信",jp:"GA Baoxin(広匯宝信)",rev:[null,null,387,326,332,138,138],g25:0.0},
-];
-
-(function(){
-  var existing = {};
-  WFIN_DATA.revenue.forEach(function(r){ existing[r.name] = true; });
-  WFIN_REV_ADD.forEach(function(r){
-    if (!existing[r.name]) WFIN_DATA.revenue.push(r);
-  });
-})();
-
-
-// ============================================================
-// 純利益＋利益率 マトリクス（HTML テーブル）
-// 画像（崔東樹レポート）と同じレイアウトで色付き表示
-// ============================================================
-function renderWfinProfitMatrix() {
-  var host = document.getElementById('wfin-profit-matrix');
-  if (!host) return;
-  var years = ['2020', '2021', '2022', '2023', '2024', '2025'];
-
-  // 純利益（億元）→ 背景色: 0以下=赤系、>0=白〜緑系
-  function colorNp(v) {
-    if (v == null) return { bg: '#fff', fg: '#999' };
-    if (v < -100) return { bg: '#dc2626', fg: '#fff' };
-    if (v < -50)  return { bg: '#ef4444', fg: '#fff' };
-    if (v < 0)   return { bg: '#fecaca', fg: '#991b1b' };
-    if (v === 0) return { bg: '#fff',    fg: '#666' };
-    if (v < 100)  return { bg: '#fff',    fg: '#111' };
-    if (v < 500)  return { bg: '#dcfce7', fg: '#111' };
-    if (v < 1000) return { bg: '#86efac', fg: '#111' };
-    return { bg: '#22c55e', fg: '#fff' };
-  }
-  // 利益率(%) → 画像と同じ赤〜黄〜緑グラデ
-  function colorPm(v) {
-    if (v == null) return { bg: '#fff',    fg: '#999' };
-    if (v <= -20)  return { bg: '#b91c1c', fg: '#fff' };
-    if (v <= -10)  return { bg: '#dc2626', fg: '#fff' };
-    if (v < 0)     return { bg: '#fca5a5', fg: '#7f1d1d' };
-    if (v < 2)     return { bg: '#fde68a', fg: '#78350f' };
-    if (v < 5)     return { bg: '#fef08a', fg: '#713f12' };
-    if (v < 8)     return { bg: '#bbf7d0', fg: '#14532d' };
-    if (v < 15)    return { bg: '#86efac', fg: '#14532d' };
-    return { bg: '#22c55e', fg: '#fff' };
-  }
-  function fmt(v) { return v == null ? '−' : v; }
-  function fmtPm(v) { return v == null ? '−' : (v + '%'); }
-
-  var html = '';
-  html += '<style>';
-  html += '.wfin-pmtx{width:100%;border-collapse:collapse;font-size:11px;font-family:-apple-system,sans-serif;text-align:right}';
-  html += '.wfin-pmtx th{background:#f1f5f9;border:1px solid #cbd5e1;padding:4px 6px;font-weight:600;text-align:center;font-size:10px;color:#334155;position:sticky;top:0;z-index:2}';
-  html += '.wfin-pmtx td{border:1px solid #e2e8f0;padding:3px 6px;white-space:nowrap}';
-  html += '.wfin-pmtx td.wfin-idx{text-align:center;color:#94a3b8;font-size:10px;background:#f8fafc}';
-  html += '.wfin-pmtx td.wfin-name{text-align:left;font-weight:500;background:#f8fafc;color:#0f172a;position:sticky;left:0;z-index:1}';
-  html += '.wfin-pmtx tr.wfin-total td{font-weight:700;background:#fef3c7 !important;border-top:2px solid #f59e0b;border-bottom:2px solid #f59e0b}';
-  html += '.wfin-pmtx tr.wfin-total td.wfin-name{background:#fde68a !important}';
-  html += '.wfin-pmtx tr:hover td:not(.wfin-name):not(.wfin-idx){outline:1px solid #3b82f6}';
-  html += '.wfin-pmtx-wrap{max-height:760px;overflow:auto;border:1px solid #e2e8f0;border-radius:6px}';
-  html += '.wfin-pmtx-legend{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 6px;font-size:11px;color:#475569}';
-  html += '.wfin-pmtx-legend span{display:inline-flex;align-items:center;gap:4px}';
-  html += '.wfin-pmtx-legend i{display:inline-block;width:14px;height:14px;border:1px solid #cbd5e1;vertical-align:middle}';
-  html += '</style>';
-
-  // 凡例
-  html += '<div class="wfin-pmtx-legend">';
-  html += '<span><b>純利益(億元)：</b></span>';
-  html += '<span><i style="background:#dc2626"></i>大赤字 &lt; -100</span>';
-  html += '<span><i style="background:#fecaca"></i>赤字</span>';
-  html += '<span><i style="background:#fff"></i>0〜100</span>';
-  html += '<span><i style="background:#dcfce7"></i>100〜500</span>';
-  html += '<span><i style="background:#86efac"></i>500〜1000</span>';
-  html += '<span><i style="background:#22c55e"></i>1000+</span>';
-  html += '<span style="margin-left:18px"><b>利益率：</b></span>';
-  html += '<span><i style="background:#dc2626"></i>≤ -10%</span>';
-  html += '<span><i style="background:#fca5a5"></i>赤字</span>';
-  html += '<span><i style="background:#fde68a"></i>0〜2%</span>';
-  html += '<span><i style="background:#fef08a"></i>2〜5%</span>';
-  html += '<span><i style="background:#bbf7d0"></i>5〜8%</span>';
-  html += '<span><i style="background:#86efac"></i>8〜15%</span>';
-  html += '<span><i style="background:#22c55e"></i>15%+</span>';
-  html += '</div>';
-
-  html += '<div class="wfin-pmtx-wrap">';
-  html += '<table class="wfin-pmtx">';
-  html += '<thead>';
-  html += '<tr>';
-  html += '<th rowspan="2" style="width:34px">序号</th>';
-  html += '<th rowspan="2" style="width:160px;text-align:left;padding-left:8px">企業</th>';
-  html += '<th colspan="6" style="background:#dbeafe">純利益（億人民元）</th>';
-  html += '<th colspan="6" style="background:#fef3c7">利益率</th>';
-  html += '</tr>';
-  html += '<tr>';
-  years.forEach(function(y){ html += '<th style="background:#dbeafe">' + y + '</th>'; });
-  years.forEach(function(y){ html += '<th style="background:#fef3c7">' + y + '</th>'; });
-  html += '</tr>';
-  html += '</thead><tbody>';
-
-  WFIN_DATA.profit.forEach(function(r, i){
-    var isTotal = r.isTotal === true;
-    html += '<tr class="' + (isTotal ? 'wfin-total' : '') + '">';
-    html += '<td class="wfin-idx">' + (isTotal ? '−' : i) + '</td>';
-    html += '<td class="wfin-name" title="' + r.name + '">' + r.jp + '</td>';
-    // 純利益
-    r.np.forEach(function(v){
-      var c = colorNp(v);
-      html += '<td style="background:' + c.bg + ';color:' + c.fg + '">' + fmt(v) + '</td>';
-    });
-    // 利益率
-    r.pm.forEach(function(v){
-      var c = colorPm(v);
-      html += '<td style="background:' + c.bg + ';color:' + c.fg + '">' + fmtPm(v) + '</td>';
-    });
-    html += '</tr>';
-  });
-
-  html += '</tbody></table></div>';
-  host.innerHTML = html;
-}
-
-// ============================================================
-// 散布図 拡大/縮小ボタン: ラベル表示数の動的変更
-// ============================================================
-var SCATTER_RENDER_FN = {
-  'ec-wfin-rev-scatter':  function(){ if (typeof renderWfinRevScatter  === 'function') renderWfinRevScatter(); },
-  'ec-wfin-pm-scatter':   function(){ if (typeof renderWfinPmScatter   === 'function') renderWfinPmScatter(); },
-  'ec-wfin-arap-scatter': function(){ if (typeof renderWfinArapScatter === 'function') renderWfinArapScatter(); }
-};
-function updateScatterCtrlLabel(targetId) {
-  var ctrl = document.querySelector('.wfin-scatter-ctrl[data-target="' + targetId + '"]');
-  if (!ctrl) return;
-  var nSpan = ctrl.querySelector('.wfin-zoom-n');
-  if (nSpan) nSpan.textContent = WFIN_LABEL_N[targetId];
-  var btnIn  = ctrl.querySelector('[data-act="in"]');
-  var btnOut = ctrl.querySelector('[data-act="out"]');
-  if (btnIn)  btnIn.disabled  = (WFIN_LABEL_N[targetId] >= WFIN_LABEL_N_MAX[targetId]);
-  if (btnOut) btnOut.disabled = (WFIN_LABEL_N[targetId] <= WFIN_LABEL_N_STEP);
-}
-function bindScatterZoomCtrls() {
-  var ctrls = document.querySelectorAll('.wfin-scatter-ctrl');
-  ctrls.forEach(function(ctrl){
-    if (ctrl.__bound) return;
-    ctrl.__bound = true;
-    var targetId = ctrl.getAttribute('data-target');
-    ctrl.addEventListener('click', function(ev){
-      var btn = ev.target.closest('.wfin-zoom-btn');
-      if (!btn) return;
-      var act = btn.getAttribute('data-act');
-      var max = WFIN_LABEL_N_MAX[targetId] || 50;
-      var cur = WFIN_LABEL_N[targetId];
-      if (act === 'in') {
-        WFIN_LABEL_N[targetId] = Math.min(max, cur + WFIN_LABEL_N_STEP);
-      } else if (act === 'out') {
-        WFIN_LABEL_N[targetId] = Math.max(WFIN_LABEL_N_STEP, cur - WFIN_LABEL_N_STEP);
-      } else if (act === 'reset') {
-        WFIN_LABEL_N[targetId] = WFIN_LABEL_N_DEFAULT[targetId];
-        // データズームもリセット
-        var ec = WFIN_EC[targetId];
-        if (ec) {
-          try {
-            ec.dispatchAction({ type: 'dataZoom', start: 0, end: 100 });
-          } catch(e) {}
-        }
-      }
-      updateScatterCtrlLabel(targetId);
-      if (SCATTER_RENDER_FN[targetId]) SCATTER_RENDER_FN[targetId]();
-    });
-    updateScatterCtrlLabel(targetId);
-  });
-}
-
-// ============================================================
 // メイン描画ディスパッチャ
 // ============================================================
 function wfinRender(id) {
@@ -21242,7 +21023,6 @@ function wfinRender(id) {
     renderWfinRevGrowth();
     renderWfinRevScatter();
   } else if (id === 'wfin-profitability') {
-    renderWfinProfitMatrix();
     renderWfinGrossRank();
     renderWfinNpRank();
     renderWfinGrossTrend();
@@ -21259,8 +21039,6 @@ function wfinRender(id) {
     renderWfinInvTrend();
     renderWfinInvChange();
   }
-  // ボタンバインド (描画後に確実にDOMが存在する)
-  bindScatterZoomCtrls();
   // resize after render
   setTimeout(function(){
     Object.values(WFIN_EC).forEach(function(ec){ try{ ec.resize(); }catch(e){} });

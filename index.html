@@ -4371,8 +4371,8 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-class-nev-16y">
               <div class="chart-card">
                 <div class="chart-title">📊 クラス別NEV浸透率と構成シェア（16年推移・小売ベース）</div>
-                <div class="chart-subtitle">2011年〜2026年累計　乗用車総量に占める c / B / A / A0 / a00 各クラスの構成比およびNEV浸透率の長期構造変化
-                  　出典：乗聯会（崔東樹）<a href="https://mp.weixin.qq.com/s/bRHUzr3gL6yHkxJC4sDzDw" target="_blank" rel="noopener noreferrer" style="color:#3b82f6;text-decoration:underline;margin-left:4px;">原文記事 ↗</a></div>
+                <div class="chart-subtitle">2011年〜2026年累計　乗用車総量に占める c（大型）/ B（中大型）/ A（コンパクト）/ A0（小型）/ a00（ミニ・微型）各クラスの構成比およびNEV浸透率の長期構造変化
+                  　引用元：<a href="https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ" target="_blank" rel="noopener noreferrer" style="color:#3b82f6;text-decoration:underline;margin-left:4px;">https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ ↗</a></div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示モード：</span>
                   <button id="cnv-btn-share" class="btn btn-sm btn-primary active" onclick="cnvSetMode('share',this)" style="font-size:11px;padding:2px 10px;">📐 クラス構成シェア</button>
@@ -4380,16 +4380,6 @@ body.tray-open { padding-bottom: 105px; }
                   <button id="cnv-btn-vol" class="btn btn-sm btn-outline-secondary" onclick="cnvSetMode('vol',this)" style="font-size:11px;padding:2px 10px;">📊 クラス別販売台数（万台）</button>
                 </div>
                 <div id="ec-zt-class-nev-16y" class="echart-box" style="height:480px"></div>
-                <div style="margin-top:8px;padding:10px 14px;background:#f8fafc;border-left:3px solid #3b82f6;border-radius:4px;font-size:12px;line-height:1.65;color:#374151;font-family:Noto Sans JP,sans-serif;">
-                  <strong style="color:#1e3a8a;">📌 構造変化の要点：</strong>
-                  <ul style="margin:6px 0 0;padding-left:20px;">
-                    <li><strong style="color:#dc2626;">a00（ミニ）</strong>：2018年に新エネが76%へ急伸、2020年以降は<strong>ほぼ完全に新エネ化</strong>（98〜99%）。販売シェアは2020-25年で2-9%レンジ</li>
-                    <li><strong style="color:#dc2626;">A0（小型）</strong>：2022年に新エネ35%突破、<em>2024年66% / 2025年74%</em>と急進。総シェアは10-13%で安定</li>
-                    <li><strong style="color:#dc2626;">A（コンパクト）</strong>：販売量最大セグメント（42-61%）だが、近年は<em>シェア低下（53→42%）</em>。新エネ化は2025年で40%</li>
-                    <li><strong style="color:#dc2626;">B（中大型）</strong>：シェアは<em>19→35%へ拡大継続</em>、新エネ化も2025年52%へ加速</li>
-                    <li><strong style="color:#dc2626;">c（大型）</strong>：シェアは4→10%へ拡大、<em>新エネ化は2024年に過半（56%）</em>を超える</li>
-                  </ul>
-                </div>
               </div>
             </div>
 
@@ -19729,7 +19719,7 @@ function renderSegment(){
 }
 
 // ── ⑬ クラス別NEV浸透率 16年推移（小売ベース）──
-// 出典: 乗聯会 崔東樹 https://mp.weixin.qq.com/s/bRHUzr3gL6yHkxJC4sDzDw
+// 引用元: https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ
 // 16年データ: 2011年〜2025年（年間）+ 2026年1-3月累計
 var CLASS_NEV_16Y = {
   years: ['11年','12年','13年','14年','15年','16年','17年','18年','19年','20年','21年','22年','23年','24年','25年','26年累'],

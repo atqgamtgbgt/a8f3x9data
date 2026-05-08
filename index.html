@@ -4371,7 +4371,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="zt-class-nev-16y">
               <div class="chart-card">
                 <div class="chart-title">📊 クラス別NEV浸透率と構成シェア（16年推移・小売ベース）</div>
-                <div class="chart-subtitle">2011年〜2026年累計　乗用車総量に占める c（大型）/ B（中大型）/ A（コンパクト）/ A0（小型）/ a00（ミニ・微型）各クラスの構成比およびNEV浸透率の長期構造変化　引用元：<a href="https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ</a></div>
+                <div class="chart-subtitle">2011年〜2026年累計　乗用車総量に占める c（大型）/ B（中大型）/ A（コンパクト）/ A0（小型）/ a00（ミニ・微型）各クラスの構成比およびNEV浸透率の長期構造変化　出典：乗聯会（崔東樹）</div>
                 <div style="margin:6px 0 4px;display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
                   <span style="font-size:11px;color:#888;font-family:Noto Sans JP,sans-serif;">表示モード：</span>
                   <button id="cnv-btn-share" class="btn btn-sm btn-primary active" onclick="cnvSetMode('share',this)" style="font-size:11px;padding:2px 10px;">📐 クラス構成シェア</button>
@@ -18675,6 +18675,14 @@ window.ztShowPane = function(id) {
   document.querySelectorAll('.cds-pane[id^="zt-"]').forEach(function(p){ p.classList.remove('cds-active'); });
   var el = document.getElementById(id);
   if (el) el.classList.add('cds-active');
+  // 引用元リンク切替: クラス別NEV 16年推移ペインは別URL、それ以外は全体タブのデフォルトURL
+  var srcLink = document.getElementById('cds-source-link');
+  if (srcLink) {
+    var url = (id === 'zt-class-nev-16y')
+      ? 'https://mp.weixin.qq.com/s/bRHUzr3gL6yHkxJC4sDzDw'
+      : 'https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ';
+    srcLink.href = url; srcLink.textContent = url;
+  }
 };
 
 // ── ヘルパー（既存グローバルと同一パターン） ──
@@ -19718,7 +19726,7 @@ function renderSegment(){
 }
 
 // ── ⑬ クラス別NEV浸透率 16年推移（小売ベース）──
-// 引用元: https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ
+// 引用元: https://mp.weixin.qq.com/s/bRHUzr3gL6yHkxJC4sDzDw
 // 16年データ: 2011年〜2025年（年間）+ 2026年1-3月累計
 var CLASS_NEV_16Y = {
   years: ['11年','12年','13年','14年','15年','16年','17年','18年','19年','20年','21年','22年','23年','24年','25年','26年累'],

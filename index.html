@@ -3937,12 +3937,24 @@ body.tray-open { padding-bottom: 105px; }
             <div id="cds-sub-worldshare" class="cds-sub-nav" style="display:none">
               <div class="cds-nav-compact">
                 <div class="cds-gc">
+                  <span class="cds-gc-label">🌐 世界全体 </span>
                   <div class="cds-gc-items" id="cds-gc-gws">
                     <button class="nav-link active" data-cds-ws-target="#ws-regional">🗺️ 地域別販売推移</button>
                     <button class="nav-link" data-cds-ws-target="#ws-monthly">📅 世界月次販売</button>
                     <button class="nav-link" data-cds-ws-target="#ws-country">🏳️ 国別販売台数</button>
                     <button class="nav-link" data-cds-ws-target="#ws-maker">🏭 メーカー世界シェア</button>
                     <button class="nav-link" data-cds-ws-target="#ws-maker-region">📊 メーカー地域別シェア</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">⚡ 世界NEV </span>
+                  <div class="cds-gc-items" id="cds-gc-gwsnev">
+                    <button class="nav-link" data-cds-ws-target="#ws-nev-yearly">📈 NEV年別推移</button>
+                    <button class="nav-link" data-cds-ws-target="#ws-nev-monthly">📅 NEV月次</button>
+                    <button class="nav-link" data-cds-ws-target="#ws-nev-region">🥧 地域別シェア</button>
+                    <button class="nav-link" data-cds-ws-target="#ws-nev-penetration">🌍 国別浸透率</button>
+                    <button class="nav-link" data-cds-ws-target="#ws-nev-overseas">🚀 自主海外シェア</button>
+                    <button class="nav-link" data-cds-ws-target="#ws-nev-makers">🏭 NEVメーカー</button>
                   </div>
                 </div>
               </div>
@@ -5190,6 +5202,81 @@ body.tray-open { padding-bottom: 105px; }
                 <div id="ec-ws-maker-region" style="width:100%;height:520px"></div>
               </div>
             </div>
+            <!-- ===== 世界NEV ペイン群 ===== -->
+            <div class="cds-pane" id="ws-nev-yearly">
+              <div class="chart-card">
+                <div class="chart-title">📈 世界NEV年別推移（2008〜2026年1-3月）</div>
+                <div class="chart-subtitle">出所：崔東樹 世界新能源乗用車市場分析　単位：万台</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="ws-nev-yearly-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="wsnSetYearlyView('volume',this)">数量（万台）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetYearlyView('share',this)">全車に占めるシェア（%）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetYearlyView('inner',this)">NEV内訳構成（%）</button>
+                </div>
+                <div id="ec-ws-nev-yearly" class="echart-box" style="height:480px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="ws-nev-monthly">
+              <div class="chart-card">
+                <div class="chart-title">📅 世界NEV月次販売推移</div>
+                <div class="chart-subtitle">出所：崔東樹 世界新能源乗用車市場分析　単位：万台</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="ws-nev-monthly-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="wsnSetMonthlyView('world',this)">🌐 世界全体</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetMonthlyView('exch',this)">🌏 中国を除く世界</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetMonthlyView('eu',this)">🇪🇺 EU</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetMonthlyView('compare',this)">📊 中欧米比較</button>
+                </div>
+                <div id="ec-ws-nev-monthly" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="ws-nev-region">
+              <div class="chart-card">
+                <div class="chart-title">🥧 NEV地域別シェア（5地域）</div>
+                <div class="chart-subtitle">出所：崔東樹 世界新能源乗用車市場分析　中国/欧州/北米/亜洲他/南半球</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="ws-nev-region-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="wsnSetRegionView('nev',this)">⚡ NEV合計</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetRegionView('bev',this)">🔌 BEV（純電動）</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetRegionView('hev',this)">🔀 HEV（混合動力）</button>
+                </div>
+                <div id="ec-ws-nev-region" class="echart-box" style="height:460px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="ws-nev-penetration">
+              <div class="chart-card">
+                <div class="chart-title">🌍 国別NEV浸透率推移（2018〜2026年1Q）</div>
+                <div class="chart-subtitle">出所：崔東樹 世界新能源乗用車市場分析　各市場のNEV/全車比率</div>
+                <div id="ec-ws-nev-penetration" class="echart-box" style="height:540px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="ws-nev-overseas">
+              <div class="chart-card">
+                <div class="chart-title">🚀 中国系NEV海外シェア</div>
+                <div class="chart-subtitle">出所：崔東樹 世界新能源乗用車市場分析　中国系メーカーの海外市場におけるNEVシェア</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="ws-nev-overseas-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="wsnSetOverseasView('monthly',this)">📅 月次推移</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetOverseasView('region',this)">🌏 地域別詳細</button>
+                </div>
+                <div id="ec-ws-nev-overseas" class="echart-box" style="height:540px"></div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="ws-nev-makers">
+              <div class="chart-card">
+                <div class="chart-title">🏭 世界NEVメーカーランキング（2021〜2026年1Q）</div>
+                <div class="chart-subtitle">出所：崔東樹 世界新能源乗用車市場分析</div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px" id="ws-nev-makers-tabs">
+                  <button class="btn btn-sm btn-primary active" onclick="wsnSetMakersView('nev',this)">⚡ NEV TOP25</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetMakersView('bev',this)">🔌 BEV TOP25</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetMakersView('phev',this)">🔋 PHEV TOP25</button>
+                  <button class="btn btn-sm btn-outline-secondary" onclick="wsnSetMakersView('hev',this)">🔀 HEV TOP20</button>
+                </div>
+                <div id="ec-ws-nev-makers" class="echart-box" style="height:760px"></div>
+              </div>
+            </div>
+
             <div class="cds-pane" id="cds-profit-monthly">
               <div class="row g-3">
                 <div class="col-12">
@@ -11474,6 +11561,531 @@ var WS_COLORS = {
   アジアその他: '#f39c12', 南半球: '#9b59b6',
   '2023年': '#95a5a6', '2024年': '#3498db', '2025年': '#2ecc71', '2026年': '#e74c3c'
 };
+
+// ===== 世界NEV データ＆描画 =====
+var WSN_EC = {};
+function wsnEc(id) {
+  if (!WSN_EC[id]) {
+    var el = document.getElementById(id);
+    if (!el) return null;
+    WSN_EC[id] = echarts.init(el, null, {renderer:'canvas'});
+  }
+  return WSN_EC[id];
+}
+
+var WSN_COLORS = {
+  '中国':'#e74c3c','欧州':'#3498db','北米':'#2ecc71','北米洲':'#2ecc71',
+  'アジアその他':'#f39c12','亜洲其他':'#f39c12','南半球':'#9b59b6',
+  '2022年':'#27ae60','2023年':'#2c3e50','2024年':'#f39c12','2025年':'#000000','2026年':'#e74c3c',
+  'BEV':'#3498db','PHEV':'#e74c3c','HEV':'#27ae60','NEV':'#9b59b6',
+  '氢':'#1abc9c'
+};
+
+var WSN = {
+  // 画像1: 世界汽车年別データ（万台）
+  yearly: {
+    years: ['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','26年1-3月'],
+    bev:   [0,0,0,3,5,10,15,24,47,74,129,158,197,477,771,1028,1139,1526,308],
+    phev:  [0,0,0,1,5,7,9,12,29,42,60,54,87,179,267,400,648,762,144],
+    h2:    [0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.2,0.3,0.2,0.7,0.8,2,2,2,1,1,0.2],
+    nev:   [0,0,0,4,11,17,25,37,77,117,189,212,285,658,1039,1429,1788,2289,453],
+    hev:   [36,61,82,81,147,153,157,142,177,200,212,229,230,319,372,500,577,660,161],
+    ice:   [6478,6306,7036,7401,7812,8109,8383,8577,8898,9092,8933,8540,7288,7159,6607,6975,6766,6740,1626],
+    total: [6514,6367,7119,7486,7969,8278,8565,8756,9152,9408,9335,8981,7803,8135,8018,8901,9177,9689,2240]
+  },
+  // 画像2: 占总体汽车份额（%）
+  shareOfTotal: {
+    years: ['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','26年1-3月'],
+    bev:   [0.0,0.0,0.0,0.0,0.1,0.1,0.2,0.3,0.5,0.8,1.4,1.8,2.5,5.9,9.6,11.5,12.4,15.7,13.8],
+    phev:  [null,0.0,0.0,0.0,0.1,0.1,0.1,0.1,0.3,0.4,0.6,0.6,1.1,2.2,3.3,4.5,7.1,7.9,6.4],
+    hev:   [0.6,1.0,1.2,1.1,1.8,1.8,1.8,1.6,1.9,2.1,2.3,2.5,3.0,3.9,4.6,5.6,6.3,6.8,7.2],
+    ice:   [99.4,99.0,98.8,98.9,98.0,98.0,97.9,98.0,97.2,96.6,95.7,95.1,93.4,88.0,82.4,78.3,74.2,69.6,72.6]
+  },
+  // 画像2: 新能源内份额（%）
+  shareInner: {
+    years: ['2008','2009','2010','2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','26年1-3月'],
+    bev:   [79,95,78,78,48,59,62,66,61,64,68,74,69,73,74,72,64,67,68],
+    phev:  [null,4,21,22,52,41,38,34,38,36,32,25,30,27,26,28,36,33,32],
+    h2:    [21,1,1,0.0,0.0,0.0,0.1,0.3,0.3,0.1,0.3,0.3,0.3,0.1,0.1,0.0,0.0,0.0,null]
+  },
+  // 画像3: 世界NEV月次（万台）
+  monthlyWorld: {
+    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    data: {
+      '2022年':[64,57,82,54,71,90,84,91,105,102,114,86],
+      '2023年':[66,81,109,95,110,125,113,124,130,131,142,161],
+      '2024年':[107,84,136,123,136,153,137,147,175,185,196,208],
+      '2025年':[135,131,182,170,183,191,181,191,228,225,236,235],
+      '2026年':[143,127,183,null,null,null,null,null,null,null,null,null]
+    }
+  },
+  // 画像4: 中国除く世界NEV月次（万台）
+  monthlyExCh: {
+    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    data: {
+      '2022年':[22.2,25.2,36.3,26.3,28.6,32.7,27.6,27.9,38.0,34.1,41.5,54.1],
+      '2023年':[28.5,33.9,49.2,35.9,42.4,50.4,40.8,44.9,47.7,42.7,46.2,50.6],
+      '2024年':[36.8,37.8,52.1,41.6,44.6,51.8,41.7,40.8,51.1,48.1,51.7,56.4],
+      '2025年':[44.7,45.8,65.6,53.7,58.4,64.8,60.5,58.5,75.5,60.6,63.0,74.5],
+      '2026年':[54.7,54.3,66.3,null,null,null,null,null,null,null,null,null]
+    }
+  },
+  // 画像8: EU NEV月次（万台）
+  monthlyEU: {
+    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    data: {
+      '2022年':[14.4,15.5,24.3,15.0,17.4,21.3,15.3,15.4,24.3,20.8,27.5,39.6],
+      '2023年':[14.9,17.5,30.9,18.9,24.2,29.8,21.9,25.4,27.0,23.7,26.4,28.5],
+      '2024年':[19.1,19.7,29.1,21.3,22.2,29.6,20.7,17.4,29.2,24.9,26.8,29.7],
+      '2025年':[23.7,23.6,36.6,28.3,30.2,36.0,29.7,24.1,39.5,34.4,36.8,43.2],
+      '2026年':[28.8,28.9,34.7,null,null,null,null,null,null,null,null,null]
+    }
+  },
+  // 画像7: 中欧米NEV月次比較（万台、2023-2026連続）
+  compareMonthly: {
+    labels: ['23年1月','23年2月','23年3月','23年4月','23年5月','23年6月','23年7月','23年8月','23年9月','23年10月','23年11月','23年12月','24年1月','24年2月','24年3月','24年4月','24年5月','24年6月','24年7月','24年8月','24年9月','24年10月','24年11月','24年12月','25年1月','25年2月','25年3月','25年4月','25年5月','25年6月','25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','26年1月','26年2月','26年3月'],
+    europe:  [15,17,31,19,24,30,22,25,27,24,26,28,19,19,28,21,22,29,20,17,29,25,27,30,24,24,37,28,30,36,30,24,39,34,37,40,29,29,35],
+    namerica:[10,11,12,12,13,14,14,14,14,13,13,15,11,11,13,14,13,14,13,12,15,13,17,12,12,12,16,14,15,13,17,20,20,11,10,12,8,9,11],
+    china:   [39,50,62,60,68,76,74,80,83,89,96,111,70,46,83,81,91,98,95,105,123,137,144,151,90,85,116,115,124,125,120,132,151,163,172,159,88,73,117]
+  },
+  // 画像10: NEV地域別シェア（%、5地域）
+  regionShareNev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','2026年1Q'],
+    '中国':       [52.2,62.5,63.7,69.0,68.3,61.3],
+    '欧州':       [34.4,23.9,20.5,16.6,17.1,20.6],
+    '北米洲':     [10.9,10.1,11.3,9.8,7.6,6.5],
+    'アジアその他':[2.4,3.1,3.7,3.6,5.7,9.0],
+    '南半球':     [0.1,0.4,0.8,1.0,1.3,2.5]
+  },
+  // 画像12: BEV地域別シェア（%）
+  regionShareBev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','2026年1Q'],
+    '中国':       [59.7,64.8,61.6,63.4,64.3,56.0],
+    '欧州':       [26.0,20.1,20.0,17.7,17.3,20.9],
+    '北米洲':     [11.7,11.3,13.0,12.6,9.2,8.2],
+    'アジアその他':[2.5,3.3,4.4,5.0,8.0,12.4],
+    '南半球':     [0.2,0.5,1.1,1.2,1.3,2.5]
+  },
+  // 画像15: HEV地域別シェア（%）
+  regionShareHev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','2026年1Q'],
+    '中国':       [16.7,20.5,15.5,14.4,15.4,17.8],
+    '欧州':       [20.9,24.8,23.6,24.3,24.0,25.7],
+    '北米洲':     [26.9,21.2,24.0,27.0,29.6,31.2],
+    'アジアその他':[35.3,33.4,36.7,34.0,30.7,24.7],
+    '南半球':     [0.1,0.2,0.2,0.3,0.3,0.6]
+  },
+  // 画像9: NEV国別浸透率（%）
+  // 注: 2020列の出典値は他年と整合せず（全球31.9%等）。原文ママ掲載・描画時null化。
+  penetration: {
+    years: ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','25年1Q','25年通年','26年1Q'],
+    '全球':       [0.6,0.8,31.9,7.8,13.1,15.9,19.5,19.7,23.6,20.2],
+    '中国':       [1.1,1.7,71.8,12.6,24.4,29.9,39.2,39.2,45.5,39.4],
+    '德国':       [0.1,0.3,0.5,22.7,28.0,22.3,18.2,23.9,26.8,30.1],
+    '法国':       [0.0,0.3,0.4,14.4,17.3,22.0,21.5,20.0,23.2,28.2],
+    '挪威':       [4.5,9.9,4.9,69.8,73.5,70.1,71.9,75.2,80.9,79.3],
+    '欧州其他':   [0.2,0.7,0.5,7.2,10.8,13.8,13.7,16.9,18.8,18.4],
+    '瑞典':       [0.3,1.5,1.5,39.1,49.1,51.2,50.9,51.3,55.8,56.4],
+    '意大利':     [0.0,0.1,0.2,9.8,9.8,8.0,7.0,8.8,11.9,15.0],
+    '英国':       [0.1,0.5,1.3,16.3,20.3,21.2,24.7,27.3,31.3,32.2],
+    '欧州 汇総':  [0.1,0.6,0.6,14.2,18.5,18.5,17.6,20.4,23.4,24.0],
+    '美国':       [1.0,1.0,1.4,4.2,6.9,9.1,9.7,9.7,9.7,6.9],
+    '北米其他':   [0.3,0.4,0.6,1.6,2.9,3.9,4.5,3.1,3.0,4.2],
+    '北米洲 汇総':[0.9,0.9,1.3,3.8,6.3,8.3,8.8,8.5,8.5,6.4],
+    '韓国':       [0.0,0.0,80.2,6.2,9.9,8.9,9.5,9.8,14.0,21.5],
+    '日本':       [0.0,0.0,79.5,1.0,2.2,2.9,2.3,2.2,2.3,2.6],
+    '亜洲其他':   [0.0,0.0,14.5,0.2,0.6,1.9,3.3,5.6,7.5,8.1],
+    '亜洲其他 汇総':[0.0,0.0,41.9,1.0,1.9,2.8,3.6,5.0,6.9,7.8],
+    '南半球 汇総':[0.0,0.0,0.0,0.2,0.8,2.2,3.2,3.8,4.7,7.1]
+  },
+  // 画像5: 自主新能源海外份額（%、月次）
+  overseasMonthly: {
+    months: ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'],
+    data: {
+      '2023年':[7.0,5.8,6.2,6.0,6.9,6.9,6.3,6.9,7.2,7.8,8.1,9.2],
+      '2024年':[12.2,9.6,8.4,9.4,8.3,9.9,10.2,9.7,8.7,9.5,9.3,11.0],
+      '2025年':[13.2,11.6,12.6,14.4,15.0,15.9,15.3,14.7,15.6,18.5,19.5,20.8],
+      '2026年':[26.9,20.3,20.2,null,null,null,null,null,null,null,null,null]
+    },
+    annual: {'2023年':7.1,'2024年':9.6,'2025年':15.8}
+  },
+  // 画像6: 自主海外份額 by region/country
+  overseasRegion: {
+    years: ['2021年','2022年','2023年','2024年','25年1Q','25年2Q','25年3Q','25年4Q','25年通年','26年1-3月'],
+    rows: [
+      {label:'欧州・德国',     vals:[0.2,1.9,4.4,3.7,3.2,5.7,5.7,7.7,5.8,6.9]},
+      {label:'欧州・法国',     vals:[1.7,3.9,7.0,4.2,4.4,7.4,7.2,7.5,6.7,5.1]},
+      {label:'欧州・挪威',     vals:[3.4,8.0,6.0,9.6,9.4,11.6,11.9,13.0,11.8,13.6]},
+      {label:'欧州・欧州其他', vals:[2.4,4.9,6.8,12.6,11.6,13.7,17.3,19.5,15.8,20.7]},
+      {label:'欧州・瑞典',     vals:[3.7,7.8,7.9,4.6,3.1,5.2,3.2,3.3,3.8,3.1]},
+      {label:'欧州・意大利',   vals:[1.3,4.6,6.5,7.3,15.1,21.0,23.6,29.7,23.1,38.7]},
+      {label:'欧州・英国',     vals:[5.7,5.4,8.3,6.7,9.9,12.7,19.1,21.0,15.8,21.4]},
+      {label:'★欧州 汇総',     vals:[2.2,4.2,6.5,7.7,8.3,10.9,13.5,15.1,12.2,15.7], emph:true},
+      {label:'北米洲・北米其他', vals:[1.2,2.1,2.6,4.0,3.2,4.3,4.3,12.4,6.1,17.3]},
+      {label:'★北米洲 汇総',   vals:[0.1,0.1,0.2,0.3,0.2,0.3,0.2,1.1,0.4,2.0], emph:true},
+      {label:'亜洲・韓国',     vals:[0.0,0.0,1.0,1.5,1.6,1.8,1.5,1.7,1.6,1.4]},
+      {label:'亜洲・日本',     vals:[0.0,0.0,1.1,2.4,2.1,4.8,4.7,3.5,3.7,3.9]},
+      {label:'亜洲・亜洲其他', vals:[36.2,55.4,52.9,43.6,46.8,47.4,42.8,41.0,44.0,48.5]},
+      {label:'★亜洲其他 汇総', vals:[3.9,12.5,23.9,26.8,34.4,35.3,30.3,34.2,33.4,35.5], emph:true},
+      {label:'★南半球 汇総',   vals:[4.9,10.2,40.1,71.3,73.2,73.0,77.0,81.9,76.8,81.5], emph:true},
+      {label:'★総計',         vals:[1.8,3.9,7.1,9.6,12.5,15.2,15.3,19.7,15.8,22.3], emph:true}
+    ]
+  },
+  // 画像11: 世界NEV TOP25 (%)
+  makersNev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','26年1Q'],
+    data: [
+      ['比亜迪',9.4,17.8,22.2,25.3,22.8,19.6],['吉利集団',4.6,5.7,5.8,8.3,10.2,11.0],
+      ['米国テスラ',16.2,14.7,14.9,11.3,8.1,9.9],['独 VW',11.1,7.6,6.8,5.4,5.8,5.8],
+      ['上汽集団',10.5,9.3,7.1,6.0,6.6,5.7],['奇瑞集団',1.5,2.3,0.9,3.0,4.1,4.5],
+      ['長安集団',1.5,2.4,3.1,3.8,4.1,3.3],['現代起亜',5.1,4.4,3.5,2.7,2.5,3.2],
+      ['零跑汽車',0.7,1.1,1.0,1.6,2.8,3.0],['独BMW',4.9,3.9,3.7,2.8,2.7,2.7],
+      ['Stellantis',5.2,4.4,3.7,2.5,2.1,2.3],['理想汽車',1.4,1.3,2.7,2.9,1.8,2.1],
+      ['雷諾日産',4.4,3.4,2.5,1.6,1.7,2.1],['日トヨタ',1.7,0.9,1.3,1.4,1.5,2.1],
+      ['広汽集団',1.9,2.8,3.8,2.4,1.6,2.0],['東風集団',1.1,1.8,0.9,1.6,1.8,2.0],
+      ['蔚来汽車',1.5,1.3,1.1,1.3,1.4,1.8],['小米汽車',null,null,null,0.8,1.8,1.8],
+      ['賽力斯',0.1,0.8,0.9,2.4,2.1,1.7],['独ベンツ',3.8,2.8,3.0,2.3,1.9,1.7],
+      ['小鵬汽車',1.6,1.2,1.0,1.1,2.0,1.6],['長城汽車',2.2,1.3,2.0,1.9,1.9,1.3],
+      ['越南VinFast',null,null,0.0,0.5,0.8,1.2],['米フォード',1.7,1.6,1.2,1.2,1.3,1.2],
+      ['米GM',0.9,0.9,1.4,1.1,1.2,1.0]
+    ]
+  },
+  // 画像13: BEV TOP25 (%)
+  makersBev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','26年1Q'],
+    data: [
+      ['米国テスラ',22.7,19.9,20.8,17.7,12.2,14.5],['比亜迪',7.1,11.9,16.7,17.4,18.0,14.2],
+      ['吉利集団',2.4,4.8,4.9,8.6,10.1,9.5],['上汽集団',13.1,11.7,9.3,8.0,8.4,6.8],
+      ['独 VW',9.4,7.3,7.2,6.3,6.1,5.6],['現代起亜',4.9,4.4,3.9,3.5,3.2,4.1],
+      ['零跑汽車',1.0,1.4,1.1,1.9,3.4,3.7],['長安集団',2.1,2.7,2.2,2.8,3.8,3.0],
+      ['Stellantis',4.0,3.2,2.7,2.1,2.1,2.8],['雷諾日産',5.5,4.4,3.3,2.4,2.4,2.7],
+      ['蔚来汽車',2.0,1.8,1.6,2.0,2.1,2.7],['独BMW',2.4,2.9,3.6,3.2,2.8,2.7],
+      ['小米汽車',null,null,null,1.2,2.7,2.6],['広汽集団',2.7,3.7,5.0,3.3,2.0,2.5],
+      ['奇瑞集団',2.2,2.9,1.2,2.4,2.0,2.4],['日トヨタ',0.3,0.3,0.9,1.2,1.3,2.3],
+      ['小鵬汽車',2.2,1.6,1.4,1.8,3.0,2.1],['理想汽車',null,null,null,0.1,0.5,2.0],
+      ['越南VinFast',null,null,0.0,0.8,1.3,1.8],['東風集団',1.5,2.2,0.8,1.6,1.5,1.5],
+      ['独ベンツ',2.0,1.8,3.0,2.3,1.6,1.5],['米フォード',1.2,1.3,1.1,1.3,1.3,1.1],
+      ['米GM',1.0,1.1,1.9,1.5,1.3,1.1],['北汽集団',0.6,0.7,0.9,1.0,1.2,0.8],
+      ['一汽集団',0.8,0.8,1.1,1.0,1.6,0.7]
+    ]
+  },
+  // 画像14: PHEV TOP25 (%)
+  makersPhev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','26年1Q'],
+    data: [
+      ['比亜迪',15.3,34.7,36.0,39.1,32.4,31.2],['吉利集団',10.0,8.2,7.8,7.6,10.4,14.2],
+      ['奇瑞集団',0.0,0.5,0.2,4.1,8.4,8.9],['独 VW',15.4,8.5,5.6,3.9,5.1,6.3],
+      ['長安集団',0.0,1.6,5.5,5.5,4.7,4.1],['賽力斯',0.5,2.6,2.6,6.2,5.5,4.0],
+      ['上汽集団',4.0,2.7,1.6,2.3,2.9,3.5],['長城汽車',0.1,1.0,3.9,4.0,4.7,3.4],
+      ['東風集団',0.3,0.5,1.0,1.6,2.3,2.9],['独BMW',11.1,6.8,3.8,2.2,2.4,2.7],
+      ['理想汽車',5.0,4.9,9.4,7.9,4.6,2.4],['独ベンツ',8.4,5.7,3.1,2.4,2.5,2.2],
+      ['日トヨタ',5.3,2.6,2.3,1.8,1.9,1.7],['零跑汽車',null,null,0.9,1.1,1.5,1.4],
+      ['Stellantis',8.1,7.6,6.3,3.1,2.0,1.4],['一汽集団',0.0,null,null,0.3,1.1,1.3],
+      ['米フォード',3.1,2.6,1.5,0.9,1.2,1.3],['現代起亜',5.7,4.4,2.7,1.4,1.1,1.0],
+      ['米GM',0.8,0.5,0.1,0.5,1.0,1.0],['広汽集団',0.0,0.0,0.8,0.9,0.7,1.0],
+      ['雷諾日産',1.8,0.5,0.7,0.2,0.3,0.7],['北汽集団',0.1,0.0,0.0,0.1,1.0,0.7],
+      ['塔塔集団',2.0,1.2,1.1,0.9,0.6,0.6],['小鵬汽車',null,null,null,null,null,0.5],
+      ['日三菱',1.8,1.8,0.9,0.5,0.4,0.4]
+    ]
+  },
+  // 画像16: HEV TOP20 (%)
+  makersHev: {
+    years: ['2021年','2022年','2023年','2024年','2025年','26年1Q'],
+    data: [
+      ['日トヨタ',62.1,56.5,55.5,55.8,51.7,49.8],['現代起亜',9.9,13.0,13.2,13.3,13.8,12.4],
+      ['雷諾日産',8.4,9.7,11.7,12.1,12.0,11.6],['日ホンダ',14.4,12.5,12.7,11.6,11.5,10.4],
+      ['上汽集団',null,0.8,0.2,0.7,2.6,5.9],['米フォード',3.0,3.5,3.2,3.7,4.5,3.5],
+      ['独 VW',0.0,0.0,0.0,0.0,0.0,1.4],['スバル',0.0,0.0,0.0,0.0,0.6,1.4],
+      ['日マツダ',null,0.4,0.4,0.4,0.8,0.9],['広汽集団',null,0.9,1.1,0.5,0.5,0.7],
+      ['東風集団',null,null,0.4,0.3,0.5,0.5],['日三菱',null,null,0.0,0.2,0.2,0.4],
+      ['北汽集団',null,null,null,0.5,0.5,0.3],['EBRO',null,null,null,null,0.0,0.2],
+      ['奇瑞集団',null,null,null,null,0.0,0.2],['Stellantis',0.0,0.0,0.0,0.1,0.2,0.2],
+      ['日鈴木',1.5,1.2,1.3,0.3,0.2,0.1],['韓国双龍',null,null,null,null,0.1,0.1],
+      ['長城汽車',0.1,0.5,0.1,0.1,0.2,0.1],['長安集団',null,null,null,null,null,0.0]
+    ]
+  }
+};
+
+
+// ===== 描画関数群 =====
+
+// ① 年別推移
+window.wsnSetYearlyView = function(view, btn) {
+  document.querySelectorAll('#ws-nev-yearly-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className='btn btn-sm btn-primary active';
+  window.WSN_YEARLY_VIEW = view;
+  wsnDrawYearly(view);
+};
+function wsnDrawYearly(view) {
+  var chart = wsnEc('ec-ws-nev-yearly'); if (!chart) return;
+  var d = WSN.yearly, sd = WSN.shareOfTotal, si = WSN.shareInner;
+  var opt;
+  if (view === 'volume') {
+    opt = {
+      tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
+        formatter: function(p){ var s='<b>'+p[0].axisValue+'</b><br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'万台<br>'; }); return s; } },
+      legend: { top: 0, type:'scroll' },
+      grid: { top: 50, left: 70, right: 80, bottom: 50 },
+      xAxis: { type:'category', data:d.years, axisLabel:{rotate:30,fontSize:10} },
+      yAxis: [
+        { type:'value', name:'NEV/HEV/H2（万台）', position:'left' },
+        { type:'value', name:'総体・伝統車（万台）', position:'right' }
+      ],
+      series: [
+        { name:'純電動BEV', type:'bar', stack:'nev', data:d.bev, itemStyle:{color:WSN_COLORS['BEV']} },
+        { name:'插混PHEV', type:'bar', stack:'nev', data:d.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
+        { name:'氢H2', type:'bar', stack:'nev', data:d.h2, itemStyle:{color:WSN_COLORS['氢']} },
+        { name:'混合動力HEV', type:'bar', data:d.hev, itemStyle:{color:WSN_COLORS['HEV']} },
+        { name:'伝統車', type:'line', yAxisIndex:1, data:d.ice, smooth:false, lineStyle:{width:2,color:'#7f8c8d'}, itemStyle:{color:'#7f8c8d'} },
+        { name:'総体汽車', type:'line', yAxisIndex:1, data:d.total, smooth:false, lineStyle:{width:2.5,color:'#2c3e50'}, itemStyle:{color:'#2c3e50'} }
+      ]
+    };
+  } else if (view === 'share') {
+    opt = {
+      tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
+        formatter: function(p){ var s='<b>'+p[0].axisValue+'</b><br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      legend: { top: 0 },
+      grid: { top: 50, left: 60, right: 30, bottom: 50 },
+      xAxis: { type:'category', data:sd.years, axisLabel:{rotate:30,fontSize:10} },
+      yAxis: { type:'value', max:100, axisLabel:{formatter:'{value}%'} },
+      series: [
+        { name:'純電動BEV', type:'bar', stack:'all', data:sd.bev, itemStyle:{color:WSN_COLORS['BEV']} },
+        { name:'插混PHEV', type:'bar', stack:'all', data:sd.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
+        { name:'混合動力HEV', type:'bar', stack:'all', data:sd.hev, itemStyle:{color:WSN_COLORS['HEV']} },
+        { name:'燃油車', type:'bar', stack:'all', data:sd.ice, itemStyle:{color:'#bdc3c7'} }
+      ]
+    };
+  } else {
+    opt = {
+      tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
+        formatter: function(p){ var s='<b>'+p[0].axisValue+'</b><br>'; p.forEach(function(x){ if(x.value!=null) s+=x.marker+x.seriesName+': '+x.value+'%<br>'; }); return s; } },
+      legend: { top: 0 },
+      grid: { top: 50, left: 60, right: 30, bottom: 50 },
+      xAxis: { type:'category', data:si.years, axisLabel:{rotate:30,fontSize:10} },
+      yAxis: { type:'value', max:100, axisLabel:{formatter:'{value}%'} },
+      series: [
+        { name:'純電動BEV', type:'bar', stack:'inner', data:si.bev, itemStyle:{color:WSN_COLORS['BEV']} },
+        { name:'插混PHEV', type:'bar', stack:'inner', data:si.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
+        { name:'氢H2', type:'bar', stack:'inner', data:si.h2, itemStyle:{color:WSN_COLORS['氢']} }
+      ]
+    };
+  }
+  chart.setOption(opt, true);
+}
+
+// ② 月次
+window.wsnSetMonthlyView = function(view, btn) {
+  document.querySelectorAll('#ws-nev-monthly-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className='btn btn-sm btn-primary active';
+  window.WSN_MONTHLY_VIEW = view;
+  wsnDrawMonthly(view);
+};
+function wsnDrawMonthly(view) {
+  var chart = wsnEc('ec-ws-nev-monthly'); if (!chart) return;
+  var titleMap = { world:'🌐 世界全体NEV月次', exch:'🌏 中国除く世界NEV月次', eu:'🇪🇺 EU NEV月次', compare:'📊 中欧米NEV月次比較' };
+  if (view === 'compare') {
+    var d = WSN.compareMonthly;
+    chart.setOption({
+      title: { text: titleMap[view], left:'center', top:0, textStyle:{fontSize:13,color:'#444'} },
+      tooltip: { trigger:'axis', formatter: function(params){ var s='<b>'+params[0].axisValue+'</b><br>'; params.forEach(function(p){ if(p.value!=null) s+=p.marker+p.seriesName+': '+p.value+'万台<br>'; }); return s; } },
+      legend: { top: 25, data:['欧州','北米','中国'] },
+      grid: { top: 60, left: 55, right: 30, bottom: 60 },
+      xAxis: { type:'category', data:d.labels, axisLabel:{rotate:60,fontSize:9} },
+      yAxis: { type:'value', name:'万台' },
+      series: [
+        { name:'欧州', type:'line', data:d.europe, smooth:false, symbol:'circle', symbolSize:4, lineStyle:{width:2,color:WSN_COLORS['欧州']}, itemStyle:{color:WSN_COLORS['欧州']} },
+        { name:'北米', type:'line', data:d.namerica, smooth:false, symbol:'circle', symbolSize:4, lineStyle:{width:2,color:'#2c3e50'}, itemStyle:{color:'#2c3e50'} },
+        { name:'中国', type:'line', data:d.china, smooth:false, symbol:'circle', symbolSize:4, lineStyle:{width:2.5,color:WSN_COLORS['中国']}, itemStyle:{color:WSN_COLORS['中国']} }
+      ]
+    }, true);
+    return;
+  }
+  var src = view==='world' ? WSN.monthlyWorld : view==='exch' ? WSN.monthlyExCh : WSN.monthlyEU;
+  var years = ['2022年','2023年','2024年','2025年','2026年'];
+  var series = years.map(function(y){
+    return {
+      name:y, type:'line', smooth:false, data:src.data[y], connectNulls:false,
+      symbol:'circle', symbolSize:6,
+      lineStyle:{ width:y==='2026年'?2.8:2, color:WSN_COLORS[y] },
+      itemStyle:{ color:WSN_COLORS[y] },
+      label: y==='2026年' ? { show:true, position:'top', formatter:function(p){return p.value!=null?p.value:'';}, fontSize:11, fontWeight:'bold', color:'#e74c3c' } : { show:false }
+    };
+  });
+  chart.setOption({
+    title: { text: titleMap[view], left:'center', top:0, textStyle:{fontSize:13,color:'#444'} },
+    tooltip: { trigger:'axis', formatter: function(params){ var s='<b>'+params[0].axisValue+'</b><br>'; params.forEach(function(p){ if(p.value!=null) s+=p.marker+p.seriesName+': '+p.value+'万台<br>'; }); return s; } },
+    legend: { top: 25, data: years },
+    grid: { top: 60, left: 55, right: 20, bottom: 40 },
+    xAxis: { type:'category', data:src.months },
+    yAxis: { type:'value', name:'万台' },
+    series: series
+  }, true);
+}
+
+// ③ 地域別シェア
+window.wsnSetRegionView = function(view, btn) {
+  document.querySelectorAll('#ws-nev-region-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className='btn btn-sm btn-primary active';
+  window.WSN_REGION_VIEW = view;
+  wsnDrawRegion(view);
+};
+function wsnDrawRegion(view) {
+  var chart = wsnEc('ec-ws-nev-region'); if (!chart) return;
+  var d = view==='bev' ? WSN.regionShareBev : view==='hev' ? WSN.regionShareHev : WSN.regionShareNev;
+  var regions = ['中国','欧州','北米洲','アジアその他','南半球'];
+  var series = regions.map(function(r){
+    return {
+      name: r, type:'bar', stack:'total',
+      data: d[r],
+      itemStyle: { color: WSN_COLORS[r] },
+      label: { show:true, position:'inside', formatter:function(p){return p.value>=3?p.value+'%':'';}, fontSize:10, color:'#fff' }
+    };
+  });
+  var titleMap = { nev:'⚡ NEV合計 地域別シェア', bev:'🔌 BEV 地域別シェア', hev:'🔀 HEV 地域別シェア' };
+  chart.setOption({
+    title: { text: titleMap[view], left:'center', top:0, textStyle:{fontSize:13,color:'#444'} },
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'}, formatter: function(params){ var s='<b>'+params[0].axisValue+'</b><br>'; params.forEach(function(p){ if(p.value!=null) s+=p.marker+p.seriesName+': '+p.value+'%<br>'; }); return s; } },
+    legend: { top: 25 },
+    grid: { top: 65, left: 55, right: 30, bottom: 40 },
+    xAxis: { type:'category', data:d.years },
+    yAxis: { type:'value', max:100, axisLabel:{formatter:'{value}%'} },
+    series: series
+  }, true);
+}
+
+// ④ 国別浸透率
+function wsnDrawPenetration() {
+  var chart = wsnEc('ec-ws-nev-penetration'); if (!chart) return;
+  var d = WSN.penetration;
+  function clean(arr){ var c=arr.slice(); c[2]=null; return c; }  // 2020列の異常値はnull化
+  var keys = ['全球','中国','欧州 汇総','北米洲 汇総','亜洲其他 汇総','南半球 汇総','德国','法国','挪威','瑞典','意大利','英国','美国','韓国','日本'];
+  var colorMap = {
+    '全球':'#e74c3c','中国':'#c0392b','欧州 汇総':'#3498db','北米洲 汇総':'#2ecc71',
+    '亜洲其他 汇総':'#f39c12','南半球 汇総':'#9b59b6',
+    '德国':'#5dade2','法国':'#85c1e9','挪威':'#3498db','瑞典':'#48c9b0','意大利':'#aed6f1','英国':'#1abc9c',
+    '美国':'#27ae60','韓国':'#e67e22','日本':'#d35400'
+  };
+  var widthMap = { '全球':3.5,'中国':3,'欧州 汇総':2.5,'北米洲 汇総':2.5,'亜洲其他 汇総':2.5,'南半球 汇総':2.5 };
+  var series = keys.map(function(k){
+    return {
+      name: k, type:'line', smooth:false, data: clean(d[k]),
+      connectNulls: true,
+      symbol: 'circle', symbolSize: widthMap[k] ? 6 : 4,
+      lineStyle: { width: widthMap[k] || 1.4, color: colorMap[k] },
+      itemStyle: { color: colorMap[k] }
+    };
+  });
+  chart.setOption({
+    tooltip: { trigger:'axis', formatter: function(params){ var s='<b>'+params[0].axisValue+'</b><br>'; params.forEach(function(p){ if(p.value!=null) s+=p.marker+p.seriesName+': '+p.value+'%<br>'; }); return s; } },
+    legend: { top: 0, type:'scroll', textStyle:{fontSize:11} },
+    grid: { top: 50, left: 55, right: 30, bottom: 50 },
+    xAxis: { type:'category', data:d.years, axisLabel:{rotate:20,fontSize:10} },
+    yAxis: { type:'value', name:'%', axisLabel:{formatter:'{value}%'} },
+    series: series,
+    graphic: [{ type:'text', right:10, bottom:10, style:{ text:'※2020列は出典の異常値のため除外', fontSize:10, fill:'#999' } }]
+  }, true);
+}
+
+// ⑤ 自主海外シェア
+window.wsnSetOverseasView = function(view, btn) {
+  document.querySelectorAll('#ws-nev-overseas-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className='btn btn-sm btn-primary active';
+  window.WSN_OVERSEAS_VIEW = view;
+  wsnDrawOverseas(view);
+};
+function wsnDrawOverseas(view) {
+  var chart = wsnEc('ec-ws-nev-overseas'); if (!chart) return;
+  if (view === 'monthly') {
+    var d = WSN.overseasMonthly;
+    var years = ['2023年','2024年','2025年','2026年'];
+    var series = years.map(function(y){
+      return {
+        name: y, type:'line', smooth:false, data:d.data[y], connectNulls:false,
+        symbol:'circle', symbolSize:6,
+        lineStyle:{ width:y==='2026年'?2.8:2, color:WSN_COLORS[y] },
+        itemStyle:{ color:WSN_COLORS[y] },
+        label: y==='2026年' ? { show:true, position:'top', formatter:function(p){return p.value!=null?p.value+'%':'';}, fontSize:11, fontWeight:'bold', color:'#e74c3c' } : { show:false }
+      };
+    });
+    chart.setOption({
+      title: { text:'🚀 中国系NEV海外市場シェア 月次推移', left:'center', top:0, textStyle:{fontSize:13,color:'#444'} },
+      tooltip: { trigger:'axis', formatter: function(params){ var s='<b>'+params[0].axisValue+'</b><br>'; params.forEach(function(p){ if(p.value!=null) s+=p.marker+p.seriesName+': '+p.value+'%<br>'; }); return s; } },
+      legend: { top: 25, data: years },
+      grid: { top: 60, left: 55, right: 30, bottom: 40 },
+      xAxis: { type:'category', data:d.months },
+      yAxis: { type:'value', name:'%', axisLabel:{formatter:'{value}%'} },
+      series: series
+    }, true);
+  } else {
+    var d = WSN.overseasRegion;
+    var rows = d.rows;
+    var yearsX = d.years;
+    var yLabels = rows.map(function(r){ return r.label; });
+    var heatData = [];
+    rows.forEach(function(r, ri){
+      r.vals.forEach(function(v, ci){ heatData.push([ci, ri, v]); });
+    });
+    chart.setOption({
+      title: { text:'🌏 中国系NEV海外シェア 地域・国別詳細（%）', left:'center', top:0, textStyle:{fontSize:13,color:'#444'} },
+      tooltip: { position:'top', formatter: function(p){ return '<b>'+yLabels[p.value[1]]+'</b><br>'+yearsX[p.value[0]]+': <b>'+p.value[2]+'%</b>'; } },
+      grid: { top: 30, left: 130, right: 100, bottom: 50 },
+      xAxis: { type:'category', data:yearsX, axisLabel:{rotate:25,fontSize:10}, splitArea:{show:true} },
+      yAxis: { type:'category', data:yLabels, inverse:true, axisLabel:{fontSize:11}, splitArea:{show:true} },
+      visualMap: { min:0, max:100, calculable:true, orient:'vertical', right:5, top:'center',
+        inRange:{ color:['#ecf0f1','#f9e79f','#f5b041','#e67e22','#c0392b','#7d3c98'] }, textStyle:{fontSize:10} },
+      series: [{
+        type:'heatmap', data:heatData,
+        label:{ show:true, formatter:function(p){ return p.value[2]+'%'; }, fontSize:9.5, color:'#222' },
+        emphasis:{ itemStyle:{ shadowBlur:10, shadowColor:'rgba(0,0,0,0.5)' } }
+      }]
+    }, true);
+  }
+}
+
+// ⑥ メーカーランキング
+window.wsnSetMakersView = function(view, btn) {
+  document.querySelectorAll('#ws-nev-makers-tabs .btn').forEach(function(b){ b.className='btn btn-sm btn-outline-secondary'; });
+  btn.className='btn btn-sm btn-primary active';
+  window.WSN_MAKERS_VIEW = view;
+  wsnDrawMakers(view);
+};
+function wsnDrawMakers(view) {
+  var chart = wsnEc('ec-ws-nev-makers'); if (!chart) return;
+  var src = view==='bev'?WSN.makersBev : view==='phev'?WSN.makersPhev : view==='hev'?WSN.makersHev : WSN.makersNev;
+  // 26年1Q値で降順ソート
+  var rows = src.data.slice().sort(function(a,b){
+    var av = a[a.length-1] == null ? -1 : a[a.length-1];
+    var bv = b[b.length-1] == null ? -1 : b[b.length-1];
+    return bv - av;
+  });
+  var names = rows.map(function(r){ return r[0]; });
+  var yearsAll = src.years;
+  var titleMap = { nev:'⚡ 世界NEVメーカーシェア', bev:'🔌 世界BEVメーカーシェア', phev:'🔋 世界PHEVメーカーシェア', hev:'🔀 世界HEVメーカーシェア' };
+  // 年別カラー（最新年を強調）
+  var yearColors = ['#dfe6e9','#b2bec3','#74b9ff','#a29bfe','#fd79a8','#e74c3c'];
+  var series = yearsAll.map(function(yr, idx){
+    return {
+      name: yr, type:'bar',
+      data: rows.map(function(r){ return r[idx+1]; }),
+      itemStyle: { color: yearColors[idx] || '#3498db' },
+      label: { show: idx === yearsAll.length-1, position:'right', formatter: function(p){ return p.value!=null?p.value+'%':''; }, fontSize:10, color:'#c0392b', fontWeight:'bold' }
+    };
+  });
+  chart.setOption({
+    title: { text: titleMap[view], left:'center', top:0, textStyle:{fontSize:13,color:'#444'} },
+    tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
+      formatter: function(params){ var s='<b>'+params[0].name+'</b><br>'; params.forEach(function(p){ if(p.value!=null) s+=p.marker+p.seriesName+': '+p.value+'%<br>'; }); return s; } },
+    legend: { top: 25, data: yearsAll },
+    grid: { top: 60, left: 100, right: 60, bottom: 30 },
+    xAxis: { type:'value', axisLabel:{formatter:'{value}%'} },
+    yAxis: { type:'category', data: names.slice().reverse(), axisLabel:{fontSize:10} },
+    series: series.map(function(s){ return Object.assign({}, s, { data: s.data.slice().reverse() }); })
+  }, true);
+}
+
+// 初期化（ペイン表示時にwsRender経由で呼ばれる）
+
+
 var WS_MAKER_COLORS = ['#e74c3c','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#34495e','#e91e63','#00bcd4','#ff5722','#607d8b','#795548','#4caf50','#ff9800','#2196f3','#673ab7','#009688','#f44336','#03a9f4'];
 
 function wsEc(id) {
@@ -11511,6 +12123,26 @@ window.wsRender = function(id) {
   else if (id === 'ws-country') wsDrawCountry(window.WS_COUNTRY_VIEW || 'volume');
   else if (id === 'ws-maker') { wsBuildToggleButtons(WS_MAKER_GROUPS[window.WS_MAKER_FILTER||'top10']); wsDrawMaker(window.WS_MAKER_FILTER || 'top10'); }
   else if (id === 'ws-maker-region') wsDrawMakerRegion(window.WS_MAKERREGION_VIEW || 'share2026');
+  // 世界NEV ペイン
+  else if (id === 'ws-nev-yearly')      wsnDrawYearly(window.WSN_YEARLY_VIEW || 'volume');
+  else if (id === 'ws-nev-monthly')     wsnDrawMonthly(window.WSN_MONTHLY_VIEW || 'world');
+  else if (id === 'ws-nev-region')      wsnDrawRegion(window.WSN_REGION_VIEW || 'nev');
+  else if (id === 'ws-nev-penetration') wsnDrawPenetration();
+  else if (id === 'ws-nev-overseas')    wsnDrawOverseas(window.WSN_OVERSEAS_VIEW || 'monthly');
+  else if (id === 'ws-nev-makers')      wsnDrawMakers(window.WSN_MAKERS_VIEW || 'nev');
+  // ソースリンクを世界NEV用に切替
+  wsnUpdateSourceLink(id);
+};
+
+// ソースバーURL切替（世界NEVペインのみ別URL）
+window.wsnUpdateSourceLink = function(id) {
+  var WSN_SOURCE = 'https://mp.weixin.qq.com/s/oeU_on2hVnWWfcwlCs9H-A';
+  var DEFAULT_SOURCE = 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg';
+  var srcLink = document.getElementById('cds-source-link');
+  if (!srcLink) return;
+  var url = (id && id.indexOf('ws-nev-') === 0) ? WSN_SOURCE : DEFAULT_SOURCE;
+  srcLink.href = url;
+  srcLink.textContent = url;
 };
 
 // 切替ボタン
@@ -13559,7 +14191,8 @@ function renderProvSalesChart(){
     if(id==='cds-prov-sales')   setTimeout(renderProvSalesChart,60);
     if(id==='cds-china-map')    setTimeout(cpcaInitMap,60);
     // 世界シェアペイン
-    var wsPanes = ['ws-regional','ws-china-share','ws-monthly','ws-country','ws-maker','ws-maker-region'];
+    var wsPanes = ['ws-regional','ws-china-share','ws-monthly','ws-country','ws-maker','ws-maker-region',
+                   'ws-nev-yearly','ws-nev-monthly','ws-nev-region','ws-nev-penetration','ws-nev-overseas','ws-nev-makers'];
     if(wsPanes.indexOf(id) >= 0) setTimeout(function(){ wsRender(id); }, 60);
   };
 })();

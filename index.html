@@ -5102,7 +5102,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="cds-prov-sales">
               <div class="chart-card">
                 <div class="chart-title">🏙️ 省別乗用車販売量ランキング</div>
-                <div class="chart-subtitle">出所：CPCA　2024年・2025年年間累計 + 2026年1-2月累計</div>
+                <div class="chart-subtitle">出所：CPCA　2024年・2025年年間累計 + 2026年1-3月累計</div>
                 <div id="ec-cpca-prov" class="echart-box" style="height:1150px"></div>
               </div>
             </div>
@@ -12797,223 +12797,225 @@ window.dcDrawImport       = dcDrawImport;
 const CPCA = {
   regionVolume: {
     regions: ['東北','東部-华北','東部-华東','東部-华南','西北','西南','中部-黄河','中部-長江'],
-    years:   ['2017','2019','2022','2023','2024','2025'],
+    years:   ['2017','2019','2023','2024','2025','26年1-3月'],
     data: {
-      '東北':     [143,109,101,122,134,138],
-      '東部-华北': [423,361,332,370,420,406],
-      '東部-华東': [419,385,429,424,440,422],
-      '東部-华南': [325,317,328,314,332,336],
-      '西北':     [192,168,147,187,201,201],
-      '西南':     [355,322,286,294,315,317],
-      '中部-黄河': [225,191,157,183,193,205],
-      '中部-長江': [325,286,270,275,302,302],
+      '東北':     [143,109,122,134,138,23.3],
+      '東部-华北': [423,361,370,420,406,68.9],
+      '東部-华東': [419,385,424,440,422,77.8],
+      '東部-华南': [325,317,314,332,336,58.9],
+      '西北':     [192,168,187,201,201,36.6],
+      '西南':     [355,322,294,315,317,62.0],
+      '中部-黄河': [225,191,183,193,205,33.7],
+      '中部-長江': [325,286,275,302,302,55.7],
     }
   },
   regionShare: {
     regions: ['東北','東部-华北','東部-华東','東部-华南','西北','西南','中部-黄河','中部-長江'],
-    years:   ['2017','2019','2023','2024','2025','2026'],
+    years:   ['2017','2019','2023','2024','2025','26年1-3月'],
     data: {
-      '東北':     [5.9,5.1,5.6,5.8,5.9,5.0],
-      '東部-华北': [17.6,16.9,17.1,18.0,17.5,15.8],
-      '東部-华東': [17.0,17.5,19.2,18.5,17.5,18.1],
-      '東部-华南': [13.3,14.5,14.3,14.0,14.2,14.4],
-      '西北':     [8.0,8.0,8.8,8.7,8.7,8.8],
-      '西南':     [14.9,15.2,13.7,13.6,13.7,15.5],
-      '中部-黄河': [9.6,9.2,8.6,8.4,8.9,8.4],
-      '中部-長江': [13.7,13.6,12.8,13.0,13.1,14.0],
+      '東北':     [5.9,5.1,5.6,5.7,5.9,5.6],
+      '東部-华北': [17.6,16.9,17.1,18.0,17.4,16.5],
+      '東部-华東': [17.4,18.0,19.6,18.8,18.1,18.7],
+      '東部-华南': [13.5,14.8,14.5,14.2,14.4,14.1],
+      '西北':     [8.0,7.9,8.6,8.6,8.7,8.8],
+      '西南':     [14.7,15.0,13.6,13.5,13.6,14.9],
+      '中部-黄河': [9.3,8.9,8.4,8.3,8.8,8.1],
+      '中部-長江': [13.5,13.4,12.7,12.9,13.0,13.4],
     }
   },
   regionGrowth: {
     regions: ['東北','東部-华北','東部-华東','東部-华南','西北','西南','中部-黄河','中部-長江'],
-    months:  ['25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','25年汇总'],
+    months:  ['25年7月','25年8月','25年9月','25年10月','25年11月','25年12月','25年汇总','26.3月','26年累'],
     data: {
-      '東北':     [-2,9,2,-23,-31,-23,3],
-      '東部-华北': [5,-5,1,-22,-23,-22,-3],
-      '東部-华東': [-6,-5,7,-14,-13,-14,-4],
-      '東部-华南': [-5,3,4,-2,-7,-2,1],
-      '西北':     [2,2,-3,-22,-16,-22,0],
-      '西南':     [5,9,6,-16,-11,-16,0],
-      '中部-黄河': [7,3,21,-23,-24,-23,6],
-      '中部-長江': [10,0,-4,-18,-11,-18,0],
+      '東北':     [-2,9,2,-23,-31,-23,3,-27,-21],
+      '東部-华北': [5,-5,1,-22,-23,-22,-3,-19,-16],
+      '東部-华東': [-6,-5,7,-14,-13,-14,-4,-17,-13],
+      '東部-华南': [-5,3,4,-2,-7,-2,1,-25,-14],
+      '西北':     [2,2,-3,-22,-16,-22,0,-24,-19],
+      '西南':     [5,9,6,-16,-11,-16,0,-16,-14],
+      '中部-黄河': [7,3,21,-23,-24,-23,6,-30,-26],
+      '中部-長江': [10,0,-4,-18,-11,-18,0,-23,-19],
     }
   },
   // 省別データ（日本語名キー）
-  // y24=2024年汇総, y25=2025年汇総, t26=2026年1-2月累計, yoy=25/24前年比,
-  // yoy26=2026年2月単月同比, cum26=2026年1-2月累計前年同期比
+  // y24=2024年汇総, y25=2025年汇総, yoy=25/24前年比,
+  // m1/m2/m3=2026年1月/2月/3月, t26=2026年1-3月累計,
+  // mom26_3=2026年3月単月環比, yoy26_3=2026年3月単月同比,
+  // cum26=2026年1-3月累計前年同期比, rank3=2026年3月销量站位(%)
   prov: {
-    '広東':  {y24:253.4,y25:245.5,yoy:-3, t26:29.4,yoy26:-16,cum26:-4},
-    '浙江':  {y24:184.6,y25:180.0,yoy:-2, t26:20.2,yoy26:-16,cum26:-8},
-    '江蘇':  {y24:193.7,y25:169.4,yoy:-13,t26:19.6,yoy26:-24,cum26:-19},
-    '山東':  {y24:186.6,y25:180.6,yoy:-3, t26:18.7,yoy26:-20,cum26:-17},
-    '河南':  {y24:138.9,y25:144.3,yoy:4,  t26:17,  yoy26:-2, cum26:-24},
-    '四川':  {y24:116.8,y25:114.1,yoy:-2, t26:14.7,yoy26:-4, cum26:-14},
-    '河北':  {y24:126.5,y25:119.8,yoy:-5, t26:13,  yoy26:-20,cum26:-15},
-    '湖北':  {y24:81,   y25:82.4, yoy:2,  t26:10,  yoy26:2,  cum26:-17},
-    '安徽':  {y24:89.7, y25:88.0, yoy:-2, t26:10.3,yoy26:-1, cum26:-22},
-    '湖南':  {y24:75.9, y25:73.3, yoy:-3, t26:9.4, yoy26:7,  cum26:-15},
-    '上海':  {y24:61.6, y25:57.4, yoy:-7, t26:7.6, yoy26:23, cum26:10},
-    '北京':  {y24:65,   y25:60.3, yoy:-7, t26:6,   yoy26:-20,cum26:-11},
-    '陝西':  {y24:67.6, y25:64.6, yoy:-4, t26:7.5, yoy26:-13,cum26:-21},
-    '雲南':  {y24:55.3, y25:51.9, yoy:-6, t26:7.5, yoy26:10, cum26:-8},
-    '福建':  {y24:59.3, y25:59.7, yoy:1,  t26:6.6, yoy26:-24,cum26:-14},
-    '貴州':  {y24:47.7, y25:49.1, yoy:3,  t26:6.8, yoy26:24, cum26:-16},
-    '遼寧':  {y24:63.6, y25:62.9, yoy:-1, t26:6,   yoy26:-38,cum26:-17},
-    '江西':  {y24:55.2, y25:53.4, yoy:-3, t26:7.1, yoy26:13, cum26:-11},
-    '広西':  {y24:51.4, y25:49.7, yoy:-3, t26:5.7, yoy26:-6, cum26:-16},
-    '重慶':  {y24:44.3, y25:46.7, yoy:5,  t26:6,   yoy26:-1, cum26:-13},
-    '新疆':  {y24:42,   y25:42.0, yoy:0,  t26:4.1, yoy26:-25,cum26:-9},
-    '天津':  {y24:42,   y25:36.3, yoy:-14,t26:3.8, yoy26:-30,cum26:3},
-    '山西':  {y24:54.2, y25:58.3, yoy:8,  t26:5.2, yoy26:-34,cum26:-25},
-    '内蒙古':{y24:39.7, y25:41.5, yoy:5,  t26:4.5, yoy26:-33,cum26:-10},
-    '黒龍江':{y24:35.1, y25:39.4, yoy:12, t26:3.6, yoy26:-33,cum26:-14},
-    '吉林':  {y24:35.3, y25:32.5, yoy:-8, t26:3.5, yoy26:-35,cum26:-13},
-    '甘粛':  {y24:26.8, y25:26.3, yoy:-2, t26:3.9, yoy26:10, cum26:-13},
-    '海南':  {y24:18.8, y25:18.0, yoy:-4, t26:1.9, yoy26:-42,cum26:-35},
-    '寧夏':  {y24:12.4, y25:13.8, yoy:11, t26:1.5, yoy26:-32,cum26:-29},
-    '青海':  {y24:8.1,  y25:7.3,  yoy:-10,t26:0.9, yoy26:-3, cum26:1},
-    '西蔵':  {y24:4.2,  y25:3.3,  yoy:-21,t26:0.6, yoy26:-21,cum26:-22},
+    '広東': {y24:253.4,y25:245.5,yoy:-3, m1:21.4,m2:9.4,m3:14.7,t26:45.5, mom26_3:57,yoy26_3:-25,cum26:-12,rank3:23},
+    '山東': {y24:186.6,y25:180.6,yoy:-3, m1:10.5,m2:8.6,m3:12.3,t26:31.4, mom26_3:43,yoy26_3:-16,cum26:-16,rank3:31},
+    '浙江': {y24:184.6,y25:180.0,yoy:-2, m1:12.9,m2:8.0,m3:11.9,t26:32.8, mom26_3:49,yoy26_3:-19,cum26:-12,rank3:31},
+    '江蘇': {y24:193.7,y25:169.4,yoy:-13, m1:11.7,m2:8.7,m3:12.5,t26:32.9, mom26_3:43,yoy26_3:-17,cum26:-18,rank3:38},
+    '河南': {y24:138.9,y25:144.3,yoy:4, m1:8.3,m2:8.8,m3:8.1,t26:25.2, mom26_3:-9,yoy26_3:-28,cum26:-26,rank3:0},
+    '河北': {y24:126.5,y25:119.8,yoy:-5, m1:7.4,m2:5.8,m3:7.7,t26:20.9, mom26_3:32,yoy26_3:-22,cum26:-18,rank3:27},
+    '四川': {y24:116.8,y25:114.1,yoy:-2, m1:7.9,m2:7.1,m3:8.2,t26:23.2, mom26_3:15,yoy26_3:-11,cum26:-13,rank3:23},
+    '安徽': {y24:89.7,y25:88.0,yoy:-2, m1:5.2,m2:5.3,m3:5.6,t26:16.1, mom26_3:6,yoy26_3:-27,cum26:-24,rank3:8},
+    '湖北': {y24:81,y25:82.4,yoy:2, m1:5.6,m2:4.5,m3:4.9,t26:15.1, mom26_3:8,yoy26_3:-21,cum26:-18,rank3:12},
+    '湖南': {y24:75.9,y25:73.3,yoy:-3, m1:5.2,m2:4.5,m3:4.5,t26:14.2, mom26_3:2,yoy26_3:-21,cum26:-17,rank3:9},
+    '陝西': {y24:67.6,y25:64.6,yoy:-4, m1:4.3,m2:3.3,m3:3.8,t26:11.4, mom26_3:13,yoy26_3:-28,cum26:-24,rank3:12},
+    '遼寧': {y24:63.6,y25:62.9,yoy:-1, m1:3.8,m2:2.5,m3:4.3,t26:10.5, mom26_3:74,yoy26_3:-31,cum26:-24,rank3:35},
+    '北京': {y24:65,y25:60.3,yoy:-7, m1:4.0,m2:2.3,m3:3.8,t26:10.1, mom26_3:67,yoy26_3:-23,cum26:-17,rank3:32},
+    '福建': {y24:59.3,y25:59.7,yoy:1, m1:4.4,m2:2.5,m3:3.5,t26:10.4, mom26_3:42,yoy26_3:-26,cum26:-18,rank3:26},
+    '山西': {y24:54.2,y25:58.3,yoy:8, m1:null,m2:null,m3:null,t26:null, mom26_3:null,yoy26_3:null,cum26:null,rank3:null},
+    '上海': {y24:61.6,y25:57.4,yoy:-7, m1:4.9,m2:3.1,m3:4.1,t26:12.1, mom26_3:31,yoy26_3:-10,cum26:1,rank3:34},
+    '江西': {y24:55.2,y25:53.4,yoy:-3, m1:3.8,m2:3.4,m3:3.2,t26:10.4, mom26_3:-4,yoy26_3:-22,cum26:-15,rank3:10},
+    '雲南': {y24:55.3,y25:51.9,yoy:-6, m1:4.1,m2:3.6,m3:3.3,t26:11.0, mom26_3:-7,yoy26_3:-17,cum26:-11,rank3:2},
+    '広西': {y24:51.4,y25:49.7,yoy:-3, m1:3.2,m2:2.6,m3:3.1,t26:8.9, mom26_3:22,yoy26_3:-18,cum26:-17,rank3:23},
+    '貴州': {y24:47.7,y25:49.1,yoy:3, m1:3.1,m2:3.7,m3:3.2,t26:10.1, mom26_3:-13,yoy26_3:-12,cum26:-15,rank3:8},
+    '重慶': {y24:44.3,y25:46.7,yoy:5, m1:3.3,m2:2.8,m3:2.8,t26:8.9, mom26_3:2,yoy26_3:-28,cum26:-19,rank3:3},
+    '新疆': {y24:42,y25:42.0,yoy:0, m1:2.4,m2:1.7,m3:3.4,t26:7.5, mom26_3:100,yoy26_3:-16,cum26:-12,rank3:60},
+    '内蒙古': {y24:39.7,y25:41.5,yoy:5, m1:2.8,m2:1.8,m3:2.9,t26:7.5, mom26_3:62,yoy26_3:-26,cum26:-17,rank3:43},
+    '黒龍江': {y24:35.1,y25:39.4,yoy:12, m1:2.1,m2:1.6,m3:2.9,t26:6.6, mom26_3:80,yoy26_3:-26,cum26:-19,rank3:44},
+    '天津': {y24:42,y25:36.3,yoy:-14, m1:2.8,m2:1.4,m3:2.3,t26:6.5, mom26_3:69,yoy26_3:-17,cum26:-3,rank3:25},
+    '吉林': {y24:35.3,y25:32.5,yoy:-8, m1:2.12,m2:1.44,m3:2.6,t26:6.17, mom26_3:81,yoy26_3:-22,cum26:-17,rank3:54},
+    '甘粛': {y24:26.8,y25:26.3,yoy:-2, m1:2.2,m2:1.7,m3:1.5,t26:5.5, mom26_3:-12,yoy26_3:-25,cum26:-17,rank3:0},
+    '海南': {y24:18.8,y25:18.0,yoy:-4, m1:3.0,m2:2.2,m3:3.3,t26:8.5, mom26_3:48,yoy26_3:-34,cum26:-34,rank3:23},
+    '寧夏': {y24:12.4,y25:13.8,yoy:11, m1:0.9,m2:1.0,m3:0.5,t26:2.4, mom26_3:25,yoy26_3:-27,cum26:-29,rank3:null},
+    '青海': {y24:8.1,y25:7.3,yoy:-10, m1:0.6,m2:0.4,m3:0.4,t26:1.4, mom26_3:21,yoy26_3:-16,cum26:-6,rank3:22},
+    '西蔵': {y24:4.2,y25:3.3,yoy:-21, m1:0.3,m2:0.3,m3:0.2,t26:0.8, mom26_3:-4,yoy26_3:5,cum26:-15,rank3:8},
   },
-  nev: {
-    // 出典：CPCA「2026年2月乗用車区域市場流向分析」4章
+    nev: {
+    // 出典：CPCA「2026年3月乗用車区域市場流向分析」4章
     // ice=常規%, hev=混合動力%, phev=插混%, bev=純電動%, nev=新能源浸透率%
     // d*=較去年同期変化(pp)
-    '海南':  {ice:35.0,hev:6.4, phev:17.9,bev:40.7,nev:58.7, dice:13.3, dhev:3.2, dphev:5.2,  dbev:-21.7,dnev:-16.5},
-    '浙江':  {ice:38.8,hev:5.4, phev:13.8,bev:42.1,nev:55.8, dice:4.5,  dhev:1.2, dphev:-0.7, dbev:-5.0, dnev:-5.7},
-    '広東':  {ice:37.5,hev:8.3, phev:21.1,bev:33.1,nev:54.2, dice:7.3,  dhev:0.8, dphev:-0.5, dbev:-7.6, dnev:-8.1},
-    '北京':  {ice:40.2,hev:6.4, phev:17.4,bev:36.0,nev:53.4, dice:-0.1, dhev:-1.4,dphev:-3.0, dbev:4.5,  dnev:1.5},
-    '天津':  {ice:43.0,hev:6.6, phev:23.9,bev:26.5,nev:50.4, dice:8.6,  dhev:1.5, dphev:-5.1, dbev:-5.0, dnev:-10.1},
-    '福建':  {ice:48.1,hev:3.9, phev:15.3,bev:32.7,nev:48.0, dice:6.3,  dhev:-1.0,dphev:-0.4, dbev:-4.9, dnev:-5.3},
-    '上海':  {ice:49.9,hev:2.4, phev:7.0, bev:40.6,nev:47.6, dice:10.5, dhev:-1.3,dphev:-1.4, dbev:-7.8, dnev:-9.2},
-    '江蘇':  {ice:50.9,hev:4.4, phev:11.6,bev:33.0,nev:44.7, dice:8.8,  dhev:1.2, dphev:-2.6, dbev:-7.4, dnev:-10.0},
-    '広西':  {ice:54.5,hev:4.2, phev:13.6,bev:27.7,nev:41.3, dice:18.3, dhev:1.4, dphev:-2.4, dbev:-17.2,dnev:-19.6},
-    '寧夏':  {ice:55.5,hev:3.7, phev:27.9,bev:12.9,nev:40.8, dice:6.1,  dhev:1.0, dphev:-5.2, dbev:-1.9, dnev:-7.2},
-    '新疆':  {ice:50.7,hev:9.9, phev:29.0,bev:10.4,nev:39.4, dice:-2.9, dhev:2.6, dphev:0.0,  dbev:0.3,  dnev:0.3},
-    '重慶':  {ice:58.7,hev:2.0, phev:15.9,bev:23.3,nev:39.2, dice:14.7, dhev:0.3, dphev:-6.5, dbev:-8.4, dnev:-14.9},
-    '湖北':  {ice:58.4,hev:3.6, phev:15.6,bev:22.5,nev:38.0, dice:16.6, dhev:0.6, dphev:-5.0, dbev:-12.2,dnev:-17.2},
-    '陝西':  {ice:58.9,hev:3.3, phev:21.7,bev:16.1,nev:37.7, dice:14.0, dhev:0.8, dphev:-5.3, dbev:-9.6, dnev:-14.9},
-    '山東':  {ice:57.5,hev:5.2, phev:13.6,bev:23.6,nev:37.3, dice:14.6, dhev:1.5, dphev:-1.8, dbev:-14.4,dnev:-16.2},
-    '安徽':  {ice:60.6,hev:3.0, phev:12.2,bev:24.2,nev:36.4, dice:13.2, dhev:0.9, dphev:-3.7, dbev:-10.4,dnev:-14.1},
-    '内蒙古':{ice:58.4,hev:7.0, phev:24.0,bev:10.6,nev:34.6, dice:6.3,  dhev:2.2, dphev:-3.6, dbev:-4.9, dnev:-8.5},
-    '山西':  {ice:60.0,hev:5.5, phev:16.4,bev:18.1,nev:34.5, dice:8.4,  dhev:1.6, dphev:-0.3, dbev:-9.7, dnev:-10.0},
-    '河南':  {ice:63.3,hev:3.8, phev:14.7,bev:18.2,nev:32.9, dice:22.0, dhev:0.9, dphev:-2.6, dbev:-20.3,dnev:-22.9},
-    '江西':  {ice:63.9,hev:3.4, phev:12.1,bev:20.5,nev:32.7, dice:15.6, dhev:0.5, dphev:-4.3, dbev:-11.8,dnev:-16.2},
-    '四川':  {ice:64.4,hev:3.2, phev:13.8,bev:18.6,nev:32.4, dice:12.6, dhev:1.0, dphev:-4.4, dbev:-9.2, dnev:-13.6},
-    '河北':  {ice:62.9,hev:5.0, phev:16.2,bev:15.9,nev:32.1, dice:11.5, dhev:1.7, dphev:-3.0, dbev:-10.2,dnev:-13.2},
-    '遼寧':  {ice:59.1,hev:9.2, phev:18.6,bev:13.1,nev:31.7, dice:7.9,  dhev:2.1, dphev:-6.0, dbev:-3.9, dnev:-10.0},
-    '湖南':  {ice:64.4,hev:4.5, phev:12.9,bev:18.3,nev:31.2, dice:13.5, dhev:-0.2,dphev:-5.5, dbev:-7.8, dnev:-13.3},
-    '青海':  {ice:66.0,hev:5.1, phev:16.4,bev:12.5,nev:28.9, dice:1.6,  dhev:0.6, dphev:0.5,  dbev:-2.7, dnev:-2.2},
-    '吉林':  {ice:68.3,hev:7.1, phev:16.3,bev:8.3, nev:24.6, dice:13.1, dhev:2.6, dphev:-7.8, dbev:-8.0, dnev:-15.8},
-    '甘粛':  {ice:73.2,hev:3.4, phev:15.7,bev:7.7, nev:23.4, dice:9.1,  dhev:0.7, dphev:-4.8, dbev:-5.0, dnev:-9.9},
-    '貴州':  {ice:77.2,hev:1.5, phev:10.1,bev:11.1,nev:21.3, dice:15.4, dhev:0.1, dphev:-5.8, dbev:-9.7, dnev:-15.5},
-    '黒龍江':{ice:70.3,hev:8.8, phev:15.8,bev:5.1, nev:20.9, dice:6.5,  dhev:2.7, dphev:-7.5, dbev:-1.7, dnev:-9.3},
-    '雲南':  {ice:76.5,hev:2.9, phev:7.3, bev:13.4,nev:20.6, dice:15.3, dhev:-0.1,dphev:-12.8,dbev:-2.4, dnev:-15.2},
-    '西蔵':  {ice:null,hev:null,phev:null, bev:null, nev:null,dice:null, dhev:null,dphev:null,  dbev:null, dnev:null},
+    '海南':  {ice:25.7,hev:5.3, phev:13.5,bev:55.5,nev:69.0, dice:-4.0, dhev:1.4, dphev:-2.3, dbev:4.9, dnev:2.6},
+    '上海':  {ice:31.3,hev:4.2, phev:7.8,bev:56.6,nev:64.4, dice:-8.2, dhev:0.5, dphev:-0.2, dbev:7.9, dnev:7.6},
+    '浙江':  {ice:33.9,hev:3.8, phev:12.3,bev:50.1,nev:62.3, dice:-3.7, dhev:-0.3, dphev:-1.2, dbev:5.3, dnev:4.0},
+    '広西':  {ice:33.4,hev:4.6, phev:14.6,bev:47.4,nev:62.0, dice:-1.0, dhev:1.4, dphev:-2.4, dbev:2.0, dnev:-0.4},
+    '広東':  {ice:31.3,hev:8.3, phev:18.1,bev:42.3,nev:60.3, dice:-3.3, dhev:0.1, dphev:-2.5, dbev:5.7, dnev:3.2},
+    '天津':  {ice:35.0,hev:6.9, phev:26.5,bev:31.6,nev:58.1, dice:-2.2, dhev:0.9, dphev:-0.1, dbev:1.5, dnev:1.3},
+    '河南':  {ice:38.1,hev:3.9, phev:15.3,bev:42.8,nev:58.1, dice:0.8, dhev:0.3, dphev:-1.5, dbev:0.4, dnev:-1.1},
+    '湖北':  {ice:38.5,hev:4.2, phev:16.4,bev:40.9,nev:57.3, dice:-3.7, dhev:0.8, dphev:-1.7, dbev:4.5, dnev:2.9},
+    '安徽':  {ice:40.0,hev:2.9, phev:13.3,bev:43.8,nev:57.1, dice:-3.4, dhev:0.6, dphev:-2.0, dbev:4.8, dnev:2.8},
+    '寧夏':  {ice:39.4,hev:3.7, phev:34.0,bev:22.9,nev:56.9, dice:-7.4, dhev:0.9, dphev:0.7, dbev:5.8, dnev:6.5},
+    '福建':  {ice:39.2,hev:4.2, phev:14.6,bev:42.0,nev:56.7, dice:-4.3, dhev:-0.2, dphev:0.3, dbev:4.2, dnev:4.5},
+    '北京':  {ice:37.1,hev:6.7, phev:17.0,bev:39.2,nev:56.2, dice:-5.7, dhev:-0.6, dphev:-0.1, dbev:6.4, dnev:6.3},
+    '陝西':  {ice:40.1,hev:3.9, phev:25.9,bev:30.1,nev:56.0, dice:-3.1, dhev:1.1, dphev:-0.4, dbev:2.3, dnev:1.9},
+    '江蘇':  {ice:40.0,hev:4.7, phev:11.4,bev:43.9,nev:55.3, dice:-2.9, dhev:1.0, dphev:-1.2, dbev:3.2, dnev:1.9},
+    '山東':  {ice:41.0,hev:5.4, phev:13.5,bev:40.1,nev:53.6, dice:-2.4, dhev:0.9, dphev:-0.1, dbev:1.6, dnev:1.5},
+    '江西':  {ice:42.8,hev:3.9, phev:12.8,bev:40.5,nev:53.3, dice:-3.8, dhev:0.2, dphev:-2.4, dbev:6.0, dnev:3.5},
+    '四川':  {ice:44.7,hev:2.9, phev:15.6,bev:36.8,nev:52.4, dice:-4.1, dhev:0.5, dphev:-2.5, dbev:6.0, dnev:3.5},
+    '山西':  {ice:44.4,hev:5.8, phev:16.9,bev:32.9,nev:49.8, dice:-4.2, dhev:1.4, dphev:0.8, dbev:2.1, dnev:2.9},
+    '河北':  {ice:45.6,hev:5.2, phev:18.4,bev:30.8,nev:49.2, dice:-2.7, dhev:1.1, dphev:0.0, dbev:1.6, dnev:1.6},
+    '湖南':  {ice:45.6,hev:5.6, phev:14.1,bev:34.6,nev:48.7, dice:-3.5, dhev:1.0, dphev:-2.4, dbev:4.9, dnev:2.5},
+    '内蒙古':  {ice:44.1,hev:7.3, phev:27.1,bev:21.6,nev:48.6, dice:-4.4, dhev:1.7, dphev:-0.9, dbev:3.6, dnev:2.7},
+    '貴州':  {ice:49.4,hev:2.2, phev:14.8,bev:33.7,nev:48.4, dice:-2.7, dhev:0.3, dphev:-3.4, dbev:5.9, dnev:2.4},
+    '青海':  {ice:49.1,hev:4.7, phev:16.7,bev:29.6,nev:46.3, dice:-8.9, dhev:1.1, dphev:-0.2, dbev:8.0, dnev:7.8},
+    '新疆':  {ice:47.1,hev:8.4, phev:30.9,bev:13.6,nev:44.5, dice:-6.5, dhev:1.7, dphev:1.0, dbev:3.9, dnev:4.9},
+    '甘粛':  {ice:51.7,hev:4.5, phev:23.3,bev:20.5,nev:43.8, dice:-7.0, dhev:1.7, dphev:1.6, dbev:3.8, dnev:5.3},
+    '遼寧':  {ice:46.5,hev:9.8, phev:21.5,bev:22.3,nev:43.8, dice:-4.4, dhev:1.9, dphev:-1.3, dbev:3.8, dnev:2.6},
+    '雲南':  {ice:55.1,hev:3.6, phev:9.1,bev:32.2,nev:41.3, dice:0.4, dhev:0.2, dphev:-0.5, dbev:-0.1, dnev:-0.6},
+    '吉林':  {ice:54.3,hev:6.5, phev:23.5,bev:15.7,nev:39.2, dice:-0.4, dhev:2.0, dphev:1.1, dbev:-2.7, dnev:-1.6},
+    '黒龍江':  {ice:56.4,hev:9.4, phev:22.1,bev:12.1,nev:34.2, dice:-4.6, dhev:2.7, dphev:-1.1, dbev:3.0, dnev:1.9},
+    '西蔵':  {ice:68.6,hev:4.6, phev:17.2,bev:9.6,nev:26.8, dice:-5.2, dhev:-0.9, dphev:0.4, dbev:5.7, dnev:6.0},
+    '重慶':  {ice:58.7,hev:2.0, phev:15.9,bev:23.3,nev:39.2, dice:14.7, dhev:0.3, dphev:-6.5, dbev:-8.4, dnev:-14.9}, // 2026年3月版に未掲載、前月（2026年2月）データ維持
   },
-  body: {
-    // 出典：CPCA「2026年2月乗用車区域市場流向分析」3章
-    // CAR/MPV/SUV = 2026年2月構成比(%) / dCAR/dMPV/dSUV = 前年増減(pp)
-    '西蔵':  {CAR:11.8,MPV:1.0, SUV:87.1, dCAR:0.5,  dMPV:-0.4,dSUV:-0.1},
-    '青海':  {CAR:24.5,MPV:1.5, SUV:74.0, dCAR:-3.4, dMPV:-1.2,dSUV:4.6},
-    '甘粛':  {CAR:25.3,MPV:1.8, SUV:72.9, dCAR:-5.9, dMPV:-1.1,dSUV:7.0},
-    '寧夏':  {CAR:24.9,MPV:2.7, SUV:72.4, dCAR:-6.3, dMPV:0.1, dSUV:6.2},
-    '新疆':  {CAR:26.7,MPV:2.8, SUV:70.4, dCAR:-4.4, dMPV:-0.8,dSUV:5.2},
-    '内蒙古':{CAR:26.5,MPV:4.9, SUV:68.6, dCAR:-7.3, dMPV:-0.2,dSUV:7.4},
-    '上海':  {CAR:33.3,MPV:3.8, SUV:62.9, dCAR:-8.4, dMPV:-4.2,dSUV:12.6},
-    '陝西':  {CAR:33.8,MPV:3.7, SUV:62.5, dCAR:-7.3, dMPV:-1.8,dSUV:9.1},
-    '黒龍江':{CAR:33.4,MPV:4.8, SUV:61.7, dCAR:-5.0, dMPV:-0.5,dSUV:5.5},
-    '重慶':  {CAR:36.6,MPV:2.0, SUV:61.4, dCAR:-5.9, dMPV:-1.1,dSUV:6.9},
-    '海南':  {CAR:31.5,MPV:7.3, SUV:61.2, dCAR:1.3,  dMPV:3.6, dSUV:-5.0},
-    '浙江':  {CAR:35.6,MPV:4.0, SUV:60.4, dCAR:-10.6,dMPV:-1.2,dSUV:11.9},
-    '遼寧':  {CAR:33.8,MPV:6.2, SUV:60.0, dCAR:-6.6, dMPV:-0.3,dSUV:6.9},
-    '湖北':  {CAR:37.7,MPV:2.9, SUV:59.4, dCAR:-4.8, dMPV:-2.5,dSUV:7.3},
-    '山西':  {CAR:35.1,MPV:5.6, SUV:59.2, dCAR:-7.5, dMPV:-0.4,dSUV:7.9},
-    '四川':  {CAR:39.3,MPV:2.1, SUV:58.7, dCAR:-6.0, dMPV:-1.1,dSUV:7.1},
-    '天津':  {CAR:34.5,MPV:6.9, SUV:58.6, dCAR:-13.4,dMPV:0.2, dSUV:13.2},
-    '福建':  {CAR:39.0,MPV:3.1, SUV:58.0, dCAR:-6.1, dMPV:-0.5,dSUV:6.5},
-    '雲南':  {CAR:39.6,MPV:3.1, SUV:57.3, dCAR:-3.6, dMPV:-2.3,dSUV:5.9},
-    '広東':  {CAR:38.0,MPV:4.9, SUV:57.1, dCAR:-7.1, dMPV:-0.4,dSUV:7.5},
-    '北京':  {CAR:36.9,MPV:8.6, SUV:54.4, dCAR:-7.1, dMPV:-0.8,dSUV:8.0},
-    '吉林':  {CAR:41.0,MPV:4.8, SUV:54.2, dCAR:-7.8, dMPV:-0.2,dSUV:8.0},
-    '江蘇':  {CAR:44.1,MPV:4.2, SUV:51.7, dCAR:-5.8, dMPV:-0.8,dSUV:6.6},
-    '湖南':  {CAR:45.9,MPV:2.4, SUV:51.7, dCAR:-0.3, dMPV:-1.2,dSUV:1.5},
-    '安徽':  {CAR:46.1,MPV:3.0, SUV:50.9, dCAR:-2.3, dMPV:-1.6,dSUV:3.8},
-    '河北':  {CAR:43.9,MPV:6.2, SUV:50.0, dCAR:-7.7, dMPV:0.3, dSUV:7.4},
-    '山東':  {CAR:45.7,MPV:5.9, SUV:48.4, dCAR:-6.1, dMPV:-0.4,dSUV:6.5},
-    '江西':  {CAR:50.6,MPV:2.4, SUV:47.0, dCAR:-1.7, dMPV:-1.1,dSUV:2.8},
-    '河南':  {CAR:49.9,MPV:4.0, SUV:46.1, dCAR:-6.5, dMPV:-0.9,dSUV:7.4},
-    '貴州':  {CAR:53.3,MPV:1.7, SUV:45.0, dCAR:4.3,  dMPV:-1.2,dSUV:-3.1},
-    '広西':  {CAR:56.7,MPV:2.3, SUV:41.0, dCAR:-0.5, dMPV:-0.7,dSUV:1.2},
+    body: {
+    // 出典：CPCA「2026年3月乗用車区域市場流向分析」3章
+    // CAR/MPV/SUV = 2026年3月構成比(%) / dCAR/dMPV/dSUV = 前年増減(pp)
+    '西蔵':  {CAR:21.1,MPV:2.3, SUV:76.7, dCAR:2.4, dMPV:-2.0,dSUV:-0.4},
+    '寧夏':  {CAR:28.1,MPV:3.0, SUV:68.9, dCAR:-2.2, dMPV:0.0,dSUV:2.1},
+    '新疆':  {CAR:27.9,MPV:4.5, SUV:67.6, dCAR:-0.8, dMPV:-0.5,dSUV:1.3},
+    '海南':  {CAR:29.0,MPV:4.4, SUV:66.6, dCAR:0.2, dMPV:0.0,dSUV:-0.3},
+    '甘粛':  {CAR:30.1,MPV:3.5, SUV:66.3, dCAR:-3.1, dMPV:0.4,dSUV:2.8},
+    '青海':  {CAR:31.4,MPV:2.9, SUV:65.7, dCAR:-0.3, dMPV:-0.7,dSUV:1.0},
+    '内蒙古':  {CAR:29.9,MPV:5.5, SUV:64.6, dCAR:-2.3, dMPV:-0.1,dSUV:2.5},
+    '重慶':  {CAR:34.4,MPV:2.6, SUV:63.0, dCAR:-7.2, dMPV:-0.5,dSUV:7.7},
+    '陝西':  {CAR:34.3,MPV:5.0, SUV:60.6, dCAR:-6.0, dMPV:0.0,dSUV:6.0},
+    '山西':  {CAR:33.9,MPV:6.1, SUV:60.0, dCAR:-6.9, dMPV:0.4,dSUV:6.5},
+    '湖北':  {CAR:36.0,MPV:4.1, SUV:59.9, dCAR:-5.1, dMPV:0.4,dSUV:4.7},
+    '上海':  {CAR:35.5,MPV:5.1, SUV:59.4, dCAR:-4.5, dMPV:-1.8,dSUV:6.3},
+    '浙江':  {CAR:37.6,MPV:4.1, SUV:58.3, dCAR:-6.2, dMPV:-0.5,dSUV:6.8},
+    '四川':  {CAR:39.3,MPV:3.8, SUV:57.7, dCAR:-4.4, dMPV:-0.1,dSUV:4.5},
+    '遼寧':  {CAR:35.5,MPV:6.7, SUV:57.7, dCAR:-2.7, dMPV:0.1,dSUV:2.6},
+    '福建':  {CAR:38.4,MPV:4.0, SUV:57.6, dCAR:-5.7, dMPV:0.4,dSUV:5.3},
+    '黒龍江':  {CAR:36.6,MPV:5.7, SUV:57.6, dCAR:-0.6, dMPV:0.2,dSUV:0.4},
+    '天津':  {CAR:36.2,MPV:7.1, SUV:56.6, dCAR:-8.6, dMPV:0.9,dSUV:7.8},
+    '広東':  {CAR:39.4,MPV:5.1, SUV:55.5, dCAR:-4.3, dMPV:-0.2,dSUV:4.5},
+    '北京':  {CAR:35.8,MPV:8.7, SUV:55.5, dCAR:-4.8, dMPV:0.0,dSUV:4.7},
+    '湖南':  {CAR:43.0,MPV:3.5, SUV:53.5, dCAR:-2.4, dMPV:-0.3,dSUV:2.7},
+    '雲南':  {CAR:42.7,MPV:3.9, SUV:53.4, dCAR:-3.1, dMPV:-0.7,dSUV:3.8},
+    '江蘇':  {CAR:42.2,MPV:4.8, SUV:53.0, dCAR:-4.7, dMPV:-0.2,dSUV:4.9},
+    '吉林':  {CAR:41.6,MPV:5.3, SUV:53.0, dCAR:-5.7, dMPV:0.7,dSUV:5.0},
+    '安徽':  {CAR:44.1,MPV:4.1, SUV:51.8, dCAR:-2.4, dMPV:0.0,dSUV:2.4},
+    '山東':  {CAR:42.2,MPV:5.9, SUV:51.8, dCAR:-6.4, dMPV:-0.2,dSUV:6.6},
+    '江西':  {CAR:45.0,MPV:3.6, SUV:51.3, dCAR:-4.2, dMPV:0.2,dSUV:4.0},
+    '貴州':  {CAR:46.4,MPV:2.8, SUV:50.7, dCAR:0.8, dMPV:-0.4,dSUV:-0.4},
+    '河北':  {CAR:42.9,MPV:6.9, SUV:50.2, dCAR:-6.7, dMPV:1.2,dSUV:5.5},
+    '河南':  {CAR:47.6,MPV:5.2, SUV:47.3, dCAR:-5.8, dMPV:0.2,dSUV:5.6},
+    '広西':  {CAR:51.9,MPV:3.0, SUV:45.1, dCAR:-1.9, dMPV:-0.3,dSUV:2.2},
   },
-  brand: {
-    // 出典：CPCA「2026年2月乗用車区域市場流向分析」6章
+    brand: {
+    // 出典：CPCA「2026年3月乗用車区域市場流向分析」6章
     // lux=豪華%, jv=合資%, dom=中国系% / dlux/djv/ddom = 較25年変化(pp)
-    '上海':  {lux:18.4,jv:25.9,dom:55.7, dlux:-5.4,djv:4.0, ddom:1.4},
-    '北京':  {lux:22.0,jv:24.8,dom:53.2, dlux:4.4, djv:-1.8,ddom:-2.6},
-    '甘粛':  {lux:5.8, jv:26.7,dom:67.5, dlux:0.5, djv:2.5, ddom:-3.0},
-    '青海':  {lux:12.3,jv:31.7,dom:56.0, dlux:1.1, djv:3.8, ddom:-4.9},
-    '福建':  {lux:16.1,jv:27.4,dom:56.5, dlux:4.1, djv:0.9, ddom:-5.0},
-    '新疆':  {lux:5.9, jv:32.8,dom:61.3, dlux:2.3, djv:2.8, ddom:-5.2},
-    '雲南':  {lux:8.5, jv:30.6,dom:60.9, dlux:0.9, djv:4.4, ddom:-5.3},
-    '四川':  {lux:12.9,jv:26.0,dom:61.1, dlux:1.1, djv:4.3, ddom:-5.4},
-    '貴州':  {lux:5.5, jv:30.0,dom:64.4, dlux:-0.5,djv:5.9, ddom:-5.5},
-    '広東':  {lux:12.8,jv:26.7,dom:60.5, dlux:3.1, djv:2.9, ddom:-6.0},
-    '浙江':  {lux:19.9,jv:20.8,dom:59.3, dlux:4.1, djv:2.3, ddom:-6.4},
-    '重慶':  {lux:10.0,jv:20.3,dom:69.7, dlux:2.2, djv:5.0, ddom:-7.2},
-    '寧夏':  {lux:7.9, jv:24.3,dom:67.8, dlux:2.6, djv:4.9, ddom:-7.5},
-    '西蔵':  {lux:16.8,jv:32.8,dom:50.4, dlux:7.0, djv:0.6, ddom:-7.7},
-    '遼寧':  {lux:12.4,jv:36.7,dom:50.8, dlux:3.1, djv:4.8, ddom:-7.9},
-    '陝西':  {lux:9.9, jv:24.9,dom:65.2, dlux:2.0, djv:6.4, ddom:-8.4},
-    '湖南':  {lux:11.7,jv:34.2,dom:54.1, dlux:2.0, djv:6.4, ddom:-8.4},
-    '山西':  {lux:6.7, jv:35.7,dom:57.6, dlux:1.4, djv:7.2, ddom:-8.7},
-    '黒龍江':{lux:8.0, jv:40.4,dom:51.6, dlux:3.4, djv:5.3, ddom:-8.7},
-    '内蒙古':{lux:7.8, jv:31.5,dom:60.8, dlux:3.2, djv:5.6, ddom:-8.8},
-    '江蘇':  {lux:21.6,jv:27.3,dom:51.2, dlux:3.7, djv:5.3, ddom:-9.0},
-    '河北':  {lux:10.7,jv:34.0,dom:55.3, dlux:3.2, djv:6.1, ddom:-9.3},
-    '江西':  {lux:11.1,jv:30.7,dom:58.2, dlux:2.2, djv:7.4, ddom:-9.6},
-    '天津':  {lux:15.0,jv:29.2,dom:55.9, dlux:4.9, djv:4.9, ddom:-9.8},
-    '安徽':  {lux:12.7,jv:26.6,dom:60.7, dlux:3.5, djv:6.9, ddom:-10.4},
-    '広西':  {lux:5.8, jv:29.9,dom:64.3, dlux:1.3, djv:9.9, ddom:-11.2},
-    '湖北':  {lux:11.2,jv:32.1,dom:56.7, dlux:2.2, djv:9.6, ddom:-11.8},
-    '山東':  {lux:11.9,jv:36.2,dom:51.9, dlux:3.2, djv:9.5, ddom:-12.7},
-    '河南':  {lux:7.4, jv:34.2,dom:58.4, dlux:1.7, djv:11.4,ddom:-13.1},
-    '吉林':  {lux:12.0,jv:38.4,dom:49.6, dlux:2.9, djv:12.4,ddom:-15.3},
-    '海南':  {lux:10.5,jv:28.1,dom:61.4, dlux:5.9, djv:11.6,ddom:-17.5},
+    '北京':  {lux:21.9,jv:21.7,dom:56.4, dlux:-3.2,djv:-3.2, ddom:6.5},
+    '浙江':  {lux:18.2,jv:17.0,dom:64.8, dlux:-3.6,djv:-1.7, ddom:5.3},
+    '上海':  {lux:30.0,jv:16.2,dom:53.8, dlux:-1.3,djv:-3.3, ddom:4.6},
+    '青海':  {lux:12.9,jv:23.4,dom:63.7, dlux:-0.4,djv:-3.5, ddom:3.8},
+    '広東':  {lux:14.3,jv:22.8,dom:62.9, dlux:-1.0,djv:-2.7, ddom:3.7},
+    '江西':  {lux:11.7,jv:22.3,dom:66.1, dlux:-2.1,djv:-1.2, ddom:3.3},
+    '貴州':  {lux:6.8,jv:22.1,dom:71.1, dlux:-2.7,djv:-0.7, ddom:3.3},
+    '福建':  {lux:16.6,jv:22.1,dom:61.3, dlux:-0.1,djv:-2.7, ddom:2.8},
+    '湖北':  {lux:11.7,jv:22.8,dom:65.6, dlux:-2.0,djv:-0.5, ddom:2.5},
+    '四川':  {lux:15.1,jv:19.9,dom:65.0, dlux:-1.4,djv:-1.1, ddom:2.4},
+    '河北':  {lux:11.1,jv:25.3,dom:63.6, dlux:0.5,djv:-2.7, ddom:2.2},
+    '安徽':  {lux:13.0,jv:17.6,dom:69.4, dlux:-0.5,djv:-1.4, ddom:2.0},
+    '海南':  {lux:10.0,jv:19.7,dom:70.3, dlux:0.3,djv:-2.2, ddom:1.9},
+    '湖南':  {lux:13.0,jv:26.7,dom:60.3, dlux:-0.6,djv:-1.2, ddom:1.8},
+    '重慶':  {lux:10.8,jv:14.4,dom:74.9, dlux:0.0,djv:-1.8, ddom:1.8},
+    '山西':  {lux:6.7,jv:28.0,dom:65.3, dlux:0.0,djv:-1.2, ddom:1.2},
+    '江蘇':  {lux:22.8,jv:20.3,dom:56.9, dlux:-0.1,djv:-0.9, ddom:1.0},
+    '山東':  {lux:12.1,jv:26.8,dom:61.3, dlux:-0.3,djv:-0.7, ddom:1.0},
+    '西蔵':  {lux:10.5,jv:30.7,dom:58.8, dlux:-0.5,djv:-0.2, ddom:0.7},
+    '遼寧':  {lux:13.6,jv:30.7,dom:55.7, dlux:2.1,djv:-2.7, ddom:0.6},
+    '陝西':  {lux:11.7,jv:19.0,dom:69.2, dlux:0.8,djv:-0.6, ddom:0.5},
+    '河南':  {lux:8.4,jv:22.8,dom:68.8, dlux:0.0,djv:-0.5, ddom:0.5},
+    '新疆':  {lux:6.4,jv:27.1,dom:66.5, dlux:1.6,djv:-1.8, ddom:0.2},
+    '寧夏':  {lux:8.3,jv:18.2,dom:73.5, dlux:1.2,djv:-1.4, ddom:0.2},
+    '甘粛':  {lux:8.4,jv:23.2,dom:68.5, dlux:0.6,djv:-0.1, ddom:-0.5},
+    '内蒙古':  {lux:7.3,jv:25.7,dom:67.0, dlux:0.7,djv:0.7, ddom:-1.4},
+    '雲南':  {lux:12.1,jv:26.2,dom:61.6, dlux:0.7,djv:0.8, ddom:-1.6},
+    '広西':  {lux:7.2,jv:21.1,dom:71.7, dlux:0.3,djv:1.3, ddom:-1.6},
+    '黒龍江':  {lux:7.7,jv:36.3,dom:56.0, dlux:1.1,djv:1.1, ddom:-2.2},
+    '天津':  {lux:18.2,jv:22.9,dom:58.8, dlux:5.2,djv:-2.6, ddom:-2.6},
+    '吉林':  {lux:12.8,jv:31.2,dom:56.0, dlux:1.2,djv:3.4, ddom:-4.6},
   },
-  // 日本語 → ECharts簡体字マッピング
+    // 日本語 → ECharts簡体字マッピング
   grade: {
-    // 出典：CPCA「2026年2月乗用車区域市場流向分析」5章
-    // a00/A0/A/B/C = 2026年2月構成比(%) / da*/dB/dC = 較上年同期変化(pp) / econ = 経済型車份額%
-    '吉林':  {a00:1,A0:4, A:55,B:31,C:10, da00:-2.8, dA0:-2.4,dA:2.8,  dB:6.0,  dC:-3.6,econ:4},
-    '北京':  {a00:0,A0:4, A:28,B:50,C:17, da00:-0.8, dA0:-1.0,dA:-6.8, dB:3.7,  dC:4.8, econ:5},
-    '黒龍江':{a00:0,A0:5, A:60,B:29,C:6,  da00:-2.4, dA0:-1.8,dA:-3.4, dB:5.1,  dC:2.5, econ:5},
-    '遼寧':  {a00:1,A0:5, A:53,B:34,C:8,  da00:-4.8, dA0:-1.6,dA:-3.7, dB:7.5,  dC:2.6, econ:6},
-    '重慶':  {a00:1,A0:6, A:52,B:35,C:7,  da00:-4.9, dA0:-3.5,dA:4.8,  dB:1.0,  dC:2.6, econ:6},
-    '上海':  {a00:0,A0:6, A:39,B:41,C:13, da00:-0.6, dA0:-0.4,dA:11.4, dB:-12.9,dC:2.5, econ:7},
-    '内蒙古':{a00:1,A0:6, A:56,B:31,C:6,  da00:-3.6, dA0:-3.3,dA:-2.8, dB:7.2,  dC:2.5, econ:7},
-    '広東':  {a00:1,A0:6, A:36,B:46,C:11, da00:-2.2, dA0:-2.9,dA:-6.0, dB:5.8,  dC:5.4, econ:7},
-    '貴州':  {a00:1,A0:6, A:54,B:36,C:3,  da00:-3.2, dA0:-2.7,dA:1.4,  dB:4.5,  dC:0.0, econ:7},
-    '湖南':  {a00:1,A0:6, A:51,B:35,C:6,  da00:-4.3, dA0:-3.0,dA:0.6,  dB:4.6,  dC:2.1, econ:8},
-    '四川':  {a00:1,A0:7, A:50,B:36,C:7,  da00:-3.7, dA0:-2.5,dA:2.5,  dB:2.0,  dC:1.8, econ:8},
-    '新疆':  {a00:1,A0:8, A:58,B:30,C:4,  da00:-1.0, dA0:-0.8,dA:-6.1, dB:7.0,  dC:0.9, econ:8},
-    '陝西':  {a00:1,A0:7, A:51,B:35,C:6,  da00:-4.0, dA0:-2.1,dA:0.1,  dB:4.4,  dC:1.6, econ:8},
-    '甘粛':  {a00:1,A0:7, A:64,B:24,C:3,  da00:-3.8, dA0:-1.0,dA:0.7,  dB:3.4,  dC:0.7, econ:8},
-    '西蔵':  {a00:0,A0:9, A:56,B:29,C:6,  da00:-0.4, dA0:0.9, dA:-5.4, dB:2.2,  dC:2.7, econ:9},
-    '湖北':  {a00:1,A0:7, A:50,B:35,C:7,  da00:-7.1, dA0:-3.6,dA:6.2,  dB:3.5,  dC:1.0, econ:9},
-    '海南':  {a00:1,A0:8, A:41,B:42,C:8,  da00:-0.8, dA0:-0.3,dA:11.6, dB:-14.3,dC:3.8, econ:9},
-    '江西':  {a00:1,A0:8, A:48,B:36,C:6,  da00:-6.8, dA0:-4.0,dA:2.6,  dB:5.9,  dC:2.2, econ:9},
-    '福建':  {a00:2,A0:8, A:40,B:40,C:10, da00:-4.7, dA0:-4.6,dA:-2.6, dB:6.7,  dC:5.2, econ:10},
-    '江蘇':  {a00:2,A0:9, A:36,B:43,C:11, da00:-4.6, dA0:-3.0,dA:-0.4, dB:2.6,  dC:5.3, econ:10},
-    '浙江':  {a00:1,A0:9, A:31,B:46,C:11, da00:-4.9, dA0:-4.9,dA:-2.6, dB:6.4,  dC:6.1, econ:11},
-    '山西':  {a00:2,A0:9, A:51,B:31,C:7,  da00:-8.6, dA0:-3.9,dA:2.0,  dB:8.0,  dC:2.4, econ:11},
-    '天津':  {a00:2,A0:10,A:36,B:43,C:9,  da00:-5.4, dA0:-0.2,dA:-10.1,dB:12.3, dC:3.5, econ:11},
-    '雲南':  {a00:2,A0:10,A:54,B:31,C:4,  da00:-6.3, dA0:-5.1,dA:4.0,  dB:7.2,  dC:0.3, econ:11},
-    '河北':  {a00:2,A0:10,A:46,B:34,C:8,  da00:-9.8, dA0:-2.1,dA:-0.2, dB:9.0,  dC:3.1, econ:12},
-    '安徽':  {a00:2,A0:10,A:42,B:37,C:8,  da00:-6.8, dA0:-3.8,dA:0.6,  dB:6.3,  dC:3.6, econ:12},
-    '山東':  {a00:2,A0:11,A:43,B:36,C:8,  da00:-12.4,dA0:-3.4,dA:3.6,  dB:8.9,  dC:3.3, econ:13},
-    '河南':  {a00:3,A0:10,A:44,B:36,C:6,  da00:-16.2,dA0:-2.7,dA:5.2,  dB:11.9, dC:1.8, econ:14},
-    '広西':  {a00:4,A0:13,A:45,B:34,C:4,  da00:-12.5,dA0:-6.3,dA:5.8,  dB:11.6, dC:1.4, econ:17},
+    // 出典：CPCA「2026年3月乗用車区域市場流向分析」5章
+    // a00/A0/A/B/C = 2026年3月構成比(%) / da*/dB/dC = 較上年同期変化(pp) / econ = 経済型車份額%
+    '北京':  {a00:1,A0:7, A:30,B:45,C:17, da00:-0.2, dA0:1.3,dA:-2.1,  dB:-2.9,  dC:3.9, econ:8},
+    '上海':  {a00:0,A0:9, A:24,B:51,C:16, da00:-0.2, dA0:1.9,dA:-2.7,  dB:-3.1,  dC:4.2, econ:9},
+    '吉林':  {a00:5,A0:5, A:49,B:33,C:9, da00:1.5, dA0:-0.3,dA:-0.2,  dB:4.6,  dC:-5.7, econ:9},
+    '黒龍江':  {a00:4,A0:6, A:56,B:28,C:6, da00:-0.1, dA0:-0.2,dA:-2.7,  dB:2.0,  dC:1.0, econ:10},
+    '広東':  {a00:1,A0:9, A:36,B:42,C:11, da00:-1.0, dA0:0.7,dA:-4.0,  dB:0.9,  dC:3.5, econ:10},
+    '青海':  {a00:1,A0:10, A:51,B:30,C:8, da00:-0.1, dA0:1.3,dA:-4.8,  dB:2.2,  dC:1.3, econ:11},
+    '遼寧':  {a00:3,A0:7, A:49,B:32,C:8, da00:-1.7, dA0:1.0,dA:-4.5,  dB:3.6,  dC:1.7, econ:11},
+    '西蔵':  {a00:2,A0:9, A:52,B:24,C:13, da00:0.7, dA0:1.8,dA:-3.2,  dB:-3.6,  dC:4.4, econ:11},
+    '重慶':  {a00:2,A0:9, A:45,B:36,C:7, da00:-2.8, dA0:0.5,dA:0.4,  dB:0.5,  dC:1.5, econ:12},
+    '寧夏':  {a00:2,A0:9, A:48,B:35,C:6, da00:-0.3, dA0:0.8,dA:-8.9,  dB:6.6,  dC:1.8, econ:12},
+    '四川':  {a00:3,A0:10, A:43,B:35,C:9, da00:-1.8, dA0:1.1,dA:-0.2,  dB:-1.6,  dC:2.5, econ:13},
+    '内蒙古':  {a00:3,A0:10, A:53,B:29,C:6, da00:-1.4, dA0:0.5,dA:-3.1,  dB:3.0,  dC:1.0, econ:13},
+    '陝西':  {a00:3,A0:10, A:43,B:36,C:8, da00:-1.2, dA0:1.6,dA:-5.6,  dB:2.8,  dC:2.4, econ:13},
+    '新疆':  {a00:2,A0:12, A:43,B:28,C:4, da00:0.1, dA0:3.5,dA:-8.6,  dB:4.4,  dC:0.6, econ:13},
+    '甘粛':  {a00:3,A0:10, A:53,B:29,C:5, da00:-2.3, dA0:1.4,dA:-4.8,  dB:5.4,  dC:0.3, econ:13},
+    '湖南':  {a00:3,A0:11, A:46,B:33,C:8, da00:-2.2, dA0:1.4,dA:-0.2,  dB:-0.6,  dC:1.5, econ:14},
+    '海南':  {a00:1,A0:13, A:41,B:37,C:8, da00:-0.8, dA0:-3.1,dA:2.0,  dB:-1.1,  dC:3.0, econ:14},
+    '江蘇':  {a00:2,A0:13, A:32,B:42,C:10, da00:-2.7, dA0:1.4,dA:-0.7,  dB:-0.3,  dC:2.2, econ:16},
+    '福建':  {a00:3,A0:13, A:37,B:37,C:10, da00:-2.6, dA0:1.2,dA:-4.0,  dB:2.6,  dC:2.8, econ:16},
+    '貴州':  {a00:3,A0:13, A:48,B:31,C:5, da00:-1.2, dA0:2.9,dA:1.6,  dB:-2.6,  dC:-0.7, econ:16},
+    '天津':  {a00:3,A0:13, A:37,B:34,C:13, da00:-3.8, dA0:3.2,dA:-6.5,  dB:1.2,  dC:5.8, econ:16},
+    '湖北':  {a00:3,A0:14, A:42,B:34,C:7, da00:-3.9, dA0:2.8,dA:0.9,  dB:-1.2,  dC:1.4, econ:17},
+    '江西':  {a00:3,A0:15, A:42,B:33,C:7, da00:-3.9, dA0:3.0,dA:0.4,  dB:-0.4,  dC:0.9, econ:18},
+    '山西':  {a00:5,A0:16, A:46,B:28,C:6, da00:-6.1, dA0:2.2,dA:-0.6,  dB:3.5,  dC:1.0, econ:20},
+    '河北':  {a00:5,A0:16, A:41,B:30,C:8, da00:-5.7, dA0:3.6,dA:-2.1,  dB:3.1,  dC:1.1, econ:21},
+    '安徽':  {a00:4,A0:18, A:37,B:34,C:7, da00:-4.0, dA0:3.4,dA:-0.7,  dB:-0.2,  dC:1.4, econ:22},
+    '山東':  {a00:6,A0:18, A:38,B:31,C:7, da00:-7.1, dA0:3.9,dA:0.6,  dB:1.8,  dC:0.8, econ:23},
+    '広西':  {a00:7,A0:21, A:37,B:31,C:5, da00:-8.6, dA0:2.1,dA:-1.4,  dB:6.7,  dC:1.2, econ:28},
+    '河南':  {a00:10,A0:21, A:34,B:29,C:6, da00:-8.0, dA0:6.3,dA:-1.8,  dB:2.4,  dC:1.1, econ:31},
   },
-  ja2zh: {
+    ja2zh: {
     '広東':'广东','浙江':'浙江','江蘇':'江苏','山東':'山东','河南':'河南',
     '四川':'四川','河北':'河北','湖北':'湖北','安徽':'安徽','湖南':'湖南',
     '上海':'上海','北京':'北京','陝西':'陕西','雲南':'云南','福建':'福建',
@@ -13053,7 +13055,7 @@ function metricVal(ja) {
     case 'sales25': return p ? p.y25 : null;
     case 'sales24': return p ? p.y24 : null;
     case 'yoy':     return p ? p.yoy : null;
-    case 'yoy26':   return p ? p.yoy26 : null;
+    case 'yoy26':   return p ? p.yoy26_3 : null;
     case 'cum26':   return p ? p.cum26 : null;
     // 4章 新能源
     case 'nev':     return n && n.nev  != null ? n.nev  : null;
@@ -13099,10 +13101,10 @@ window.cpcaInitMap = function() {
         <div style="font-size:11px;font-weight:700;color:#7eb3ff;letter-spacing:.5px">📊 表示指標</div>
         <div id="cpca-btns" style="display:flex;flex-direction:column;gap:4px">
           ${[
-            ['sales26','📦 26年1-2月 販売量（万台）'],['sales25','📦 2025年通年 販売量（万台）'],['sales24','📦 2024年通年 販売量（万台）'],
-            ['yoy','📈 25年 前年比（対24年）'],['yoy26','📈 26年2月 前年比（単月）'],['cum26','📈 26年1-2月累計 前年比'],
-            ['nev','⚡ NEV新車比率（2月）'],['dnev','⚡ NEV新車比率 前年差（pp）'],
-            ['dom','🏷️ 中国系ブランド比率'],['econ','📉 経済型車份額（2月）'],
+            ['sales26','📦 26年1-3月 販売量（万台）'],['sales25','📦 2025年通年 販売量（万台）'],['sales24','📦 2024年通年 販売量（万台）'],
+            ['yoy','📈 25年 前年比（対24年）'],['yoy26','📈 26年3月 前年比（単月）'],['cum26','📈 26年1-3月累計 前年比'],
+            ['nev','⚡ NEV新車比率（3月）'],['dnev','⚡ NEV新車比率 前年差（pp）'],
+            ['dom','🏷️ 中国系ブランド比率'],['econ','📉 経済型車份額（3月）'],
           ].map(([m,lbl],i)=>`<button onclick="cpcaMetric('${m}',this)" style="font-size:11px;padding:5px 8px;border-radius:5px;cursor:pointer;text-align:left;border:${i===0?'none':'1px solid #2a3f60'};background:${i===0?'#2563eb':'transparent'};color:${i===0?'#fff':'#8ab0d0'}">${lbl}</button>`).join('')}
         </div>
         <div id="cpca-vmap-legend" style="margin-top:4px"></div>
@@ -13223,18 +13225,18 @@ function getVisualMap() {
 function renderMapChart() {
   if(!mapChart||!mapReady) return;
   const titles = {
-    sales26:'26年1-2月 販売量（万台）', sales25:'2025年通年 販売量（万台）', sales24:'2024年通年 販売量（万台）',
-    yoy:'2025年 前年比（対2024年・%）', yoy26:'26年2月 前年比 単月（%）',
-    cum26:'26年1-2月累計 前年比（%）',
-    nev:'NEV新車比率 2月単月（%）', dnev:'NEV新車比率 前年差（pp）',
-    bev:'純電動(BEV)比率 2月（%）', phev:'插混(PHEV)比率 2月（%）',
-    hev:'HEV比率 2月（%）',  ice:'燃油車(ICE)比率 2月（%）',
-    suv:'SUV比率 2月単月（%）', dsuv:'SUV比率 前年増減（pp）',
-    car:'セダン(CAR)比率 2月（%）',
-    dom:'中国系ブランド比率 2026年1-2月（%）', ddom:'中国系ブランド 前年差（pp）',
-    lux:'高級車比率 2026年1-2月（%）', dlux:'豪華ブランド 前年差（pp）',
-    cgrade:'Cクラス比率 2月（%）', bgrade:'Bクラス比率 2月（%）',
-    econ:'経済型車份額 2月（%）',
+    sales26:'26年1-3月 販売量（万台）', sales25:'2025年通年 販売量（万台）', sales24:'2024年通年 販売量（万台）',
+    yoy:'2025年 前年比（対2024年・%）', yoy26:'26年3月 前年比 単月（%）',
+    cum26:'26年1-3月累計 前年比（%）',
+    nev:'NEV新車比率 3月単月（%）', dnev:'NEV新車比率 前年差（pp）',
+    bev:'純電動(BEV)比率 3月（%）', phev:'插混(PHEV)比率 3月（%）',
+    hev:'HEV比率 3月（%）',  ice:'燃油車(ICE)比率 3月（%）',
+    suv:'SUV比率 3月単月（%）', dsuv:'SUV比率 前年増減（pp）',
+    car:'セダン(CAR)比率 3月（%）',
+    dom:'中国系ブランド比率 2026年累計（%）', ddom:'中国系ブランド 前年差（pp）',
+    lux:'高級車比率 2026年累計（%）', dlux:'豪華ブランド 前年差（pp）',
+    cgrade:'Cクラス比率 3月（%）', bgrade:'Bクラス比率 3月（%）',
+    econ:'経済型車份額 3月（%）',
   };
   mapChart.setOption({
     backgroundColor:'#0d1b2a',
@@ -13324,22 +13326,22 @@ function showProvDetail(ja) {
         + '<div>2024年: <strong style="color:#fff">' + p.y24 + '</strong>万台</div>'
         + '<div>2025年: <strong style="color:#7eb3ff">' + p.y25 + '</strong>万台</div>'
         + '<div>25年前年比: <strong style="color:' + (p.yoy < 0 ? '#ef5350' : '#66bb6a') + '">' + (p.yoy > 0 ? '+' : '') + p.yoy + '%</strong></div>'
-        + '<div>26年1-2月: <strong style="color:#ffcc02">' + p.t26 + '</strong>万台'
+        + '<div>26年1-3月: <strong style="color:#ffcc02">' + p.t26 + '</strong>万台'
         + (p.cum26 != null ? ' <span style="font-size:10px;color:' + (p.cum26 < 0 ? '#ef5350' : '#66bb6a') + '">(' + (p.cum26 > 0 ? '+' : '') + p.cum26 + '%)</span>' : '')
         + '</div>'
-        + (p.yoy26 != null ? '<div>26年2月単月: <span style="font-size:10px;color:' + (p.yoy26 < 0 ? '#ef5350' : '#66bb6a') + '">' + (p.yoy26 > 0 ? '+' : '') + p.yoy26 + '%</span></div>' : '')
+        + (p.yoy26_3 != null ? '<div>26年3月単月: <span style="font-size:10px;color:' + (p.yoy26_3 < 0 ? '#ef5350' : '#66bb6a') + '">' + (p.yoy26_3 > 0 ? '+' : '') + p.yoy26_3 + '%</span></div>' : '')
         + '</div></div>'
       : '')
     + (nevH > 0
-      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:6px 0 2px">⚡ 動力構成・新車販売比率 2026年2月</div>'
+      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:6px 0 2px">⚡ 動力構成・新車販売比率 2026年3月</div>'
         + '<div id="cpca-pnev" style="height:' + nevH + 'px"></div>'
       : '<div style="font-size:10px;color:#3a5070;padding:4px 0">動力構成データなし（PDF未記載）</div>')
-    + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🚙 車身構造 2026年2月</div>'
+    + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🚙 車身構造 2026年3月</div>'
     + '<div id="cp-body" style="height:80px"></div>'
-    + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏷️ ブランド構成 2026年1-2月</div>'
+    + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏷️ ブランド構成 2026年累計</div>'
     + '<div id="cpca-pbrand" style="height:80px"></div>'
     + (gradeH > 0
-      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車型級別 2026年2月</div>'
+      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車型級別 2026年3月</div>'
         + '<div id="cp-grade" style="height:' + gradeH + 'px"></div>'
       : '<div style="font-size:10px;color:#3a5070;padding:4px 0">車型級別データなし（寧夏・青海はPDF未記載）</div>');
 
@@ -13534,7 +13536,7 @@ function renderProvSalesChart(){
   cpcaProvChart.setOption({
     backgroundColor:'transparent',
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
-    legend:{data:['2024年','2025年','26年1-2月'],top:8,type:'scroll',textStyle:{fontSize:10,color:'#8ab0d0'}},
+    legend:{data:['2024年','2025年','26年1-3月'],top:8,type:'scroll',textStyle:{fontSize:10,color:'#8ab0d0'}},
     grid:{left:65,right:55,top:45,bottom:20},
     yAxis:{type:'category',data:sorted.map(([k])=>k),axisLabel:{fontSize:9,color:'#7eb3ff'}},
     xAxis:{type:'value',name:'万台',nameTextStyle:{color:'#6a8aaa',fontSize:9},
@@ -13543,7 +13545,7 @@ function renderProvSalesChart(){
     series:[
       {name:'2024年',  type:'bar',data:sorted.map(([,v])=>v.y24), itemStyle:{color:'#3b6ea8'},barMaxWidth:getBarMaxWidth(16)},
       {name:'2025年',  type:'bar',data:sorted.map(([,v])=>v.y25), itemStyle:{color:'#2563eb'},barMaxWidth:getBarMaxWidth(16)},
-      {name:'26年1-2月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barMaxWidth:getBarMaxWidth(16)},
+      {name:'26年1-3月',type:'bar',data:sorted.map(([,v])=>v.t26), itemStyle:{color:'#f59e0b'},barMaxWidth:getBarMaxWidth(16)},
     ]
   });
 }

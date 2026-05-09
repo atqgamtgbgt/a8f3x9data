@@ -21888,7 +21888,7 @@ window.INFO_REGISTRY = {
       '中国の世界シェア：2025年 <strong>35.4%</strong> → 2026年初 <strong>29.7%</strong>（春節異常値、-5.7pp）。',
       '2026年1-2月の中国 -9% / 米国 -2% / 印度 +11% / タイ <strong>+64%</strong> / ロシア -7%。',
       '世界TOP10メーカーに中国系2社：<strong>吉利6位 / 奇瑞10位</strong>、BYDは11位に後退。',
-      '東升西降が鮮明：中国系メーカーが全面シェア向上、欧州系（ルノー日産・Stellantis・VW）が-3pp前後。',
+      '<strong>東升西降（中国系台頭・欧米系衰退）</strong>が鮮明：中国系メーカーが全面シェア向上、欧州系（ルノー日産・Stellantis・VW）が-3pp前後。',
       '例外的に強いのは<strong>トヨタ・スズキ・タタ</strong>（北米・印度市場好調）。'
     ],
     sections: [
@@ -22048,11 +22048,6 @@ window.cdsToggleInfoPanel = function() {
 // 記事1件分のHTMLを組み立て
 function cdsBuildArticle(art) {
   if (!art) return '';
-  var head = '<div class="cds-info-article-head">'
-           + '<span class="cds-info-article-title">' + art.title + '</span>'
-           + '<span class="cds-info-article-source">出典：' + art.source + '（' + art.date + '）</span>'
-           + (art.url ? '<a class="cds-info-article-link" href="' + art.url + '" target="_blank" rel="noopener">原文 ↗</a>' : '')
-           + '</div>';
 
   var hi = '';
   if (art.highlights && art.highlights.length) {
@@ -22078,7 +22073,7 @@ function cdsBuildArticle(art) {
         + '<div class="cds-info-section-body"><div class="cds-info-raw">' + art.rawText + '</div></div></details>';
   }
 
-  return '<div class="cds-info-article">' + head + hi + sec + raw + '</div>';
+  return '<div class="cds-info-article">' + hi + sec + raw + '</div>';
 }
 
 // 指定ペインIDに対応する解説パネルを描画

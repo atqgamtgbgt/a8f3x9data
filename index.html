@@ -2449,6 +2449,102 @@ img.car-thumb {
 }
 .cds-mid-tab:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
 .cds-mid-tab.active { background: #1e40af; color: #fff; border-color: #1e40af; font-weight: 600; }
+
+/* ====== 解説パネル（INFO_REGISTRY方式） ====== */
+.cds-info-panel {
+  margin: 6px 0 14px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #fafbfc 0%, #f8f9fa 100%);
+  overflow: hidden;
+  font-family: 'Noto Sans JP', sans-serif;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+.cds-info-header {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; cursor: pointer;
+  background: #f1f5f9;
+  border-bottom: 1px solid transparent;
+  transition: background .15s;
+  user-select: none;
+}
+.cds-info-header:hover { background: #e6ecf2; }
+.cds-info-panel.is-open .cds-info-header { border-bottom-color: #e2e8f0; }
+.cds-info-icon { font-size: 14px; }
+.cds-info-title { font-size: 13px; font-weight: 700; color: #2c3e50; flex: 1; }
+.cds-info-meta { font-size: 11px; color: #64748b; margin-right: 8px; }
+.cds-info-chevron { font-size: 10px; color: #94a3b8; transition: transform .2s; }
+.cds-info-panel.is-open .cds-info-chevron { transform: rotate(180deg); }
+.cds-info-body { display: none; padding: 12px 14px 14px; font-size: 12.5px; line-height: 1.65; color: #334155; }
+.cds-info-panel.is-open .cds-info-body { display: block; }
+.cds-info-article + .cds-info-article {
+  margin-top: 14px; padding-top: 14px; border-top: 1px dashed #cbd5e1;
+}
+.cds-info-article-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 10px;
+  margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid #f1f5f9;
+}
+.cds-info-article-title {
+  font-size: 13px; font-weight: 700; color: #1e293b;
+}
+.cds-info-article-source {
+  font-size: 11px; color: #64748b;
+}
+.cds-info-article-link {
+  font-size: 11px; color: #3b82f6; text-decoration: none;
+  border: 1px solid #dbeafe; padding: 1px 8px; border-radius: 4px;
+}
+.cds-info-article-link:hover { background: #dbeafe; }
+.cds-info-section { margin-top: 8px; }
+.cds-info-section > summary {
+  cursor: pointer; padding: 5px 8px; font-size: 12px; font-weight: 600;
+  background: #fff; border: 1px solid #e2e8f0; border-radius: 5px;
+  list-style: none; user-select: none; transition: background .12s;
+}
+.cds-info-section > summary::-webkit-details-marker { display: none; }
+.cds-info-section > summary:hover { background: #f1f5f9; }
+.cds-info-section[open] > summary { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
+.cds-info-section-body { padding: 8px 10px 4px; font-size: 12px; line-height: 1.7; }
+.cds-info-section-body ul { margin: 0; padding-left: 20px; }
+.cds-info-section-body li { margin-bottom: 3px; }
+.cds-info-section-body li strong { color: #c2410c; font-weight: 700; }
+.cds-info-section-body h4 {
+  font-size: 12px; margin: 8px 0 4px; color: #475569; font-weight: 700;
+  border-left: 3px solid #94a3b8; padding-left: 8px;
+}
+.cds-info-section-body p { margin: 0 0 6px; }
+.cds-info-raw {
+  font-size: 11.5px; line-height: 1.7; color: #475569;
+  background: #f8fafc; padding: 10px 12px; border-radius: 4px;
+  white-space: pre-wrap; word-break: break-word;
+  max-height: 380px; overflow-y: auto;
+}
+@media (max-width: 768px) {
+  .cds-info-panel {
+    margin: 8px 0 14px;
+    border-color: #cbd5e1;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+  .cds-info-header {
+    padding: 12px 12px;
+    background: linear-gradient(180deg, #eff6ff 0%, #dbeafe 100%);
+    min-height: 44px; /* タップ最低高さ */
+  }
+  .cds-info-title { font-size: 13px; color: #1e40af; }
+  .cds-info-meta { display: none; } /* スマホでは省略 */
+  .cds-info-chevron { font-size: 11px; color: #1e40af; }
+  .cds-info-body { padding: 12px; font-size: 12.5px; }
+  .cds-info-section > summary {
+    padding: 8px 10px;
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+  }
+  .cds-info-article-head { gap: 4px 8px; }
+  .cds-info-article-title { font-size: 12.5px; line-height: 1.4; }
+  .cds-info-raw { max-height: 280px; font-size: 11px; }
+}
+
 .cds-sub-nav { padding: 10px 0 4px; }
 .cds-pane.cds-active { display: block; }
 .chart-card {
@@ -4218,6 +4314,17 @@ body.tray-open { padding-bottom: 105px; }
 
           <!-- ========== コンテンツペイン ========== -->
           <div id="cdsPillsContent" style="display:none">
+
+            <!-- ====== 解説パネル（中タブ全体で共有） ====== -->
+            <div id="cds-info-panel" class="cds-info-panel" style="display:none">
+              <div class="cds-info-header" onclick="cdsToggleInfoPanel()" role="button" tabindex="0">
+                <span class="cds-info-icon">📋</span>
+                <span class="cds-info-title">記事の解説・出典を見る</span>
+                <span class="cds-info-meta" id="cds-info-meta"></span>
+                <span class="cds-info-chevron">▼</span>
+              </div>
+              <div class="cds-info-body" id="cds-info-body"></div>
+            </div>
 
 
             <!-- ===== 全体 ペイン群 ===== -->
@@ -11236,6 +11343,28 @@ function cdsSetMidTab(tab) {
     p.classList.remove('cds-active');
   });
 
+  // ── 解説パネルの中タブ別初期化（デフォルトサブペインで描画） ──
+  if (typeof window.cdsRenderInfoPanel === 'function') {
+    var midTabDefaultPane = {
+      'worldshare': window.WS_CURRENT_ID || 'ws-regional',
+      'china': 'cds-china-map',
+      'zenntai': 'zt-summary',
+      'jishuhaiex': window.JH_CURRENT_ID || 'jh-monthly-trend',
+      'import': window.IMP_CURRENT_ID || 'imp-trend',
+      'profit': 'cds-profit-monthly',
+      'inventory': window.INV_CURRENT_ID || 'inv-total',
+      'battery': window.BAT_CURRENT_ID || 'bat-production',
+      'discount': window.DISC_CURRENT_ID || 'disc-monthly-dist',
+      'price': window.PRICE_CURRENT_ID || 'price-distribution',
+      'stats': window.STATS_CURRENT_ID || 'stats-monthly',
+      'dc': window.DC_CURRENT_ID || 'dc-overview',
+      'nev': window.NEV_CURRENT_ID || 'nev-batch29',
+      'wfin': window.WFIN_CURRENT_ID || 'wfin-revenue',
+      'export': window.CDS_CURRENT_EXPORT_ID || 'cds-monthly'
+    };
+    try { window.cdsRenderInfoPanel(midTabDefaultPane[tab] || ''); } catch(e) {}
+  }
+
   // ── 引用元リンク切替 ──
   var CDS_SOURCE_URLS = {
     'zenntai':    'https://mp.weixin.qq.com/s/7_6nJhYPYBFVfNabF06sAQ',
@@ -12142,6 +12271,10 @@ window.wsShowPane = function(id) {
   var el = document.getElementById(id);
   if (el) el.classList.add('cds-active');
   window.WS_CURRENT_ID = id;
+  // 解説パネル更新
+  if (typeof window.cdsRenderInfoPanel === 'function') {
+    try { window.cdsRenderInfoPanel(id); } catch(e) {}
+  }
 };
 
 // サブナビクリック
@@ -14234,6 +14367,11 @@ function renderProvSalesChart(){
     var wsPanes = ['ws-regional','ws-china-share','ws-monthly','ws-country','ws-maker','ws-maker-region',
                    'ws-nev-yearly','ws-nev-monthly','ws-nev-region','ws-nev-penetration','ws-nev-overseas','ws-nev-makers'];
     if(wsPanes.indexOf(id) >= 0) setTimeout(function(){ wsRender(id); }, 60);
+
+    // 解説パネルの更新（INFO_REGISTRYルーティング）
+    if (typeof window.cdsRenderInfoPanel === 'function') {
+      try { window.cdsRenderInfoPanel(id); } catch(e) {}
+    }
   };
 })();
 
@@ -21730,6 +21868,253 @@ window.addEventListener('resize', function(){
   <div class="print-footer container">
     中国自動車販売ランキングや関連データ &nbsp;|&nbsp; 非公式・個人作成 &nbsp;|&nbsp; 印刷日: <span id="print-date"></span>
   </div>
+
+
+<script>
+// ====== 解説パネル（INFO_REGISTRY方式） ======
+// 各記事はキーで識別し、INFO_PANE_MAPでサブタブIDから記事キーへルーティング。
+// 1サブタブで複数記事を出したい場合は配列にして並べる。
+
+window.INFO_REGISTRY = {
+  // ── 世界シェア・世界全体グループ ──
+  'gws-2026-1to2': {
+    title: '2026年1-2月中国占世界汽車份額30%',
+    source: '崔東樹',
+    date: '2026年3月',
+    url: 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg',
+    highlights: [
+      '<strong>2025年世界販売 9,689万台</strong>（前年比+6%）、過去最高。',
+      '<strong>2026年2月 674万台</strong>（-2%）、1-2月累計 <strong>1,396万台</strong>（+0.1%）— 中国春節要因で減速。',
+      '中国の世界シェア：2025年 <strong>35.4%</strong> → 2026年初 <strong>29.7%</strong>（春節異常値、-5.7pp）。',
+      '2026年1-2月の中国 -9% / 米国 -2% / 印度 +11% / タイ <strong>+64%</strong> / ロシア -7%。',
+      '世界TOP10メーカーに中国系2社：<strong>吉利6位 / 奇瑞10位</strong>、BYDは11位に後退。',
+      '東升西降が鮮明：中国系メーカーが全面シェア向上、欧州系（ルノー日産・Stellantis・VW）が-3pp前後。',
+      '例外的に強いのは<strong>トヨタ・スズキ・タタ</strong>（北米・印度市場好調）。'
+    ],
+    sections: [
+      { heading:'1. 世界車市の月次推移', body:'<p>2025年は各月とも前年同月超で堅調。2026年は中国春節が2月にずれた影響で1月好調・2月急減。</p>' },
+      { heading:'2. 過去推移', body:'<p>2018-2020年は3年連続下落。2021年8,135万台で回復、2022年は8,018万台と低迷、2023年に8,901万台（+11%）、2024年9,177万台で2019年水準を超え、2025年9,689万台で過去最高。</p>' },
+      { heading:'3. 中国の世界地位', body:'<p>2016-2018年30%前後 → 2019年29%まで下落 → 2020-21年32%回復 → 2022年33.5% → 2023年33.8% → 2024年34.2% → <strong>2025年35.4%（過去最高）</strong>。2026年初29.7%は春節異常値で、3月下旬以降の政策効果で持続的回復見込み。</p>' },
+      { heading:'4. 新興国の伸び', body:'<p>欧米先進国・印度・タイ・南米が好調。2023-2024年はロシア市場回復が中国系メーカーの高販売・高利益を後押し。2025年ロシア下落でシェア1.5%まで低下、2026年は再び回復し中国系車企を牽引。中国系の伸びしろは未開拓小国市場に大きく残る。</p>' },
+      { heading:'5. 主要国の月次特徴', body:'<p>中国はマイカー普及期で<em>年初・年末強、年央軟調</em>。印度は<em>年初強・年央安定</em>。季節要因と年度要因で各国の波形は大きく異なる。</p>' },
+      { heading:'6. 中国月次シェア', body:'<p>2025年は車市常態化＋輸出回復で持続上昇。2026年初は両新（以旧換新）補助金の発動鈍化で大幅下落、2月シェアは27%まで低下。</p>' },
+      { heading:'7. 国際集団の世界占比', body:'<p>国際大手のシェア下落、中国系の上昇が継続。アジア勢（吉利・奇瑞・スズキ）が好調、欧州勢が全般低迷。2026年1-2月の世界TOP10に中国系2社（吉利6位・奇瑞10位）、BYDは11位に。</p>' },
+      { heading:'8. 集団別 地域シェア', body:'<p>トヨタは欧州・北米堅調で世界11.5%。現代起亜は中国弱・他地域好調で7.7%。スズキは印度・日本市場で堅調。<br>欧州勢は2026年大幅下落：ルノー日産・Stellantis・VWが2019年比-3pp前後（中国市場で約300万台分の減）。VWは南半球で改善も中国の減を補えず。</p>' }
+    ],
+    rawText: `2025年全球汽车销量9689万台，同比增长6%。2026年2月的世界汽车销量达到674万台，同比下降2%。2026年1-2月世界汽车销量达到1396万台，同比增0.1%。由于中国车市的增速低于预期，2026年1-2月世界车市销量增长放缓明显。
+
+中国车市近几年走势总体较好，份额持续提升，2020年以来中国的世界份额持续提升，到2023年达到33.8%，2024年中国车市达到34.2%，2025年中国车市达到世界35.4%，2026年中国车市达到世界29.7%，较2025年下滑较大。
+
+自主品牌出海的海外环境较好，大量国家处于普及率低，市场空间大的机会期，速度决定效果。2026年1-2月的全球汽车销量增长0.1%，其中中国汽车销量下降9%，印度汽车市场销量增11%，泰国汽车市场增64%，俄罗斯市场销量降7%，而南美的部分市场表现较好。其它大量的不发达小国家的中国车企潜力仍是巨大。
+
+从目前集团综合表现来看，东升西降，中国自主品牌全面提升世界份额。国际头部车企份额明显下降，中国车企普遍表现较强。吉利、奇瑞、比亚迪表现较强。电动化发展也导致部分国际车企逐步走向衰落。除了美国市场异常暂时较强和铃木等印度市场较好的因素促进，其它国际品牌份额出现全面较大的下滑。
+
+【1. 当月世界汽车销量走势】
+2025年以来世界车市增长总体较好，各月均好于同期水平。2026年世界车市波动较大，因2026年中国春节在2月，中国春节前车市销量平稳导致世界1月增长较好，但2月因春节因素导致中国车市销量剧烈下滑。
+
+【2. 历年世界汽车销量走势】
+上表中的世界汽车销量主要是70个国家的销量，这70个核心国家在2019年有9000万台左右。从主力国家代表的世界销量看，2018年后开始下滑周期，2020年进入谷底；2021年开始回升；2025年的世界销量增速6%，其中中国车市增长9%的贡献度巨大。
+
+【3. 中国2026年销量保持领军地位】
+中国汽车市场对世界汽车市场影响力极其巨大。2016-2018年中国汽车占世界30%左右；2019年下降到29%；2020-2021年回升到32%；2022年上升到33.5%；2023年保持33.8%；2024年34.2%；2025年35.4%；2026年初29.7%，年初较低是春节因素的异常体现。随着政策刺激效果逐步恢复显现，3月下旬开始中国车市预计持续走强。
+
+【4. 发展中国家市场大幅走强】
+2023-2024年俄罗斯市场逐步恢复，带来中国自主车企的高销量和高利润。2025年俄罗斯下滑，份额降到1.5%。2026年俄罗斯回升带动中国自主车企走势较好。
+
+【5. 世界各国市场走势】
+2026年1-2月全球汽车销量增长0.1%，其中中国-9%、印度+11%、泰国+64%、俄罗斯-7%，南美部分市场表现较好。
+
+【6. 中国的世界市场份额走势】
+2025年中国车市逐步恢复常态，加之出口回复，份额持续回升。2026年初两新补贴启动平缓，2月份额下降到27%。
+
+【7. 各国汽车销量月度走势特征】
+中国仍是私车普及期，呈现年初年末较强、年中较软；印度年初较强、年中平稳。
+
+【8. 国际集团的世界占比表现】
+国际头部车企份额明显下降，中国车企普遍较强。今年1-2月世界前10车企中，吉利第6位，奇瑞第10位，比亚迪下降到第11位。
+
+【9. 国际集团的各区域份额表现】
+丰田2026年世界份额11.5%（较2019年+0.3pp），欧美与北美表现较强。现代起亚7.7%（与2019年持平）。本田较2019年下降2.3pp，中国市场偏弱。
+2026年欧洲车企普遍较弱，雷诺日产、Stellantis、大众较2019年下降3个点左右（约300万台中国市场损失）。大众全球其它市场改善较大，南半球回升明显。`
+  },
+
+  // ── 世界シェア・世界NEVグループ ──
+  'gwsnev-2026-1to3': {
+    title: '26年1-3月中国新能源車的世界份額56%',
+    source: '崔東樹',
+    date: '2026年4月',
+    url: 'https://mp.weixin.qq.com/s/oeU_on2hVnWWfcwlCs9H-A',
+    highlights: [
+      '<strong>2026年1-3月世界自動車2,240万台 / NEV 453万台</strong>。',
+      'NEV浸透率<strong>20.2%</strong>（BEV 13.8% / PHEV 6.4% / HEV 7.2%）。',
+      '米国NEV：3月 <strong>11.2万台 -32%</strong>、1-3月 16万台 -31%（高関税＋補助金廃止）。',
+      '欧州NEV：3月 35万台 -5%、1-3月 <strong>92万台 +10%</strong>。',
+      '中国の世界NEVシェア：2025年 68.3% → 2026年1-3月 <strong>61%</strong>。',
+      '中国系NEVの海外シェア：2025年 15.8% → 2026年1-3月 <strong>22%（+10pp）</strong>。',
+      '中国の世界PHEVシェア：2025年 76.4% → 2026年 <strong>73%</strong>（圧倒的）。',
+      '南米NEV市場の中国系シェア<strong>80%超</strong>、東南アジア49%。'
+    ],
+    sections: [
+      { heading:'1. 世界NEV乗用車 全体推移', body:'<p>2024年1,788万台（+29%）、2025年2,289万台（+28%）。<strong>2026年1-3月 453万台（+1%のみ）</strong>と歴史水準を大きく下回る伸び。1月142万台で当月過去最高ながら、3月183万台で前年割れ。中国2月春節要因＋米国免税停止が複合。</p>' },
+      { heading:'2. 海外NEV市場の動向', body:'<p>米国は2025年10月以降弱体化。早期購入層が一巡し、補助金廃止＋テスラFSD解禁効果も期待外れ。欧州は経済低迷下でも一定の伸び維持（2025年386万台 +33% / 96万台増）。</p>' },
+      { heading:'3. 中国系NEV海外シェア', body:'<p>2023年 7.1% → 2024年 9.6% → 2025年 15.8% → 2026年1-3月 <strong>22%</strong>（前年同期比+10pp）。中国系NEV輸出好調＋米国市場萎縮の合わせ技で大幅上昇。<strong>南米80%超、東南アジア49%</strong>。</p>' },
+      { heading:'4. 国別NEV浸透率', body:'<p>2022年 13.1% → 2023年 15.9% → 2024年 19.5% → 2025年 23.6% → 2026年1Q 20.2%。<br>2026年1Q：<strong>独30% / ノルウェー80% / 英32% / 米6.9% / 日本2.6%</strong>。世界NEV発展の不均衡性が極度に鮮明化。中国は強化継続、米国は鼓励政策弱化、欧州は補助金徐々再起動 — 分化発展の新段階へ。</p>' },
+      { heading:'5. 世界NEV市場の構成変化', body:'<p>欧州NEV世界シェア：2022年低下 → 2023-24年も小幅低下 → 2025年17% → <strong>2026年1-3月21%</strong>（前年同期並み）。<br>中国NEV世界シェア：2021年52% → 2022年62%超 → 2023年64% → 2024年69% → 2025年68.3% → <strong>2026年1-3月 61%</strong>。</p>' },
+      { heading:'6. メーカー全体（NEV）', body:'<p>BYD世界1位、吉利急速台頭、テスラ第3位に後退。上汽集団・上汽五菱の海外好調。吉利・奇瑞NEVが直近で強化顕著。VW（独）が回復、BMW・現代起亜は第3梯隊水準。豪華車NEV化競争激化、ベンツ・BMWの動向は平凡。</p>' },
+      { heading:'7. BEV市場構成', body:'<p>中国の世界BEVシェア：2023-2025年は63%前後で安定 → <strong>2026年1-3月 56%</strong>（年初要因で一時的後退）。<br>欧州BEV：2021年26% → 2023年20% → 2026年1-3月 <strong>20.9%</strong>。米国BEV：2025年8.5% → <strong>2026年1-3月 7.2%</strong>と急落。</p>' },
+      { heading:'8. BEVメーカー', body:'<p>BYDは2021年7% → 2023年17% → 2024-2025年18% → 2026年1-3月 <strong>14.5%</strong>（一時低下）。テスラは2021年23% → 直近14%水準まで下落。吉利集団は2019年4% → <strong>2026年9.5%</strong>。上汽集団は近期強化、広汽・長安は安定。</p>' },
+      { heading:'9. PHEV市場構成', body:'<p>中国の世界PHEVシェア：2021年33% → 2025年 <strong>76.4%（超高水準）</strong> → 2026年 <strong>73%</strong>。中国の超強表現が継続。欧州PHEVシェアは2021年55% → 2026年20%まで低下。</p>' },
+      { heading:'10. PHEVメーカー', body:'<p>BYDが圧倒的：2021年15% → 2023年36% → 2024年 <strong>39%</strong> → 2026年1-3月 31%。VWは2021年急上昇15% → 2024年谷底 → 2026年 <strong>6.3%回復</strong>。BMWは2024年谷底 → 2026年2.7%回復。吉利ボルボは <strong>14.2%</strong>。</p>' },
+      { heading:'11. HEV市場構成', body:'<p>中国は2022年世界最大のHEV市場へ → PHEV台頭で2023年以降低下 → <strong>2026年は17.8%まで回復</strong>。米国HEV市場が2024年以降回復、<strong>2026年1Q米国シェア31%</strong>。</p>' },
+      { heading:'12. HEVメーカー', body:'<p>日韓が圧倒：トヨタ・ホンダ・日産・現代が <strong>2026年計84%</strong>。欧州での中国系BEV圧迫を受け上汽MGのHEVが欧州で急伸し<strong>6%</strong>に到達。フォード・マツダの北米HEVも好調。</p>' }
+    ],
+    rawText: `2026年1-3月世界汽车销量达到2240万台，新能源汽车达到453万台。2026年1-3月的新能源车份额达到20.2%，其中纯电动车的占比达到13.8%，插电混动达到6.4%的汽车比例，混合动力达到7.2%的表现优秀。
+
+由于高关税和新能源补贴取消的涨价因素，美国新能源车2026年3月销量11.2万台同比降32%，1-3月美国新能源车销量16万，降低31%。欧洲新能源乘用车3月35万台同比降5%，2026年1-3月92万台同比增10%。
+
+由于中新能源车海外销量大增，国内偏弱，因此2025年中国新能源乘用车世界份额68.3%；2026年1-3月中国新能源乘用车世界份额降到61%的水平。中国在世界纯电动车市场份额表现相对平稳，2023-2025年的份额在63%的左右份额水平；2026年中国在世界纯电动车市场份额56%份额。中国在世界插电混动份额表现遥遥领先。2025年中国在世界插电混动份额达到76.4%的超高水平，2026年中国在世界插电混动份额达到73%的高水平。
+
+由于自主新能源出口表现较好，而美国变化大，因此自主新能源乘用车海外市场销量份额提升较大。2025年自主新能源乘用车海外市场销量份额达到15.8%。2026年自主新能源乘用车海外市场销量份额达到22%。
+
+【一、世界新能源汽车走势】
+2024年世界汽车销量9177万台，新能源汽车销量1788万台。2025年世界汽车销量9689万台，新能源汽车2289万台。2026年1-3月世界汽车2240万台，新能源汽车453万台。2026年1-3月普通混合动力超过插混成为增长亮点。
+
+【二、世界新能源乘用车走势】
+2026年世界新能源车起步较低，1月仅142万台仍创当月历史新高；3月仅有183万出现负增长。由于中国2月春节因素、美国停止免税政策，共同导致世界新能源车增长放缓。
+
+2020年新能源乘用车287万台（+42%）；2021年637万台（+122%）；2022年1039万台（+63%）；2023年1388万台（+34%）；2024年1788万台（+29%）；2025年2289万台（+28%）；2026年1-3月453万台（+1%）。
+
+3月的海外走势相对波动较大。由于欧洲新能源市场较大，因此海外新能源总体表现较好，3月未出现负增长。
+
+2023年中国自主品牌新能源车在海外市场份额7.1%；2024年9.6%；2025年15.8%；2026年22%。目前在南美的新能源份额均超80%，东南亚的新能源份额达到49%。
+
+2020年欧洲超越中国。2021-2026年的欧洲新能源车市场总体高位平稳增长。中国今年1-3月低迷是暂时的，欧洲和美国新能源走势远弱于中国走势。
+
+美国新能源乘用车在2025年10月之后走弱。欧美早期尝试者和环保主义者都已购买电动车，美国政府取消新能源补贴影响较大。
+
+欧洲新能源乘用车2025年销量386万台，较去年同期增量96万台，增33%。2026年1-3月92万台同比增10%。
+
+【世界各国新能源渗透率】
+2022年13.1%；2023年15.9%；2024年19.5%；2025年23.6%。2026年1季度20.2%。德国30%、挪威80%、英国32%、美国6.9%、日本2.6%。
+
+【三、世界新能源乘用车结构特征】
+2025年欧洲新能源世界份额17%，2026年1-3月21%。
+2021年中国52% → 2022年62%超 → 2023年64% → 2024年69% → 2025年68.3% → 2026年1-3月61%。
+
+中国比亚迪世界领先，吉利迅速崛起，特斯拉表现不强下滑到第三位。上汽集团乘用车和上汽五菱海外表现较好。吉利与奇瑞新能源近期走强。德国大众较强，宝马、韩国现代下降到第三梯队。
+
+【四、纯电动新能源车】
+中国纯电动世界份额：2023-2025年63%左右 → 2026年56%。欧洲纯电动份额：2021年26% → 2023年20% → 2026年1-3月20.9%。美国2025年8.5% → 2026年1-3月7.2%。
+
+比亚迪：2021年7% → 2023年17% → 2024-2025年18% → 2026年1-3月14.5%。特斯拉：2021年23%左右 → 目前14%。吉利：2019年4% → 2026年9.5%。上汽近期较强，广汽、长安平稳。
+
+【五、插电混动】
+中国插混份额：2021年33% → 2025年76.4% → 2026年73%。欧洲：2021年55% → 2026年20%。
+比亚迪：2021年15% → 2023年36% → 2024年39% → 2026年1-3月31%。德国大众：2021年15% → 2024年谷底 → 2026年6.3%。宝马：2024年谷底 → 2026年2.7%。吉利沃尔沃：14.2%。
+
+【六、混合动力】
+中国2022年成为世界最大混动市场，2023年以来份额下降，2026年回升到17.8%。美国2024年以来回升，2026年1季度31%。
+丰田、本田、日产、现代占据2026年84%。上汽名爵在欧洲混动市场迅速走强到6%。福特和马自达在美国混动市场表现较好。`
+  }
+};
+
+// サブタブIDから記事キーへのマッピング（同じグループ内の全サブタブで同じ記事を表示）
+window.INFO_PANE_MAP = {
+  // 世界全体グループ
+  'ws-regional': 'gws-2026-1to2',
+  'ws-monthly': 'gws-2026-1to2',
+  'ws-country': 'gws-2026-1to2',
+  'ws-maker': 'gws-2026-1to2',
+  'ws-maker-region': 'gws-2026-1to2',
+  // 世界NEVグループ
+  'ws-nev-yearly': 'gwsnev-2026-1to3',
+  'ws-nev-monthly': 'gwsnev-2026-1to3',
+  'ws-nev-region': 'gwsnev-2026-1to3',
+  'ws-nev-penetration': 'gwsnev-2026-1to3',
+  'ws-nev-overseas': 'gwsnev-2026-1to3',
+  'ws-nev-makers': 'gwsnev-2026-1to3'
+  // 他タブの記事を増やす場合はここに追記
+};
+
+// パネル開閉の状態保持（中タブ全体で1つ）
+window.cdsInfoOpen = false;
+window.cdsToggleInfoPanel = function() {
+  var panel = document.getElementById('cds-info-panel');
+  if (!panel) return;
+  window.cdsInfoOpen = !window.cdsInfoOpen;
+  panel.classList.toggle('is-open', window.cdsInfoOpen);
+};
+
+// 記事1件分のHTMLを組み立て
+function cdsBuildArticle(art) {
+  if (!art) return '';
+  var head = '<div class="cds-info-article-head">'
+           + '<span class="cds-info-article-title">' + art.title + '</span>'
+           + '<span class="cds-info-article-source">出典：' + art.source + '（' + art.date + '）</span>'
+           + (art.url ? '<a class="cds-info-article-link" href="' + art.url + '" target="_blank" rel="noopener">原文 ↗</a>' : '')
+           + '</div>';
+
+  var hi = '';
+  if (art.highlights && art.highlights.length) {
+    hi = '<details class="cds-info-section" open><summary>📍 ハイライト（' + art.highlights.length + '項目）</summary>'
+       + '<div class="cds-info-section-body"><ul>'
+       + art.highlights.map(function(h){ return '<li>' + h + '</li>'; }).join('')
+       + '</ul></div></details>';
+  }
+
+  var sec = '';
+  if (art.sections && art.sections.length) {
+    sec = '<details class="cds-info-section"><summary>📝 章別サマリー（日本語・' + art.sections.length + '節）</summary>'
+        + '<div class="cds-info-section-body">'
+        + art.sections.map(function(s){
+            return '<h4>' + s.heading + '</h4>' + s.body;
+          }).join('')
+        + '</div></details>';
+  }
+
+  var raw = '';
+  if (art.rawText) {
+    raw = '<details class="cds-info-section"><summary>🇨🇳 原文（中国語）</summary>'
+        + '<div class="cds-info-section-body"><div class="cds-info-raw">' + art.rawText + '</div></div></details>';
+  }
+
+  return '<div class="cds-info-article">' + head + hi + sec + raw + '</div>';
+}
+
+// 指定ペインIDに対応する解説パネルを描画
+window.cdsRenderInfoPanel = function(paneId) {
+  var panel = document.getElementById('cds-info-panel');
+  var meta = document.getElementById('cds-info-meta');
+  var body = document.getElementById('cds-info-body');
+  if (!panel || !body) return;
+
+  var key = window.INFO_PANE_MAP[paneId];
+  if (!key) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  // 配列でも単一でも対応
+  var keys = Array.isArray(key) ? key : [key];
+  var arts = keys.map(function(k){ return window.INFO_REGISTRY[k]; }).filter(Boolean);
+  if (!arts.length) {
+    panel.style.display = 'none';
+    return;
+  }
+
+  panel.style.display = 'block';
+  var first = arts[0];
+  if (meta) {
+    meta.textContent = arts.length === 1
+      ? '出典：' + first.source + '（' + first.date + '）'
+      : '出典：' + first.source + ' 他' + (arts.length - 1) + '件';
+  }
+  body.innerHTML = arts.map(cdsBuildArticle).join('');
+
+  // 開閉状態を維持
+  panel.classList.toggle('is-open', !!window.cdsInfoOpen);
+};
+</script>
 
 </body>
 </html>

@@ -242,6 +242,18 @@
             t.extraCssText = 'max-width:min(88vw,320px);white-space:normal;word-break:break-word;font-size:12px;';
         });
       }
+      // ★ 凡例ホバー時のラベル表示問題対策：
+      //   ECharts組み込みの legendHoverLink（凡例ホバー → series強調）と
+      //   このパッチのカスタムホバー挙動が競合し、パッチで設定したラベルが
+      //   レンダリングされない問題が発生する（特に label:{show:false} が
+      //   明示されている系列が含まれるグラフで顕著）。
+      //   全系列で legendHoverLink を無効化し、組み込み挙動を抑止する。
+      if (!_hovering && option && option.series) {
+        var _sArr = Array.isArray(option.series) ? option.series : [option.series];
+        _sArr.forEach(function(s) {
+          if (s && s.legendHoverLink == null) s.legendHoverLink = false;
+        });
+      }
       // ★ スマホ時：上配置の凡例が縦軸と重ならないようgrid.topを底上げ
       //   X軸ラベルが多いグラフは45度回転して重なりを防ぐ
       if (!_hovering && option) {
@@ -448,7 +460,14 @@
       var hovIsPercent = hovFmt.indexOf('%') >= 0 || (hovAxis && hovAxis.max === 100);
       var niceMax = null;
       if (!isHovLine) {
-        niceMax = hovIsPercent ? 100 : (dataMax > 0 ? Math.ceil(dataMax * 1.15 / 5) * 5 : null);
+        if (dataMax > 0) {
+          // 単一系列ホバー時はその系列のデータ範囲に合わせて自動スケール
+          // パーセント軸は 100 を上限としてキャップ（100%超を表示しない）
+          var _calcMax = Math.ceil(dataMax * 1.15 / 5) * 5;
+          niceMax = hovIsPercent ? Math.min(100, _calcMax) : _calcMax;
+        } else if (hovIsPercent) {
+          niceMax = 100;
+        }
       }
 
       var labelPos = isHorizontal ? 'right' : 'top';

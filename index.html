@@ -2935,6 +2935,61 @@ body.tray-open { padding-bottom: 105px; }
 .print-footer {
   display: none;
 }
+
+/* 散布図 ズーム/パン コントロール */
+.wfin-scatter-ctrl {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 6px 0 8px;
+  padding: 4px 10px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #334155;
+  flex-wrap: wrap;
+}
+.wfin-zoom-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 10px;
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 4px;
+  color: #0f172a;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.12s;
+  user-select: none;
+}
+.wfin-zoom-btn:hover {
+  background: #f59e0b;
+  color: #fff;
+}
+.wfin-zoom-hint {
+  margin-left: auto;
+  font-size: 11px;
+  color: #94a3b8;
+  font-style: italic;
+}
+@media (max-width: 768px) {
+  .wfin-zoom-hint { display: none; }
+}
+/* 散布図エリア: ドラッグ可能を示すカーソル */
+#ec-wfin-rev-scatter,
+#ec-wfin-pm-scatter,
+#ec-wfin-arap-scatter {
+  cursor: grab;
+}
+#ec-wfin-rev-scatter:active,
+#ec-wfin-pm-scatter:active,
+#ec-wfin-arap-scatter:active {
+  cursor: grabbing;
+}
 </style>
 </head>
 <body>
@@ -5518,6 +5573,10 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">📐 規模 vs 成長率 散布図</div>
                     <div class="chart-subtitle">X軸: 2025年営収（対数）／Y軸: 25年成長率（%）　出典：崔東樹（乗聯会）</div>
+                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-rev-scatter">
+                      <button type="button" class="wfin-zoom-btn" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
+                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
+                    </div>
                     <div id="ec-wfin-rev-scatter" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
@@ -5552,6 +5611,10 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">🔁 粗利率 vs 純利益率 散布図（2025年）</div>
                     <div class="chart-subtitle">粗利が高くても純利が薄い構造を可視化　出典：崔東樹（乗聯会）</div>
+                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-pm-scatter">
+                      <button type="button" class="wfin-zoom-btn" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
+                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
+                    </div>
                     <div id="ec-wfin-pm-scatter" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
@@ -5593,6 +5656,10 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">📐 売上債権 vs 仕入債務 回転日数 散布図（2025年）</div>
                     <div class="chart-subtitle">右下＝買い手としての支払力強・売り手としての回収速い　出典：崔東樹（乗聯会）</div>
+                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-arap-scatter">
+                      <button type="button" class="wfin-zoom-btn" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
+                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
+                    </div>
                     <div id="ec-wfin-arap-scatter" class="echart-box" style="height:640px"></div>
                   </div>
                 </div>
@@ -11371,7 +11438,7 @@ function cdsSetMidTab(tab) {
     'export':     'https://mp.weixin.qq.com/s/OHDvUDYVgo3BtSizh8y5OA',
     'jishuhaiex': 'https://mp.weixin.qq.com/s/I9noQ4j76sBTSDcJoZ5cfg',
     'import':     'https://mp.weixin.qq.com/s/uA0qxzrcCT5H1LNK80Q8fQ',
-    'china':      'https://mp.weixin.qq.com/s/4I78_XPYH62JeqVyJurBrg',
+    'china':      'https://mp.weixin.qq.com/s/JGRelbBCdAPqSgaxb4W6YQ',
     'worldshare': 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg',
     'wfin':       'https://mp.weixin.qq.com/s/F8JXWgQIy5W3NyDsJD1DpA',
     'profit':     'https://mp.weixin.qq.com/s/tKkV8nPjYXjQlEFPYxMIBQ',
@@ -21289,37 +21356,72 @@ function renderWfinRevGrowth() {
 }
 
 // Chart 4: 規模 vs 成長率 散布図
+// X軸はlog10変換した値で type:'value' を使用 (type:'log'+dataZoomだとパン時にティックが
+// 再計算されてスケールが揺れて見えるため。事前変換で他の散布図と同じ挙動にする)
 function renderWfinRevScatter() {
   var ec = wfinInitOrGet('ec-wfin-rev-scatter'); if (!ec) return;
   var arr = WFIN_DATA.revenue.filter(function(r){
     return r.rev[6] != null && r.g25 != null && r.rev[6] >= 50;
   });
-  var dataPts = arr.map(function(r){ return [r.rev[6], r.g25, r.jp]; });
+  // [logRev, growth, name, originalRev] - 4要素タプルにして元値も保持
+  var dataPts = arr.map(function(r){ return [Math.log10(r.rev[6]), r.g25, r.jp, r.rev[6]]; });
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
-        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[0]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
+        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[3]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
       }
     },
     grid: { left:55, right:25, top:25, bottom:55 },
-    xAxis: { type:'log', name:'2025年営収（億元・対数）', logBase:10, nameGap:35, nameLocation:'middle' },
+    xAxis: {
+      type:'value',
+      name:'2025年営収（億元・対数）',
+      nameGap:35, nameLocation:'middle',
+      min: 1.5, max: 4.7, interval: 1,
+      axisLabel: {
+        formatter: function(v){
+          var orig = Math.pow(10, v);
+          if (orig >= 10000) return Math.round(orig/10000) + '万';
+          if (orig >= 1000)  return Math.round(orig/1000) + 'k';
+          return Math.round(orig).toString();
+        }
+      },
+      splitLine: { lineStyle: { color:'#eee' } },
+      minorTick: { show:true, splitNumber:9 },
+      minorSplitLine: { show:true, lineStyle:{ color:'#f5f5f5' } }
+    },
     yAxis: { type:'value', name:'25年成長率(%)', axisLabel:{formatter:'{value}%'},
       splitLine:{lineStyle:{color:'#eee'}} },
+    dataZoom: [
+      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
+      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
+    ],
     series: [{
       type:'scatter',
       data: dataPts,
       symbolSize: function(v){
-        var s = Math.sqrt(v[0]) * 0.7;
+        var s = Math.sqrt(v[3]) * 0.7;
         return Math.max(8, Math.min(40, s));
       },
       itemStyle: { color: function(p){
         return p.value[1] >= 20 ? '#dc2626' : (p.value[1] >= 0 ? '#3b82f6' : '#94a3b8');
-      }, opacity:0.7 },
+      }, opacity:0.7, borderColor:'#fff', borderWidth:1 },
       label: {
         show:true, position:'top', fontSize:9,
         formatter: function(p){
-          if (p.value[0] >= 5000 || p.value[1] >= 30 || p.value[1] <= -10) return p.value[2];
+          if (p.value[3] >= 5000 || p.value[1] >= 30 || p.value[1] <= -10) return p.value[2];
           return '';
+        }
+      },
+      labelLayout: { hideOverlap: true },
+      emphasis: {
+        focus:'self', scale:1.4,
+        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
+        label: {
+          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
+          backgroundColor:'rgba(255,255,180,0.98)',
+          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
+          padding:[3,6,3,6],
+          formatter: function(p){ return p.value[2]; }
         }
       },
       markLine: {
@@ -21452,6 +21554,10 @@ function renderWfinPmScatter() {
       axisLabel:{formatter:'{value}%'} },
     yAxis: { type:'value', name:'純利益率(%)',
       axisLabel:{formatter:'{value}%'}, splitLine:{lineStyle:{color:'#eee'}} },
+    dataZoom: [
+      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
+      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
+    ],
     series: [{
       type:'scatter',
       data: dataPts,
@@ -21466,6 +21572,18 @@ function renderWfinPmScatter() {
         formatter: function(p){
           if (p.value[0] >= 30 || p.value[1] >= 8 || p.value[1] <= -5) return p.value[2];
           return '';
+        }
+      },
+      labelLayout: { hideOverlap: true },
+      emphasis: {
+        focus:'self', scale:1.5,
+        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
+        label: {
+          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
+          backgroundColor:'rgba(255,255,180,0.98)',
+          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
+          padding:[3,6,3,6],
+          formatter: function(p){ return p.value[2]; }
         }
       },
       markLine: {
@@ -21650,8 +21768,15 @@ function renderWfinArapScatter() {
         borderWidth: 1.5
       },
       emphasis: {
+        focus:'self', scale:1.5,
         itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
-        scale: 1.5
+        label: {
+          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
+          backgroundColor:'rgba(255,255,180,0.98)',
+          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
+          padding:[3,6,3,6],
+          formatter: function(p){ return p.value[2]; }
+        }
       },
       label: {
         show:true, position:'top', fontSize:9, color:'#333',
@@ -21661,7 +21786,8 @@ function renderWfinArapScatter() {
           if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)','XPENG(小鵬)','Geely(吉利)','上汽集団','ホンダ','日産','GM','メルセデス・ベンツ','BMW'].indexOf(p.value[2]) >= 0) return p.value[2];
           return '';
         }
-      }
+      },
+      labelLayout: { hideOverlap: true }
     };
   });
   ec.setOption({
@@ -21689,6 +21815,10 @@ function renderWfinArapScatter() {
       nameGap:48, nameLocation:'middle',
       splitLine:{lineStyle:{color:'#eee'}}
     },
+    dataZoom: [
+      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
+      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
+    ],
     series: series
   });
 }
@@ -21824,6 +21954,31 @@ function renderWfinInvChange() {
 }
 
 // ============================================================
+// 散布図 リセットボタンのバインド
+// ============================================================
+function bindScatterZoomCtrls() {
+  var ctrls = document.querySelectorAll('.wfin-scatter-ctrl');
+  ctrls.forEach(function(ctrl){
+    if (ctrl.__bound) return;
+    ctrl.__bound = true;
+    var targetId = ctrl.getAttribute('data-target');
+    ctrl.addEventListener('click', function(ev){
+      var btn = ev.target.closest('.wfin-zoom-btn');
+      if (!btn) return;
+      var act = btn.getAttribute('data-act');
+      if (act === 'reset') {
+        var ec = WFIN_EC[targetId];
+        if (ec) {
+          try {
+            ec.dispatchAction({ type: 'dataZoom', start: 0, end: 100 });
+          } catch(e) {}
+        }
+      }
+    });
+  });
+}
+
+// ============================================================
 // メイン描画ディスパッチャ
 // ============================================================
 function wfinRender(id) {
@@ -21849,6 +22004,8 @@ function wfinRender(id) {
     renderWfinInvTrend();
     renderWfinInvChange();
   }
+  // ボタンバインド (描画後に確実にDOMが存在する)
+  bindScatterZoomCtrls();
   // resize after render
   setTimeout(function(){
     Object.values(WFIN_EC).forEach(function(ec){ try{ ec.resize(); }catch(e){} });

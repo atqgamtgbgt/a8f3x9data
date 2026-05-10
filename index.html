@@ -2935,61 +2935,6 @@ body.tray-open { padding-bottom: 105px; }
 .print-footer {
   display: none;
 }
-
-/* 散布図 ズーム/パン コントロール */
-.wfin-scatter-ctrl {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin: 6px 0 8px;
-  padding: 4px 10px;
-  background: #f1f5f9;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  font-size: 12px;
-  color: #334155;
-  flex-wrap: wrap;
-}
-.wfin-zoom-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  height: 26px;
-  padding: 0 10px;
-  background: #fef3c7;
-  border: 1px solid #f59e0b;
-  border-radius: 4px;
-  color: #0f172a;
-  font-size: 12px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.12s;
-  user-select: none;
-}
-.wfin-zoom-btn:hover {
-  background: #f59e0b;
-  color: #fff;
-}
-.wfin-zoom-hint {
-  margin-left: auto;
-  font-size: 11px;
-  color: #94a3b8;
-  font-style: italic;
-}
-@media (max-width: 768px) {
-  .wfin-zoom-hint { display: none; }
-}
-/* 散布図エリア: ドラッグ可能を示すカーソル */
-#ec-wfin-rev-scatter,
-#ec-wfin-pm-scatter,
-#ec-wfin-arap-scatter {
-  cursor: grab;
-}
-#ec-wfin-rev-scatter:active,
-#ec-wfin-pm-scatter:active,
-#ec-wfin-arap-scatter:active {
-  cursor: grabbing;
-}
 </style>
 </head>
 <body>
@@ -5573,10 +5518,6 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">📐 規模 vs 成長率 散布図</div>
                     <div class="chart-subtitle">X軸: 2025年営収（対数）／Y軸: 25年成長率（%）　出典：崔東樹（乗聯会）</div>
-                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-rev-scatter">
-                      <button type="button" class="wfin-zoom-btn" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
-                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
-                    </div>
                     <div id="ec-wfin-rev-scatter" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
@@ -5611,10 +5552,6 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">🔁 粗利率 vs 純利益率 散布図（2025年）</div>
                     <div class="chart-subtitle">粗利が高くても純利が薄い構造を可視化　出典：崔東樹（乗聯会）</div>
-                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-pm-scatter">
-                      <button type="button" class="wfin-zoom-btn" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
-                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
-                    </div>
                     <div id="ec-wfin-pm-scatter" class="echart-box" style="height:420px"></div>
                   </div>
                 </div>
@@ -5656,10 +5593,6 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-card">
                     <div class="chart-title">📐 売上債権 vs 仕入債務 回転日数 散布図（2025年）</div>
                     <div class="chart-subtitle">右下＝買い手としての支払力強・売り手としての回収速い　出典：崔東樹（乗聯会）</div>
-                    <div class="wfin-scatter-ctrl" data-target="ec-wfin-arap-scatter">
-                      <button type="button" class="wfin-zoom-btn" data-act="reset" title="拡大表示をリセット">⟲ 全体表示</button>
-                      <span class="wfin-zoom-hint">💡 ホイール=拡大/縮小　ドラッグ=移動</span>
-                    </div>
                     <div id="ec-wfin-arap-scatter" class="echart-box" style="height:640px"></div>
                   </div>
                 </div>
@@ -11441,7 +11374,7 @@ function cdsSetMidTab(tab) {
     'china':      'https://mp.weixin.qq.com/s/JGRelbBCdAPqSgaxb4W6YQ',
     'worldshare': 'https://mp.weixin.qq.com/s/hUklHI7uc8TmXIxJruy2Fg',
     'wfin':       'https://mp.weixin.qq.com/s/F8JXWgQIy5W3NyDsJD1DpA',
-    'profit':     'https://mp.weixin.qq.com/s/6QheSwEM-ssJUf5weZLFbQ',
+    'profit':     'https://mp.weixin.qq.com/s/tKkV8nPjYXjQlEFPYxMIBQ',
     'inventory':  'https://mp.weixin.qq.com/s/ljWbGxQbBdknDCq0Pbz4NA',
     'battery':    'https://mp.weixin.qq.com/s/uKBxiZOfY2Pl8odGuuGt7g',
     'discount':   'https://mp.weixin.qq.com/s/RjO2beNuAx6wjWeqho8KaQ',
@@ -21356,70 +21289,37 @@ function renderWfinRevGrowth() {
 }
 
 // Chart 4: 規模 vs 成長率 散布図
-// X軸はlog10変換した値で type:'value' を使用 (type:'log'+dataZoomだとパン時にティックが
-// 再計算されてスケールが揺れて見えるため。事前変換で他の散布図と同じ挙動にする)
 function renderWfinRevScatter() {
   var ec = wfinInitOrGet('ec-wfin-rev-scatter'); if (!ec) return;
   var arr = WFIN_DATA.revenue.filter(function(r){
     return r.rev[6] != null && r.g25 != null && r.rev[6] >= 50;
   });
-  // [logRev, growth, name, originalRev] - 4要素タプルにして元値も保持
-  var dataPts = arr.map(function(r){ return [Math.log10(r.rev[6]), r.g25, r.jp, r.rev[6]]; });
+  var dataPts = arr.map(function(r){ return [r.rev[6], r.g25, r.jp]; });
   ec.setOption({
     tooltip: { trigger:'item',
       formatter: function(p){
-        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[3]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
+        return '<b>' + p.value[2] + '</b><br>2025年営収: ' + fmtNum(p.value[0]) + '億元<br>25年成長率: ' + p.value[1].toFixed(1) + '%';
       }
     },
     grid: { left:55, right:25, top:25, bottom:55 },
-    xAxis: {
-      type:'value',
-      name:'2025年営収（億元・対数）',
-      nameGap:35, nameLocation:'middle',
-      min: 1.5, max: 4.7, interval: 1,
-      axisLabel: {
-        formatter: function(v){
-          var orig = Math.pow(10, v);
-          if (orig >= 10000) return Math.round(orig/10000) + '万';
-          if (orig >= 1000)  return Math.round(orig/1000) + 'k';
-          return Math.round(orig).toString();
-        }
-      },
-      splitLine: { lineStyle: { color:'#eee' } },
-      minorTick: { show:true, splitNumber:9 },
-      minorSplitLine: { show:true, lineStyle:{ color:'#f5f5f5' } }
-    },
+    xAxis: { type:'log', name:'2025年営収（億元・対数）', logBase:10, nameGap:35, nameLocation:'middle' },
     yAxis: { type:'value', name:'25年成長率(%)', axisLabel:{formatter:'{value}%'},
       splitLine:{lineStyle:{color:'#eee'}} },
-    dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
-    ],
     series: [{
       type:'scatter',
       data: dataPts,
       symbolSize: function(v){
-        var s = Math.sqrt(v[3]) * 0.7;
+        var s = Math.sqrt(v[0]) * 0.7;
         return Math.max(8, Math.min(40, s));
       },
       itemStyle: { color: function(p){
         return p.value[1] >= 20 ? '#dc2626' : (p.value[1] >= 0 ? '#3b82f6' : '#94a3b8');
-      }, opacity:0.7, borderColor:'#fff', borderWidth:1 },
+      }, opacity:0.7 },
       label: {
-        show:true, position:'top', distance:5, fontSize:10, color:'#1e293b',
-        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
-        formatter: function(p){ return p.value[2]; }
-      },
-      labelLayout: { hideOverlap: true },
-      emphasis: {
-        focus:'self', scale:1.4,
-        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
-        label: {
-          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,180,0.98)',
-          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
-          padding:[3,6,3,6],
-          formatter: function(p){ return p.value[2]; }
+        show:true, position:'top', fontSize:9,
+        formatter: function(p){
+          if (p.value[0] >= 5000 || p.value[1] >= 30 || p.value[1] <= -10) return p.value[2];
+          return '';
         }
       },
       markLine: {
@@ -21552,10 +21452,6 @@ function renderWfinPmScatter() {
       axisLabel:{formatter:'{value}%'} },
     yAxis: { type:'value', name:'純利益率(%)',
       axisLabel:{formatter:'{value}%'}, splitLine:{lineStyle:{color:'#eee'}} },
-    dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
-    ],
     series: [{
       type:'scatter',
       data: dataPts,
@@ -21566,20 +21462,10 @@ function renderWfinPmScatter() {
                                   '#ef4444';
       }, opacity:0.75 },
       label: {
-        show:true, position:'top', distance:5, fontSize:10, color:'#1e293b',
-        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
-        formatter: function(p){ return p.value[2]; }
-      },
-      labelLayout: { hideOverlap: true },
-      emphasis: {
-        focus:'self', scale:1.5,
-        itemStyle: { borderColor:'#000', borderWidth:2, opacity:1 },
-        label: {
-          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,180,0.98)',
-          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
-          padding:[3,6,3,6],
-          formatter: function(p){ return p.value[2]; }
+        show:true, position:'top', fontSize:9,
+        formatter: function(p){
+          if (p.value[0] >= 30 || p.value[1] >= 8 || p.value[1] <= -5) return p.value[2];
+          return '';
         }
       },
       markLine: {
@@ -21764,22 +21650,18 @@ function renderWfinArapScatter() {
         borderWidth: 1.5
       },
       emphasis: {
-        focus:'self', scale:1.5,
         itemStyle: { borderWidth: 2, borderColor: '#000', opacity: 1 },
-        label: {
-          show:true, fontSize:13, fontWeight:'bold', color:'#0f172a',
-          backgroundColor:'rgba(255,255,180,0.98)',
-          borderColor:'#0f172a', borderWidth:1.5, borderRadius:3,
-          padding:[3,6,3,6],
-          formatter: function(p){ return p.value[2]; }
-        }
+        scale: 1.5
       },
       label: {
-        show:true, position:'top', distance:5, fontSize:10, color:'#1e293b',
-        backgroundColor:'rgba(255,255,255,0.7)', padding:[1,3,1,3], borderRadius:2,
-        formatter: function(p){ return p.value[2]; }
-      },
-      labelLayout: { hideOverlap: true }
+        show:true, position:'top', fontSize:9, color:'#333',
+        formatter: function(p){
+          // 主要企業＋極端値のみラベル表示
+          if (p.value[0] >= 100 || p.value[1] >= 200) return p.value[2];
+          if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)','XPENG(小鵬)','Geely(吉利)','上汽集団','ホンダ','日産','GM','メルセデス・ベンツ','BMW'].indexOf(p.value[2]) >= 0) return p.value[2];
+          return '';
+        }
+      }
     };
   });
   ec.setOption({
@@ -21807,10 +21689,6 @@ function renderWfinArapScatter() {
       nameGap:48, nameLocation:'middle',
       splitLine:{lineStyle:{color:'#eee'}}
     },
-    dataZoom: [
-      { type:'inside', xAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false },
-      { type:'inside', yAxisIndex:0, filterMode:'none', zoomOnMouseWheel:true, moveOnMouseMove:true, moveOnMouseWheel:false }
-    ],
     series: series
   });
 }
@@ -21946,31 +21824,6 @@ function renderWfinInvChange() {
 }
 
 // ============================================================
-// 散布図 リセットボタンのバインド
-// ============================================================
-function bindScatterZoomCtrls() {
-  var ctrls = document.querySelectorAll('.wfin-scatter-ctrl');
-  ctrls.forEach(function(ctrl){
-    if (ctrl.__bound) return;
-    ctrl.__bound = true;
-    var targetId = ctrl.getAttribute('data-target');
-    ctrl.addEventListener('click', function(ev){
-      var btn = ev.target.closest('.wfin-zoom-btn');
-      if (!btn) return;
-      var act = btn.getAttribute('data-act');
-      if (act === 'reset') {
-        var ec = WFIN_EC[targetId];
-        if (ec) {
-          try {
-            ec.dispatchAction({ type: 'dataZoom', start: 0, end: 100 });
-          } catch(e) {}
-        }
-      }
-    });
-  });
-}
-
-// ============================================================
 // メイン描画ディスパッチャ
 // ============================================================
 function wfinRender(id) {
@@ -21996,8 +21849,6 @@ function wfinRender(id) {
     renderWfinInvTrend();
     renderWfinInvChange();
   }
-  // ボタンバインド (描画後に確実にDOMが存在する)
-  bindScatterZoomCtrls();
   // resize after render
   setTimeout(function(){
     Object.values(WFIN_EC).forEach(function(ec){ try{ ec.resize(); }catch(e){} });
@@ -22337,11 +22188,112 @@ window.INFO_REGISTRY = {
 
 4. 资金话语权重构，马太效应愈发显著
 在电动化浪潮下，账期差已成为衡量产业链地位的核心指标。头部电池与中国整车企业持续扩大资金优势，而日韩、欧美部分传统车企与中小供应商面临资金链压力，行业资源加速向强势企业集中，格局重构已成定局。`
+  },
+
+  // ── 利益率グループ ──
+  'cnprof-2026-1to3': {
+    title: '2026年1-3月 中国自動車業界利益率3.2% — 収入-0.2%・コスト+0.7%・利益-18%',
+    source: '崔東樹',
+    date: '2026年4月',
+    url: 'https://mp.weixin.qq.com/s/',
+    highlights: [
+      '2026年1-3月の中国自動車業界の販売利益率は <strong>3.2%</strong>、下流工業平均（<strong>6%</strong>）を大きく下回り歴史的低水準。',
+      '業界収入 <strong>24,128億元（-0.2%）</strong>、コスト <strong>21,406億元（+0.7%）</strong>、利益 <strong>784億元（-18%）</strong>。',
+      '3月単月の利益率は <strong>3.7%</strong>、1-2月の <strong>2.9%</strong> から改善も依然として低位。',
+      '1-3月の自動車生産 <strong>715万台（-6%）</strong>、NEV <strong>302万台（-6%・浸透率42%）</strong>、燃油車 <strong>413万台（-5%）</strong>。',
+      '産業チェーン単車収入 <strong>33.7万元（+5.4%）</strong>、単車コスト <strong>29.9万元（+6.3%）</strong>、単車粗利 <strong>1.1万元（-13.2%）</strong>。',
+      '上流が暴利、下流を圧迫：有色金属の利益率 <strong>39.1%</strong>、石油 <strong>32.9%</strong>、採鉱業利益 <strong>+16%（利益率19.9%）</strong>。',
+      '主因は「<strong>車企が電池を作らない（不造電池）</strong>」発言力の問題：リチウム電池の輸出単価下落 vs 国内電池価格高騰の二重圧迫。',
+      '<strong>反内卷（反過当競争）</strong>政策が推進中、終端ユーザーの様子見が強まり、車企の運営圧力は継続的に増大。'
+    ],
+    sections: [
+      { heading:'1. 業界全体：利益率3.2%、歴史的低水準', body:'<p>2026年1-3月の自動車業界の販売利益率は <strong>3.2%</strong>と、下流工業企業平均の <strong>6%</strong>を大きく下回り、歴史的低水準にとどまった。3月単月では <strong>3.7%</strong>と、1-2月の <strong>2.9%</strong>から改善したものの、依然低位。<br>業界収入 <strong>24,128億元（前年比 -0.2%）</strong>、コスト <strong>21,406億元（+0.7%）</strong>、利益 <strong>784億元（-18%）</strong>。生産規模拡大とPPI上昇を背景に、上流の有色金属・石油等の鉱業利益が暴騰、リチウム電池の輸出単価が大幅下落する一方で国内電池価格が高騰し、車企の利益が持続的に低下している。</p>' },
+      { heading:'2. 単車経済指標：原材料コスト圧力が顕著', body:'<p>2026年1-3月、工業企業全体で単位コスト上昇圧力が大きい。炭酸リチウム価格は2倍に、コモディティ価格は高位で推移し、川中・川下の原材料コスト圧力が増した。<br>自動車産業チェーン全体の単車指標（産業チェーン重複計算込み）：<br>・単車収入 <strong>33.7万元（+5.4%）</strong><br>・単車コスト <strong>29.9万元（+6.3%）</strong><br>・単車税費 <strong>2.7万元（+3.9%）</strong><br>・産業チェーン単車粗利 <strong>1.1万元（-13.2%）</strong><br>収入の伸びをコストの伸びが上回り、粗利が大幅に圧縮されている構図。</p>' },
+      { heading:'3. 工業企業全体の収入・利益構造', body:'<p>2026年1-3月、規模以上工業企業の営業収入は <strong>33.19兆元（+5.0%）</strong>、営業コストは <strong>28.19兆元（+4.5%）</strong>、営業収入利益率は <strong>5.11%（前年比+0.46pp）</strong>と改善。3月末の売掛金 <strong>27.03兆元（+6.7%）</strong>、製品在庫 <strong>6.78兆元（+5.2%）</strong>。<br>主体別の利益分化が顕著：国有企業が好調で利益占有率は <strong>37%</strong>に到達、民営企業の販売利益率は <strong>3.7%</strong>と低水準、株式会社系は利益が明らかに低下。製造業の利益占有率は <strong>73%</strong>と直近で明確に低下し、利益の重心が採鉱・公益事業へシフトしている。</p>' },
+      { heading:'4. 採鉱業：有色・石油の利益が暴騰', body:'<p>2026年1-3月、採鉱業は高基数と価格上昇下でも利益が <strong>+16%</strong>、利益率 <strong>19.9%</strong>と高位を維持。<br>業種別では、<strong>有色金属の利益率39.1%</strong>、<strong>石油業界の利益率32.9%</strong>と、近年の石油業の利益率上昇は驚異的。採鉱業全体が高位で推移し、下流に強い圧力をかけている。</p>' },
+      { heading:'5. 電熱気水（公益事業）：利益高位を維持', body:'<p>電熱気水は高利益のサービス業界で、2026年の利益率は <strong>6.3%</strong>。電力業界の利益は歴史的高位、水処理業界は利益が <strong>-20%</strong>と落ち込む一方、ガス業界は <strong>+4%</strong>。電力業界は2025年に <strong>-3%</strong>を記録した後の高位安定。</p>' },
+      { heading:'6. 上流：利益改善基調', body:'<p>2025年の上流業界は売上・利益とも高い伸びを示し、特に販売利益率が <strong>3.4%</strong>まで回復。有色金属を代表とする業種で販売利益率が高位に到達した。<br>鉄鋼は前年初の巨額赤字から今年も依然として厳しい。化学原料・有色金属精錬業は比較的良好な利益水準を維持している。</p>' },
+      { heading:'7. 中流：利益動向は底入れ', body:'<p>2026年1-3月、中流業界の売上・利益は良好な伸び。販売利益率は <strong>2018年の6%から2026年の3.4%まで低下</strong>したが、直近で底入れしている。<br>2026年は主要中流業種の販売利益率もやや低下傾向だが、造船・鉄道などの効益が良好、廃棄物資源利用・非金属鉱物製品業は利益増加が大きい。</p>' },
+      { heading:'8. 下流：分化進行 — 自動車だけが取り残される', body:'<p>2026年1-3月、下流工業全体の利益は <strong>+15%</strong>と改善基調。一方で<strong>自動車業界の利益は -18%</strong>、販売利益率 <strong>3.2%（2014年は9%）</strong>と、下流全体の <strong>6%</strong>水準を大きく下回り、タバコ・酒類・医薬等の他下流業種にも大きく劣後。<br>高利益を維持するのは依然としてタバコ・酒類・医薬で、特に酒類業界の利益は他業種を大きく上回る。コンピュータ・通信業界は異例の好調な伸び、食品業界は利益自体は強くないが前年比改善が顕著。</p>' },
+      { heading:'9. 自動車業界の生産規模：年度別推移', body:'<p>2022〜2026年の年度別生産推移（中国自動車）：<br>・<strong>2022年</strong>：総生産 <strong>2,748万台（+3%）</strong>／NEV 722万（+98%・浸透率26%）／燃油車 2,026万（-11%）<br>・<strong>2023年</strong>：総生産 <strong>3,011万台（+9%）</strong>／NEV 944万（+30%・浸透率31%）／燃油車 2,067万（+2%）<br>・<strong>2024年</strong>：総生産 <strong>3,156万台（+5%）</strong>／NEV 1,317万（+39%・浸透率42%）／燃油車 1,839万（-11%）<br>・<strong>2025年</strong>：総生産 <strong>3,478万台（+10%）</strong>／NEV 1,652万（+25%・浸透率48%）／燃油車 1,825万（-1%）<br>・<strong>2026年1-3月</strong>：総生産 <strong>715万台（-6%）</strong>／NEV 302万（-6%・浸透率42%）／燃油車 413万（-5%）<br>・<strong>2026年3月単月</strong>：総生産 <strong>307万台（-0.1%）</strong>／NEV 134万（+1%・浸透率44%）／燃油車 173万（-1%）</p>' },
+      { heading:'10. 自動車業界の効益圧力 — 「電池の発言力」問題', body:'<p>1-3月の自動車生産 <strong>715万台（-6%）</strong>、業界利益率 <strong>3.2%</strong>は下流平均 <strong>6%</strong>を大きく下回り、依然として偏低。<br>近年の生産規模拡大とPPI上昇の中、<strong>炭酸リチウム原価の上昇</strong>とリチウム電池の輸出価格持続下落、<strong>国内電池価格の暴騰</strong>が同時進行。「<strong>車企が電池を作らない（不造電池）</strong>」発言力（話語権）の構造的欠如が、車企の利益持続的低下を招いている。<br>政策補助下でNEVの優位性は明らかである一方、電池を内製しないことで主要車企の収益性圧力は引き続き急激に増大する見通し。<strong>反内卷（反過当競争）</strong>政策の継続推進により上流業界の利益改善促進効果は徐々に現れているが、下流の圧力は依然として大きい。</p>' }
+    ],
+    rawText: `一、核心数据观点
+
+一季度，面对国际环境复杂演变和国内转型压力等多重挑战，国民经济开局良好、质效提升，装备制造业和高技术制造业利润快速增长，原材料制造业利润两位数增长，为全年经济平稳运行奠定坚实基础。2026年1-3月汽车生产715万台，同比降6%。2026年1-3月的汽车行业收入24128亿元，同比降0.2%；成本21406亿元，增0.7%；利润784亿元，同比降18%。
+
+2026年1-3月汽车行业销售利润率进一步降至3.2%，3月汽车行业销售利润率3.7%，好于1-2月2.9%的表现，但仍处于历史低位。今年汽车行业利润率3.2%，相对于下游工业企业利润率6%的平均水平。近期随着车市生产规模扩大，PPI上行，上游有色和石油等矿业利润暴涨，锂电池出口吨单价持续大幅下降，国内电池价格暴涨，车企不造电池的问题严重，车企利润可持续下滑。
+
+2026年各地大力度推动"两新"政策落地实施，逐步有效释放内需活力。但汽车行业效益改善明显落后其它消费品。随着国家反内卷工作持续推进，汽车行业的上游挤压严重，油价暴涨，终端用户购车观望心态严重，车企运行压力持续加大。
+
+由于汽车行业的产销基本是一致的，统计口径一致，产销差距不大，因此我们用国家统计局产量测算统计局单车经济指标。
+
+1-3月总体工业企业单位成本增长压力大。碳酸锂价格翻一倍，大宗商品价格高位运行，中下游行业原料成本压力有所加大。1-3月汽车行业产业链的总体单车收入33.7万元（有产业链的重复计算）增5.4%，单车成本增29.9万元增6.3%，单车税费2.7万元增3.9%，产业链单车毛利润1.1万元降13.2%。
+
+二、具体分析
+
+【1、各类经济体的收入和利润结构】
+1-3月份，规模以上工业企业实现营业收入33.19万亿元，同比增长5.0%；发生营业成本28.19万亿元，增长4.5%；营业收入利润率为5.11%，同比上升0.46个百分点。3月末，规模以上工业企业应收账款27.03万亿元，同比增长6.7%；产成品存货6.78万亿元，增长5.2%。
+
+今年总体工业领域的收入增长平稳，利润表现也是相对分化，其中近几年的国有企业的收入和利润波动较大。采矿企业的表现较好，利润增速很强。
+
+【2、收入利润结构变化】
+目前看国有企业表现很好，收入和利润占比持续增长，利润占比达到37%，私营企业的销售利润率3.7%的水平较低，股份制企业利润下滑较明显。
+
+营业收入的利润率指标中，主要是采矿业和煤水电等国有企业指标数值较高，私营企业利润率很差，制造业的利润占比73%，近期明显下降。
+
+三、具体行业分析
+
+【1、采矿业利润分化】
+2026年1-3月的高基数和价格走高下，采矿利润增16%仍有很好利润，采矿业1-3月利润率在19.9%水平也是很好的。
+
+2026年1-3月，有色行业利润暴增到39.1%，石油行业利润32.9%，近期的石油业的利润率增长惊人。总体采矿行业利润保持高位。对下游的冲击较大。
+
+【2、水电气行业利润保持高位】
+电热气水是高利润服务行业，2026年利润率6.3%。电力行业的利润处于历史高位，水的处理行业利润下降20%，燃气行业利润2026年增4%，电力的利润2025年下降3%。
+
+【3、上游利润改善】
+2025年上游行业的销售收入和利润都是出现高增长，尤其是利润率回升到3.4%。其中有色金属等为代表的销售利润率逐步冲到高位，钢铁从去年年初的巨额亏损到今年仍是较差。化工原料和有色金属冶炼等行业利润还算较好。
+
+【4、中游利润表现较好】
+2026年1-3月中游行业的销售收入和利润增长较好。中游行业销售利润率从2018年6%下降到2026年的3.4%，近期企稳。2026年主要中游行业的销售利润率也有所下降，造船铁路等效益好，废弃物资利用和非金属矿物制品业利润增长较大。
+
+【5、下游利润逐步改善】
+2026年1-3月总体下游工业利润增15%，而汽车业利润降18%，销售利润率3.2%（2014年9%），仍低于下游总体6%的利润水平，也大幅低于烟、酒、药等其它下游企业。
+
+目前高利润的主要还是烟草、酒类、医药行业，酒类行业的利润大幅高于其他行业。计算机通讯行业利润出现异常良好的增长态势。食品行业盈利不强，但也同比提升明显。
+
+四、汽车行业分析
+
+【1、汽车行业规模持续扩大】
+2022年汽车生产2748万台，产量同比增长3%；新能源汽车生产722万，增长98%，渗透率26%；燃油车生产2026万台，降11%。
+
+2023年汽车生产3011万台，同比增9%；新能源汽车生产944万台，同比增30%，渗透率31%；燃油车生产2067万台，增2%。
+
+2024年汽车生产3156万台，同比增长5%；新能源汽车生产1317万台，同比增39%，渗透率42%；燃油车生产1839万台，降11%。
+
+2025年汽车生产3478万台，同比增10%；新能源汽车生产1652万台，同比增25%，渗透率48%；燃油车生产1825万台，同比降1%。
+
+2026年1-3月汽车生产715万台，同比降6%；新能源汽车生产302万台，同比降6%，渗透率42%；燃油车生产413万台，同比降5%。
+
+2026年3月汽车生产307万台，同比降0.1%；新能源汽车生产134万台，同比增1%，渗透率44%；燃油车生产173万台，同比降1%。
+
+【2、汽车行业效益压力较大】
+2026年1-3月汽车生产715万台，同比降6%。2026年1-3月的汽车行业收入24128亿元，同比降0.2%；成本21406亿元，增0.7%；利润784亿元，同比降18%；汽车行业利润率3.2%，相对于下游工业企业利润率6%的平均水平，汽车行业仍偏低。
+
+近期随着车市生产规模扩大，PPI上行，上游碳酸锂成本上升，锂电池出口价格持续下降，国内电池价格暴涨，车企不造电池的问题严重，车企利润可持续下滑。
+
+结合前几年的利润率下行趋势看，近期汽车行业利润下滑幅度仍较大，由于政策加持下的新能源政策优势明显，由于不造电池，没有话语权，主流车企盈利压力仍将急剧增大。随着国家反内卷工作持续推进，对改善上游行业利润的促进效果逐步体现改善，下游压力持续较大。`
   }
 };
 
 // サブタブIDから記事キーへのマッピング（同じグループ内の全サブタブで同じ記事を表示）
 window.INFO_PANE_MAP = {
+  // 利益率グループ
+  'cds-profit-monthly': 'cnprof-2026-1to3',
+  'cds-profit-annual': 'cnprof-2026-1to3',
+  'cds-profit-chain': 'cnprof-2026-1to3',
+  'cds-profit-unit': 'cnprof-2026-1to3',
   // 世界企業財務グループ
   'wfin-revenue': 'gwfin-2020to2025',
   'wfin-profitability': 'gwfin-2020to2025',

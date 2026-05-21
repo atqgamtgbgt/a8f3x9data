@@ -3635,15 +3635,17 @@ body.tray-open { padding-bottom: 105px; }
           <div class="tab-content" id="chartsPillsContent">
             <div class="tab-pane fade show active" id="cp-overview">
               <!-- ===== 月次総論カード（CAAM公式レポート 綜述）===== -->
-              <div class="chart-card" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);border-left:4px solid #3b82f6;margin-bottom:14px">
+              <div class="chart-card" id="commentary-card" style="background:linear-gradient(135deg,#eff6ff 0%,#f8fafc 100%);border-left:4px solid #3b82f6;margin-bottom:14px">
                 <div class="chart-title" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px">
-                  <span>📋 2026年4月 産業運行 総論（CAAM公式レポート）</span>
-                  <a href="https://mp.weixin.qq.com/s/zqDrjDV3hp1oltPQu-LlAA" target="_blank" rel="noopener" style="font-size:11px;font-weight:400;color:#3b82f6;text-decoration:none">原典 ↗</a>
+                  <span>📋 <span id="commentary-title-month">2026年4月</span> 産業運行 総論（CAAM公式レポート）</span>
+                  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                    <select id="commentary-month-select" class="form-select form-select-sm" style="width:auto;font-size:12px;padding:2px 24px 2px 8px;height:auto"></select>
+                    <a id="commentary-source-link" href="https://mp.weixin.qq.com/s/zqDrjDV3hp1oltPQu-LlAA" target="_blank" rel="noopener" style="font-size:11px;font-weight:400;color:#3b82f6;text-decoration:none">原典 ↗</a>
+                  </div>
                 </div>
-                <div style="font-size:13px;line-height:1.85;color:#334155;padding:6px 4px">
-                  <p style="margin-bottom:10px"><span style="color:#1e40af;font-weight:600">▸ マクロ環境：</span>今年以来、中国経済は順調なスタートを切り、主要指標は予想を上回って推移している。自動車産業の転換・グレードアップは着実に進み、対外貿易においては強い韧性（レジリエンス）を示し、総合競争力は持続的に向上している。先日終了した北京モーターショーでは電動化・スマート化・クロスボーダー融合等の最先端の成果が集中的に展示され、中国が世界の自動車産業の中核市場とイノベーションの策源地となっていることを示した。</p>
-                  <p style="margin-bottom:10px"><span style="color:#1e40af;font-weight:600">▸ 4月の動向：</span>自動車の生産・販売は前年同期比でやや小幅な下降となったが、累計の産販減少幅はさらに縮小した。内需市場は依然として改善・刺激が必要、輸出は引き続き急速な増加を示し全体に安定的なサポートを形成。具体的には乗用車市場は下降、商用車市場は成長を維持、新エネルギー車は安定的に運行している。</p>
-                  <p style="margin-bottom:0"><span style="color:#1e40af;font-weight:600">▸ 政策動向：</span>4月28日、中央政治局は会議を開催し、現下の経済情勢を分析・研究のうえ一連の重要施策を打ち出した。会議では宏観政策の活用、内需ポテンシャルの掘り起こし、現代化産業体系の構築加速、外部衝撃への体系的対応を強調。これらは自動車内需市場の改善、対外貿易の優位性確保、業界の安定運営と高品質発展に寄与する見込み。</p>
+                <div id="commentary-source" style="font-size:11px;color:#64748b;padding:0 4px 4px"></div>
+                <div id="commentary-body" style="font-size:13px;line-height:1.85;color:#334155;padding:6px 4px">
+                  <p style="color:#94a3b8;font-style:italic">CAAM Excelデータ読み込み中…</p>
                 </div>
               </div>
               <div class="chart-card"><div class="chart-title">総販売台数推移</div><div id="ec-overview" class="echart-box"></div></div>
@@ -9159,8 +9161,72 @@ function parseSingleSheet(sheet) {
 }
 
 // ---- Excel fetch & 全データ組み立て ----
-const CAAM_EXCEL_PATH    = `${RAW_BASE}source/${encodeURIComponent('CAAM_2026年産販月報_v35.xlsx')}`;
+const CAAM_EXCEL_PATH    = `${RAW_BASE}source/${encodeURIComponent('CAAM_2026年産販月報_v40.xlsx')}`;
 const CAAM_EXCEL_PATH_EN = `${RAW_BASE}source/caam_monthly.xlsx`;  // 英語名フォールバック
+
+// ---- 月次総論（綜述）パース・描画 ----
+const CAAM_COMMENTARY = {};
+
+function parseCommentary(rows) {
+  let titleIdx = -1;
+  for (let i = 0; i < rows.length; i++) {
+    const v = (rows[i] && rows[i][0]) ? String(rows[i][0]) : '';
+    if (/^[８8]．産業運行/.test(v)) { titleIdx = i; break; }
+  }
+  if (titleIdx < 0) return null;
+  const titleRaw = String(rows[titleIdx][0] || '');
+  let source = '';
+  const sm = titleRaw.match(/出所[:：]\s*(.+)$/);
+  if (sm) source = sm[1].trim();
+  const paragraphs = [];
+  for (let i = titleIdx + 1; i < rows.length; i++) {
+    const v = (rows[i] && rows[i][0]) ? String(rows[i][0]).trim() : '';
+    if (v) paragraphs.push(v);
+  }
+  return paragraphs.length ? { source, paragraphs } : null;
+}
+
+function _ccEscHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderCommentary(ym) {
+  const titleEl  = document.getElementById('commentary-title-month');
+  const body     = document.getElementById('commentary-body');
+  const link     = document.getElementById('commentary-source-link');
+  const srcEl    = document.getElementById('commentary-source');
+  if (!body) return;
+  const [y, m] = ym.split('-');
+  if (titleEl) titleEl.textContent = `${y}年${parseInt(m, 10)}月`;
+  const data = CAAM_COMMENTARY[ym];
+  if (!data) {
+    body.innerHTML = '<p style="color:#94a3b8;font-style:italic;margin-bottom:0">この月の総論は未登録です。</p>';
+    if (srcEl) srcEl.textContent = '';
+    if (link) link.style.display = 'none';
+    return;
+  }
+  body.innerHTML = data.paragraphs.map((p, i) => {
+    const mb = (i === data.paragraphs.length - 1) ? '0' : '10px';
+    return `<p style="margin-bottom:${mb}">${_ccEscHtml(p)}</p>`;
+  }).join('');
+  if (srcEl) srcEl.textContent = data.source ? '出所：' + data.source : '';
+  // 原典リンクは2026-04のみ（既知URL）
+  if (link) link.style.display = (ym === '2026-04') ? '' : 'none';
+}
+
+function setupCommentaryUI() {
+  const sel = document.getElementById('commentary-month-select');
+  if (!sel) return;
+  const months = Object.keys(CAAM_COMMENTARY).sort().reverse();  // 新しい順
+  if (!months.length) return;
+  sel.innerHTML = months.map(ym => {
+    const [y, m] = ym.split('-');
+    return `<option value="${ym}">${y}年${parseInt(m, 10)}月</option>`;
+  }).join('');
+  sel.onchange = () => renderCommentary(sel.value);
+  sel.value = months[0];
+  renderCommentary(months[0]);
+}
 
 async function loadCaamExcel() {
   const loadingEl = document.getElementById('caam-loading');
@@ -9189,6 +9255,9 @@ async function loadCaamExcel() {
       const ym = `${m[1]}-${String(parseInt(m[2])).padStart(2,'0')}`;
       const rows = sheetToRows(wb.Sheets[sname]);
       allMonthly[ym] = parseMonthSheet(rows, ym);
+      // 月次総論（綜述）を抽出
+      const commentary = parseCommentary(rows);
+      if (commentary) CAAM_COMMENTARY[ym] = commentary;
     }
 
     // 単月計算シートをパースしてセグメント・価格帯を上書き
@@ -9212,6 +9281,8 @@ async function loadCaamExcel() {
     // CD / SD オブジェクトを組み立て
     buildCdSd(allMonthly);
     CAAM_EXCEL_LOADED = true;
+    // 月次総論UI を初期化
+    setupCommentaryUI();
     // INITEDキャッシュをクリア（ロード前に空描画された可能性があるため）
     Object.keys(INITED).forEach(k => delete INITED[k]);
     if (loadingEl) loadingEl.style.display = 'none';

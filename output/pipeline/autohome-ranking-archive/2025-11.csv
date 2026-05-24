@@ -1,4 +1,4 @@
-﻿rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacturer,manufacturer_ja
+rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacturer,manufacturer_ja
 1,宏光MINIEV,ウーリンMINIEV,56756,,https://www.autohome.com.cn/5714/#pvareaid=6861512,3.58-5.58万,/autohome_images/001_宏光MINIEV.png,五菱汽车,Wuling（五菱）
 2,Model Y,モデルY,47132,14.0,https://www.autohome.com.cn/5769/#pvareaid=6861512,26.35-31.35万,/autohome_images/002_Model_Y.png,特斯拉,Tesla
 3,星愿,Geely Xingyuan,42038,-1.0,https://www.autohome.com.cn/7806/#pvareaid=6861512,6.88-8.78万,/autohome_images/003_星愿.png,吉利银河,Geely Galaxy（吉利銀河）
@@ -85,17 +85,17 @@
 84,宝马X3,X3,7851,15.0,https://www.autohome.com.cn/4658/#pvareaid=6861512,31.80-39.80万,/autohome_images/084_宝马X3.png,宝马,BMW
 85,汉,Han,7841,10.0,https://www.autohome.com.cn/5499/#pvareaid=6861512,16.88-22.58万,/autohome_images/085_汉.png,比亚迪,BYD
 86,问界M9,AITO M9,7804,2.0,https://www.autohome.com.cn/7207/#pvareaid=6861512,46.98-59.98万,/autohome_images/086_问界M9.png,AITO 问界,AITO（問界）
-87,红旗E-QM5,Hongqi E-QM5,7678,-17.0,https://www.autohome.com.cn/6002/#pvareaid=6861512,8.98-23.98万,/autohome_images/087_红旗E-QM5.png,红旗,紅旗
-88,汉兰达,ハイランダー,7642,13.0,https://www.autohome.com.cn/771/#pvareaid=6861512,24.98-32.58万,/autohome_images/088_汉兰达.png,丰田,トヨタ
-89,零跑Lafa5,Leapmotor Lafa5,7397,274.0,https://www.autohome.com.cn/8278/#pvareaid=6861512,9.78-12.98万,/autohome_images/089_零跑Lafa5.png,零跑汽车,Leapmotor
-90,威兰达,ウィランダー,7367,-28.0,https://www.autohome.com.cn/5472/#pvareaid=6861512,16.98-23.08万,/autohome_images/090_威兰达.png,丰田,トヨタ
-91,极氪7X,Zeekr 7X,7339,41.0,https://www.autohome.com.cn/7777/#pvareaid=6861512,22.98-26.98万,/autohome_images/091_极氪7X.png,极氪,Zeekr（极氪）
-92,五菱缤果,Bingo,7334,-15.0,https://www.autohome.com.cn/7045/#pvareaid=6861512,5.68-8.48万,/autohome_images/092_五菱缤果.png,五菱汽车,Wuling（五菱）
-93,荣威i5,i5,7213,,https://www.autohome.com.cn/4869/#pvareaid=6861512,6.89-12.58万,/autohome_images/093_荣威i5.png,荣威,Roewe（栄威）
-94,零跑C11,C11,7197,-36.0,https://www.autohome.com.cn/5205/#pvareaid=6861512,14.98-16.58万,/autohome_images/094_零跑C11.png,零跑汽车,Leapmotor
-95,海狮05 EV,シーライオン05 EV (Sealion 05 EV),7194,-10.0,https://www.autohome.com.cn/7982/#pvareaid=6861512,11.78-14.59万,/autohome_images/095_海狮05_EV.png,比亚迪,BYD
-96,长安X5 PLUS,X5 Plus,6902,-9.0,https://www.autohome.com.cn/7552/#pvareaid=6861512,6.99-10.39万,/autohome_images/096_长安X5_PLUS.png,长安,長安
-97,理想i6,Li Xiang i6,6798,24.0,https://www.autohome.com.cn/8183/#pvareaid=6861512,24.98-26.98万,/autohome_images/097_理想i6.png,理想汽车,Li Auto
-98,捷途X70,X70,6796,-38.0,https://www.autohome.com.cn/4683/#pvareaid=6861512,9.99-14.99万,/autohome_images/098_捷途X70.png,捷途,Jetour（捷途）
-99,元PLUS,Atto 3,6743,-15.0,https://www.autohome.com.cn/6298/#pvareaid=6861512,11.58-14.99万,/autohome_images/099_元PLUS.png,比亚迪,BYD
-100,银河星耀8,Galaxy X8,6733,-35.0,https://www.autohome.com.cn/8042/#pvareaid=6861512,12.58-17.28万,/autohome_images/100_银河星耀8.png,吉利银河,Geely Galaxy（吉利銀河）
+87,红旗E-QM5,Hongqi E-QM5,7678,-17.0,https://www.autohome.com.cn/6002/#pvareaid=6861512,8.98-23.98万,./images/by_series/6002_95d02c71.png,红旗,紅旗
+88,汉兰达,ハイランダー,7642,13.0,https://www.autohome.com.cn/771/#pvareaid=6861512,24.98-32.58万,./images/by_series/771_8530e9a0.png,丰田,トヨタ
+89,零跑Lafa5,Leapmotor Lafa5,7397,274.0,https://www.autohome.com.cn/8278/#pvareaid=6861512,9.78-12.98万,./images/by_series/8278_5e6f8c38.png,零跑汽车,Leapmotor
+90,威兰达,ウィランダー,7367,-28.0,https://www.autohome.com.cn/5472/#pvareaid=6861512,16.98-23.08万,./images/by_series/5472_962ab92f.png,丰田,トヨタ
+91,极氪7X,Zeekr 7X,7339,41.0,https://www.autohome.com.cn/7777/#pvareaid=6861512,22.98-26.98万,./images/by_series/7777_77ab0241.png,极氪,Zeekr（极氪）
+92,五菱缤果,Bingo,7334,-15.0,https://www.autohome.com.cn/7045/#pvareaid=6861512,5.68-8.48万,./images/by_series/7045_cbb36943.png,五菱汽车,Wuling（五菱）
+93,荣威i5,i5,7213,,https://www.autohome.com.cn/4869/#pvareaid=6861512,6.89-12.58万,./images/by_series/4869_ae80355f.png,荣威,Roewe（栄威）
+94,零跑C11,C11,7197,-36.0,https://www.autohome.com.cn/5205/#pvareaid=6861512,14.98-16.58万,./images/by_series/5205_21f37566.png,零跑汽车,Leapmotor
+95,海狮05 EV,シーライオン05 EV (Sealion 05 EV),7194,-10.0,https://www.autohome.com.cn/7982/#pvareaid=6861512,11.78-14.59万,./images/by_series/7982_5158abbf.png,比亚迪,BYD
+96,长安X5 PLUS,X5 Plus,6902,-9.0,https://www.autohome.com.cn/7552/#pvareaid=6861512,6.99-10.39万,./images/by_series/7552_cee67d18.png,长安,長安
+97,理想i6,Li Xiang i6,6798,24.0,https://www.autohome.com.cn/8183/#pvareaid=6861512,24.98-26.98万,./images/by_series/8183_54dc76da.png,理想汽车,Li Auto
+98,捷途X70,X70,6796,-38.0,https://www.autohome.com.cn/4683/#pvareaid=6861512,9.99-14.99万,./images/by_series/4683_34bc4ceb.png,捷途,Jetour（捷途）
+99,元PLUS,Atto 3,6743,-15.0,https://www.autohome.com.cn/6298/#pvareaid=6861512,11.58-14.99万,./images/by_series/6298_c6968813.png,比亚迪,BYD
+100,银河星耀8,Galaxy X8,6733,-35.0,https://www.autohome.com.cn/8042/#pvareaid=6861512,12.58-17.28万,./images/by_series/8042_6bc8ef74.png,吉利银河,Geely Galaxy（吉利銀河）

@@ -39,7 +39,7 @@ category_id,category,month,rank,series_id,name,global_name,units,price,link,imag
 1,燃油车,2026-01,38,4083,捷豹XFL,XFL,1052.0,43.99-48.99万,https://www.autohome.com.cn/4083/#pvareaid=6861512,./images/by_series/4083_97b4f44e.png,https://www.autohome.com.cn/4083/#pvareaid=6861512,捷豹,Jaguar
 1,燃油车,2026-01,39,2886,起亚K3,K3,,11.29-14.39万,https://www.autohome.com.cn/2886/#pvareaid=6861512,./images/by_series/2886_44fefd73.png,https://www.autohome.com.cn/2886/#pvareaid=6861512,起亚,Kia
 1,燃油车,2026-01,40,813,福瑞迪,フォルテ (Forte),,7.88-13.98万,https://www.autohome.com.cn/813/#pvareaid=6861512,./images/by_series/813_9a016720.png,https://www.autohome.com.cn/813/#pvareaid=6861512,起亚,Kia
-1,燃油车,2026-01,41,3294,马自达3 昂克赛拉,Mazda3 Axela,,8.99-18.99万,https://www.autohome.com.cn/3294/#pvareaid=6861512,./images/by_series/3294_6a1a2781.png,https://www.autohome.com.cn/3294/#pvareaid=6861512,马自达,マツダ
+1,燃油车,2026-01,41,3294,马自达3 昂克赛拉,Mazda3 Axela,,8.99-18.99万,https://www.autohome.com.cn/3294/#pvareaid=6861512,./images/by_series/3294_d4644017.png,https://www.autohome.com.cn/3294/#pvareaid=6861512,马自达,マツダ
 1,燃油车,2026-01,42,3462,雷凌,レビン,,11.38-14.88万,https://www.autohome.com.cn/3462/#pvareaid=6861512,./images/by_series/3462_974c6da4.png,https://www.autohome.com.cn/3462/#pvareaid=6861512,丰田,トヨタ
 1,燃油车,2026-01,43,6386,型格,Integra,,13.99-17.09万,https://www.autohome.com.cn/6386/#pvareaid=6861512,./images/by_series/6386_e32f802d.png,https://www.autohome.com.cn/6386/#pvareaid=6861512,本田,ホンダ
 1,燃油车,2026-01,44,5998,奥迪A7L,A7L,,41.87-66.62万,https://www.autohome.com.cn/5998/#pvareaid=6861512,./images/by_series/5998_fe486d62.png,https://www.autohome.com.cn/5998/#pvareaid=6861512,奥迪,Audi
@@ -49,7 +49,7 @@ category_id,category,month,rank,series_id,name,global_name,units,price,link,imag
 1,燃油车,2026-01,48,3802,凯迪拉克CT6,CT6,,36.99-42.99万,https://www.autohome.com.cn/3802/#pvareaid=6861512,./images/by_series/3802_0d1df9ba.png,https://www.autohome.com.cn/3802/#pvareaid=6861512,凯迪拉克,Cadillac
 1,燃油车,2026-01,49,4764,奔驰A级,Aクラス,,25.13-27.57万,https://www.autohome.com.cn/4764/#pvareaid=6861512,./images/by_series/4764_9f8e1748.png,https://www.autohome.com.cn/4764/#pvareaid=6861512,奔驰,Mercedes-Benz
 1,燃油车,2026-01,50,7890,捷达VA7,捷达VA7,,9.98-12.98万,https://www.autohome.com.cn/7890/#pvareaid=6861512,./images/by_series/7890_81bb6145.png,https://www.autohome.com.cn/7890/#pvareaid=6861512,捷达,Jetta
-456,新能源,2026-01,1,8243,日产N6,N6,3012.0,10.39-12.99万,https://www.autohome.com.cn/8243/#pvareaid=6861512,./images/by_series/8243_6ce01e3b.png,https://www.autohome.com.cn/8243/#pvareaid=6861512,日产,日産
+456,新能源,2026-01,1,8243,日产N6,N6,3012.0,10.39-12.99万,https://www.autohome.com.cn/8243/#pvareaid=6861512,./images/by_series/8243_77600724.png,https://www.autohome.com.cn/8243/#pvareaid=6861512,日产,日産
 456,新能源,2026-01,2,7692,马自达EZ-6,EZ-6,1305.0,11.98-16.28万,https://www.autohome.com.cn/7692/#pvareaid=6861512,./images/by_series/7692_5691f4b9.png,https://www.autohome.com.cn/7692/#pvareaid=6861512,马自达,マツダ
 456,新能源,2026-01,3,8100,别克至境L7,Envista L7,1140.0,17.39-21.99万,https://www.autohome.com.cn/8100/#pvareaid=6861512,./images/by_series/8100_89d22e44.png,https://www.autohome.com.cn/8100/#pvareaid=6861512,别克,Buick
 456,新能源,2026-01,4,6544,宝马i3,i3,1038.0,27.80-33.80万,https://www.autohome.com.cn/6544/#pvareaid=6861512,./images/by_series/6544_9cdf73f5.png,https://www.autohome.com.cn/6544/#pvareaid=6861512,宝马,BMW
@@ -58,13 +58,13 @@ category_id,category,month,rank,series_id,name,global_name,units,price,link,imag
 456,新能源,2026-01,7,7925,奥迪E5 Sportback,E5 Sportback,,23.59-31.99万,https://www.autohome.com.cn/7925/#pvareaid=6861512,./images/by_series/7925_e93384ea.png,https://www.autohome.com.cn/7925/#pvareaid=6861512,奥迪AUDI,Audi
 456,新能源,2026-01,8,6903,丰田bZ3,Toyota bZ3,,10.98-19.98万,https://www.autohome.com.cn/6903/#pvareaid=6861512,./images/by_series/6903_174ce9ed.png,https://www.autohome.com.cn/6903/#pvareaid=6861512,丰田,トヨタ
 456,新能源,2026-01,9,7344,宝马i5,i5,,36.80-53.99万,https://www.autohome.com.cn/7344/#pvareaid=6861512,./images/by_series/7344_3e257596.png,https://www.autohome.com.cn/7344/#pvareaid=6861512,宝马,BMW
-456,新能源,2026-01,10,7127,雅阁新能源,雅阁新能源,,,https://www.autohome.com.cn/7127/#pvareaid=6861512,./images/by_series/7127_bf5c74b9.png,https://www.autohome.com.cn/7127/#pvareaid=6861512,本田,ホンダ
+456,新能源,2026-01,10,7127,雅阁新能源,雅阁新能源,,,https://www.autohome.com.cn/7127/#pvareaid=6861512,./images/by_series/7127_8ce744fb.png,https://www.autohome.com.cn/7127/#pvareaid=6861512,本田,ホンダ
 456,新能源,2026-01,11,7208,大众ID.7 VIZZION,大众ID.7 VIZZION,,22.78-26.28万,https://www.autohome.com.cn/7208/#pvareaid=6861512,./images/by_series/7208_0554d501.png,https://www.autohome.com.cn/7208/#pvareaid=6861512,大众,Volkswagen
-456,新能源,2026-01,12,4776,微蓝6,Velite 6,,11.28-16.89万,https://www.autohome.com.cn/4776/#pvareaid=6861512,./images/by_series/4776_287c978c.png,https://www.autohome.com.cn/4776/#pvareaid=6861512,别克,Buick
+456,新能源,2026-01,12,4776,微蓝6,Velite 6,,11.28-16.89万,https://www.autohome.com.cn/4776/#pvareaid=6861512,./images/by_series/4776_d5ace838.png,https://www.autohome.com.cn/4776/#pvareaid=6861512,别克,Buick
 456,新能源,2026-01,13,6640,奔驰EQE,奔驰EQE,,47.80-62.70万,https://www.autohome.com.cn/6640/#pvareaid=6861512,./images/by_series/6640_29314d4c.png,https://www.autohome.com.cn/6640/#pvareaid=6861512,奔驰,Mercedes-Benz
 456,新能源,2026-01,14,7407,灵悉L,灵悉L,,14.98-15.58万,https://www.autohome.com.cn/7407/#pvareaid=6861512,./images/by_series/7407_f5e7eab3.png,https://www.autohome.com.cn/7407/#pvareaid=6861512,灵悉,灵悉
 456,新能源,2026-01,15,4904,帕萨特插电混动,帕萨特插电混动,,,https://www.autohome.com.cn/4904/#pvareaid=6861512,./images/by_series/4904_fd4e11ef.png,https://www.autohome.com.cn/4904/#pvareaid=6861512,大众,Volkswagen
-456,新能源,2026-01,16,4864,沃尔沃S90插电式混动,沃尔沃S90插电式混动,,49.99-61.39万,https://www.autohome.com.cn/4864/#pvareaid=6861512,./images/by_series/4864_f8f21f11.png,https://www.autohome.com.cn/4864/#pvareaid=6861512,沃尔沃,Volvo
+456,新能源,2026-01,16,4864,沃尔沃S90插电式混动,沃尔沃S90插电式混动,,49.99-61.39万,https://www.autohome.com.cn/4864/#pvareaid=6861512,./images/by_series/4864_e30a0629.png,https://www.autohome.com.cn/4864/#pvareaid=6861512,沃尔沃,Volvo
 456,新能源,2026-01,17,4350,宝马5系新能源,宝马5系新能源,,49.69-69.86万,https://www.autohome.com.cn/4350/#pvareaid=6861512,./images/by_series/4350_c64f6f17.png,https://www.autohome.com.cn/4350/#pvareaid=6861512,宝马,BMW
 456,新能源,2026-01,18,5396,畅巡,畅巡,,18.29-19.79万,https://www.autohome.com.cn/5396/#pvareaid=6861512,./images/by_series/5396_36c848a4.png,https://www.autohome.com.cn/5396/#pvareaid=6861512,雪佛兰,Chevrolet
 4,纯电动,2026-01,1,6544,宝马i3,i3,1038.0,27.80-33.80万,https://www.autohome.com.cn/6544/#pvareaid=6861512,./images/by_series/6544_ead0853b.png,https://www.autohome.com.cn/6544/#pvareaid=6861512,宝马,BMW
@@ -74,14 +74,14 @@ category_id,category,month,rank,series_id,name,global_name,units,price,link,imag
 4,纯电动,2026-01,5,6903,丰田bZ3,Toyota bZ3,,10.98-19.98万,https://www.autohome.com.cn/6903/#pvareaid=6861512,./images/by_series/6903_174ce9ed.png,https://www.autohome.com.cn/6903/#pvareaid=6861512,丰田,トヨタ
 4,纯电动,2026-01,6,7344,宝马i5,i5,,36.80-53.99万,https://www.autohome.com.cn/7344/#pvareaid=6861512,./images/by_series/7344_3e257596.png,https://www.autohome.com.cn/7344/#pvareaid=6861512,宝马,BMW
 4,纯电动,2026-01,7,7208,大众ID.7 VIZZION,大众ID.7 VIZZION,,22.78-26.28万,https://www.autohome.com.cn/7208/#pvareaid=6861512,./images/by_series/7208_0554d501.png,https://www.autohome.com.cn/7208/#pvareaid=6861512,大众,Volkswagen
-4,纯电动,2026-01,8,4776,微蓝6,Velite 6,,11.28-16.89万,https://www.autohome.com.cn/4776/#pvareaid=6861512,./images/by_series/4776_287c978c.png,https://www.autohome.com.cn/4776/#pvareaid=6861512,别克,Buick
+4,纯电动,2026-01,8,4776,微蓝6,Velite 6,,11.28-16.89万,https://www.autohome.com.cn/4776/#pvareaid=6861512,./images/by_series/4776_d5ace838.png,https://www.autohome.com.cn/4776/#pvareaid=6861512,别克,Buick
 4,纯电动,2026-01,9,6640,奔驰EQE,奔驰EQE,,47.80-62.70万,https://www.autohome.com.cn/6640/#pvareaid=6861512,./images/by_series/6640_29314d4c.png,https://www.autohome.com.cn/6640/#pvareaid=6861512,奔驰,Mercedes-Benz
 4,纯电动,2026-01,10,7407,灵悉L,灵悉L,,14.98-15.58万,https://www.autohome.com.cn/7407/#pvareaid=6861512,./images/by_series/7407_f5e7eab3.png,https://www.autohome.com.cn/7407/#pvareaid=6861512,灵悉,灵悉
 4,纯电动,2026-01,11,5396,畅巡,畅巡,,18.29-19.79万,https://www.autohome.com.cn/5396/#pvareaid=6861512,./images/by_series/5396_06c4666d.png,https://www.autohome.com.cn/5396/#pvareaid=6861512,雪佛兰,Chevrolet
 5,插电混动,2026-01,1,8243,日产N6,N6,3012.0,10.39-12.99万,https://www.autohome.com.cn/8243/#pvareaid=6861512,./images/by_series/8243_46a60c6d.png,https://www.autohome.com.cn/8243/#pvareaid=6861512,日产,日産
-5,插电混动,2026-01,2,7127,雅阁新能源,雅阁新能源,,,https://www.autohome.com.cn/7127/#pvareaid=6861512,./images/by_series/7127_bf5c74b9.png,https://www.autohome.com.cn/7127/#pvareaid=6861512,本田,ホンダ
+5,插电混动,2026-01,2,7127,雅阁新能源,雅阁新能源,,,https://www.autohome.com.cn/7127/#pvareaid=6861512,./images/by_series/7127_8ce744fb.png,https://www.autohome.com.cn/7127/#pvareaid=6861512,本田,ホンダ
 5,插电混动,2026-01,3,4904,帕萨特插电混动,帕萨特插电混动,,,https://www.autohome.com.cn/4904/#pvareaid=6861512,./images/by_series/4904_fd4e11ef.png,https://www.autohome.com.cn/4904/#pvareaid=6861512,大众,Volkswagen
-5,插电混动,2026-01,4,4864,沃尔沃S90插电式混动,沃尔沃S90插电式混动,,49.99-61.39万,https://www.autohome.com.cn/4864/#pvareaid=6861512,./images/by_series/4864_f8f21f11.png,https://www.autohome.com.cn/4864/#pvareaid=6861512,沃尔沃,Volvo
+5,插电混动,2026-01,4,4864,沃尔沃S90插电式混动,沃尔沃S90插电式混动,,49.99-61.39万,https://www.autohome.com.cn/4864/#pvareaid=6861512,./images/by_series/4864_e30a0629.png,https://www.autohome.com.cn/4864/#pvareaid=6861512,沃尔沃,Volvo
 5,插电混动,2026-01,5,4350,宝马5系新能源,宝马5系新能源,,49.69-69.86万,https://www.autohome.com.cn/4350/#pvareaid=6861512,./images/by_series/4350_aaac20a2.png,https://www.autohome.com.cn/4350/#pvareaid=6861512,宝马,BMW
 6,混动增程,2026-01,1,7692,马自达EZ-6,EZ-6,1305.0,11.98-16.28万,https://www.autohome.com.cn/7692/#pvareaid=6861512,./images/by_series/7692_8f438e14.png,https://www.autohome.com.cn/7692/#pvareaid=6861512,马自达,マツダ
 6,混动增程,2026-01,2,8100,别克至境L7,Envista L7,1140.0,17.39-21.99万,https://www.autohome.com.cn/8100/#pvareaid=6861512,./images/by_series/8100_89d22e44.png,https://www.autohome.com.cn/8100/#pvareaid=6861512,别克,Buick

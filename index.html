@@ -21273,9 +21273,23 @@ var MONTHS_LABEL = ['22.6','22.7','22.8','22.9','22.10','22.11','22.12','23.1','
 var MONTHS_TREND = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
 function leg(opt){ return Object.assign({top:8,right:12,textStyle:{fontFamily:FONT,fontSize:11},itemWidth:14,itemHeight:10}, opt||{}); }
-function grid(opt){ return Object.assign({top:55,bottom:55,left:60,right:20,containLabel:false}, opt||{}); }
+function grid(opt){ return Object.assign({top:55,bottom:65,left:60,right:20,containLabel:true}, opt||{}); }
 function yVal(unit,opt){ return Object.assign({type:'value',name:unit,nameTextStyle:{fontFamily:FONT,fontSize:11,color:'#888'},axisLabel:{fontFamily:FONT,fontSize:11,color:'#555'},splitLine:{lineStyle:{color:'#f0f0f0'}},axisLine:{show:true,lineStyle:{color:'#ddd'}}}, opt||{}); }
-function xCat(data){ return {type:'category',data:data,axisLabel:{fontFamily:FONT,fontSize:11,color:'#555',interval:0},axisLine:{lineStyle:{color:'#ddd'}}}; }
+function xCat(data){
+  // データ長に応じて動的にラベルを間引く＋多いときは斜めに
+  var len = (data && data.length) || 0;
+  var interval, rotate, fs;
+  if (len <= 12)      { interval = 0;  rotate = 0;  fs = 11; }
+  else if (len <= 24) { interval = 1;  rotate = 0;  fs = 10; }
+  else if (len <= 36) { interval = 2;  rotate = 30; fs = 10; }
+  else if (len <= 60) { interval = 3;  rotate = 30; fs = 10; }
+  else                { interval = Math.ceil(len/14)-1; rotate = 35; fs = 9; }
+  return {
+    type:'category', data:data,
+    axisLabel:{ fontFamily:FONT, fontSize:fs, color:'#555', interval:interval, rotate:rotate },
+    axisLine:{ lineStyle:{ color:'#ddd' } }
+  };
+}
 
 var PAL = ['#3b82f6','#ef4444','#10b981','#f59e0b','#8b5cf6','#06b6d4','#ec4899','#84cc16'];
 

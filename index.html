@@ -222,6 +222,82 @@
     return newOpt;
   }
 
+  // ===== Y軸name（'%','万台'等）と上配置凡例の重なり対策（全デバイス共通） =====
+  // - yAxis.name は ECharts デフォルトで軸の最上端から nameGap(=15) 上に表示される
+  // - 凡例が上に置かれていると、凡例の文字と name が縦方向で被ることがある
+  // 対策：
+  //  1) yAxis.nameGap を小さく(8)して name を grid 上端の直上に詰める
+  //  2) grid.top を「凡例下端 + name用余白」まで底上げして name と凡例を分離
+  // 既に nameGap が明示指定されている場合は尊重する。
+  function _adjustYAxisNameForLegend(option) {
+    if (!option || !option.legend || !option.yAxis) return option;
+
+    // 上配置の凡例があるか判定
+    var legendArr = Array.isArray(option.legend) ? option.legend : [option.legend];
+    var hasTopLegend = legendArr.some(function(lg) {
+      if (!lg) return false;
+      if (lg.show === false) return false;
+      if (lg.bottom != null && lg.bottom !== 'auto' && lg.bottom !== '') return false;
+      if (lg.top == null) return true;                      // 未指定 → デフォルトで上
+      if (typeof lg.top === 'number') return lg.top < 60;
+      if (lg.top === 'top') return true;
+      var n = parseInt(lg.top, 10);
+      return !isNaN(n) && n < 60;
+    });
+    if (!hasTopLegend) return option;
+
+    // yAxis に name があるか
+    var yAxisArr = Array.isArray(option.yAxis) ? option.yAxis : [option.yAxis];
+    var hasYName = yAxisArr.some(function(ax) {
+      return ax && ax.name && String(ax.name).length > 0;
+    });
+    if (!hasYName) return option;
+
+    // 凡例の推定行数 → 必要な top 余白
+    var rows = _estimateLegendRows(option);
+    var legendTopPad = 8;       // legend.top デフォルト相当
+    var legendRowH   = 22;      // 凡例1行の高さ目安
+    var legendBottomY = legendTopPad + rows * legendRowH;
+    var NAME_AREA = 18;         // y軸name表示分の余白（name高さ約14 + 4）
+    var MIN_TOP = legendBottomY + NAME_AREA;
+
+    // yAxis.nameGap を 8 に設定（既存指定があれば尊重）
+    var yModified = false;
+    var newYAxis = yAxisArr.map(function(ax) {
+      if (!ax || !ax.name) return ax;
+      if (ax.nameGap != null) return ax;
+      var copyAx = {};
+      Object.keys(ax).forEach(function(k) { copyAx[k] = ax[k]; });
+      copyAx.nameGap = 8;
+      yModified = true;
+      return copyAx;
+    });
+
+    // grid.top を底上げ
+    var grids = Array.isArray(option.grid) ? option.grid : [option.grid];
+    var gridModified = false;
+    var newGrids = grids.map(function(g) {
+      if (!g) return g;
+      var curTop = (typeof g.top === 'number') ? g.top
+                 : (typeof g.top === 'string' ? (parseInt(g.top, 10) || 0) : 0);
+      if (curTop < MIN_TOP) {
+        gridModified = true;
+        var copy = {};
+        Object.keys(g).forEach(function(k) { copy[k] = g[k]; });
+        copy.top = MIN_TOP;
+        return copy;
+      }
+      return g;
+    });
+
+    if (!yModified && !gridModified) return option;
+    var newOpt = {};
+    Object.keys(option).forEach(function(k) { newOpt[k] = option[k]; });
+    if (yModified)    newOpt.yAxis = Array.isArray(option.yAxis) ? newYAxis : newYAxis[0];
+    if (gridModified) newOpt.grid  = Array.isArray(option.grid)  ? newGrids  : newGrids[0];
+    return newOpt;
+  }
+
   var _init = echarts.init;
   echarts.init = function() {
     var instance = _init.apply(this, arguments);
@@ -256,9 +332,11 @@
       }
       // ★ スマホ時：上配置の凡例が縦軸と重ならないようgrid.topを底上げ
       //   X軸ラベルが多いグラフは45度回転して重なりを防ぐ
+      // ★ 全デバイス：Y軸name（'%','万台'等）と上配置凡例の重なり対策
       if (!_hovering && option) {
         option = _adjustTopMarginForMobile(option);
         option = _adjustXAxisForMobile(option);
+        option = _adjustYAxisNameForLegend(option);
       }
       if (!_hovering) {
         _lastOption = option;

@@ -8747,6 +8747,9 @@ init();
       const priceJPY = convertToJPY(r.price || '');
       const specBtn = carId ? `<button class="btn btn-outline-primary btn-sm btn-spec" onclick="showConfigCsv('${carId}','${globalName}','autohome')">仕様表</button>` : '';
       const storyBtn = carId ? `<button class="btn btn-outline-secondary btn-sm btn-story" onclick="showStory('${carId}','${globalName}','autohome')">口コミ</button>` : '';
+      const trendBtn = (carId && window.SERIES_HISTORY && window.SERIES_HISTORY[carId])
+        ? `<button class="btn btn-sm btn-trend" onclick="showTrend('${carId}','${globalName}')" title="販売トレンド">📈</button>`
+        : '';
       const tr = document.createElement('tr');
       tr.innerHTML = `
         <td class="rank-badge">${r.rank}</td>
@@ -8756,7 +8759,7 @@ init();
         <td>${maker}</td>
         <td style="white-space:nowrap;">${units}</td>
         <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
-        <td>${specBtn}${storyBtn}</td>`;
+        <td>${specBtn}${storyBtn}${trendBtn}</td>`;
       tbody.appendChild(tr);
     });
   }

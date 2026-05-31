@@ -83,7 +83,8 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .pct{text-align:right;line-height:1.35}
 .pct .num{font-family:var(--mono);font-size:15px;font-weight:700;color:#0f172a}
 .pct .num small{font-size:10px;color:var(--opt);font-weight:600;margin-left:2px}
-.pct .counts{display:block;font-size:10.5px;color:var(--ink3);margin-top:1px;white-space:nowrap}
+.pct .counts{display:block;font-size:10.5px;color:var(--ink3);margin-top:1px;white-space:normal;word-break:keep-all;overflow-wrap:anywhere}
+.pct .counts .cstd,.pct .counts .copt,.pct .counts .ctot,.pct .counts .cov{white-space:nowrap}
 .pct .counts .cstd{color:var(--std2);font-weight:700}
 .pct .counts .copt{color:#d97706;font-weight:700}
 .pct .counts .ctot{color:var(--ink2)}

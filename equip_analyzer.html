@@ -76,6 +76,20 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .segpart{height:100%;transition:width .5s;display:flex;align-items:center;justify-content:center}
 .segpart span{font-size:9px;color:#fff;font-weight:700;opacity:.9;white-space:nowrap;overflow:hidden}
 .distag{font-size:9px;font-weight:700;color:#fff;background:var(--conn);border-radius:4px;padding:1px 5px;margin-left:6px;vertical-align:middle}
+.distleg{display:flex;flex-direction:column;gap:1.5px;align-items:flex-end}
+.distleg .lg{font-size:10px;color:var(--ink2);white-space:nowrap;display:inline-flex;align-items:center;gap:4px;line-height:1.3}
+.distleg .lg i{width:9px;height:9px;border-radius:2px;display:inline-block;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
+.distleg .lg b{color:#0f172a;font-family:var(--mono);font-weight:700}
+.distrow{cursor:pointer}
+.distrow .segbar{grid-column:2 / 4;height:20px}
+.distrow .segbar:hover{outline:2px solid rgba(59,130,246,.35);outline-offset:1px}
+.tip{position:fixed;z-index:100;display:none;background:#fff;border:1px solid var(--line);border-radius:10px;
+  box-shadow:0 12px 32px rgba(15,23,42,.20);padding:9px 11px;font-size:11.5px;color:var(--ink);pointer-events:none;max-width:280px}
+.tip .tiptitle{font-weight:700;font-size:12px;margin-bottom:6px;color:#0f172a}
+.tip .tiprow{display:flex;align-items:center;gap:8px;padding:2px 0;white-space:nowrap}
+.tip .tiprow i{width:11px;height:11px;border-radius:3px;flex-shrink:0}
+.tip .tiprow span{flex:1}
+.tip .tiprow b{font-family:var(--mono);color:#0f172a;font-weight:700}
 .loadwrap{padding:60px 20px;text-align:center;color:var(--ink2)}
 .spinner{width:30px;height:30px;border:3px solid var(--line);border-top-color:var(--std);border-radius:50%;
   margin:0 auto 14px;animation:spin .8s linear infinite}
@@ -202,6 +216,7 @@ footer b{color:var(--ink2)}
 </footer>
 </div><!-- /wrap -->
 
+<div id="tip" class="tip"></div>
 <div class="modal-bg" id="modalBg">
   <div class="modal">
     <div class="mh">
@@ -213,7 +228,7 @@ footer b{color:var(--ink2)}
 </div>
 <script>
 const CAT_COLORS={'安全・運転支援':'var(--safe)','快適・利便':'var(--comf)','コネクト・スマート':'var(--conn)','外装・灯火':'var(--light)','パワートレイン・足回り':'var(--power)','スペック・構造':'#0891b2','その他':'var(--misc)'};
-const SEG_COLORS=['#cbd5e1','#bfdbfe','#60a5fa','#2563eb','#1e3a8a']; // なし→弱→強
+const SEG_COLORS=['#cbd5e1','#93c5fd','#3b82f6','#1d4ed8','#1e3a8a','#0e7490','#7c3aed']; // 区別しやすい濃いめ
 const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const d36=ch=>{const i=B36.indexOf(ch);return i<0?0:i;};
 let FEATS=[], DISTFEATS=[], CATS=[], DS={};
@@ -268,19 +283,20 @@ function binRow(r){
 }
 function distRow(r){
   const K=r.f.cats.length, total=r.total||1;
-  let seg='', leg=[];
-  for(let k=K;k>=1;k--){ // 強い順に表示
+  let seg='', tip=`<div class="tiptitle">${esc(r.f.item)}</div>`;
+  for(let k=K;k>=1;k--){ // 強い順
     const n=r.dist[k]; if(!n) continue;
     const w=n/total*100, col=SEG_COLORS[Math.min(k,SEG_COLORS.length-1)];
-    seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;background:${col}"><span>${w>=8?r.f.cats[k-1]:''}</span></div>`;
-    leg.push(`${r.f.cats[k-1]}${n}`);
+    seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;min-width:4px;background:${col}"></div>`;
+    tip+=`<div class="tiprow"><i style="background:${col}"></i><span>${esc(r.f.cats[k-1])}</span><b>${n}台 (${Math.round(w)}%)</b></div>`;
   }
   const none=r.dist[0];
-  if(none){seg+=`<div class="segpart" style="width:${(none/total*100).toFixed(1)}%;background:var(--panel2)"></div>`; leg.push(`なし/未掲載${none}`);}
-  return `<div class="frow" data-di="${r.j}">
+  if(none){const w=none/total*100;
+    seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;background:var(--panel2)"></div>`;
+    tip+=`<div class="tiprow"><i style="background:#e2e8f0;border:1px solid var(--line)"></i><span>なし / 未掲載</span><b>${none}台 (${Math.round(w)}%)</b></div>`;}
+  return `<div class="frow distrow" data-di="${r.j}">
     <div class="fname">${esc(r.f.item)}<span class="distag">分布</span><span class="sec">${esc(r.f.zh)}</span></div>
-    <div class="segbar">${seg}</div>
-    <div class="pct"><span class="counts" style="white-space:normal">${leg.join(' / ')}</span></div>
+    <div class="segbar">${seg}<template class="tpl">${tip}</template></div>
   </div>`;
 }
 
@@ -302,6 +318,20 @@ function renderSections({rows,drows}){
   host.innerHTML=html;
   host.querySelectorAll('.frow[data-bi]').forEach(el=>el.onclick=()=>openBin(+el.dataset.bi));
   host.querySelectorAll('.frow[data-di]').forEach(el=>el.onclick=()=>openDist(+el.dataset.di));
+  // 分布バー: ホバーでツールチップ表示（別タブのグラフ同様）
+  const tip=document.getElementById('tip');
+  host.querySelectorAll('.distrow .segbar').forEach(bar=>{
+    const tpl=bar.querySelector('template.tpl'); const html=tpl?tpl.innerHTML:'';
+    bar.addEventListener('mouseenter',()=>{tip.innerHTML=html;tip.style.display='block';});
+    bar.addEventListener('mousemove',e=>{
+      const pad=14, w=tip.offsetWidth, h=tip.offsetHeight;
+      let x=e.clientX+pad, y=e.clientY+pad;
+      if(x+w>window.innerWidth-8) x=e.clientX-w-pad;
+      if(y+h>window.innerHeight-8) y=e.clientY-h-pad;
+      tip.style.left=Math.max(8,x)+'px'; tip.style.top=Math.max(8,y)+'px';
+    });
+    bar.addEventListener('mouseleave',()=>{tip.style.display='none';});
+  });
 }
 
 function render(){const {rows,drows,total}=computeRows(); renderNote(total); renderSections({rows,drows});}

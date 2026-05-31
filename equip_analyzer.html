@@ -198,6 +198,14 @@ footer b{color:var(--ink2)}
       <button data-range="all" class="on">すべて</button>
     </div>
   </div>
+  <div class="cgroup">
+    <span class="clabel">並び</span>
+    <div class="seg" id="sortSeg">
+      <button data-sort="spec" class="on">仕様表順</button>
+      <button data-sort="desc">装着率 高い順</button>
+      <button data-sort="asc">装着率 低い順</button>
+    </div>
+  </div>
   <div class="search"><input id="q" type="text" placeholder="装備名で検索（例: 自動駐車, サンルーフ, 音声）"></div>
 </div>
 
@@ -235,7 +243,7 @@ const SEG_COLORS=['#cbd5e1','#93c5fd','#3b82f6','#1d4ed8','#1e3a8a','#0e7490','#
 const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const d36=ch=>{const i=B36.indexOf(ch);return i<0?0:i;};
 let FEATS=[], DISTFEATS=[], CATS=[], DS={};
-const state={primary:'overall',esrc:'guochan',ecat:'456',scope:999,denom:'all',range:'all',cat:'ALL',q:''};
+const state={primary:'overall',esrc:'guochan',ecat:'456',scope:999,denom:'all',range:'all',cat:'ALL',q:'',sort:'spec'};
 
 function dsKey(){ return state.primary==='energy' ? `e_${state.esrc}_${state.ecat}` : state.primary; }
 function curDS(){ return DS[dsKey()]||{label:'(データなし)',cars:[]}; }
@@ -250,23 +258,26 @@ function computeRows(){
   let rows=FEATS.map((f,i)=>{
     const denom=state.denom==='listed'?(listed[i]||0):total;
     const stdP=denom?std[i]/denom*100:0, optP=denom?opt[i]/denom*100:0;
-    return {kind:'bin',f,i,std:std[i],opt:opt[i],listed:listed[i],denom,stdP,optP,val:stdP+optP,
-            cov:total?listed[i]/total*100:0,total};
+    return {kind:'bin',f,i,o:(f.o!=null?f.o:1e9),tie:i,std:std[i],opt:opt[i],listed:listed[i],denom,stdP,optP,
+            val:stdP+optP,sortVal:stdP+optP,cov:total?listed[i]/total*100:0,total};
   });
-  // distribution
   let drows=DISTFEATS.map((f,j)=>{
     const K=f.cats.length, dist=new Array(K+1).fill(0);
     cars.forEach(c=>{const code=d36(c.dc[j]); dist[Math.min(code,K)]++;});
     const have=dist.reduce((a,b,idx)=>idx>0?a+b:a,0);
-    return {kind:'dist',f,j,dist,have,total};
+    return {kind:'dist',f,j,o:(f.o!=null?f.o:1e9),tie:1e6+j,dist,have,total,
+            sortVal:total?have/total*100:0};
   });
   if(state.cat!=='ALL'){rows=rows.filter(r=>r.f.cat===state.cat); drows=drows.filter(r=>r.f.cat===state.cat);}
   if(state.q){const q=state.q.toLowerCase();
-    rows=rows.filter(r=>r.f.item.toLowerCase().includes(q)||(r.f.zh&&r.f.zh.includes(state.q)));
-    drows=drows.filter(r=>r.f.item.toLowerCase().includes(q)||(r.f.zh&&r.f.zh.includes(state.q)));}
+    const mt=r=>r.f.item.toLowerCase().includes(q)||(r.f.zh&&r.f.zh.includes(state.q));
+    rows=rows.filter(mt); drows=drows.filter(mt);}
   if(state.range==='diff'&&!state.q) rows=rows.filter(r=>r.val>=10&&r.val<=90);
-  rows.sort((a,b)=>b.stdP-a.stdP||b.std-a.std);
-  return {rows,drows,total};
+  let all=rows.concat(drows);
+  if(state.sort==='desc') all.sort((a,b)=>b.sortVal-a.sortVal||a.o-b.o);
+  else if(state.sort==='asc') all.sort((a,b)=>a.sortVal-b.sortVal||a.o-b.o);
+  else all.sort((a,b)=>a.o-b.o||a.tie-b.tie); // spec=仕様表順
+  return {all,total};
 }
 
 function renderNote(total){
@@ -303,29 +314,26 @@ function distRow(r){
   </div>`;
 }
 
-function renderSections({rows,drows}){
+function renderSections({all}){
   const host=document.getElementById('sections');
-  const byCat={}; CATS.forEach(c=>byCat[c]={bin:[],dist:[]});
-  rows.forEach(r=>(byCat[r.f.cat]=byCat[r.f.cat]||{bin:[],dist:[]}).bin.push(r));
-  drows.forEach(r=>(byCat[r.f.cat]=byCat[r.f.cat]||{bin:[],dist:[]}).dist.push(r));
+  const byCat={}; CATS.forEach(c=>byCat[c]=[]);
+  all.forEach(r=>(byCat[r.f.cat]=byCat[r.f.cat]||[]).push(r));
   let html=''; const order=state.cat==='ALL'?CATS:[state.cat];
   order.forEach(cat=>{
-    const g=byCat[cat]; if(!g||(!g.bin.length&&!g.dist.length)) return;
+    const g=byCat[cat]; if(!g||!g.length) return;
     const col=CAT_COLORS[cat];
-    html+=`<div class="section"><h2><span class="bar" style="background:${col}"></span>${cat}<span class="cnt">${g.bin.length+g.dist.length}項目</span></h2><div class="flist">`;
-    g.bin.forEach(r=>html+=binRow(r));
-    g.dist.forEach(r=>html+=distRow(r));
+    html+=`<div class="section"><h2><span class="bar" style="background:${col}"></span>${cat}<span class="cnt">${g.length}項目</span></h2><div class="flist">`;
+    g.forEach(r=>html+=(r.kind==='bin'?binRow(r):distRow(r)));
     html+='</div></div>';
   });
   if(!html) html='<div class="empty" style="padding:40px;text-align:center;color:var(--ink3)">該当する装備がありません。</div>';
   host.innerHTML=html;
   host.querySelectorAll('.frow[data-bi]').forEach(el=>el.onclick=()=>openBin(+el.dataset.bi));
   host.querySelectorAll('.frow[data-di]').forEach(el=>el.onclick=()=>openDist(+el.dataset.di));
-  // 分布バー: ホバーでツールチップ表示（別タブのグラフ同様）
   const tip=document.getElementById('tip');
   host.querySelectorAll('.distrow .segbar').forEach(bar=>{
-    const tpl=bar.querySelector('template.tpl'); const html=tpl?tpl.innerHTML:'';
-    bar.addEventListener('mouseenter',()=>{tip.innerHTML=html;tip.style.display='block';});
+    const tpl=bar.querySelector('template.tpl'); const thtml=tpl?tpl.innerHTML:'';
+    bar.addEventListener('mouseenter',()=>{tip.innerHTML=thtml;tip.style.display='block';});
     bar.addEventListener('mousemove',e=>{
       const pad=14, w=tip.offsetWidth, h=tip.offsetHeight;
       let x=e.clientX+pad, y=e.clientY+pad;
@@ -337,7 +345,7 @@ function renderSections({rows,drows}){
   });
 }
 
-function render(){const {rows,drows,total}=computeRows(); renderNote(total); renderSections({rows,drows});}
+function render(){const {all,total}=computeRows(); renderNote(total); renderSections({all});}
 
 const priceChip=p=>p?`<span class="price">${esc(p)}元</span>`:'';
 const lnk=c=>c.link?`<a class="ext" href="${c.link}" target="_blank" rel="noopener" title="Autohomeで開く">↗</a>`:'';
@@ -409,7 +417,7 @@ function bindSeg(id,key,cast,after){
 }
 bindSeg('dsSeg','primary',null,()=>{document.getElementById('esub').style.display=state.primary==='energy'?'flex':'none';});
 bindSeg('esrcSeg','esrc'); bindSeg('ecatSeg','ecat');
-bindSeg('scopeSeg','scope',v=>+v); bindSeg('denomSeg','denom'); bindSeg('rangeSeg','range');
+bindSeg('scopeSeg','scope',v=>+v); bindSeg('denomSeg','denom'); bindSeg('rangeSeg','range'); bindSeg('sortSeg','sort');
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value.trim();render();});
 
 function buildCattabs(){

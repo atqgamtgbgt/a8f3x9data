@@ -130,6 +130,9 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .crow .ext{color:var(--ink3);text-decoration:none;font-size:15px;width:22px;height:22px;display:inline-flex;
   align-items:center;justify-content:center;border-radius:6px;border:1px solid var(--line);transition:.12s}
 .crow .ext:hover{color:var(--std);border-color:var(--std);background:rgba(59,130,246,.06)}
+.crow .speclink{font-size:10px;font-weight:700;color:var(--std2);text-decoration:none;border:1px solid rgba(59,130,246,.3);
+  border-radius:6px;padding:3px 7px;white-space:nowrap;transition:.12s}
+.crow .speclink:hover{background:rgba(59,130,246,.1);border-color:var(--std)}
 .crow .grade{font-family:var(--mono);font-size:11px;white-space:nowrap}
 .crow .grade .g-std{color:var(--std2);font-weight:700}
 .crow .grade .g-opt{color:#d97706;font-weight:700}
@@ -338,12 +341,23 @@ function render(){const {rows,drows,total}=computeRows(); renderNote(total); ren
 
 const priceChip=p=>p?`<span class="price">${esc(p)}元</span>`:'';
 const lnk=c=>c.link?`<a class="ext" href="${c.link}" target="_blank" rel="noopener" title="Autohomeで開く">↗</a>`:'';
+const escAttr=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const SOURCE_MAP={overall:'autohome',hezi:'hezi',energy:'energy'};
+let SPEC_OK=false;
+function specAvailable(){ try{return window.parent&&window.parent!==window&&typeof window.parent.showConfigCsv==='function';}catch(e){return false;} }
+function openSpecParent(carId,name){ try{ window.parent.showConfigCsv(carId,name,SOURCE_MAP[state.primary]||'autohome'); }catch(e){} }
+function specLnk(c){
+  if(!SPEC_OK||!c.link) return '';
+  const m=c.link.match(/(\d+)/); if(!m) return '';
+  return `<a class="speclink" href="#" data-carid="${m[1]}" data-name="${escAttr(c.name)}" title="このダッシュボードの仕様表を開く">仕様表</a>`;
+}
 function carRow(c,right,dim){return `<div class="crow ${dim?'dim':''}">
   <span class="r">${c.rank}</span>
   <span class="cinfo"><span class="cn1">${esc(c.name)}</span>${c.cn?` <span class="mk">${esc(c.cn)}</span>`:''} <span class="mk">${esc(c.maker)}</span></span>
-  ${priceChip(c.price)}<span class="cbadge">${right}${lnk(c)}</span></div>`;}
+  ${priceChip(c.price)}<span class="cbadge">${right}${specLnk(c)}${lnk(c)}</span></div>`;}
 
 function openBin(fi){
+  SPEC_OK=specAvailable();
   const f=FEATS[fi], cars=curDS().cars.slice(0,state.scope);
   const allStd=[],partStd=[],optOnly=[],absent=[],unlisted=[];
   cars.forEach(c=>{const ns=d36(c.ns[fi]),no=d36(c.no[fi]),t=c.t||0,ch=c.s[fi];const rec={c,ns,no,t};
@@ -366,6 +380,7 @@ function openBin(fi){
   showModal(h);
 }
 function openDist(j){
+  SPEC_OK=specAvailable();
   const f=DISTFEATS[j], cars=curDS().cars.slice(0,state.scope), K=f.cats.length;
   const groups=Array.from({length:K+1},()=>[]);
   cars.forEach(c=>groups[Math.min(d36(c.dc[j]),K)].push(c));
@@ -380,7 +395,9 @@ function openDist(j){
   if(groups[0].length) h+=`<div class="mcol"><h4>なし / 未掲載 — ${groups[0].length}台</h4>`+groups[0].map(c=>carRow(c,'',true)).join('')+'</div>';
   showModal(h);
 }
-function showModal(h){const b=document.getElementById('mBody');b.innerHTML=h||'<div class="empty">該当なし</div>';b.scrollTop=0;document.getElementById('modalBg').classList.add('show');}
+function showModal(h){const b=document.getElementById('mBody');b.innerHTML=h||'<div class="empty">該当なし</div>';b.scrollTop=0;
+  b.querySelectorAll('.speclink').forEach(a=>a.onclick=e=>{e.preventDefault();openSpecParent(a.dataset.carid,a.dataset.name);});
+  document.getElementById('modalBg').classList.add('show');}
 document.getElementById('mClose').onclick=()=>document.getElementById('modalBg').classList.remove('show');
 document.getElementById('modalBg').onclick=e=>{if(e.target.id==='modalBg')e.currentTarget.classList.remove('show');};
 

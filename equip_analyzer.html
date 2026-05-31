@@ -211,7 +211,7 @@ footer b{color:var(--ink2)}
   </div>
 </div>
 <script>
-const CAT_COLORS={'安全・運転支援':'var(--safe)','快適・利便':'var(--comf)','コネクト・スマート':'var(--conn)','外装・灯火':'var(--light)','パワートレイン・足回り':'var(--power)','その他':'var(--misc)'};
+const CAT_COLORS={'安全・運転支援':'var(--safe)','快適・利便':'var(--comf)','コネクト・スマート':'var(--conn)','外装・灯火':'var(--light)','パワートレイン・足回り':'var(--power)','スペック・構造':'#0891b2','その他':'var(--misc)'};
 const SEG_COLORS=['#cbd5e1','#bfdbfe','#60a5fa','#2563eb','#1e3a8a']; // なし→弱→強
 const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const d36=ch=>{const i=B36.indexOf(ch);return i<0?0:i;};
@@ -380,7 +380,7 @@ function applyParam(){
 }
 
 const params=new URLSearchParams(location.search);
-const DATA_URL=params.get('data')||'equip_data.json';
+const DATA_URL=params.get('data')||'https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/pipeline/equip/equip_data.json';
 (async function init(){
   applyParam();
   const host=document.getElementById('sections');

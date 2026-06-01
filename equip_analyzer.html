@@ -239,7 +239,8 @@ footer b{color:var(--ink2)}
 </div>
 <script>
 const CAT_COLORS={'安全・運転支援':'var(--safe)','快適・利便':'var(--comf)','コネクト・スマート':'var(--conn)','外装・灯火':'var(--light)','パワートレイン・足回り':'var(--power)','スペック・構造':'#0891b2','その他':'var(--misc)'};
-const SEG_COLORS=['#cbd5e1','#93c5fd','#3b82f6','#1d4ed8','#1e3a8a','#0e7490','#7c3aed']; // 区別しやすい濃いめ
+const SEG_COLORS=['#bfdbfe','#93c5fd','#60a5fa','#3b82f6','#2563eb','#1e40af','#0e7490','#0891b2','#7c3aed','#9333ea','#db2777','#e11d48','#ea580c','#d97706','#ca8a04','#65a30d','#16a34a','#059669','#0d9488','#6366f1']; // 多区分でも区別できる拡張パレット
+function segColor(k,cats){const l=cats&&cats[k-1]; if(l&&l.indexOf('その他')>=0) return '#94a3b8'; return SEG_COLORS[Math.min(k,SEG_COLORS.length-1)];}
 const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const d36=ch=>{const i=B36.indexOf(ch);return i<0?0:i;};
 let FEATS=[], DISTFEATS=[], CATS=[], DS={};
@@ -300,7 +301,7 @@ function distRow(r){
   let seg='', tip=`<div class="tiptitle">${esc(r.f.item)}</div>`;
   for(let k=K;k>=1;k--){ // 強い順
     const n=r.dist[k]; if(!n) continue;
-    const w=n/total*100, col=SEG_COLORS[Math.min(k,SEG_COLORS.length-1)];
+    const w=n/total*100, col=segColor(k,r.f.cats);
     seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;min-width:4px;background:${col}"></div>`;
     tip+=`<div class="tiprow"><i style="background:${col}"></i><span>${esc(r.f.cats[k-1])}</span><b>${n}台 (${Math.round(w)}%)</b></div>`;
   }
@@ -397,7 +398,7 @@ function openDist(j){
   parts.push(`なし/未掲載 ${groups[0].length}`);
   document.getElementById('mSub').innerHTML=`${esc(f.cat)}（原: ${esc(f.zh)}） ・ ${esc(curDS().label)} ${cars.length}車種　|　`+parts.map(esc).join(' ・ ');
   let h='';
-  for(let k=K;k>=1;k--){const col=SEG_COLORS[Math.min(k,SEG_COLORS.length-1)];
+  for(let k=K;k>=1;k--){const col=segColor(k,f.cats);
     if(groups[k].length) h+=`<div class="mcol"><h4><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col};margin-right:5px"></span>${esc(f.cats[k-1])} — ${groups[k].length}台</h4>`
       +groups[k].map(c=>carRow(c,'',false)).join('')+'</div>';}
   if(groups[0].length) h+=`<div class="mcol"><h4>なし / 未掲載 — ${groups[0].length}台</h4>`+groups[0].map(c=>carRow(c,'',true)).join('')+'</div>';

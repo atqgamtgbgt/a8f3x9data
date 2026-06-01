@@ -154,6 +154,10 @@ footer b{color:var(--ink2)}
   <h1>装備搭載率アナライザー</h1>
   <div class="sub" id="subline">ランキング上位車種が、どの装備を標準装備しているかを集計</div>
 </header>
+<style>
+.fname .bk{font-size:10px;font-weight:600;color:var(--std2);text-decoration:none;border:1px solid rgba(59,130,246,.25);border-radius:5px;padding:1px 5px;margin-left:6px;white-space:nowrap;vertical-align:middle}
+.fname .bk:hover{background:rgba(59,130,246,.1);border-color:var(--std)}
+</style>
 <div class="dsbar" id="dsbar">
   <div class="seg big" id="dsSeg">
     <button data-primary="overall" class="on">全体</button>
@@ -290,7 +294,7 @@ function binRow(r){
   const covTxt=(state.denom==='all'&&r.cov<99.5)?` <span class="cov" title="この装備が仕様表に載っている車種数">掲載${r.listed}</span>`:'';
   const optPart=r.opt?` <span class="copt">OP${r.opt}</span>`:'';
   return `<div class="frow" data-bi="${r.i}">
-    <div class="fname">${esc(r.f.item)}<span class="sec">${esc(r.f.zh)}</span></div>
+    <div class="fname">${esc(r.f.item)}${bkLink(r.f)}<span class="sec">${esc(r.f.zh)}</span></div>
     <div class="track"><div class="fill-std" style="width:${r.stdP.toFixed(1)}%"></div><div class="fill-opt" style="width:${r.optP.toFixed(1)}%"></div></div>
     <div class="pct"><span class="num">${Math.round(r.stdP)}%${r.opt?`<small>+${Math.round(r.optP)}%</small>`:''}</span>
       <span class="counts">全<span class="ctot">${r.denom}</span>中 <span class="cstd">標準${r.std}</span>${optPart}${covTxt}</span></div>
@@ -310,7 +314,7 @@ function distRow(r){
     seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;background:var(--panel2)"></div>`;
     tip+=`<div class="tiprow"><i style="background:#e2e8f0;border:1px solid var(--line)"></i><span>なし / 未掲載</span><b>${none}台 (${Math.round(w)}%)</b></div>`;}
   return `<div class="frow distrow" data-di="${r.j}">
-    <div class="fname">${esc(r.f.item)}<span class="distag">分布</span><span class="sec">${esc(r.f.zh)}</span></div>
+    <div class="fname">${esc(r.f.item)}<span class="distag">分布</span>${bkLink(r.f)}<span class="sec">${esc(r.f.zh)}</span></div>
     <div class="segbar">${seg}<template class="tpl">${tip}</template></div>
   </div>`;
 }
@@ -350,6 +354,7 @@ function render(){const {all,total}=computeRows(); renderNote(total); renderSect
 
 const priceChip=p=>p?`<span class="price">${esc(p)}元</span>`:'';
 const lnk=c=>c.link?`<a class="ext" href="${c.link}" target="_blank" rel="noopener" title="Autohomeで開く">↗</a>`:'';
+const bkLink=f=>f.u?` <a class="bk" href="${f.u}" target="_blank" rel="noopener" title="汽车之家の用語解説" onclick="event.stopPropagation()">解説↗</a>`:'';
 const escAttr=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const SOURCE_MAP={overall:'autohome',hezi:'hezi',energy:'energy'};
 let SPEC_OK=false;

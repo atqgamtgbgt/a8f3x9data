@@ -1,10 +1,10 @@
 rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacturer,manufacturer_ja
-1,星愿,Geely Xingyuan,34727,1.0,https://www.autohome.com.cn/7806/#pvareaid=6861512,6.48-9.48万,./images/by_series/7806_8b6617d4.png,吉利银河,Geely Galaxy（吉利銀河）
+1,星愿,Geely Xingyuan,34727,1.0,https://www.autohome.com.cn/7806/#pvareaid=6861512,6.48-9.48万,./images/by_series/7806_778ff228.png,吉利银河,Geely Galaxy（吉利銀河）
 2,小米SU7,SU7,26826,63.0,https://www.autohome.com.cn/6962/#pvareaid=6861512,21.99-30.39万,./images/by_series/6962_1077f967.png,小米汽车,Xiaomi（小米）
 3,Model Y,モデルY,22990,-2.0,https://www.autohome.com.cn/5769/#pvareaid=6861512,26.35-31.35万,./images/by_series/5769_29287643.png,特斯拉,Tesla
-4,理想i6,Li Xiang i6,21024,,https://www.autohome.com.cn/8183/#pvareaid=6861512,24.98-26.98万,./images/by_series/8183_54dc76da.png,理想汽车,Li Auto
+4,理想i6,Li Xiang i6,21024,,https://www.autohome.com.cn/8183/#pvareaid=6861512,24.98-26.98万,./images/by_series/8183_270ff8b8.png,理想汽车,Li Auto
 5,海狮06,シーライオン06 (Sealion 06),19649,2.0,https://www.autohome.com.cn/8087/#pvareaid=6861512,12.99-19.98万,./images/by_series/8087_a74f42d8.png,比亚迪,BYD
-6,长安启源Q05,Qiyuan Q05,15814,30.0,https://www.autohome.com.cn/8241/#pvareaid=6861512,7.99-11.49万,./images/by_series/8241_3782f954.png,长安启源,長安啓源
+6,长安启源Q05,Qiyuan Q05,15814,30.0,https://www.autohome.com.cn/8241/#pvareaid=6861512,7.99-11.49万,./images/by_series/8241_eea76be0.png,长安启源,長安啓源
 7,元UP,Atto 2,15658,-2.0,https://www.autohome.com.cn/7538/#pvareaid=6861512,7.48-11.98万,./images/by_series/7538_fdb899f6.png,比亚迪,BYD
 8,缤越,Coolray,14923,29.0,https://www.autohome.com.cn/4701/#pvareaid=6861512,6.68-9.78万,./images/by_series/4701_02971080.png,吉利汽车,Geely（吉利）
 9,零跑A10,Leapmotor A10,14372,116.0,https://www.autohome.com.cn/8433/#pvareaid=6861512,6.58-8.68万,./images/by_series/8433_1b68dcfe.png,零跑汽车,Leapmotor
@@ -32,7 +32,7 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 31,小米YU7,YU7,9876,-1.0,https://www.autohome.com.cn/7793/#pvareaid=6861512,23.35-38.99万,./images/by_series/7793_8e1156a4.png,小米汽车,Xiaomi（小米）
 32,海鸥,シーガル (Seagull),9864,-9.0,https://www.autohome.com.cn/6762/#pvareaid=6861512,6.98-8.59万,./images/by_series/6762_304bc195.png,比亚迪,BYD
 33,速腾,サギター (Sagitar),9806,-22.0,https://www.autohome.com.cn/442/#pvareaid=6861512,9.38-16.49万,./images/by_series/442_fffabf8a.png,大众,Volkswagen
-34,AION i60,AION i60,9711,9.0,https://www.autohome.com.cn/8245/#pvareaid=6861512,10.28-13.58万,./images/by_series/8245_363be78a.png,埃安,Aiways（埃安）
+34,AION i60,AION i60,9711,9.0,https://www.autohome.com.cn/8245/#pvareaid=6861512,10.28-13.58万,./images/by_series/8245_363be78a.png,埃安,Aion（埃安）
 35,奥迪A6L,A6L,9449,10.0,https://www.autohome.com.cn/18/#pvareaid=6861512,32.29-55.89万,./images/by_series/18_41287a14.png,奥迪,Audi
 36,极氪9X,Zeekr 9X,9315,12.0,https://www.autohome.com.cn/7835/#pvareaid=6861512,46.59-59.99万,./images/by_series/7835_df7221ff.png,极氪,Zeekr（极氪）
 37,卡罗拉锐放,カローラクロス,9184,-6.0,https://www.autohome.com.cn/6428/#pvareaid=6861512,12.68-18.48万,./images/by_series/6428_aae9086a.png,丰田,トヨタ
@@ -51,11 +51,11 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 50,极狐T1,ARCFOX T1,7589,7.0,https://www.autohome.com.cn/8086/#pvareaid=6861512,6.28-13.08万,./images/by_series/8086_cce9c858.png,ARCFOX极狐,ARCFOX（極狐）
 51,五菱缤果,Bingo,7512,55.0,https://www.autohome.com.cn/7045/#pvareaid=6861512,5.68-8.48万,./images/by_series/7045_c8710506.png,五菱汽车,Wuling（五菱）
 52,奔驰E级,Eクラス,7450,-30.0,https://www.autohome.com.cn/197/#pvareaid=6861512,37.88-59.98万,./images/by_series/197_6484f170.png,奔驰,Mercedes-Benz
-53,星瑞,Preface,7427,-11.0,https://www.autohome.com.cn/5273/#pvareaid=6861512,9.87-14.67万,./images/by_series/5273_199554b9.png,吉利汽车,Geely（吉利）
+53,星瑞,Preface,7427,-11.0,https://www.autohome.com.cn/5273/#pvareaid=6861512,9.87-14.67万,./images/by_series/5273_bbec9062.png,吉利汽车,Geely（吉利）
 54,奥迪Q5L,Q5L,7358,-5.0,https://www.autohome.com.cn/4851/#pvareaid=6861512,30.98-39.98万,./images/by_series/4851_eeb1b11e.png,奥迪,Audi
-55,逸动,Eado,7193,-15.0,https://www.autohome.com.cn/2429/#pvareaid=6861512,7.29-9.99万,./images/by_series/2429_4fdfc92f.png,长安,長安
-56,岚图梦想家,Lantu Dreamer,6995,34.0,https://www.autohome.com.cn/6459/#pvareaid=6861512,30.99-70.99万,./images/by_series/6459_f46dc587.png,岚图汽车,Land Rover（岚图汽车）
-57,问界M8,AITO M8,6889,65.0,https://www.autohome.com.cn/8003/#pvareaid=6861512,35.98-45.98万,./images/by_series/8003_2e550323.png,AITO 问界,AITO（問界）
+55,逸动,Eado,7193,-15.0,https://www.autohome.com.cn/2429/#pvareaid=6861512,7.29-9.99万,./images/by_series/2429_2e001ecf.png,长安,長安
+56,岚图梦想家,Lantu Dreamer,6995,34.0,https://www.autohome.com.cn/6459/#pvareaid=6861512,30.99-70.99万,./images/by_series/6459_2e001ecf.png,岚图汽车,Lantu（岚图汽车）
+57,问界M8,AITO M8,6889,65.0,https://www.autohome.com.cn/8003/#pvareaid=6861512,35.98-45.98万,./images/by_series/8003_2e001ecf.png,AITO 问界,AITO（問界）
 58,红旗H5,H5,6683,-7.0,https://www.autohome.com.cn/4410/#pvareaid=6861512,15.98-21.58万,./images/by_series/4410_30103952.png,红旗,紅旗
 59,探岳,タイロン (Tayron),6667,-43.0,https://www.autohome.com.cn/4744/#pvareaid=6861512,19.89-25.99万,./images/by_series/4744_746b217e.png,大众,Volkswagen
 60,宝马5系,5シリーズ,6622,7.0,https://www.autohome.com.cn/65/#pvareaid=6861512,36.80-44.80万,./images/by_series/65_b36d38a9.png,宝马,BMW
@@ -88,7 +88,7 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 87,海狮05 EV,シーライオン05 EV (Sealion 05 EV),5140,4.0,https://www.autohome.com.cn/7982/#pvareaid=6861512,11.78-14.59万,./images/by_series/7982_08d6f07e.png,比亚迪,BYD
 88,汉兰达,ハイランダー,5139,-16.0,https://www.autohome.com.cn/771/#pvareaid=6861512,24.98-32.58万,./images/by_series/771_8530e9a0.png,丰田,トヨタ
 89,元PLUS,Atto 3,5111,-10.0,https://www.autohome.com.cn/6298/#pvareaid=6861512,11.58-14.99万,./images/by_series/6298_c6968813.png,比亚迪,BYD
-90,AION RT,AION RT,4990,2.0,https://www.autohome.com.cn/7860/#pvareaid=6861512,9.98-16.58万,./images/by_series/7860_776117ee.png,埃安,Aiways（埃安）
+90,AION RT,AION RT,4990,2.0,https://www.autohome.com.cn/7860/#pvareaid=6861512,9.98-16.58万,./images/by_series/7860_776117ee.png,埃安,Aion（埃安）
 91,firefly萤火虫,firefly,4973,-7.0,https://www.autohome.com.cn/7990/#pvareaid=6861512,11.98-12.58万,./images/by_series/7990_975177d7.png,firefly萤火虫,firefly（萤火虫）
 92,传祺M8,Trumpchi M8,4916,6.0,https://www.autohome.com.cn/4174/#pvareaid=6861512,18.98-23.98万,./images/by_series/4174_f458b2a2.png,广汽传祺,GAC Trumpchi（広汽伝祺）
 93,腾势D9,デンツァD9 (Denza D9),4797,20.0,https://www.autohome.com.cn/6669/#pvareaid=6861512,30.98-60.06万,./images/by_series/6669_ca3123d9.png,腾势,DENZA
@@ -99,12 +99,12 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 98,零跑D19,零跑D19,4455,,https://www.autohome.com.cn/8273/#pvareaid=6861512,21.98-26.98万,./images/by_series/8273_de27ab88.png,零跑汽车,Leapmotor
 99,熊猫,Panda,4367,-22.0,https://www.autohome.com.cn/6924/#pvareaid=6861512,4.69-5.39万,./images/by_series/6924_f9ee19a3.png,吉利银河,Geely Galaxy（吉利銀河）
 100,宝马X5,X5,4280,-7.0,https://www.autohome.com.cn/6548/#pvareaid=6861512,59.80-74.80万,./images/by_series/6548_26178c20.png,宝马,BMW
-1,星愿,Geely Xingyuan,34727,1.0,https://www.autohome.com.cn/7806/#pvareaid=6861512,6.48-9.48万,./images/by_series/7806_8b6617d4.png,吉利银河,Geely Galaxy（吉利銀河）
+1,星愿,Geely Xingyuan,34727,1.0,https://www.autohome.com.cn/7806/#pvareaid=6861512,6.48-9.48万,./images/by_series/7806_778ff228.png,吉利银河,Geely Galaxy（吉利銀河）
 2,小米SU7,SU7,26826,63.0,https://www.autohome.com.cn/6962/#pvareaid=6861512,21.99-30.39万,./images/by_series/6962_1077f967.png,小米汽车,Xiaomi（小米）
 3,Model Y,モデルY,22990,-2.0,https://www.autohome.com.cn/5769/#pvareaid=6861512,26.35-31.35万,./images/by_series/5769_29287643.png,特斯拉,Tesla
-4,理想i6,Li Xiang i6,21024,,https://www.autohome.com.cn/8183/#pvareaid=6861512,24.98-26.98万,./images/by_series/8183_54dc76da.png,理想汽车,Li Auto
+4,理想i6,Li Xiang i6,21024,,https://www.autohome.com.cn/8183/#pvareaid=6861512,24.98-26.98万,./images/by_series/8183_270ff8b8.png,理想汽车,Li Auto
 5,海狮06,シーライオン06 (Sealion 06),19649,2.0,https://www.autohome.com.cn/8087/#pvareaid=6861512,12.99-19.98万,./images/by_series/8087_a74f42d8.png,比亚迪,BYD
-6,长安启源Q05,Qiyuan Q05,15814,30.0,https://www.autohome.com.cn/8241/#pvareaid=6861512,7.99-11.49万,./images/by_series/8241_3782f954.png,长安启源,長安啓源
+6,长安启源Q05,Qiyuan Q05,15814,30.0,https://www.autohome.com.cn/8241/#pvareaid=6861512,7.99-11.49万,./images/by_series/8241_eea76be0.png,长安启源,長安啓源
 7,元UP,Atto 2,15658,-2.0,https://www.autohome.com.cn/7538/#pvareaid=6861512,7.48-11.98万,./images/by_series/7538_fdb899f6.png,比亚迪,BYD
 8,缤越,Coolray,14923,29.0,https://www.autohome.com.cn/4701/#pvareaid=6861512,6.68-9.78万,./images/by_series/4701_02971080.png,吉利汽车,Geely（吉利）
 9,零跑A10,Leapmotor A10,14372,116.0,https://www.autohome.com.cn/8433/#pvareaid=6861512,6.58-8.68万,./images/by_series/8433_1b68dcfe.png,零跑汽车,Leapmotor
@@ -132,7 +132,7 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 31,小米YU7,YU7,9876,-1.0,https://www.autohome.com.cn/7793/#pvareaid=6861512,23.35-38.99万,./images/by_series/7793_8e1156a4.png,小米汽车,Xiaomi（小米）
 32,海鸥,シーガル (Seagull),9864,-9.0,https://www.autohome.com.cn/6762/#pvareaid=6861512,6.98-8.59万,./images/by_series/6762_304bc195.png,比亚迪,BYD
 33,速腾,サギター (Sagitar),9806,-22.0,https://www.autohome.com.cn/442/#pvareaid=6861512,9.38-16.49万,./images/by_series/442_fffabf8a.png,大众,Volkswagen
-34,AION i60,AION i60,9711,9.0,https://www.autohome.com.cn/8245/#pvareaid=6861512,10.28-13.58万,./images/by_series/8245_363be78a.png,埃安,Aiways（埃安）
+34,AION i60,AION i60,9711,9.0,https://www.autohome.com.cn/8245/#pvareaid=6861512,10.28-13.58万,./images/by_series/8245_363be78a.png,埃安,Aion（埃安）
 35,奥迪A6L,A6L,9449,10.0,https://www.autohome.com.cn/18/#pvareaid=6861512,32.29-55.89万,./images/by_series/18_41287a14.png,奥迪,Audi
 36,极氪9X,Zeekr 9X,9315,12.0,https://www.autohome.com.cn/7835/#pvareaid=6861512,46.59-59.99万,./images/by_series/7835_df7221ff.png,极氪,Zeekr（极氪）
 37,卡罗拉锐放,カローラクロス,9184,-6.0,https://www.autohome.com.cn/6428/#pvareaid=6861512,12.68-18.48万,./images/by_series/6428_aae9086a.png,丰田,トヨタ
@@ -151,11 +151,11 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 50,极狐T1,ARCFOX T1,7589,7.0,https://www.autohome.com.cn/8086/#pvareaid=6861512,6.28-13.08万,./images/by_series/8086_cce9c858.png,ARCFOX极狐,ARCFOX（極狐）
 51,五菱缤果,Bingo,7512,55.0,https://www.autohome.com.cn/7045/#pvareaid=6861512,5.68-8.48万,./images/by_series/7045_c8710506.png,五菱汽车,Wuling（五菱）
 52,奔驰E级,Eクラス,7450,-30.0,https://www.autohome.com.cn/197/#pvareaid=6861512,37.88-59.98万,./images/by_series/197_6484f170.png,奔驰,Mercedes-Benz
-53,星瑞,Preface,7427,-11.0,https://www.autohome.com.cn/5273/#pvareaid=6861512,9.87-14.67万,./images/by_series/5273_199554b9.png,吉利汽车,Geely（吉利）
+53,星瑞,Preface,7427,-11.0,https://www.autohome.com.cn/5273/#pvareaid=6861512,9.87-14.67万,./images/by_series/5273_bbec9062.png,吉利汽车,Geely（吉利）
 54,奥迪Q5L,Q5L,7358,-5.0,https://www.autohome.com.cn/4851/#pvareaid=6861512,30.98-39.98万,./images/by_series/4851_eeb1b11e.png,奥迪,Audi
-55,逸动,Eado,7193,-15.0,https://www.autohome.com.cn/2429/#pvareaid=6861512,7.29-9.99万,./images/by_series/2429_4fdfc92f.png,长安,長安
-56,岚图梦想家,Lantu Dreamer,6995,34.0,https://www.autohome.com.cn/6459/#pvareaid=6861512,30.99-70.99万,./images/by_series/6459_f46dc587.png,岚图汽车,Land Rover（岚图汽车）
-57,问界M8,AITO M8,6889,65.0,https://www.autohome.com.cn/8003/#pvareaid=6861512,35.98-45.98万,./images/by_series/8003_2e550323.png,AITO 问界,AITO（問界）
+55,逸动,Eado,7193,-15.0,https://www.autohome.com.cn/2429/#pvareaid=6861512,7.29-9.99万,./images/by_series/2429_2e001ecf.png,长安,長安
+56,岚图梦想家,Lantu Dreamer,6995,34.0,https://www.autohome.com.cn/6459/#pvareaid=6861512,30.99-70.99万,./images/by_series/6459_2e001ecf.png,岚图汽车,Lantu（岚图汽车）
+57,问界M8,AITO M8,6889,65.0,https://www.autohome.com.cn/8003/#pvareaid=6861512,35.98-45.98万,./images/by_series/8003_2e001ecf.png,AITO 问界,AITO（問界）
 58,红旗H5,H5,6683,-7.0,https://www.autohome.com.cn/4410/#pvareaid=6861512,15.98-21.58万,./images/by_series/4410_30103952.png,红旗,紅旗
 59,探岳,タイロン (Tayron),6667,-43.0,https://www.autohome.com.cn/4744/#pvareaid=6861512,19.89-25.99万,./images/by_series/4744_746b217e.png,大众,Volkswagen
 60,宝马5系,5シリーズ,6622,7.0,https://www.autohome.com.cn/65/#pvareaid=6861512,36.80-44.80万,./images/by_series/65_b36d38a9.png,宝马,BMW
@@ -188,7 +188,7 @@ rank,name,global_name,units,delta_vs_last_month,link,price,image_url,manufacture
 87,海狮05 EV,シーライオン05 EV (Sealion 05 EV),5140,4.0,https://www.autohome.com.cn/7982/#pvareaid=6861512,11.78-14.59万,./images/by_series/7982_08d6f07e.png,比亚迪,BYD
 88,汉兰达,ハイランダー,5139,-16.0,https://www.autohome.com.cn/771/#pvareaid=6861512,24.98-32.58万,./images/by_series/771_8530e9a0.png,丰田,トヨタ
 89,元PLUS,Atto 3,5111,-10.0,https://www.autohome.com.cn/6298/#pvareaid=6861512,11.58-14.99万,./images/by_series/6298_c6968813.png,比亚迪,BYD
-90,AION RT,AION RT,4990,2.0,https://www.autohome.com.cn/7860/#pvareaid=6861512,9.98-16.58万,./images/by_series/7860_776117ee.png,埃安,Aiways（埃安）
+90,AION RT,AION RT,4990,2.0,https://www.autohome.com.cn/7860/#pvareaid=6861512,9.98-16.58万,./images/by_series/7860_776117ee.png,埃安,Aion（埃安）
 91,firefly萤火虫,firefly,4973,-7.0,https://www.autohome.com.cn/7990/#pvareaid=6861512,11.98-12.58万,./images/by_series/7990_975177d7.png,firefly萤火虫,firefly（萤火虫）
 92,传祺M8,Trumpchi M8,4916,6.0,https://www.autohome.com.cn/4174/#pvareaid=6861512,18.98-23.98万,./images/by_series/4174_f458b2a2.png,广汽传祺,GAC Trumpchi（広汽伝祺）
 93,腾势D9,デンツァD9 (Denza D9),4797,20.0,https://www.autohome.com.cn/6669/#pvareaid=6861512,30.98-60.06万,./images/by_series/6669_ca3123d9.png,腾势,DENZA

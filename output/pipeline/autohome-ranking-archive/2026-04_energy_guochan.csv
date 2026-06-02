@@ -1,5 +1,5 @@
 category_id,category,month,rank,series_id,name,global_name,units,price,link,image_url,series_url,manufacturer,manufacturer_ja
-1,燃油车,2026-04,1,4701,缤越,Coolray,14923,6.68-9.78万,https://www.autohome.com.cn/4701/#pvareaid=6861512,public/autohome_energy/guochan/images/1/1_0_缤越.png,https://www.autohome.com.cn/4701/#pvareaid=6861512,吉利汽车,Geely（吉利）
+1,燃油车,2026-04,1,4701,缤越,Coolray,14923,6.68-9.78万,https://www.autohome.com.cn/4701/#pvareaid=6861512,./images/by_series/4701_da018e5d.png,https://www.autohome.com.cn/4701/#pvareaid=6861512,吉利汽车,Geely（吉利）
 1,燃油车,2026-04,2,6814,博越L,Boyue L,11315,9.99-12.99万,https://www.autohome.com.cn/6814/#pvareaid=6861512,./images/by_series/6814_232d3619.png,https://www.autohome.com.cn/6814/#pvareaid=6861512,吉利汽车,Geely（吉利）
 1,燃油车,2026-04,3,5770,哈弗大狗,Big Dog,10226,12.39-14.99万,https://www.autohome.com.cn/5770/#pvareaid=6861512,./images/by_series/5770_5257bc62.png,https://www.autohome.com.cn/5770/#pvareaid=6861512,哈弗,Haval（哈弗）
 1,燃油车,2026-04,4,7552,长安X5 PLUS,X5 Plus,9147,6.99-10.39万,https://www.autohome.com.cn/7552/#pvareaid=6861512,./images/by_series/7552_cee67d18.png,https://www.autohome.com.cn/7552/#pvareaid=6861512,长安,長安
@@ -53,7 +53,7 @@ category_id,category,month,rank,series_id,name,global_name,units,price,link,imag
 456,新能源,2026-04,2,6962,小米SU7,SU7,26826,21.99-30.39万,https://www.autohome.com.cn/6962/#pvareaid=6861512,./images/by_series/6962_1077f967.png,https://www.autohome.com.cn/6962/#pvareaid=6861512,小米汽车,Xiaomi（小米）
 456,新能源,2026-04,3,8183,理想i6,Li Xiang i6,21024,24.98-26.98万,https://www.autohome.com.cn/8183/#pvareaid=6861512,./images/by_series/8183_54dc76da.png,https://www.autohome.com.cn/8183/#pvareaid=6861512,理想汽车,Li Auto
 456,新能源,2026-04,4,8087,海狮06,シーライオン06 (Sealion 06),19649,12.99-19.98万,https://www.autohome.com.cn/8087/#pvareaid=6861512,./images/by_series/8087_a74f42d8.png,https://www.autohome.com.cn/8087/#pvareaid=6861512,比亚迪,BYD
-456,新能源,2026-04,5,8241,长安启源Q05,Qiyuan Q05,15814,7.99-11.49万,https://www.autohome.com.cn/8241/#pvareaid=6861512,./images/by_series/8241_3782f954.png,https://www.autohome.com.cn/8241/#pvareaid=6861512,长安启源,長安啓源
+456,新能源,2026-04,5,8241,长安启源Q05,Qiyuan Q05,15814,7.99-11.49万,https://www.autohome.com.cn/8241/#pvareaid=6861512,./images/by_series/8241_eea76be0.png,https://www.autohome.com.cn/8241/#pvareaid=6861512,长安启源,長安啓源
 456,新能源,2026-04,6,7538,元UP,Atto 2,15658,7.48-11.98万,https://www.autohome.com.cn/7538/#pvareaid=6861512,./images/by_series/7538_fdb899f6.png,https://www.autohome.com.cn/7538/#pvareaid=6861512,比亚迪,BYD
 456,新能源,2026-04,7,8433,零跑A10,Leapmotor A10,14372,6.58-8.68万,https://www.autohome.com.cn/8433/#pvareaid=6861512,./images/by_series/8433_1b68dcfe.png,https://www.autohome.com.cn/8433/#pvareaid=6861512,零跑汽车,Leapmotor
 456,新能源,2026-04,8,6139,海豚,ドルフィン (Dolphin),14218,9.98-12.98万,https://www.autohome.com.cn/6139/#pvareaid=6861512,./images/by_series/6139_57696108.png,https://www.autohome.com.cn/6139/#pvareaid=6861512,比亚迪,BYD
@@ -102,7 +102,7 @@ category_id,category,month,rank,series_id,name,global_name,units,price,link,imag
 4,纯电动,2026-04,1,7806,星愿,Geely Xingyuan,34727,6.48-9.48万,https://www.autohome.com.cn/7806/#pvareaid=6861512,./images/by_series/7806_8b6617d4.png,https://www.autohome.com.cn/7806/#pvareaid=6861512,吉利银河,Geely Galaxy（吉利銀河）
 4,纯电动,2026-04,2,6962,小米SU7,SU7,26826,21.99-30.39万,https://www.autohome.com.cn/6962/#pvareaid=6861512,./images/by_series/6962_1077f967.png,https://www.autohome.com.cn/6962/#pvareaid=6861512,小米汽车,Xiaomi（小米）
 4,纯电动,2026-04,3,8183,理想i6,Li Xiang i6,21024,24.98-26.98万,https://www.autohome.com.cn/8183/#pvareaid=6861512,./images/by_series/8183_54dc76da.png,https://www.autohome.com.cn/8183/#pvareaid=6861512,理想汽车,Li Auto
-4,纯电动,2026-04,4,8241,长安启源Q05,Qiyuan Q05,15814,7.99-11.49万,https://www.autohome.com.cn/8241/#pvareaid=6861512,./images/by_series/8241_3782f954.png,https://www.autohome.com.cn/8241/#pvareaid=6861512,长安启源,長安啓源
+4,纯电动,2026-04,4,8241,长安启源Q05,Qiyuan Q05,15814,7.99-11.49万,https://www.autohome.com.cn/8241/#pvareaid=6861512,./images/by_series/8241_eea76be0.png,https://www.autohome.com.cn/8241/#pvareaid=6861512,长安启源,長安啓源
 4,纯电动,2026-04,5,8087,海狮06,シーライオン06 (Sealion 06),15659,12.99-19.98万,https://www.autohome.com.cn/8087/#pvareaid=6861512,./images/by_series/8087_a74f42d8.png,https://www.autohome.com.cn/8087/#pvareaid=6861512,比亚迪,BYD
 4,纯电动,2026-04,6,7538,元UP,Atto 2,15658,7.48-11.98万,https://www.autohome.com.cn/7538/#pvareaid=6861512,./images/by_series/7538_fdb899f6.png,https://www.autohome.com.cn/7538/#pvareaid=6861512,比亚迪,BYD
 4,纯电动,2026-04,7,8433,零跑A10,Leapmotor A10,14372,6.58-8.68万,https://www.autohome.com.cn/8433/#pvareaid=6861512,./images/by_series/8433_1b68dcfe.png,https://www.autohome.com.cn/8433/#pvareaid=6861512,零跑汽车,Leapmotor

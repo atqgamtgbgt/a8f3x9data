@@ -7596,7 +7596,13 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
     return "";
   }
 
-  // autohome: "001_Model_Y.png" 形式（rankStr=3桁ゼロ埋め、スペースは_に変換）
+  // autohome: CSVのimage_url（例 "/autohome_images/046_宋Pro新能源.png"）を使い、
+  // ファイル名だけ取り出して imgBase に連結する（heziと同じ考え方）。
+  if (imageUrl) {
+    const fileName = imageUrl.split("/").pop();
+    return `<img class="car-thumb" src="${imgBase}${fileName}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
+  }
+  // フォールバック: image_url が無い場合のみ従来の推測方式
   const fileName = `${rankStr}_${model.replace(/ /g, '_')}.png`;
   return `<img class="car-thumb" src="${imgBase}${fileName}?v=${Date.now()}" alt="${model}" onerror="this.style.visibility='hidden';" />`;
 }

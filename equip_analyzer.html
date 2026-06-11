@@ -374,8 +374,9 @@ function openBin(fi){
   SPEC_OK=specAvailable();
   const f=FEATS[fi], cars=curDS().cars.slice(0,state.scope);
   const allStd=[],partStd=[],optOnly=[],absent=[],unlisted=[];
-  cars.forEach(c=>{const ns=d36(c.ns[fi]),no=d36(c.no[fi]),t=c.t||0,ch=c.s[fi];const rec={c,ns,no,t};
-    if(ns>0&&ns>=t)allStd.push(rec); else if(ns>0)partStd.push(rec); else if(no>0)optOnly.push(rec);
+  cars.forEach(c=>{const ns=d36(c.ns[fi]),no=d36(c.no[fi]),t=c.t||0,ch=c.s[fi];
+    const full=(c.fs&&c.fs[fi]==='1');const rec={c,ns,no,t,full};
+    if(full||(ns>0&&ns>=t))allStd.push(rec); else if(ns>0)partStd.push(rec); else if(no>0)optOnly.push(rec);
     else if(ch!=='0')absent.push(rec); else unlisted.push(rec);});
   const stdCars=allStd.length+partStd.length, listed=stdCars+optOnly.length+absent.length;
   const denom=state.denom==='listed'?(listed||1):cars.length;
@@ -384,8 +385,9 @@ function openBin(fi){
     +`<b style="color:var(--std2)">標準あり ${stdCars}台</b>（${Math.round(stdCars/denom*100)}%）= 全グレード ${allStd.length} ＋ 一部 ${partStd.length}`
     +` ・ <b style="color:#d97706">OPのみ ${optOnly.length}</b> ・ 非搭載 ${absent.length} ・ 未掲載 ${unlisted.length}`;
   const gr=(rec,type)=>{if(!rec.t)return '';
-    if(type==='std')return `<span class="grade"><b class="g-std">標準 ${rec.ns}/${rec.t}</b>${rec.no?` <span class="g-opt">OP ${rec.no}</span>`:''}</span>`;
-    if(type==='opt')return `<span class="grade"><b class="g-opt">OP ${rec.no}/${rec.t}</b></span>`;
+    const nsT=(rec.ns===35&&rec.t>35)?(rec.full?rec.t:'35+'):rec.ns, noT=(rec.no===35&&rec.t>35)?'35+':rec.no;
+    if(type==='std')return `<span class="grade"><b class="g-std">標準 ${nsT}/${rec.t}</b>${rec.no?` <span class="g-opt">OP ${noT}</span>`:''}</span>`;
+    if(type==='opt')return `<span class="grade"><b class="g-opt">OP ${noT}/${rec.t}</b></span>`;
     return `<span class="grade g-non">0/${rec.t}</span>`;};
   const blk=(title,arr,type,dim)=>arr.length?`<div class="mcol"><h4>${title} — ${arr.length}台</h4>${arr.map(r=>carRow(r.c,gr(r,type),dim)).join('')}</div>`:'';
   let h=blk('● 全グレード標準',allStd,'std',false)+blk('◐ 一部グレードのみ標準',partStd,'std',false)

@@ -3,7 +3,7 @@
     "source": "cada.cn (中国汽車流通協会 乗聯会)",
     "data_type": "NEV BEV/PHEV/EREV 月次批発データ + 市場概況",
     "extraction": "テキスト正規表現による自動抽出",
-    "last_updated": "2026-06-12T10:54:18.442024"
+    "last_updated": "2026-07-12T10:33:18.486768"
   },
   "months": {
     "2023-01": {

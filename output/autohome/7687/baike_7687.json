@@ -116,6 +116,7 @@
 "车内摄像头数量": "https://car.autohome.com.cn/baike/detail_8_52_9049.html",
 "超声波雷达数量": "https://car.autohome.com.cn/baike/detail_8_52_8438.html",
 "毫米波雷达数量": "https://car.autohome.com.cn/baike/detail_8_52_8439.html",
+"激光雷达数量": "https://car.autohome.com.cn/baike/detail_8_52_8440.html",
 "前方最大探测距离": "https://car.autohome.com.cn/baike/detail_8_26_9055.html",
 "巡航系统": "https://car.autohome.com.cn/baike/detail_8_26_34.html",
 "辅助驾驶系统": "https://car.autohome.com.cn/baike/detail_8_26_8424.html",
@@ -187,6 +188,7 @@
 "车机智能芯片": "https://car.autohome.com.cn/baike/detail_8_30_8673.html",
 "后排液晶屏幕": "https://car.autohome.com.cn/baike/detail_8_30_119.html",
 "后排液晶屏幕尺寸": "https://car.autohome.com.cn/baike/detail_8_30_8712.html",
+"后排液晶屏幕分辨率": "https://car.autohome.com.cn/baike/detail_8_30_9076.html",
 "后排多媒体屏幕数量": "https://car.autohome.com.cn/baike/detail_8_30_9078.html",
 "后排控制多媒体": "https://car.autohome.com.cn/baike/detail_8_30_120.html",
 "车机系统内存(GB)": "https://car.autohome.com.cn/baike/detail_8_30_9086.html",
@@ -195,6 +197,7 @@
 "4G/5G网络": "https://car.autohome.com.cn/baike/detail_8_30_8412.html",
 "OTA升级": "https://car.autohome.com.cn/baike/detail_8_30_6101.html",
 "Wi-Fi热点": "https://car.autohome.com.cn/baike/detail_8_30_8429.html",
+"车内生物监测系统": "https://car.autohome.com.cn/baike/detail_8_28_8408.html",
 "手机APP远程功能": "https://car.autohome.com.cn/baike/detail_8_30_8420.html",
 "车载KTV": "https://car.autohome.com.cn/baike/detail_8_30_9098.html",
 "方向盘材质": "https://car.autohome.com.cn/baike/detail_8_28_71.html",
@@ -241,5 +244,6 @@
 "温度分区控制": "https://car.autohome.com.cn/baike/detail_8_33_151.html",
 "车载空气净化器": "https://car.autohome.com.cn/baike/detail_8_33_1142.html",
 "车内PM2.5过滤装置": "https://car.autohome.com.cn/baike/detail_8_33_1140.html",
-"空气质量监测": "https://car.autohome.com.cn/baike/detail_8_33_9104.html"
+"空气质量监测": "https://car.autohome.com.cn/baike/detail_8_33_9104.html",
+"车载冰箱": "https://car.autohome.com.cn/baike/detail_8_33_1145.html"
 }

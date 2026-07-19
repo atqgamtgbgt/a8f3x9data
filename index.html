@@ -2817,6 +2817,104 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
   .echart-box:not([style*="height"]) {
     height: 300px !important; /* 240px→300px: 凡例+軸余白を引いた実描画エリアを確保。インライン高さ指定は尊重 */
   }
+  /* スマホ：チャート見出しの情報密度を最適化 */
+  .chart-title { font-size: 0.9rem; line-height: 1.35; }
+  .chart-subtitle { font-size: 0.72rem; margin-bottom: 0.6rem; }
+}
+
+
+/* ========================================
+   チャート全画面ビューア（スマホ拡大対応）
+   ・各 .chart-card 右上に ⛶ ボタンを注入（JSは</body>直前）
+   ・全画面中は inside dataZoom を一時付与しピンチズーム/パン可能
+   ======================================== */
+.chart-card { position: relative; }
+.chart-title { padding-right: 36px; } /* ⛶ボタンとの重なり回避 */
+.chart-fs-btn {
+  position: absolute;
+  top: 8px; right: 8px;
+  z-index: 5;
+  width: 30px; height: 30px;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background: rgba(255,255,255,.92);
+  color: #6c757d;
+  font-size: 13px;
+  line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.chart-fs-btn:hover { background: #f1f3f5; color: #495057; }
+.chart-fs-btn:active { background: #e9ecef; }
+/* 1カードに複数グラフがある場合：各グラフ直前に右寄せ配置 */
+.chart-fs-btnbar {
+  display: flex;
+  justify-content: flex-end;
+  margin: 2px 0;
+  height: 0; /* レイアウトを押し下げない */
+}
+.chart-fs-btn.chart-fs-btn-inline {
+  position: relative;
+  top: 4px; right: 0;
+  width: 26px; height: 26px;
+  font-size: 11px;
+  z-index: 4;
+}
+
+#chart-fs-overlay {
+  position: fixed; inset: 0;
+  z-index: 20000;
+  background: #fff;
+  display: none;
+  flex-direction: column;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+#chart-fs-overlay.open { display: flex; }
+.chart-fs-head {
+  flex: 0 0 auto;
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid #e9ecef;
+}
+.chart-fs-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 0.9rem; font-weight: 600; color: #333;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.chart-fs-hint {
+  flex: 0 0 auto;
+  font-size: 10px; color: #adb5bd;
+  display: none;
+}
+@media (hover: none) { .chart-fs-hint { display: block; } } /* タッチ端末のみ表示 */
+.chart-fs-close {
+  flex: 0 0 auto;
+  width: 34px; height: 34px;
+  border: 1px solid #dee2e6; border-radius: 8px;
+  background: #fff; color: #495057;
+  font-size: 15px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  padding: 0;
+}
+.chart-fs-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 4px;
+  overscroll-behavior: contain;
+  touch-action: none; /* 全画面中はブラウザ側のピンチ/スクロールを抑止しEChartsへ渡す */
+}
+.chart-fs-body .echart-box {
+  width: 100% !important;
+  height: 100% !important; /* インライン高さ(420px等)より優先し画面いっぱいに */
+}
+body.chart-fs-open { overflow: hidden; }
+@media print {
+  .chart-fs-btn, #chart-fs-overlay { display: none !important; }
+  .chart-title { padding-right: 0 !important; }
 }
 
 
@@ -3062,110 +3160,6 @@ body.tray-open { padding-bottom: 105px; }
 /* 印刷フッターは画面では非表示 */
 .print-footer {
   display: none;
-}
-</style>
-
-<style>
-/* ================================================================
-   グラフ拡大表示（フルスクリーンモーダル）— スマホ対応
-   ・全 .chart-card に「⤢ 拡大」ボタンを自動付与（JSで注入）
-   ・拡大表示中は2本指ピンチでズーム／ドラッグで移動可能
-   ================================================================ */
-.chart-card { position: relative; }
-.ec-expand-btn {
-  position: absolute;
-  top: 6px;
-  right: 6px;
-  z-index: 5;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.9);
-  color: #6c757d;
-  font-size: 15px;
-  line-height: 1;
-  padding: 0;
-  cursor: pointer;
-  transition: background .15s, color .15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.ec-expand-btn:hover, .ec-expand-btn:active {
-  background: #f1f3f5;
-  color: #333;
-}
-@media (max-width: 768px) {
-  .ec-expand-btn { width: 34px; height: 34px; font-size: 16px; }
-}
-
-#ecFullModal {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: none;
-  flex-direction: column;
-  background: #fff;
-  overscroll-behavior: contain;
-}
-#ecFullModal.show { display: flex; }
-.ecfm-head {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 10px 12px 6px;
-  border-bottom: 1px solid #e9ecef;
-  background: #fff;
-}
-.ecfm-titles { flex: 1 1 auto; min-width: 0; }
-.ecfm-title {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #333;
-  line-height: 1.35;
-}
-.ecfm-subtitle {
-  font-size: 0.72rem;
-  color: #888;
-  margin-top: 2px;
-  line-height: 1.35;
-}
-.ecfm-close {
-  flex: 0 0 auto;
-  width: 36px;
-  height: 36px;
-  border: 1px solid #dee2e6;
-  border-radius: 8px;
-  background: #fff;
-  color: #495057;
-  font-size: 17px;
-  line-height: 1;
-  padding: 0;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-}
-.ecfm-close:active { background: #f1f3f5; }
-.ecfm-hint {
-  flex: 0 0 auto;
-  padding: 4px 12px;
-  font-size: 0.68rem;
-  color: #999;
-  background: #fafafa;
-  border-bottom: 1px solid #f1f3f5;
-}
-#ecFullBody {
-  flex: 1 1 auto;
-  overflow: auto;
-  -webkit-overflow-scrolling: touch;
-  background: #fff;
-}
-#ecFullChart { width: 100%; }
-
-@media print {
-  .ec-expand-btn, #ecFullModal { display: none !important; }
 }
 </style>
 </head>
@@ -23866,7 +23860,6 @@ function renderWfinRevScatter() {
           return '';
         }
       },
-      labelLayout: { hideOverlap: true },
       markLine: {
         silent:true, symbol:'none',
         data: [{ yAxis:0, lineStyle:{color:'#aaa', type:'dashed'} }],
@@ -24013,7 +24006,6 @@ function renderWfinPmScatter() {
           return '';
         }
       },
-      labelLayout: { hideOverlap: true },
       markLine: {
         silent:true, symbol:'none',
         data: [{ yAxis:0, lineStyle:{color:'#aaa', type:'dashed'} }],
@@ -24207,8 +24199,7 @@ function renderWfinArapScatter() {
           if (['BYD','Stellantis','VW','トヨタ','テスラ','フェラーリ','ポルシェ','CATL(寧徳時代)','SERES(賽力斯)','NIO(蔚来)','Li Auto(理想)','XPENG(小鵬)','Geely(吉利)','上汽集団','ホンダ','日産','GM','メルセデス・ベンツ','BMW'].indexOf(p.value[2]) >= 0) return p.value[2];
           return '';
         }
-      },
-      labelLayout: { hideOverlap: true }
+      }
     };
   });
   ec.setOption({
@@ -26255,181 +26246,156 @@ document.getElementById('trendModal').addEventListener('shown.bs.modal', ()=>{
 </script>
 
 <script>
-// ================================================================
-// グラフ拡大表示（フルスクリーンモーダル）
-//  - 各 .chart-card 内の EChartsグラフに「⤢」ボタンを自動付与
-//  - タップでフル画面表示。画面内に収まるグラフには inside dataZoom を
-//    追加し、2本指ピンチズーム／ドラッグ移動を可能にする
-//  - 縦長ランキング（850px超など）は元の高さを維持し、ネイティブ
-//    スクロールで閲覧（dataZoomは付けずスクロールを妨げない）
-// ================================================================
-(function () {
-  'use strict';
+/* ============================================================
+   チャート全画面ビューア（スマホ拡大対応）
+   - .echart-box を含む全 .chart-card に ⛶ ボタンを注入
+   - タップで全画面表示。既存EChartsインスタンスのDOMごと
+     オーバーレイへ移動して resize するため再描画・データ再構築は不要
+   - 全画面中のみ inside dataZoom を一時付与
+     （ピンチで拡大、1本指ドラッグで移動。閉じると元に戻す）
+   ============================================================ */
+(function(){
+  var fsState = null;
 
-  var modal, titleEl, subtitleEl, bodyEl, chartEl, hintEl;
-  var bigChart = null;
-  var srcBoxRef = null;
-
-  function ensureModal() {
-    if (modal) return;
-    modal = document.createElement('div');
-    modal.id = 'ecFullModal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.innerHTML =
-      '<div class="ecfm-head">' +
-        '<div class="ecfm-titles">' +
-          '<div class="ecfm-title"></div>' +
-          '<div class="ecfm-subtitle"></div>' +
-        '</div>' +
-        '<button type="button" class="ecfm-close" aria-label="閉じる">&#10005;</button>' +
+  function buildOverlay(){
+    var ov = document.getElementById('chart-fs-overlay');
+    if (ov) return ov;
+    ov = document.createElement('div');
+    ov.id = 'chart-fs-overlay';
+    ov.innerHTML =
+      '<div class="chart-fs-head">' +
+        '<div class="chart-fs-title"></div>' +
+        '<div class="chart-fs-hint">ピンチで拡大／ドラッグで移動</div>' +
+        '<button type="button" class="chart-fs-close" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>' +
       '</div>' +
-      '<div class="ecfm-hint"></div>' +
-      '<div id="ecFullBody"><div id="ecFullChart"></div></div>';
-    document.body.appendChild(modal);
-    titleEl    = modal.querySelector('.ecfm-title');
-    subtitleEl = modal.querySelector('.ecfm-subtitle');
-    hintEl     = modal.querySelector('.ecfm-hint');
-    bodyEl     = modal.querySelector('#ecFullBody');
-    chartEl    = modal.querySelector('#ecFullChart');
-    modal.querySelector('.ecfm-close').addEventListener('click', closeFull);
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && modal.classList.contains('show')) closeFull();
-    });
-    window.addEventListener('resize', function () {
-      if (bigChart && modal.classList.contains('show')) {
-        // 回転（縦⇄横）時に高さを再計算
-        relayout();
-        try { bigChart.resize(); } catch (e) {}
-      }
-    });
+      '<div class="chart-fs-body"></div>';
+    document.body.appendChild(ov);
+    ov.querySelector('.chart-fs-close').addEventListener('click', closeFs);
+    return ov;
   }
 
-  function relayout() {
-    if (!srcBoxRef) return;
-    var avail = bodyEl.clientHeight || (window.innerHeight - 90);
-    var srcH  = srcBoxRef.clientHeight || 400;
-    chartEl.style.height = Math.max(srcH, avail - 4) + 'px';
-  }
+  function openFs(card, boxOverride){
+    if (fsState) closeFs();
+    var box = boxOverride || card.querySelector('.echart-box');
+    if (!box) return;
+    var ov = buildOverlay();
 
-  // 拡大表示用にオプションを補強
-  function enhanceForModal(opt, fitsViewport) {
-    try {
-      // 散布図: ラベルを読みやすく＋重なり回避
-      var sArr = Array.isArray(opt.series) ? opt.series : (opt.series ? [opt.series] : []);
-      sArr.forEach(function (s) {
-        if (!s || s.type !== 'scatter') return;
-        s.label = s.label || {};
-        if (!s.label.fontSize || s.label.fontSize < 11) s.label.fontSize = 11;
-        s.labelLayout = s.labelLayout || { hideOverlap: true };
-      });
+    var titleEl = card.querySelector('.chart-title');
+    ov.querySelector('.chart-fs-title').textContent =
+      titleEl ? titleEl.textContent.replace(/\s+/g, ' ').trim() : 'グラフ';
 
-      // 画面内に収まるグラフのみピンチズーム（inside dataZoom）を追加。
-      // 縦長グラフはネイティブスクロール優先のため付けない。
-      var hasDz = Array.isArray(opt.dataZoom) ? opt.dataZoom.length > 0 : !!opt.dataZoom;
-      if (fitsViewport && !hasDz) {
-        var dz = [];
-        var xArr = Array.isArray(opt.xAxis) ? opt.xAxis : (opt.xAxis ? [opt.xAxis] : []);
-        var yArr = Array.isArray(opt.yAxis) ? opt.yAxis : (opt.yAxis ? [opt.yAxis] : []);
-        xArr.forEach(function (ax, i) {
-          dz.push({ type: 'inside', xAxisIndex: i,
-                    filterMode: (ax && ax.type === 'category') ? 'filter' : 'none' });
-        });
-        yArr.forEach(function (ax, i) {
-          dz.push({ type: 'inside', yAxisIndex: i,
-                    filterMode: (ax && ax.type === 'category') ? 'filter' : 'none' });
-        });
-        if (dz.length) opt.dataZoom = dz;
-      }
+    // 元位置にプレースホルダーを置いてレイアウト崩れを防ぐ
+    var ph = document.createElement('div');
+    ph.style.height = box.getBoundingClientRect().height + 'px';
+    box.parentNode.insertBefore(ph, box);
+    ov.querySelector('.chart-fs-body').appendChild(box);
 
-      // ズームリセット用の復元ボタン
-      if (fitsViewport) {
-        opt.toolbox = opt.toolbox || {};
-        opt.toolbox.right = opt.toolbox.right != null ? opt.toolbox.right : 6;
-        opt.toolbox.top   = opt.toolbox.top   != null ? opt.toolbox.top   : 2;
-        opt.toolbox.feature = opt.toolbox.feature || {};
-        if (!opt.toolbox.feature.restore) {
-          opt.toolbox.feature.restore = { title: 'リセット' };
+    var st = { box: box, ph: ph, inst: null, addedZoom: false };
+    var inst = (window.echarts && echarts.getInstanceByDom) ? echarts.getInstanceByDom(box) : null;
+    st.inst = inst || null;
+    fsState = st;
+
+    document.body.classList.add('chart-fs-open');
+    ov.classList.add('open');
+
+    requestAnimationFrame(function(){
+      if (!st.inst) return;
+      try { st.inst.resize(); } catch(e){}
+      // 既存 dataZoom がないチャートにのみ、一時的な inside zoom を付与
+      try {
+        var opt = st.inst.getOption() || {};
+        var hasZoom = opt.dataZoom && opt.dataZoom.length;
+        if (!hasZoom) {
+          var dz = [];
+          if (opt.xAxis && opt.xAxis.length) {
+            dz.push({ type:'inside', xAxisIndex: opt.xAxis.map(function(_, i){ return i; }),
+                      filterMode:'none', moveOnMouseMove:true, zoomOnMouseWheel:true });
+          }
+          if (opt.yAxis && opt.yAxis.length) {
+            dz.push({ type:'inside', yAxisIndex: opt.yAxis.map(function(_, i){ return i; }),
+                      filterMode:'none', moveOnMouseMove:true, zoomOnMouseWheel:false });
+          }
+          if (dz.length) { st.inst.setOption({ dataZoom: dz }); st.addedZoom = true; }
         }
-      }
-    } catch (e) { /* 補強に失敗しても表示自体は続行 */ }
-    return opt;
-  }
-
-  function openFull(card, box) {
-    if (typeof echarts === 'undefined') return;
-    var src = echarts.getInstanceByDom(box);
-    if (!src) return;
-    var opt;
-    try { opt = src.getOption(); } catch (e) { return; }
-
-    ensureModal();
-    srcBoxRef = box;
-
-    var t  = card.querySelector('.chart-title');
-    var st = card.querySelector('.chart-subtitle');
-    titleEl.textContent    = t  ? t.textContent.trim()  : '';
-    subtitleEl.textContent = st ? st.textContent.trim() : '';
-    subtitleEl.style.display = st ? '' : 'none';
-
-    modal.classList.add('show');
-    document.documentElement.style.overflow = 'hidden';
-    document.body.style.overflow = 'hidden';
-
-    relayout();
-    var fits = (srcBoxRef.clientHeight || 400) <= (bodyEl.clientHeight || window.innerHeight);
-    hintEl.textContent = fits
-      ? '2本指ピンチで拡大、ドラッグで移動できます（右上ボタンでリセット）'
-      : '上下にスクロールして閲覧できます';
-
-    if (bigChart) { try { bigChart.dispose(); } catch (e) {} bigChart = null; }
-    bigChart = echarts.init(chartEl);
-    bigChart.setOption(enhanceForModal(opt, fits), true);
-  }
-
-  function closeFull() {
-    if (!modal) return;
-    modal.classList.remove('show');
-    document.documentElement.style.overflow = '';
-    document.body.style.overflow = '';
-    if (bigChart) { try { bigChart.dispose(); } catch (e) {} bigChart = null; }
-    srcBoxRef = null;
-  }
-
-  // ---- 拡大ボタンの自動付与（冪等） ----
-  function injectButtons() {
-    document.querySelectorAll('.chart-card').forEach(function (card) {
-      if (card.dataset.ecExpand) return;
-      var box = card.querySelector('.echart-box');
-      if (!box) return;
-      card.dataset.ecExpand = '1';
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'ec-expand-btn';
-      btn.setAttribute('aria-label', 'グラフを拡大表示');
-      btn.title = '拡大表示';
-      btn.innerHTML = '&#x26F6;';
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        openFull(card, card.querySelector('.echart-box'));
-      });
-      card.appendChild(btn);
+      } catch(e){}
     });
   }
 
-  // 初期表示＋タブ切替などで生成されるカードにも対応（軽量デバウンス）
-  var injectTimer = null;
-  function scheduleInject() {
-    if (injectTimer) clearTimeout(injectTimer);
-    injectTimer = setTimeout(injectButtons, 350);
+  function closeFs(){
+    var st = fsState;
+    if (!st) return;
+    fsState = null;
+    var ov = document.getElementById('chart-fs-overlay');
+    // 一時付与した dataZoom を除去（ズーム状態もリセット）
+    if (st.addedZoom && st.inst) {
+      try { st.inst.setOption({ dataZoom: [] }, { replaceMerge: ['dataZoom'] }); } catch(e){}
+    }
+    // DOMを元の位置へ戻す
+    st.ph.parentNode.insertBefore(st.box, st.ph);
+    st.ph.parentNode.removeChild(st.ph);
+    if (ov) ov.classList.remove('open');
+    document.body.classList.remove('chart-fs-open');
+    if (st.inst) {
+      requestAnimationFrame(function(){ try { st.inst.resize(); } catch(e){} });
+    }
   }
+
+  // 全画面中の画面回転・リサイズに追従
+  window.addEventListener('resize', function(){
+    if (fsState && fsState.inst) { try { fsState.inst.resize(); } catch(e){} }
+  });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape') closeFs();
+  });
+
+  // ⛶ ボタン注入（chart-cardは全て静的HTMLなので初回1回でOK）
+  function makeBtn(cls){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'chart-fs-btn' + (cls ? ' ' + cls : '');
+    b.title = 'グラフを拡大表示';
+    b.setAttribute('aria-label', 'グラフを全画面表示');
+    b.innerHTML = '<i class="fa-solid fa-expand"></i>';
+    return b;
+  }
+  function injectButtons(){
+    document.querySelectorAll('.chart-card').forEach(function(card){
+      var boxes = card.querySelectorAll('.echart-box');
+      if (!boxes.length) return;
+      if (card.querySelector('.chart-fs-btn')) return;
+      if (boxes.length === 1) {
+        // 単一グラフ：カード右上に固定配置
+        card.appendChild(makeBtn(''));
+      } else {
+        // 複数グラフ：各グラフ直前に右寄せインラインで配置
+        boxes.forEach(function(box){
+          var bar = document.createElement('div');
+          bar.className = 'chart-fs-btnbar';
+          bar.appendChild(makeBtn('chart-fs-btn-inline'));
+          box.parentNode.insertBefore(bar, box);
+        });
+      }
+    });
+  }
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest ? e.target.closest('.chart-fs-btn') : null;
+    if (!btn) return;
+    e.preventDefault();
+    e.stopPropagation();
+    var card = btn.closest('.chart-card');
+    if (!card) return;
+    var box = null;
+    var bar = btn.closest('.chart-fs-btnbar');
+    if (bar && bar.nextElementSibling && bar.nextElementSibling.classList.contains('echart-box')) {
+      box = bar.nextElementSibling; // 複数グラフカード：直後のグラフを対象
+    }
+    openFs(card, box);
+  });
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', injectButtons);
   } else {
     injectButtons();
   }
-  document.addEventListener('click', scheduleInject, true);
-  document.addEventListener('shown.bs.tab', scheduleInject);
 })();
 </script>
 </body>

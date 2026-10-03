@@ -3366,11 +3366,16 @@ body.tray-open { padding-bottom: 105px; }
           <div class="tab-pane fade" id="cnsuv-charts-content" role="tabpanel">
             <!-- 引用元バー -->
             <div class="text-end mt-2 mb-1" style="font-size:0.75rem;color:#aaa;">
-              引用元：<a href="https://www.cnsuv.com/sales/factory/" target="_blank" rel="noopener" style="color:#aaa;word-break:break-all;">https://www.cnsuv.com/sales/factory/</a>
+              <span id="cnsuvNotice" style="color:#c0392b;margin-right:8px;"></span>引用元：<a id="cnsuvCiteLink" href="https://www.autohome.com.cn/rank/1#pvareaid=6863887" target="_blank" rel="noopener" style="color:#aaa;word-break:break-all;">汽车之家 厂商月销榜</a>
             </div>
             <div class="mt-3">
               <div class="d-flex flex-wrap align-items-center gap-2 mb-3 p-3" style="background:#f8f9fa;border-radius:10px;border:1px solid #e9ecef;">
-                <span class="fw-semibold text-muted" style="font-size:0.85rem;">📅 期間</span>
+                <span class="fw-semibold text-muted" style="font-size:0.85rem;">🗂 データ</span>
+                <select id="cnsuvSource" class="form-select form-select-sm" style="width:auto;">
+                  <option value="autohome" selected>汽车之家（厂商月销榜）</option>
+                  <option value="cnsuv">cnsuv.com（〜2026年3月・更新終了）</option>
+                </select>
+                <span class="fw-semibold text-muted ms-2" style="font-size:0.85rem;">📅 期間</span>
                 <select id="cnsuvStartYear" class="form-select form-select-sm" style="width:auto;">
                   <option value="2023">2023年</option><option value="2024">2024年</option><option value="2025">2025年</option>
                 </select>
@@ -3391,11 +3396,11 @@ body.tray-open { padding-bottom: 105px; }
                 <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cnsuv-yoy" type="button">📉 前年比較</button></li>
               </ul>
               <div class="tab-content">
-                <div class="tab-pane fade show active" id="cnsuv-line"><div class="chart-card"><div class="chart-title">メーカー別月次販売台数推移</div><div class="chart-subtitle">cnsuv.com / 乗聯会データ（上位10社のみ各月表示）</div><div id="ec-cnsuv-line" class="echart-box"></div></div></div>
-                <div class="tab-pane fade" id="cnsuv-bar"><div class="chart-card"><div class="chart-title">メーカー別月次販売台数（積み上げ棒）</div><div class="chart-subtitle">cnsuv.com / 乗聯会データ</div><div id="ec-cnsuv-bar" class="echart-box"></div></div></div>
-                <div class="tab-pane fade" id="cnsuv-share"><div class="chart-card"><div class="chart-title">メーカー別シェア推移（%）</div><div class="chart-subtitle">月次シェア変動</div><div id="ec-cnsuv-share" class="echart-box"></div></div></div>
+                <div class="tab-pane fade show active" id="cnsuv-line"><div class="chart-card"><div class="chart-title">メーカー別月次販売台数推移</div><div class="chart-subtitle" id="cnsuvLineSub"></div><div id="ec-cnsuv-line" class="echart-box"></div></div></div>
+                <div class="tab-pane fade" id="cnsuv-bar"><div class="chart-card"><div class="chart-title">メーカー別月次販売台数（積み上げ棒）</div><div class="chart-subtitle" id="cnsuvBarSub"></div><div id="ec-cnsuv-bar" class="echart-box"></div></div></div>
+                <div class="tab-pane fade" id="cnsuv-share"><div class="chart-card"><div class="chart-title">メーカー別シェア推移（%）</div><div class="chart-subtitle" id="cnsuvShareSub"></div><div id="ec-cnsuv-share" class="echart-box"></div></div></div>
                 <div class="tab-pane fade" id="cnsuv-rank"><div class="chart-card"><div class="chart-title">メーカー別ランキング変動</div><div class="chart-subtitle">1位が最上位</div><div id="ec-cnsuv-rank" class="echart-box"></div></div></div>
-                <div class="tab-pane fade" id="cnsuv-yoy"><div class="chart-card"><div class="chart-title">前年同月比較（万台）</div><div class="chart-subtitle">2024年 vs 2025年</div><div id="ec-cnsuv-yoy" class="echart-box"></div></div></div>
+                <div class="tab-pane fade" id="cnsuv-yoy"><div class="chart-card"><div class="chart-title">前年同月比較（万台）</div><div class="chart-subtitle" id="cnsuvYoySub"></div><div id="ec-cnsuv-yoy" class="echart-box"></div></div></div>
               </div>
             </div>
           </div>
@@ -11436,49 +11441,120 @@ document.querySelectorAll('#cccmPills .nav-link').forEach(btn => {
 });
 
 // =============================================
-// メーカー販売グラフ (cnsuv.com データ)
+// メーカー販売グラフ（汽车之家 厂商月销榜 / cnsuv.com アーカイブ）
 // =============================================
+// cnsuv.com は閉鎖（2026年3月分が最終）。現在は汽车之家を既定ソースとし、
+// output/market/autohome_factory_monthly.json は private リポの
+// tools/scrape_market_data.py --source autohome（market_data_scraper ワークフロー）が毎月自動更新し、
+// deploy_public で本リポにミラーされる。
+// 両JSONとも { months: { "YYYY-MM": { total_sales, factory_count, top[] | top_30[] } } } 形式。
+var CNSUV_SOURCES = {
+  autohome: {
+    path: 'output/market/autohome_factory_monthly.json',
+    cite: 'https://www.autohome.com.cn/rank/1#pvareaid=6863887',
+    citeLabel: '汽车之家 厂商月销榜',
+    lineSub: '汽车之家 厂商月销榜（各月の掲載上位社）',
+    barSub: '汽车之家 厂商月销榜',
+    shareSub: '掲載上位社の合計に対するシェア（汽车之家は市場全体の総数を掲載していないため）'
+  },
+  cnsuv: {
+    path: 'output/market/cnsuv_factory_monthly.json',
+    cite: 'https://www.cnsuv.com/sales/factory/',
+    citeLabel: 'https://www.cnsuv.com/sales/factory/（2026年3月で更新終了）',
+    lineSub: 'cnsuv.com / 乗聯会データ（各月上位30社・2026年3月で更新終了）',
+    barSub: 'cnsuv.com / 乗聯会データ',
+    shareSub: '月次シェア変動（乗聯会の総数比）'
+  }
+};
+var CNSUV_SOURCE = 'autohome';
+var CNSUV_CACHE = {};
 var CNSUV_RAW = {};
 var CNSUV_RAW_LOADED = false;
 
-async function loadCnsuvRaw() {
-  if (CNSUV_RAW_LOADED) return;
-  try {
-    const res = await fetch(
-      `${RAW_BASE}output/market/cnsuv_factory_monthly.json?v=${Date.now()}`,
-      { cache: "no-store" }
-    );
-    if (!res.ok) throw new Error(res.statusText);
+// 月データの行配列（汽车之家=top / cnsuv=top_30）
+function cnsuvRows(md) { return md ? (md.top || md.top_30 || []) : []; }
+function cnsuvFind(m, mk) { return cnsuvRows(CNSUV_RAW[m]).find(function(r){ return r.factory === mk; }); }
+
+async function loadCnsuvRaw(source) {
+  source = source || CNSUV_SOURCE;
+  if (!CNSUV_CACHE[source]) {
+    const res = await fetch(`${RAW_BASE}${CNSUV_SOURCES[source].path}?v=${Date.now()}`, { cache: "no-store" });
+    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
     const json = await res.json();
     const months = json.months || json;
-    Object.assign(CNSUV_RAW, months);
-    CNSUV_RAW_LOADED = true;
-    console.log('cnsuv JSON 読み込み成功:', Object.keys(CNSUV_RAW).length + '件');
-    // データに含まれる年の範囲を検出してセレクトボックスを最新年に更新
-    const allYears = [...new Set(Object.keys(CNSUV_RAW).map(m => parseInt(m.split('-')[0])))].sort();
-    const minYear = allYears[0];
-    const maxYear = allYears[allYears.length - 1];
-    const startSel = document.getElementById('cnsuvStartYear');
-    const endSel   = document.getElementById('cnsuvEndYear');
-    if (startSel && endSel) {
-      [startSel, endSel].forEach(sel => {
-        sel.innerHTML = '';
-        allYears.forEach(y => {
-          const opt = document.createElement('option');
-          opt.value = y; opt.textContent = y + '年';
-          sel.appendChild(opt);
-        });
+    if (!Object.keys(months).length) throw new Error('データが空です');
+    CNSUV_CACHE[source] = months;
+  }
+  CNSUV_SOURCE = source;
+  Object.keys(CNSUV_RAW).forEach(function(k){ delete CNSUV_RAW[k]; });
+  Object.assign(CNSUV_RAW, CNSUV_CACHE[source]);
+  CNSUV_RAW_LOADED = true;
+  console.log(source + ' JSON 読み込み成功:', Object.keys(CNSUV_RAW).length + '件');
+  // データに含まれる年の範囲でセレクトボックスを作り直す
+  const allYears = [...new Set(Object.keys(CNSUV_RAW).map(m => parseInt(m.split('-')[0])))].sort();
+  const startSel = document.getElementById('cnsuvStartYear');
+  const endSel   = document.getElementById('cnsuvEndYear');
+  if (startSel && endSel) {
+    [startSel, endSel].forEach(sel => {
+      sel.innerHTML = '';
+      allYears.forEach(y => {
+        const opt = document.createElement('option');
+        opt.value = y; opt.textContent = y + '年';
+        sel.appendChild(opt);
       });
-      startSel.value = minYear;
-      endSel.value   = maxYear;
-    }
-  } catch (err) {
-    console.error('cnsuv JSON 読み込み失敗:', err);
+    });
+    startSel.value = allYears[0];
+    endSel.value   = allYears[allYears.length - 1];
   }
 }
-var CNSUV_MAKER_JA = {"比亚迪":"BYD","吉利汽车":"吉利","长安汽车":"長安","奇瑞汽车":"奇瑞","长城汽车":"長城","一汽红旗":"紅旗","上汽集团":"SAIC","特斯拉中国":"Tesla","理想":"Li Auto","蔚来":"NIO","小鹏汽车":"XPENG","零跑汽车":"Leapmotor","极氪":"Zeekr","小米汽车":"Xiaomi","深蓝汽车":"Deepal","AITO 问界":"AITO（問界）","广汽埃安":"広汽AION","领克":"LYNK&CO（領克）","合众汽车":"Neta（合衆汽車）","方程豹":"方程豹（BYD傘下）","长安启源":"長安啓源","一汽-大众":"FAW-フォルクスワーゲン","上汽大众":"SAIC-フォルクスワーゲン","一汽-大众奥迪":"FAW-アウディ","一汽-大众捷达":"FAW-捷達（Jetta）","上汽大众斯柯达":"SAIC-シュコダ","上汽通用别克":"Buick（上汽GM）","上汽通用凯迪拉克":"Cadillac（上汽GM）","上汽通用雪佛兰":"Chevrolet（上汽GM）","上汽通用五菱":"GM五菱（SGMW）","广汽丰田":"広汽トヨタ","一汽丰田":"一汽トヨタ","广汽本田":"広汽Honda","东风本田":"東風Honda","东风日产":"東風日産","华晨宝马":"華晨BMW","北京奔驰":"北京メルセデス","北京现代":"北京ヒュンダイ","悦达起亚":"悦達・起亜（Kia）","长安福特":"長安Ford","长安马自达":"長安Mazda","广汽三菱":"広汽Mitsubishi","广汽菲克Jeep":"広汽Jeep","沃尔沃亚太":"Volvo（中国生産）","东风标致":"東風Peugeot","北汽新能源":"BJEV（北汽新能源）","北京汽车":"BAIC（北京汽車）","北汽幻速":"BAIC幻速","广汽乘用车":"広汽乗用（Trumpchi）","奇瑞新能源":"奇瑞EV","长城新能源":"長城EV","一汽奔腾":"FAW-奔騰","东风乘用车":"東風乗用","东风小康":"東風小康","东风风行":"東風Forthing","众泰汽车":"Zotye（衆泰）","江淮汽车":"JAC（江淮）","江汽集团":"JAC集団（江汽）","鑫源汽车":"鑫源"};
+
+// 表示テキスト（引用元・サブタイトル）をソースに合わせて切替
+function cnsuvApplySourceTexts(notice) {
+  var S = CNSUV_SOURCES[CNSUV_SOURCE];
+  var sel = document.getElementById('cnsuvSource');
+  if (sel) sel.value = CNSUV_SOURCE;
+  var keys = Object.keys(CNSUV_RAW).sort();
+  var latest = keys.length ? CNSUV_RAW[keys[keys.length - 1]] : null;
+  var link = document.getElementById('cnsuvCiteLink');
+  if (link) {
+    link.href = (latest && latest.source_url) || S.cite;
+    link.textContent = S.citeLabel + (CNSUV_SOURCE === 'autohome' && keys.length ? '（〜' + keys[keys.length - 1] + '）' : '');
+  }
+  var set = function(id, txt){ var el = document.getElementById(id); if (el) el.textContent = txt; };
+  set('cnsuvNotice', notice || '');
+  set('cnsuvLineSub', S.lineSub);
+  set('cnsuvBarSub', S.barSub);
+  set('cnsuvShareSub', S.shareSub);
+}
+
+// ソースを読み込み → メーカー一覧・チェックボックス・グラフを作り直す
+async function cnsuvActivate(source) {
+  var notice = '';
+  try {
+    await loadCnsuvRaw(source);
+  } catch (err) {
+    console.error(source + ' JSON 読み込み失敗:', err);
+    if (source === 'cnsuv') return;
+    try {
+      await loadCnsuvRaw('cnsuv');
+      notice = '⚠ 汽车之家データを読み込めなかったため、cnsuvアーカイブを表示中';
+    } catch (err2) {
+      console.error('cnsuv JSON 読み込み失敗:', err2);
+      return;
+    }
+  }
+  cnsuvApplySourceTexts(notice);
+  rebuildCnsuvAllMakers();
+  var cont = document.getElementById('cnsuvMakerCheckboxes');
+  if (cont) cont.innerHTML = '';
+  cnsuvBuildCheckboxes();
+  cnsuvRefresh();
+}
+var CNSUV_MAKER_JA = {"比亚迪":"BYD","吉利汽车":"吉利","长安汽车":"長安","奇瑞汽车":"奇瑞","长城汽车":"長城","一汽红旗":"紅旗","上汽集团":"SAIC","特斯拉中国":"Tesla","理想":"Li Auto","蔚来":"NIO","小鹏汽车":"XPENG","零跑汽车":"Leapmotor","极氪":"Zeekr","小米汽车":"Xiaomi","深蓝汽车":"Deepal","AITO 问界":"AITO（問界）","广汽埃安":"広汽AION","领克":"LYNK&CO（領克）","合众汽车":"Neta（合衆汽車）","方程豹":"方程豹（BYD傘下）","长安启源":"長安啓源","一汽-大众":"FAW-フォルクスワーゲン","上汽大众":"SAIC-フォルクスワーゲン","一汽-大众奥迪":"FAW-アウディ","一汽-大众捷达":"FAW-捷達（Jetta）","上汽大众斯柯达":"SAIC-シュコダ","上汽通用别克":"Buick（上汽GM）","上汽通用凯迪拉克":"Cadillac（上汽GM）","上汽通用雪佛兰":"Chevrolet（上汽GM）","上汽通用五菱":"GM五菱（SGMW）","广汽丰田":"広汽トヨタ","一汽丰田":"一汽トヨタ","广汽本田":"広汽Honda","东风本田":"東風Honda","东风日产":"東風日産","华晨宝马":"華晨BMW","北京奔驰":"北京メルセデス","北京现代":"北京ヒュンダイ","悦达起亚":"悦達・起亜（Kia）","长安福特":"長安Ford","长安马自达":"長安Mazda","广汽三菱":"広汽Mitsubishi","广汽菲克Jeep":"広汽Jeep","沃尔沃亚太":"Volvo（中国生産）","东风标致":"東風Peugeot","北汽新能源":"BJEV（北汽新能源）","北京汽车":"BAIC（北京汽車）","北汽幻速":"BAIC幻速","广汽乘用车":"広汽乗用（Trumpchi）","奇瑞新能源":"奇瑞EV","长城新能源":"長城EV","一汽奔腾":"FAW-奔騰","东风乘用车":"東風乗用","东风小康":"東風小康","东风风行":"東風Forthing","众泰汽车":"Zotye（衆泰）","江淮汽车":"JAC（江淮）","江汽集团":"JAC集団（江汽）","鑫源汽车":"鑫源","五菱汽车":"GM五菱（SGMW）","长安":"長安","日产":"日産","理想汽车":"Li Auto","奥迪":"アウディ","一汽奥迪":"FAW-アウディ","本田":"Honda","埃安":"広汽AION","奇瑞":"奇瑞","鸿蒙智行":"HIMA（鴻蒙智行）","哈弗":"Haval（哈弗）","广汽传祺":"広汽Trumpchi（伝祺）","吉利银河":"Geely Galaxy（吉利銀河）","捷途":"Jetour（捷途）","MG":"MG（名爵）","北京越野":"BAIC越野","岚图汽车":"Voyah（嵐図）","坦克":"Tank（坦克）","荣威":"Roewe（栄威）","魏牌":"WEY（魏牌）","特斯拉":"Tesla","小鹏":"XPENG","ARCFOX极狐":"ARCFOX（極狐）"};
 var CNSUV_COLORS = ["#5470c6","#ee6666","#91cc75","#fac858","#73c0de","#3ba272","#fc8452","#9a60b4","#ea7ccc","#48b6c8","#ff9e7d","#a0c878","#6baed6","#fd8d3c","#9e9ac8"];
-var CNSUV_DEFAULT = ["比亚迪","吉利汽车","上汽大众","一汽-大众","上汽通用五菱","广汽丰田","一汽丰田","华晨宝马","长安汽车","特斯拉中国","奇瑞汽车","理想","零跑汽车","小米汽车","AITO 问界"];
+// 初期チェック（両ソースの表記を併記。存在しない名前は無視される）
+var CNSUV_DEFAULT = ["比亚迪","吉利汽车","上汽大众","一汽-大众","上汽通用五菱","广汽丰田","一汽丰田","华晨宝马","长安汽车","特斯拉中国","奇瑞汽车","理想","零跑汽车","小米汽车","AITO 问界",
+                     "五菱汽车","吉利银河","长安","奇瑞","理想汽车","鸿蒙智行"];
 var CNSUV_EC = {};
 var CNSUV_INITED = false;
 
@@ -11488,12 +11564,15 @@ var CNSUV_ALL_MAKERS = [];
 function rebuildCnsuvAllMakers() {
   var freq = {};
   Object.values(CNSUV_RAW).forEach(function(m) {
-    (m.top_30 || []).forEach(function(r) { freq[r.factory] = (freq[r.factory]||0)+1; });
+    cnsuvRows(m).forEach(function(r) { freq[r.factory] = (freq[r.factory]||0)+1; });
   });
   CNSUV_ALL_MAKERS = Object.keys(freq).sort(function(a,b){ return freq[b]-freq[a]; });
 }
 
 function cnsuvJa(name) {
+  // 同名別エントリ（例「长安启源（2）」）は元の名前で引いて番号を付け直す
+  var dup = /^(.*)（(\d+)）$/.exec(name);
+  if (dup) return cnsuvJa(dup[1]) + '（' + dup[2] + '）';
   var ja = CNSUV_MAKER_JA[name];
   if (!ja || ja === name) return name;
   return ja + ' (' + name + ')';
@@ -11541,7 +11620,7 @@ function cnsuvDrawLine() {
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'万台'},
     series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:true,symbolSize:4,color:cnsuvColor(mk),connectNulls:false,
-      data:months.map(function(m){ var e=CNSUV_RAW[m]&&CNSUV_RAW[m].top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/10000*10)/10:null; })}; })
+      data:months.map(function(m){ var e=cnsuvFind(m,mk); return e?Math.round(e.sales/10000*10)/10:null; })}; })
   });
 }
 function cnsuvDrawBar() {
@@ -11554,7 +11633,7 @@ function cnsuvDrawBar() {
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'万台'},
     series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'bar',stack:'total',color:cnsuvColor(mk),
-      data:months.map(function(m){ var e=CNSUV_RAW[m]&&CNSUV_RAW[m].top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/10000*10)/10:null; })}; })
+      data:months.map(function(m){ var e=cnsuvFind(m,mk); return e?Math.round(e.sales/10000*10)/10:null; })}; })
   });
 }
 function cnsuvDrawShare() {
@@ -11567,34 +11646,53 @@ function cnsuvDrawShare() {
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
     yAxis:{type:'value',name:'シェア(%)'},
     series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:true,color:cnsuvColor(mk),connectNulls:false,
-      data:months.map(function(m){ var md=CNSUV_RAW[m]; if(!md)return null; var e=md.top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/md.total_sales*1000)/10:null; })}; })
+      data:months.map(function(m){ var md=CNSUV_RAW[m]; if(!md||!md.total_sales)return null; var e=cnsuvFind(m,mk); return e?Math.round(e.sales/md.total_sales*1000)/10:null; })}; })
   });
 }
 function cnsuvDrawRank() {
   var c = cnsuvGetChart('ec-cnsuv-rank'); if (!c) return;
   var months = cnsuvGetMonths(), makers = cnsuvGetMakers();
+  var series = makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:false,symbolSize:5,color:cnsuvColor(mk),connectNulls:false,
+      data:months.map(function(m){ var e=cnsuvFind(m,mk); return e?e.rank:null; })}; });
+  // 縦軸の下限：表示中メーカーの最下位に合わせる（最低10位）
+  var maxRank = 10;
+  series.forEach(function(s){ s.data.forEach(function(v){ if (v != null && v > maxRank) maxRank = v; }); });
+  var interval = maxRank > 30 ? 5 : (maxRank > 15 ? 2 : 1);
+  maxRank = Math.ceil(maxRank / interval) * interval;
   c.setOption({ backgroundColor:'transparent',
     tooltip:{trigger:'axis',valueFormatter:function(v){return v!=null?v+'位':'圏外';}},
     legend:{top:8,type:'scroll',textStyle:{fontSize:11}},
     grid:{left:60,right:20,top:60,bottom:55},
     xAxis:{type:'category',data:months,axisLabel:{rotate:45,fontSize:10}},
-    yAxis:{type:'value',name:'順位',inverse:true,min:1,max:10,interval:1},
-    series: makers.map(function(mk){ return {name:cnsuvJa(mk),type:'line',smooth:false,symbolSize:5,color:cnsuvColor(mk),connectNulls:false,
-      data:months.map(function(m){ var e=CNSUV_RAW[m]&&CNSUV_RAW[m].top_30.find(function(r){return r.factory===mk;}); return e?e.rank:null; })}; })
+    // 目盛りを 5,10,15… に揃えるため間隔>1のときは0起点（0は非表示）
+    yAxis:{type:'value',name:'順位',inverse:true,min:interval>1?0:1,max:maxRank,interval:interval,
+      axisLabel:{formatter:function(v){ return v===0?'':v; }}},
+    series: series
   });
 }
 function cnsuvDrawYoy() {
   var c = cnsuvGetChart('ec-cnsuv-yoy'); if (!c) return;
   var makers = cnsuvGetMakers();
-  var m24 = Object.keys(CNSUV_RAW).filter(function(m){return m.startsWith('2024');}).sort();
-  var m25 = Object.keys(CNSUV_RAW).filter(function(m){return m.startsWith('2025');}).sort();
-  var common = m24.map(function(m){return m.slice(5);}).filter(function(mm){return m25.some(function(m2){return m2.slice(5)===mm;});});
+  // データ内の最新年とその前年を比較（共通する月のみ）
+  var years = [...new Set(Object.keys(CNSUV_RAW).map(function(m){ return m.slice(0,4); }))].sort();
+  var yB = years[years.length-1], yA = years[years.length-2];
+  var sub = document.getElementById('cnsuvYoySub');
+  if (!yA) {
+    if (sub) sub.textContent = '比較できる前年データがありません';
+    c.setOption({ title:{text:'前年データなし',left:'center',top:'middle',textStyle:{color:'#999',fontSize:14}}, series:[] });
+    return;
+  }
+  if (sub) sub.textContent = yA + '年 vs ' + yB + '年（共通する月のみ）';
+  var mA = Object.keys(CNSUV_RAW).filter(function(m){return m.startsWith(yA);}).sort();
+  var mB = Object.keys(CNSUV_RAW).filter(function(m){return m.startsWith(yB);}).sort();
+  var common = mA.map(function(m){return m.slice(5);}).filter(function(mm){return mB.some(function(m2){return m2.slice(5)===mm;});});
+  var sA = '(' + yA.slice(2) + ')', sB = '(' + yB.slice(2) + ')';
   var series = [];
   makers.forEach(function(mk) {
-    series.push({name:cnsuvJa(mk)+'(24)',type:'bar',color:cnsuvColor(mk),itemStyle:{opacity:0.5},
-      data:common.map(function(mm){ var e=CNSUV_RAW['2024-'+mm]&&CNSUV_RAW['2024-'+mm].top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/10000*10)/10:null; })});
-    series.push({name:cnsuvJa(mk)+'(25)',type:'bar',color:cnsuvColor(mk),
-      data:common.map(function(mm){ var e=CNSUV_RAW['2025-'+mm]&&CNSUV_RAW['2025-'+mm].top_30.find(function(r){return r.factory===mk;}); return e?Math.round(e.sales/10000*10)/10:null; })});
+    series.push({name:cnsuvJa(mk)+sA,type:'bar',color:cnsuvColor(mk),itemStyle:{opacity:0.5},
+      data:common.map(function(mm){ var e=cnsuvFind(yA+'-'+mm,mk); return e?Math.round(e.sales/10000*10)/10:null; })});
+    series.push({name:cnsuvJa(mk)+sB,type:'bar',color:cnsuvColor(mk),
+      data:common.map(function(mm){ var e=cnsuvFind(yB+'-'+mm,mk); return e?Math.round(e.sales/10000*10)/10:null; })});
   });
   c.setOption({ backgroundColor:'transparent',
     tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
@@ -11619,12 +11717,14 @@ function cnsuvRefresh() {
 
 function cnsuvBuildCheckboxes() {
   var container = document.getElementById('cnsuvMakerCheckboxes');
-  if (!container || container.children.length > 0) return;
+  if (!container || container.children.length > 0 || !CNSUV_ALL_MAKERS.length) return;
 
   var JV_MAKERS = [
     "上汽大众","一汽-大众","一汽-大众奥迪","上汽通用别克","上汽通用凯迪拉克","上汽通用雪佛兰",
     "广汽丰田","一汽丰田","广汽本田","东风本田","东风日产",
-    "华晨宝马","北京奔驰","北京现代","沃尔沃亚太","特斯拉中国","一汽-大众捷达"
+    "华晨宝马","北京奔驰","北京现代","沃尔沃亚太","特斯拉中国","一汽-大众捷达",
+    // 汽车之家の表記
+    "日产","本田","奥迪","一汽奥迪","长安马自达","长安福特","上汽大众斯柯达","悦达起亚","东风标致","广汽三菱","特斯拉"
   ];
   var JV_PRESENT  = JV_MAKERS.filter(function(m){ return CNSUV_ALL_MAKERS.indexOf(m) >= 0; });
   var CN_MAKERS   = CNSUV_ALL_MAKERS.filter(function(m){ return JV_MAKERS.indexOf(m) < 0; });
@@ -11674,7 +11774,8 @@ function cnsuvBuildCheckboxes() {
 function cnsuvSetup() {
   if (CNSUV_INITED) return;
   CNSUV_INITED = true;
-  cnsuvBuildCheckboxes();
+  // チェックボックスはデータ読込後に cnsuvActivate() が作る
+  document.getElementById('cnsuvSource').addEventListener('change', function(){ cnsuvActivate(this.value); });
   document.querySelectorAll('#cnsuvChartPills .nav-link').forEach(function(btn) {
     btn.addEventListener('shown.bs.tab', function() {
       var t = this.getAttribute('data-bs-target');
@@ -11695,10 +11796,9 @@ function cnsuvSetup() {
 
 document.getElementById('cnsuv-charts-tab').addEventListener('click', function() {
   setTimeout(async function() {
-    await loadCnsuvRaw();
-    rebuildCnsuvAllMakers();
     cnsuvSetup();
-    cnsuvDrawLine();
+    if (!CNSUV_RAW_LOADED) await cnsuvActivate(CNSUV_SOURCE);
+    else cnsuvRefresh();
   }, 100);
 });
 

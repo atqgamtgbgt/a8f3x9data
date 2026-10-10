@@ -1,5 +1,51 @@
 [
  {
+  "run_at": "2026-10-10T12:59:19+00:00",
+  "ok": true,
+  "list_method": "v2",
+  "list_attempts": [
+   "v2: OK 20件"
+  ],
+  "content_methods": [
+   "1078592557: pc:lxml:.content-main-detail",
+   "1079036468: pc:lxml:.content-main-detail",
+   "1079610268: pc:lxml:.content-main-detail",
+   "1080113775: pc:lxml:.content-main-detail",
+   "1081215640: pc:lxml:.content-main-detail",
+   "1081478423: pc:lxml:.content-main-detail",
+   "1082168367: pc:lxml:.content-main-detail",
+   "1082790911: pc:lxml:.content-main-detail",
+   "1083062554: pc:lxml:.content-main-detail",
+   "1083353151: pc:lxml:.content-main-detail",
+   "1084086892: pc:lxml:.content-main-detail",
+   "1084890228: pc:lxml:.content-main-detail",
+   "1085170493: pc:lxml:.content-main-detail",
+   "1085753030: pc:lxml:.content-main-detail",
+   "1085751082: pc:lxml:.content-main-detail",
+   "1086043839: pc:lxml:.content-main-detail"
+  ],
+  "new": [
+   "1078592557",
+   "1079036468",
+   "1079610268",
+   "1080113775",
+   "1081215640",
+   "1081478423",
+   "1082168367",
+   "1082790911",
+   "1083062554",
+   "1083353151",
+   "1084086892",
+   "1084890228",
+   "1085170493",
+   "1085753030",
+   "1085751082",
+   "1086043839"
+  ],
+  "failed": [],
+  "seconds": 153.9
+ },
+ {
   "run_at": "2026-10-10T12:11:44+00:00",
   "ok": true,
   "list_method": "v2",

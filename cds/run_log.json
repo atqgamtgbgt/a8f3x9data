@@ -1,5 +1,17 @@
 [
  {
+  "run_at": "2026-10-10T14:28:54+00:00",
+  "ok": true,
+  "list_method": "v2",
+  "list_attempts": [
+   "v2: OK 20件"
+  ],
+  "content_methods": [],
+  "new": [],
+  "failed": [],
+  "seconds": 1.4
+ },
+ {
   "run_at": "2026-10-10T12:59:19+00:00",
   "ok": true,
   "list_method": "v2",

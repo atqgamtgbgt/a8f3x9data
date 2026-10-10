@@ -513,3 +513,138 @@ def test_list_failure_is_annotated_for_github(monkeypatch, tmp_path, capsys):
     # 失敗時も実行記録が残る（ワークフローはこれを保存用ブランチに保存する）
     log = json.loads((tmp_path / "cds/run_log.json").read_text(encoding="utf-8"))
     assert log[0]["ok"] is False and "v2: NG" in log[0]["list_attempts"]
+
+
+# ---------------------------------------------------------------------------
+# ページの作りが違う記事への対応（2026-10-10 の本番実行で16/20件が「本文なし」になった件）
+# ---------------------------------------------------------------------------
+LONG_P = "2026年9月1-20日，全国乘用车市场零售87.8万辆，同比去年同期下降22%，较上月同期增长21%。" * 3
+
+NEW_TEMPLATE_PC = f"""<html><head><meta property="og:title" content="车市扫描-2026年36期（9月14日-9月19日）">
+<meta itemprop="datePublished" content="2026-09-20 20:10"></head><body>
+<div class="page"><div class="main-col"><div class="content-box">
+  <p>{LONG_P}</p><p><img data-src="{encrypt(IMG1)}"></p><p>{LONG_P}</p><p><img src="{IMG2}"></p>
+</div></div>
+<aside class="recommend-list"><article class="card"><p>热门推荐</p><img src="https://example.com/c.jpg"></article></aside>
+</div></body></html>"""
+
+EMPTY_PC = """<html><head><meta property="og:title" content="2026年1-8月中国占世界汽车份额32%"></head>
+<body><div id="app"></div><script>window.__X__={}</script></body></html>"""
+
+MOBILE_PAGE = f"""<html><head><title>2026年1-8月中国占世界汽车份额32%</title></head><body>
+<div class="time">2026-09-30 18:00</div>
+<div id="articleContent"><p>{LONG_P}</p><p><img data-src="{encrypt(IMG3)}"></p></div></body></html>"""
+
+
+def test_densest_fallback_for_unknown_template():
+    art = sohu.parse_article_html(NEW_TEMPLATE_PC, "https://www.sohu.com/a/1080113775_115312")
+    assert "densest" in art.content_method
+    assert art.image_urls == [IMG1, IMG2]           # 関連記事カードの画像は拾わない
+    assert "热门推荐" not in art.text and art.published_at == "2026-09-20T20:10+08:00"
+
+
+def test_tiny_generic_article_is_not_mistaken_for_body():
+    html = NEW_TEMPLATE_PC.replace('<div class="content-box">', '<article class="related"><p>相关</p></article><div class="content-box">')
+    art = sohu.parse_article_html(html, "https://www.sohu.com/a/1080113775_115312")
+    assert "相关" not in art.text and len(art.image_urls) == 2
+
+
+def test_short_article_with_reliable_selector_is_accepted():
+    html = '<html><body><article class="article" id="mp-editor"><p>9月新能源乘用车批发120万辆。</p></article></body></html>'
+    art = sohu.parse_article_html(html, "https://www.sohu.com/a/1085751082_115312")
+    assert art.text == "9月新能源乘用车批发120万辆。" and art.content_method == "lxml:#mp-editor"
+
+
+def _routes_with(pc_html, mobile_html=None, mobile_status=200):
+    img = png_bytes()
+    routes = [
+        ("https://v2.sohu.com/author-page-api/author-articles/pc/115312",
+         FakeResponse(200, v2_json([("1083353151", "2026年1-8月中国占世界汽车份额32%", 1759226400000)]))),
+        ("https://www.sohu.com/a/1083353151_115312", FakeResponse(200, pc_html)),
+        ("https://m.sohu.com/a/1083353151_115312", FakeResponse(mobile_status, mobile_html or "not found")),
+    ]
+    for u in (IMG1, IMG2, IMG3):
+        routes.append((u, FakeResponse(200, content=img, headers={"Content-Type": "image/png"})))
+    return routes
+
+
+def test_mobile_page_fallback(monkeypatch, tmp_path):
+    code, session = run_fetch(monkeypatch, tmp_path, _routes_with(EMPTY_PC, MOBILE_PAGE))
+    assert code == 0
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    a = index["articles"][0]
+    assert a["content_method"] == "mobile:lxml:#articleContent"
+    assert a["title"] == "2026年1-8月中国占世界汽车份額32%".replace("額", "额")   # PC版のog:titleを使う
+    assert a["images_saved"] == 1
+    mobile_calls = [c for c in session.calls if c[1].startswith("https://m.sohu.com/")]
+    assert mobile_calls and "iPhone" in mobile_calls[0][2]["headers"]["User-Agent"]
+
+
+def test_debug_html_saved_then_removed_on_success(monkeypatch, tmp_path):
+    code, _ = run_fetch(monkeypatch, tmp_path, _routes_with(EMPTY_PC, "<html><body>empty</body></html>"))
+    assert code == 0
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    err = index["failed"]["1083353151"]["error"]
+    assert "ContentNotFound" in err and "mp-editor=False" in err and "モバイル版" in err
+    assert (tmp_path / "cds/debug/1083353151.pc.html").exists()
+    assert (tmp_path / "cds/debug/1083353151.mobile.html").exists()
+    # 次の実行で取れたら、調査用HTMLは消える
+    code, _ = run_fetch(monkeypatch, tmp_path, _routes_with(EMPTY_PC, MOBILE_PAGE))
+    assert not list((tmp_path / "cds/debug").glob("1083353151.*"))
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    assert index["failed"] == {} and index["articles"][0]["id"] == "1083353151"
+
+
+# ---------------------------------------------------------------------------
+# 新しい作り（Vue）のページ。2026-10-10 にユーザーが保存した実物の構造を小さく再現したもの
+# ---------------------------------------------------------------------------
+PLACEHOLDER = "https://m1.auto.itc.cn/appImage/sohu-default.png"
+VUE_PAGE = f"""<!DOCTYPE html><html><head><title>车市扫描-2026年38期（9月28日-9月30日）_搜狐汽车_搜狐网</title></head>
+<body><div id="app" data-v-app=""><section class="content-box area"><section class="content-main">
+<h3 class="content-main--title">车市扫描-2026年38期（9月28日-9月30日）</h3>
+<span class="content-main-desc--time">2026-10-10 17:34</span>
+<div class="content-main-detail">
+  <p>主要信息源自乘联分会每日新闻等</p>
+  <p>9月1-30日全国乘用车厂家批发252.8万辆，同比去年同期下降10%，较上月同期增长7%。</p>
+  <p class="ql-align-center"><img src="{IMG1}"></p>
+  <p>9月第1周乘用车市场日均零售3.5万辆。</p>
+  <p class="ql-align-center"><img src="{PLACEHOLDER}" data-src="{IMG2}"></p>
+  <p class="ql-align-center"><img src="{PLACEHOLDER}" lazy-url="{IMG3}"></p>
+</div>
+<section id="recommendApp" class="info-recommend"><ul class="info-recommend-list"><li><p>推荐阅读：某车型上市</p></li></ul></section>
+</section><section id="asideContent" class="content-right"><section class="model-recommend"><p>热门车型</p></section></section>
+</section></div></body></html>"""
+
+
+def test_vue_template_page():
+    art = sohu.parse_article_html(VUE_PAGE, "https://www.sohu.com/a/1086043839_115312")
+    assert art.content_method == "lxml:.content-main-detail"
+    assert art.title == "车市扫描-2026年38期（9月28日-9月30日）"
+    assert art.published_at == "2026-10-10T17:34+08:00"
+    assert art.image_urls == [IMG1, IMG2, IMG3]       # 仮画像は飛ばし、data-src / 未知の属性の本物URLを拾う
+    assert art.missing_images == 0
+    assert "推荐阅读" not in art.text and "热门车型" not in art.text
+
+
+def test_placeholder_only_image_is_reported(monkeypatch, tmp_path):
+    page = VUE_PAGE.replace(f'lazy-url="{IMG3}"', "")   # 3枚目は仮画像だけ（本物のURLがどこにも無い）
+    art = sohu.parse_article_html(page, "https://www.sohu.com/a/1086043839_115312")
+    assert art.image_urls == [IMG1, IMG2] and art.missing_images == 1
+    img = png_bytes()
+    routes = [
+        ("https://v2.sohu.com/author-page-api/author-articles/pc/115312",
+         FakeResponse(200, v2_json([("1086043839", "车市扫描-2026年38期", 1791700000000)]))),
+        ("https://www.sohu.com/a/1086043839_115312", FakeResponse(200, page)),
+        (IMG1, FakeResponse(200, content=img, headers={"Content-Type": "image/png"})),
+        (IMG2, FakeResponse(200, content=img, headers={"Content-Type": "image/png"})),
+    ]
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    code, session = run_fetch(monkeypatch, tmp_path, routes)
+    assert code == 0
+    assert not any(c[1] == PLACEHOLDER for c in session.calls)   # 仮画像はダウンロードしない
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    a = index["articles"][0]
+    assert a["image_count"] == 3 and a["images_saved"] == 2
+    assert (tmp_path / "cds/debug/1086043839.pc.html").exists()
+    md = (tmp_path / a["path"] / "content.md").read_text(encoding="utf-8")
+    assert "（図3：画像を取得できませんでした）" in md

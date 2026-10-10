@@ -37,6 +37,10 @@ USER_AGENT = (
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
     "(KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36"
 )
+MOBILE_USER_AGENT = (
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 "
+    "(KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
+)
 IMAGE_KEY = b"www.sohu.com6666"          # 画像URL復号用（RSSHub と同じ）
 ASID_SECRET = b"439642a904ef43d092d45509cdc4391c"  # odin API の asId 生成用
 DEFAULT_SUV = "1612268936507kas0gk"
@@ -70,10 +74,17 @@ class Article:
     title: str
     published_at: str | None
     blocks: list[dict] = field(default_factory=list)  # {"type": "text"|"image", ...}
+    content_method: str = ""  # 本文をどの方法で見つけたか（調査用）
+    raw_html: str | None = field(default=None, repr=False)  # 取得したHTML（調査用。article.json には保存しない）
 
     @property
     def image_urls(self) -> list[str]:
-        return [b["src_url"] for b in self.blocks if b["type"] == "image"]
+        return [b["src_url"] for b in self.blocks if b["type"] == "image" and b.get("src_url")]
+
+    @property
+    def missing_images(self) -> int:
+        """本物の画像URLが見つからなかった図の数"""
+        return sum(1 for b in self.blocks if b["type"] == "image" and not b.get("src_url"))
 
     @property
     def text(self) -> str:
@@ -399,12 +410,33 @@ def _clean_text(s: str) -> str:
     return s.strip()
 
 
+# 遅延読み込み用の仮画像（本物の画像は別の属性に入っている）
+_PLACEHOLDER_RE = re.compile(r"sohu-default|/appImage/|blank\.(gif|png)|loading\.(gif|png)|placeholder|lazy\.(gif|png)", re.I)
+_LAZY_ATTRS = ("data-src", "data-original", "original", "data-url", "data-lazy-src", "lazy-src",
+               "data-actualsrc", "data-echo", "data-lazyload", "data-img", "data-image")
+_SKIP_ATTRS = {"src", "srcset", "class", "style", "alt", "title", "width", "height", "id", "loading", "decoding"}
+
+
 def _img_src(img: Tag, base_url: str) -> str | None:
-    for attr in ("data-src", "data-original", "src"):
-        url = normalize_image_url(img.get(attr))
-        if url:
+    """img から本物の画像URLを得る。仮画像しか無ければ None。"""
+    tried = [img.get(a) for a in _LAZY_ATTRS]
+    # 名前の分からない属性でも、画像URL（または暗号化された値）なら拾う
+    tried += [v for k, v in img.attrs.items() if k not in _SKIP_ATTRS and k not in _LAZY_ATTRS and isinstance(v, str)]
+    srcset = img.get("srcset")
+    if srcset:
+        tried.append(srcset.split(",")[0].strip().split(" ")[0])
+    tried.append(img.get("src"))
+    for value in tried:
+        url = normalize_image_url(value)
+        if url and not _PLACEHOLDER_RE.search(url) and _looks_like_image_url(url):
             return urljoin(base_url, url)
     return None
+
+
+def _looks_like_image_url(url: str) -> bool:
+    path = urlsplit(url).path.lower()
+    return ("itc.cn" in url or "sohucs.com" in url or "sohu.com" in url
+            or path.endswith((".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp")))
 
 
 def _table_text(tbl: Tag) -> str:
@@ -436,7 +468,13 @@ def extract_blocks(root: Tag, base_url: str) -> list[dict]:
 
     def add_img(img: Tag):
         src = _img_src(img, base_url)
-        if not src or src in seen_imgs:
+        if not src:
+            raw = (img.get("src") or "").strip()
+            if raw and _PLACEHOLDER_RE.search(raw):
+                # 仮画像しか無い図（本物の画像URLが見つからない）。図の位置だけ残して後で報告する
+                blocks.append({"type": "image", "src_url": None, "placeholder": raw[:200], "alt": ""})
+            return
+        if src in seen_imgs:
             return
         # 1x1 のスペーサーやアイコンは除外
         try:
@@ -489,12 +527,141 @@ def extract_blocks(root: Tag, base_url: str) -> list[dict]:
     return blocks
 
 
+# 本文が入っている要素の目印（上から順に試す）。#articleContent はモバイル版ページの本文
+# .content-main-detail は 2026年秋から一部の記事で使われている新しい作り（Vue）のページの本文
+CONTENT_SELECTORS = ("#mp-editor", "article.article", ".content-main-detail", "#articleContent",
+                     ".article-content", ".article-text", "article", ".article")
+# 本文ではない部分（コメント欄・関連記事・ナビなど）に付きがちな class / id
+_NOISE_RE = re.compile(r"comment|footer|nav|recommend|related|sidebar|share|copyright|rank|hot-|advert|banner|login|header",
+                       re.I)
+
+
+class ContentNotFound(ValueError):
+    """記事ページから本文を見つけられなかった。原因調査用に取得したHTMLを持つ。"""
+
+    def __init__(self, msg: str, html: str | None = None, mobile_html: str | None = None):
+        super().__init__(msg)
+        self.html = html
+        self.mobile_html = mobile_html
+
+
+# 確実に本文を指す目印。これで見つかった場合は短い記事（速報など）でも本文として扱う
+RELIABLE_SELECTORS = {"#mp-editor", "article.article", ".content-main-detail", "#articleContent"}
+
+
+def _blocks_ok(blocks: list[dict], strict: bool = True) -> bool:
+    """本文として十分な中身があるか。曖昧な目印では、関連記事カードなどの小さな要素を拾わないよう厳しめに判定。"""
+    text = sum(len(b["text"]) for b in blocks if b["type"] == "text")
+    imgs = sum(1 for b in blocks if b["type"] == "image" and b.get("src_url"))
+    if strict:
+        return text >= 120 or imgs >= 2
+    return text >= 10 or imgs >= 1
+
+
+def _ident(el: Tag) -> str:
+    return " ".join(el.get("class") or []) + " " + (el.get("id") or "")
+
+
+def _densest(soup: BeautifulSoup) -> Tag | None:
+    """段落の文字数と画像の数が最も集中している要素を本文とみなす（ページの作りが変わった時の保険）。"""
+    scores: dict[int, int] = {}
+    nodes: dict[int, Tag] = {}
+    noise_cache: dict[int, bool] = {}
+
+    def in_noise(el: Tag) -> bool:
+        """コメント欄・おすすめ欄・ナビなどの中にある要素か（判定結果は祖先ごとに覚えておく）。"""
+        chain = []
+        result = False
+        for anc in el.parents:
+            if not isinstance(anc, Tag) or anc.name in ("body", "html", "[document]"):
+                break
+            if id(anc) in noise_cache:
+                result = noise_cache[id(anc)]
+                break
+            chain.append(anc)
+        # 外側（body寄り）から内側へ順に判定して記録する
+        for anc in reversed(chain):
+            result = result or anc.name in ("aside", "nav", "footer", "header") or bool(_NOISE_RE.search(_ident(anc)))
+            noise_cache[id(anc)] = result
+        return result
+
+    def add(el: Tag, pts: int):
+        if in_noise(el):
+            return
+        for anc in el.parents:
+            if not isinstance(anc, Tag) or anc.name in ("html", "[document]"):
+                break
+            k = id(anc)
+            scores[k] = scores.get(k, 0) + pts
+            nodes[k] = anc
+
+    for p in soup.find_all("p"):
+        n = len(p.get_text(strip=True))
+        if n:
+            add(p, n)
+    for img in soup.find_all("img"):
+        add(img, 150)
+    cands = [(sc, nodes[k]) for k, sc in scores.items()
+             if nodes[k].name in ("article", "section", "div", "main", "td", "body") and not _NOISE_RE.search(_ident(nodes[k]))]
+    if not cands:
+        return None
+    best_score, best = max(cands, key=lambda x: x[0])
+    if best_score < 200:
+        return None
+    # 1つの子要素が大半を占める間は、その子へ降りていく（いちばん内側の本文の箱を見つける）
+    while True:
+        kids = [c for c in best.children if isinstance(c, Tag) and id(c) in scores]
+        if not kids:
+            break
+        c = max(kids, key=lambda k: scores[id(k)])
+        if scores[id(c)] >= 0.85 * best_score and c.name in ("article", "section", "div", "main", "td"):
+            best, best_score = c, scores[id(c)]
+        else:
+            break
+    return best
+
+
+def _extract_content(html: str, base_url: str) -> tuple[list[dict] | None, str | None]:
+    """HTMLから本文ブロックを取り出す。戻り値は (ブロック, 使った方法)。見つからなければ (None, None)。"""
+    html = html.replace("\x00", "")
+    soups = {}
+    for parser in ("lxml", "html.parser"):
+        soup = BeautifulSoup(html, parser)
+        soups[parser] = soup
+        for sel in CONTENT_SELECTORS:
+            for el in soup.select(sel)[:3]:
+                blocks = extract_blocks(el, base_url)
+                if _blocks_ok(blocks, strict=sel not in RELIABLE_SELECTORS):
+                    return blocks, f"{parser}:{sel}"
+    for parser in ("lxml", "html.parser"):
+        el = _densest(BeautifulSoup(html, parser))
+        if el is not None:
+            blocks = extract_blocks(el, base_url)
+            if _blocks_ok(blocks):
+                return blocks, f"{parser}:densest({el.name}.{'.'.join(el.get('class') or [])}#{el.get('id') or ''})"
+    return None, None
+
+
+def _diagnose(html: str, final_url: str = "") -> str:
+    """本文が見つからなかった時の手がかり（ログ・実行記録に残す）。"""
+    m = re.search(r"<title[^>]*>(.*?)</title>", html, re.S | re.I)
+    title = _clean_text(m.group(1))[:40] if m else "-"
+    return (f"len={len(html)} title={title} mp-editor={'mp-editor' in html} "
+            f"articleContent={'articleContent' in html} article_tags={html.lower().count('<article')} "
+            f"p_tags={html.lower().count('<p')} url={final_url}")
+
+
+def _decode(r: requests.Response) -> str:
+    r.encoding = r.apparent_encoding if not r.encoding or r.encoding.lower() == "iso-8859-1" else r.encoding
+    return r.text
+
+
 def parse_article_html(html: str, url: str) -> Article:
     canon = canonical_article_url(url)
     if not canon:
         raise ValueError(f"記事URLではありません: {url}")
     aid, author, curl = canon
-    soup = BeautifulSoup(html, "lxml")
+    soup = BeautifulSoup(html.replace("\x00", ""), "lxml")
 
     def meta(*selectors):
         for sel in selectors:
@@ -505,7 +672,7 @@ def parse_article_html(html: str, url: str) -> Article:
 
     title = meta('meta[property="og:title"]', 'meta[name="og:title"]')
     if not title:
-        h1 = soup.select_one(".text-title h1, h1")
+        h1 = soup.select_one(".text-title h1, h1, h3.content-main--title")
         title = _clean_text(h1.get_text()) if h1 else ""
     if not title and soup.title:
         title = re.sub(r"_(搜狐\S*|搜狐网)$", "", _clean_text(soup.title.get_text()))
@@ -522,19 +689,18 @@ def parse_article_html(html: str, url: str) -> Article:
         if t is not None:
             published = parse_datetime(t.get("data-val")) or parse_datetime(t.get_text())
     if not published:
-        t = soup.select_one(".article-info .time, span.time, .time")
+        t = soup.select_one(".article-info .time, span.time, .content-main-desc--time, .time, #videoPublicTime")
         if t is not None:
             published = parse_datetime(t.get_text())
 
-    root = (soup.select_one("#mp-editor") or soup.select_one("article.article")
-            or soup.select_one("article") or soup.select_one(".article"))
-    if root is None:
-        raise ValueError("本文（#mp-editor）が見つかりません")
-    blocks = extract_blocks(root, curl)
+    blocks, method = _extract_content(html, curl)
     if not blocks:
-        raise ValueError("本文が空です")
-    return Article(article_id=aid, author_id=author, url=curl, title=title,
-                   published_at=published, blocks=blocks)
+        raise ContentNotFound("本文が見つかりません（" + _diagnose(html) + "）", html=html)
+    art = Article(article_id=aid, author_id=author, url=curl, title=title,
+                  published_at=published, blocks=blocks)
+    art.content_method = method
+    art.raw_html = html
+    return art
 
 
 def parse_fallback_html(fragment: str, item: ListItem) -> Article:
@@ -545,16 +711,40 @@ def parse_fallback_html(fragment: str, item: ListItem) -> Article:
     blocks = extract_blocks(soup.select_one("#rss-body"), canon[2])
     if not blocks:
         raise ValueError("RSS本文が空です")
-    return Article(article_id=canon[0], author_id=canon[1], url=canon[2], title=item.title,
-                   published_at=item.published_at, blocks=blocks)
+    art = Article(article_id=canon[0], author_id=canon[1], url=canon[2], title=item.title,
+                  published_at=item.published_at, blocks=blocks)
+    art.content_method = "rsshub"
+    return art
 
 
 def fetch_article(session: requests.Session, item: ListItem) -> Article:
+    """記事ページ（PC版）から本文を取る。取れなければモバイル版ページで取り直す。"""
     r = _get(session, item.url, headers={"Referer": "https://mp.sohu.com/"})
     if r.status_code != 200:
         raise RuntimeError(f"記事ページ HTTP {r.status_code}")
-    r.encoding = r.apparent_encoding if not r.encoding or r.encoding.lower() == "iso-8859-1" else r.encoding
-    art = parse_article_html(r.text, item.url)
+    html = _decode(r)
+    try:
+        art = parse_article_html(html, item.url)
+        art.content_method = "pc:" + art.content_method
+    except ContentNotFound as e_pc:
+        canon = canonical_article_url(item.url)
+        murl = f"https://m.sohu.com/a/{canon[0]}_{canon[1]}"
+        r2 = _get(session, murl, headers={"User-Agent": MOBILE_USER_AGENT, "Referer": "https://m.sohu.com/"})
+        if r2.status_code != 200:
+            raise ContentNotFound(f"PC版: {e_pc} / モバイル版: HTTP {r2.status_code}", html=html) from None
+        mhtml = _decode(r2)
+        try:
+            art = parse_article_html(mhtml, item.url)
+        except ContentNotFound as e_m:
+            raise ContentNotFound(f"PC版: {e_pc} / モバイル版: {e_m}", html=html, mobile_html=mhtml) from None
+        art.content_method = "mobile:" + art.content_method
+        # タイトル・日時はPC版のメタ情報の方が確実なので、取れていればそちらを使う
+        pc_soup = BeautifulSoup(html.replace("\x00", ""), "lxml")
+        og = pc_soup.select_one('meta[property="og:title"]')
+        if og and (og.get("content") or "").strip():
+            art.title = re.sub(r"_搜狐\S*$", "", og["content"].strip())
+    if r.url and "sohu.com" in r.url and canonical_article_url(r.url) is None:
+        art.content_method += f" (redirect: {r.url[:80]})"
     if not art.title:
         art.title = item.title
     if not art.published_at:

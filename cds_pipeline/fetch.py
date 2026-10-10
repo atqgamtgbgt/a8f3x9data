@@ -78,8 +78,10 @@ def build_markdown(art: sohu.Article, topic_label: str, blocks: list[dict]) -> s
             fig += 1
             if b.get("file"):
                 lines += [f"![図{fig}]({b['file']})", ""]
-            else:
+            elif b.get("src_url"):
                 lines += [f"![図{fig}（保存失敗）]({b['src_url']})", ""]
+            else:
+                lines += [f"（図{fig}：画像を取得できませんでした）", ""]
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -99,6 +101,11 @@ def save_article(archive: Archive, session, art: sohu.Article, *, with_images: b
             continue
         n += 1
         nb = dict(b)
+        if not b.get("src_url"):
+            nb["file"] = None
+            nb["error"] = "本物の画像URLが見つからない（仮画像のみ）"
+            blocks.append(nb)
+            continue
         if with_images:
             try:
                 data, ext = sohu.download_image(session, b["src_url"])
@@ -125,6 +132,7 @@ def save_article(archive: Archive, session, art: sohu.Article, *, with_images: b
         "id": art.article_id, "author_id": art.author_id, "url": art.url,
         "title": art.title, "published_at": art.published_at, "fetched_at": now_iso(),
         "topic": topic, "topic_label": topic_label, "source": "sohu",
+        "content_method": art.content_method,
         "image_count": total_imgs, "images_saved": saved, "text_chars": len(text),
         "blocks": blocks,
     }
@@ -137,7 +145,7 @@ def save_article(archive: Archive, session, art: sohu.Article, *, with_images: b
         "id": art.article_id, "title": art.title, "published_at": art.published_at,
         "url": art.url, "topic": topic, "topic_label": topic_label,
         "path": archive.rel(adir), "image_count": total_imgs, "images_saved": saved,
-        "text_chars": len(text), "lead": lead,
+        "text_chars": len(text), "lead": lead, "content_method": art.content_method,
         "thumb": archive.rel(adir / first_img["file"]) if first_img else None,
         "fetched_at": record["fetched_at"],
     }
@@ -212,6 +220,7 @@ def main(argv=None) -> int:
 
     # ---- 2. 記事ごとに取得・保存 ------------------------------------------------
     new_entries, failed = [], []
+    debug_saved = 0
     for i, it in enumerate(targets, 1):
         log(f"[{i}/{len(targets)}] {it.url} {it.title[:40]}")
         try:
@@ -225,21 +234,44 @@ def main(argv=None) -> int:
                     raise
             entry = save_article(archive, session, art, with_images=not args.no_images)
             archive.upsert(entry)
+            archive.remove_debug(art.article_id)
+            if art.missing_images:
+                # 図の一部で本物の画像URLが見つからなかった → 原因を調べられるよう生HTMLを残す
+                gh_annotate("warning", "画像の一部を取得できませんでした",
+                            f"{art.url} 図{art.missing_images}枚が仮画像のみ（本文の取得方法 {art.content_method}）")
+                if debug_saved < 3:
+                    paths = archive.save_debug(art.article_id, art.raw_html)
+                    debug_saved += 1
+                    log(f"    図{art.missing_images}枚の画像URLが見つからないため、調査用にHTMLを保存: {', '.join(paths)}")
             archive.save_index()  # 途中で止まっても保存済み分は残す
             new_entries.append(entry)
-            log(f"    保存: {entry['title'][:40]} / {entry['topic_label']} / 画像{entry['images_saved']}/{entry['image_count']}")
+            log(f"    保存: {entry['title'][:40]} / {entry['topic_label']} / 画像{entry['images_saved']}/{entry['image_count']}"
+                f" / 本文の取得方法 {entry['content_method']}")
         except Exception as e:
             tries = archive.record_failure(it.article_id, it.url, f"{type(e).__name__}: {e}")
             failed.append((it, e))
             log(f"    失敗（{tries}回目）: {type(e).__name__}: {e}")
+            # 本文が見つからなかったページは、原因を調べられるよう生HTMLを残す（初回のみ・1回の実行で3件まで）
+            if isinstance(e, sohu.ContentNotFound) and tries == 1 and debug_saved < 3:
+                paths = archive.save_debug(it.article_id, e.html, e.mobile_html)
+                if paths:
+                    debug_saved += 1
+                    log(f"    調査用にHTMLを保存: {', '.join(paths)}")
             gh_annotate("warning", f"記事の取得に失敗（{tries}回目）", f"{it.url} {type(e).__name__}: {e}")
             if os.environ.get("CDS_DEBUG"):
                 traceback.print_exc()
         time.sleep(ARTICLE_INTERVAL)
 
     archive.save_index()
+    methods = {}
+    for e in new_entries:
+        key = (e.get("content_method") or "?").split(":")[0]
+        methods[key] = methods.get(key, 0) + 1
+    if new_entries:
+        gh_annotate("notice", "本文の取得方法", " / ".join(f"{k}: {v}件" for k, v in methods.items()))
     archive.append_log({
         "run_at": now_iso(), "ok": True, "list_method": list_method, "list_attempts": attempts,
+        "content_methods": [f"{e['id']}: {e.get('content_method')}" for e in new_entries],
         "new": [e["id"] for e in new_entries], "failed": [f"{it.article_id}: {e}"[:200] for it, e in failed],
         "seconds": round(time.time() - started, 1),
     })

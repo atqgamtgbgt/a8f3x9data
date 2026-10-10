@@ -24,6 +24,7 @@ SOURCE_INFO = {
 }
 MAX_IMAGE_BYTES = 800_000  # これより大きい画像は JPEG に再圧縮して保存する
 LATEST_COUNT = 60          # latest.json（ダッシュボードが読む軽量版）に載せる件数
+MAX_DEBUG_CHARS = 800_000   # 調査用に残すHTMLの上限（文字数）
 ARCHIVE_README = """# 崔東樹 記事アーカイブ（自動取得）
 
 このブランチは GitHub Actions（.github/workflows/cds-fetch.yml）が自動で更新します。手で編集しないでください。
@@ -35,6 +36,7 @@ ARCHIVE_README = """# 崔東樹 記事アーカイブ（自動取得）
 - `cds/articles/年/月/記事ID/img/` … 図の画像
 - `cds/articles/年/月/記事ID/ai.json` … AIによる日本語要約・グラフの数値表（APIキー登録時のみ）
 - `cds/run_log.json` … 直近の実行記録
+- `cds/debug/` … 本文が取れなかったページの生HTML（原因調査用。取れるようになると自動で消えます）
 
 出典: 崔东树（搜狐号） https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==
 著作権は原著作者に帰属します。
@@ -123,6 +125,25 @@ class Archive:
 
     def rel(self, p: Path) -> str:
         return p.relative_to(self.root).as_posix()
+
+    # ---- 調査用（本文が取れなかったページの生HTML） -----------------------------
+    def debug_dir(self) -> Path:
+        return self.root / "cds" / "debug"
+
+    def save_debug(self, article_id: str, html: str | None, mobile_html: str | None = None) -> list[str]:
+        saved = []
+        for suffix, text in (("pc", html), ("mobile", mobile_html)):
+            if not text:
+                continue
+            path = self.debug_dir() / f"{article_id}.{suffix}.html"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(text[:MAX_DEBUG_CHARS], encoding="utf-8")
+            saved.append(self.rel(path))
+        return saved
+
+    def remove_debug(self, article_id: str) -> None:
+        for path in self.debug_dir().glob(f"{article_id}.*.html"):
+            path.unlink()
 
 
 def shrink_image(data: bytes, ext: str) -> tuple[bytes, str]:

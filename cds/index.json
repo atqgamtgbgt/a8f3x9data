@@ -1,0 +1,169 @@
+{
+ "version": 1,
+ "source": {
+  "name": "崔东树（搜狐号）",
+  "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
+  "author_id": "115312"
+ },
+ "updated_at": "2026-10-10T12:11:44+00:00",
+ "articles": [
+  {
+   "id": "1084470582",
+   "title": "2025年全国结婚年龄与老龄化对车市影响分析",
+   "published_at": "2026-10-06T14:20+08:00",
+   "url": "https://www.sohu.com/a/1084470582_115312",
+   "topic": "market",
+   "topic_label": "乗用車市場",
+   "path": "cds/articles/2026/10/1084470582",
+   "image_count": 2,
+   "images_saved": 2,
+   "text_chars": 3913,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  9月30日国家民政部发布了《2025 年民政事业发展统计公报》，2025 年，全年依法办理结婚登记676.5 万对，比上年增长10.8％。结婚率为4.8‰，比上年增长0.5 个千分点。从结婚年龄结构看，2025年全国结婚人数为1353万人，其中20—24岁173",
+   "thumb": "cds/articles/2026/10/1084470582/img/01.jpg",
+   "fetched_at": "2026-10-10T12:11:32+00:00"
+  },
+  {
+   "id": "1083812341",
+   "title": "汽车整车上市公司市值变化分析-9月",
+   "published_at": "2026-10-04T05:50+08:00",
+   "url": "https://www.sohu.com/a/1083812341_115312",
+   "topic": "world_finance",
+   "topic_label": "世界企業財務",
+   "path": "cds/articles/2026/10/1083812341",
+   "image_count": 7,
+   "images_saved": 7,
+   "text_chars": 2846,
+   "lead": "汽车整车上市公司市值不仅是资本市场对企业当前经营成果的定价，更是反映汽车行业趋势、技术变革与政策导向的“晴雨表”。很多整车企业都把市值管理作为重要的工作，因此跟踪市值变化也是行业研究的重要领域。整车企业A股上市艰难，带来A股相对国际股市的竞争力较差。  世界汽车整车企业市值中，美股市场的整车企业规模最大，2026年9月",
+   "thumb": "cds/articles/2026/10/1083812341/img/01.jpg",
+   "fetched_at": "2026-10-10T12:11:27+00:00"
+  },
+  {
+   "id": "1081896680",
+   "title": "2026年1-8月汽车行业利润率3.6%、收入增2.9%、成本增4%、利润降16%",
+   "published_at": "2026-09-28T16:44+08:00",
+   "url": "https://www.sohu.com/a/1081896680_115312",
+   "topic": "profit",
+   "topic_label": "利益・収益",
+   "path": "cds/articles/2026/09/1081896680",
+   "image_count": 13,
+   "images_saved": 13,
+   "text_chars": 3959,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  一、核心数据观点  2026年1-8月，以人工智能为推动的电子行业利润1.1倍增长，上游原材料行业利润高增长，对行业总体利润改善促进巨大，汽车行业面临成本上涨和需求不强的双重压力，盈利表现较差。2026年8月汽车生产270万台，销售收入9281亿元增4.2%，成",
+   "thumb": "cds/articles/2026/09/1081896680/img/01.jpg",
+   "fetched_at": "2026-10-10T12:11:15+00:00"
+  },
+  {
+   "id": "1080474555",
+   "title": "1-8月中国汽车出口745万辆增51%，全年预计近1200万辆",
+   "published_at": "2026-09-24T16:58+08:00",
+   "url": "https://www.sohu.com/a/1080474555_115312",
+   "topic": "export",
+   "topic_label": "輸出",
+   "path": "cds/articles/2026/09/1080474555",
+   "image_count": 33,
+   "images_saved": 33,
+   "text_chars": 10129,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年1-8月中国汽车实现出口745万辆，同比2025年同期增速51%，8月中国汽车实现出口105万辆，同比增37%，环比降4%，同比走势总体较强, 环比走势暂时受阻。今年的主要动力仍是高油价和中国产品竞争力提升和全球南方国家市场的持续增长。8月的英国和澳大",
+   "thumb": "cds/articles/2026/09/1080474555/img/01.jpg",
+   "fetched_at": "2026-10-10T12:11:05+00:00"
+  }
+ ],
+ "failed": {
+  "1078592557": {
+   "url": "https://www.sohu.com/a/1078592557_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:10:35+00:00"
+  },
+  "1079036468": {
+   "url": "https://www.sohu.com/a/1079036468_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:10:37+00:00"
+  },
+  "1079610268": {
+   "url": "https://www.sohu.com/a/1079610268_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:10:39+00:00"
+  },
+  "1080113775": {
+   "url": "https://www.sohu.com/a/1080113775_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:10:41+00:00"
+  },
+  "1081215640": {
+   "url": "https://www.sohu.com/a/1081215640_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:07+00:00"
+  },
+  "1081478423": {
+   "url": "https://www.sohu.com/a/1081478423_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:09+00:00"
+  },
+  "1082168367": {
+   "url": "https://www.sohu.com/a/1082168367_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:17+00:00"
+  },
+  "1082790911": {
+   "url": "https://www.sohu.com/a/1082790911_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:19+00:00"
+  },
+  "1083062554": {
+   "url": "https://www.sohu.com/a/1083062554_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:21+00:00"
+  },
+  "1083353151": {
+   "url": "https://www.sohu.com/a/1083353151_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:23+00:00"
+  },
+  "1084086892": {
+   "url": "https://www.sohu.com/a/1084086892_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:29+00:00"
+  },
+  "1084890228": {
+   "url": "https://www.sohu.com/a/1084890228_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:34+00:00"
+  },
+  "1085170493": {
+   "url": "https://www.sohu.com/a/1085170493_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:36+00:00"
+  },
+  "1085753030": {
+   "url": "https://www.sohu.com/a/1085753030_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:38+00:00"
+  },
+  "1085751082": {
+   "url": "https://www.sohu.com/a/1085751082_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:40+00:00"
+  },
+  "1086043839": {
+   "url": "https://www.sohu.com/a/1086043839_115312",
+   "tries": 1,
+   "error": "ValueError: 本文（#mp-editor）が見つかりません",
+   "last_try": "2026-10-10T12:11:42+00:00"
+  }
+ }
+}

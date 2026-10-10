@@ -29,7 +29,7 @@ jobs:
     timeout-minutes: 40
     steps:
       - name: スクリプトを取得
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           sparse-checkout: cds_pipeline
 
@@ -44,7 +44,7 @@ jobs:
 
       - name: 保存用ブランチを取得
         if: steps.branch.outputs.exists == 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           ref: ${{ env.ARCHIVE_BRANCH }}
           path: archive
@@ -57,7 +57,7 @@ jobs:
           git init -q -b "$ARCHIVE_BRANCH" archive
           git -C archive remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
           cache: pip

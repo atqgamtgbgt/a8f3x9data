@@ -1,0 +1,121 @@
+# 崔東樹さん（搜狐号）の新着記事を自動で取得し、cds-archive ブランチに保存する。
+# 詳しくは cds_pipeline/README.md を参照。
+name: 崔東樹 記事取得
+
+on:
+  schedule:
+    # 毎日 12:17 と 23:17（日本時間）。GitHub が混んでいると数十分遅れることがある
+    - cron: '17 3,14 * * *'
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: '特定の記事だけ取りたい時の搜狐URL（空白区切り）。空欄なら新着を取得'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cds-fetch
+  cancel-in-progress: false
+
+env:
+  ARCHIVE_BRANCH: cds-archive
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: スクリプトを取得
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: cds_pipeline
+
+      - name: 保存用ブランチの有無を確認
+        id: branch
+        run: |
+          if git ls-remote --exit-code --heads origin "$ARCHIVE_BRANCH" > /dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 保存用ブランチを取得
+        if: steps.branch.outputs.exists == 'true'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.ARCHIVE_BRANCH }}
+          path: archive
+
+      - name: 保存用ブランチを新規作成（初回のみ）
+        if: steps.branch.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init -q -b "$ARCHIVE_BRANCH" archive
+          git -C archive remote add origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+          cache-dependency-path: cds_pipeline/requirements.txt
+
+      - name: ライブラリをインストール
+        run: pip install -r cds_pipeline/requirements.txt
+
+      - name: 新着記事を取得
+        id: fetch
+        env:
+          URLS: ${{ inputs.urls }}
+          CDS_RSSHUB: ${{ vars.CDS_RSSHUB }}
+        run: |
+          set +e
+          if [ -n "$URLS" ]; then
+            python cds_pipeline/fetch.py --archive archive --urls $URLS
+          else
+            python cds_pipeline/fetch.py --archive archive
+          fi
+          code=$?
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+          # 3 = 一覧が取れなかった → 次のステップで RSSHub を起動して再試行する
+          if [ "$code" = "3" ]; then exit 0; fi
+          exit $code
+
+      - name: RSSHub を起動して再試行（一覧が取れなかった場合のみ）
+        if: steps.fetch.outputs.code == '3'
+        run: |
+          docker run -d --name rsshub -p 1200:1200 -e NODE_ENV=production diygod/rsshub:latest
+          for i in $(seq 1 60); do
+            curl -fsS -o /dev/null http://localhost:1200/ && break
+            sleep 2
+          done
+          python cds_pipeline/fetch.py --archive archive --rsshub http://localhost:1200
+
+      # 有料API（Anthropic）を使う処理。初期状態ではオフ。
+      # 使う場合だけ、Settings → Variables に CDS_AI_ENABLED=true、Secrets に ANTHROPIC_API_KEY を登録する
+      - name: AIで日本語要約・グラフ読み取り（有効にした場合のみ）
+        if: vars.CDS_AI_ENABLED == 'true'
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          CDS_AI_MODEL: ${{ vars.CDS_AI_MODEL }}
+          CDS_AI_MAX_ARTICLES: ${{ vars.CDS_AI_MAX_ARTICLES }}
+          CDS_AI_CHARTS: ${{ vars.CDS_AI_CHARTS }}
+        run: python cds_pipeline/ai.py --archive archive
+
+      - name: 保存用ブランチに保存
+        # 失敗した時も実行記録（run_log.json）を残して、原因を後から確認できるようにする
+        if: always() && hashFiles('archive/cds/run_log.json') != ''
+        working-directory: archive
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "変更はありません"
+            exit 0
+          fi
+          git commit -q -m "崔東樹 記事取得 $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')"
+          git push origin "HEAD:${ARCHIVE_BRANCH}"

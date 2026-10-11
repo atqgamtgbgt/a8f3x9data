@@ -8,10 +8,21 @@ on:
     - cron: '17 3,14 * * *'
   workflow_dispatch:
     inputs:
-      urls:
-        description: '特定の記事だけ取りたい時の搜狐URL（空白区切り）。空欄なら新着を取得'
+      count:
+        description: '直近何件までさかのぼって取るか（0＝通常どおり新着だけ。最大300）。成功済みの記事は飛ばします'
         required: false
+        type: number
+        default: 0
+      urls:
+        description: '取りたい記事のURLか記事ID（空白・カンマ区切りで複数可）。成功済みの記事は飛ばします'
+        required: false
+        type: string
         default: ''
+      refetch:
+        description: '成功済みの記事も取り直す（通常はオフのまま）'
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -26,7 +37,8 @@ env:
 jobs:
   fetch:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
+    # さかのぼって大量に取る場合に備えて長め。取得は75分で区切り（CDS_TIME_BUDGET）、残りは再実行で続きから
+    timeout-minutes: 100
     steps:
       - name: スクリプトを取得
         uses: actions/checkout@v5
@@ -66,18 +78,18 @@ jobs:
       - name: ライブラリをインストール
         run: pip install -r cds_pipeline/requirements.txt
 
-      - name: 新着記事を取得
+      # 手動実行で入れた件数・記事の指定は、環境変数で fetch.py に渡す（定期実行では空＝新着だけ）
+      - name: 記事を取得
         id: fetch
         env:
-          URLS: ${{ inputs.urls }}
+          CDS_COUNT: ${{ inputs.count }}
+          CDS_URLS: ${{ inputs.urls }}
+          CDS_REFETCH: ${{ inputs.refetch }}
+          CDS_TIME_BUDGET: '4500'
           CDS_RSSHUB: ${{ vars.CDS_RSSHUB }}
         run: |
           set +e
-          if [ -n "$URLS" ]; then
-            python cds_pipeline/fetch.py --archive archive --urls $URLS
-          else
-            python cds_pipeline/fetch.py --archive archive
-          fi
+          python cds_pipeline/fetch.py --archive archive
           code=$?
           echo "code=$code" >> "$GITHUB_OUTPUT"
           # 3 = 一覧が取れなかった → 次のステップで RSSHub を起動して再試行する
@@ -86,6 +98,11 @@ jobs:
 
       - name: RSSHub を起動して再試行（一覧が取れなかった場合のみ）
         if: steps.fetch.outputs.code == '3'
+        env:
+          CDS_COUNT: ${{ inputs.count }}
+          CDS_URLS: ${{ inputs.urls }}
+          CDS_REFETCH: ${{ inputs.refetch }}
+          CDS_TIME_BUDGET: '1800'
         run: |
           docker run -d --name rsshub -p 1200:1200 -e NODE_ENV=production diygod/rsshub:latest
           for i in $(seq 1 60); do

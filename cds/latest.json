@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-10-11T04:03:40+00:00",
- "total": 200,
+ "updated_at": "2026-10-11T14:30:08+00:00",
+ "total": 201,
  "articles": [
+  {
+   "id": "1086399433",
+   "title": "乘用车新车的分级测算探讨—9月",
+   "published_at": "2026-10-11T19:09+08:00",
+   "url": "https://www.sohu.com/a/1086399433_115312",
+   "topic": "segment",
+   "topic_label": "セグメント・車種",
+   "path": "cds/articles/2026/10/1086399433",
+   "image_count": 11,
+   "images_saved": 11,
+   "text_chars": 5387,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  近期乘用车市场的传统车市场推出新车型逐步放缓，新能源大幅增加新品投放。目前主力车企产品逐步进入多生孩子好竞争的局面，车企呈现剧烈的价格竞争和破圈趋势。这些传统车和新能源车的新车型如何归类也是很重要的，每家都有自己的分级模式，但我们还是习惯用行业相对主流的源自于德",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/10/1086399433/img/01.jpg",
+   "fetched_at": "2026-10-11T14:30:06+00:00"
+  },
   {
    "id": "1086043839",
    "title": "车市扫描-2026年38期（9月28日-9月30日）",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/08/1062036636/img/01.jpg",
    "fetched_at": "2026-10-11T03:35:40+00:00"
-  },
-  {
-   "id": "1061527403",
-   "title": "【月度分析】2026年7月份全国乘用车市场分析",
-   "published_at": "2026-08-11T17:22+08:00",
-   "url": "https://www.sohu.com/a/1061527403_115312",
-   "topic": "market",
-   "topic_label": "乗用車市場",
-   "path": "cds/articles/2026/08/1061527403",
-   "image_count": 9,
-   "images_saved": 9,
-   "text_chars": 10071,
-   "lead": "本文全文共9051字，阅读全文约需30分钟  1.2026年7月全国乘用车市场回顾  零售：2026年7月全国乘用车市场零售146.1万辆，同比下降20.9%，环比下降8.8%；今年以来累计零售1,017.3万辆，同比下降20.3%。2026年7月国内乘用车市场呈现“总量持续承压、环比走弱、结构极致分化”的运行态势，淡",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/08/1061527403/img/01.jpg",
-   "fetched_at": "2026-10-11T03:35:51+00:00"
   }
  ]
 }

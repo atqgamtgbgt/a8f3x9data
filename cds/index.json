@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-10-11T04:03:40+00:00",
+ "updated_at": "2026-10-11T14:30:08+00:00",
  "articles": [
+  {
+   "id": "1086399433",
+   "title": "乘用车新车的分级测算探讨—9月",
+   "published_at": "2026-10-11T19:09+08:00",
+   "url": "https://www.sohu.com/a/1086399433_115312",
+   "topic": "segment",
+   "topic_label": "セグメント・車種",
+   "path": "cds/articles/2026/10/1086399433",
+   "image_count": 11,
+   "images_saved": 11,
+   "text_chars": 5387,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  近期乘用车市场的传统车市场推出新车型逐步放缓，新能源大幅增加新品投放。目前主力车企产品逐步进入多生孩子好竞争的局面，车企呈现剧烈的价格竞争和破圈趋势。这些传统车和新能源车的新车型如何归类也是很重要的，每家都有自己的分级模式，但我们还是习惯用行业相对主流的源自于德",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/10/1086399433/img/01.jpg",
+   "fetched_at": "2026-10-11T14:30:06+00:00"
+  },
   {
    "id": "1086043839",
    "title": "车市扫描-2026年38期（9月28日-9月30日）",

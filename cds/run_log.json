@@ -1,5 +1,24 @@
 [
  {
+  "run_at": "2026-10-11T14:30:08+00:00",
+  "ok": true,
+  "mode": "新着（一覧の先頭）",
+  "list_method": "v2",
+  "list_attempts": [
+   "v2: OK 20件"
+  ],
+  "content_methods": [
+   "1086399433: pc:lxml:.content-main-detail"
+  ],
+  "new": [
+   "1086399433"
+  ],
+  "failed": [],
+  "skipped": [],
+  "deferred": [],
+  "seconds": 12.1
+ },
+ {
   "run_at": "2026-10-11T04:03:40+00:00",
   "ok": true,
   "mode": "新着（一覧の先頭）",

@@ -205,35 +205,72 @@ def _get(session: requests.Session, url: str, *, retries: int = 2, **kw) -> requ
 # ---------------------------------------------------------------------------
 # 一覧 1: v2 author-articles API
 # ---------------------------------------------------------------------------
-def list_via_v2(session: requests.Session, author_id: str, pages: int = 1) -> list[ListItem]:
+LIST_INTERVAL = 0.8   # 一覧のページ送りの間隔（秒）
+MAX_LIST_PAGES = 40   # 一覧をさかのぼるページ数の上限（安全装置）
+
+
+def _log(log, msg: str) -> None:
+    if log:
+        log(msg)
+
+
+def _page_limit(pages: int, want: int | None) -> int:
+    """一覧を何ページまで送るか。want 指定時は件数に届く・記事が尽きるまで（安全のため MAX_LIST_PAGES まで）。"""
+    if not want:
+        return max(1, pages)
+    return max(1, pages, MAX_LIST_PAGES)
+
+
+def list_via_v2(session: requests.Session, author_id: str, pages: int = 1,
+                want: int | None = None, log=None) -> list[ListItem]:
+    """v2 API で一覧を取る。want を指定すると、その件数に届くまでページを送る。
+    2ページ目以降で失敗・空・前と同じ記事（ページ送りが効かない）になったら、そこまでの分を返す。"""
     items: list[ListItem] = []
-    for page in range(1, pages + 1):
+    seen: set[str] = set()
+    limit = _page_limit(pages, want)
+    for page in range(1, limit + 1):
         url = f"https://v2.sohu.com/author-page-api/author-articles/pc/{author_id}"
         params = {"pNo": page} if page > 1 else None
-        r = _get(session, url, params=params, headers={"Referer": "https://mp.sohu.com/"})
-        if r.status_code != 200:
-            raise ListError(f"v2 API HTTP {r.status_code}")
         try:
-            data = r.json()
-        except ValueError as e:
-            raise ListError(f"v2 API がJSONを返さない: {r.text[:120]!r}") from e
+            r = _get(session, url, params=params, headers={"Referer": "https://mp.sohu.com/"})
+            if r.status_code != 200:
+                raise ListError(f"v2 API HTTP {r.status_code}")
+            try:
+                data = r.json()
+            except ValueError as e:
+                raise ListError(f"v2 API がJSONを返さない: {r.text[:120]!r}") from e
+        except Exception as e:
+            if page == 1:
+                raise
+            _log(log, f"[一覧] v2: {page}ページ目で中断（{type(e).__name__}: {e}）。{len(items)}件まで使います")
+            break
         vos = ((data or {}).get("data") or {}).get("pcArticleVOS") or []
-        if not vos and page == 1:
-            raise ListError(f"v2 API の記事リストが空: {str(data)[:200]}")
+        if not vos:
+            if page == 1:
+                raise ListError(f"v2 API の記事リストが空: {str(data)[:200]}")
+            break
+        fresh = 0
         for vo in vos:
             canon = canonical_article_url(vo.get("link") or vo.get("url") or "")
             if not canon and vo.get("id"):
                 canon = (str(vo["id"]), author_id, f"https://www.sohu.com/a/{vo['id']}_{author_id}")
-            if not canon:
+            if not canon or canon[0] in seen:
                 continue
+            seen.add(canon[0])
+            fresh += 1
             items.append(ListItem(
                 article_id=canon[0], url=canon[2], title=(vo.get("title") or "").strip(),
                 published_at=parse_datetime(vo.get("publicTime") or vo.get("publishTime")),
                 method="v2",
             ))
-        if not vos:
+        if not fresh:
+            _log(log, f"[一覧] v2: {page}ページ目が前のページと同じ記事でした（ページ送りが効かない）。{len(items)}件まで使います")
             break
-    return _dedupe(items)
+        if want and len(items) >= want:
+            break
+        if page < limit:
+            time.sleep(LIST_INTERVAL)
+    return items
 
 
 # ---------------------------------------------------------------------------
@@ -264,7 +301,9 @@ def _script_json(scripts: list[str], marker: str, pattern: str, pick_longest: bo
         return None
 
 
-def list_via_odin(session: requests.Session, xpt: str) -> list[ListItem]:
+def list_via_odin(session: requests.Session, xpt: str, want: int | None = None, log=None) -> list[ListItem]:
+    """プロフィールページと同じ odin API で一覧を取る。want を指定するとページを送る
+    （2ページ目以降で失敗・空・同じ記事になったら、そこまでの分を返す）。"""
     r = _get(session, "https://mp.sohu.com/profile", params={"xpt": xpt})
     if r.status_code != 200:
         raise ListError(f"profile HTTP {r.status_code}")
@@ -284,58 +323,88 @@ def list_via_odin(session: requests.Session, xpt: str) -> list[ListItem]:
     mkey = gconst.get("mkeyConst_mkey")
     if not mkey:
         raise ListError("profile ページから mkey が見つからない")
-    now = int(time.time() * 1000)
+    now0 = int(time.time() * 1000)
     tpl_key = req_param.get("tplCompKey") or "FeedSlideloadAuthor_2_0_pc_1655965929143_data2"
-    body = {
-        "pvId": (cbd.get("COMMONCONFIG") or {}).get("pvId") or f"{now}_{_rand(7)}",
-        "pageId": f"{now}_{DEFAULT_SUV[:-5]}_{_rand(3)}",
-        "mainContent": {
-            "productType": content.get("businessType") or "13",
-            "productId": content.get("id") or "324",
-            "secureScore": content.get("secureScore") or "5",
-            "categoryId": content.get("categoryId") or "47",
-            "adTags": content.get("adTags") or "11111111",
-            "authorId": (content.get("account") or {}).get("id") or 121135924,
-        },
-        "resourceList": [{
-            "tplCompKey": tpl_key,
-            "isServerRender": req_param.get("isServerRender") or False,
-            "isSingleAd": req_param.get("isSingleAd") or False,
-            "configSource": req_param.get("configSource") or "mp",
-            "content": {
-                "productId": (req_param.get("content") or {}).get("productId") or "325",
-                "productType": (req_param.get("content") or {}).get("productType") or "13",
-                "size": 20,
-                "pro": render.get("pro") or "0,1,3,4,5",
-                "feedType": render.get("feedType") or "XTOPIC_SYNTHETICAL",
-                "view": "operateFeedMode",
-                "innerTag": (req_param.get("content") or {}).get("innerTag") or "work",
-                "spm": (req_param.get("content") or {}).get("spm") or "smpc.channel_248.block3_308_hHsK47_2_fd",
-                "page": 1,
-                "requestId": f"{now}{_rand(7)}_{content.get('id')}",
+    pv_id = (cbd.get("COMMONCONFIG") or {}).get("pvId") or f"{now0}_{_rand(7)}"
+    page_id = f"{now0}_{DEFAULT_SUV[:-5]}_{_rand(3)}"
+    cookie = f"SUV={suv}; itssohu=true; reqtype=pc; t={now0}"
+
+    def request(page: int):
+        now = int(time.time() * 1000)
+        body = {
+            "pvId": pv_id,
+            "pageId": page_id,
+            "mainContent": {
+                "productType": content.get("businessType") or "13",
+                "productId": content.get("id") or "324",
+                "secureScore": content.get("secureScore") or "5",
+                "categoryId": content.get("categoryId") or "47",
+                "adTags": content.get("adTags") or "11111111",
+                "authorId": (content.get("account") or {}).get("id") or 121135924,
             },
-            "adInfo": {},
-            "context": {"mkey": mkey},
-        }],
-        "asId": _auth_token(),
-    }
-    cookie = f"SUV={suv}; itssohu=true; reqtype=pc; t={now}"
-    rr = session.post("https://odin.sohu.com/odin/api/blockdata", json=body,
-                      headers={"Cookie": cookie, "Referer": r.url}, timeout=30)
-    if rr.status_code != 200:
-        raise ListError(f"odin API HTTP {rr.status_code}")
-    data = rr.json()
-    lst = (((data or {}).get("data") or {}).get(tpl_key) or {}).get("list") or []
-    if not lst:
-        raise ListError(f"odin API の記事リストが空: {str(data)[:200]}")
-    items = []
-    for it in lst:
-        if not it.get("id"):
-            continue
-        aid = str(it["id"])
-        items.append(ListItem(article_id=aid, url=f"https://www.sohu.com/a/{aid}_{mkey}",
-                              title=(it.get("title") or "").strip(), method="odin"))
-    return _dedupe(items)
+            "resourceList": [{
+                "tplCompKey": tpl_key,
+                "isServerRender": req_param.get("isServerRender") or False,
+                "isSingleAd": req_param.get("isSingleAd") or False,
+                "configSource": req_param.get("configSource") or "mp",
+                "content": {
+                    "productId": (req_param.get("content") or {}).get("productId") or "325",
+                    "productType": (req_param.get("content") or {}).get("productType") or "13",
+                    "size": 20,
+                    "pro": render.get("pro") or "0,1,3,4,5",
+                    "feedType": render.get("feedType") or "XTOPIC_SYNTHETICAL",
+                    "view": "operateFeedMode",
+                    "innerTag": (req_param.get("content") or {}).get("innerTag") or "work",
+                    "spm": (req_param.get("content") or {}).get("spm") or "smpc.channel_248.block3_308_hHsK47_2_fd",
+                    "page": page,
+                    "requestId": f"{now}{_rand(7)}_{content.get('id')}",
+                },
+                "adInfo": {},
+                "context": {"mkey": mkey},
+            }],
+            "asId": _auth_token(),
+        }
+        rr = session.post("https://odin.sohu.com/odin/api/blockdata", json=body,
+                          headers={"Cookie": cookie, "Referer": r.url}, timeout=30)
+        if rr.status_code != 200:
+            raise ListError(f"odin API HTTP {rr.status_code}")
+        data = rr.json()
+        return (((data or {}).get("data") or {}).get(tpl_key) or {}).get("list") or [], data
+
+    items: list[ListItem] = []
+    seen: set[str] = set()
+    limit = _page_limit(1, want)
+    for page in range(1, limit + 1):
+        try:
+            lst, data = request(page)
+        except Exception as e:
+            if page == 1:
+                raise
+            _log(log, f"[一覧] odin: {page}ページ目で中断（{type(e).__name__}: {e}）。{len(items)}件まで使います")
+            break
+        if not lst:
+            if page == 1:
+                raise ListError(f"odin API の記事リストが空: {str(data)[:200]}")
+            break
+        fresh = 0
+        for it in lst:
+            if not it.get("id"):
+                continue
+            aid = str(it["id"])
+            if aid in seen:
+                continue
+            seen.add(aid)
+            fresh += 1
+            items.append(ListItem(article_id=aid, url=f"https://www.sohu.com/a/{aid}_{mkey}",
+                                  title=(it.get("title") or "").strip(), method="odin"))
+        if not fresh:
+            _log(log, f"[一覧] odin: {page}ページ目が前のページと同じ記事でした。{len(items)}件まで使います")
+            break
+        if want and len(items) >= want:
+            break
+        if page < limit:
+            time.sleep(LIST_INTERVAL)
+    return items
 
 
 # ---------------------------------------------------------------------------
@@ -377,11 +446,13 @@ def _dedupe(items: Iterable[ListItem]) -> list[ListItem]:
 
 
 def list_articles(session: requests.Session, *, author_id: str, xpt: str,
-                  rsshub_instances: list[str], pages: int = 1, log=print) -> tuple[list[ListItem], list[str]]:
-    """一覧を取得する。戻り値は (記事リスト, 試した方法ごとのログ)。全滅なら ListError。"""
+                  rsshub_instances: list[str], pages: int = 1, want: int | None = None,
+                  log=print) -> tuple[list[ListItem], list[str]]:
+    """一覧を取得する。戻り値は (記事リスト, 試した方法ごとのログ)。全滅なら ListError。
+    want（直近◯件）を指定すると、v2・odin はその件数に届くまでページを送る。RSSHub は1ページ分（20件程度）だけ。"""
     attempts: list[str] = []
-    methods = [("v2", lambda: list_via_v2(session, author_id, pages)),
-               ("odin", lambda: list_via_odin(session, xpt))]
+    methods = [("v2", lambda: list_via_v2(session, author_id, pages, want=want, log=log)),
+               ("odin", lambda: list_via_odin(session, xpt, want=want, log=log))]
     methods += [(f"rsshub:{u}", (lambda u=u: list_via_rsshub(session, u, author_id))) for u in rsshub_instances]
     for name, fn in methods:
         try:

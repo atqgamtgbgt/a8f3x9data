@@ -141,7 +141,8 @@ def no_sleep(monkeypatch):
     monkeypatch.setattr(fetch.time, "sleep", lambda s: None)
     monkeypatch.setattr(sohu.time, "sleep", lambda s: None)
     monkeypatch.setattr(ai.time, "sleep", lambda s: None)
-    for k in ("GITHUB_OUTPUT", "GITHUB_STEP_SUMMARY"):
+    for k in ("GITHUB_OUTPUT", "GITHUB_STEP_SUMMARY", "GITHUB_ACTIONS",
+              "CDS_COUNT", "CDS_URLS", "CDS_REFETCH", "CDS_TIME_BUDGET", "CDS_MAX_NEW"):
         monkeypatch.delenv(k, raising=False)
 
 
@@ -236,8 +237,7 @@ def test_list_rsshub():
     assert art.image_urls == [IMG1] and art.title == "2026年8月乘用车市场价格段跟踪"
 
 
-def test_list_odin_port():
-    """RSSHub の odin 実装を移植した部分が、想定どおりの値を読み取り・送信できるか。"""
+def odin_profile_html() -> str:
     block = {"FeedSlideloadAuthor_2_0_pc_X": {"param": {
         "pro": "0,1,3,4,5", "feedType": "XTOPIC_SYNTHETICAL",
         "data2": {"reqParam": {"tplCompKey": "FeedSlideloadAuthor_2_0_pc_X_data2", "configSource": "mp",
@@ -245,11 +245,16 @@ def test_list_odin_port():
                                            "spm": "smpc.x"}}}}},
              "BriefIntroductionCard_1": {"param": {"data": {"list": [{"column_9_text": "intro"}]}}},
              "column_2_text": "x"}
-    profile = f"""<html><head><script>var CBDRenderConst = {json.dumps({"COMMONCONFIG": {"pvId": "PV1"}})}
+    return f"""<html><head><script>var CBDRenderConst = {json.dumps({"COMMONCONFIG": {"pvId": "PV1"}})}
 </script><script>window.contentData = {json.dumps({"id": "324", "businessType": "13", "account": {"id": 999}})}
 </script><script>var blockRenderData = {json.dumps(block)}
 </script><script>var globalConst = {json.dumps({"mkeyConst_mkey": "115312", "title": "崔东树"})}
 </script></head></html>"""
+
+
+def test_list_odin_port():
+    """RSSHub の odin 実装を移植した部分が、想定どおりの値を読み取り・送信できるか。"""
+    profile = odin_profile_html()
     posted = {}
 
     def odin(url, kw):
@@ -648,3 +653,210 @@ def test_placeholder_only_image_is_reported(monkeypatch, tmp_path):
     assert (tmp_path / "cds/debug/1086043839.pc.html").exists()
     md = (tmp_path / a["path"] / "content.md").read_text(encoding="utf-8")
     assert "（図3：画像を取得できませんでした）" in md
+
+
+# ---------------------------------------------------------------------------
+# 直近◯件・複数の記事指定・成功済みのスキップ（2026-10-11 追加）
+# ---------------------------------------------------------------------------
+def _simple_article(aid: str, title: str) -> str:
+    day = int(aid[-2:]) % 28 + 1
+    return (f'<html><head><meta property="og:title" content="{title}">'
+            f'<meta itemprop="datePublished" content="2026-09-{day:02d} 10:00"></head><body>'
+            f'<article class="article" id="mp-editor"><p>{title}。{LONG_P}</p><p><img src="{IMG1}"></p>'
+            f'</article></body></html>')
+
+
+def paged_routes(pages, *, same_every_page=False, page2_status=200, article_status=None):
+    """v2 API のページ送り（pNo）を再現する。pages は1ページ目から順に [(記事ID, タイトル, 時刻ms), ...]。"""
+    def v2(url, kw):
+        pno = int((kw.get("params") or {}).get("pNo") or 1)
+        if pno > 1 and page2_status != 200:
+            return FakeResponse(page2_status, "error")
+        if same_every_page:
+            pno = 1
+        rows = pages[pno - 1] if pno - 1 < len(pages) else []
+        return FakeResponse(200, v2_json(rows))
+
+    routes = [("https://v2.sohu.com/author-page-api/author-articles/pc/115312", v2)]
+    for page in pages:
+        for aid, title, _ in page:
+            status = (article_status or {}).get(aid, 200)
+            routes.append((f"https://www.sohu.com/a/{aid}_115312", FakeResponse(status, _simple_article(aid, title))))
+            routes.append((f"https://m.sohu.com/a/{aid}_115312", FakeResponse(404, "not found")))
+    routes.append((IMG1, FakeResponse(200, content=png_bytes(), headers={"Content-Type": "image/png"})))
+    return routes
+
+
+SIX = [[("1000000006", "记事6", 1790000600000), ("1000000005", "记事5", 1790000500000)],
+       [("1000000004", "记事4", 1790000400000), ("1000000003", "记事3", 1790000300000)],
+       [("1000000002", "记事2", 1790000200000), ("1000000001", "记事1", 1790000100000)]]
+
+
+def article_calls(session):
+    return sorted({c[1].split("/a/")[1].split("_")[0] for c in session.calls if c[1].startswith("https://www.sohu.com/a/")})
+
+
+def index_ids(tmp_path):
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    return [a["id"] for a in index["articles"]]
+
+
+def test_parse_targets_accepts_urls_and_ids():
+    items, bad = fetch.parse_targets([
+        "https://www.sohu.com/a/1080113775_115312?scm=1.2 1079036468，1079036468_115312、"
+        "m.sohu.com/a/1078592557_115312\nhttps://mp.sohu.com/profile?xpt=abc ほげ", "「1085170493」"])
+    assert [i.article_id for i in items] == ["1080113775", "1079036468", "1078592557", "1085170493"]
+    assert items[1].url == "https://www.sohu.com/a/1079036468_115312"
+    assert all(i.method == "manual" for i in items)
+    assert bad == ["https://mp.sohu.com/profile?xpt=abc", "ほげ"]
+
+
+def test_count_mode_pages_back_and_skips_successes(monkeypatch, tmp_path):
+    summary = tmp_path / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    # 1回目: 直近3件 → 2ページ目まで見る（3ページ目は見ない）
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--count", "3")
+    assert code == 0
+    pnos = [(c[2].get("params") or {}).get("pNo", 1) for c in session.calls if "v2.sohu.com" in c[1]]
+    assert pnos == [1, 2]
+    assert index_ids(tmp_path) == ["1000000006", "1000000005", "1000000004"]
+    # 2回目: 直近5件 → 成功済みの3件は取りに行かず、残り2件だけ取る
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--count", "5")
+    assert code == 0
+    assert article_calls(session) == ["1000000002", "1000000003"]
+    assert index_ids(tmp_path) == ["1000000006", "1000000005", "1000000004", "1000000003", "1000000002"]
+    text = summary.read_text(encoding="utf-8")
+    assert "実行内容: 直近5件（成功済みはスキップ）" in text and "成功済みでスキップ 3件" in text
+    log = json.loads((tmp_path / "cds/run_log.json").read_text(encoding="utf-8"))
+    assert sorted(log[0]["skipped"]) == ["1000000004", "1000000005", "1000000006"]
+
+
+def test_explicit_targets_retry_incomplete_and_failed_but_skip_successes(monkeypatch, tmp_path):
+    run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--count", "3")          # 6, 5, 4 を保存
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    for a in index["articles"]:
+        if a["id"] == "1000000005":
+            a["images_saved"] = 0                                                # 図が欠けた記事
+    index["failed"]["1000000001"] = {"url": "https://www.sohu.com/a/1000000001_115312", "tries": 9}
+    (tmp_path / "cds/index.json").write_text(json.dumps(index, ensure_ascii=False), encoding="utf-8")
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX),
+                              "--urls", "1000000006", "https://www.sohu.com/a/1000000005_115312", "1000000001")
+    assert code == 0
+    assert article_calls(session) == ["1000000001", "1000000005"]    # 成功済みの6は飛ばす。失敗9回の1も指定なら取る
+    assert not any("v2.sohu.com" in c[1] for c in session.calls)     # 記事の指定だけなら一覧は見ない
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    assert index["failed"] == {}
+    assert next(a for a in index["articles"] if a["id"] == "1000000005")["images_saved"] == 1
+    # --refetch なら成功済みも取り直す
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--urls", "1000000006", "--refetch")
+    assert article_calls(session) == ["1000000006"]
+
+
+def test_saved_entry_without_files_is_not_treated_as_success(monkeypatch, tmp_path):
+    run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--urls", "1000000006")
+    index = json.loads((tmp_path / "cds/index.json").read_text(encoding="utf-8"))
+    shutil.rmtree(tmp_path / index["articles"][0]["path"])                      # 保存先のファイルが無い
+    _, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--urls", "1000000006")
+    assert article_calls(session) == ["1000000006"]
+
+
+def test_env_inputs_and_explicit_targets_are_not_capped(monkeypatch, tmp_path):
+    monkeypatch.setenv("CDS_URLS", "1000000001, 1000000002 https://www.sohu.com/a/1000000003_115312")
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--max-new", "1")
+    assert code == 0
+    assert sorted(index_ids(tmp_path)) == ["1000000001", "1000000002", "1000000003"]
+    monkeypatch.setenv("CDS_URLS", "")
+    monkeypatch.setenv("CDS_COUNT", "2")
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX))
+    assert article_calls(session) == ["1000000005", "1000000006"]
+    monkeypatch.setenv("CDS_COUNT", "0")
+    monkeypatch.setenv("CDS_URLS", "1000000001")
+    monkeypatch.setenv("CDS_REFETCH", "true")
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX))
+    assert article_calls(session) == ["1000000001"]
+
+
+def test_count_is_capped(monkeypatch, tmp_path, capsys):
+    code, _ = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--count", "99999")
+    assert code == 0
+    assert f"{fetch.MAX_COUNT}件にします" in capsys.readouterr().out
+    assert len(index_ids(tmp_path)) == 6
+
+
+def test_count_mode_stops_when_paging_is_ignored(monkeypatch, tmp_path, capsys):
+    monkeypatch.setenv("GITHUB_ACTIONS", "true")
+    code, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX[:1], same_every_page=True), "--count", "10")
+    assert code == 0
+    assert len([c for c in session.calls if "v2.sohu.com" in c[1]]) == 2   # 2ページ目が同じ内容 → そこで止める
+    out = capsys.readouterr().out
+    assert "ページ送りが効かない" in out and "指定した件数までさかのぼれませんでした" in out
+    assert len(index_ids(tmp_path)) == 2
+
+
+def test_v2_keeps_first_page_when_later_page_fails():
+    s = FakeSession(paged_routes(SIX, page2_status=500))
+    items = sohu.list_via_v2(s, "115312", want=5, log=lambda m: None)
+    assert [i.article_id for i in items] == ["1000000006", "1000000005"]
+
+
+def test_list_odin_pages_when_count_given():
+    pages = {1: [{"id": 1000000006, "title": "6"}, {"id": 1000000005, "title": "5"}],
+             2: [{"id": 1000000004, "title": "4"}, {"id": 1000000003, "title": "3"}]}
+    sent = []
+
+    def odin(url, kw):
+        page = kw["json"]["resourceList"][0]["content"]["page"]
+        sent.append(page)
+        return FakeResponse(200, json.dumps({"data": {"FeedSlideloadAuthor_2_0_pc_X_data2": {"list": pages.get(page, [])}}}))
+
+    s = FakeSession([("https://mp.sohu.com/profile", FakeResponse(200, odin_profile_html())),
+                     ("https://odin.sohu.com/odin/api/blockdata", odin)])
+    items = sohu.list_via_odin(s, "x", want=3, log=lambda m: None)
+    assert sent == [1, 2]
+    assert [i.article_id for i in items] == ["1000000006", "1000000005", "1000000004", "1000000003"]
+
+
+def test_unreadable_targets_only_returns_2(monkeypatch, tmp_path):
+    out = tmp_path / "o.txt"
+    monkeypatch.setenv("GITHUB_OUTPUT", str(out))
+    code, session = run_fetch(monkeypatch, tmp_path, make_routes(), "--urls", "https://example.com/x", "abc")
+    assert code == 2 and session.calls == []
+    assert "new_count=0" in out.read_text()
+
+
+def test_time_budget_defers_the_rest(monkeypatch, tmp_path):
+    clock = {"t": 1000.0}
+    monkeypatch.setattr(fetch.time, "time", lambda: clock["t"])
+    orig_save = fetch.save_article
+
+    def slow_save(*a, **kw):          # 記事を1件保存するたびに100秒進める
+        clock["t"] += 100
+        return orig_save(*a, **kw)
+
+    monkeypatch.setattr(fetch, "save_article", slow_save)
+    summary = tmp_path / "summary.md"
+    monkeypatch.setenv("GITHUB_STEP_SUMMARY", str(summary))
+    code, _ = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--count", "3", "--time-budget", "150")
+    assert code == 0
+    assert index_ids(tmp_path) == ["1000000006", "1000000005"]          # 新しい順に処理し、3件目は次回へ
+    assert "時間切れで次回 1件" in summary.read_text(encoding="utf-8")
+    log = json.loads((tmp_path / "cds/run_log.json").read_text(encoding="utf-8"))
+    assert log[0]["deferred"] == ["1000000004"]
+    # 同じ設定でもう一度 → 続きの1件だけ取る
+    _, session = run_fetch(monkeypatch, tmp_path, paged_routes(SIX), "--count", "3")
+    assert article_calls(session) == ["1000000004"]
+
+
+def test_list_failure_still_fetches_explicit_targets(monkeypatch, tmp_path):
+    img = png_bytes()
+    routes = [("https://v2.sohu.com/", FakeResponse(503, "down")), ("https://mp.sohu.com/", FakeResponse(503, "down")),
+              ("https://www.sohu.com/a/1080113775_115312", FakeResponse(200, ARTICLE_B)),
+              (IMG3, FakeResponse(200, content=img, headers={"Content-Type": "image/png"}))]
+    code, _ = run_fetch(monkeypatch, tmp_path, routes, "--count", "5", "--urls", "1080113775")
+    assert code == 3                                  # ワークフローは RSSHub を起動して一覧だけ取り直す
+    assert index_ids(tmp_path) == ["1080113775"]
+    log = json.loads((tmp_path / "cds/run_log.json").read_text(encoding="utf-8"))
+    assert log[0]["ok"] is False and log[0]["new"] == ["1080113775"]
+    # 再試行（同じ指定）では、成功済みの指定記事は取りに行かない
+    code, session = run_fetch(monkeypatch, tmp_path, routes, "--count", "5", "--urls", "1080113775")
+    assert article_calls(session) == []

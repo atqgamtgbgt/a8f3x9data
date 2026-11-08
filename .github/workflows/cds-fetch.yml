@@ -1,5 +1,11 @@
 # 崔東樹さん（搜狐号）の新着記事を自動で取得し、cds-archive ブランチに保存する。
-# 詳しくは cds_pipeline/README.md を参照。
+# 詳しくは同じ場所の README.md を参照。
+#
+# 取得スクリプト（fetch.py など）は、このファイルと同じ .github/workflows に置く。
+# 非公開リポジトリからの自動同期（Sync from private repo）は、リポジトリの中身を非公開側にそろえる（無いものは消す）。
+# 2026年10月12日の同期で直下にあったスクリプトのフォルダが消え、以降の実行がすべて失敗していた。
+# .github/workflows の中は、10月12日〜20日の11回の同期で一度も変更されていない（10月10日に作ったファイルも残っている）。
+# （.py・.txt・.md のファイルは、ここにあってもワークフローとしては扱われない）
 name: 崔東樹 記事取得
 
 on:
@@ -43,7 +49,14 @@ jobs:
       - name: スクリプトを取得
         uses: actions/checkout@v5
         with:
-          sparse-checkout: cds_pipeline
+          sparse-checkout: .github/workflows
+
+      - name: スクリプトの有無を確認
+        run: |
+          if [ ! -f .github/workflows/fetch.py ]; then
+            echo "::error title=取得スクリプトが見つかりません::main ブランチの .github/workflows に fetch.py がありません。取得スクリプトが消えていないか確認してください。"
+            exit 1
+          fi
 
       - name: 保存用ブランチの有無を確認
         id: branch
@@ -73,10 +86,10 @@ jobs:
         with:
           python-version: '3.12'
           cache: pip
-          cache-dependency-path: cds_pipeline/requirements.txt
+          cache-dependency-path: .github/workflows/requirements.txt
 
       - name: ライブラリをインストール
-        run: pip install -r cds_pipeline/requirements.txt
+        run: pip install -r .github/workflows/requirements.txt
 
       # 手動実行で入れた件数・記事の指定は、環境変数で fetch.py に渡す（定期実行では空＝新着だけ）
       - name: 記事を取得
@@ -89,7 +102,7 @@ jobs:
           CDS_RSSHUB: ${{ vars.CDS_RSSHUB }}
         run: |
           set +e
-          python cds_pipeline/fetch.py --archive archive
+          python .github/workflows/fetch.py --archive archive
           code=$?
           echo "code=$code" >> "$GITHUB_OUTPUT"
           # 3 = 一覧が取れなかった → 次のステップで RSSHub を起動して再試行する
@@ -109,7 +122,7 @@ jobs:
             curl -fsS -o /dev/null http://localhost:1200/ && break
             sleep 2
           done
-          python cds_pipeline/fetch.py --archive archive --rsshub http://localhost:1200
+          python .github/workflows/fetch.py --archive archive --rsshub http://localhost:1200
 
       # 有料API（Anthropic）を使う処理。初期状態ではオフ。
       # 使う場合だけ、Settings → Variables に CDS_AI_ENABLED=true、Secrets に ANTHROPIC_API_KEY を登録する
@@ -120,7 +133,7 @@ jobs:
           CDS_AI_MODEL: ${{ vars.CDS_AI_MODEL }}
           CDS_AI_MAX_ARTICLES: ${{ vars.CDS_AI_MAX_ARTICLES }}
           CDS_AI_CHARTS: ${{ vars.CDS_AI_CHARTS }}
-        run: python cds_pipeline/ai.py --archive archive
+        run: python .github/workflows/ai.py --archive archive
 
       - name: 保存用ブランチに保存
         # 失敗した時も実行記録（run_log.json）を残して、原因を後から確認できるようにする
@@ -135,4 +148,11 @@ jobs:
             exit 0
           fi
           git commit -q -m "崔東樹 記事取得 $(TZ=Asia/Tokyo date '+%Y-%m-%d %H:%M')"
-          git push origin "HEAD:${ARCHIVE_BRANCH}"
+          # CAAM・CCCM の統計取得（stats-fetch.yml）が同時に保存していた場合は、取り込んでから保存し直す
+          for i in 1 2 3 4 5; do
+            if git push origin "HEAD:${ARCHIVE_BRANCH}"; then exit 0; fi
+            echo "保存が重なったため取り込み直します（${i}回目）"
+            git pull --rebase -q origin "$ARCHIVE_BRANCH" || { git rebase --abort; exit 1; }
+            sleep $((i * 5))
+          done
+          exit 1

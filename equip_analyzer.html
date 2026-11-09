@@ -372,7 +372,7 @@ function render(){const {all,total}=computeRows(); renderNote(total); renderSect
 
 function formatChinaPrice(raw){
   const s=String(raw??'').trim();
-  const m=s.match(/^(\\d+(?:\\.\\d+)?)(?:-(\\d+(?:\\.\\d+)?))?万$/);
+  const m=s.match(/^(\d+(?:\.\d+)?)(?:-(\d+(?:\.\d+)?))?万$/);
   if(!m)return s?s+'元':'';
   const yen=v=>new Intl.NumberFormat('ja-JP').format(Math.round(Number(v)*10000))+'元';
   return yen(m[1])+(m[2]?'〜'+yen(m[2]):'');

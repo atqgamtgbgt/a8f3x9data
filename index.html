@@ -3319,34 +3319,7 @@ body.tray-open { padding-bottom: 105px; }
   <div class="container mt-3">
 
     <!-- 説明文 -->
-    <details class="site-description" id="siteDesc">
-      <summary style="cursor:pointer;user-select:none"><strong>本ページについて</strong> <span class="text-muted" style="font-size:12px">（非公式・出典・利用上の注意 ― タップで開閉）</span></summary>
-      <ul class="mt-2 mb-0">
-        <li>
-          本ページは、非公式の個人作成物です。<br>
-          （そのため、クオリティが低い点等があったらご容赦ください・・・）
-        </li>
-        <li style="list-style:none; padding-left:1.2em; text-indent:-1.2em;">
-          ― <strong>販売ランキング</strong>は、<a href="https://www.autohome.com.cn/rank/1" target="_blank" rel="noopener">汽车之家（Autohome）</a>の公開データを、単純にAIで翻訳・要約したものです。
-          （ランキングは、乗聯会やCAAMのデータを基にしているとされています）
-        </li>
-        <li style="list-style:none; padding-left:1.2em; text-indent:-1.2em;">
-          ― <strong>CAAM統計グラフ</strong>・<strong>CCCM統計グラフ</strong>は、CAAMおよびCCCMの毎月の統計をAIに読み取らせ、それを基に作成しています。新しい月の分は、両会の公式サイトの発表本文から自動で読み取った数値を加えています。
-        </li>
-        <li style="list-style:none; padding-left:1.2em; text-indent:-1.2em;">
-          ― <strong>崔東樹(全国乗用車市場信息聯席会(CPCA)秘書長)ブログ</strong>は、崔東樹さんのブログの内容をAIに読み取らせ作成しています。
-        </li>
-        <li>
-          画像・データの著作権はすべて原著作権者に帰属します。<br>
-          非商用の限定共有を目的としており、正確性・最新性は保証しません。<br>
-          個人利用や、部署内・会議体など限定された範囲での閲覧・共有であれば問題ありませんが、<br>
-          不特定多数への公開や広範な拡散はご遠慮ください。
-        </li>
-      </ul>
-    </details>
-    <script>/* デスクトップでは初期展開、スマホでは折りたたみ */
-      if (window.innerWidth > 768) { var _sd = document.getElementById('siteDesc'); if (_sd) _sd.open = true; }
-    </script>
+    <p class="site-description" style="padding:10px 14px;margin-bottom:12px">（実験集計）</p>
 
     <!-- 印刷ボタン（一時削除） -->
 
@@ -3359,17 +3332,17 @@ body.tray-open { padding-bottom: 105px; }
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="charts-super-tab" data-bs-toggle="tab" data-bs-target="#charts-super-content" type="button" role="tab">
-          <i class="fa-solid fa-chart-line me-1"></i>CAAM統計グラフ<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
+          <i class="fa-solid fa-chart-line me-1"></i>CAAM統計グラフ
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="cccm-super-tab" data-bs-toggle="tab" data-bs-target="#cccm-super-content" type="button" role="tab">
-          <i class="fa-solid fa-motorcycle me-1"></i>CCCM統計グラフ<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
+          <i class="fa-solid fa-motorcycle me-1"></i>CCCM統計グラフ
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="cds-super-tab" data-bs-toggle="tab" data-bs-target="#cds-super-content" type="button" role="tab" title="崔東樹（全国乗用車市場信息聯席会(CPCA)秘書長）ブログの分析">
-          <i class="fa-solid fa-ship me-1"></i>崔東樹ブログ<span class="badge ms-1" style="background:#6c757d;color:#fff;font-size:10px;vertical-align:middle;font-weight:400">工事中</span>
+          <i class="fa-solid fa-ship me-1"></i>崔東樹ブログ
         </button>
       </li>
     </ul>
@@ -3408,6 +3381,7 @@ body.tray-open { padding-bottom: 105px; }
           </div>
         </div>
         <div class="equip-embed" style="display:none">
+          <div style="text-align:right"><a href="equip_analyzer.html?ds=overall" target="_blank" rel="noopener" style="font-size:12px">装備アナライザーを大きく開く ↗</a></div>
           <iframe data-src="equip_analyzer.html?ds=overall" style="width:100%;height:82vh;border:0;border-radius:12px;margin-top:.75rem;background:#f8f9fa" title="装備搭載率" loading="lazy"></iframe>
         </div>
 
@@ -3428,6 +3402,7 @@ body.tray-open { padding-bottom: 105px; }
           </div>
         </div>
         <div class="equip-embed" style="display:none">
+          <div style="text-align:right"><a href="equip_analyzer.html?ds=hezi" target="_blank" rel="noopener" style="font-size:12px">装備アナライザーを大きく開く ↗</a></div>
           <iframe data-src="equip_analyzer.html?ds=hezi" style="width:100%;height:82vh;border:0;border-radius:12px;margin-top:.75rem;background:#f8f9fa" title="装備搭載率" loading="lazy"></iframe>
         </div>
 
@@ -3448,6 +3423,7 @@ body.tray-open { padding-bottom: 105px; }
           </div>
         </div>
         <div class="equip-embed" style="display:none">
+          <div style="text-align:right"><a href="equip_analyzer.html?ds=energy" target="_blank" rel="noopener" style="font-size:12px">装備アナライザーを大きく開く ↗</a></div>
           <iframe data-src="equip_analyzer.html?ds=energy" style="width:100%;height:82vh;border:0;border-radius:12px;margin-top:.75rem;background:#f8f9fa" title="装備搭載率" loading="lazy"></iframe>
         </div>
 

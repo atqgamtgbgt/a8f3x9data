@@ -1,0 +1,29 @@
+name: Main HTML diagnostic
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - index.html
+      - tools/audit_index_html.js
+      - .github/workflows/index-audit.yml
+  pull_request:
+    paths:
+      - index.html
+      - tools/audit_index_html.js
+      - .github/workflows/index-audit.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check diagnostic script syntax
+        run: node --check tools/audit_index_html.js
+      - name: Audit main page JavaScript and localization
+        run: node tools/audit_index_html.js

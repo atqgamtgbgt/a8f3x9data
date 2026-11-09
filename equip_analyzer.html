@@ -379,7 +379,7 @@ function safeExternalUrl(raw){
   }catch(e){return '';}
 }
 const lnk=c=>{const url=safeExternalUrl(c.link);return url?`<a class="ext" href="${url}" target="_blank" rel="noopener noreferrer" title="Autohomeで開く">↗</a>`:'';};
-const bkLink=f=>{const url=safeExternalUrl(f.u);return url?` <a class="bk" href="${url}" target="_blank" rel="noopener noreferrer" title="汽车之家の用語解説" onclick="event.stopPropagation()">解説↗</a>`:'';};').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const bkLink=f=>{const url=safeExternalUrl(f.u);return url?` <a class="bk" href="${url}" target="_blank" rel="noopener noreferrer" title="Autohomeの用語解説" onclick="event.stopPropagation()">解説↗</a>`:'';};
 const SOURCE_MAP={overall:'autohome',hezi:'hezi',energy:'energy'};
 let SPEC_OK=false;
 function specAvailable(){ try{return window.parent&&window.parent!==window&&typeof window.parent.showConfigCsv==='function';}catch(e){return false;} }

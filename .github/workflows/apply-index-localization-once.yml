@@ -29,7 +29,7 @@ jobs:
         run: |
           node tools/audit_index_html.js | tee /tmp/index-audit.log
           ! grep -Eq 'syntax errors: [1-9]' /tmp/index-audit.log
-          git diff --check
+          git -c core.whitespace=cr-at-eol diff --check
           test "$(git diff --name-only)" = "index.html"
       - name: Commit modified main page to patch branch
         run: |

@@ -39,6 +39,17 @@ console.log('Inline classic scripts checked: ' + inlineCount +
             '; external scripts: ' + externalCount + '; skipped/module/data scripts: ' + skippedCount +
             '; syntax errors: ' + scriptErrors);
 
+// Identify the largest inline blocks to guide safe, incremental refactoring.
+function blockSizes(regex) {
+  return Array.from(source.matchAll(regex), (match, index) => ({
+    ordinal: index + 1,
+    bytes: Buffer.byteLength(match[2], 'utf8'),
+    line: source.slice(0, match.index).split('\n').length
+  })).sort((a, b) => b.bytes - a.bytes).slice(0, 8);
+}
+console.log('Largest inline scripts: ' + JSON.stringify(blockSizes(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)));
+console.log('Largest inline styles: ' + JSON.stringify(blockSizes(/<style\b([^>]*)>([\s\S]*?)<\/style\s*>/gi)));
+
 // Count static HTML lines with characters typically exclusive to Simplified Chinese.
 // This is an indicator only. Inline dynamic text and brand names need separate review.
 const nonScript = source

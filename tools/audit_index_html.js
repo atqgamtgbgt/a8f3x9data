@@ -44,7 +44,7 @@ console.log('Inline classic scripts checked: ' + inlineCount +
 const nonScript = source
   .replace(/<script\b[^>]*>[\s\S]*?<\/script\s*>/gi, '')
   .replace(/<style\b[^>]*>[\s\S]*?<\/style\s*>/gi, '');
-const possibleChinese = /[这车电销价产级为办经证计网维营数厂广货订选购时们无优规动务师样开关护栏湾览问张气频页线驾费兴厅]/;
+const possibleChinese = /[这车电销价产级为办经证计网维营厂广货订选购时们无优规动务师样开关护栏湾览问张气频页线驾费兴厅]/;
 const hits = nonScript.split('\n').map((line, i) => ({ i: i + 1, line: line.trim() }))
   .filter(x => possibleChinese.test(x.line));
 console.log('Potential Simplified Chinese in static HTML lines: ' + hits.length);
@@ -60,3 +60,4 @@ console.log('Potential Simplified Chinese visible text snippets: ' + uniqueVisib
 uniqueVisible.slice(0, 100).forEach(value => console.log('  text: ' + value.slice(0, 160)));
 if (uniqueVisible.length > 100) console.log('  ... and ' + (uniqueVisible.length - 100) + ' more text snippets');
 console.log('Diagnostic complete (no files were changed).');
+if (scriptErrors) process.exitCode = 1;

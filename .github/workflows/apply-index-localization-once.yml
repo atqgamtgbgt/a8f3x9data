@@ -1,0 +1,40 @@
+name: One-time Japanese text patch for index
+
+on:
+  push:
+    branches:
+      - fix/index-japanese-static-20261110
+    paths:
+      - tools/localize_index_html.py
+      - .github/workflows/apply-index-localization-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Validate patch script syntax
+        run: python -m py_compile tools/localize_index_html.py
+      - name: Apply exactly scoped display-string changes
+        run: |
+          python tools/localize_index_html.py --apply
+          python tools/localize_index_html.py --check
+      - name: Verify page scripts and source safety
+        run: |
+          node tools/audit_index_html.js | tee /tmp/index-audit.log
+          ! grep -Eq 'syntax errors: [1-9]' /tmp/index-audit.log
+          git diff --check
+          test "$(git diff --name-only)" = "index.html"
+      - name: Commit modified main page to patch branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Localize selected static Japanese UI labels in index.html"
+          git push origin HEAD:fix/index-japanese-static-20261110

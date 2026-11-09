@@ -44,7 +44,9 @@ function blockSizes(regex) {
   return Array.from(source.matchAll(regex), (match, index) => ({
     ordinal: index + 1,
     bytes: Buffer.byteLength(match[2], 'utf8'),
-    line: source.slice(0, match.index).split('\n').length
+    line: source.slice(0, match.index).split('\n').length,
+    start: match[2].slice(0, 160).replace(/\s+/g, ' ').trim(),
+    currentScript: /document\.currentScript/.test(match[2])
   })).sort((a, b) => b.bytes - a.bytes).slice(0, 8);
 }
 console.log('Largest inline scripts: ' + JSON.stringify(blockSizes(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)));

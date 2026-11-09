@@ -1,0 +1,47 @@
+name: One-time INFO_REGISTRY extraction
+
+on:
+  push:
+    branches:
+      - refactor/extract-info-registry-20261110
+    paths:
+      - tools/extract_info_registry.py
+      - .github/workflows/extract-info-registry-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check extraction script
+        run: python -m py_compile tools/extract_info_registry.py
+      - name: Extract and verify byte-identical JavaScript
+        run: |
+          python tools/extract_info_registry.py --apply
+          python tools/extract_info_registry.py --check
+          node --check js/info-registry.js
+      - name: Check HTML script execution order and assets
+        run: |
+          node tools/audit_index_html.js | tee /tmp/index-audit.log
+          grep -q 'Inline classic scripts checked: 20; external scripts: 5; skipped/module/data scripts: 0; syntax errors: 0' /tmp/index-audit.log
+          git -c core.whitespace=cr-at-eol diff --check
+          test "$(git diff --name-only)" = "index.html"
+      - name: Check static HTTP asset serving
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/info-http.log 2>&1 &
+          sleep 2
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/index.html
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8765/js/info-registry.js
+      - name: Commit isolated verified extraction
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html js/info-registry.js
+          git commit -m "Extract INFO_REGISTRY into synchronously loaded JS asset"
+          git push origin HEAD:refactor/extract-info-registry-20261110

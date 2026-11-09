@@ -6,11 +6,13 @@ on:
     paths:
       - index.html
       - tools/audit_index_html.js
+      - tools/localize_index_html.py
       - .github/workflows/index-audit.yml
   pull_request:
     paths:
       - index.html
       - tools/audit_index_html.js
+      - tools/localize_index_html.py
       - .github/workflows/index-audit.yml
   workflow_dispatch:
 
@@ -25,5 +27,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Check diagnostic script syntax
         run: node --check tools/audit_index_html.js
+      - name: Reject reintroduced Chinese UI labels
+        run: python tools/localize_index_html.py --check
       - name: Audit main page JavaScript and localization
         run: node tools/audit_index_html.js

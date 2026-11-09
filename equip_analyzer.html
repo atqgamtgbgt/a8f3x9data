@@ -45,6 +45,8 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .dsnote{font-size:12.5px;color:var(--ink2);margin:10px 2px 14px}
 .dsnote b{color:var(--std2);font-weight:700}
 .cov{font-family:var(--mono);font-size:10px;color:var(--ink3);font-weight:500}
+.covline{display:block;margin-top:2px;font-size:10.5px;color:var(--ink2)}
+.frow:focus-visible,.cattab:focus-visible{outline:3px solid var(--std);outline-offset:2px}
 
 .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:11.5px;color:var(--ink2);margin:0 0 14px 2px}
 .legend span{display:inline-flex;align-items:center;gap:6px}
@@ -142,8 +144,20 @@ footer{margin-top:30px;border-top:1px solid var(--line);padding-top:14px;color:v
 footer code{font-family:var(--mono);color:var(--ink2)}
 footer b{color:var(--ink2)}
 @media(max-width:640px){
-  .frow{grid-template-columns:120px 1fr 120px;gap:9px}
-  .fname{font-size:12px}
+  .wrap{padding:12px 10px 40px}
+  .controls{padding:10px;gap:8px}
+  .cgroup{flex-wrap:wrap}
+  .frow{grid-template-columns:minmax(0,1fr) auto;gap:7px 10px;padding:10px 8px}
+  .frow .fname{grid-column:1;grid-row:1;min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:12.5px}
+  .frow .pct{grid-column:2;grid-row:1;min-width:90px}
+  .frow .track,.frow .segbar,.distrow .segbar{grid-column:1/-1;grid-row:2;width:100%;height:20px}
+  .modal-bg{padding:8px}
+  .modal{max-height:94dvh}
+  .modal .mh{padding:12px}
+  .crow{grid-template-columns:22px minmax(0,1fr) auto;gap:6px;padding:8px 7px}
+  .crow .cinfo{white-space:normal;overflow-wrap:anywhere}
+  .crow .price{grid-column:2}
+  .crow .cbadge{grid-column:3;grid-row:1/3}
 }
 </style>
 </head>
@@ -233,10 +247,10 @@ footer b{color:var(--ink2)}
 
 <div id="tip" class="tip"></div>
 <div class="modal-bg" id="modalBg">
-  <div class="modal">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle" aria-describedby="mSub" tabindex="-1">
     <div class="mh">
       <div><h3 id="mTitle"></h3><div class="ms" id="mSub"></div></div>
-      <button class="x" id="mClose">&times;</button>
+      <button class="x" id="mClose" type="button" aria-label="閉じる">&times;</button>
     </div>
     <div class="mbody" id="mBody"></div>
   </div>
@@ -252,7 +266,7 @@ const state={primary:'overall',esrc:'guochan',ecat:'456',scope:999,denom:'all',r
 
 function dsKey(){ return state.primary==='energy' ? `e_${state.esrc}_${state.ecat}` : state.primary; }
 function curDS(){ return DS[dsKey()]||{label:'(データなし)',cars:[]}; }
-function esc(s){return String(s).replace(/[&<>]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 
 function computeRows(){
   const cars=curDS().cars.slice(0,state.scope);
@@ -291,13 +305,13 @@ function renderNote(total){
 }
 
 function binRow(r){
-  const covTxt=(state.denom==='all'&&r.cov<99.5)?` <span class="cov" title="この装備が仕様表に載っている車種数">掲載${r.listed}</span>`:'';
+  const covTxt=`<span class="covline" title="掲載率＝仕様表に項目が載っている車種数／対象全車種数">掲載率 ${Math.round(r.cov)}%（${r.listed}/${r.total}車種）</span>`;
   const optPart=r.opt?` <span class="copt">OP${r.opt}</span>`:'';
-  return `<div class="frow" data-bi="${r.i}">
+  return `<div class="frow" data-bi="${r.i}" role="button" tabindex="0" aria-label="${escAttr(r.f.item)}の搭載内訳を表示">
     <div class="fname">${esc(r.f.item)}${bkLink(r.f)}<span class="sec">${esc(r.f.zh)}</span></div>
     <div class="track"><div class="fill-std" style="width:${r.stdP.toFixed(1)}%"></div><div class="fill-opt" style="width:${r.optP.toFixed(1)}%"></div></div>
     <div class="pct"><span class="num">${Math.round(r.stdP)}%${r.opt?`<small>+${Math.round(r.optP)}%</small>`:''}</span>
-      <span class="counts">全<span class="ctot">${r.denom}</span>中 <span class="cstd">標準${r.std}</span>${optPart}${covTxt}</span></div>
+      <span class="counts">全<span class="ctot">${r.denom}</span>中 <span class="cstd">標準${r.std}</span>${optPart}</span>${covTxt}</div>
   </div>`;
 }
 function distRow(r){
@@ -313,7 +327,7 @@ function distRow(r){
   if(none){const w=none/total*100;
     seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;background:var(--panel2)"></div>`;
     tip+=`<div class="tiprow"><i style="background:#e2e8f0;border:1px solid var(--line)"></i><span>なし / 未掲載</span><b>${none}台 (${Math.round(w)}%)</b></div>`;}
-  return `<div class="frow distrow" data-di="${r.j}">
+  return `<div class="frow distrow" data-di="${r.j}" role="button" tabindex="0" aria-label="${escAttr(r.f.item)}の分布内訳を表示">
     <div class="fname">${esc(r.f.item)}<span class="distag">分布</span>${bkLink(r.f)}<span class="sec">${esc(r.f.zh)}</span></div>
     <div class="segbar">${seg}<template class="tpl">${tip}</template></div>
   </div>`;
@@ -321,13 +335,13 @@ function distRow(r){
 
 function renderSections({all}){
   const host=document.getElementById('sections');
-  const byCat={}; CATS.forEach(c=>byCat[c]=[]);
+  const byCat=Object.create(null); CATS.forEach(c=>byCat[c]=[]);
   all.forEach(r=>(byCat[r.f.cat]=byCat[r.f.cat]||[]).push(r));
   let html=''; const order=state.cat==='ALL'?CATS:[state.cat];
   order.forEach(cat=>{
     const g=byCat[cat]; if(!g||!g.length) return;
-    const col=CAT_COLORS[cat];
-    html+=`<div class="section"><h2><span class="bar" style="background:${col}"></span>${cat}<span class="cnt">${g.length}項目</span></h2><div class="flist">`;
+    const col=CAT_COLORS[cat]||'var(--misc)';
+    html+=`<div class="section"><h2><span class="bar" style="background:${col}"></span>${esc(cat)}<span class="cnt">${g.length}項目</span></h2><div class="flist">`;
     g.forEach(r=>html+=(r.kind==='bin'?binRow(r):distRow(r)));
     html+='</div></div>';
   });
@@ -335,6 +349,10 @@ function renderSections({all}){
   host.innerHTML=html;
   host.querySelectorAll('.frow[data-bi]').forEach(el=>el.onclick=()=>openBin(+el.dataset.bi));
   host.querySelectorAll('.frow[data-di]').forEach(el=>el.onclick=()=>openDist(+el.dataset.di));
+  host.querySelectorAll('.frow').forEach(el=>el.addEventListener('keydown',e=>{
+    if(e.target!==el)return;
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();el.click();}
+  }));
   const tip=document.getElementById('tip');
   host.querySelectorAll('.distrow .segbar').forEach(bar=>{
     const tpl=bar.querySelector('template.tpl'); const thtml=tpl?tpl.innerHTML:'';
@@ -353,9 +371,15 @@ function renderSections({all}){
 function render(){const {all,total}=computeRows(); renderNote(total); renderSections({all});}
 
 const priceChip=p=>p?`<span class="price">${esc(p)}元</span>`:'';
-const lnk=c=>c.link?`<a class="ext" href="${c.link}" target="_blank" rel="noopener" title="Autohomeで開く">↗</a>`:'';
-const bkLink=f=>f.u?` <a class="bk" href="${f.u}" target="_blank" rel="noopener" title="汽车之家の用語解説" onclick="event.stopPropagation()">解説↗</a>`:'';
-const escAttr=s=>String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+const escAttr=esc;
+function safeExternalUrl(raw){
+  try{
+    const u=new URL(String(raw),location.href);
+    return u.protocol==='https:'&&!u.username&&!u.password?escAttr(u.href):'';
+  }catch(e){return '';}
+}
+const lnk=c=>{const url=safeExternalUrl(c.link);return url?`<a class="ext" href="${url}" target="_blank" rel="noopener noreferrer" title="Autohomeで開く">↗</a>`:'';};
+const bkLink=f=>{const url=safeExternalUrl(f.u);return url?` <a class="bk" href="${url}" target="_blank" rel="noopener noreferrer" title="汽车之家の用語解説" onclick="event.stopPropagation()">解説↗</a>`:'';};').replace(/"/g,'&quot;').replace(/</g,'&lt;');
 const SOURCE_MAP={overall:'autohome',hezi:'hezi',energy:'energy'};
 let SPEC_OK=false;
 function specAvailable(){ try{return window.parent&&window.parent!==window&&typeof window.parent.showConfigCsv==='function';}catch(e){return false;} }
@@ -366,7 +390,7 @@ function specLnk(c){
   return `<a class="speclink" href="#" data-carid="${m[1]}" data-name="${escAttr(c.name)}" title="このダッシュボードの仕様表を開く">仕様表</a>`;
 }
 function carRow(c,right,dim){return `<div class="crow ${dim?'dim':''}">
-  <span class="r">${c.rank}</span>
+  <span class="r">${esc(c.rank)}</span>
   <span class="cinfo"><span class="cn1">${esc(c.name)}</span>${c.cn?` <span class="mk">${esc(c.cn)}</span>`:''} <span class="mk">${esc(c.maker)}</span></span>
   ${priceChip(c.price)}<span class="cbadge">${right}${specLnk(c)}${lnk(c)}</span></div>`;}
 
@@ -411,11 +435,35 @@ function openDist(j){
   if(groups[0].length) h+=`<div class="mcol"><h4>なし / 未掲載 — ${groups[0].length}台</h4>`+groups[0].map(c=>carRow(c,'',true)).join('')+'</div>';
   showModal(h);
 }
-function showModal(h){const b=document.getElementById('mBody');b.innerHTML=h||'<div class="empty">該当なし</div>';b.scrollTop=0;
+let modalPreviousFocus=null;
+function showModal(h){
+  modalPreviousFocus=document.activeElement;
+  const b=document.getElementById('mBody');b.innerHTML=h||'<div class="empty">該当なし</div>';b.scrollTop=0;
   b.querySelectorAll('.speclink').forEach(a=>a.onclick=e=>{e.preventDefault();openSpecParent(a.dataset.carid,a.dataset.name);});
-  document.getElementById('modalBg').classList.add('show');}
-document.getElementById('mClose').onclick=()=>document.getElementById('modalBg').classList.remove('show');
-document.getElementById('modalBg').onclick=e=>{if(e.target.id==='modalBg')e.currentTarget.classList.remove('show');};
+  document.getElementById('modalBg').classList.add('show');
+  document.getElementById('mClose').focus();
+}
+function closeModal(){
+  const bg=document.getElementById('modalBg');
+  if(!bg.classList.contains('show'))return;
+  bg.classList.remove('show');
+  if(modalPreviousFocus&&modalPreviousFocus.isConnected)modalPreviousFocus.focus();
+  modalPreviousFocus=null;
+}
+document.getElementById('mClose').onclick=closeModal;
+document.getElementById('modalBg').onclick=e=>{if(e.target.id==='modalBg')closeModal();};
+document.addEventListener('keydown',e=>{
+  const bg=document.getElementById('modalBg');
+  if(!bg.classList.contains('show'))return;
+  if(e.key==='Escape'){e.preventDefault();closeModal();return;}
+  if(e.key!=='Tab')return;
+  const items=Array.from(bg.querySelectorAll('button,a[href],[tabindex]:not([tabindex="-1"])'))
+    .filter(el=>!el.hasAttribute('disabled')&&el.getClientRects().length);
+  if(!items.length){e.preventDefault();bg.querySelector('.modal').focus();return;}
+  const first=items[0],last=items[items.length-1];
+  if(e.shiftKey&&(document.activeElement===first||!bg.contains(document.activeElement))){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&(document.activeElement===last||!bg.contains(document.activeElement))){e.preventDefault();first.focus();}
+});
 
 function bindSeg(id,key,cast,after){
   const el=document.getElementById(id); if(!el)return;
@@ -430,10 +478,10 @@ document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value
 
 function buildCattabs(){
   const host=document.getElementById('cattabs');
-  const mk=(label,cat,col)=>`<div class="cattab ${cat===state.cat?'on':''}" data-cat="${cat}"><span class="dot" style="background:${col}"></span>${label}</div>`;
+  const mk=(label,cat,col)=>`<button type="button" class="cattab ${cat===state.cat?'on':''}" data-cat="${escAttr(cat)}" aria-pressed="${cat===state.cat}"><span class="dot" style="background:${col||'var(--misc)'}"></span>${esc(label)}</button>`;
   let h=mk('すべて','ALL','var(--ink2)'); CATS.forEach(c=>h+=mk(c,c,CAT_COLORS[c])); host.innerHTML=h;
   host.querySelectorAll('.cattab').forEach(el=>el.onclick=()=>{state.cat=el.dataset.cat;
-    host.querySelectorAll('.cattab').forEach(x=>x.classList.toggle('on',x.dataset.cat===state.cat)); render();});
+    host.querySelectorAll('.cattab').forEach(x=>{const on=x.dataset.cat===state.cat;x.classList.toggle('on',on);x.setAttribute('aria-pressed',String(on));}); render();});
 }
 function applyParam(){
   const p=new URLSearchParams(location.search), ds=p.get('ds');
@@ -445,14 +493,23 @@ function applyParam(){
 
 const params=new URLSearchParams(location.search);
 const DATA_URL=params.get('data')||'https://raw.githubusercontent.com/atqgamtgbgt/a8f3x9data/main/output/pipeline/equip/equip_data.json';
+function validatedDataUrl(raw){
+  const u=new URL(raw,location.href);
+  const sameOrigin=u.origin===location.origin&&['https:','http:'].includes(u.protocol);
+  const repoRaw=u.protocol==='https:'&&u.hostname==='raw.githubusercontent.com'
+    &&u.pathname.startsWith('/atqgamtgbgt/a8f3x9data/');
+  if(!sameOrigin&&!repoRaw)throw new Error('許可されていないデータ取得先です');
+  return u.href;
+}
 (async function init(){
   applyParam();
   const host=document.getElementById('sections');
   host.innerHTML='<div class="loadwrap"><div class="spinner"></div>装備データを読み込み中…</div>';
   try{
-    const res=await fetch(DATA_URL,{cache:'no-store'}); if(!res.ok) throw new Error(res.status);
+    const res=await fetch(validatedDataUrl(DATA_URL),{cache:'no-store'}); if(!res.ok) throw new Error(res.status);
     const data=await res.json();
-    FEATS=data.features||[]; DISTFEATS=data.distFeatures||[]; CATS=data.cats||[]; DS=data.datasets||{};
+    if(!Array.isArray(data.features)||!Array.isArray(data.distFeatures)||!Array.isArray(data.cats)||!data.datasets||typeof data.datasets!=='object')throw new Error('データ形式が正しくありません');
+    FEATS=data.features; DISTFEATS=data.distFeatures; CATS=data.cats; DS=data.datasets;
     buildCattabs(); render();
   }catch(err){
     host.innerHTML=`<div class="loadwrap">データの読み込みに失敗しました（${esc(String(err))}）。<br>URL: <code>${esc(DATA_URL)}</code></div>`;

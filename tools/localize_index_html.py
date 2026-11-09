@@ -54,7 +54,8 @@ def important_markup(text: str) -> tuple[list[str], list[str], list[str]]:
 
 
 def run(check: bool) -> None:
-    original = INDEX.read_text(encoding="utf-8")
+    with INDEX.open("r", encoding="utf-8", newline="") as handle:
+        original = handle.read()
     updated = original
     for old, new in REPLACEMENTS:
         if check:
@@ -74,7 +75,8 @@ def run(check: bool) -> None:
     if important_markup(original) != important_markup(updated):
         raise ValueError("Aborted: script/style or asset-link attributes would change")
     if updated != original:
-        INDEX.write_text(updated, encoding="utf-8")
+        with INDEX.open("w", encoding="utf-8", newline="") as handle:
+            handle.write(updated)
         print("Updated index.html; source scripts, styles, and asset references unchanged")
     else:
         print("index.html is already localized")

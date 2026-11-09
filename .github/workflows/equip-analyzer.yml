@@ -1,0 +1,29 @@
+name: Equipment analyzer checks
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - equip_analyzer.html
+      - tools/check_equip_analyzer.js
+      - output/pipeline/equip/equip_data.json
+      - .github/workflows/equip-analyzer.yml
+  pull_request:
+    paths:
+      - equip_analyzer.html
+      - tools/check_equip_analyzer.js
+      - output/pipeline/equip/equip_data.json
+      - .github/workflows/equip-analyzer.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JavaScript and currency formatting
+        run: node tools/check_equip_analyzer.js

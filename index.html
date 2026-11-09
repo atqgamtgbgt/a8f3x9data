@@ -4256,9 +4256,6 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-stats" class="cds-mid-tab" onclick="cdsSetMidTab('stats')">
                 📈 産業統計
               </button>
-              <button id="cds-mid-btn-dc" class="cds-mid-tab" onclick="cdsSetMidTab('dc')">
-                ⚖️ ダブルクレジット
-              </button>
               <button id="cds-mid-btn-nev" class="cds-mid-tab" onclick="cdsSetMidTab('nev')">
                 ⚡ NEV
               </button>
@@ -4266,7 +4263,7 @@ body.tray-open { padding-bottom: 105px; }
                 🚛 商用車
               </button>
               <button id="cds-mid-btn-topic" class="cds-mid-tab" onclick="cdsSetMidTab('topic')">
-                🔎 トピック
+                🧩 個別テーマ
               </button>
             </div>
 
@@ -4704,40 +4701,7 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div><!-- end cds-sub-stats -->
 
-            <!-- 中タブダブルクレジット: サブナビ -->
-            <div id="cds-sub-dc" class="cds-sub-nav" style="display:none">
-              <div class="cds-nav-compact">
-                <div class="cds-gc">
-                  <span class="cds-gc-label">📊 概観</span>
-                  <div class="cds-gc-items">
-                    <button class="nav-link active" data-cds-target="#dc-overview">📊 総合推移</button>
-                    <button class="nav-link" data-cds-target="#dc-compliance">⚖️ 目標達成率</button>
-                  </div>
-                </div>
-                <div class="cds-gc">
-                  <span class="cds-gc-label">💎 積分推移</span>
-                  <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-target="#dc-nev-credits">🔋 NEV積分</button>
-                    <button class="nav-link" data-cds-target="#dc-fuel-credits">⛽ 燃費積分</button>
-                  </div>
-                </div>
-                <div class="cds-gc">
-                  <span class="cds-gc-label">🏢 集団・企業</span>
-                  <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-target="#dc-group">🏢 集団別</button>
-                    <button class="nav-link" data-cds-target="#dc-central">🏛️ 中央国有</button>
-                    <button class="nav-link" data-cds-target="#dc-local">🏭 地方国有</button>
-                    <button class="nav-link" data-cds-target="#dc-newforces">🚀 新興EV</button>
-                  </div>
-                </div>
-                <div class="cds-gc">
-                  <span class="cds-gc-label">🌐 輸入車</span>
-                  <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-target="#dc-import">🌐 輸入車ブランド別</button>
-                  </div>
-                </div>
-              </div>
-            </div><!-- end cds-sub-dc -->
+            
 
             <!-- 中タブNEV: 新エネルギー車（減税・免税・続航・電池密度） サブナビ -->
             <div id="cds-sub-nev" class="cds-sub-nav" style="display:none">
@@ -4868,6 +4832,20 @@ body.tray-open { padding-bottom: 105px; }
                   <span class="cds-gc-label">📉 株式市場 </span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-topic-target="#topic-mcap">💹 時価総額（9月）</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
+                  <span class="cds-gc-label">⚖️ ダブルクレジット</span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-target="#dc-overview">📊 総合推移</button>
+                    <button class="nav-link" data-cds-target="#dc-compliance">⚖️ 目標達成率</button>
+                    <button class="nav-link" data-cds-target="#dc-nev-credits">🔋 NEV積分</button>
+                    <button class="nav-link" data-cds-target="#dc-fuel-credits">⛽ 燃費積分</button>
+                    <button class="nav-link" data-cds-target="#dc-group">🏢 集団別</button>
+                    <button class="nav-link" data-cds-target="#dc-central">🏛️ 中央国有</button>
+                    <button class="nav-link" data-cds-target="#dc-local">🏭 地方国有</button>
+                    <button class="nav-link" data-cds-target="#dc-newforces">🚀 新興EV</button>
+                    <button class="nav-link" data-cds-target="#dc-import">🌐 輸入車ブランド別</button>
                   </div>
                 </div>
               </div>
@@ -10218,7 +10196,29 @@ async function caamMergeAuto(allMonthly) {
   try {
     const r = await fetch(url, { cache: 'no-store', signal: ctl ? ctl.signal : undefined });
     if (r.ok) auto = await r.json();
-  } finally { if (timer) clearTimeout(timer); }
+  } catch (err) { console.info('CAAMアーカイブは利用できません:', err); }
+  finally { if (timer) clearTimeout(timer); }
+  // CAAM公式記者会見スライドから目視照合した単月値（Excel優先の補完）。
+  try {
+    const r = await fetch(RAW_BASE + 'output/caam/official_2026_05_09.json', { cache:'no-store' });
+    if (r.ok) {
+      const verified = await r.json();
+      if (verified && verified.monthly) {
+        if (!auto) auto = verified;
+        else {
+          auto.monthly = auto.monthly || {};
+          for (const [ym, row] of Object.entries(verified.monthly))
+            auto.monthly[ym] = Object.assign({}, auto.monthly[ym] || {}, row);
+          auto.commentary = Object.assign({}, auto.commentary || {}, verified.commentary || {});
+          const oldMeta = auto.meta || {}, newMeta = verified.meta || {};
+          auto.meta = Object.assign({}, oldMeta, newMeta, {
+            months: Array.from(new Set([...(oldMeta.months || []), ...(newMeta.months || [])])).sort(),
+            decks: oldMeta.decks || newMeta.decks || {}
+          });
+        }
+      }
+    }
+  } catch (err) { console.warn('CAAM公式資料データの読み込み失敗:', err); }
   if (!auto || !auto.monthly) return;
   const added = [];
   for (const [ym, row] of Object.entries(auto.monthly)) {
@@ -10258,7 +10258,9 @@ function caamShowAutoStatus() {
   const fmt = ym => { const [y, m] = ym.split('-'); return `${y}年${parseInt(m, 10)}月`; };
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let html = '';
-  if (ms.length) {
+  if (CAAM_AUTO_META.source_type === 'official_press_slides') {
+    html += '📊 <b>CAAM公式記者会見資料</b>：2026年5〜9月の単月データを補完（万台）。Excelの既存値は優先し、未掲載の企業・セグメント等は空欄です。';
+  } else if (ms.length) {
     const add = CAAM_AUTO_META.added || [];
     const span = !add.length ? `${fmt(ms[ms.length - 1])}分まで確認済み`
                : add.length === 1 ? `${fmt(add[0])}分を追加` : `${fmt(add[0])}〜${fmt(add[add.length - 1])}分を追加`;
@@ -10333,7 +10335,7 @@ function renderCommentary(ym) {
     else link.style.display = 'none';
   }
   if (data.lang === 'zh' && srcEl) srcEl.textContent = (data.source ? '出所：' + data.source : '') +
-    '　※公式サイトから自動取得した原文（中国語）です。日本語の要約は未作成。';
+    '　※公式記事に掲載された原文（中国語）です。日本語の要約は未作成。';
 }
 
 function setupCommentaryUI() {
@@ -12105,7 +12107,7 @@ function cccmRenderCommentary(ym) {
     else link.style.display = 'none';  // 手入力の月は公式記事URLが未収録
   }
   if (data.lang === 'zh' && srcEl) srcEl.textContent = (data.source ? '出所：' + data.source : '') +
-    '　※公式サイトから自動取得した原文（中国語）です。日本語の要約は未作成。';
+    '　※公式記事に掲載された原文（中国語）です。日本語の要約は未作成。';
 }
 
 function cccmSetupCommentary() {
@@ -14635,7 +14637,7 @@ function cdsSetMidTab(tab) {
   } else if (tab === 'dc') {
     var dcTarget = window.DC_CURRENT_ID || 'dc-overview';
     cdsShowPane(dcTarget);
-    document.querySelectorAll('#cds-sub-dc [data-cds-target]').forEach(function(b){
+    document.querySelectorAll('#cds-sub-topic [data-cds-target^="#dc-"]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-target') === '#' + dcTarget);
     });
     // 再描画を遅延して確実に発火（タブ切替時のサイズ0問題対策）
@@ -14668,10 +14670,14 @@ function cdsSetMidTab(tab) {
     requestAnimationFrame(function(){ requestAnimationFrame(function(){ cvRender(cvTarget); setTimeout(function(){ cvRender(cvTarget); }, 150); }); });
   } else if (tab === 'topic') {
     var tpTarget = window.TOPIC_CURRENT_ID || 'topic-h1-profit';
-    if (typeof window.topicShowPane === 'function') window.topicShowPane(tpTarget);
-    requestAnimationFrame(function(){ requestAnimationFrame(function(){
-      if (typeof window.topicRender === 'function') { window.topicRender(tpTarget); setTimeout(function(){ window.topicRender(tpTarget); }, 150); }
-    }); });
+    if (tpTarget.indexOf('dc-') === 0) {
+      cdsShowPane(tpTarget);
+    } else {
+      if (typeof window.topicShowPane === 'function') window.topicShowPane(tpTarget);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        if (typeof window.topicRender === 'function') { window.topicRender(tpTarget); setTimeout(function(){ window.topicRender(tpTarget); }, 150); }
+      }); });
+    }
   } else {
     // 輸出分析タブ：最後に表示していたexportペインへ戻る
     cdsShowPane(CDS_CURRENT_EXPORT_ID || 'cds-monthly');
@@ -14696,7 +14702,7 @@ var CDS_CURRENT_EXPORT_ID = 'cds-monthly';
     if (typeof id === 'string' && id.indexOf('dc-') === 0) {
       window.DC_CURRENT_ID = id;
       // サブナビのactive状態も同期
-      document.querySelectorAll('#cds-sub-dc [data-cds-target]').forEach(function(b){
+      document.querySelectorAll('#cds-sub-topic [data-cds-target^="#dc-"]').forEach(function(b){
         b.classList.toggle('active', b.getAttribute('data-cds-target') === '#' + id);
       });
     }
@@ -28907,7 +28913,8 @@ document.getElementById('trendModal').addEventListener('shown.bs.modal', ()=>{
     var pillEl = document.getElementById('cdsPills'), contEl = document.getElementById('cdsPillsContent');
     if (pillEl) pillEl.setAttribute('style','display:block');
     if (contEl) contEl.setAttribute('style','display:block');
-    document.querySelectorAll('.cds-pane[id^="topic-"]').forEach(function(p){ p.classList.remove('cds-active'); });
+    document.querySelectorAll('.cds-pane:not(#cds-super-content)').forEach(function(p){ p.classList.remove('cds-active'); });
+    document.querySelectorAll('#cds-sub-topic [data-cds-target^="#dc-"]').forEach(function(b){ b.classList.remove('active'); });
     var pane = document.getElementById(id);
     if (pane) pane.classList.add('cds-active');
     window.TOPIC_CURRENT_ID = id;
@@ -28915,6 +28922,12 @@ document.getElementById('trendModal').addEventListener('shown.bs.modal', ()=>{
       b.classList.toggle('active', b.getAttribute('data-cds-topic-target') === '#' + id);
     });
   };
+  document.addEventListener('click', function(e){
+    var btn = e.target.closest('#cds-sub-topic [data-cds-target^="#dc-"]');
+    if (!btn) return;
+    window.TOPIC_CURRENT_ID = btn.getAttribute('data-cds-target').slice(1);
+    document.querySelectorAll('#cds-sub-topic [data-cds-topic-target]').forEach(function(b){b.classList.remove('active');});
+  });
   document.addEventListener('click', function(e){
     var btn = e.target.closest('[data-cds-topic-target]');
     if (!btn) return;

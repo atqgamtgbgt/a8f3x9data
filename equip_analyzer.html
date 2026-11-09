@@ -370,7 +370,14 @@ function renderSections({all}){
 
 function render(){const {all,total}=computeRows(); renderNote(total); renderSections({all});}
 
-const priceChip=p=>p?`<span class="price">${esc(p)}元</span>`:'';
+function formatChinaPrice(raw){
+  const s=String(raw??'').trim();
+  const m=s.match(/^(\\d+(?:\\.\\d+)?)(?:-(\\d+(?:\\.\\d+)?))?万$/);
+  if(!m)return s?s+'元':'';
+  const yen=v=>new Intl.NumberFormat('ja-JP').format(Math.round(Number(v)*10000))+'元';
+  return yen(m[1])+(m[2]?'〜'+yen(m[2]):'');
+}
+const priceChip=p=>p?`<span class="price" title="中国国内の価格（人民元）">${esc(formatChinaPrice(p))}</span>`:'';
 const escAttr=esc;
 function safeExternalUrl(raw){
   try{

@@ -180,12 +180,12 @@ footer b{color:var(--ink2)}
   </div>
   <div class="esub" id="esub" style="display:none">
     <div class="seg" id="esrcSeg">
-      <button data-esrc="guochan" class="on">国産</button>
+      <button data-esrc="guochan" class="on">中国系</button>
       <button data-esrc="hezi">合弁</button>
     </div>
     <div class="seg" id="ecatSeg">
-      <button data-ecat="1">燃油車</button>
-      <button data-ecat="456" class="on">新能源</button>
+      <button data-ecat="1">エンジン車</button>
+      <button data-ecat="456" class="on">電動車</button>
       <button data-ecat="4">BEV</button>
       <button data-ecat="5">PHEV</button>
       <button data-ecat="6">EREV/HEV</button>
@@ -224,7 +224,8 @@ footer b{color:var(--ink2)}
       <button data-sort="asc">装着率 低い順</button>
     </div>
   </div>
-  <div class="search"><input id="q" type="text" placeholder="装備名で検索（例: 自動駐車, サンルーフ, 音声）"></div>
+  <div class="search"><input id="q" type="search" aria-label="装備名で検索" placeholder="装備名で検索（例: 自動駐車、サンルーフ、音声）"></div>
+  <button id="originalToggle" type="button" class="cattab" aria-pressed="false" title="出典の中国語表記を表示・非表示">原語を表示</button>
 </div>
 
 <div class="dsnote" id="dsnote"></div>
@@ -261,11 +262,23 @@ const SEG_COLORS=['#bfdbfe','#93c5fd','#60a5fa','#3b82f6','#2563eb','#1e40af','#
 function segColor(k,cats){const l=cats&&cats[k-1]; if(l&&l.indexOf('その他')>=0) return '#94a3b8'; return SEG_COLORS[Math.min(k,SEG_COLORS.length-1)];}
 const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const d36=ch=>{const i=B36.indexOf(ch);return i<0?0:i;};
+const DS_GROUP_NAMES={guochan:'中国系メーカー',hezi:'合弁メーカー'};
+const DS_ENERGY_NAMES={'1':'エンジン車','456':'電動車','4':'BEV（電気自動車）','5':'PHEV（プラグインハイブリッド）','6':'EREV／HEV'};
+const DIST_LABELS={'ステレオ(双目)':'ステレオ（2眼）','3眼(三目)':'3眼（3カメラ）'};
 let FEATS=[], DISTFEATS=[], CATS=[], DS={};
-const state={primary:'overall',esrc:'guochan',ecat:'456',scope:999,denom:'all',range:'all',cat:'ALL',q:'',sort:'spec'};
+const state={primary:'overall',esrc:'guochan',ecat:'456',scope:999,denom:'all',range:'all',cat:'ALL',q:'',sort:'spec',showOriginal:false};
 
 function dsKey(){ return state.primary==='energy' ? `e_${state.esrc}_${state.ecat}` : state.primary; }
 function curDS(){ return DS[dsKey()]||{label:'(データなし)',cars:[]}; }
+function datasetLabel(key=dsKey()){
+  if(key==='overall')return '総合ランキング';
+  if(key==='hezi')return '合弁・外資系ランキング';
+  const m=/^e_(guochan|hezi)_(1|456|4|5|6)$/.exec(key);
+  return m?DS_GROUP_NAMES[m[1]]+'・'+DS_ENERGY_NAMES[m[2]]:(DS[key]?.label||'(データなし)');
+}
+function originalName(f){return state.showOriginal&&f.zh?`<span class="sec">原語：${esc(f.zh)}</span>`:'';}
+function originalModalLabel(f){return state.showOriginal&&f.zh?`（原語：${esc(f.zh)}）`:'';}
+function distributionLabel(value){return DIST_LABELS[value]||value;}
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 
 function computeRows(){
@@ -291,7 +304,7 @@ function computeRows(){
   if(state.q){const q=state.q.toLowerCase();
     const mt=r=>r.f.item.toLowerCase().includes(q)||(r.f.zh&&r.f.zh.includes(state.q));
     rows=rows.filter(mt); drows=drows.filter(mt);}
-  if(state.range==='diff'&&!state.q) rows=rows.filter(r=>r.val>=10&&r.val<=90);
+  if(state.range==='diff') rows=rows.filter(r=>r.val>=10&&r.val<=90);
   let all=rows.concat(drows);
   if(state.sort==='desc') all.sort((a,b)=>b.sortVal-a.sortVal||a.o-b.o);
   else if(state.sort==='asc') all.sort((a,b)=>a.sortVal-b.sortVal||a.o-b.o);
@@ -301,14 +314,14 @@ function computeRows(){
 
 function renderNote(total){
   const dlbl=state.denom==='listed'?'掲載車基準':'全車基準';
-  document.getElementById('dsnote').innerHTML=`<b>${esc(curDS().label)}</b> ・ 対象 ${total}車種（${state.scope===999?'全件':'上位'+state.scope}）・ 分母=${dlbl}`;
+  document.getElementById('dsnote').innerHTML=`<b>${esc(datasetLabel())}</b> ・ 対象 ${total}車種（${state.scope===999?'全件':'上位'+state.scope}）・ 分母=${dlbl}`;
 }
 
 function binRow(r){
   const covTxt=`<span class="covline" title="掲載率＝仕様表に項目が載っている車種数／対象全車種数">掲載率 ${Math.round(r.cov)}%（${r.listed}/${r.total}車種）</span>`;
   const optPart=r.opt?` <span class="copt">OP${r.opt}</span>`:'';
   return `<div class="frow" data-bi="${r.i}" role="button" tabindex="0" aria-label="${escAttr(r.f.item)}の搭載内訳を表示">
-    <div class="fname">${esc(r.f.item)}${bkLink(r.f)}<span class="sec">${esc(r.f.zh)}</span></div>
+    <div class="fname">${esc(r.f.item)}${bkLink(r.f)}${originalName(r.f)}</div>
     <div class="track"><div class="fill-std" style="width:${r.stdP.toFixed(1)}%"></div><div class="fill-opt" style="width:${r.optP.toFixed(1)}%"></div></div>
     <div class="pct"><span class="num">${Math.round(r.stdP)}%${r.opt?`<small>+${Math.round(r.optP)}%</small>`:''}</span>
       <span class="counts">全<span class="ctot">${r.denom}</span>中 <span class="cstd">標準${r.std}</span>${optPart}</span>${covTxt}</div>
@@ -321,14 +334,14 @@ function distRow(r){
     const n=r.dist[k]; if(!n) continue;
     const w=n/total*100, col=segColor(k,r.f.cats);
     seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;min-width:4px;background:${col}"></div>`;
-    tip+=`<div class="tiprow"><i style="background:${col}"></i><span>${esc(r.f.cats[k-1])}</span><b>${n}台 (${Math.round(w)}%)</b></div>`;
+    tip+=`<div class="tiprow"><i style="background:${col}"></i><span>${esc(distributionLabel(r.f.cats[k-1]))}</span><b>${n}台 (${Math.round(w)}%)</b></div>`;
   }
   const none=r.dist[0];
   if(none){const w=none/total*100;
     seg+=`<div class="segpart" style="width:${w.toFixed(1)}%;background:var(--panel2)"></div>`;
     tip+=`<div class="tiprow"><i style="background:#e2e8f0;border:1px solid var(--line)"></i><span>なし / 未掲載</span><b>${none}台 (${Math.round(w)}%)</b></div>`;}
   return `<div class="frow distrow" data-di="${r.j}" role="button" tabindex="0" aria-label="${escAttr(r.f.item)}の分布内訳を表示">
-    <div class="fname">${esc(r.f.item)}<span class="distag">分布</span>${bkLink(r.f)}<span class="sec">${esc(r.f.zh)}</span></div>
+    <div class="fname">${esc(r.f.item)}<span class="distag">分布</span>${bkLink(r.f)}${originalName(r.f)}</div>
     <div class="segbar">${seg}<template class="tpl">${tip}</template></div>
   </div>`;
 }
@@ -398,7 +411,7 @@ function specLnk(c){
 }
 function carRow(c,right,dim){return `<div class="crow ${dim?'dim':''}">
   <span class="r">${esc(c.rank)}</span>
-  <span class="cinfo"><span class="cn1">${esc(c.name)}</span>${c.cn?` <span class="mk">${esc(c.cn)}</span>`:''} <span class="mk">${esc(c.maker)}</span></span>
+  <span class="cinfo"><span class="cn1">${esc(c.name)}</span>${state.showOriginal&&c.cn?` <span class="mk">${esc(c.cn)}</span>`:''} <span class="mk">${esc(c.maker)}</span></span>
   ${priceChip(c.price)}<span class="cbadge">${right}${specLnk(c)}${lnk(c)}</span></div>`;}
 
 function openBin(fi){
@@ -412,7 +425,7 @@ function openBin(fi){
   const stdCars=allStd.length+partStd.length, listed=stdCars+optOnly.length+absent.length;
   const denom=state.denom==='listed'?(listed||1):cars.length;
   document.getElementById('mTitle').textContent=f.item;
-  document.getElementById('mSub').innerHTML=`${esc(f.cat)}（原: ${esc(f.zh)}） ・ ${esc(curDS().label)} ${cars.length}車種　|　`
+  document.getElementById('mSub').innerHTML=`${esc(f.cat)}${originalModalLabel(f)} ・ ${esc(datasetLabel())} ${cars.length}車種　|　`
     +`<b style="color:var(--std2)">標準あり ${stdCars}台</b>（${Math.round(stdCars/denom*100)}%）= 全グレード ${allStd.length} ＋ 一部 ${partStd.length}`
     +` ・ <b style="color:#d97706">OPのみ ${optOnly.length}</b> ・ 非搭載 ${absent.length} ・ 未掲載 ${unlisted.length}`;
   const gr=(rec,type)=>{if(!rec.t)return '';
@@ -432,12 +445,12 @@ function openDist(j){
   const groups=Array.from({length:K+1},()=>[]);
   cars.forEach(c=>groups[Math.min(d36(c.dc[j]),K)].push(c));
   document.getElementById('mTitle').textContent=f.item+'（分布）';
-  const parts=[]; for(let k=K;k>=1;k--) if(groups[k].length) parts.push(`${f.cats[k-1]} ${groups[k].length}`);
+  const parts=[]; for(let k=K;k>=1;k--) if(groups[k].length) parts.push(`${distributionLabel(f.cats[k-1])} ${groups[k].length}`);
   parts.push(`なし/未掲載 ${groups[0].length}`);
-  document.getElementById('mSub').innerHTML=`${esc(f.cat)}（原: ${esc(f.zh)}） ・ ${esc(curDS().label)} ${cars.length}車種　|　`+parts.map(esc).join(' ・ ');
+  document.getElementById('mSub').innerHTML=`${esc(f.cat)}${originalModalLabel(f)} ・ ${esc(datasetLabel())} ${cars.length}車種　|　`+parts.map(esc).join(' ・ ');
   let h='';
   for(let k=K;k>=1;k--){const col=segColor(k,f.cats);
-    if(groups[k].length) h+=`<div class="mcol"><h4><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col};margin-right:5px"></span>${esc(f.cats[k-1])} — ${groups[k].length}台</h4>`
+    if(groups[k].length) h+=`<div class="mcol"><h4><span style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${col};margin-right:5px"></span>${esc(distributionLabel(f.cats[k-1]))} — ${groups[k].length}台</h4>`
       +groups[k].map(c=>carRow(c,'',false)).join('')+'</div>';}
   if(groups[0].length) h+=`<div class="mcol"><h4>なし / 未掲載 — ${groups[0].length}台</h4>`+groups[0].map(c=>carRow(c,'',true)).join('')+'</div>';
   showModal(h);
@@ -482,6 +495,12 @@ bindSeg('dsSeg','primary',null,()=>{document.getElementById('esub').style.displa
 bindSeg('esrcSeg','esrc'); bindSeg('ecatSeg','ecat');
 bindSeg('scopeSeg','scope',v=>+v); bindSeg('denomSeg','denom'); bindSeg('rangeSeg','range'); bindSeg('sortSeg','sort');
 document.getElementById('q').addEventListener('input',e=>{state.q=e.target.value.trim();render();});
+document.getElementById('originalToggle').addEventListener('click',e=>{
+  state.showOriginal=!state.showOriginal;
+  e.currentTarget.setAttribute('aria-pressed',String(state.showOriginal));
+  e.currentTarget.classList.toggle('on',state.showOriginal);
+  render();
+});
 
 function buildCattabs(){
   const host=document.getElementById('cattabs');

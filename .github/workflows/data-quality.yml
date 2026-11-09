@@ -1,0 +1,31 @@
+name: Japanese data quality audit
+
+on:
+  pull_request:
+    paths:
+      - "tools/audit_data_quality.py"
+      - "output/autohome/**/config_*.ja.csv"
+      - "output/market/autohome_factory_monthly.json"
+      - ".github/workflows/data-quality.yml"
+  push:
+    branches: [main, "chore/japanese-data-quality-audit"]
+    paths:
+      - "tools/audit_data_quality.py"
+      - "output/autohome/**/config_*.ja.csv"
+      - "output/market/autohome_factory_monthly.json"
+      - ".github/workflows/data-quality.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check Python syntax
+        run: python -m py_compile tools/audit_data_quality.py
+      - name: Check Japanese CSVs and monthly rankings
+        run: python tools/audit_data_quality.py

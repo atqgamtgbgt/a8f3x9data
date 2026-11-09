@@ -10244,7 +10244,12 @@ async function caamMergeAuto(allMonthly) {
       m++; if (m > 12) { m = 1; y++; }
     }
   }
-  for (const [ym, c] of Object.entries(auto.commentary || {})) if (!CAAM_COMMENTARY[ym]) CAAM_COMMENTARY[ym] = c;
+  // 公式スライドからの日本語訳は、Excel等から読み込んだコメントより優先する。
+  for (const [ym, c] of Object.entries(auto.commentary || {})) {
+    if (!CAAM_COMMENTARY[ym] || (c.lang === 'ja' && c.source_type === 'official_press_slides')) {
+      CAAM_COMMENTARY[ym] = c;
+    }
+  }
   CAAM_AUTO_META = Object.assign({}, auto.meta || {}, { added: added.sort() });
   caamShowAutoStatus();
 }
@@ -10323,10 +10328,15 @@ function renderCommentary(ym) {
     if (link) link.style.display = 'none';
     return;
   }
-  body.innerHTML = data.paragraphs.map((p, i) => {
-    const mb = (i === data.paragraphs.length - 1) ? '0' : '10px';
-    return `<p style="margin-bottom:${mb}">${_ccEscHtml(p)}</p>`;
-  }).join('');
+  // 未翻訳の中国語を日本語コメント欄にそのまま表示しない。
+  if (data.lang === 'zh') {
+    body.innerHTML = '<p style="color:#64748b;margin-bottom:0">この月の「産業運行 総論」は、日本語訳をまだ登録していません。</p>';
+  } else {
+    body.innerHTML = (data.paragraphs || []).map((p, i) => {
+      const mb = (i === data.paragraphs.length - 1) ? '0' : '10px';
+      return `<p style="margin-bottom:${mb}">${_ccEscHtml(p)}</p>`;
+    }).join('');
+  }
   if (srcEl) srcEl.textContent = data.source ? '出所：' + data.source : '';
   // 原典リンクは2026-04のみ（既知URL）
   if (link) {
@@ -10335,7 +10345,7 @@ function renderCommentary(ym) {
     else link.style.display = 'none';
   }
   if (data.lang === 'zh' && srcEl) srcEl.textContent = (data.source ? '出所：' + data.source : '') +
-    '　※公式記事に掲載された原文（中国語）です。日本語の要約は未作成。';
+    '　※日本語訳は未登録です。';
 }
 
 function setupCommentaryUI() {

@@ -1,0 +1,175 @@
+{
+  "meta": {
+    "source_type": "official_press_slides",
+    "unit": "万台",
+    "months": [
+      "2026-05",
+      "2026-06",
+      "2026-07",
+      "2026-08",
+      "2026-09"
+    ],
+    "description": "2026年5〜9月の中国汽車工業協会公式記者会見スライドの単月表示値。画像から目視転記。合算による逆算は使用せず、各項目は発表資料の値を採用。小数点以下の丸めで内訳と合計が一致しない場合がある。未掲載の内訳は空欄。",
+    "sources": {
+      "2026-05": "https://mp.weixin.qq.com/s/tyLxaTLabQ_FTNyiir0lIg",
+      "2026-06": "https://mp.weixin.qq.com/s/ji-oZh_VqJiUUBHGLXSTXg",
+      "2026-07": "https://mp.weixin.qq.com/s/X717QTcViRIT6duzIKCY0Q",
+      "2026-08": "https://mp.weixin.qq.com/s/IdxMfEol1F-1O8iiVwJMuw",
+      "2026-09": "https://mp.weixin.qq.com/s/rpJlWjDbCU8cTMJLWaB-bA"
+    }
+  },
+  "monthly": {
+    "2026-05": {
+      "total_prod": 261.6,
+      "total_sales": 262.9,
+      "domestic_sales": 170,
+      "export_total": 93,
+      "pax_prod": 224.1,
+      "pax_sales": 225.3,
+      "com_prod": 37.5,
+      "com_sales": 37.6,
+      "nev_prod": 155.4,
+      "nev_total": 149.6,
+      "bev_prod": 104.4,
+      "bev_sales": 102.6,
+      "phev_prod": 51,
+      "phev_sales": 47,
+      "nev_domestic": 104.9,
+      "nev_pax_dom": 94.7,
+      "nev_com_dom": 10.3,
+      "nev_exp": 44.6,
+      "nev_pax_exp": 43.5,
+      "nev_com_exp": 1.2
+    },
+    "2026-06": {
+      "total_prod": 276,
+      "total_sales": 281,
+      "domestic_sales": 177.3,
+      "export_total": 103.7,
+      "pax_prod": 237.3,
+      "pax_sales": 240.2,
+      "com_prod": 38.7,
+      "com_sales": 40.9,
+      "nev_prod": 159.8,
+      "nev_total": 164.3,
+      "bev_prod": 109.9,
+      "bev_sales": 114.2,
+      "phev_prod": 49.9,
+      "phev_sales": 50,
+      "nev_domestic": 112,
+      "nev_pax_dom": 100.7,
+      "nev_com_dom": 11.3,
+      "nev_exp": 52.3,
+      "nev_pax_exp": 51,
+      "nev_com_exp": 1.3
+    },
+    "2026-07": {
+      "total_prod": 257.3,
+      "total_sales": 258.4,
+      "domestic_sales": 154.1,
+      "export_total": 104.3,
+      "pax_prod": 224.6,
+      "pax_sales": 226.8,
+      "com_prod": 32.8,
+      "com_sales": 31.7,
+      "nev_prod": 157.6,
+      "nev_total": 156.1,
+      "bev_prod": 109.6,
+      "bev_sales": 107.2,
+      "phev_prod": 48,
+      "phev_sales": 48.9,
+      "nev_domestic": 100.8,
+      "nev_pax_dom": 91.6,
+      "nev_com_dom": 9.2,
+      "nev_exp": 55.3,
+      "nev_pax_exp": 54.1,
+      "nev_com_exp": 1.3
+    },
+    "2026-08": {
+      "total_prod": 268.4,
+      "total_sales": 271.2,
+      "domestic_sales": 170.1,
+      "export_total": 101,
+      "pax_prod": 236.9,
+      "pax_sales": 238.3,
+      "com_prod": 31.5,
+      "com_sales": 32.8,
+      "nev_prod": 165.3,
+      "nev_total": 164.3,
+      "bev_prod": 116.1,
+      "bev_sales": 116.1,
+      "phev_prod": 49.2,
+      "phev_sales": 48.2,
+      "nev_domestic": 111.8,
+      "nev_pax_dom": 101.5,
+      "nev_com_dom": 10.3,
+      "nev_exp": 52.6,
+      "nev_pax_exp": 51.4,
+      "nev_com_exp": 1.1
+    },
+    "2026-09": {
+      "total_prod": 299,
+      "total_sales": 295.6,
+      "domestic_sales": 190.4,
+      "export_total": 105.3,
+      "pax_prod": 262.6,
+      "pax_sales": 258.8,
+      "com_prod": 36.4,
+      "com_sales": 36.9,
+      "nev_prod": 181.4,
+      "nev_total": 182.3,
+      "bev_prod": 126,
+      "bev_sales": 127.7,
+      "phev_prod": 55.3,
+      "phev_sales": 54.6,
+      "nev_domestic": 125.2,
+      "nev_pax_dom": 114.2,
+      "nev_com_dom": 11,
+      "nev_exp": 57.1,
+      "nev_pax_exp": 55.6,
+      "nev_com_exp": 1.5
+    }
+  },
+  "commentary": {
+    "2026-05": {
+      "paragraphs": [
+        "据中国汽车工业协会分析，5月，汽车产销环比增长、同比小幅下降。受政策调整、市场结构变化、宏观环境承压等多重因素影响，国内市场同比继续呈现两位数下滑；出口发展强劲，延续快速增长态势。分车型看，乘用车销量同比小幅下滑，商用车销量继续保持增长，新能源汽车市场企稳回升。"
+      ],
+      "source": "中国汽车工业协会（記者会見・産業運行）",
+      "url": "https://mp.weixin.qq.com/s/tyLxaTLabQ_FTNyiir0lIg",
+      "lang": "zh"
+    },
+    "2026-06": {
+      "paragraphs": [
+        "据中国汽车工业协会分析，上半年，我国汽车行业运行总体平稳，产销累计降幅逐月收窄。市场流向主要呈现出三个分化：一是内需承压明显，销量两位数下降；出口超预期增长，形成稳定支撑。二是乘用车市场表现欠佳，出现小幅下滑；商用车市场延续向好态势，销量保持增长。三是产业新旧动能持续转换，传统燃油车市场进一步萎缩，新能源汽车稳定增长。"
+      ],
+      "source": "中国汽车工业协会（記者会見・産業運行）",
+      "url": "https://mp.weixin.qq.com/s/ji-oZh_VqJiUUBHGLXSTXg",
+      "lang": "zh"
+    },
+    "2026-07": {
+      "paragraphs": [
+        "据中国汽车工业协会分析，7月，汽车市场进入传统销售淡季，客流与订单自然回落，叠加半年度冲量提前释放部分需求、全国持续高温及部分区域台风、洪涝灾害影响线下销售等因素，环比呈现季节性回落，同比微降。其中，出口继续保持高速增长，月度出口量连续两个月超过100万辆，新能源汽车出口占比连续两个月超过50%；新能源汽车月度新车销量占比首次超过60%、累计占比首次超过50%。"
+      ],
+      "source": "中国汽车工业协会（記者会見・産業運行）",
+      "url": "https://mp.weixin.qq.com/s/X717QTcViRIT6duzIKCY0Q",
+      "lang": "zh"
+    },
+    "2026-08": {
+      "paragraphs": [
+        "据中国汽车工业协会分析，8月，多地汽车消费补贴持续升级，车企促销活动活跃，汽车产销环比增长、同比小幅下降。其中，国内市场继续承压，月度销量同比降幅连续5个月超过20%；出口保持高速增长，月度出口量连续3个月超过100万辆，成为稳定行业大盘的关键增量；新能源汽车主导地位持续巩固，月度销量占比再创新高。"
+      ],
+      "source": "中国汽车工业协会（記者会見・産業運行）",
+      "url": "https://mp.weixin.qq.com/s/IdxMfEol1F-1O8iiVwJMuw",
+      "lang": "zh"
+    },
+    "2026-09": {
+      "paragraphs": [
+        "据中国汽车工业协会分析，前三季度，我国汽车产销小幅下滑，市场总体呈现“内冷外热”运行态势。由于多重因素影响，国内汽车市场持续承压，尚未得到有效改善；尽管外部环境复杂严峻，出口继续保持高速增长，展现出强劲韧性；国内新动能持续释放，新能源汽车销量占比稳步提升。"
+      ],
+      "source": "中国汽车工业协会（記者会見・産業運行）",
+      "url": "https://mp.weixin.qq.com/s/rpJlWjDbCU8cTMJLWaB-bA",
+      "lang": "zh"
+    }
+  }
+}

@@ -50,4 +50,13 @@ const hits = nonScript.split('\n').map((line, i) => ({ i: i + 1, line: line.trim
 console.log('Potential Simplified Chinese in static HTML lines: ' + hits.length);
 hits.slice(0, 25).forEach(x => console.log('  candidate: ' + x.line.slice(0, 180)));
 if (hits.length > 25) console.log('  ... and ' + (hits.length - 25) + ' more candidate lines');
+
+// Visible text nodes are stronger evidence of untranslated UI than file-name attributes.
+const visibleText = nonScript.replace(/<!--[\s\S]*?-->/g, '')
+  .replace(/<[^>]+>/g, '\n').split('\n')
+  .map(value => value.trim()).filter(value => value && possibleChinese.test(value));
+const uniqueVisible = [...new Set(visibleText)];
+console.log('Potential Simplified Chinese visible text snippets: ' + uniqueVisible.length);
+uniqueVisible.slice(0, 100).forEach(value => console.log('  text: ' + value.slice(0, 160)));
+if (uniqueVisible.length > 100) console.log('  ... and ' + (uniqueVisible.length - 100) + ' more text snippets');
 console.log('Diagnostic complete (no files were changed).');

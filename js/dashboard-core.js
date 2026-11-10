@@ -3270,7 +3270,7 @@ function cccmInitOverview() {
 function cccmInitFuelEv() {
   initCccmEC('cccm-ec-fuel-ev', chart => {
     const opt = cccmBaseOpt();
-    opt.legend = {data:['燃油車','EV'], textStyle:{color:opt.textStyle.color}, top:8};
+    opt.legend = {data:['ガソリン車','EV'], textStyle:{color:opt.textStyle.color}, top:8};
     opt.tooltip = unifiedStackTooltip({unit:'万台', note:'※電動摩托車のみ（街中のe-bikeは別統計）'});
     opt.series = [
       {name:'ガソリン車',type:'bar',stack:'total',data:CCCM.gas_sales,itemStyle:{color:'#f28e2b'},barMaxWidth:50},
@@ -3283,7 +3283,7 @@ function cccmInitFuelEv() {
   initCccmEC('cccm-ec-gas-yoy', chart => {
     const opt = cccmBaseOpt();
     opt.grid={left:55,right:20,top:40,bottom:45,containLabel:true};
-    opt.series=[{name:'燃油車 前年同月比',type:'bar',data:CCCM.gas_sales_yoy,itemStyle:{color:p=>cccmBarColor(p.value)},barMaxWidth:40}];
+    opt.series=[{name:'ガソリン車 前年同月比',type:'bar',data:CCCM.gas_sales_yoy,itemStyle:{color:p=>cccmBarColor(p.value)},barMaxWidth:40}];
     opt.yAxis.name='%'; opt.legend.show=false; chart.setOption(opt);
   });
   initCccmEC('cccm-ec-ev-yoy', chart => {
@@ -5887,7 +5887,8 @@ function drawTop10(key) {
     chart.setOption({
       tooltip: { trigger:'axis', axisPointer:{type:'shadow'},
         formatter: p => `<b>${p[0].axisValueLabel}</b><br/>${p[0].marker}<b>${p[0].value != null ? p[0].value.toLocaleString() + '台' : '—'}</b>` },
-      grid: { left:120, right:20, top:10, bottom:40 },
+      // 右端の数値ラベル（例: 752,610）が切れないよう右余白を確保
+      grid: { left:120, right:64, top:10, bottom:40 },
       xAxis: { type:'value', name:'台' },
       yAxis: { type:'category', data: d.map(x => x.country) },
       series: [{ type:'bar', data: d.map(x => x.value),
@@ -5898,9 +5899,13 @@ function drawTop10(key) {
 
   if (monSelEl && !monSelEl.dataset.built) {
     monSelEl.dataset.built = '1';
-    const lastIdx = blocks.length - 1;  // 最新データを既定表示
-    monSelEl.innerHTML = blocks.map((b, i) =>
-      `<button class="btn btn-sm ${i===lastIdx?'btn-primary':'btn-outline-secondary'} rk-mon-btn" data-idx="${i}">${b.title}</button>`
+    // 記事の掲載順のままだと「2025年12月・2025年2月・2024年12月…」と前後するため、年月順に並べる
+    // （単月 → その月までの累計 の順。年月を読み取れない見出しは元の順で末尾）
+    const order = blocks.map((b, i) => ({ i, k: rkMonthSortKey(b.title, i) }))
+      .sort((a, b) => a.k < b.k ? -1 : a.k > b.k ? 1 : 0).map(x => x.i);
+    const lastIdx = order[order.length - 1];  // 最新データを既定表示
+    monSelEl.innerHTML = order.map(i =>
+      `<button class="btn btn-sm ${i===lastIdx?'btn-primary':'btn-outline-secondary'} rk-mon-btn" data-idx="${i}">${blocks[i].title}</button>`
     ).join('');
     monSelEl.querySelectorAll('.rk-mon-btn').forEach(btn => {
       btn.addEventListener('click', () => {
@@ -5910,7 +5915,18 @@ function drawTop10(key) {
       });
     });
   }
-  draw(blocks.length - 1);
+  const sel = monSelEl && monSelEl.querySelector('.rk-mon-btn.btn-primary');
+  draw(sel ? parseInt(sel.dataset.idx) : blocks.length - 1);
+}
+
+// 月選択ボタンの並び順キー（例「2026年3月」→2026-03-0、「2026年1〜3月累計」→2026-03-1）
+function rkMonthSortKey(title, idx) {
+  const t = String(title || '');
+  let m = /^(\d{4})年(\d{1,2})月$/.exec(t);
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-0`;
+  m = /^(\d{4})年\d{1,2}[〜~～\-－](\d{1,2})月(?:累計)?$/.exec(t);
+  if (m) return `${m[1]}-${m[2].padStart(2, '0')}-1`;
+  return `9999-${String(idx).padStart(4, '0')}`;
 }
 
 function drawTrend(key) {
@@ -8841,11 +8857,12 @@ function updateCustomLabels() {
   customLabels.forEach(function(item) {
     var zhName = item[0], jaName = item[1], lon = item[2], lat = item[3];
     var divId = 'map-label-' + zhName;
+    var small = ecEl.clientWidth < 500;
     var div = document.getElementById(divId);
     if (!div) {
       div = document.createElement('div');
       div.id = divId;
-      div.style.cssText = 'position:absolute;pointer-events:none;font-size:14px;font-weight:bold;font-family:"Noto Sans SC","Noto Sans JP",sans-serif;color:#fff;text-shadow:-1px -1px 3px rgba(0,0,0,0.9),1px -1px 3px rgba(0,0,0,0.9),-1px 1px 3px rgba(0,0,0,0.9),1px 1px 3px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.95);transform:translate(-50%,-50%);z-index:10;letter-spacing:0;white-space:nowrap;';
+      div.style.cssText = 'position:absolute;pointer-events:none;font-size:' + (small ? 10 : 14) + 'px;font-weight:bold;font-family:"Noto Sans SC","Noto Sans JP",sans-serif;color:#fff;text-shadow:-1px -1px 3px rgba(0,0,0,0.9),1px -1px 3px rgba(0,0,0,0.9),-1px 1px 3px rgba(0,0,0,0.9),1px 1px 3px rgba(0,0,0,0.9),0 0 8px rgba(0,0,0,0.95);transform:translate(-50%,-50%);z-index:10;letter-spacing:0;white-space:nowrap;';
       ecEl.parentElement.appendChild(div);
     }
     var pt = mapChart.convertToPixel({seriesIndex:0}, [lon, lat]);
@@ -8903,6 +8920,9 @@ function getVisualMap() {
 
 function renderMapChart() {
   if(!mapChart||!mapReady) return;
+  // スマホでは地図が小さく省名が重なり合うため、ラベルを小さくする
+  const mapEl = document.getElementById('cpca-map-ec');
+  const lblSize = (mapEl && mapEl.clientWidth < 500) ? 10 : 14;
   const titles = {
     sales26:'26年1-8月 販売量（万台）', sales25:'2025年通年 販売量（万台）', sales24:'2024年通年 販売量（万台）',
     yoy:'2025年 前年比（対2024年・%）', yoy26:'26年8月 前年比 単月（%）',
@@ -8941,13 +8961,13 @@ function renderMapChart() {
       data: mapDataArr(),
       selectedMode:false,
       emphasis:{itemStyle:{areaColor:'#f5a623',borderColor:'#fff',borderWidth:2},
-        label:{show:true,color:'#fff',fontWeight:'bold',fontSize:14,
+        label:{show:true,color:'#fff',fontWeight:'bold',fontSize:lblSize,
           textShadowColor:'rgba(0,0,0,0.95)',textShadowBlur:5}},
       itemStyle:{borderColor:'rgba(255,255,255,0.35)',borderWidth:0.7},
       label:{
         show:true,
         color:'#fff',
-        fontSize:14,
+        fontSize:lblSize,
         fontWeight:'bold',
         textShadowColor:'rgba(0,0,0,0.95)',
         textShadowBlur:5,

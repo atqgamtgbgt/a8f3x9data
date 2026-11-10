@@ -18,6 +18,21 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
 <script>
+// ===== 追加: グラフ（canvas）の解像度を最大2倍に抑える =====
+// 3倍密度のスマホ（iPhoneなど）では1枚のグラフが大量のメモリを使い、タブを次々に開くと
+// Safari の canvas メモリ上限（約384MB）を超えて、以降のグラフが真っ白になることがあるため。
+// 2倍でも網膜ディスプレイで十分くっきり表示される。
+(function () {
+  if (!window.echarts || !echarts.init || echarts.__dprCapped) return;
+  var origInit = echarts.init;
+  echarts.init = function (dom, theme, opts) {
+    var o = {};
+    if (opts) for (var k in opts) o[k] = opts[k];
+    if (o.devicePixelRatio == null && (window.devicePixelRatio || 1) > 2) o.devicePixelRatio = 2;
+    return origInit.call(this, dom, theme, o);
+  };
+  echarts.__dprCapped = true;
+})();
 // ===== 追加: 画像キャッシュバージョン（日単位。Date.now()だと毎回全画像を再取得してしまうため） =====
 window.IMG_CACHE_VER = new Date().toISOString().slice(0, 10);
 // ===== 追加: 共通ヘルパー（HTMLエスケープ・URL検証・グラフのリサイズ） =====
@@ -296,6 +311,8 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
           lg.selector = [{ type: 'inverse', title: '反転' }, { type: 'all', title: '全選択' }];
           lg.selectorLabel = { fontSize: 10, padding: [2, 5], borderRadius: 4 };
           lg.selectorItemGap = 4;
+          // スマホなど幅の狭いグラフでは、末尾に置くと「全選択」が右端で切れるため先頭に置く
+          try { if (instance && instance.getWidth && instance.getWidth() < 600) lg.selectorPosition = 'start'; } catch (e) {}
         }
       });
       if (option.dataZoom === undefined) {
@@ -860,7 +877,11 @@ header {
   color: #333;
   padding: 20px 12px;
   text-align: center;
-  font-size: 1.4rem;
+  /* スマホでは1行に収まる大きさまで縮め、収まらない狭い画面では「や」の後ろで改行する
+     （語の途中の「関連デ／ータ」で折り返さないように） */
+  font-size: clamp(1.05rem, 4.6vw, 1.4rem);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
@@ -1515,6 +1536,9 @@ img.car-thumb {
   .car-table td:nth-child(7),
   .car-table td:nth-child(8) {
     margin-left: 135px !important;
+    /* width:100%（全セル共通）のままだと左余白135pxの分だけカードの右へはみ出し、
+       長い車名・価格・ボタンが切れるため、残り幅に収める */
+    width: auto !important;
     display: block;
     padding-top: 2px !important;
     padding-bottom: 2px !important;
@@ -2896,6 +2920,7 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
    ======================================== */
 .chart-card { position: relative; }
 .chart-title { padding-right: 36px; } /* ⛶ボタンとの重なり回避 */
+.chart-title + .chart-subtitle { padding-right: 36px; } /* スマホでは見出しが1行だと説明文の1行目もボタンにかかるため */
 .chart-fs-btn {
   position: absolute;
   top: 8px; right: 8px;
@@ -2914,20 +2939,24 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
 }
 .chart-fs-btn:hover { background: #f1f3f5; color: #495057; }
 .chart-fs-btn:active { background: #e9ecef; }
-/* 1カードに複数グラフがある場合：各グラフ直前に右寄せ配置 */
+/* 1カードに複数グラフがある場合：各グラフ直前に右寄せ配置
+   （高さ0で重ねるとグラフ上端の凡例と⛶ボタンが重なるため、ボタン1個分の行を確保する） */
 .chart-fs-btnbar {
   display: flex;
   justify-content: flex-end;
   margin: 2px 0;
-  height: 0; /* レイアウトを押し下げない */
 }
 .chart-fs-btn.chart-fs-btn-inline {
   position: relative;
-  top: 4px; right: 0;
+  top: 0; right: 0;
   width: 26px; height: 26px;
   font-size: 11px;
   z-index: 4;
 }
+/* 非表示のグラフ（並列比較など）の⛶ボタンは出さない */
+.chart-fs-btnbar:has(+ .echart-box[style*="display:none"]),
+.chart-fs-btnbar:has(+ .echart-box[style*="display: none"]),
+.chart-fs-btnbar:has(+ .echart-box.d-none) { display: none; }
 
 #chart-fs-overlay {
   position: fixed; inset: 0;
@@ -3314,7 +3343,7 @@ body.tray-open { padding-bottom: 105px; }
 </style>
 </head>
 <body>
-  <header>中国自動車販売ランキングや関連データ</header>
+  <header>中国自動車販売ランキングや<wbr>関連データ</header>
 
   <div class="container mt-3">
 
@@ -13764,9 +13793,11 @@ function renderSummary(){
     legend: leg({data:['小売','卸売（出荷）','生産','輸出']}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
+    // 上限を固定（左320・右80）していたため、輸出が80万台を超えた2026年6月以降の棒が上で切れていた。
+    // 上限はデータから自動で決め、右軸（輸出）の目盛りは左軸の目盛り線にそろえる
     yAxis: [
-      yVal('万台',{min:0,max:320}),
-      Object.assign(yVal('万台',{min:0,max:80}),{splitLine:{show:false}})
+      yVal('万台',{min:0}),
+      Object.assign(yVal('万台',{min:0,alignTicks:true}),{splitLine:{show:false}})
     ],
     series:[
       {name:'小売', type:'line', yAxisIndex:0, color:PAL[0], symbol:'circle', symbolSize:5,
@@ -13854,7 +13885,7 @@ function renderExportTrend(){
     legend: leg({data:Object.keys(years)}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(MONTHS_TREND),
-    yAxis: yVal('万台',{min:0,max:80}),
+    yAxis: yVal('万台',{min:0}), // 上限80固定だと2026年（最大92万台）が切れるため自動
     series: series
   });
 }
@@ -13989,7 +14020,8 @@ function renderBrandWholesale(){
     legend: leg({data:['高級車','合弁メーカー','中国系ブランド']}),
     grid: grid({bottom:50,top:55,left:55,right:20}),
     xAxis: xCat(months),
-    yAxis: yVal('万台',{min:0,max:d.max}),
+    // 既定の上限（輸出は80）を超える月があれば上限を広げる（2026年の中国系の輸出は91.8万台）
+    yAxis: yVal('万台',{min:0,max:function(v){ return Math.max(d.max, Math.ceil(v.max / 20) * 20); }}),
     series:[
       {name:'高級車', type:'bar', stack:'s', color:'#8b5cf6', data:d.gouhua},
       {name:'合弁メーカー', type:'bar', stack:'s', color:'#06b6d4', data:d.heizi},
@@ -15259,7 +15291,7 @@ window.addEventListener('resize', __rafThrottle(function(){
       xAxis: xCat(YEARS),
       yAxis:[
         yVal('万台',{min:0}),
-        yVal('普及率(%)',{position:'right',min:0,max:60,
+        yVal('普及率(%)',{position:'right',min:0,max:function(v){ return Math.max(60, Math.ceil(v.max / 10) * 10); },
           axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
       ],
       series:[
@@ -16469,6 +16501,7 @@ window.addEventListener('resize', __rafThrottle(function(){
     var bar = btn.closest('.chart-fs-btnbar');
     if (bar && bar.nextElementSibling && bar.nextElementSibling.classList.contains('echart-box')) {
       box = bar.nextElementSibling; // 複数グラフカード：直後のグラフを対象
+      if (!box.getClientRects().length) return; // 非表示のグラフは拡大しない
     }
     openFs(card, box);
   });

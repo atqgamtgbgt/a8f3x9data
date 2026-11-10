@@ -184,7 +184,7 @@ footer b{color:var(--ink2)}
       <button data-esrc="hezi">合弁</button>
     </div>
     <div class="seg" id="ecatSeg">
-      <button data-ecat="1">エンジン車</button>
+      <button data-ecat="1">ICE車</button>
       <button data-ecat="456" class="on">電動車</button>
       <button data-ecat="4">BEV</button>
       <button data-ecat="5">PHEV</button>
@@ -263,7 +263,7 @@ function segColor(k,cats){const l=cats&&cats[k-1]; if(l&&l.indexOf('その他')>
 const B36='0123456789abcdefghijklmnopqrstuvwxyz';
 const d36=ch=>{const i=B36.indexOf(ch);return i<0?0:i;};
 const DS_GROUP_NAMES={guochan:'中国系メーカー',hezi:'合弁メーカー'};
-const DS_ENERGY_NAMES={'1':'エンジン車','456':'電動車','4':'BEV（電気自動車）','5':'PHEV（プラグインハイブリッド）','6':'EREV／HEV'};
+const DS_ENERGY_NAMES={'1':'ICE車','456':'電動車','4':'BEV（電気自動車）','5':'PHEV（プラグインハイブリッド）','6':'EREV／HEV'};
 const DIST_LABELS={'ステレオ(双目)':'ステレオ（2眼）','3眼(三目)':'3眼（3カメラ）'};
 let FEATS=[], DISTFEATS=[], CATS=[], DS={};
 const state={primary:'overall',esrc:'guochan',ecat:'456',scope:999,denom:'all',range:'all',cat:'ALL',q:'',sort:'spec',showOriginal:false};

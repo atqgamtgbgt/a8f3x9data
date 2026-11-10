@@ -3476,7 +3476,7 @@ body.tray-open { padding-bottom: 105px; }
                 <button class="nav-link" id="energy-4-tab" data-bs-toggle="pill" data-bs-target="#energy-4-pane" type="button" role="tab">⚡ BEV</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="energy-1-tab" data-bs-toggle="pill" data-bs-target="#energy-1-pane" type="button" role="tab">⛽ ガソリン車</button>
+                <button class="nav-link" id="energy-1-tab" data-bs-toggle="pill" data-bs-target="#energy-1-pane" type="button" role="tab">⛽ ICE</button>
               </li>
               <li class="nav-item" role="presentation">
                 <button class="nav-link" id="energy-5-tab" data-bs-toggle="pill" data-bs-target="#energy-5-pane" type="button" role="tab">🔌 PHEV</button>
@@ -4027,7 +4027,7 @@ body.tray-open { padding-bottom: 105px; }
 
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-segment" type="button" role="tab">🚗 乗用車・商用車</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-brand" type="button" role="tab">🏷️ ブランド系シェア</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-trad-seg" type="button" role="tab">🔧 ICE セグメント</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-trad-seg" type="button" role="tab">🔧 ICEセグメント</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-nev-seg" type="button" role="tab">⚡ NEVセグメント</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-price" type="button" role="tab">💰 価格帯</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cp-nev-detail" type="button" role="tab">🔋 NEV詳細</button></li>
@@ -4055,8 +4055,8 @@ body.tray-open { padding-bottom: 105px; }
               </div>
               <div class="chart-card"><div class="chart-title">総販売台数推移</div><div id="ec-overview" class="echart-box"></div></div>
             </div>
-            <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（従来車/BEV/PHEV）</div><div id="ec-domestic-export" class="echart-box"></div></div></div>
-            <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / 従来車</div><div id="ec-nev" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-domestic-export"><div class="chart-card"><div class="chart-title">販売内訳：国内（乗用ICE/NEV・商用ICE/NEV） ＋ 輸出（ICE車/BEV/PHEV）</div><div id="ec-domestic-export" class="echart-box"></div></div></div>
+            <div class="tab-pane fade" id="cp-nev"><div class="chart-card"><div class="chart-title">NEV販売内訳 BEV / PHEV / ICE車</div><div id="ec-nev" class="echart-box"></div></div></div>
 
             <div class="tab-pane fade" id="cp-segment"><div class="chart-card"><div class="chart-title">乗用車・商用車　販売推移</div><div class="chart-subtitle">セグメント別月次推移</div><div id="ec-segment" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-brand">
@@ -4066,7 +4066,7 @@ body.tray-open { padding-bottom: 105px; }
                 <div id="ec-brand" class="echart-box" style="height:420px"></div>
               </div>
             </div>
-            <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（伝統燃料車）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）</div>
+            <div class="tab-pane fade" id="cp-trad-seg"><div class="chart-card"><div class="chart-title">乗用車（ICE車）セグメント別販売</div><div class="chart-subtitle">単月値（23年6月〜26年2月）</div>
                 <div class="seg-definition">
                   <span class="seg-item"><b>A00</b> 軽小型（〜3.4m）</span>
                   <span class="seg-item"><b>A0</b> 小型（3.4〜4.1m）</span>
@@ -4086,7 +4086,7 @@ body.tray-open { padding-bottom: 105px; }
                 </div><div id="ec-nev-seg" class="echart-box"></div></div></div>
             <div class="tab-pane fade" id="cp-price">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別月次販売推移（ガソリン・ICE車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-trad-price" class="echart-box" style="height:400px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別月次販売推移（ICE車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-trad-price" class="echart-box" style="height:400px"></div></div></div>
                 <div class="col-12"><div class="chart-card"><div class="chart-title">価格帯別月次販売推移（NEV乗用車）</div><div class="chart-subtitle">25年7月〜26年2月　単月値（23年6月〜26年2月）</div><div id="ec-nev-price" class="echart-box" style="height:400px"></div></div></div>
               </div>
             </div>
@@ -4135,7 +4135,7 @@ body.tray-open { padding-bottom: 105px; }
           <div id="cccm-auto-status" style="display:none;font-size:12px;line-height:1.6;color:#475569;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:6px 10px;margin:0 0 10px"></div>
           <ul class="nav charts-pills mb-3" id="cccmPills" role="tablist">
             <li class="nav-item"><button class="nav-link active" data-bs-toggle="pill" data-bs-target="#cccm-overview" type="button" role="tab">📊 総合概要</button></li>
-            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cccm-fuel-ev" type="button" role="tab">🔥 ガソリン車・EV内訳</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cccm-fuel-ev" type="button" role="tab">🔥 ICE・EV内訳</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cccm-bike-type" type="button" role="tab">🏍️ 二輪車種別</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cccm-large" type="button" role="tab">🏎️ 大排気量</button></li>
             <li class="nav-item"><button class="nav-link" data-bs-toggle="pill" data-bs-target="#cccm-export" type="button" role="tab">🌍 輸出・排気量別</button></li>
@@ -4156,12 +4156,12 @@ body.tray-open { padding-bottom: 105px; }
                 <div id="cccm-commentary-source" style="font-size:11px;color:#64748b;padding:0 4px 4px"></div>
                 <div id="cccm-commentary-body" style="font-size:13px;line-height:1.85;color:#334155;padding:6px 4px"></div>
               </div>
-              <div class="chart-card"><div class="chart-title">月次総販売台数推移（ガソリン車 + EV）</div><div class="chart-subtitle">CCCM 月次統計</div><div id="cccm-ec-overview" class="echart-box"></div></div>
+              <div class="chart-card"><div class="chart-title">月次総販売台数推移（ICE + EV）</div><div class="chart-subtitle">CCCM 月次統計</div><div id="cccm-ec-overview" class="echart-box"></div></div>
             </div>
             <div class="tab-pane fade" id="cccm-fuel-ev">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">ガソリン車・EV 月次販売台数</div><div class="chart-subtitle">積み上げ棒グラフ / ※電動バイクのみ（街中のe-bikeは別統計）</div><div id="cccm-ec-fuel-ev" class="echart-box"></div></div></div>
-                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">ガソリン車 前年同月比（%）</div><div class="chart-subtitle">前年同月比</div><div id="cccm-ec-gas-yoy" class="echart-box" style="height:300px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">ICE・EV 月次販売台数</div><div class="chart-subtitle">積み上げ棒グラフ / ※電動バイクのみ（街中のe-bikeは別統計）</div><div id="cccm-ec-fuel-ev" class="echart-box"></div></div></div>
+                <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">ICE 前年同月比（%）</div><div class="chart-subtitle">前年同月比</div><div id="cccm-ec-gas-yoy" class="echart-box" style="height:300px"></div></div></div>
                 <div class="col-12 col-lg-6"><div class="chart-card"><div class="chart-title">EV 前年同月比（%）</div><div class="chart-subtitle">前年同月比 / ※電動バイク（登録車）のみ</div><div id="cccm-ec-ev-yoy" class="echart-box" style="height:300px"></div></div></div>
               </div>
             </div>
@@ -4190,7 +4190,7 @@ body.tray-open { padding-bottom: 105px; }
             </div>
             <div class="tab-pane fade" id="cccm-makers">
               <div class="row g-3">
-                <div class="col-12"><div class="chart-card"><div class="chart-title">ガソリン二輪車 メーカー別月次販売 Top10</div><div class="chart-subtitle">単月＝累計（1〜N月）の前月差。前月に上位10社に入っていない社はその月を表示しません</div><div id="cccm-ec-fuel-makers" class="echart-box" style="height:480px"></div></div></div>
+                <div class="col-12"><div class="chart-card"><div class="chart-title">ICE二輪車 メーカー別月次販売 Top10</div><div class="chart-subtitle">単月＝累計（1〜N月）の前月差。前月に上位10社に入っていない社はその月を表示しません</div><div id="cccm-ec-fuel-makers" class="echart-box" style="height:480px"></div></div></div>
                 <div class="col-12"><div class="chart-card"><div class="chart-title">電動二輪車（EV） メーカー別月次販売 Top10</div><div class="chart-subtitle">単月＝累計（1〜N月）の前月差。前月に上位10社に入っていない社はその月を表示しません</div><div id="cccm-ec-ev-makers" class="echart-box" style="height:480px"></div></div></div>
               </div>
             </div>
@@ -4411,7 +4411,7 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="cds-gc-items" id="cds-gc-g4">
                     <button class="nav-link" data-cds-target="#cds-r3">🚘 完成車</button>
                     <button class="nav-link" data-cds-target="#cds-r4">⚡ NEV</button>
-                    <button class="nav-link" data-cds-target="#cds-r5">⛽ 燃油</button>
+                    <button class="nav-link" data-cds-target="#cds-r5">⛽ ICE</button>
                     <button class="nav-link" data-cds-target="#cds-r6">🔌 BEV</button>
                     <button class="nav-link" data-cds-target="#cds-r7">🔋 PHEV</button>
                     <button class="nav-link" data-cds-target="#cds-r6b">🔀 HEV</button>
@@ -4421,11 +4421,11 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🚛 商用車 国別 </span>
                   <div class="cds-gc-items" id="cds-gc-g5">
-                    <button class="nav-link" data-cds-target="#cds-r8">⛽ 燃油トラック</button>
+                    <button class="nav-link" data-cds-target="#cds-r8">⛽ ICEトラック</button>
                     <button class="nav-link" data-cds-target="#cds-r9">🔋 PHEVトラック</button>
                     <button class="nav-link" data-cds-target="#cds-r10">🔌 BEVトラック</button>
                     <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEVトラック</button>
-                    <button class="nav-link" data-cds-target="#cds-r11">⛽ 燃油バス</button>
+                    <button class="nav-link" data-cds-target="#cds-r11">⛽ ICEバス</button>
                     <button class="nav-link" data-cds-target="#cds-r12">⚡ NEVバス</button>
                   </div>
                 </div>
@@ -4650,10 +4650,10 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-discount-target="#disc-powertype">🔋 動力種別</button>
                     <button class="nav-link" data-cds-discount-target="#disc-overall-rate">📊 総合値引き率</button>
                     <button class="nav-link" data-cds-discount-target="#disc-nev-trend">⚡ 新エネ車推移</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-fuel-trend">⛽ ガソリン車推移</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-fuel-trend">⛽ ICE推移</button>
                     <button class="nav-link" data-cds-discount-target="#disc-luxury">💎 高級車</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-joint">🤝 合弁ガソリン車</button>
-                    <button class="nav-link" data-cds-discount-target="#disc-domestic">🏭 国内系ガソリン車</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-joint">🤝 合弁ICE車</button>
+                    <button class="nav-link" data-cds-discount-target="#disc-domestic">🏭 国内系ICE車</button>
                     <button class="nav-link" data-cds-discount-target="#disc-by-power">🔌 動力種別値引き率</button>
                     <button class="nav-link" data-cds-discount-target="#disc-by-origin">🌍 出身地域別</button>
                   </div>
@@ -5130,19 +5130,19 @@ body.tray-open { padding-bottom: 105px; }
                     <div class="cds-cmt-header" onclick="cdsCmtToggle(this)">
                       <div class="cds-cmt-header-text">
                         <div class="cds-cmt-month">2026年 9月</div>
-                        <div class="cds-cmt-headline">「旺季不旺」— 小売161.8万台（−28.0%・前月比+5.0%）、燃油車−43%の一方でNEV小売浸透率は67%と過去最高</div>
+                        <div class="cds-cmt-headline">「旺季不旺」— 小売161.8万台（−28.0%・前月比+5.0%）、ICE車−43%の一方でNEV小売浸透率は67%と過去最高</div>
                       </div>
                       <span class="cds-cmt-toggle">▶</span>
                     </div>
                     <ul class="cds-cmt-points">
-                      <li>9月小売<strong>161.8万台、前年比 −28.0% / 前月比 +5.0%</strong>。1-9月累計<strong>1,333.4万台 −21.7%</strong>。最大の特徴は<em>「旺季不旺」</em>で、伝統的な「金九」の成色が大きく不足。存量の奪い合いの中で燃油車の需要が激しく萎縮した</li>
+                      <li>9月小売<strong>161.8万台、前年比 −28.0% / 前月比 +5.0%</strong>。1-9月累計<strong>1,333.4万台 −21.7%</strong>。最大の特徴は<em>「旺季不旺」</em>で、伝統的な「金九」の成色が大きく不足。存量の奪い合いの中でICE車の需要が激しく萎縮した</li>
                       <li>降幅が際立った要因：<strong>①中秋休暇が9月下旬</strong>にずれ込み中秋週の販売が弱い、<strong>②前年9月は一部の省で補助終了前の駆け込み</strong>があり高基数、<strong>③高油価</strong>（年初来のガソリン価格は累計<strong>2,375元/トン上昇</strong>）、<strong>④AI需要によるメモリ・チップの価格高騰と供給逼迫</strong>でNEV新車の投入が鈍い</li>
                       <li>9月卸売<strong>254.9万台 −8.9% / 前月比 +8.1%</strong>。輸出の激増で<strong>卸売伸び率が小売を19pt上回る</strong>「内冷外熱」。国内卸売が少なく在庫削減が進み、<em>チャネル圧力は明確に改善</em></li>
                       <li>9月生産<strong>259.0万台 −9.1% / 前月比 +10.3%</strong>で年内最高。豪華 −24%、合弁 −29%、<strong>自主 −1%</strong></li>
                       <li>9月輸出（整車＋CKD）<strong>91.7万台 +73.7% / 前月比 +3.2%</strong>、メーカー販売の<strong>36%</strong>（前月38%、25年同期19%）。<strong>NEVが輸出の60.8%</strong>（+21pt）。<em>2ヶ月続けて7月のピークを下回り、平穏期に入りつつある</em></li>
                       <li>産販在庫：卸売が生産を<strong>4.1万台下回り</strong>、国内卸売は国内小売を<strong>1.4万台上回る</strong>。1-9月の業界在庫は<strong>−68万台</strong>（25年同期 −25万、24年 −88万、23年 −13万）</li>
                       <li><strong>NEV卸売浸透率 65.4%</strong>（前年比 +12pt）— 自主<strong>75.5%</strong> / 豪華<strong>55.4%</strong> / 合弁<strong>16.3%</strong>。<em>伝統車卸売 −32% に対しNEV +12%、伸び率差は44pt</em>。小売浸透率は<strong>67.0%</strong>（+9.1pt、前月比 +1.7pt）で過去最高、自主<strong>84.5%</strong>、豪華44.9%、合弁15.9%</li>
-                      <li>動力別：燃油車小売<strong>−43%</strong>（純燃油 −49%、<strong>HEVは +25%</strong>）、NEV小売<strong>108.4万台 −16.7%</strong>。燃油車は自主 −47%・合弁 −42%・豪華 −41%と<em>一様に高油価の打撃</em>を受けた</li>
+                      <li>動力別：ICE車小売<strong>−43%</strong>（純ICE −49%、<strong>HEVは +25%</strong>）、NEV小売<strong>108.4万台 −16.7%</strong>。ICE車は自主 −47%・合弁 −42%・豪華 −41%と<em>一様に高油価の打撃</em>を受けた</li>
                       <li>国別：<strong>自主113万台 −25%（前月比 +5%）</strong>でシェア<strong>69.8%（+2.8pt）</strong>。<strong>主流合弁31万台 −36%（前月比 +2%）</strong>（独12.2% −2.0pt、日10.7% −0.9pt、米6.3% +0.5pt）。豪華17万台 −29%でシェア11%（−0.2pt）</li>
                       <li>級別：小売 −28%・卸売 −9%で<strong>「内冷外熱」</strong>。<em>入門級の消費が大きな打撃</em>を受け、A級・A00級セダンが低調、<strong>A0級セダンと高級車型が主力</strong>。SUVは高級が強い</li>
                     </ul>
@@ -5167,7 +5167,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li><strong>NEV卸売浸透率 64.2%</strong>（前年比 +12pt）— 自主<strong>74.3%</strong> / 豪華<strong>53.1%</strong> / 合弁<strong>15.7%</strong>。<em>伝統車卸売 −29% に対しNEV +17%、伸び率差は50pt近く</em>。小売浸透率は<strong>65.2%</strong>（+9.9pt）で、自主<strong>83.9%</strong>、豪華38.9%、合弁13.4%</li>
                       <li>国別：<strong>自主108万台 −19%（前月比 +4%）</strong>でシェア<strong>69.9%（+4.1pt）</strong>。<strong>主流合弁31万台 −35%（前月比 +5%）</strong>（独12.5% −2.1pt、日10.9% −1.4pt、米5.6% ほぼ横ばい）。<em>販売の少ない合弁メーカーは徐々に活力を回復</em></li>
                       <li>級別：小売 −23%・卸売 −5%で<strong>「内冷外熱」</strong>。<em>入門級の消費が大きな打撃</em>を受け、A級・A00級セダンが低調、<strong>A0級セダンと高級車型が主力</strong></li>
-                      <li>値引き率：NEV<strong>8.6%</strong>（前年比 −0.9pt、前月比 +0.1pt）、燃油車23.6%、豪華26.9%（+0.2pt）、合弁燃油車23.4%（−0.3pt）、<strong>自主燃油車19.0%</strong>。純電動は前年比 −1.3pt。<em>欧州系・韓国系の促販が大きく、自主が最小</em></li>
+                      <li>値引き率：NEV<strong>8.6%</strong>（前年比 −0.9pt、前月比 +0.1pt）、ICE車23.6%、豪華26.9%（+0.2pt）、合弁ICE車23.4%（−0.3pt）、<strong>自主ICE車19.0%</strong>。純電動は前年比 −1.3pt。<em>欧州系・韓国系の促販が大きく、自主が最小</em></li>
                     </ul>
                   </article>
 
@@ -5181,7 +5181,7 @@ body.tray-open { padding-bottom: 105px; }
                     </div>
                     <ul class="cds-cmt-points">
                       <li>7月小売<strong>146万台、前年比 −21% / 前月比 −9%</strong>。1-7月累計<strong>1,016.1万台 −20%</strong>。<em>「総量は圧力が続き、前月比は悪化、構造は極端な二極化」</em>で、閑散期の下行特徴が際立つ</li>
-                      <li>崔氏は7月の弱さを<strong>油価反発・マクロ減速・季節的閑散期・前期の需要先食い・政策切替</strong>の多重共振とみる。ホルムズ海峡の航行混乱で国際油価が上昇し、<strong>国内ガソリン価格は年初来1,575元/トン上昇</strong>。燃油乗用車の需要が激しく萎縮した（商用車への影響は小さい）</li>
+                      <li>崔氏は7月の弱さを<strong>油価反発・マクロ減速・季節的閑散期・前期の需要先食い・政策切替</strong>の多重共振とみる。ホルムズ海峡の航行混乱で国際油価が上昇し、<strong>国内ガソリン価格は年初来1,575元/トン上昇</strong>。ICE乗用車の需要が激しく萎縮した（商用車への影響は小さい）</li>
                       <li>7月はCPI・PPIが前月比で低下しPMIも悪化、<em>家計の収入・消費期待は慎重</em>。高温閑散期で来店客が減り、<strong>6月の半期末の押し込みが需要を先食い</strong>。新エネ安全新国標の施行で<em>低端車型の短期的な退出</em>も攪乱要因に</li>
                       <li>一方で7月の政治局会議は<strong>財政の積極化と内需拡大策の上積み</strong>を明確にしており、<em>今回の下落は段階的・構造的な波動で、趨勢的な悪化ではない</em>との見方</li>
                       <li>7月卸売<strong>225.2万台（前年並み） / 前月比 −4.7%</strong> — <em>半年ぶりに月次伸び率がほぼ前年並み</em>。輸出の急増で<strong>卸売伸び率が小売を20.7pt上回る</strong></li>
@@ -5191,8 +5191,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li><strong>NEV卸売浸透率 64.2%</strong>（前年比 +11pt、過去最高を更新）— 自主<strong>73.6%</strong> / 豪華<strong>57.1%</strong> / 合弁<strong>17.1%</strong>。<em>伝統車卸売 −24% に対しNEV +22%</em>。小売浸透率は<strong>65.1%</strong>（+11.1pt、前月比 +2.1pt）で、自主<strong>83.8%</strong>、豪華30.9%、合弁13.7%</li>
                       <li>国別：<strong>自主104万台 −14%（前月比 −6%）</strong>でシェア<strong>71.0%（+5.4pt）</strong>。<strong>主流合弁29万台 −35%（前月比 −12%）</strong>（独12.4% −2.0pt、日10.9% −1.9pt、米4.2% −1.0pt）。<strong>豪華13万台 −27%（前月比 −23%）</strong>でシェア8.7%（−0.7pt）</li>
                       <li>級別：<em>A級セダンとA00級セダンが低調</em>、<strong>A0級セダンと高級車型が7月の小売主力</strong>。SUVは高級車が好調</li>
-                      <li>値引き率：NEV<strong>8.5%の中低位</strong>（前月比 −0.7pt）、燃油車23.7%（+0.4pt）、豪華26.7%（+0.3pt）、合弁燃油車23.7%（+0.6pt）、<strong>自主燃油車18.9%</strong>。<em>PHEV・増程の促販が明確に改善</em>し、純電動は前年比 −1.3pt</li>
-                      <li>注目点：<strong>燃油車小売 −41% に対しNEV −4%</strong>。7月は<em>燃油車の前月比の動きがNEVより弱く、油価上昇後の需要減退</em>がはっきり現れた</li>
+                      <li>値引き率：NEV<strong>8.5%の中低位</strong>（前月比 −0.7pt）、ICE車23.7%（+0.4pt）、豪華26.7%（+0.3pt）、合弁ICE車23.7%（+0.6pt）、<strong>自主ICE車18.9%</strong>。<em>PHEV・増程の促販が明確に改善</em>し、純電動は前年比 −1.3pt</li>
+                      <li>注目点：<strong>ICE車小売 −41% に対しNEV −4%</strong>。7月は<em>ICE車の前月比の動きがNEVより弱く、油価上昇後の需要減退</em>がはっきり現れた</li>
                     </ul>
                   </article>
 
@@ -5200,25 +5200,25 @@ body.tray-open { padding-bottom: 105px; }
                     <div class="cds-cmt-header" onclick="cdsCmtToggle(this)">
                       <div class="cds-cmt-header-text">
                         <div class="cds-cmt-month">2026年 6月</div>
-                        <div class="cds-cmt-headline">燃油車内販の崩壊 — 減量の78%を占め純燃油 −42%、輸出は油電双方が急増</div>
+                        <div class="cds-cmt-headline">ICE車内販の崩壊 — 減量の78%を占め純ICE −42%、輸出は油電双方が急増</div>
                       </div>
                       <span class="cds-cmt-toggle">▶</span>
                     </div>
                     <ul class="cds-cmt-points">
                       <li>6月小売<strong>160.2万台、前年比 −23% / 前月比 +6%</strong>。1-6月累計小売<strong>870万台 −20%</strong>。<em>「総量は圧力下、前月比は改善、構造は極端な二極化」</em>の趨勢的回復態勢</li>
-                      <li>崔氏が挙げる6月の核心特徴は<strong>「エンジン車の国内販売急減・新エネルギー車の台頭・輸出の好調」</strong>の3点</li>
-                      <li><strong>燃油車小売 −39%</strong>が国内下落の核心圧力。常規燃油車のシェアは<strong>37.2%</strong>で、その減少分が<em>乗用車総減量の78%を占める</em>。内部でも分化が進み<strong>常規HV −7% に対し純燃油車 −42%</strong>と、<em>燃油車内部でHVだけが相対的に踏みとどまる構図</em></li>
+                      <li>崔氏が挙げる6月の核心特徴は<strong>「ICE車の国内販売急減・新エネルギー車の台頭・輸出の好調」</strong>の3点</li>
+                      <li><strong>ICE車小売 −39%</strong>が国内下落の核心圧力。ICE車のシェアは<strong>37.2%</strong>で、その減少分が<em>乗用車総減量の78%を占める</em>。内部でも分化が進み<strong>HEV −7% に対し純ICE車 −42%</strong>と、<em>ICE車内部でHVだけが相対的に踏みとどまる構図</em></li>
                       <li><strong>高油価・消費転型が「油電替代」を加速</strong>させ、NEV小売浸透率は<strong>62.8%の歴史的高位</strong>を維持（前年比 +9.5pt、前月比 −0.1pt）</li>
-                      <li><strong>合資ブランドの電動化転換が加速</strong>：6月の合資NEV車型は<strong>+45%</strong>、一方で合資燃油車は<strong>−39%</strong>と、<em>合資陣営内部でも明暗が完全に分かれた</em></li>
+                      <li><strong>合資ブランドの電動化転換が加速</strong>：6月の合資NEV車型は<strong>+45%</strong>、一方で合資ICE車は<strong>−39%</strong>と、<em>合資陣営内部でも明暗が完全に分かれた</em></li>
                       <li>6月卸売<strong>235.8万台 −5.7% / 前月比 +6.5%</strong>。前年同期比14万台減で<em>5月の差より拡大、チャネル圧力の改善なし</em>。<strong>輸出急増により卸売伸び率が小売を17.5pt上回る</strong></li>
                       <li>6月生産<strong>233.8万台 −2.7% / 前月比 +5.6%</strong>。<strong>7月からの新国標始動</strong>を控え需要が弱含んだため<em>6月の主体的減産力度は非常に大きかった</em>が、<strong>輸出の牽引が巨大</strong>で生産を下支え</li>
-                      <li>6月輸出（整車＋CKD）<strong>87.7万台 +82.3% / 前月比 +11.5%</strong>、メーカー販売の<strong>37%</strong>（前月36%、25年同期19%）。<strong>NEV輸出比率57%と過去最高</strong>、同時に<strong>燃油車輸出も +33%</strong>と強く、<em>中国の海外進出は油電双方が増加する超強表現</em></li>
+                      <li>6月輸出（整車＋CKD）<strong>87.7万台 +82.3% / 前月比 +11.5%</strong>、メーカー販売の<strong>37%</strong>（前月36%、25年同期19%）。<strong>NEV輸出比率57%と過去最高</strong>、同時に<strong>ICE車輸出も +33%</strong>と強く、<em>中国の海外進出は油電双方が増加する超強表現</em></li>
                       <li>産販在庫：メーカー卸売が生産を<strong>2.0万台上回り</strong>、国内卸売は国内小売を<strong>12.0万台下回る</strong>。1-6月の行業在庫は<strong>−47万台</strong>の在庫削減（25年同期 −16万、24年 −49万、23年 −20万）</li>
                       <li><strong>NEV卸売浸透率 62.8%</strong>（前年比 +13pt）— 自主<strong>73.9%</strong> / 豪華<strong>55.5%</strong> / 合資<strong>13.1%</strong>。<em>伝統車卸売 −30% に対しNEV +19% と伸び率差50pt</em>。小売側の内訳は自主<strong>81.8%</strong>、豪華39.6%、合資11.9%</li>
                       <li>国別の明暗：<strong>自主110万台 −18%（前月比+6%）</strong>で国内シェア<strong>68.6%（+4.5pt）</strong>。<strong>主流合資33万台 −34%（前月比+8%）</strong>（独12.8% −3.4pt、日11.0% −1.0pt、米5.8% −0.1pt）。<strong>豪華17万台 −30%（前月比+3%）</strong>でシェア10.3%（−1.1pt）</li>
                       <li>級別：<em>A級セダンとA00級セダンがいずれも低調</em>、<strong>A0級セダンと高級車型が6月の小売主力</strong>。SUVは高級車が好調</li>
-                      <li>値引き率：NEV<strong>9.1%の中低位</strong>（前月比 −0.5pt、<em>低価格新車増加で新車切替時の促販が急減</em>）、燃油車23.3%（前月比+0.8pt）、豪華26.4%（前月比+1.2pt）、合資23.1%（前月比+0.8pt）、<strong>自主19.0%（最も促販が小さい）</strong>。<em>PHEV・増程の促販が明確に改善</em>、純電動は前月比 −0.3pt。現在は<em>欧州系・韓国系の促販が大きく、その他合資は22%前後で差は小さい</em></li>
-                      <li>6月の注目点：<strong>燃油車の前月比の動きがNEVより強い</strong> — <em>油価下落後に需要がやや改善した特徴</em>が現れた（燃油車小売 −39% に対しNEV −9% と前年比の差は依然30pt前後だが、前月比では逆転）</li>
+                      <li>値引き率：NEV<strong>9.1%の中低位</strong>（前月比 −0.5pt、<em>低価格新車増加で新車切替時の促販が急減</em>）、ICE車23.3%（前月比+0.8pt）、豪華26.4%（前月比+1.2pt）、合資23.1%（前月比+0.8pt）、<strong>自主19.0%（最も促販が小さい）</strong>。<em>PHEV・増程の促販が明確に改善</em>、純電動は前月比 −0.3pt。現在は<em>欧州系・韓国系の促販が大きく、その他合資は22%前後で差は小さい</em></li>
+                      <li>6月の注目点：<strong>ICE車の前月比の動きがNEVより強い</strong> — <em>油価下落後に需要がやや改善した特徴</em>が現れた（ICE車小売 −39% に対しNEV −9% と前年比の差は依然30pt前後だが、前月比では逆転）</li>
                     </ul>
                   </article>
 
@@ -5240,7 +5240,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>産販在庫：メーカー卸売が生産を<strong>1.1万台上回り</strong>、国内卸売は国内小売を<strong>8.2万台下回る</strong>。1-5月の行業在庫は<strong>−34万台</strong>の在庫削減（25年同期 +1万、24年 −48万、23年 −20万）</li>
                       <li><strong>NEV小売浸透率 62.9%</strong>（前年比 +9.9pt、<em>前月比 +1.6pt</em>）。自主中NEV比率<strong>81.4%</strong>、豪華36.9%、合資14.5%。<strong>NEV卸売浸透率 61.1%</strong>（+8pt）— 自主71.6% / 豪華51.3% / 合資15.0%。<em>伝統車卸売 −21% に対しNEV +11% と伸び率差32pt</em></li>
                       <li>国別の明暗：<strong>自主104万台 −17%（前月比+8%）</strong>で国内シェア<strong>68.7%（+3.8pt）</strong>、<em>吉利汽車・長安汽車などの伝統メーカーのシェア上昇が顕著</em>。<strong>主流合資31万台 −35%（前月比+12%）</strong>（独13.4% −2.3pt、日10.5% −2.1pt、<em>米5.9% +0.7pt</em>）、<em>韓系シェアは明確に改善</em>。<strong>豪華16万台 −20%（前月比+13%）</strong>でシェア10.6%（<em>+0.2pt、伝統高級車市場はやや底堅さ</em>）</li>
-                      <li>値引き率：NEV<strong>9.8%</strong>（前月比 −1.1pt）、燃油車22.5%（前月比+0.4pt、<em>1年以上23%前後を維持</em>）、豪華25.2%（前月比+1.2pt）、合資22.3%（前月比 −0.1pt）、<strong>自主18.8%（最も促販が小さい）</strong>。動力別では<em>増程が前年比+3.3pt</em>、PHEVは前年比+2pt・前月比横ばい、<strong>純電動は主力車型切替で前月比 −2.4pt</strong></li>
+                      <li>値引き率：NEV<strong>9.8%</strong>（前月比 −1.1pt）、ICE車22.5%（前月比+0.4pt、<em>1年以上23%前後を維持</em>）、豪華25.2%（前月比+1.2pt）、合資22.3%（前月比 −0.1pt）、<strong>自主18.8%（最も促販が小さい）</strong>。動力別では<em>増程が前年比+3.3pt</em>、PHEVは前年比+2pt・前月比横ばい、<strong>純電動は主力車型切替で前月比 −2.4pt</strong></li>
                     </ul>
                   </article>
 
@@ -5255,12 +5255,12 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>4月小売<strong>138.4万台、前年比 −21% / 前月比 −16%</strong> — 崔氏が<em>「正常な増長線路から逸脱」</em>と評価。1-4月累計小売<strong>560.4万台 −18.5%</strong>と深刻な前期失速</li>
                       <li>失速の多元的主因：<strong>春節後の回復遅れ</strong>＋以旧換新政策の<strong>規範強化＋補助縮小</strong>＋<em>高油価の激烈な衝撃</em>＋深層には<em>消費能力・購買意欲の低下</em></li>
-                      <li><strong>燃油車が「減量の主犯」に</strong>：4月燃油車前年比 <strong>−36.5万台</strong>で<em>市場減量の84%を占める</em>（1-2月 40% → 3月 52% → 4月 <strong>84%</strong>と寄与が拡大）— <em>油電分化が決定的に進行</em></li>
+                      <li><strong>ICE車が「減量の主犯」に</strong>：4月ICE車前年比 <strong>−36.5万台</strong>で<em>市場減量の84%を占める</em>（1-2月 40% → 3月 52% → 4月 <strong>84%</strong>と寄与が拡大）— <em>油電分化が決定的に進行</em></li>
                       <li>4月卸売<strong>211万台 −4.0% / 前月比 −11.3%</strong>、生産<strong>219.3万台 −1.8% / −7.2%</strong> — <em>輸出爆発で卸売伸び率が小売を17pt上回る「内冷外熱」</em>の鮮明化</li>
                       <li>4月輸出（整車＋CKD）<strong>76.9万台 +80.7% / 前月比 +11.8%</strong> — <em>2ヶ月連続の爆発的成長</em>、メーカー販売の<strong>36%</strong>（前月29%、25年同期19%）。1-4月行業在庫累計<strong>−26万台</strong>の在庫削減（25年同期+11万、24年 −39万、23年 −15万）</li>
                       <li><strong>NEV小売浸透率 61.4% が史上初の60%突破</strong>（前年比 +9.7pt、前月比 +9.6pt）— 自主中NEV比率<strong>80.1%</strong>、豪華26.1%、合資14.1%。NEV卸売浸透率も<strong>58.0%</strong>（+6.2pt）に上昇、<em>NEV主導への構造転換が完成段階</em></li>
                       <li>国別の明暗：<strong>主流合資 28万台 −37%（前月比 −33%）</strong>と急失速（独13.3% −2.2pt、日10.9% −1.2pt、米4.5% −0.3pt）、<strong>豪華14万 −16%（前月比 −33%）</strong>。一方<strong>自主97万 −16%</strong>で<em>国内シェア69.6%（+4pt）</em>と相対的に堅調、新エネと輸出が下支え</li>
-                      <li>値引き率：NEV<strong>10.9%</strong>（前月+0.3pt、<em>反内卷で中高位安定</em>）、燃油車22.1%（<em>9ヶ月連続23%前後</em>）、豪華<strong>24.0%（前月比 −1.9pt 急縮小）</strong>、合資22.4%、自主18.6%。<em>新車指導価の合理回帰で促販絶対値は縮小も実質価格に変化少</em></li>
+                      <li>値引き率：NEV<strong>10.9%</strong>（前月+0.3pt、<em>反内卷で中高位安定</em>）、ICE車22.1%（<em>9ヶ月連続23%前後</em>）、豪華<strong>24.0%（前月比 −1.9pt 急縮小）</strong>、合資22.4%、自主18.6%。<em>新車指導価の合理回帰で促販絶対値は縮小も実質価格に変化少</em></li>
                     </ul>
                   </article>
 
@@ -5276,7 +5276,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>1Qの新車投入が<strong>わずか18車種</strong>（24年Q1: 33車種 / 25年Q1: 28車種）— 新規モデルの増分貢献度が大幅低下、年式更新型へ移行</li>
                       <li>消費アップグレードで<strong>エコノミー車の新投入が1車種まで激減</strong>、レンジエクステンダー・ハイブリッドが新ブレークスルーポイントに</li>
                       <li>米国AI革命によるメモリ・チップ・有色金属の価格高騰、中東危機による国際原油価格高騰 → <strong>車載部品の製造コストとユーザー使用コストの両方が上昇</strong>、消費ポテンシャル抑制</li>
-                      <li>1Qが販売マイナス成長で<strong>ディーラーの生存圧力急増</strong>、3月のガソリン車販促率は前月比 −0.8pt、新車値下げ潮流が起きず<em>消費者の様子見ムードが顕著</em></li>
+                      <li>1Qが販売マイナス成長で<strong>ディーラーの生存圧力急増</strong>、3月のICE車販促率は前月比 −0.8pt、新車値下げ潮流が起きず<em>消費者の様子見ムードが顕著</em></li>
                       <li>NEV販促率10.6%で<strong>7ヶ月連続10%前後</strong>を維持 — 「反内卷」が業界の共通了解として定着</li>
                       <li>崔氏の長期政策提言：単発の「以旧換新」では不十分、<em>「車購入の所得控除」</em>のような恒久的な支援策が必要</li>
                       <li>3月は<strong>「最も耐え難い時期」</strong>と位置付け — 新製品発表とマーケット環境明朗化を待つ局面</li>
@@ -5295,7 +5295,7 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>NEV購置税免除退出から2ヶ月目、<strong>「税収・補助の調整による回復期」</strong>が継続 — 1-2月の合算で空洞化効果がより鮮明化</li>
                       <li>2026年は春節2/17の<em>「大きな年」</em>（春節遅め＝消費機会増）— ただし市場の伸びは二極化、NEVは依然として弱い</li>
-                      <li>春節前燃油車主導のパターンが2年連続で再演（燃油車 −19% / EV −35% / レンジエクステンダー −16% / プラグインハイブリッド −31%）</li>
+                      <li>春節前ICE車主導のパターンが2年連続で再演（ICE車 −19% / EV −35% / レンジエクステンダー −16% / プラグインハイブリッド −31%）</li>
                       <li>NEV販促率10.4%で<strong>6ヶ月連続10%前後</strong>を維持 — 反内卷の規律性が定着</li>
                       <li>入門級車種の比率が低下、<em>高級NEVの比率が明確に上昇</em> — 構造的な高品質化への進化と崔氏は評価</li>
                       <li>中国系NEV輸出 +125%、中国系輸出に占めるNEV比率48.4%(過去最高更新)</li>
@@ -5312,8 +5312,8 @@ body.tray-open { padding-bottom: 105px; }
                     </div>
                     <ul class="cds-cmt-points">
                       <li>NEV購置税免除終了後の<strong>正常な調整期</strong>に入った市場 — 一部消費者が12月に政策恩恵を前倒し享受したため、1月に明確な<em>反動の空洞化効果</em>が出現（崔氏は「短期波動で長期トレンドではない」と強調）</li>
-                      <li><strong>NEV小売が前年同月比 −19%、初めて燃油車を下回るマイナス成長へ反転</strong> — グラフ上ではNEV小売浸透率が前月59% → 38.8%へ急落、20pt超の崖</li>
-                      <li>春節前は燃油車が強い歴史パターンが再演（燃油車 −10% / EV −17% / レンジエクステンダー +1% / プラグインハイブリッド −30%）</li>
+                      <li><strong>NEV小売が前年同月比 −19%、初めてICE車を下回るマイナス成長へ反転</strong> — グラフ上ではNEV小売浸透率が前月59% → 38.8%へ急落、20pt超の崖</li>
+                      <li>春節前はICE車が強い歴史パターンが再演（ICE車 −10% / EV −17% / レンジエクステンダー +1% / プラグインハイブリッド −30%）</li>
                       <li>新車上市は穏やかに進み、「反内卷」推進で1月のNEV販促率は10.1% — <strong>5ヶ月連続で約10%</strong>、悪性の値下げ競争を回避</li>
                       <li>歴代1月は変動が激しい（過去5年で −38%〜+58%）、−14%は<em>中間状態</em>と位置付け</li>
                       <li>中国系NEV輸出 +115%、中国系輸出に占めるNEV比率47.5%（過去最高）— <strong>欧州・東南アジア向けが牽引</strong></li>
@@ -5407,7 +5407,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>各省の入れ替え(以旧換新)補助の<strong>政策差異化</strong>が鮮明化 → 地域間の販売伸び率が二極化、7月は一部地域で前年比 −10%超の落ち込み、8月で持ち直し</li>
                       <li>新興メーカーにおけるEV vs レンジエクステンダーの構成比が <em>56:10 → 64:8</em> へシフト（EV比率が拡大、レンジエクステンダーが縮小）</li>
                       <li>反内卷の浸透で、メーカー側は<strong>能動的に在庫を圧縮</strong>する動きへ（前年は小売起点の在庫減少だった）</li>
-                      <li>1-8月の中国系ガソリン車輸出 −10% / 中国系NEV輸出 +123% — 輸出の主役交代が進行</li>
+                      <li>1-8月の中国系ICE車輸出 −10% / 中国系NEV輸出 +123% — 輸出の主役交代が進行</li>
                     </ul>
                   </article>
 
@@ -5479,7 +5479,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>入れ替え(以旧換新)政策の<strong>「政策始動が早く、補助設計も一段階で行き渡る形」</strong>により年初から市場成長は良好、価格競争の穏やかさが継続</li>
                       <li>4月の前年比増加率は近10年の正常な年の同月で最高 — <em>四半期ごとの周期変動という構造的な特徴が薄まりつつある</em>ことを示唆（季節性の弱体化）</li>
                       <li>値下げ車種数は前年4月比で大幅減 — <em>値下げ潮流の明らかな冷却</em>が鮮明化、「年式更新による装備強化」型の隠れた優遇策へ完全シフト</li>
-                      <li>ガソリン車の値引きが10ヶ月連続で22%前後の安定圏 — 業界の自律規律化が進行</li>
+                      <li>ICE車の値引きが10ヶ月連続で22%前後の安定圏 — 業界の自律規律化が進行</li>
                       <li>個人車購入ユーザーのうち<strong>約70%が入れ替え(以旧換新)の受益者</strong>、初回購入は31%まで低下 → 「消費アップグレードを伴う買い替え・買い増しが車購入消費の絶対主流に」</li>
                       <li>1-4月の在庫が前年同期比で正常化 — 過去5年続いた「1-4月は在庫減少」のパターンが転換</li>
                     </ul>
@@ -5513,7 +5513,7 @@ body.tray-open { padding-bottom: 105px; }
                     </div>
                     <ul class="cds-cmt-points">
                       <li>春節1/29を経た春節明けの初動月。2025年の廃車・買い換え(報廃更新)、入れ替え(以旧換新)の両政策が段階的にスタート</li>
-                      <li>価格競争は例年に比べて穏やか。<strong>メーカー各社が能動的に価格期待値を安定させ</strong>、ガソリン車の値引きはほぼ横ばい</li>
+                      <li>価格競争は例年に比べて穏やか。<strong>メーカー各社が能動的に価格期待値を安定させ</strong>、ICE車の値引きはほぼ横ばい</li>
                       <li>国内外のマクロ環境が想定より好転、消費者心理も良好。春節期間にメーカー各社のマーケティングが継続発動</li>
                       <li>2024年2月の販売実績が低かった分の反動効果と、春節後の販売エンジンの早期始動が重なり<em>「2月の開門紅」</em>（年初の好スタート）を実現</li>
                       <li>1-2月累計が前年比プラスに復帰 — 政策始動による市場の信頼回復が背景</li>
@@ -5551,7 +5551,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>12月小売264万台、前年同月比+12%、前月比+8.7% — <strong>過去12月で歴代最高水準</strong>。ただし一部地区で入れ替え(以旧換新)補助予算が枯渇し下半月小売に減速感も</li>
                       <li>12月卸売308万台で<strong>過去12月の新記録</strong>を達成、年累計卸売2719万台（前年比+6%）</li>
                       <li>メーカー生産294万台、12月はメーカー生産＜卸売13万、<em>「産銷達標」</em>（生産・販売目標達成）後の年末安定成長 → 2025年初の備蓄</li>
-                      <li>2024年通期の特徴：<strong>強力な在庫圧縮</strong>（メーカー在庫 −34万 / 販売網在庫 −49万）、ガソリン車販売網体系の不安定で在庫大幅減</li>
+                      <li>2024年通期の特徴：<strong>強力な在庫圧縮</strong>（メーカー在庫 −34万 / 販売網在庫 −49万）、ICE車販売網体系の不安定で在庫大幅減</li>
                       <li>NEV年小売浸透率47.6%（前年比+12pt）、下半年は5ヶ月連続で50%超 — <em>「NEV成長率の逓減則」を打破</em></li>
                       <li>中国系メーカーの年度卸売65%・小売60%突破 — BYD・吉利・奇瑞・長安・上汽通用五菱の頭部メーカーが転型成功</li>
                       <li>20万元超の中国系メーカー比率が12月で41%（22年27% / 23年36%から急上昇）— <em>中国系メーカーの「高級化」（プレミアム化）突破</em>が鮮明</li>
@@ -5571,7 +5571,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li><strong>廃車・買い換え(報廃更新)＋入れ替え(以旧換新)</strong>政策の効果が継続放出。11月18日時点で<em>両補助申請が合計400万件超え</em>（各200万件突破）— 不動産刺激策をはるかに超える即効性で、崔氏は<strong>「補助で立ちどころに効果が出る数少ない政策」</strong>と評価</li>
                       <li>11月小売240.9万台、前年同月比 +15.7% / 前月比 +6.5% — 過年累計の3月比で <em>+72万台</em> の押し上げ、<strong>2024年の「低開高走」（低くスタート→尻上がり）の特徴を完全に体現</strong></li>
                       <li>11月卸売293万台、前年同月比 +15%、<strong>歴年11月の新記録更新</strong>。販売店の在庫補充も追い風となり、生産301万台＞卸売293万台＞小売241万台と<em>「メーカーが全面的に在庫を積み増し」する繁忙期らしい好循環</em>へ</li>
-                      <li>NEV出荷浸透率49%（前年比+11pt）、小売浸透率52.1%（前年比+12pt）— 報廃更新でNEVは燃油車より補助5,000元上乗せ、入れ替えでもNEVは燃油車より3,000元上乗せ → <strong>「報廃更新の大半・入れ替えの一部」がNEVを選択</strong>、入門級BEVと狭義PHEVが急成長</li>
+                      <li>NEV出荷浸透率49%（前年比+11pt）、小売浸透率52.1%（前年比+12pt）— 報廃更新でNEVはICE車より補助5,000元上乗せ、入れ替えでもNEVはICE車より3,000元上乗せ → <strong>「報廃更新の大半・入れ替えの一部」がNEVを選択</strong>、入門級BEVと狭義PHEVが急成長</li>
                       <li>中国系メーカーの卸売200万台（前年比 +31%）— BYD・吉利・奇瑞・上汽通用五菱など頭部メーカーの転型が鮮明、累計シェア卸売65% / 小売60%へ拡大</li>
                       <li>SUV市場で<em>BクラスとCクラスの高級化が顕著</em>、Aセダンが歴年最高のB級セダン販売を支える構造に</li>
                       <li>合弁の値引き圧力が全面的に急拡大 — 従来温和だった<strong>ドイツ系・日系も韓国系・米国系並みの値引きへ収斂</strong>、合弁全体促販率は11月時点で21.9%。崔氏は<em>「合弁にもう儲かるブランドはほぼない」</em>と警鐘、<strong>2線ブランドだけでなく1線ブランドの競争圧力も急増</strong></li>
@@ -5590,9 +5590,9 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>全省で<strong>入れ替え(以旧換新)補助政策</strong>が出揃い、<strong>廃車・買い換え(報廃更新)</strong>政策と合わせて10月に全面発力。「十一」黄金週効果と相まって、<em>「銀九金十」（9月銀色・10月金色＝商売最盛期）の効果がはっきり表れた</em>月</li>
                       <li>10月は<strong>小売226万 / 卸売273万 / 生産264.5万 / 輸出44.1万</strong>が全て<em>当月歴代最高</em>を記録 — 特に<strong>輸出が卸売の歴代最高更新を牽引</strong>。小売・卸売とも前月比 +7%・+9%、対前年同月比 +11%・+11%</li>
-                      <li>NEV小売浸透率<strong>52.8%（前年比+15pt）</strong> — 4ヶ月連続で50%超え。10月は本来NEV比率の低い伝統的な燃油車消費月だが、その月でも<em>52.8%まで到達したのはNEVの「爆発式成長」の表れ</em>と崔氏は評価</li>
+                      <li>NEV小売浸透率<strong>52.8%（前年比+15pt）</strong> — 4ヶ月連続で50%超え。10月は本来NEV比率の低い伝統的なICE車消費月だが、その月でも<em>52.8%まで到達したのはNEVの「爆発式成長」の表れ</em>と崔氏は評価</li>
                       <li>NEV輸出は前年比+10%・前月比+14%と引き続き堅調（1-10月累計+28%からはやや減速）</li>
-                      <li>価格戦は7-10月に値引き頻度が2-4月より明確に減少 → <em>「価格戦が落ち着き始めた」</em>。10月は伝統燃油車の値引きも前月比小幅に縮小</li>
+                      <li>価格戦は7-10月に値引き頻度が2-4月より明確に減少 → <em>「価格戦が落ち着き始めた」</em>。10月はICE車の値引きも前月比小幅に縮小</li>
                       <li>在庫は<strong>強力な圧縮継続</strong>：1-10月メーカー在庫 −29万、流通網在庫 −94万 — 7-10月の<em>連続在庫削減31万台で販売店の運営圧力が大幅改善</em>、流通生態が落ち着きつつある局面へ</li>
                       <li>細分市場は<strong>高低両端が伸長</strong> — 報廃更新が経済型EV市場を牽引（季節性の谷を埋めた）、地方の入れ替え補助が中高級セグを牽引</li>
                       <li><strong>「爆款」（ヒット車種）</strong>増加：卸売2万台超の車種は10月28車種（前月23車種）、<em>BYD宋は単月10万台突破</em></li>
@@ -5630,7 +5630,7 @@ body.tray-open { padding-bottom: 105px; }
                       <span class="cds-cmt-toggle">▶</span>
                     </div>
                     <ul class="cds-cmt-points">
-                      <li>8月小売<strong>190.2万台、前年同月比 −1% / 前月比 +10.6%</strong> — 累計1,345万台で +2%。閑散期ながら<em>「報廃更新」政策の追加力（NEVは燃油車より補助5,000元上乗せ）</em>と「反内卷」（過当競争是正）呼びかけで価格が安定し始め、消費者の様子見ムードが緩和</li>
+                      <li>8月小売<strong>190.2万台、前年同月比 −1% / 前月比 +10.6%</strong> — 累計1,345万台で +2%。閑散期ながら<em>「報廃更新」政策の追加力（NEVはICE車より補助5,000元上乗せ）</em>と「反内卷」（過当競争是正）呼びかけで価格が安定し始め、消費者の様子見ムードが緩和</li>
                       <li>NEV小売浸透率<strong>54.0%（前年比+16.7pt）</strong> — <em>2ヶ月連続で50%超え、過去最高の押し上げ幅</em>。崔氏は5つの構造要因を整理：①中国製造業（電池・モーター・チップ）の優位性、②「新質生産力」推進下の中国メーカー全力NEV投入、③開放発展指導思想による異業種参入と競争活性化、④<strong>狭義PHEV・REEVの技術突破で世界PHEV市場の78%を中国が掌握</strong>、⑤8月の報廃更新政策強化</li>
                       <li>卸売215万台（前年同月比 −4% / 前月比 +9%）— 合資の慎重姿勢で歴代最高更新ならず。中国系メーカーの卸売144万（+12%）が伸びる一方、<strong>合資は46万（−30%）と急落</strong>、豪華25万（−15%）も下落</li>
                       <li>輸出41万台で前年同月比 +24%、<em>NEV輸出前年比 +23%</em>（1-8月累計+18%を上回る）— NEV輸出の回復鮮明</li>
@@ -5670,16 +5670,16 @@ body.tray-open { padding-bottom: 105px; }
                       <span class="cds-cmt-toggle">▶</span>
                     </div>
                     <ul class="cds-cmt-points">
-                      <li>6月小売<strong>176.2万台、前年同月比 −7% / 前月比 +3%</strong> — 累計983万台 +3%。<em>4-6月の小売連続マイナスの主因は燃油車前年比 −25% の予想超低迷</em>、6月のNEVと燃油車の伸び率差は<strong>55ポイント</strong>を維持</li>
+                      <li>6月小売<strong>176.2万台、前年同月比 −7% / 前月比 +3%</strong> — 累計983万台 +3%。<em>4-6月の小売連続マイナスの主因はICE車前年比 −25% の予想超低迷</em>、6月のNEVとICE車の伸び率差は<strong>55ポイント</strong>を維持</li>
                       <li>2024年初の値下げ競争は早期スタート、人気車種に約20%の値引きで2月春節後〜4月末まで継続 — <em>値下げ車種数は2023年通年の数に迫り消費者を「極度の様子見」に</em>。年初の蓄積購買力が<strong>「入れ替え(以旧換新)」執行細則公表</strong>で6月に解放、<em>「紅6月」（赤い6月＝商売最盛期）の堅調なNEV相場</em>へ</li>
                       <li>6月1日からNEV車購税優遇から200km未満の超小型EV等入門車が除外 → <strong>6月のNEV増加分の質が向上</strong>（高単価車種に重心がシフト）</li>
                       <li>NEV小売浸透率<strong>48.5%（前年比+13.6pt）</strong>、卸売45.3%（前年比+11.4pt）— Q2はNEV国内小売浸透率が前年比+13pt上昇継続。中国系メーカーNEV小売浸透率<strong>72.5%</strong>に対し、合弁はわずか<strong>7.4%</strong>と二極化が鮮明</li>
                       <li>6月卸売217万台（前年同月比 −3% / 前月比 +7%）、生産213万台（−3% / +7%） — <em>合弁の小売前月比減と輸出前月比横ばい</em>で歴代最高更新ならず。崔氏はメーカー卸売の伸びは<em>「主に1Qの春節要因」</em>と分析</li>
-                      <li>燃油車は新製品の支えに欠け、6月の燃油車値引きは前月比で大幅拡大、NEV値引きは新製品投入と値下げ車種の主力化で沈静化（歴史中位水準）</li>
+                      <li>ICE車は新製品の支えに欠け、6月のICE車値引きは前月比で大幅拡大、NEV値引きは新製品投入と値下げ車種の主力化で沈静化（歴史中位水準）</li>
                       <li>業界の<strong>「在庫圧縮」</strong>特徴が日増しに鮮明化：上半期メーカー在庫 <strong>−17万台</strong>（前年同期 −7万）、国内販売網在庫 <strong>−33万台</strong>（前年同期 −14万） — <em>構造的調整圧力がメーカーから販売網側へ加速度的に伝導、ディーラーの経営マインドは持続不足</em>と崔氏</li>
                       <li>合弁危機が加速：合弁小売48万台<strong>前年比 −27%</strong>（独 −18%、日 −25%、米 −36%、韓 −32%）。シェアも独 −2.6pt、日 −3.5pt、米 −2.9pt と全面後退</li>
-                      <li>輸出37.8万台 <strong>+28%</strong>（累計224.1万 +33%） — 6月の<strong>燃油車輸出 +31%</strong>、NEV輸出 +12%、<em>「燃油車の海外市場表現が国内をはるかに上回る」</em>。中国系メーカーは新エネと輸出で明確な増分を獲得、奇瑞・吉利・BYD・長安・長城などのシェアが顕著に上昇</li>
-                      <li>高級車値引き<strong>23.2%で歴史高位水準</strong> — NEVへの分流圧力が増大、消費アップグレード需要があっても燃油高級は圧迫される構造</li>
+                      <li>輸出37.8万台 <strong>+28%</strong>（累計224.1万 +33%） — 6月の<strong>ICE車輸出 +31%</strong>、NEV輸出 +12%、<em>「ICE車の海外市場表現が国内をはるかに上回る」</em>。中国系メーカーは新エネと輸出で明確な増分を獲得、奇瑞・吉利・BYD・長安・長城などのシェアが顕著に上昇</li>
+                      <li>高級車値引き<strong>23.2%で歴史高位水準</strong> — NEVへの分流圧力が増大、消費アップグレード需要があってもICEの高級車は圧迫される構造</li>
                     </ul>
                   </article>
 
@@ -5696,10 +5696,10 @@ body.tray-open { padding-bottom: 105px; }
                       <li><strong>5月卸売203.1万台、前年同月比 +1% / 前月比 +4%</strong> — 2023年5月の歴史最高200万台を2.8万台上回り<em>歴代5月の新記録</em>。市場「下げ止まり・回復」と輸出促進が背景。1-5月累計958万台 +8%</li>
                       <li><strong>5月生産199.7万台、前年同月比 +0.4%、歴代5月の新記録</strong>（2023年同期高点199万を0.4万上回る）— 生産能力は超強だがメーカーは1-5月「比較克制」（抑制的）</li>
                       <li><strong>5月輸出37.8万台 +23%</strong>、<em>歴代月次輸出の新記録</em>（前月比 −9%だが累計186万 +34%、強含み）</li>
-                      <li>NEV小売浸透率<strong>47.0%（前年比+14pt）</strong>、出荷44.2%（前年比+10.6pt）— 燃油車前年比 −23%、NEV小売前年比 +38%、<em>燃油車の税負重く圧力大</em></li>
+                      <li>NEV小売浸透率<strong>47.0%（前年比+14pt）</strong>、出荷44.2%（前年比+10.6pt）— ICE車前年比 −23%、NEV小売前年比 +38%、<em>ICE車の税負重く圧力大</em></li>
                       <li><strong>NEV車購税優遇政策が6月1日から200km未満超小型EV等を除外 → 5月の「駆け込み登録」</strong>がNEV市場に持続的増量をもたらした</li>
-                      <li>NEVの値引きは<em>春季値引き済み新車が主力化したため一時低下、歴史中位水準</em>へ。一方で<strong>合資の値引きは大きく、自主燃油車も追随</strong>。欧系・韓系の値引きが最強</li>
-                      <li>高級車の値引き<strong>21.7%で歴史高位</strong> — NEV分流圧力で消費アップグレード需要があっても燃油高級は圧迫される</li>
+                      <li>NEVの値引きは<em>春季値引き済み新車が主力化したため一時低下、歴史中位水準</em>へ。一方で<strong>合資の値引きは大きく、自主ICE車も追随</strong>。欧系・韓系の値引きが最強</li>
+                      <li>高級車の値引き<strong>21.7%で歴史高位</strong> — NEV分流圧力で消費アップグレード需要があってもICEの高級車は圧迫される</li>
                       <li>合資危機継続：合資小売49万台<strong>前年比 −21%</strong>、独 −11%、日 −19%、米 −19%、韓 −29%</li>
                       <li>メーカーの在庫削減基調：生産200＜卸売203（−3万）、卸売203＜小売171+輸出（−6万差） — 4-5月の在庫削減特徴の中、5月は<em>「メーカー在庫の穏健調整」</em></li>
                     </ul>
@@ -5719,10 +5719,10 @@ body.tray-open { padding-bottom: 105px; }
                       <li>4月卸売<strong>194.9万台 +10% / −11%</strong> — 2018年4月歴代高点188万台を7万上回り<strong>歴代4月の新記録</strong>。1-4月累計754万 +10%</li>
                       <li>4月生産<strong>198.4万台 +15% / −10%</strong> — 2018年同期高点197万を1万上回り<strong>歴代4月の新記録</strong>。1-4月累計744万 +9%</li>
                       <li>4月輸出<strong>41.2万台 +38% / +0.2%</strong> — <em>歴代月度最高記録更新</em>、累計148.1万 +37%。中国系メーカーの輸出 +41% が牽引、合弁の輸出も +56% と急増（低基数効果）</li>
-                      <li>NEV小売浸透率<strong>43.7%（前年比 +11.7pt）</strong>、卸売<strong>40%（+6pt）</strong>。中国系メーカーNEV小売<strong>66.8%</strong> vs 合弁<strong>7.5%</strong>。4月伝統車小売 −22%、NEV小売 +28%、<em>燃油車・NEVともに圧力が大きい</em>と崔氏</li>
+                      <li>NEV小売浸透率<strong>43.7%（前年比 +11.7pt）</strong>、卸売<strong>40%（+6pt）</strong>。中国系メーカーNEV小売<strong>66.8%</strong> vs 合弁<strong>7.5%</strong>。4月伝統車小売 −22%、NEV小売 +28%、<em>ICE車・NEVともに圧力が大きい</em>と崔氏</li>
                       <li><strong>「メーデー連休前の在庫積み増し」</strong>（メーデー連休前の在庫補充）の動き：生産＞卸売4万、卸売＞小売1万 — <em>3月から開始した「在庫補充」が4月も継続</em>、4月は通常「在庫圧縮」の月だがメーデー備蓄で例年より高め、メーカー在庫は引続き合理的コントロールが必要</li>
-                      <li>NEV値引きが歴史的高水準に到達、2-4月のNEV値引き拡大が顕著（4月は前月比で温和な増加）。伝統燃油車値引きは2024年4月に<strong>18.9%まで上昇</strong>、依然として近期高位水準</li>
-                      <li>高級車値引き<strong>20.9%で歴史次高位水準</strong> — NEVへの分流圧力で消費アップグレードがあっても燃油高級は圧迫される構造。中国系メーカーの値引きは新エネが燃油車より小さく、輸出比率拡大もあり相対的に安定</li>
+                      <li>NEV値引きが歴史的高水準に到達、2-4月のNEV値引き拡大が顕著（4月は前月比で温和な増加）。ICE車値引きは2024年4月に<strong>18.9%まで上昇</strong>、依然として近期高位水準</li>
+                      <li>高級車値引き<strong>20.9%で歴史次高位水準</strong> — NEVへの分流圧力で消費アップグレードがあってもICEの高級車は圧迫される構造。中国系メーカーの値引きは新エネがICE車より小さく、輸出比率拡大もあり相対的に安定</li>
                       <li>合弁危機継続：合弁小売45万 <strong>前年比 −26%</strong>、独 −16%、日 −24%、米 −35%、韓 −25%。<em>独系小売シェア19.0%（−2.2pt）、日系15.2%（−3.6pt）、米系5.9%（−2.6pt）</em>と全面後退。中国系メーカーは新エネと輸出で明確な増分を獲得、奇瑞・吉利・BYD・長安・長城などのシェアが顕著上昇</li>
                     </ul>
                   </article>
@@ -5740,11 +5740,11 @@ body.tray-open { padding-bottom: 105px; }
                       <li>春節後の値下げ競争が急速に過熱 → <em>明確な「消費の様子見」現象</em>を形成、加えて一部新製品への注目と<strong>入れ替え(以旧換新)政策への期待</strong>から、3月車市は<em>「慢熱型」起動</em>（じわじわ加熱型のスタート）</li>
                       <li><strong>3月卸売218.9万台（前年同月比 +10% / 前月比 +68%）</strong>、春節要因の2月低水準を経て<em>当月歴代最高水準</em>に。1-3月累計559万台 +11%</li>
                       <li><strong>3月生産219.2万台（+5% / +77%）</strong> — 2018年同期高点216万台を3万台上回り<em>歴代3月の新記録</em>。生産能力は超強だが1-3月は比較的抑制的、3月は主力企業が生産を強力に調整して在庫を安定化</li>
-                      <li>NEV小売浸透率<strong>41.6%（前年比+7.2pt）</strong>、NEV卸売浸透率<strong>36.8%（前年比+5.8pt）</strong>。3月の燃油車小売 −6% に対しNEV小売 +29%、ともに圧力大。中国系メーカーNEV小売浸透率<strong>63.3%</strong> vs 合弁<strong>7.4%</strong>と二極化</li>
+                      <li>NEV小売浸透率<strong>41.6%（前年比+7.2pt）</strong>、NEV卸売浸透率<strong>36.8%（前年比+5.8pt）</strong>。3月のICE車小売 −6% に対しNEV小売 +29%、ともに圧力大。中国系メーカーNEV小売浸透率<strong>63.3%</strong> vs 合弁<strong>7.4%</strong>と二極化</li>
                       <li>3月輸出40.6万台 <strong>+39% / +36%</strong> — 1Q累計106万 +36%、<em>昨年末からの強勢成長特徴を継続</em></li>
                       <li>1-2月のメーカー生産抑制と春節前の販促による小売押し上げで、メーカー・販売網ともに在庫減少。3月はメーカー生産回復、卸売≧生産・卸売＞小売10万台で<em>「在庫補充」</em>の動きへ転換 — 2023年9月〜3月でメーカーと販売網あわせて<strong>−23万台の在庫圧縮</strong>、<em>ディーラーの在庫減少自衛意識が大幅強化</em>と崔氏</li>
-                      <li>NEV値引きが<strong>2021年9月以降の歴史高位水準</strong>に到達、3月のNEV値引き拡大が顕著（2月は前月比で温和な増加）。伝統燃油車の値引きも2023年8月から再び大幅反発、2024年2月は前月比で18.3%まで低下も依然として高位</li>
-                      <li>高級車値引き<strong>21.4%で過去最高水準</strong> — NEVへの分流圧力で消費アップグレードがあっても燃油高級は圧迫される構造。中国系メーカーの値引きは新エネが燃油車より小さく、輸出比率拡大もあり相対的に安定</li>
+                      <li>NEV値引きが<strong>2021年9月以降の歴史高位水準</strong>に到達、3月のNEV値引き拡大が顕著（2月は前月比で温和な増加）。ICE車の値引きも2023年8月から再び大幅反発、2024年2月は前月比で18.3%まで低下も依然として高位</li>
+                      <li>高級車値引き<strong>21.4%で過去最高水準</strong> — NEVへの分流圧力で消費アップグレードがあってもICEの高級車は圧迫される構造。中国系メーカーの値引きは新エネがICE車より小さく、輸出比率拡大もあり相対的に安定</li>
                       <li>合弁危機継続：合弁小売50万台<strong>前年比 −8%</strong>。<em>独系小売シェア20.4%（−1.5pt）、日系13.8%（−2.2pt）、米系8.2%（−1.8pt）</em>と全面後退。中国系メーカーは新エネと輸出で明確な増分を獲得、奇瑞・吉利・BYD・長安・長城などのシェアが顕著上昇</li>
                     </ul>
                   </article>
@@ -5765,8 +5765,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li>2月輸出<strong>29.8万台 +18% / −17%</strong> — 中国系メーカー輸出 +28%、合弁 −18%、豪華 −14%。中国系メーカーは新エネと輸出で増分獲得継続</li>
                       <li>NEV小売浸透率<strong>35.8%（前年比 +4.1pt / 前月比 +2.9pt）</strong>、卸売<strong>34.5%（前年比 −3.5pt（高基数）／ 前月比 +1.6pt）</strong>。中国系メーカーNEV小売<strong>55.3%</strong> vs 合弁<strong>4.9%</strong>、豪華24.0%</li>
                       <li><strong>「在庫圧縮」</strong>の動き継続：生産＜卸売6万、卸売＜小売11万 — 春節前促販で小売が強く、メーカー＆販売網ともに在庫減。<em>2023年9月〜2024年2月で計 −33万台の在庫圧縮</em>、<em>ディーラーの在庫減少自衛意識が大幅強化</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが2-4月にかけて拡大顕著、<strong>2021年9月以後の歴史高位水準</strong>到達（2月のNEV値引き拡大は特に明顕）。燃油車2月<strong>18.1%（前月比減）</strong>、依然近期高位水準</li>
-                      <li>高級車値引き<strong>20%過去最高水準</strong>継続 — NEVへの分流圧力で消費アップグレードがあっても燃油高級は圧迫される構造</li>
+                      <li>値引き状況：NEV値引きが2-4月にかけて拡大顕著、<strong>2021年9月以後の歴史高位水準</strong>到達（2月のNEV値引き拡大は特に明顕）。ICE車2月<strong>18.1%（前月比減）</strong>、依然近期高位水準</li>
+                      <li>高級車値引き<strong>20%過去最高水準</strong>継続 — NEVへの分流圧力で消費アップグレードがあってもICEの高級車は圧迫される構造</li>
                       <li>合弁の危機が加速：合弁小売33万 <strong>前年比 −31% / 前月比 −51%</strong>、独 −21%、日 −36%、米 −30%、韓 −23%。<em>独系小売シェア20.5%（−0.2pt）、日系14.4%（−3.4pt）、米系6.4%（−0.9pt）</em>。中国系メーカー卸売シェア<strong>60.4%（+7.2pt）</strong>、小売シェア<strong>56.1%（+4.9pt）</strong>。崔氏は<em>「合弁が総体圧力最大、自主が表現最良、豪華は総体不錯」</em>と繰り返し評価</li>
                     </ul>
                   </article>
@@ -5783,13 +5783,13 @@ body.tray-open { padding-bottom: 105px; }
                       <li>1月小売<strong>203.5万台、前年同月比 +57.4% / 前月比 −13.9%</strong> — <em>春節（旧正月）が前年は本世紀最早だった基数効果</em>で大幅成長、「<strong>開門紅</strong>」（年初好況）の動きを実現。今年1月の小売は<em>歴年で中位水準</em>、相対的に平穏</li>
                       <li>1月放量に不利な3要素：① <strong>12月の「透支」</strong>（先食い販売）影響、② 一部車種の予想内の値戻り、③ 各地の促消費<em>消費券等の活動が減少</em></li>
                       <li>国家層面で自動車向け政策指引が頻出、消費安定・拡大を志向。商務部が<strong>「百城聯動」汽車節</strong>と<strong>「千県万鎮」NEV消費季</strong>活動を推進、効果が顕現。各地の促消費政策が持続発力、企業販促との合力で年末車市を安定支持</li>
-                      <li>合弁vs中国系メーカーで前月比の動きが明確に乖離：<em>12月に合弁が普遍的に「冲刺力度」（駆け込み度）大、中国系メーカーは12月相対平穏</em>のため、1月は<strong>合弁の燃油車小売 前月比 −15% / 中国系メーカーの燃油車小売 前月比 +23%</strong>。吉利・奇瑞・長安などの1月の動きが強い</li>
-                      <li><em>入門レベル燃油車は現在「極高性価比」</em>だが、春節前の<strong>「首購群体」</strong>（初回購入層）の消費は明らかに不旺</li>
+                      <li>合弁vs中国系メーカーで前月比の動きが明確に乖離：<em>12月に合弁が普遍的に「冲刺力度」（駆け込み度）大、中国系メーカーは12月相対平穏</em>のため、1月は<strong>合弁のICE車小売 前月比 −15% / 中国系メーカーのICE車小売 前月比 +23%</strong>。吉利・奇瑞・長安などの1月の動きが強い</li>
+                      <li><em>入門レベルICE車は現在「極高性価比」</em>だが、春節前の<strong>「首購群体」</strong>（初回購入層）の消費は明らかに不旺</li>
                       <li>1月卸売<strong>208.9万台 +44.4% / −23.7%</strong>、生産<strong>202.1万台 +50.0% / −24.5%</strong> — NEV・輸出市場の牽引で、メーカー販売は高位維持。年初は多くのメーカーが「生産安定・在庫圧縮」に大きく注力</li>
                       <li>1月輸出<strong>35.5万台 +51% / −7%</strong> — 中国系メーカー輸出 +61%、合弁 +92%（低基数効果）、豪華 −3% で全体が大幅成長</li>
                       <li>NEV小売浸透率<strong>32.8%（前年比 +7.2pt）</strong>、卸売<strong>32.6%（+5.8pt）</strong> — ただし<em>12月の40.3%/40.7%から大幅反落（−7.5pt/−8.1pt）</em>。中国系メーカーNEV小売<strong>51.8%</strong> vs 合弁<strong>5.1%</strong>、豪華22.3%</li>
                       <li><strong>「在庫圧縮」</strong>の動き継続：生産＜卸売7万、卸売＜小売30万 — 春節前促販で小売が強く、メーカー＆販売網ともに在庫減。<em>2023年9月〜1月で計 −16万台の在庫圧縮</em>、春節前の販売網在庫圧力が大幅緩和</li>
-                      <li>値引き状況：高級車値引き<strong>20%で過去最高水準</strong>、燃油車1月<strong>18.3%（前月比減）</strong>、NEV値引きは2023年1月以後の歴史的高水準に到達。<em>1月のNEV値引き拡大は12月対比で温和</em></li>
+                      <li>値引き状況：高級車値引き<strong>20%で過去最高水準</strong>、ICE車1月<strong>18.3%（前月比減）</strong>、NEV値引きは2023年1月以後の歴史的高水準に到達。<em>1月のNEV値引き拡大は12月対比で温和</em></li>
                       <li>中国系メーカーが圧勝：小売シェア<strong>55.1%（+5.9pt）</strong>、卸売シェア<strong>60.5%（+8.2pt）</strong>。新エネと輸出で増分獲得、吉利・BYD・奇瑞・長安・長城などのシェアが顕著に上昇。崔氏は<em>「合弁が総体的に圧力最大、自主が表現最良、豪華は総体不錯」</em>と評価</li>
                     </ul>
                   </article>
@@ -5805,14 +5805,14 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>12月小売<strong>235万台、前年同月比 +8.5% / 前月比 +13%</strong>、年間累計2,170万 +6%。<em>1-12月で持続的に前月比成長</em>し12月が年内最高 — 崔氏は<strong>「本世紀以来かつて出現しなかった前月比成長持続の動き」</strong>と評価</li>
                       <li>2023年動向の独立特徴：① 春節が本世紀最早だった<em>ベース効果（前年比の基準が変動する影響）</em>、② 期待刺激政策がもたらす<em>消費者の様子見</em>、③ 国6（中国第6段階排ガス規制）の旧在庫車の販売促進戦、④ 住宅市場の冷却による車市消費促進、⑤ 政策促販などの複合的影響</li>
-                      <li>12月は冬季気温が冷えるなか<strong>「升温の動き」継続</strong> — NEVの成長動力 + 小ロット燃油車の<strong>国6A車の在庫一掃</strong>が前月比走強を駆動。<em>歴年の年末「促販企穏縮小」とは対照的に、今年12月は燃油車もNEVも値引き続伸</em>、増換購促販と地方補助金で消費需要を解放</li>
+                      <li>12月は冬季気温が冷えるなか<strong>「升温の動き」継続</strong> — NEVの成長動力 + 小ロットICE車の<strong>国6A車の在庫一掃</strong>が前月比走強を駆動。<em>歴年の年末「促販企穏縮小」とは対照的に、今年12月はICE車もNEVも値引き続伸</em>、増換購促販と地方補助金で消費需要を解放</li>
                       <li>12月卸売<strong>271万台 +22% / +7%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>。年間累計2,553万 +10%、2017年高点を130万上回る<strong>歴代最高</strong></li>
                       <li>12月生産<strong>267万台 +28% / +1%</strong> — 各地の「成長安定」任務が重く、メーカーが努力。年間累計2,555万 +9%。生産能力超強で市場圧力加劇、12月主力企業は生産調整で在庫安定化、米FRB利上げ・上流資源価格下落で<em>NEV産販相対慎重</em></li>
                       <li>12月輸出<strong>38.5万台 +49% / +3%</strong> — 中国系メーカー輸出+45%（33.1万）、合弁+76%、豪華+87%。累計輸出383.1万 +62%</li>
                       <li>NEV卸売浸透率<strong>40.8%</strong>（持続走強）、NEV小売浸透率<strong>40.2%（前年比 +10.6pt、年間35.7% +8.1pt）</strong>。中国系メーカーNEV小売<strong>64.6%</strong> vs 合弁<strong>6.0%</strong>、豪華29.5%</li>
                       <li>「<strong>在庫補充</strong>」の動き：生産＜卸売4万、卸売＜小売2万 — <em>強力な販促</em>が小売を強く牽引、メーカー＆販売網ともに在庫減。<em>2023年9月〜年末の販売網在庫増加が猛烈、春節前繁忙期に向けた備蓄</em></li>
                       <li>2023年乗用車企業の販売額は<strong>4.26万億元</strong>、単価は<strong>16.71万元</strong>に上昇 — <em>促販費用の効果明顕</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史高位、燃油車も2-12月で再び大幅反発し<strong>近期最高位水準</strong>到達。<strong>高級車値引き19%過去最高</strong>、合弁が圧力最大、欧系・韓系が値引き強い</li>
+                      <li>値引き状況：NEV値引きが歴史高位、ICE車も2-12月で再び大幅反発し<strong>近期最高位水準</strong>到達。<strong>高級車値引き19%過去最高</strong>、合弁が圧力最大、欧系・韓系が値引き強い</li>
                       <li>中国系メーカーが圧勝：12月小売<strong>124万台 +17% / +8%</strong>、小売シェア<strong>52.9%（+4.0pt）</strong>、卸売シェア<strong>58.2%（+0.8pt）</strong>。23年累計小売シェア<strong>52%（+4.6pt）</strong>。<em>BYD・奇瑞・長安・吉利等のシェアが顕著上昇</em></li>
                       <li>合弁危機継続：合弁小売79万 <strong>前年比 −7% / 前月比 +20%</strong>。独系小売シェア<strong>20.5%（横ばい）</strong>、日系<strong>16.5%（−2.3pt）</strong>、米系<strong>7.3%（−1.1pt）</strong>。崔氏は<em>「合弁が総体的に圧力最大、自主が表現最良、豪華は総体不錯」</em>と評価</li>
                     </ul>
@@ -5829,14 +5829,14 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>11月小売<strong>208万台、前年同月比 +26% / 前月比 +2.4%</strong>、累計1,935万 +5%。<em>1-11月で連続前月比成長</em>し11月が年内最高 — 崔氏は<strong>「本世紀以来かつて出現しなかった前月比成長持続の動き」</strong>と評価</li>
                       <li>2023年動向の独立特徴：① 春節が本世紀最早だった<em>ベース効果（前年比の基準が変動する影響）</em>、② 期待刺激政策がもたらす<em>消費者の様子見</em>、③ 国6（中国第6段階排ガス規制）の旧在庫車の販売促進戦、④ 住宅市場の冷却による車市消費促進、⑤ 政策促販などの複合的影響</li>
-                      <li>11月は冬季気温が冷えるなか<strong>「冬季時間升温」（冬季は気温下がるが車市は温まる）の動きが継続</strong> — NEVの成長動力 + 小ロット燃油車の<strong>国6A車の在庫一掃</strong>が前月比走強を駆動。<em>歴年の年末「促販企穏縮小」とは対照的に、今年11月は燃油車もNEVも値引き持続増大</em>、増換購促販と地方補助金で消費需要を解放</li>
+                      <li>11月は冬季気温が冷えるなか<strong>「冬季時間升温」（冬季は気温下がるが車市は温まる）の動きが継続</strong> — NEVの成長動力 + 小ロットICE車の<strong>国6A車の在庫一掃</strong>が前月比走強を駆動。<em>歴年の年末「促販企穏縮小」とは対照的に、今年11月はICE車もNEVも値引き持続増大</em>、増換購促販と地方補助金で消費需要を解放</li>
                       <li>11月卸売<strong>254.8万台 +26% / +4%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>更新。年間累計2,282万 +9%、メーカー販売は輸出とNEVで好調牽引</li>
                       <li>11月生産<strong>264万台 +25% / +8%</strong> — 各地の「成長安定」任務が重く、メーカーが努力。1-11月累計2,288万 +8%。生産能力超強で市場圧力加劇、<em>11月主力企業が生産強力調整で販売店体系の在庫均衡を確保</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV産販相対慎重</em></li>
                       <li>11月輸出<strong>37.8万台 +50% / −3%</strong> — 中国系メーカー輸出 +75%（33.3万）、合弁 +12%（2.7万）、豪華 −51%（1.8万）。累計輸出344.9万 +64%</li>
                       <li>NEV卸売浸透率<strong>37.7%（前年比 +1.9pt）</strong>、NEV小売浸透率<strong>40.4%（前年比 +4pt）</strong>。中国系メーカーNEV小売<strong>62.1%</strong> vs 合弁<strong>6.6%</strong>、豪華30.9%。卸売側は中国系52.6% vs 合弁7.9%、豪華35.2%</li>
                       <li>「<strong>増在庫</strong>」（在庫補充）の動きへ転換：生産＞卸売9.6万、卸売＞小売9万 — メーカー・販売網ともに在庫増。<em>22年12月〜23年10月で持続的に−42万台の在庫圧縮を経て、11月の在庫増は春節前の「繁忙期に向けた在庫確保」（最盛期向け備蓄）</em>。<em>去年11月は流通チャネル大幅在庫積み増し時期だったが、今年は部分主力メーカーの産販慎重で11月生産で流通チャネル在庫補充して正常販売に対応</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史高位、<strong>11月のNEV値引き拡大が特に明顕</strong>で2022年11月後の歴史的高水準に到達。燃油車も2-11月で再び大幅反発し<strong>近期最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引き較大、自主燃油車も追隨</strong>、欧系・韓系最強。<strong>高級車値引き19%過去最高</strong>。自主メーカーはNEV値引き&lt;燃油車かつ輸出比率拡大で値引き全体が安定</li>
-                      <li>車型別：燃油車小売伸び率が卸売をやや上回る、MPV小売が鈍化（累計 +17%と依然強い）。<em>燃油車弱含みでセダン需要の比率が低下、セダン小売&lt;SUV小売</em>。A0級セダンが好調、微型セダンは落ち込みが大きい。SUVの高級化が進み<strong>B級・C級SUVが前年比で強含み</strong></li>
+                      <li>値引き状況：NEV値引きが歴史高位、<strong>11月のNEV値引き拡大が特に明顕</strong>で2022年11月後の歴史的高水準に到達。ICE車も2-11月で再び大幅反発し<strong>近期最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引き較大、自主ICE車も追隨</strong>、欧系・韓系最強。<strong>高級車値引き19%過去最高</strong>。自主メーカーはNEV値引き&lt;ICE車かつ輸出比率拡大で値引き全体が安定</li>
+                      <li>車型別：ICE車小売伸び率が卸売をやや上回る、MPV小売が鈍化（累計 +17%と依然強い）。<em>ICE車弱含みでセダン需要の比率が低下、セダン小売&lt;SUV小売</em>。A0級セダンが好調、微型セダンは落ち込みが大きい。SUVの高級化が進み<strong>B級・C級SUVが前年比で強含み</strong></li>
                       <li>中国系メーカーが圧勝：11月小売<strong>115万台 +30% / +1.8%</strong>、小売シェア<strong>55.3%（+1.9pt）</strong>、卸売<strong>152万 +36% / +3%</strong>、卸売シェア<strong>59.7%（+4.6pt）</strong>。23年累計小売シェア<strong>52%（+4.7pt）</strong>。<em>NEVと輸出で増分獲得、奇瑞・BYD・長安・吉利等の頭部伝統メーカーの転型升級パフォーマンスが優れる</em></li>
                       <li>合弁減速：合弁小売66万 <strong>前年比 +23% / 前月比 −3%</strong>。独系小売シェア<strong>18.7%（−0.4pt）</strong>、日系<strong>15.5%（+0.2pt）</strong>、米系<strong>7.9%（−1.5pt）</strong>。合弁卸売73.6万 +18% / +3%、豪華卸売29万 −1% / +12%</li>
                     </ul>
@@ -5853,15 +5853,15 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>10月小売<strong>203.3万台、前年同月比 +10% / 前月比 +1%</strong>、累計1,727万 +3%。<em>1-10月で連続前月比成長</em>し10月が年内最高 — 崔氏は<strong>「本世紀以来かつて出現しなかった前月比成長持続の動き」</strong>との評価を9月から継続</li>
                       <li>2023年動向の独立特徴：① 春節が本世紀最早だった<em>ベース効果（前年比の基準が変動する影響）</em>、② 期待刺激政策がもたらす<em>消費者の様子見</em>、③ 国6（中国第6段階排ガス規制）の旧在庫車の販売促進戦、④ 住宅市場の冷却による車市消費促進、⑤ 政策促販などの複合的影響</li>
-                      <li>10月は「<strong>銀九金十</strong>」（銀色の9月・金色の10月＝中国の伝統的な車市最盛期）の動きが継続 — NEVの成長動力が前月比走強を駆動。値引き持続増大で燃油車もNEVも前月比増、購車消費需要が徐々に解放</li>
+                      <li>10月は「<strong>銀九金十</strong>」（銀色の9月・金色の10月＝中国の伝統的な車市最盛期）の動きが継続 — NEVの成長動力が前月比走強を駆動。値引き持続増大でICE車もNEVも前月比増、購車消費需要が徐々に解放</li>
                       <li><strong>双11電商大促浪潮</strong>で需要が徐々に解放、冬季入りで気温下がり<strong>秋収完了で農村購車熱情が徐々に解放</strong>、共同富裕政策推進で<em>県乡市場の出行需要潜力巨大</em> → 年末車市が徐々に走強の見込み</li>
                       <li>10月卸売<strong>244.5万台 +11% / +0.1%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>更新。年累計2,027万 +7%、メーカー販売は輸出とNEVで好調牽引</li>
                       <li>10月生産<strong>245万台 +7% / +1%</strong> — 前月比の動き比較平穏、<em>急増の回升局面なし</em>。1-10月累計2,023万 +6%。生産能力超強で市場圧力加劇、<em>10月主力企業が生産強力調整で販売店体系の在庫均衡を確保</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV産販相対慎重</em></li>
                       <li>10月輸出<strong>39.1万台 +49% / +9%</strong> — 中国系メーカー輸出 +69%（31.8万）、合弁 +44%（2.9万）、豪華 −20%（4.4万）。累計輸出307.1万 +66%</li>
                       <li>NEV卸売浸透率<strong>36.1%（前年比 +5.2pt）</strong>、NEV小売浸透率<strong>37.7%（前年比 +7.5pt）</strong>。中国系メーカーNEV小売<strong>60.2%</strong> vs 合弁<strong>6.3%</strong>、<em>高級車中のNEVは小売わずか19.4%</em>（卸売側は33.8%）— 高級車NEVは輸入中心で国内小売は限定的</li>
                       <li>「<strong>増在庫</strong>」（在庫補充）の動き継続：生産＞卸売1万、卸売＞小売2万 — メーカー・販売網ともに在庫増。<em>22年12月〜23年10月で持続的に−42万台の在庫圧縮</em>を経て、流通チャネル在庫圧力が大幅緩和。<em>22年10月は流通チャネル大幅在庫積み増し時期だったが、今年は部分主力メーカーの産販慎重</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史高位、<strong>10月のNEV値引き拡大が特に明顕</strong>で2022年10月後の歴史的高水準に到達。燃油車も2-10月で再び大幅反発し<strong>近期最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引き較大、自主燃油車も追隨</strong>、欧系・韓系最強。<strong>高級車値引き18.2%過去最高</strong>。自主メーカーはNEV値引き&lt;燃油車かつ輸出比率拡大で値引き全体が安定</li>
-                      <li>車型別：<em>燃油車卸売伸び率がやや小売を上回る</em>（11月とは逆）、MPV小売が好調（10月+11%、累計+17%）。<em>燃油車弱含みでセダン需要の比率が低下、セダン小売&lt;SUV小売</em>。A0級セダンが好調、微型セダンは落ち込みが大きい。SUVの高級化が進み<strong>B級・C級SUVが前年比で強含み</strong></li>
+                      <li>値引き状況：NEV値引きが歴史高位、<strong>10月のNEV値引き拡大が特に明顕</strong>で2022年10月後の歴史的高水準に到達。ICE車も2-10月で再び大幅反発し<strong>近期最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引き較大、自主ICE車も追隨</strong>、欧系・韓系最強。<strong>高級車値引き18.2%過去最高</strong>。自主メーカーはNEV値引き&lt;ICE車かつ輸出比率拡大で値引き全体が安定</li>
+                      <li>車型別：<em>ICE車卸売伸び率がやや小売を上回る</em>（11月とは逆）、MPV小売が好調（10月+11%、累計+17%）。<em>ICE車弱含みでセダン需要の比率が低下、セダン小売&lt;SUV小売</em>。A0級セダンが好調、微型セダンは落ち込みが大きい。SUVの高級化が進み<strong>B級・C級SUVが前年比で強含み</strong></li>
                       <li>中国系メーカーが圧勝：10月小売<strong>113万台 +19% / +5%</strong>、小売シェア<strong>55.6%（+4.0pt）</strong>、卸売シェア<strong>60.1%（+6.4pt）</strong>。23年累計小売シェア<strong>51%（+4.9pt）</strong>。<em>NEVと輸出で増分獲得、BYD・奇瑞・長安・吉利等の頭部伝統メーカーの転型升級パフォーマンスが優れる</em></li>
                       <li>合弁減速継続：合弁小売66万 <strong>前年比 −2% / 前月比 +1%</strong>。独系小売シェア<strong>18.1%（−1.2pt）</strong>、日系<strong>17.7%（−1.2pt）</strong>、米系<strong>6.1%（−0.8pt）</strong>。高級車小売22万 +8% / −16%。<em>22年の半導体供給逼迫による合弁缺貨問題は徐々に改善されたが、合弁・伝統高級車市場の需要は強くない</em>と崔氏</li>
                     </ul>
@@ -5878,14 +5878,14 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>9月小売<strong>201.8万台、前年同月比 +5% / 前月比 +5%</strong>、累計1,523万 +2%。<em>1-9月で連続前月比成長</em>、9月が年内最高 — 崔氏は<strong>「本世紀以来かつて出現しなかった前月比成長持続の動き」</strong>との評価を8月から継続。ただし9月小売は2017年9月の歴代最高記録219万より約9%低水準</li>
                       <li>2023年動向の独立特徴：① 春節が本世紀最早だった<em>ベース効果（前年比の基準が変動する影響）</em>、② 期待刺激政策がもたらす<em>消費者の様子見</em>、③ 国6（中国第6段階排ガス規制）の旧在庫車の販売促進戦、④ 住宅市場の冷却による車市消費促進、⑤ 政策促販などの複合的影響</li>
-                      <li>9月は<strong>「銀九」</strong>（銀色の9月＝中国の伝統的な車市最盛期）の動向に入り、四半期スパート目標で<em>促販が明確に強まる</em> — 燃油車もNEVも前月比増、購入需要が徐々に解放。国家促消費政策の効果が累積し経済のプラス要因が増加、国慶節連休後10月中旬から<strong>年末加速期入り</strong>、10月の市場環境は良好の見通し</li>
+                      <li>9月は<strong>「銀九」</strong>（銀色の9月＝中国の伝統的な車市最盛期）の動向に入り、四半期スパート目標で<em>促販が明確に強まる</em> — ICE車もNEVも前月比増、購入需要が徐々に解放。国家促消費政策の効果が累積し経済のプラス要因が増加、国慶節連休後10月中旬から<strong>年末加速期入り</strong>、10月の市場環境は良好の見通し</li>
                       <li>9月卸売<strong>244.9万台 +7% / +9%</strong> — NEV・輸出市場の牽引で<strong>当月歴代最高記録</strong>更新。年累計1,782万 +7%、メーカー販売は輸出とNEVで好調牽引</li>
                       <li>9月生産<strong>243万台 +3% / +9%</strong> — 前月比の動向が比較的緩慢、<em>急増の回復局面なし</em>。1-9月累計1,777万 +5%。生産能力過剰で市場圧力激化、<em>9月主力企業が生産を強力に調整して販売店網の在庫均衡を確保</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV生産・販売が相対的に慎重</em></li>
                       <li>9月輸出<strong>35.7万台 +50% / +8%</strong> — 中国系メーカー輸出29.7万 +46% / +5%、合弁3.0万 +5% / +10%、<strong>高級車3.1万 +454% / +57%</strong>（極端な低基数効果）。累計輸出267.7万 +68%</li>
                       <li>NEV卸売浸透率<strong>33.9%（前年比 +4.6pt）</strong>、NEV小売浸透率<strong>36.9%（前年比 +5.1pt）</strong>。中国系メーカーNEV小売<strong>59.4%</strong> vs 合弁<strong>6.2%</strong>、<em>高級車中のNEVは小売24.0%</em>（卸売側は31.1%）— 高級車NEVは輸入中心で国内小売は限定的</li>
                       <li>「<strong>在庫圧縮</strong>」の動向継続：生産＜卸売1.5万、卸売＞小売8万 — メーカー・販売網ともに在庫圧縮。<em>22年12月〜23年9月で持続的に−55万台の在庫圧縮</em>で流通チャネルの在庫圧力が大幅緩和。<em>前年9月は流通チャネルで小幅な在庫圧縮の時期だったが、今年は一部の主力メーカーは生産・販売が慎重で9月生産は多めとなり流通チャネルの在庫を補充</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>9月のNEV値引き拡大が特に顕著</strong>で2022年9月後の歴史的高水準に到達。燃油車も2-9月で大幅反発し<strong>直近最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主燃油車も追随</strong>、欧系・韓系強い。<strong>高級車値引き17.8%歴代最高</strong>。自主メーカーはNEV値引き&lt;燃油車かつ輸出比率拡大で値引き全体が安定</li>
-                      <li>車型別：<em>9月燃油車卸売伸び率 &gt; 小売</em>。<strong>燃油車MPV小売の増加が強い</strong>（1-9月MPV +18%）。燃油車弱含みで<em>セダンの需要シェアが低下 → 今年セダン小売 &lt; SUV小売</em>。セダンの中で<strong>A0級パフォーマンス良好</strong>、<strong>微型（a00）セダンの販売損失が比較的大きい</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>9月のNEV値引き拡大が特に顕著</strong>で2022年9月後の歴史的高水準に到達。ICE車も2-9月で大幅反発し<strong>直近最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主ICE車も追随</strong>、欧系・韓系強い。<strong>高級車値引き17.8%歴代最高</strong>。自主メーカーはNEV値引き&lt;ICE車かつ輸出比率拡大で値引き全体が安定</li>
+                      <li>車型別：<em>9月ICE車卸売伸び率 &gt; 小売</em>。<strong>ICE車MPV小売の増加が強い</strong>（1-9月MPV +18%）。ICE車弱含みで<em>セダンの需要シェアが低下 → 今年セダン小売 &lt; SUV小売</em>。セダンの中で<strong>A0級パフォーマンス良好</strong>、<strong>微型（a00）セダンの販売損失が比較的大きい</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーが圧勝：9月小売<strong>107万台 +20% / +7.9%</strong>、卸売シェア<strong>56.6%（+6.3pt）</strong>。<em>BYD・長安・吉利等のトップの伝統メーカーの転型升級（業態転換・高度化）パフォーマンスが優れる</em>、ブランドシェアが顕著に上昇</li>
                       <li>合弁の危機が加速：合弁小売67万 <strong>前年比 −9% / 前月比 +4%</strong>。<em>独系小売シェア20.2%（−0.9pt）、日系16.6%（−1.1pt）、米系7.3%（−3.3pt）</em>。9月の高級車小売27万 <strong>−7% / −4%</strong></li>
                     </ul>
@@ -5908,8 +5908,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li>8月輸出<strong>33万台 +31% / +7%</strong> — 中国系メーカー輸出28.4万 +58% / +14%、合弁2.7万 −11% / 0%、<strong>高級車1.9万 −54% / −41%</strong>（高級車輸出が大幅減速）。累計輸出232万 +72%</li>
                       <li>NEV卸売浸透率<strong>35.7%（前年比 +5.5pt）</strong>、NEV小売浸透率<strong>37.3%（前年比 +9pt）</strong>。中国系メーカーNEV小売<strong>60.2%</strong> vs 合弁<strong>5.2%</strong>、<em>高級車中のNEVは小売30.0%</em>（卸売側は34.6%）— 高級車NEVは小売側も高水準</li>
                       <li>「<strong>在庫圧縮</strong>」の動向続く：生産＜卸売0.1万、卸売＞小売1万 — メーカーが緩やかに増産で小売活況感が高く流通チャネルの在庫が安定。<em>22年12月〜23年8月で持続的に−51万台の在庫圧縮</em>で流通チャネルの在庫圧力が大幅緩和。<em>前年8月は流通チャネルで小幅な在庫圧縮の時期だったが、今年は一部の主力メーカーは生産・販売が慎重で8月生産は多めとなり流通チャネルの在庫を補充</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>8月のNEV値引き拡大が特に顕著</strong>で2022年8月後の歴史的高水準に到達。燃油車も2023年2月収縮後、3-8月で大幅反発し<strong>直近最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主燃油車も追随</strong>、欧系・韓系強い。<strong>高級車値引き17.5%歴代最高水準</strong>。自主メーカーはNEV値引き&lt;燃油車かつ輸出比率拡大で値引き全体が安定</li>
-                      <li>車型別：<em>8月燃油車卸売伸び率 &gt; 小売</em>。<strong>燃油車MPV小売の増加が強い</strong>（1-8月MPV +19%）。燃油車弱含みで<em>セダンの需要シェアが低下 → セダン小売 &lt; SUV小売</em>。セダンの中で<strong>A0級パフォーマンス良好</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>8月のNEV値引き拡大が特に顕著</strong>で2022年8月後の歴史的高水準に到達。ICE車も2023年2月収縮後、3-8月で大幅反発し<strong>直近最高位水準</strong>到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主ICE車も追随</strong>、欧系・韓系強い。<strong>高級車値引き17.5%歴代最高水準</strong>。自主メーカーはNEV値引き&lt;ICE車かつ輸出比率拡大で値引き全体が安定</li>
+                      <li>車型別：<em>8月ICE車卸売伸び率 &gt; 小売</em>。<strong>ICE車MPV小売の増加が強い</strong>（1-8月MPV +19%）。ICE車弱含みで<em>セダンの需要シェアが低下 → セダン小売 &lt; SUV小売</em>。セダンの中で<strong>A0級パフォーマンス良好</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーが躍進：8月小売<strong>100万台 +17% / +6%</strong>、小売シェア<strong>52.1%（+6.1pt）</strong>、卸売シェア<strong>57.6%（+8.6pt）</strong>。23年累計小売シェア<strong>50%（+4.7pt）</strong>。<em>BYD・奇瑞・長安・吉利・長城等のトップの伝統メーカーの転型升級（業態転換・高度化）パフォーマンスが優れる</em>、ブランドシェアが顕著に上昇</li>
                       <li>合弁危機：合弁小売65万 <strong>前年比 −16% / 前月比 +10%</strong>。<em>独系小売シェア20.1%（−1.0pt）、日系16.7%（−4.0pt）、米系8.5%（−0.4pt）</em>。一方<strong>高級車小売28万 +9% / +14%</strong>と好調に回復</li>
                     </ul>
@@ -5932,8 +5932,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li>7月輸出<strong>31万台 +63% / +4%</strong>（乗用車のみ。自動車全体では税関統計で44万 +59%、額87.7億USD +83%） — 中国系メーカー輸出24.8万 +56% / 0%、合弁2.7万 −8% / −2%、<strong>高級車3.3万 +3295% / +69%</strong>（前年同月のごく低いベースから跳躍）。累計輸出199万 +81%</li>
                       <li>NEV卸売浸透率<strong>35.7%（前年比 +9.3pt）</strong>、NEV小売浸透率<strong>36.1%（前年比 +9.3pt）</strong>。中国系メーカーNEV小売<strong>59.7%</strong> vs 合弁<strong>5.1%</strong>、<em>高級車中のNEVは小売20.3%</em>（卸売側は28.9%）— 高級車NEV小売は2割程度で他より低水準</li>
                       <li>「<strong>在庫積み増し</strong>」の動向に転換：生産＞卸売4万、卸売＞小売2万を下回る — 7月は生産が増加する一方で小売が減速し<em>流通チャネルの在庫が微増</em>。<em>22年12月〜23年7月で持続的に−50万台の在庫圧縮</em>を経て累計の在庫圧力は大幅緩和済み。<em>前年7月は流通チャネルで小幅な在庫圧縮の時期だったが、今年は一部の主力メーカーは生産・販売が慎重で7月生産は多めとなり流通チャネルの在庫を補充</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>7月のNEV値引き拡大が特に顕著</strong>で2022年7月後の歴史的高水準に到達。燃油車も2023年2月収縮後、3-7月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主燃油車も追随</strong>、欧系・韓系強い</li>
-                      <li>車型別：<em>7月燃油車卸売伸び率 &lt; 小売</em>（通常と逆方向）。<strong>MPV小売の増加が強い</strong>。<em>SUVの高級需要が強くセダンの需要シェアが低下 → セダン小売 &lt; SUV小売</em>。セダンの中で<strong>A0級パフォーマンス良好</strong>、<strong>B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>7月のNEV値引き拡大が特に顕著</strong>で2022年7月後の歴史的高水準に到達。ICE車も2023年2月収縮後、3-7月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主ICE車も追随</strong>、欧系・韓系強い</li>
+                      <li>車型別：<em>7月ICE車卸売伸び率 &lt; 小売</em>（通常と逆方向）。<strong>MPV小売の増加が強い</strong>。<em>SUVの高級需要が強くセダンの需要シェアが低下 → セダン小売 &lt; SUV小売</em>。セダンの中で<strong>A0級パフォーマンス良好</strong>、<strong>B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーの躍進：7月小売<strong>94万台 +15% / +1%</strong>、卸売<strong>119万台 +22% / −1%</strong>。7月卸売シェア<strong>58.1%（+8.3pt）</strong>、小売シェア<strong>53.2%（+5.8pt）</strong>。<em>23年累計卸売シェア55%（+6.6pt）、累計小売シェア50%（+4.4pt）</em></li>
                       <li>合弁の全面後退：合弁卸売59万 <strong>前年比 −34% / 前月比 −17%</strong>、合弁小売59万 −28% / −11%。7月の高級車卸売28万 −13% / −15%、<strong>高級車小売24万 −22% / −20%</strong>（前年同月の高水準ベースからの反動）。<em>独系小売シェア20.8%（−0.8pt）、日系15.8%（−5.0pt）、米系7.7%（+0.7pt — 米系のみプラス）</em></li>
                     </ul>
@@ -5957,8 +5957,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li>6月輸出<strong>29万台 +56% / −4%</strong> — 中国系メーカー輸出24.8万 +56% / −1%、合弁2.8万 −7% / +33%、<strong>高級車1.9万 +1911% / −45%</strong>（前年同月のごく低いベースから跳躍）。累計輸出168.1万 +92%</li>
                       <li>NEV卸売浸透率<strong>34.0%（前年比 +8pt）</strong>、NEV小売浸透率<strong>35.1%（前年比 +7.8pt）</strong>。中国系メーカーNEV小売<strong>58.8%</strong> vs 合弁<strong>3.7%</strong>、<em>高級車中のNEVは小売30.9%</em>（卸売側は34.2%）</li>
                       <li>「<strong>在庫積み増し</strong>」の動向に転換：生産＜卸売4万、卸売＞小売5万 — 6月は生産が増産で小売が回復しに転じ、流通チャネルの在庫が改善方向に。<em>22年12月〜23年6月で持続的に−51万台の在庫圧縮</em>で累計の在庫圧力は大幅緩和済み。<em>前年6月は流通チャネルで小幅な在庫圧縮の時期だったが、今年は一部の主力メーカーは生産・販売が慎重で6月生産は多めとなり流通チャネルの在庫を補充</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>6月のNEV値引き拡大が特に顕著</strong>で2022年6月後の歴史的高水準に到達。燃油車も2023年2月収縮後、3-6月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主燃油車も追随</strong>、欧系・韓系強い</li>
-                      <li>車型別：<em>6月燃油車卸売伸び率 &gt; 小売</em>。<strong>燃油車MPV小売の増加が強い</strong>。燃油車弱含みで<em>SUV需要シェアが低下 → セダン小売 &lt; SUV小売</em>。セダンが SUVより良好で、特に<strong>A0級パフォーマンス良好</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>6月のNEV値引き拡大が特に顕著</strong>で2022年6月後の歴史的高水準に到達。ICE車も2023年2月収縮後、3-6月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主ICE車も追随</strong>、欧系・韓系強い</li>
+                      <li>車型別：<em>6月ICE車卸売伸び率 &gt; 小売</em>。<strong>ICE車MPV小売の増加が強い</strong>。ICE車弱含みで<em>SUV需要シェアが低下 → セダン小売 &lt; SUV小売</em>。セダンが SUVより良好で、特に<strong>A0級パフォーマンス良好</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーの躍進：6月小売<strong>93万台 +14% / +7%</strong>、卸売<strong>120万台 +23% / +9%</strong>。6月小売シェア<strong>49.3%（+6.7pt）</strong>、卸売シェア<strong>53.7%（+8.6pt）</strong>。<em>23年累計卸売シェア54%（+6.3pt）、累計小売シェア50%（+4.2pt）</em></li>
                       <li>合弁の苦戦継続：合弁卸売70万 <strong>前年比 −21% / 前月比 +13%</strong>、合弁小売66万 −19% / +6%。<em>独系小売シェア21.1%（−1.6pt）、日系17.8%（−3.7pt）、米系9.2%（−0.9pt）</em>。一方<strong>高級車小売30万 −3% / +22%</strong>と回復 — <em>前年の半導体供給不足による高級車の供給問題が徐々に改善</em>し市場が強含み</li>
                     </ul>
@@ -5981,8 +5981,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li>5月輸出<strong>30万台 +64% / +1%</strong> — 中国系メーカー輸出24.6万 +75% / +1%、合弁2.1万 +1% / +1%、<strong>高級車3.5万 +58% / −2%</strong>。累計輸出138.1万 +102%</li>
                       <li>NEV卸売浸透率<strong>33.7%（前年比 +7.2pt）</strong>、NEV小売浸透率<strong>33.3%（前年比 +6.7pt）</strong>。中国系メーカーNEV小売<strong>57.1%</strong> vs 合弁<strong>4.0%</strong>、<em>高級車中のNEVは小売23.0%</em>（卸売側は33.6%）</li>
                       <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売2万、卸売＞小売5万を下回る — 生産増産と小売回復で流通チャネルの在庫が改善。<em>22年12月〜23年5月で持続的に−53万台の在庫圧縮</em>で累計の在庫圧力は大幅緩和済み。<em>前年5月は流通チャネルで小幅な在庫圧縮の時期だったが、今年も一部の主力メーカーは生産・販売が慎重で5月も流通チャネルの在庫を継続的に低下させ安全性を確保</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>5月のNEV値引き拡大が特に顕著</strong>で2022年5月後の歴史的高水準に到達。燃油車も2023年2月収縮後、3-5月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主燃油車も追随</strong>、欧系・韓系強い</li>
-                      <li>車型別：<em>5月燃油車卸売伸び率 &gt; 小売</em>。<strong>燃油車MPV小売の増加が強い</strong>。燃油車弱含みで<em>SUV需要シェアが低下 → セダン小売 &gt; SUV小売</em>（通常逆方向だが今月はセダンが上）。セダンが SUVより良好で、特に<strong>A0級パフォーマンス良好</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>5月のNEV値引き拡大が特に顕著</strong>で2022年5月後の歴史的高水準に到達。ICE車も2023年2月収縮後、3-5月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主ICE車も追随</strong>、欧系・韓系強い</li>
+                      <li>車型別：<em>5月ICE車卸売伸び率 &gt; 小売</em>。<strong>ICE車MPV小売の増加が強い</strong>。ICE車弱含みで<em>SUV需要シェアが低下 → セダン小売 &gt; SUV小売</em>（通常逆方向だが今月はセダンが上）。セダンが SUVより良好で、特に<strong>A0級パフォーマンス良好</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーの躍進：5月小売<strong>87万台 +41% / +11%</strong>、卸売<strong>110万台 +29% / +10%</strong>。5月小売シェア<strong>50.3%（+4.0pt）</strong>、卸売シェア<strong>55.0%（+5.2pt）</strong>。<em>23年累計小売シェア50%（+3.5pt）、累計卸売シェア54%（+5.8pt）</em></li>
                       <li>合弁の回復兆し：合弁卸売62万 <strong>前年比 +4% / 前月比 +16%</strong>、合弁小売<strong>62万 +12% / +2%</strong> — <em>前年5月の上海ロックダウンによる落ち込みからの回復</em>。<em>独系小売シェア20.6%（−2.4pt）、日系18.0%（−2.9pt）、米系8.1%（+1.2pt — 米系のみプラス）</em>。<strong>高級車小売25万 +39% / +8%</strong>と回復 — <em>前年の半導体供給不足による高級車の供給問題が徐々に改善</em>し市場が強含み</li>
                     </ul>
@@ -6005,8 +6005,8 @@ body.tray-open { padding-bottom: 105px; }
                       <li>4月輸出<strong>30万台 +227% / +3%</strong> — 中国系メーカー輸出24.3万 +203% / −5%、合弁2.1万 +81% / −15%、<strong>高級車3.6万（前年同月のごく低いベースから跳躍、前月比 +194%）</strong>。累計輸出107.9万 +115%</li>
                       <li>NEV卸売浸透率<strong>33.9%（2022年4月の28%比 +5.9pt）</strong>累計30.0%、NEV小売浸透率<strong>32.3%</strong>累計30.1%。小売側：中国系メーカーNEV<strong>56.5%</strong> vs 合弁<strong>4.4%</strong>、<em>高級車中のNEVは23.8%</em>。卸売側：自主<strong>49.5%</strong> / 高級車35.5% / 合弁わずか<strong>4.1%</strong></li>
                       <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売3万、卸売＜小売14万 — 4月はメーカーが減産する一方で小売が回復し<em>流通チャネルの在庫が改善</em>。<em>22年12月〜23年4月で持続的に−33万台の在庫圧縮</em>を経て累計の在庫圧力は大幅緩和。<em>前年4月は流通チャネルで小幅な在庫圧縮の時期だったが、今年も一部の主力メーカーは生産・販売が慎重で4月も流通チャネルの在庫を継続的に低下させ安全性を確保</em>と崔氏</li>
-                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>4月のNEV値引き拡大が特に顕著</strong>で2022年4月後の歴史的高位水準に到達。燃油車も2023年2月収縮後、3-4月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主燃油車も徐々に追随</strong>、欧系・韓系の値引き力度が強い</li>
-                      <li>車型別：燃油車弱含みで<em>SUV需要シェアが低下 → セダン小売 &gt; SUV小売</em>（通常は逆方向だが今月はセダンが上）。セダンの中で<strong>A0級パフォーマンス良好</strong>（A0級卸売 +242% / 小売 +175%）。<strong>燃油車MPVの小売増加が強い</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：NEV値引きが歴史的高水準、<strong>4月のNEV値引き拡大が特に顕著</strong>で2022年4月後の歴史的高位水準に到達。ICE車も2023年2月収縮後、3-4月で大幅反発し<strong>直近最高位水準</strong>に到達。各車系で値引きが二極化、<strong>合弁の値引きが比較的大きく、自主ICE車も徐々に追随</strong>、欧系・韓系の値引き力度が強い</li>
+                      <li>車型別：ICE車弱含みで<em>SUV需要シェアが低下 → セダン小売 &gt; SUV小売</em>（通常は逆方向だが今月はセダンが上）。セダンの中で<strong>A0級パフォーマンス良好</strong>（A0級卸売 +242% / 小売 +175%）。<strong>ICE車MPVの小売増加が強い</strong>。SUVの高級化が強く、<strong>B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーの躍進：4月小売<strong>79万台 +63% / +1.5%</strong>、小売シェア<strong>48.2%（+1.7pt）</strong>。卸売<strong>99.9万台 +83% / −5%</strong>、卸売シェア<strong>55.8%</strong>は<em>超高基数（前年4月＝上海ロックダウンで合弁が崩れ自主シェアが異常高だった）</em>のため前年同期比 −2pt。<em>23年累計小売シェア49%（+3.3pt）、累計卸売シェア54%（+5.8pt）</em>。比亜迪・長安・奇瑞・上汽乗用車など頭部伝統メーカーの<strong>転型升級（事業転換・高度化）</strong>が顕著</li>
                       <li>合弁の回復兆し：合弁小売<strong>61万台 +35% / +12%</strong> — <em>前年4月の上海ロックダウンによる落ち込みからの回復</em>。<em>独系小売シェア21.6%（+2.3pt）、日系18.7%（−5.7pt）、米系8.4%（+1.9pt — 独・米はプラス、日系のみ大幅マイナス）</em>。<strong>高級車小売24万 +101% / −13%</strong>と大幅回復 — <em>前年の半導体供給不足による高級車の供給問題が徐々に改善</em>し市場が強含み</li>
                     </ul>
@@ -6023,14 +6023,14 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>3月小売<strong>159万台、前年同月比 ±0%（横ばい）/ 前月比 +13%</strong>、累計429万 −13%。<em>3月の前月比は+13%のプラス成長だが、これは「本世紀以来最弱の3月前月比伸び率」</em>で、<strong>1-3月累計小売は前年比 −13%と総体消費表現はかなり低調</strong></li>
                       <li>2023年動向の独立特徴：① 春節が本世紀最早だった<em>ベース効果（前年比の基準が変動する影響）</em>、② 期待刺激政策がもたらす<em>消費者の様子見</em>、③ 値引き合戦が様子見ムードを更に助長 — などの複合的影響で、1-3月累計小売429万 −13%</li>
-                      <li>3月車市の力学：国際油価下落で国内油価が調整通道入り、一部NEVメーカーの値下げ追随、燃油車の<em>販売店末端での値引き強化</em>はいずれも車市回復に有利。<strong>だが3月の混乱した値引き合戦が市場低迷を招いた</strong>。崔氏は<em>「この値引きラッシュは通常の販促政策をやや上乗せした程度のものだと市場が認識した後、すでに徐々に沈静化した」</em>とし、<strong>国6（中国第6段階排ガス規制）車型の環保停售期（環境規制による販売停止期）延後が確定すれば、燃油車市場の様子見ムードは自然に褪せる</strong>とみる</li>
+                      <li>3月車市の力学：国際油価下落で国内油価が調整通道入り、一部NEVメーカーの値下げ追随、ICE車の<em>販売店末端での値引き強化</em>はいずれも車市回復に有利。<strong>だが3月の混乱した値引き合戦が市場低迷を招いた</strong>。崔氏は<em>「この値引きラッシュは通常の販促政策をやや上乗せした程度のものだと市場が認識した後、すでに徐々に沈静化した」</em>とし、<strong>国6（中国第6段階排ガス規制）車型の環保停售期（環境規制による販売停止期）延後が確定すれば、ICE車市場の様子見ムードは自然に褪せる</strong>とみる</li>
                       <li>3月卸売<strong>199万台 +9% / +22%</strong> — <em>NEV市場の牽引で一部メーカーの表現が明顕に二極化（メーカー間の格差拡大）</em>。年累計506万 −7%。1-2月は弱含みだったが<em>地方経済の安定需要から四半期末スパートはなお力度（強度）大</em></li>
                       <li>3月生産<strong>208万台 +14% / +22%</strong> — <em>疫情封控（コロナ都市封鎖）の産業チェーンへの影響は完全消除、メーカー生産は正常なリズムに徐々に回復</em>。1-3月累計510万 −5%。生産能力過剰で市場圧力激化、<em>3月の主力企業が生産を強力に調整して販売店網の在庫均衡を確保</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV生産・販売が相対的に慎重</em></li>
                       <li>3月輸出<strong>29万台 +172% / +15%</strong> — 中国系メーカー輸出25.4万 +166% / +31%、合弁2.4万 +112% / +34%、<strong>高級車1.2万（前年同月のごく低いベースから跳躍、前月比 −70%）</strong>。累計輸出77.8万 +90%。<em>全国乗用車輸出は昨年下半期から月25万台前後の歴史的高位を持続維持</em></li>
                       <li>NEV卸売浸透率<strong>31%（2022年3月の25.1%比 +6pt）</strong>累計29.7%、NEV小売浸透率<strong>34.2%（2022年3月の28.1%比 +6pt）</strong>累計30.9%。小売側：中国系メーカーNEV<strong>54.7%</strong> vs 合弁<strong>5.3%</strong>、<em>高級車中のNEVは33.6%</em>。卸売側：自主<strong>46.4%</strong> / 高級車36% / 合弁わずか<strong>3.7%</strong></li>
                       <li>「<strong>在庫積み増し</strong>」の動向：生産＞卸売9万、卸売＞小売11万 — 3月はメーカー生産が回復する一方で小売のペースは安定的で、<em>流通チャネルが継続的に在庫補充</em>。<em>22年12月〜23年3月では持続的に−20万台の在庫圧縮</em>で累計の在庫圧力は緩和。前年3月は流通チャネルが大幅に在庫補充の時期だったが<em>今年は状況が逆で、一部の主力メーカーは生産・販売が慎重で3月も流通チャネル在庫を継続的に低下させ安全性を確保</em>と崔氏。なお<strong>2月末のメーカー＋流通チャネルの総在庫341万台</strong>が3月の供給を有効に保障。世界的な品不足が未だ大幅緩和しない中、<em>中国メーカーの在庫が中高位水準に回復したのは希少な成果で、輸出・内需に安定局面を築いた</em></li>
-                      <li>値引き状況：<strong>燃油車値引きが2023年2月収縮後、3月に再び大幅反発し近期最高位水準</strong>に到達。NEV値引きも徐々に高位、<strong>3月のNEV値引き拡大が特に顕著</strong>で2022年3月後の歴史的高位水準に到達。各車系で値引きが二極化、<strong>日系・独系の値引き力度が比較的大きく、自主燃油車も徐々に追随</strong>、欧系・韓系の値引き力度が強い</li>
-                      <li>車型別：<em>3月燃油車卸売伸び率がやや小売を上回る</em>。<strong>燃油車MPV小売 +39%と好調</strong>。燃油車弱含みで<em>SUV需要の比率が低下 → セダン小売 −1% / SUV小売 −2%</em>でセダンがSUVより良好（主にA0級セダンが好調）。<strong>SUV高級化が強く、B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>値引き状況：<strong>ICE車値引きが2023年2月収縮後、3月に再び大幅反発し近期最高位水準</strong>に到達。NEV値引きも徐々に高位、<strong>3月のNEV値引き拡大が特に顕著</strong>で2022年3月後の歴史的高位水準に到達。各車系で値引きが二極化、<strong>日系・独系の値引き力度が比較的大きく、自主ICE車も徐々に追随</strong>、欧系・韓系の値引き力度が強い</li>
+                      <li>車型別：<em>3月ICE車卸売伸び率がやや小売を上回る</em>。<strong>ICE車MPV小売 +39%と好調</strong>。ICE車弱含みで<em>SUV需要の比率が低下 → セダン小売 −1% / SUV小売 −2%</em>でセダンがSUVより良好（主にA0級セダンが好調）。<strong>SUV高級化が強く、B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーの躍進：3月小売<strong>77万台 +2% / +9%</strong>、国内小売シェア<strong>48.8%（+0.7pt）</strong>。卸売<strong>105.2万台 +21% / +23%</strong>、卸売シェア<strong>52.9%（+4.6pt）</strong>。<em>23年累計小売シェア50%（+3.8pt）、累計卸売シェア53%（+6.7pt）</em></li>
                       <li>合弁の苦戦：合弁小売<strong>54万台 −9% / +11%</strong>。<em>独系小売シェア21.9%（+3.2pt）、日系16.0%（−4.4pt）、米系10.0%（+0.1pt — 独・米はプラス、日系のみ大幅マイナス）</em>。一方<strong>高級車小売27万 +17% / +35%</strong>と回復 — <em>前年の半導体供給不足による高級車の供給問題が徐々に改善</em>し市場が強含み</li>
                     </ul>
@@ -6047,13 +6047,13 @@ body.tray-open { padding-bottom: 105px; }
                     <ul class="cds-cmt-points">
                       <li>2月小売<strong>139万台、前年同月比 +10% / 前月比 +8%</strong>、累計268万 −20%。<em>2月小売は対1月でプラス成長を実現、その前月比伸び率は「本世紀以来最強」</em>。<strong>2023年車市は2月の「開門紅」（年初の好スタート）を実現</strong> — 春節要因と政策退出（補助金終了）などの複合要因で1月が極低水準となった後の、2月の合理的な回復の動き</li>
                       <li>市場回復の背景：前年は「就地過年」（帰省せず現地で年越し）が提唱され春節ムードが薄く、そのため<em>春節前後の市場回復が比較的速かった</em>。今年2月は<strong>春節後の真の市場始動期であり、コロナ3年終結後の市場始動期</strong> — 長く停滞していた消費市場が巨大な新投資・新消費の機会を映し出すと崔氏は期待。<em>節後に消費者の購車潮（まとまった購入の波）が出現し2月の回復を牽引</em></li>
-                      <li>2023年動向の独立特徴：<em>1月の高販売の先食い（透支）の圧力と販売日数の短さで2月の動きは実際にはやや弱含み</em>だが、春節の影響を受けず比較的良好。コロナ後は消費者のNEV購入の実需が小幅低下、油価がさほど高くないことも重なり、<em>春節後の燃油車市場の下落速度が緩和し良好な「開門紅」成長を形成</em></li>
+                      <li>2023年動向の独立特徴：<em>1月の高販売の先食い（透支）の圧力と販売日数の短さで2月の動きは実際にはやや弱含み</em>だが、春節の影響を受けず比較的良好。コロナ後は消費者のNEV購入の実需が小幅低下、油価がさほど高くないことも重なり、<em>春節後のICE車市場の下落速度が緩和し良好な「開門紅」成長を形成</em></li>
                       <li>2月卸売<strong>162万台 +10% / +12%</strong> — <em>NEV市場の牽引で一部メーカーの表現が明顕に二極化</em>。年累計307万 −16%。1-2月は弱含みだが<em>地方経済の安定需要から卸売はなお幾分スパート</em>（2022年4Qの販売が中位水準で1月の開門紅は難度が高く、一部企業は堅実販売で2月の開門紅を実現）</li>
                       <li>2月生産<strong>166万台 +11% / +24%</strong> — <em>コロナ都市封鎖（疫情封控）の産業チェーンへの影響は基本消除、春節後にメーカーの生産・販売が徐々に正常化</em>。内訳：高級ブランド生産 前年比+26%/前月比+21%、合弁ブランド生産 −17%/+27%、中国系ブランド生産 +34%/+23%。生産能力過剰で市場圧力激化、<em>2月の主力企業が生産を強力に調整して在庫安定</em>、米FRB利上げ・上流資源価格下落傾向で<em>NEV生産・販売が相対的に慎重</em></li>
                       <li>2月輸出<strong>25万台 +89% / +8%</strong> — 中国系メーカー輸出19.4万 +122% / +5%、合弁1.8万 +39% / +62%、高級車4.0万 +22% / +3%。累計輸出48.8万 +61%。<em>全国乗用車輸出は2022年下半期から月25万台前後の歴史的高位を維持し、2月も高位を保つ良好な水準</em></li>
                       <li>NEV卸売浸透率<strong>30.6%（2022年2月の21.6%比 +9pt）</strong>。NEV小売浸透率<strong>31.6%（2021年2月の21.7%比 +10pt）</strong> — <em>2月のNEV小売浸透率は低位</em>（2022年3月に28%の高位に達し、その後は天井圏での変動期に入った）。小売側：中国系メーカーNEV<strong>52.9%</strong> vs 合弁<strong>4.2%</strong>、<em>高級車中のNEVは22.6%</em>。卸売側：中国系45.7% / 高級車35% / 合弁わずか<strong>3.1%</strong></li>
-                      <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売10万、卸売＜小売7万 — <em>2月はメーカーが生産・卸売のペースを強力にコントロールして在庫を圧縮</em>。コロナ防疫「新十条」発布後、想定どおり2022年末に燃油車小売の強い増加が出現し<em>在庫圧力を大幅に緩和</em>、2月もメーカー生産を低めにして在庫を更に低減。なお<strong>2022年1月末のメーカー＋流通チャネルの総在庫333万台</strong>が2月の供給を有効に保障。世界的な品不足が深刻な中、<em>中国メーカーの在庫が中高位水準に回復したのは希少な成果で、輸出・内需に安定局面を築いた</em></li>
-                      <li>車型別：<em>2月燃油車卸売伸び率がやや小売を上回る</em>。<strong>燃油車MPV小売 +24%だが表現はやや弱め</strong>。政策実施前の販売一時停止により、<em>セダン小売は前年同月比 +9%、SUV小売は前年同月比 −45%</em>とセダンが相対的に強い（主にA0級セダンが好調）。<strong>SUV高級化が強く、B級・C級SUVが前年同月比で強い</strong></li>
+                      <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売10万、卸売＜小売7万 — <em>2月はメーカーが生産・卸売のペースを強力にコントロールして在庫を圧縮</em>。コロナ防疫「新十条」発布後、想定どおり2022年末にICE車小売の強い増加が出現し<em>在庫圧力を大幅に緩和</em>、2月もメーカー生産を低めにして在庫を更に低減。なお<strong>2022年1月末のメーカー＋流通チャネルの総在庫333万台</strong>が2月の供給を有効に保障。世界的な品不足が深刻な中、<em>中国メーカーの在庫が中高位水準に回復したのは希少な成果で、輸出・内需に安定局面を築いた</em></li>
+                      <li>車型別：<em>2月ICE車卸売伸び率がやや小売を上回る</em>。<strong>ICE車MPV小売 +24%だが表現はやや弱め</strong>。政策実施前の販売一時停止により、<em>セダン小売は前年同月比 +9%、SUV小売は前年同月比 −45%</em>とセダンが相対的に強い（主にA0級セダンが好調）。<strong>SUV高級化が強く、B級・C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカーの躍進：2月小売<strong>71万台 +29% / +12%</strong>、国内小売シェア<strong>51.1%（+7.0pt）</strong>。卸売<strong>85.9万台 +37% / +13%</strong>、卸売シェア<strong>53.3%（+9.8pt）</strong>。<em>1-2月累計シェア50%（2021年同期比 +5.4pt）</em>。NEV市場と輸出市場で明確な増分を獲得、比亜迪・長安・吉利・奇瑞など頭部伝統メーカーの<strong>転型升級（事業転換・高度化）</strong>が顕著</li>
                       <li>合弁の苦戦：合弁小売<strong>48万台 −12% / +2%</strong>。<em>独系小売シェア20.6%（+0.2pt）、日系17.6%（−5.4pt）、米系7.5%（−1.6pt）</em>（独系のみ僅かにプラス、日系・米系はマイナス）。高級車卸売<strong>25万 +16% / +9%</strong></li>
                     </ul>
@@ -6069,14 +6069,14 @@ body.tray-open { padding-bottom: 105px; }
                     </div>
                     <ul class="cds-cmt-points">
                       <li>1月小売<strong>129万台、前年同月比 −38% / 前月比 −40%</strong> — <em>前年比伸び率・前月比伸び率とも「本世紀以来の1月最低データ」</em>。<strong>車市は1月の「開門紅」（年初の好スタート）を実現できず</strong>、これは想定どおりの合理的な動き</li>
-                      <li>2023年動向の独立特徴：外部環境の動揺が中国経済への影響を深めるも、<em>「新十条」が車市の封控状態を変え、住民の外出が正常化し市場活発度が明顕に回復</em>。社会の烟火気（賑わい）の回帰が消費信頼と所得回復をもたらし、春節の帰省・旅行潮、地方政策の安定継続が需要を温和に誘導、<strong>1月中旬には燃油車市場の安定態勢が比較的良好に</strong></li>
+                      <li>2023年動向の独立特徴：外部環境の動揺が中国経済への影響を深めるも、<em>「新十条」が車市の封控状態を変え、住民の外出が正常化し市場活発度が明顕に回復</em>。社会の烟火気（賑わい）の回帰が消費信頼と所得回復をもたらし、春節の帰省・旅行潮、地方政策の安定継続が需要を温和に誘導、<strong>1月中旬にはICE車市場の安定態勢が比較的良好に</strong></li>
                       <li>1月車市の力学：国際油価下落で国内油価が調整通道入り、一部NEVメーカーの値下げ追随・ユーザー権益向上、<em>販売店末端での値引き強化はいずれも車市回復に有利</em>。<strong>ただし1月の春節が本世紀最早だった要因で、産販の稼働日数が同期に減少し、販売ポテンシャルが充分に放出されず</strong></li>
                       <li>1月卸売<strong>145万台 前年比 −33% / 前月比 −35%</strong> — <em>NEV市場の牽引で一部メーカーの表現が明顕に二極化</em>。2022年4Qの販売が中位水準で1月の開門紅は難度が高く一部企業は堅実販売を選好、ただし地方経済の安定需要から卸売はなお幾分スパート</li>
                       <li>1月生産<strong>135万台 前年比 −34% / 前月比 −35%</strong> — <em>コロナ都市封鎖（疫情封控）の産業チェーンへの影響は基本消除、春節前にメーカーが主動的に減産・在庫圧縮を強力推進</em>。内訳：高級ブランド生産 前年比−24%/前月比−18%、合弁ブランド −49%/−32%、中国系ブランド −24%/−42%。生産能力過剰で市場圧力激化、米FRB利上げ・上流資源価格下落傾向でNEV生産・販売が相対的に慎重</li>
                       <li>1月輸出<strong>23万台 前年比 +34% / 前月比 −13%</strong> — 中国系メーカー18.4万 +72% / −20%、合弁0.3万 −86% / −81%、高級車3.9万（前年同月のごく低いベースから跳躍、前月比 +183%）。<em>全国乗用車輸出は2022年下半期から月25万台前後の歴史的高位を維持し、1月も高位を保つ良好な水準</em></li>
-                      <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売10万、卸売＜小売7万 — <em>1月はメーカーが生産・卸売のペースを強力にコントロールして在庫を圧縮</em>。「新十条」発布後、想定どおり2022年末に燃油車小売の強い増加が出現し<em>在庫圧力を大幅に緩和</em>、1月もメーカー生産を低めにして在庫を更に低減。なお<strong>2022年12月末のメーカー＋流通チャネルの総在庫358万台</strong>が1月の供給を有効に保障</li>
+                      <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売10万、卸売＜小売7万 — <em>1月はメーカーが生産・卸売のペースを強力にコントロールして在庫を圧縮</em>。「新十条」発布後、想定どおり2022年末にICE車小売の強い増加が出現し<em>在庫圧力を大幅に緩和</em>、1月もメーカー生産を低めにして在庫を更に低減。なお<strong>2022年12月末のメーカー＋流通チャネルの総在庫358万台</strong>が1月の供給を有効に保障</li>
                       <li>NEV卸売浸透率<strong>26.8%（2022年1月の19.4%比 +7.4pt）</strong>。NEV小売浸透率<strong>25.7%（2021年1月の17%比 +8.7pt）</strong> — <em>歴年1月のNEV浸透率は特に低く、今年も同様の特徴で低位</em>（2022年3月に28%高位、その後天井圏変動）。小売側：中国系メーカーNEV<strong>43.8%</strong> vs 合弁<strong>2.7%</strong>、高級車21.4%。卸売側：中国系39.4% / 高級車34.5% / 合弁わずか<strong>2.4%</strong></li>
-                      <li>車型別：<em>1月燃油車卸売伸び率がやや小売を上回る</em>。<strong>燃油車MPV小売 −49%と表現が弱い</strong>。政策実施前の販売一時停止で<em>セダン小売 前年比 −43%、SUV小売 前年比 −45%</em>とセダンが相対的に強い（主にA0級セダンが好調）。<strong>SUV高級化が強く、C級SUVが前年同月比で強い</strong></li>
+                      <li>車型別：<em>1月ICE車卸売伸び率がやや小売を上回る</em>。<strong>ICE車MPV小売 −49%と表現が弱い</strong>。政策実施前の販売一時停止で<em>セダン小売 前年比 −43%、SUV小売 前年比 −45%</em>とセダンが相対的に強い（主にA0級セダンが好調）。<strong>SUV高級化が強く、C級SUVが前年同月比で強い</strong></li>
                       <li>中国系メーカー：1月小売<strong>64万台 −31% / −40%</strong>、国内小売シェア<strong>49.4%（+4.3pt）</strong>（2022年累計シェア50%、2021年比 +6.0pt）。卸売シェア<strong>52.4%（+6.4pt）</strong>。NEV市場と輸出市場で明確な増分を獲得、比亜迪・長安・吉利・奇瑞など頭部伝統メーカーの<strong>転型升級（事業転換・高度化）</strong>が顕著</li>
                       <li>合弁・高級車：合弁小売<strong>47万台 −45% / −45%</strong>。<em>独系小売シェア22.9%（−0.7pt）、日系16.6%（−2.8pt）、米系7.7%（−0.5pt）</em>。<strong>高級車小売19万 −36% / −28%</strong> — 車購税半減政策が消費アップグレード（高級消費）を大きく促進、政策退出の影響も大きくなく、BMWが販売トップ10入り</li>
                     </ul>
@@ -6091,16 +6091,16 @@ body.tray-open { padding-bottom: 105px; }
                       <span class="cds-cmt-toggle">▶</span>
                     </div>
                     <ul class="cds-cmt-points">
-                      <li>12月小売<strong>217万台、前年同月比 +3% / 前月比 +31%</strong> — <em>これは「2008年以来最強の12月前月比伸び率」</em>。11月の前年比 −9%との<strong>大きな反差（コントラスト）</strong>を形成。コロナ防疫「新十条」発布後、想定どおり年末に燃油車小売の強い増加が出現</li>
+                      <li>12月小売<strong>217万台、前年同月比 +3% / 前月比 +31%</strong> — <em>これは「2008年以来最強の12月前月比伸び率」</em>。11月の前年比 −9%との<strong>大きな反差（コントラスト）</strong>を形成。コロナ防疫「新十条」発布後、想定どおり年末にICE車小売の強い増加が出現</li>
                       <li>2022年通年：<strong>累計小売2054万台 +1.9%（前年比 純増40万台）</strong>。うち車購税優遇政策が始動した6-12月で前年比+146万台 — 11月のマイナス成長で当初予測の政策増分200万台をやや下回ったが、<em>政策増分の寄与はなお巨大</em></li>
                       <li>2023年見通し（崔氏）：<em>輸出は持続的に楽観的</em>。2023年は海外経済が景気後退の影響を受ける可能性があるが、2022年の輸出が持続的な単辺上行だったため、<strong>2023年も輸出は高位を保ちつつ徐々に落ち着く態勢</strong>で、上昇後のプラットフォーム的増分を形成。中国の輸出NEVは旺盛な生命力を持ち、メーカー販売の良好な成長を牽引</li>
                       <li>12月卸売<strong>222万台 前年比 −6% / 前月比 +9%</strong> — <em>NEV市場の牽引で一部メーカーの表現が明顕に二極化</em>。2022年通年累計卸売2314万台 +10%（増分205万台）。中国系メーカー卸売127.2万 +15% / +14%、合弁68万 −29% / +10%、高級車26.7万 −10% / −9%</li>
                       <li>12月生産<strong>209万台 前年比 −15% / 前月比 −1%</strong> — <em>コロナ都市封鎖（疫情封控）の産業チェーンへの影響は基本消除、メーカーが主動的に減産・在庫圧縮を強力推進</em>。2022年通年生産2336万台 +12%。四川・重慶の一部企業の長期停産分は12月の長安乗用車減産損失で取り戻し</li>
-                      <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売13万、卸売＜小売21万 — <em>年末に予想された燃油車小売の強い増加が「新十条」発布後に出現し、12月のメーカー在庫が急速かつ大幅に低下（実際の低下幅はより強い）</em>。販売店在庫は前月比 −21万台、2022年通年では累計+25万台（2021年通年は −57万台で、今年のメーカー在庫過剰圧力は部分的に解消）</li>
+                      <li>「<strong>在庫圧縮</strong>」の動向：生産＜卸売13万、卸売＜小売21万 — <em>年末に予想されたICE車小売の強い増加が「新十条」発布後に出現し、12月のメーカー在庫が急速かつ大幅に低下（実際の低下幅はより強い）</em>。販売店在庫は前月比 −21万台、2022年通年では累計+25万台（2021年通年は −57万台で、今年のメーカー在庫過剰圧力は部分的に解消）</li>
                       <li>12月輸出<strong>26万台 前年比 +50% / 前月比 +3%</strong> — 中国系メーカー22.7万 +52% / +19%、合弁1.9万 −18% / −23%、高級車1.4万（前年同月のごく低いベースから跳躍）。<em>全国乗用車輸出は2022年8-12月で月25万台前後の歴史的高位を維持</em></li>
-                      <li>値引き状況：全国狭義乗用車の値引き力度が拡大、<strong>12月の燃油車値引きは12.8%の比較的高水準</strong>に到達（主力メーカーが優遇を追加し、コロナによる販売損失の挽回と年末目標達成に注力）。NEVの値引きは比較的小さく<strong>8%の中位水準</strong></li>
+                      <li>値引き状況：全国狭義乗用車の値引き力度が拡大、<strong>12月のICE車値引きは12.8%の比較的高水準</strong>に到達（主力メーカーが優遇を追加し、コロナによる販売損失の挽回と年末目標達成に注力）。NEVの値引きは比較的小さく<strong>8%の中位水準</strong></li>
                       <li>NEV卸売浸透率<strong>33.7%（2021年12月の21.3%比 +12pt）</strong>。NEV小売浸透率<strong>29.5%（2021年12月の22.6%比 +7pt）</strong> — <em>2022年3月に28%の高位に達した後は天井圏での変動期、12月に約30%の新たな突破を実現</em>。小売側：中国系メーカーNEV<strong>51.0%</strong> vs 合弁<strong>4.9%</strong>、高級車22.8%。卸売側：中国系50.6% / 高級車26.8% / 合弁わずか<strong>5.0%</strong></li>
-                      <li>車型別：<em>2022年12月燃油車卸売伸び率が小売を大幅に下回る</em>。燃油車MPV小売 −7%（やや弱め）、政策実施前の販売一時停止でセダン小売 −6% / SUV小売 −6%、セダンが相対的に強くB級セダンが良好。SUV高級化が強く、B級SUV小売は前年比+1%、C級SUVが前年比で強い。<em>NEVは小売増加が二極化、SUVの伸びが非常に強くセダンは弱め（ただしNEV SUVはなおセダンの市場シェアを超えず）</em></li>
+                      <li>車型別：<em>2022年12月ICE車卸売伸び率が小売を大幅に下回る</em>。ICE車MPV小売 −7%（やや弱め）、政策実施前の販売一時停止でセダン小売 −6% / SUV小売 −6%、セダンが相対的に強くB級セダンが良好。SUV高級化が強く、B級SUV小売は前年比+1%、C級SUVが前年比で強い。<em>NEVは小売増加が二極化、SUVの伸びが非常に強くセダンは弱め（ただしNEV SUVはなおセダンの市場シェアを超えず）</em></li>
                       <li>中国系メーカーの躍進：12月小売<strong>106万台 +13% / +20%</strong>、国内小売シェア<strong>48.9%（+3.8pt）</strong>、2022年累計シェア47%（2021年比 +6.1pt）。卸売シェア<strong>57.5%（+10.0pt）</strong>、累計卸売シェア50%（+6.0pt）。比亜迪・吉利・長安・奇瑞など頭部伝統メーカーの<strong>転型升級（事業転換・高度化）</strong>が顕著</li>
                       <li>合弁・高級車：合弁小売<strong>85万台 −8% / +59%</strong>。<em>独系小売シェア20.6%（+2.3pt）、日系18.7%（−4.4pt）、米系8.5%（−1.4pt）</em>（独系のみプラス）。<strong>高級車小売26万 +6% / +10%</strong> — 車購税半減政策が消費アップグレード（高級消費）を大きく促進</li>
                     </ul>
@@ -6120,9 +6120,9 @@ body.tray-open { padding-bottom: 105px; }
                       <li>11月卸売<strong>202.9万台 −5.7% / −8%</strong> — <em>NEV市場の牽引で一部メーカーの表現が明顕に二極化</em>。1-11月累計卸売2,092万台 +11.7%（6-10月の増分寄与が最大）。卸売を牽引する比亜迪・吉利・長安が前年同月増分の上位3社、奇瑞・長城の増分も強い</li>
                       <li>11月生産<strong>207.8万台 −6.7% / −10%</strong> — <em>コロナ都市封鎖（疫情封控）が産業チェーンに一定の影響</em>。内訳：高級ブランド生産 前年比+9%/前月比+3%、合弁ブランド −27%/−16%、中国系ブランド +7%/−7%。<em>中国系主力企業の増産力度が強く、比亜迪・吉利・長安・長城が前月比+8%以上（伝統車・NEV・輸出いずれも好調）</em>。1-11月累計生産2,123万台 +14.9%</li>
                       <li>11月輸出：乘聯会口径<strong>25万台 +54% / −4%</strong>（累計210.3万 +56%）。中国系メーカー19.0万 +52%、合弁2.4万 +34%、高級車3.8万 +79%。<em>乗用車輸出は8-11月で月25万台前後の歴史的高位を維持</em></li>
-                      <li>NEV卸売浸透率<strong>35.9%（2021年11月の19.9%比 +16pt、近期の高点を記録）</strong>。NEV小売浸透率<strong>36.3%（2021年11月の20.8%比 +15.5pt、歴史的高位）</strong> — <em>11月の燃油車低迷が市場の小売浸透率を押し上げた</em>。小売側：中国系メーカーNEV<strong>56.5%</strong> vs 合弁<strong>5.2%</strong>、高級車32.1%。卸売側：中国系51.9% / 高級車40.6% / 合弁わずか<strong>5.0%</strong></li>
+                      <li>NEV卸売浸透率<strong>35.9%（2021年11月の19.9%比 +16pt、近期の高点を記録）</strong>。NEV小売浸透率<strong>36.3%（2021年11月の20.8%比 +15.5pt、歴史的高位）</strong> — <em>11月のICE車低迷が市場の小売浸透率を押し上げた</em>。小売側：中国系メーカーNEV<strong>56.5%</strong> vs 合弁<strong>5.2%</strong>、高級車32.1%。卸売側：中国系51.9% / 高級車40.6% / 合弁わずか<strong>5.0%</strong></li>
                       <li>「<strong>在庫積み増し</strong>」の動向：卸売＜生産5万、卸売＜小売13万の<em>困難な産販の動き</em>（予想された年末小売の強い増加がまだ出現せず、メーカーが急ぎ産販ペースを調整）。販売店在庫は前月比+13万、1-11月累計+45万（2021年同期は −66万で、今年は<em>受動的な在庫積み増し（建儲）圧力が大きい</em>）</li>
-                      <li>値引き状況：全国狭義乗用車の値引き力度が拡大、<strong>11月の燃油車値引きは11.5%の比較的高水準</strong>（主力メーカーが優遇を追加し、コロナによる販売損失の挽回と年末目標達成に注力）。NEVの値引きは比較的小さく<strong>6.6%の低水準</strong></li>
+                      <li>値引き状況：全国狭義乗用車の値引き力度が拡大、<strong>11月のICE車値引きは11.5%の比較的高水準</strong>（主力メーカーが優遇を追加し、コロナによる販売損失の挽回と年末目標達成に注力）。NEVの値引きは比較的小さく<strong>6.6%の低水準</strong></li>
                       <li>車型別：<em>2022年11月卸売伸び率が小売を大幅に上回る</em>。MPV小売 −29%（やや弱め）、政策実施前の販売一時停止でセダン小売 −24% / SUV小売 −29%、セダンが相対的に強くB級セダンが良好。SUV高級化が強く、B級SUV小売は前年比 −21%、C級SUVが前年比で強い</li>
                       <li>中国系メーカーの躍進：11月小売<strong>87万台 +5% / −7%</strong>、国内小売シェア<strong>53.4%（+7.1pt）</strong>、1-11月累計シェア47%（2021年比 +6.3pt）。卸売シェア<strong>55.2%（+8.4pt）</strong>、1-11月累計50%（+5.6pt）。比亜迪・吉利・長安・奇瑞など頭部伝統メーカーの<strong>転型升級（事業転換・高度化）</strong>が顕著</li>
                       <li>合弁・高級車：合弁小売<strong>54万台 −31% / −23%</strong>。<em>独系小売シェア18.9%（+0.1pt）、日系15.3%（−6.9pt）、米系9.6%（+0.6pt）</em>（独・米はプラス、日系のみ大幅マイナス）。<strong>高級車小売24万 +13% / +15%</strong> — 車購税半減が消費アップグレード（高級消費）を大きく促進</li>
@@ -6145,7 +6145,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>10月輸出：乘聯会口径<strong>27万台 +42% / +13%</strong>（累計185.8万 +57%）。中国系メーカー19.4万 +46%、合弁2.0万 −28%、高級車5.5万（前年同月のごく低いベースから跳躍）。<em>なお乗用車輸出（広口径）は10月に30万台の過去最高を記録</em></li>
                       <li>NEV卸売浸透率<strong>30.8%（2021年10月の18.4%比 +12pt）</strong> — <em>4月の高点を突破</em>。NEV小売浸透率<strong>30.2%（2021年10月の18.5%比 +11.7pt）</strong>（9月の31.8%歴史高位後も30%超を維持）。小売側：中国系メーカーNEV<strong>52.9%</strong> vs 合弁<strong>4.6%</strong>、高級車13.6%。卸売側：中国系47.7% / 高級車31.4% / 合弁わずか<strong>4.7%</strong></li>
                       <li>「<strong>在庫積み増し</strong>」の動向：卸売＜生産9万、卸売＜小売8万の<em>プッシュ型産販の動き</em>（5-10月の卸売増分が年末の小売強い増加の基礎を構築）。メーカー在庫は前月比+9万、1-10月累計+25万（2021年同期は −32万で改善大）。流通チャネル在庫は前月比+8万、1-10月+32万（2021年同期 −83万と強烈な対比）</li>
-                      <li>値引き状況：全国狭義乗用車の値引き力度が拡大、<strong>10月の燃油車値引きは11.5%の比較的高水準</strong>。NEVの値引きは比較的小さく<strong>6.6%の低水準</strong></li>
+                      <li>値引き状況：全国狭義乗用車の値引き力度が拡大、<strong>10月のICE車値引きは11.5%の比較的高水準</strong>。NEVの値引きは比較的小さく<strong>6.6%の低水準</strong></li>
                       <li>車型別：<em>2022年10月卸売伸び率が小売を大幅に上回る</em>。MPV小売 −6%（やや弱め）、政策実施前の販売一時停止でセダン小売 +9% / SUV小売 +7%、セダンが相対的に強くB級セダンが良好。SUV高級化が強く、B級SUV小売は前年比+13%、C級SUVが前年比で強い</li>
                       <li>中国系メーカーの躍進：国内小売シェア<strong>51.5%（+5.6pt）</strong>、1-10月累計シェア46%（2021年比 +6.3pt）。卸売シェア<strong>53.8%（+6.1pt）</strong>、1-10月累計49%（+5.4pt）。NEV市場と輸出市場で明確な増分、比亜迪・吉利・長安・奇瑞など頭部伝統メーカーの<strong>転型升級（事業転換・高度化）</strong>が顕著</li>
                       <li>合弁・高級車：合弁小売<strong>70万台 −9% / −6%</strong>。<em>独系小売シェア19.3%（−0.1pt）、日系18.9%（−3.7pt）、米系7.0%（−1.7pt）</em>。高級車卸売27.4万（車購税半減が消費アップグレード＝高級消費を大きく促進）</li>
@@ -6235,7 +6235,7 @@ body.tray-open { padding-bottom: 105px; }
                       <li>1-6月累計：<strong>累計小売925万台 −7.2%（前年比 −71.5万台）</strong>、うち3-5月で前年比 −103.1万台と影響が大きい</li>
                       <li>6月卸売<strong>218.9万台 +42.3% / 前月比 +37.6%</strong> — <em>NEV市場の牽引で一部メーカーの表現が明顕に二極化</em>。1-6月累計卸売1,017.2万台 +3.4%（5月の卸売増分が6月の小売強い増加の基礎を構築）</li>
                       <li>6月生産<strong>220.0万台 +45.6% / +31.7%</strong> — <em>産業チェーンの供給確保措置が奏功</em>。内訳：高級ブランド生産 前年比+36%/前月比+34%、合弁ブランド +41%/+49%、中国系ブランド +54%/+19%。1-6月累計生産1,023万台 +7%。<em>長三角の国産部品サプライヤーが供給を逐次回復、上海・長春の供給確保政策で生産が顕著に向上</em></li>
-                      <li>6月輸出：乘聯会口径<strong>18.9万台 +68% / 前月比 +44%</strong>（累計87.3万 +49%）。中国系メーカー15.9万 +83%、合弁2.9万 +38%、高級車0.1万。販売均価が明顕に上昇（6月の燃油車市場販売均価15.66万元超、前年同期比約+0.7万元、半導体不足下の高級車型増産効果）</li>
+                      <li>6月輸出：乘聯会口径<strong>18.9万台 +68% / 前月比 +44%</strong>（累計87.3万 +49%）。中国系メーカー15.9万 +83%、合弁2.9万 +38%、高級車0.1万。販売均価が明顕に上昇（6月のICE車市場販売均価15.66万元超、前年同期比約+0.7万元、半導体不足下の高級車型増産効果）</li>
                       <li>NEV卸売浸透率<strong>26.0%（2021年6月の15.3%比 +10.8pt）</strong>。NEV小売浸透率<strong>27.3%（2021年6月の14.6%比 +12.8pt、4-6月は安定で27%高位）</strong>。小売側：中国系メーカーNEV<strong>50.0%</strong> vs 合弁<strong>4.5%</strong>、高級車28.0%。卸売側：中国系44.9% / 高級車27.5% / 合弁わずか<strong>4.9%</strong></li>
                       <li>「<strong>在庫積み増し</strong>」の動向：メーカー在庫は前月比+2万、1-6月累計+6.0万（2021年同期は −27.0万で改善大）。流通チャネル在庫は前月比+6.0万、1-6月+4.0万（2021年同期 −72.0万と強烈な対比）。<em>疫情下の生産不足で「在途在庫」（輸送中在庫）の比率が上昇、人気車型の生産不足で需給構造が不一致、在庫係数に虚高問題</em></li>
                       <li>車型別：<em>2022年6月卸売伸び率が小売を大幅に上回る</em>。MPV小売 −13%（やや弱め）、政策実施前の販売一時停止でセダン・SUV小売とも前年比+20%強、セダンが相対的に強くA00級セダンが良好。SUV高級化が強く、B級SUV小売は前年比+65%、C級SUVは+79%</li>
@@ -7318,7 +7318,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 3: 総合降価幅度 -->
             <div class="cds-pane" id="disc-overall-rate">
               <div class="chart-card">
-                <div class="chart-title">📊 総合値引き率（新エネ車 vs 通常エンジン車）</div>
+                <div class="chart-title">📊 総合値引き率（新エネ車 vs ICE車）</div>
                 <div class="chart-subtitle">値下げした車種の平均値下げ幅÷平均価格（%）。2026年7月は値引き記事が無いため空欄</div>
                 <div id="ec-disc-overall-rate" class="echart-box" style="height:400px"></div>
               </div>
@@ -7336,7 +7336,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 5: ガソリン車割引推移 -->
             <div class="cds-pane" id="disc-fuel-trend">
               <div class="chart-card">
-                <div class="chart-title">⛽ ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-title">⛽ ICE 月次値引き率推移（%）</div>
                 <div class="chart-subtitle">確認値：2022・2023・2025年全月・2026年1-8月　推測値：2024年（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-fuel-trend" class="echart-box" style="height:400px"></div>
               </div>
@@ -7345,7 +7345,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 6: 豪华车 -->
             <div class="cds-pane" id="disc-luxury">
               <div class="chart-card">
-                <div class="chart-title">💎 高級ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-title">💎 高級ICE車 月次値引き率推移（%）</div>
                 <div class="chart-subtitle">確認値：2025年全月・2026年1-8月　推測値：（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-luxury" class="echart-box" style="height:400px"></div>
               </div>
@@ -7354,7 +7354,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 7: 合弁ガソリン車 -->
             <div class="cds-pane" id="disc-joint">
               <div class="chart-card">
-                <div class="chart-title">🤝 合弁ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-title">🤝 合弁ICE車 月次値引き率推移（%）</div>
                 <div class="chart-subtitle">確認値：2022・2023・2025年全月・2026年1-8月　推測値：2024年（グラフ線のみ・数値不明）</div>
                 <div id="ec-disc-joint" class="echart-box" style="height:400px"></div>
               </div>
@@ -7363,7 +7363,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 8: 国内系ガソリン車 -->
             <div class="cds-pane" id="disc-domestic">
               <div class="chart-card">
-                <div class="chart-title">🏭 国内系ガソリン車 月次値引き率推移（%）</div>
+                <div class="chart-title">🏭 国内系ICE車 月次値引き率推移（%）</div>
                 <div class="chart-subtitle">確認値：2022・2023・2024・2025年全月・2026年1-8月</div>
                 <div id="ec-disc-domestic" class="echart-box" style="height:400px"></div>
               </div>
@@ -7373,7 +7373,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="disc-by-power">
               <div class="chart-card">
                 <div class="chart-title">🔌 動力種別 値引き率（%）月次推移</div>
-                <div class="chart-subtitle">通常エンジン・HEV・PHEV・レンジエクステンダー・BEV　2020年末〜2026年8月</div>
+                <div class="chart-subtitle">ICE・HEV・PHEV・レンジエクステンダー・BEV　2020年末〜2026年8月</div>
                 <div id="ec-disc-by-power" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -7381,7 +7381,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- 10: 出所別ガソリン車 -->
             <div class="cds-pane" id="disc-by-origin">
               <div class="chart-card">
-                <div class="chart-title">🌍 ガソリン車 値引き率：出身地域別（%）</div>
+                <div class="chart-title">🌍 ICE車 値引き率：出身地域別（%）</div>
                 <div class="chart-subtitle">日系・独系・韓系・米系・欧系・国内系・全体</div>
                 <div id="ec-disc-by-origin" class="echart-box" style="height:440px"></div>
               </div>
@@ -7428,7 +7428,7 @@ body.tray-open { padding-bottom: 105px; }
             <!-- ⑤ 価格帯別 動力内訳 -->
             <div class="cds-pane" id="price-band-detail">
               <div class="chart-card">
-                <div class="chart-title">価格帯別 ガソリン車 vs 新エネルギー車 内訳推移（万台）</div>
+                <div class="chart-title">価格帯別 ICE車 vs 新エネルギー車 内訳推移（万台）</div>
                 <div class="chart-subtitle">合計・2026年は1-3月・4-6月・7月・8月・9月（▶で展開）</div>
                 <div id="ec-price-band-detail" class="echart-box" style="height:480px"></div>
               </div>
@@ -7493,7 +7493,7 @@ body.tray-open { padding-bottom: 105px; }
                   <div id="ec-price-seg-share" class="echart-box" style="height:380px"></div>
                 </div>
                 <div class="chart-card">
-                  <div class="chart-title">車格別 新エネ vs ガソリン 台数（2026年8月）</div>
+                  <div class="chart-title">車格別 新エネ vs ICE 台数（2026年8月）</div>
                   <div class="chart-subtitle">各グレードの動力内訳（万台）</div>
                   <div id="ec-price-seg-power" class="echart-box" style="height:380px"></div>
                 </div>
@@ -7517,7 +7517,7 @@ body.tray-open { padding-bottom: 105px; }
               <div class="bpm-view" id="bpm-view-bottom">
                 <div class="chart-card" style="margin-bottom:14px;padding:14px 16px;background:linear-gradient(135deg,#fef3c7 0%,#fef9c3 100%);border:1px solid #fde68a">
                   <div style="font-weight:600;font-size:14px;color:#78350f;margin-bottom:4px">📐 視点A：価格帯内の動力構成（過去39ヶ月、5動力の合計100%）</div>
-                  <div style="font-size:11px;color:#92400e;line-height:1.5">各価格帯の市場が「常規／HEV／PHEV／EREV／BEV」でどう構成されているかを月次で追跡。例：<strong>10-15万元のBEV比率は'23/6の17%（NEV黎明期）→'24/1の7.8%（春節期）→'25/9に36.1%（ピーク）→'26/1に18.2%（政策急減）→'26/7に41.1% →'26/9に44.7%（過去最高）</strong>と過去3年あまりでダイナミックに変動。<small style="opacity:0.7">※ "23/6"は当時PHEVとEREVが合算表示だったため、増程式はPHEV値に含まれる。 ※ "24/12*"は2024年通年データを12月の代替として使用。</small></div>
+                  <div style="font-size:11px;color:#92400e;line-height:1.5">各価格帯の市場が「ICE／HEV／PHEV／EREV／BEV」でどう構成されているかを月次で追跡。例：<strong>10-15万元のBEV比率は'23/6の17%（NEV黎明期）→'24/1の7.8%（春節期）→'25/9に36.1%（ピーク）→'26/1に18.2%（政策急減）→'26/7に41.1% →'26/9に44.7%（過去最高）</strong>と過去3年あまりでダイナミックに変動。<small style="opacity:0.7">※ "23/6"は当時PHEVとEREVが合算表示だったため、増程式はPHEV値に含まれる。 ※ "24/12*"は2024年通年データを12月の代替として使用。</small></div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
                   <div class="chart-card"><div class="chart-title" style="font-size:13px">40万以上</div><div id="ec-bpm-bot-40" class="echart-box" style="height:220px"></div></div>
@@ -7538,7 +7538,7 @@ body.tray-open { padding-bottom: 105px; }
                   <div style="font-size:11px;color:#1e40af;line-height:1.5">各動力タイプの売上が「7価格帯」にどう分布しているかを月次で追跡。例：<strong>BEVの5万以下シェアは'23年〜'24年で約8〜14%、'25年は10〜15%維持→'25/12に5.4%急減→'26/2に1.7%（過去最低）→'26/9は3.6%</strong>とA00級電動車の主戦場が縮小、高級化が進行。<small style="opacity:0.7">※ "23/6"および"23/7"はTOPデータが元レポートに存在しないため空白表示。 ※ "23/8"・"23/9"は絶対値（万台）から逆算。 ※ "24/12*"は2024年通年データを12月の代替として使用。</small></div>
                 </div>
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-                  <div class="chart-card"><div class="chart-title" style="font-size:13px">常規燃油</div><div id="ec-bpm-top-gas" class="echart-box" style="height:220px"></div></div>
+                  <div class="chart-card"><div class="chart-title" style="font-size:13px">ICE</div><div id="ec-bpm-top-gas" class="echart-box" style="height:220px"></div></div>
                   <div class="chart-card"><div class="chart-title" style="font-size:13px">HEV（ハイブリッド）</div><div id="ec-bpm-top-hev" class="echart-box" style="height:220px"></div></div>
                   <div class="chart-card"><div class="chart-title" style="font-size:13px">PHEV（狭義插混）</div><div id="ec-bpm-top-phev" class="echart-box" style="height:220px"></div></div>
                   <div class="chart-card"><div class="chart-title" style="font-size:13px">EREV（増程式）</div><div id="ec-bpm-top-erev" class="echart-box" style="height:220px"></div></div>
@@ -7637,7 +7637,7 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
                 <div class="col-12 col-lg-6">
                   <div class="chart-card">
-                    <div class="chart-title">⛽ 燃油車生産 vs 燃費積分</div>
+                    <div class="chart-title">⛽ ICE車生産 vs 燃費積分</div>
                     <div class="chart-subtitle">燃費積分の悪化→好転の軌跡</div>
                     <div id="ec-dc-overview-fuel" class="echart-box" style="height:340px"></div>
                   </div>
@@ -8149,7 +8149,7 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
                 <div class="chart-card">
                   <div class="chart-title">3年後の残価率（保値率、%）</div>
-                  <div class="chart-subtitle">各年12月と2026年の各月。A級（コンパクト）ガソリンSUVは2024年12月から</div>
+                  <div class="chart-subtitle">各年12月と2026年の各月。A級（コンパクト）ICE SUVは2024年12月から</div>
                   <div id="ec-topic-used-resid" class="echart-box" style="height:340px"></div>
                 </div>
               </div>
@@ -8166,7 +8166,7 @@ body.tray-open { padding-bottom: 105px; }
                 </div>
               </div>
               <div class="chart-card" style="margin-top:14px">
-                <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・NEV中古車は8月<b>14.05万台（前年比-5.3%）</b>、1-8月<b>112.3万台（+14.9%）</b>。中古乗用車に占める比率は2022年末3.6%→<b>2026年8月12.6%</b>で、NEV保有の比率とほぼ同じペースで上がっている。<br>・NEV中古車の車齢（3Q）は2年以内29.0%（前年同期比-9.2pt）、2〜4年46.2%（+9.4pt）。価格は8〜12万元帯が15.2%に上がり、3万元以下は23.0%に下がった。<br>・在庫は3Qに30日超が<b>41%</b>（前年同期比+4pt）、平均28.6日と圧力が強まった。新車の実売価格の下落で中古車の値差が縮んでいる。<br>・3年後の残価率（9月）はPHEV 42.9%・EV 45.7%・A級ガソリンSUV 47.1%。記事は、NEVの残価率が低めなのは急成長期の市場として正常とみている。</div>
+                <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・NEV中古車は8月<b>14.05万台（前年比-5.3%）</b>、1-8月<b>112.3万台（+14.9%）</b>。中古乗用車に占める比率は2022年末3.6%→<b>2026年8月12.6%</b>で、NEV保有の比率とほぼ同じペースで上がっている。<br>・NEV中古車の車齢（3Q）は2年以内29.0%（前年同期比-9.2pt）、2〜4年46.2%（+9.4pt）。価格は8〜12万元帯が15.2%に上がり、3万元以下は23.0%に下がった。<br>・在庫は3Qに30日超が<b>41%</b>（前年同期比+4pt）、平均28.6日と圧力が強まった。新車の実売価格の下落で中古車の値差が縮んでいる。<br>・3年後の残価率（9月）はPHEV 42.9%・EV 45.7%・A級ICE SUV 47.1%。記事は、NEVの残価率が低めなのは急成長期の市場として正常とみている。</div>
               </div>
             </div>
 
@@ -8179,7 +8179,7 @@ body.tray-open { padding-bottom: 105px; }
               <div class="topic-grid2">
                 <div class="chart-card">
                   <div class="chart-title">乗用車の対EU輸出 動力別（四半期、万台）</div>
-                  <div class="chart-subtitle">乗聯会の各社集計。PHEV（増程を含む）・HEVは記事の合計、BEVは表の各社の合計、その他（ガソリン車など）は全動力の表から差し引き</div>
+                  <div class="chart-subtitle">乗聯会の各社集計。PHEV（増程を含む）・HEVは記事の合計、BEVは表の各社の合計、その他（ICE車など）は全動力の表から差し引き</div>
                   <div id="ec-topic-eu-power" class="echart-box" style="height:490px"></div>
                 </div>
                 <div class="chart-card">
@@ -8210,7 +8210,7 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="chart-title">2026年が想定を下回った短期要因</div>
                   <ol style="margin:8px 0 0;padding-left:20px;font-size:13px;line-height:1.75;color:#374151">
                     <li><b>政策の節目</b>：年初の以旧換新は入門車の基準引き上げ・補助縮小でBEVの条件も厳しくなった。2025年末の購入税優遇の終了で需要が先食いされ、年初のNEV小売が大きく落ちた。</li>
-                    <li><b>地政学と油価</b>：記事によると、3月の米国・イランの戦争で原油価格が高騰し、ガソリン車の使用コストが急上昇した。</li>
+                    <li><b>地政学と油価</b>：記事によると、3月の米国・イランの戦争で原油価格が高騰し、ICE車の使用コストが急上昇した。</li>
                     <li><b>AI投資のコスト波及</b>：メモリー価格の高騰でNEVの採算が悪化。電力需要で銅など、蓄電需要で炭酸リチウムが高騰し、半導体・素材・電池までコストが上がった。</li>
                     <li><b>以旧換新の効果逓減</b>：効果は2024年が最大で、買い替え意欲の強い層はすでに購入済み。2026年は消費意欲が低く、政策の効き目が落ちた。</li>
                   </ol>
@@ -8221,7 +8221,7 @@ body.tray-open { padding-bottom: 105px; }
                   <ol style="margin:8px 0 0;padding-left:20px;font-size:13px;line-height:1.75;color:#374151">
                     <li><b>購入税優遇の終了前の駆け込み</b>：NEV浸透率が上がった分、2025年より効果が大きい。</li>
                     <li><b>春節が消費の大年</b>：2027年は2月5日（2026年は2月16日）で、節前の購入が年間を支える。</li>
-                    <li><b>油価の影響が弱まる</b>：原油価格が戻れば、抑えられていたガソリン車の需要が出てくる。</li>
+                    <li><b>油価の影響が弱まる</b>：原油価格が戻れば、抑えられていたICE車の需要が出てくる。</li>
                     <li><b>炭酸リチウムの下落</b>：10万元前後と2026年の高値からほぼ半減し、電池価格が下がる。</li>
                     <li><b>在庫サイクルの反転</b>：2026年の大幅な在庫削減が2027年は小さくなり、メーカーの国内出荷の伸びは小売を上回る。</li>
                     <li><b>新車供給の回復</b>：2026年は5m超の大型車が新車の79%（2024年44%）と大型化が急進。コストが落ち着けば各価格帯に競争力のある新車が出る。</li>
@@ -11538,10 +11538,10 @@ var DISC_MONTHLY_DIST = {
 
 var DISC_POWERTYPE_2026 = {
   // 各月の記事時点の年初来累計（重複を除く車型数）。右端は前年同期
-  categories: ['通常エンジン','純電動(BEV)','PHEV','レンジEX','ハイブリッド'],
+  categories: ['ICE','純電動(BEV)','PHEV','レンジEX','ハイブリッド'],
   periods: ['26年1-3月','26年1-4月','26年1-5月','26年1-6月','26年1-8月','25年1-8月'],
   data: {
-    '通常エンジン': [22,25,32,31,36,36],
+    'ICE': [22,25,32,31,36,36],
     '純電動(BEV)': [12,16,22,24,31,64],
     'PHEV':        [5,9,16,19,22,22],
     'レンジEX':    [3,3,3,4,6,10],
@@ -11552,7 +11552,7 @@ var DISC_POWERTYPE_2026 = {
 var DISC_OVERALL_RATE = {
   periods: ['2020年','2021年','2022年','2023年','2024年','2025年累計','2026年1月','2026年2月','2026年3月','2026年4月','2026年5月','2026年6月','2026年7月','2026年8月','2026年1-8月累計'],
   新エネ:     [0.087,0.092,0.138,0.108,0.100,0.110,0.148,0.151,0.120,0.111,0.096,0.056,null,0.178,0.115],
-  通常エンジン: [0.070,0.050,0.179,0.099,0.084,0.089,0.150,0.148,0.125,0.172,0.149,0.003,null,0.033,0.137],
+  ICE: [0.070,0.050,0.179,0.099,0.084,0.089,0.150,0.148,0.125,0.172,0.149,0.003,null,0.033,0.137],
   全体:        [0.080,0.080,0.152,0.106,0.096,0.105,0.149,0.150,0.121,0.123,0.108,0.048,null,0.161,0.123]
 };
 
@@ -11597,17 +11597,17 @@ var DISC_DOMESTIC_TREND = {
   '2026年': { confirmed:true, data:[0.186,0.182,0.180,0.186,0.188,0.190,0.189,0.190,null,null,null,null] }
 };
 
-var DISC_BY_POWER = { periods:[], 通常エンジン:[], HEV:[], PHEV:[], レンジEX:[], BEV:[] };
+var DISC_BY_POWER = { periods:[], ICE:[], HEV:[], PHEV:[], レンジEX:[], BEV:[] };
 var snapshots = [
-  {p:'2020年末', 通常エンジン:0.140, HEV:0.068, PHEV:0.117, レンジEX:0.000, BEV:0.121},
-  {p:'2021年末', 通常エンジン:0.101, HEV:0.060, PHEV:0.088, レンジEX:0.000, BEV:0.088},
-  {p:'2022年末', 通常エンジン:0.132, HEV:0.067, PHEV:0.035, レンジEX:0.033, BEV:0.063},
-  {p:'2023年末', 通常エンジン:0.189, HEV:0.177, PHEV:0.078, レンジEX:0.069, BEV:0.081},
-  {p:'2024年末', 通常エンジン:0.221, HEV:0.174, PHEV:0.066, レンジEX:0.032, BEV:0.095}
+  {p:'2020年末', ICE:0.140, HEV:0.068, PHEV:0.117, レンジEX:0.000, BEV:0.121},
+  {p:'2021年末', ICE:0.101, HEV:0.060, PHEV:0.088, レンジEX:0.000, BEV:0.088},
+  {p:'2022年末', ICE:0.132, HEV:0.067, PHEV:0.035, レンジEX:0.033, BEV:0.063},
+  {p:'2023年末', ICE:0.189, HEV:0.177, PHEV:0.078, レンジEX:0.069, BEV:0.081},
+  {p:'2024年末', ICE:0.221, HEV:0.174, PHEV:0.066, レンジEX:0.032, BEV:0.095}
 ];
 snapshots.forEach(function(s){
   DISC_BY_POWER.periods.push(s.p);
-  ['通常エンジン','HEV','PHEV','レンジEX','BEV'].forEach(function(k){ DISC_BY_POWER[k].push(s[k]); });
+  ['ICE','HEV','PHEV','レンジEX','BEV'].forEach(function(k){ DISC_BY_POWER[k].push(s[k]); });
 });
 var raw2025 = [
   [0.222,0.174,0.088,0.035,0.094],[0.220,0.176,0.104,0.049,0.108],[0.224,0.179,0.107,0.064,0.117],
@@ -11617,14 +11617,14 @@ var raw2025 = [
 ];
 ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'].forEach(function(m,i){
   DISC_BY_POWER.periods.push('2025年'+m);
-  ['通常エンジン','HEV','PHEV','レンジEX','BEV'].forEach(function(k,ki){ DISC_BY_POWER[k].push(raw2025[i][ki]); });
+  ['ICE','HEV','PHEV','レンジEX','BEV'].forEach(function(k,ki){ DISC_BY_POWER[k].push(raw2025[i][ki]); });
 });
 var raw2026 = [[0.239,0.202,0.113,0.078,0.102],[0.237,0.203,0.112,0.080,0.106],[0.229,0.199,0.106,0.093,0.111],
   [0.222,0.204,0.107,0.093,0.114],[0.226,0.204,0.111,0.088,0.090],[0.235,0.211,0.103,0.079,0.088],
   [0.238,0.213,0.094,0.068,0.086],[0.235,0.217,0.101,0.073,0.083]];
 ['1月','2月','3月','4月','5月','6月','7月','8月'].forEach(function(m,i){
   DISC_BY_POWER.periods.push('2026年'+m);
-  ['通常エンジン','HEV','PHEV','レンジEX','BEV'].forEach(function(k,ki){ DISC_BY_POWER[k].push(raw2026[i][ki]); });
+  ['ICE','HEV','PHEV','レンジEX','BEV'].forEach(function(k,ki){ DISC_BY_POWER[k].push(raw2026[i][ki]); });
 });
 
 var DISC_BY_ORIGIN = {
@@ -11747,7 +11747,7 @@ function discRender(id) {
     };
 
   } else if (id === 'disc-overall-rate') {
-    var clrs = {新エネ:'#ef4444', 通常エンジン:'#3b82f6', 全体:'#374151'};
+    var clrs = {新エネ:'#ef4444', ICE:'#3b82f6', 全体:'#374151'};
     opt = {
       tooltip:{ trigger:'axis', formatter:function(params){
         var s=params[0].axisValue+'<br>';
@@ -11761,7 +11761,7 @@ function discRender(id) {
       yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
       series:[
         { name:'新エネ車', type:'line', data: DISC_OVERALL_RATE.新エネ.map(pct), lineStyle:{color:clrs.新エネ}, itemStyle:{color:clrs.新エネ}, symbol:'circle' },
-        { name:'通常エンジン車', type:'line', data: DISC_OVERALL_RATE.通常エンジン.map(pct), lineStyle:{color:clrs.通常エンジン}, itemStyle:{color:clrs.通常エンジン}, symbol:'circle' },
+        { name:'ICE車', type:'line', data: DISC_OVERALL_RATE.ICE.map(pct), lineStyle:{color:clrs.ICE}, itemStyle:{color:clrs.ICE}, symbol:'circle' },
         { name:'全体', type:'line', data: DISC_OVERALL_RATE.全体.map(pct), lineStyle:{color:clrs.全体,type:'dashed'}, itemStyle:{color:clrs.全体}, symbol:'diamond' }
       ]
     };
@@ -11827,7 +11827,7 @@ function discRender(id) {
     };
 
   } else if (id === 'disc-by-power') {
-    var pwColors = {通常エンジン:'#3b82f6',HEV:'#22c55e',PHEV:'#f59e0b',レンジEX:'#8b5cf6',BEV:'#ef4444'};
+    var pwColors = {ICE:'#3b82f6',HEV:'#22c55e',PHEV:'#f59e0b',レンジEX:'#8b5cf6',BEV:'#ef4444'};
     opt = {
       tooltip:{ trigger:'axis', formatter:function(p){
         var s=p[0].axisValue+'<br>';
@@ -11839,7 +11839,7 @@ function discRender(id) {
       yAxis:{ type:'value', name:'値引き率(%)', axisLabel:{formatter:'{value}%'} },
       dataZoom:[{type:'inside'},{type:'slider',height:20,bottom:0}],
       grid:{ bottom:60 },
-      series: ['通常エンジン','HEV','PHEV','レンジEX','BEV'].map(function(k){
+      series: ['ICE','HEV','PHEV','レンジEX','BEV'].map(function(k){
         return { name:k, type:'line', data: DISC_BY_POWER[k].map(pct), connectNulls:false,
           lineStyle:{color:pwColors[k]}, itemStyle:{color:pwColors[k]}, symbol:'circle', symbolSize:4 };
       })
@@ -12954,7 +12954,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     var ec = initOrGet('ec-price-avg-power'); if(!ec) return;
     // 11点: [2021,2022,2023,2024,2025合計, 2026合計(1-9月), 2026年1-3月, 4-6月, 7月, 8月, 9月]
     var data = [
-      {name:'ガソリン車', d:[16.4,17.2,18.1,18.5,17.3,17.5,17.1,17.6,17.6,17.7,18.3], c:COLORS.gas},
+      {name:'ICE車', d:[16.4,17.2,18.1,18.5,17.3,17.5,17.1,17.6,17.6,17.7,18.3], c:COLORS.gas},
       {name:'HEV',        d:[20.6,21.8,21.5,22.3,21.8,20.3,21.5,20.4,19.6,19.5,18.4], c:COLORS.hev},
       {name:'PHEV',       d:[20.1,18,18.2,16.7,15.9,18.2,18.6,18.5,18,17.4,17.5], c:COLORS.phev},
       {name:'EREV',       d:[32.3,32,31.1,30.2,27.8,26.4,25.8,25.1,28.1,28.2,27.9], c:COLORS.erev},
@@ -13017,18 +13017,18 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     );
     // 11点: [2021,2022,2023,2024,2025合計, 2026合計(1-9月), 2026年1-3月, 4-6月, 7月, 8月, 9月]
     var RAW = [
-      {name:'高級/ガソリン', c:'#fde68a', d:[35.1,35.7,37,37.9,33.6,33.5,33.6,33.1,33,33.5,34.5]},
+      {name:'高級/ICE', c:'#fde68a', d:[35.1,35.7,37,37.9,33.6,33.5,33.6,33.1,33,33.5,34.5]},
       {name:'高級/HEV',      c:'#f59e0b', d:[null,null,37,30.3,32.3,32.6,32.7,32.6,32.6,32.5,32.6]},
       {name:'高級/PHEV',     c:'#d97706', d:[50.3,50,50.1,51.1,42.8,37.5,38.3,38.1,36.8,36.9,34.9]},
       {name:'高級/BEV',      c:'#92400e', d:[41.7,36.6,34.4,34,27.3,26.1,26.2,25.9,26.7,27,25.1]},
-      {name:'合弁/ガソリン', c:'#93c5fd', d:[15.7,15.9,16.5,16.8,16.2,16.2,16.3,16.2,16.2,16.1,16.4]},
+      {name:'合弁/ICE', c:'#93c5fd', d:[15.7,15.9,16.5,16.8,16.2,16.2,16.3,16.2,16.2,16.1,16.4]},
       {name:'合弁/HEV',      c:'#60a5fa', d:[20.6,22.4,22.4,23,21.9,20.8,21.5,20.9,20.2,20.2,19.5]},
       {name:'合弁/PHEV',     c:'#3b82f6', d:[20.8,20.4,20.7,26.5,22.5,20.4,25.1,19.4,19.8,19.4,17.5]},
       {name:'合弁/EREV',     c:'#1d4ed8', d:[null,null,null,14,13.8,19.8,14.8,22.4,19.1,19.2,16.8]},
       {name:'合弁/BEV',      c:'#1e3a8a', d:[23.8,24.3,21.9,21,14.2,13.7,13.4,14,13.7,13.4,13.8]},
       {name:'新興EV/EREV',   c:'#fca5a5', d:[32.3,33.2,34.2,32.4,31.3,31.1,30.5,30.3,32.9,32.5,31.3]},
       {name:'新興EV/BEV',    c:'#ef4444', d:[19.5,19,23.3,23.6,20.5,21,24,20.8,19.8,19.3,19.8]},
-      {name:'中国系/ガソリン', c:'#6ee7b7', d:[10,10.4,10.9,11.2,10.9,10.8,10.7,11,10.9,10.6,10.9]},
+      {name:'中国系/ICE', c:'#6ee7b7', d:[10,10.4,10.9,11.2,10.9,10.8,10.7,11,10.9,10.6,10.9]},
       {name:'中国系/HEV',      c:'#34d399', d:[15.3,17.5,14.3,13.2,16.2,13,13.5,12.4,12.7,14.3,12.7]},
       {name:'中国系/PHEV',     c:'#10b981', d:[15.7,16.2,17.6,16.4,15.5,17.7,18,18.1,17.6,17.1,17.2]},
       {name:'中国系/EREV',     c:'#059669', d:[31,21.7,19.4,21,19.5,18.6,18.6,18.2,17.8,18.2,19]},
@@ -13139,7 +13139,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
   }
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  // ⑤ 価格帯別 ガソリン/新エネ内訳（積み上げ棒）
+  // ⑤ 価格帯別 ICE/新エネ内訳（積み上げ棒）
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   function renderBandDetail(){
     var ec = initOrGet('ec-price-band-detail'); if(!ec) return;
@@ -13169,7 +13169,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     var curXl = xl();
     var series=[];
     bands.forEach(function(b,i){
-      series.push({name:b+' ガソリン',type:'bar',stack:b,color:gasC[i],barMaxWidth:36,
+      series.push({name:b+' ICE',type:'bar',stack:b,color:gasC[i],barMaxWidth:36,
         data:sd(GAS[b]),label:{show:false},
         markArea:i===0?maMark():{silent:true,data:[]}});
     });
@@ -13195,7 +13195,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
         return s;
       }}),
       legend:Object.assign(leg(),{type:'scroll',top:30,pageTextStyle:{color:'#374151'},
-        data:bands.map(function(b){return b+' 新エネ';}).concat(bands.map(function(b){return b+' ガソリン';}))}),
+        data:bands.map(function(b){return b+' 新エネ';}).concat(bands.map(function(b){return b+' ICE';}))}),
       grid:grid({top:75,right:20,bottom:55}),
       xAxis:xCat(curXl), yAxis:yVal('万台'),
       series:series
@@ -13232,7 +13232,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
 
   function renderCumPower(){
     var ec = initOrGet('ec-price-cum-power'); if(!ec) return;
-    var powers=['ガソリン','HEV','PHEV','EREV','BEV'];
+    var powers=['ICE','HEV','PHEV','EREV','BEV'];
     var d2024=[1106,93,340,116,633];
     var d2025=[1004,89,369,124,792];
     // 2026年1-9月累計（9月記事 図1）
@@ -13280,12 +13280,12 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     }
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'億元'}),
-      legend:leg({data:['ガソリン車','新エネルギー車']}),
+      legend:leg({data:['ICE車','新エネルギー車']}),
       grid:grid({right:20}),
       xAxis:xCat(xlD),
       yAxis:yVal('億元'),
       series:[
-        {name:'ガソリン車',type:'bar',stack:'s',color:'rgba(91,143,255,0.6)',data:gasD,
+        {name:'ICE車',type:'bar',stack:'s',color:'rgba(91,143,255,0.6)',data:gasD,
           itemStyle:{borderRadius:[2,2,0,0]},
           markArea:SHOW_2026_MONTHLY?{silent:true,data:[[
             {xAxis:'2026年\n1-3月',itemStyle:{color:'rgba(0,0,0,0.03)'},label:{show:true,position:'insideTopLeft',formatter:'← 四半期・月次',color:'rgba(0,0,0,0.2)',fontFamily:FONT,fontSize:9}},{xAxis:'2026年\n9月'}
@@ -13358,7 +13358,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
 
     var series=[];
     grades.forEach(function(g,i){
-      series.push({name:gradeNames[i]+' ガソリン',type:'bar',stack:gradeNames[i],
+      series.push({name:gradeNames[i]+' ICE',type:'bar',stack:gradeNames[i],
         color:gasColors[i],barMaxWidth:40,data:built.slice(built.src.gas[g]),label:{show:false},
         markArea:i===0?{silent:true,data:qMark.concat(mMark)}:{silent:true,data:[]}});
     });
@@ -13374,11 +13374,11 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
         var s='<b>'+p[0].axisValue.replace('\n',' ')+'</b><br>';
         grades.forEach(function(g,gi){
           var gv=built.slice(built.src.gas[g])[i]||0, nv=built.slice(built.src.nev[g])[i]||0;
-          s+='<span style="color:'+nevColors[gi]+'">■</span> '+gradeNames[gi]+': 新エネ<b>'+nv+'%</b> / ガソリン<b>'+gv+'%</b><br>';
+          s+='<span style="color:'+nevColors[gi]+'">■</span> '+gradeNames[gi]+': 新エネ<b>'+nv+'%</b> / ICE<b>'+gv+'%</b><br>';
         });
         return s;
       }}),
-      legend:leg({data:gradeNames.map(function(n){return n+' 新エネ';}).concat(gradeNames.map(function(n){return n+' ガソリン';}))}),
+      legend:leg({data:gradeNames.map(function(n){return n+' 新エネ';}).concat(gradeNames.map(function(n){return n+' ICE';}))}),
       grid:grid({right:20,bottom:50}),
       xAxis:xCat(built.xl),
       yAxis:Object.assign(yVal('%'),{max:100,axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}}),
@@ -13408,7 +13408,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
       bev: [244,426,515,633,792,523,122,191,65,70,76],
     };
     var keys=['gas','hev','phev','erev','bev'];
-    var names=['ガソリン車','HEV','PHEV','EREV','BEV'];
+    var names=['ICE車','HEV','PHEV','EREV','BEV'];
     var cols=[COLORS.gas,COLORS.hev,COLORS.phev,COLORS.erev,COLORS.bev];
     var curXl=xl();
     var curData={};
@@ -13459,11 +13459,11 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
     var gas26=[4.6,15.8,30.2,3.1],nev26=[12.4,35.1,26.8,23.0];
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'万台'}),
-      legend:leg({data:['ガソリン車','新エネルギー車']}),grid:grid({bottom:40,top:45}),
+      legend:leg({data:['ICE車','新エネルギー車']}),grid:grid({bottom:40,top:45}),
       xAxis:{type:'category',data:grades,axisLabel:{fontFamily:FONT,fontSize:11,color:DARK_AXIS}},
       yAxis:yVal('万台'),
       series:[
-        {name:'ガソリン車',type:'bar',stack:'s',color:COLORS.gas,data:gas26,label:{show:true,formatter:function(p){return p.value.toFixed(1);},color:'#fff',fontSize:10,fontFamily:FONT}},
+        {name:'ICE車',type:'bar',stack:'s',color:COLORS.gas,data:gas26,label:{show:true,formatter:function(p){return p.value.toFixed(1);},color:'#fff',fontSize:10,fontFamily:FONT}},
         {name:'新エネルギー車',type:'bar',stack:'s',color:COLORS.nev,data:nev26,label:{show:true,formatter:function(p){return p.value.toFixed(1);},color:'#fff',fontSize:10,fontFamily:FONT}}
       ]
     });
@@ -13477,7 +13477,7 @@ window.JH_CURRENT_ID = JH_CURRENT_ID;
   // 共通データ・ヘルパー
   var BPM_MONTHS = ['23/6','23/7','23/8','23/9','23/10','23/11','23/12','24/1','24/2','24/3','24/4','24/5','24/6','24/7','24/8','24/9','24/10','24/11','24/12*','25/1-2','25/3','25/4','25/5','25/6','25/7','25/8','25/9','25/10','25/11','25/12','26/1','26/2','26/3','26/4','26/5','26/6','26/7','26/8','26/9'];
   var BPM_POW_KEYS  = ['gas','hev','phev','erev','bev'];
-  var BPM_POW_NAMES = ['常規','HEV','PHEV','EREV','BEV'];
+  var BPM_POW_NAMES = ['ICE','HEV','PHEV','EREV','BEV'];
   var BPM_POW_COLORS= [COLORS.gas, COLORS.hev, COLORS.phev, COLORS.erev, COLORS.bev];
   var BPM_BAND_KEYS = ['40+','30-40','20-30','15-20','10-15','5-10','-5'];
   var BPM_BAND_NAMES= ['40万以上','30-40万','20-30万','15-20万','10-15万','5-10万','5万以下'];
@@ -14391,12 +14391,12 @@ function renderDiscount(){
   ec.setOption({
     tooltip:{trigger:'axis',backgroundColor:'rgba(255,255,255,0.97)',borderColor:'#ddd',borderWidth:1,textStyle:{fontFamily:FONT,fontSize:12},
       formatter:function(p){ return '<b>'+p[0].name+'</b><br>'+p.map(function(x){return x.marker+x.seriesName+': <b>'+x.value.toFixed(1)+'%</b>';}).join('<br>'); }},
-    legend: leg({data:['通常エンジン(ICE)','ハイブリッド(HEV)','PHEV','増程式(EREV)','純電動(BEV)']}),
+    legend: leg({data:['ICE(ICE)','ハイブリッド(HEV)','PHEV','増程式(EREV)','純電動(BEV)']}),
     grid: grid({bottom:60,top:55,left:55,right:20}),
     xAxis: {type:'category',data:months,boundaryGap:true,axisLabel:{fontFamily:FONT,fontSize:10,color:'#555',rotate:45,interval:0},axisLine:{lineStyle:{color:'#ddd'}}},
     yAxis: yVal('%',{min:0,max:28}),
     series:[
-      {name:'通常エンジン(ICE)',  type:'line',color:'#64748b',symbol:'circle',symbolSize:4,lineStyle:{width:2},
+      {name:'ICE(ICE)',  type:'line',color:'#64748b',symbol:'circle',symbolSize:4,lineStyle:{width:2},
        data:[18.7,18.4,18.7,19.1,19.8,21.3,22.0,22.1,22.3,21.8,22.2,22.1,22.2,22.0,22.4,22.5,22.8,23.6,23.7,23.4,24.1,24.3,24.3,23.8,23.9,23.7,22.9,22.2,22.6,23.5,23.8,23.5]},
       {name:'ハイブリッド(HEV)',type:'line',color:'#10b981',symbol:'circle',symbolSize:4,lineStyle:{width:2},
        data:[14.8,14.2,14.8,16.6,18.4,20.0,20.6,20.4,18.7,17.6,17.5,17.4,17.4,17.6,17.9,18.1,18.4,19.3,19.3,19.6,20.4,20.1,19.3,19.7,20.2,20.3,19.9,20.4,20.4,21.1,21.3,21.7]},
@@ -15286,7 +15286,7 @@ window.addEventListener('resize', __rafThrottle(function(){
     if (!ec) return;
     ec.setOption({
       tooltip: Object.assign(tt(),{axisPointer:{type:'cross'}}),
-      legend: leg({data:['燃油車','新エネ車','新エネ普及率(%)']}),
+      legend: leg({data:['ICE車','新エネ車','新エネ普及率(%)']}),
       grid: grid(),
       xAxis: xCat(YEARS),
       yAxis:[
@@ -15295,7 +15295,7 @@ window.addEventListener('resize', __rafThrottle(function(){
           axisLabel:{formatter:'{value}%',fontFamily:FONT,fontSize:11,color:DARK_AXIS}})
       ],
       series:[
-        { name:'ガソリン車', type:'bar', data:PROD.ice, stack:'s', yAxisIndex:0,
+        { name:'ICE車', type:'bar', data:PROD.ice, stack:'s', yAxisIndex:0,
           itemStyle:{color:'#93c5fd'}, barMaxWidth:38 },
         { name:'新エネ車', type:'bar', data:PROD.nev, stack:'s', yAxisIndex:0,
           itemStyle:{color:'#34d399'}, barMaxWidth:38 },
@@ -17323,11 +17323,11 @@ window.addEventListener('resize', __rafThrottle(function(){
       };
       ec2.setOption({
         tooltip: tt({ valueFormatter:function(v){ return v == null ? '−' : v + '%'; } }),
-        legend: leg({ data:['PHEV','EV（BEV）','A級ガソリンSUV'] }),
+        legend: leg({ data:['PHEV','EV（BEV）','A級ICE SUV'] }),
         grid: { left:10, right:16, top:40, bottom:20, containLabel:true },
         xAxis: catAxis(R.labels, { axisLabel:{ fontFamily:FONT, fontSize:10, color:'#374151', rotate:45 } }),
         yAxis: valAxis('%', { min:35, max:55, interval:5, axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:11, color:AX} }),
-        series: [ ln('PHEV', R.phev, C.amber), ln('EV（BEV）', R.ev, '#10b981'), ln('A級ガソリンSUV', R.ice, C.slate, true) ]
+        series: [ ln('PHEV', R.phev, C.amber), ln('EV（BEV）', R.ev, '#10b981'), ln('A級ICE SUV', R.ice, C.slate, true) ]
       });
     }
     var A = TP.usedNevAge;
@@ -17404,12 +17404,12 @@ window.addEventListener('resize', __rafThrottle(function(){
           var i = p[0].dataIndex, s = '<b>' + E.quarters[i] + '</b>　計 <b>' + (P.all[i] / 10000).toFixed(1) + '万台</b><br>';
           p.slice().reverse().forEach(function(x){ s += x.marker + x.seriesName + '：<b>' + x.value.toFixed(1) + '万台</b>（' + (x.value * 10000 / P.all[i] * 100).toFixed(0) + '%）<br>'; });
           return s; } }),
-        legend: leg({ data:['BEV','PHEV（増程を含む）','HEV','その他（ガソリン車など）'] }),
+        legend: leg({ data:['BEV','PHEV（増程を含む）','HEV','その他（ICE車など）'] }),
         grid: { left:10, right:16, top:58, bottom:20, containLabel:true },
         xAxis: catAxis(E.quarters),
         yAxis: valAxis('万台', { min:0 }),
         series: [ bar('BEV', P.bev, C.blue), bar('PHEV（増程を含む）', P.phev, C.amber), bar('HEV', P.hev, '#10b981'),
-                  bar('その他（ガソリン車など）', P.other, '#cbd5e1') ]
+                  bar('その他（ICE車など）', P.other, '#cbd5e1') ]
       });
     }
     renderEuMaker();

@@ -67,6 +67,15 @@ async function fetchSeriesUrls(source) {
   }
 }
 
+function formatCnyPrice(priceStr) {
+  const value = String(priceStr ?? '').trim();
+  if (!value) return '';
+  const match = /^(\d+(?:\.\d+)?)(?:\s*[-~〜～]\s*(\d+(?:\.\d+)?))?\s*万(?:元)?$/.exec(value);
+  if (!match) return /元$/.test(value) ? value : value + '元';
+  const amount = part => new Intl.NumberFormat('ja-JP').format(Math.round(Number(part) * 10000)) + '元';
+  return amount(match[1]) + (match[2] ? '〜' + amount(match[2]) : '');
+}
+
 function convertToJPY(priceStr) {
   if (!priceStr) return "";
   // 「6.48-9.48万」のような価格帯と、「24.98万」のような単一価格の両方に対応
@@ -155,7 +164,7 @@ function renderTable(data, tableId, source) {
          </div>`
       : esc(globalName);
 
-    const price = esc(r.price || "") + "元";
+    const price = esc(formatCnyPrice(r.price || ""));
     const priceJPY = convertToJPY(r.price || "");
     const maker = esc(r.manufacturer_ja || r.manufacturer || "");
     const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : "";
@@ -1258,7 +1267,7 @@ init();
       const carId = link.match(/\/(\d+)\//)?.[1] || '';
       const maker = esc(r.manufacturer_ja || r.manufacturer || '');
       const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + '台' : '';
-      const price = esc(r.price || '') + '元';
+      const price = esc(formatCnyPrice(r.price || ''));
       const priceJPY = convertToJPY(r.price || '');
       const btnData = `data-car="${esc(carId)}" data-name="${esc(globalName)}" data-src="autohome"`;
       const specBtn = carId ? `<button type="button" class="btn btn-outline-primary btn-sm btn-spec" data-act="spec" ${btnData}>仕様表</button>` : '';

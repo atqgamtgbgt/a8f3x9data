@@ -99,6 +99,39 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
   var _isMobileLayout = _checkMobile();
   window.addEventListener('resize', function() { _isMobileLayout = _checkMobile(); });
 
+  // ===== スマホ・タブレット（マウスでホバーできない端末）判定 =====
+  var _noHover = !!(window.matchMedia && window.matchMedia('(hover: none)').matches);
+  // 凡例タップで「その項目だけ表示」にしているグラフ。グラフの外をタップしたら元に戻す
+  var _tapFocused = [];
+  // 初めて使った時（最初の3回まで）だけ、画面下に短い説明を出す
+  function _showTapFocusHint() {
+    if (_showTapFocusHint.done) return;
+    _showTapFocusHint.done = true;
+    var n = 0;
+    try { n = parseInt(localStorage.getItem('tapFocusHint') || '0', 10) || 0; } catch (e) {}
+    if (n >= 3) return;
+    try { localStorage.setItem('tapFocusHint', String(n + 1)); } catch (e) {}
+    try {
+      var d = document.createElement('div');
+      d.textContent = 'タップした項目だけを表示しています（もう一度タップするか、グラフの外をタップすると元に戻ります）';
+      d.style.cssText = 'position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);'
+        + 'width:max-content;max-width:86vw;background:rgba(30,41,59,.93);color:#fff;font-size:12px;line-height:1.5;'
+        + 'padding:8px 12px;border-radius:8px;z-index:10050;pointer-events:none;box-shadow:0 4px 14px rgba(0,0,0,.22);transition:opacity .4s;';
+      document.body.appendChild(d);
+      setTimeout(function() { d.style.opacity = '0'; }, 3500);
+      setTimeout(function() { if (d.parentNode) d.parentNode.removeChild(d); }, 4000);
+    } catch (e) {}
+  }
+  if (_noHover) {
+    document.addEventListener('touchstart', function(ev) {
+      if (!_tapFocused.length) return;
+      _tapFocused.slice().forEach(function(f) {
+        if (f.dom && ev.target && f.dom.contains(ev.target)) return;
+        f.reset();
+      });
+    }, { passive: true, capture: true });
+  }
+
   // ===== 凡例の行数を推定（折り返しを見越した余白計算用） =====
   // type:'scroll' なら常に1行。それ以外は名称合計幅とコンテナ幅から推定。
   function _estimateLegendRows(option) {
@@ -131,6 +164,22 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
                     ? Math.max(window.innerWidth - 40, 280) : 320;
     var rows = Math.ceil(totalWidth / widthHint);
     return Math.max(1, Math.min(rows, 6));  // 1〜6行に制限
+  }
+
+  // ===== スマホ: 凡例の記号と間隔を少し小さくして行数を減らす（凡例がグラフを圧迫しないように） =====
+  // 文字の大きさなど、グラフ側で指定している項目はそのまま
+  function _compactLegendForMobile(option) {
+    if (!_isMobileLayout || !option || !option.legend) return option;
+    var arr = Array.isArray(option.legend) ? option.legend : [option.legend];
+    arr.forEach(function(lg) {
+      if (!lg || lg.show === false || lg.orient === 'vertical') return;
+      if (lg.itemWidth == null) lg.itemWidth = 16;
+      if (lg.itemHeight == null) lg.itemHeight = 10;
+      if (lg.itemGap == null) lg.itemGap = 8;
+      if (!lg.textStyle) lg.textStyle = {};
+      if (lg.textStyle.fontSize == null) lg.textStyle.fontSize = 11;
+    });
+    return option;
   }
 
   // ===== 上配置凡例 ⇔ grid.top の重なり対策 =====
@@ -307,7 +356,8 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
       legends.forEach(function(lg) {
         if (!lg || lg.show === false || lg.selector !== undefined) return;
         var cnt = (lg.data && lg.data.length) || namedCount;
-        if (cnt >= 8) {
+        // スマホ・タブレットでは凡例タップが「その項目だけ表示」になる（下記）ため、選択ボタンは付けない
+        if (cnt >= 8 && !_noHover) {
           lg.selector = [{ type: 'inverse', title: '反転' }, { type: 'all', title: '全選択' }];
           lg.selectorLabel = { fontSize: 10, padding: [2, 5], borderRadius: 4 };
           lg.selectorItemGap = 4;
@@ -416,6 +466,7 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
     var _lastOption = null;
     var _hovering   = false;
     var _hiddenSeries = {};
+    var _tapFocusName = null;   // スマホで凡例タップにより「その項目だけ表示」中の系列名
 
     // setOption をラップして _lastOption を保存
     instance.setOption = function(option, notMerge, lazyUpdate) {
@@ -444,6 +495,7 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
       // ★ スマホ時：上配置の凡例が縦軸と重ならないようgrid.topを底上げ
       //   X軸ラベルが多いグラフは45度回転して重なりを防ぐ
       if (!_hovering && option) {
+        option = _compactLegendForMobile(option);
         option = _adjustTopMarginForMobile(option);
         option = _adjustXAxisForMobile(option);
         option = _enhanceReadability(option, instance);
@@ -451,9 +503,136 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
       if (!_hovering) {
         _lastOption = option;
         _hiddenSeries = {};
+        // グラフが描き直されたら、スマホの「その項目だけ表示」も解除
+        if (_tapFocusName != null) { _clearTapFocus(false); _isShowingHover = false; }
       }
-      return _setOption(option, notMerge, lazyUpdate);
+      var _ret = _setOption(option, notMerge, lazyUpdate);
+      if (!_hovering) _fitMobile();
+      return _ret;
     };
+
+    // ★ スマホ：描画後に余白を実測して詰め、それでも描画エリアが低すぎるグラフは高さを伸ばす
+    //   （左右は目盛りの文字幅、上下は凡例・軸名・X軸ラベルの実際の大きさに合わせる。
+    //    表示されていない間は何もせず、表示されて resize された時に調整する）
+    var _fitting = false;
+    var _resizeOrig = instance.resize.bind(instance);
+    instance.resize = function() {
+      var r = _resizeOrig.apply(null, arguments);
+      _fitMobile();
+      return r;
+    };
+    function _fitMobile() {
+      if (!_isMobileLayout || _fitting || _hovering) return;
+      if (instance.isDisposed && instance.isDisposed()) return;
+      _fitting = true;
+      try { _fitMobileCore(); } catch (e) {}
+      _fitting = false;
+    }
+    function _rectOfView(cm) {
+      var v = cm && instance.getViewOfComponentModel(cm);
+      if (!v || !v.group) return null;
+      // 軸の目盛り文字などは描き直し時に前の位置から動いて来るので、動きを終わらせて最終位置で測る
+      v.group.traverse(function(el) { if (el.animators && el.animators.length && el.stopAnimation) el.stopAnimation(null, true); });
+      var b = v.group.getBoundingRect();
+      if (!b || !(b.width > 0 && b.height > 0) || !isFinite(b.x) || !isFinite(b.y)) return null;
+      b = b.clone();
+      var t = v.group.getComputedTransform && v.group.getComputedTransform();
+      if (t) b.applyTransform(t);
+      return b;
+    }
+    function _px(v, total) {
+      if (v == null || v === 'auto') return null;
+      if (typeof v === 'number') return v;
+      var s = String(v).trim();
+      var n = parseFloat(s);
+      if (!isFinite(n)) return null;
+      return /%$/.test(s) ? n / 100 * total : n;
+    }
+    function _fitMobileCore() {
+      var dom = instance.getDom();
+      if (!dom || !dom.clientWidth || !dom.clientHeight || !dom.getClientRects().length) return;
+      var W = instance.getWidth(), H = instance.getHeight();
+      if (W < 250) return;  // 小さな並列グラフは設計どおり
+      var model = instance.getModel();
+      if (!model) return;
+      var grids = [];
+      model.eachComponent('grid', function(g) { grids.push(g); });
+      if (grids.length !== 1) return;  // 複数段のグラフは設計どおり
+      if (grids[0].get('width') != null || grids[0].get('height') != null) return;
+      var other = ['graphic', 'visualMap', 'polar', 'geo', 'singleAxis', 'parallel', 'radar', 'calendar', 'timeline'];
+      for (var oi = 0; oi < other.length; oi++) if (model.getComponent(other[oi])) return;
+      // setOption のたびに座標系は作り直されるので、毎回取り直す
+      var gridRect = function() {
+        var g = instance.getModel().getComponent('grid', 0);
+        var c = g && g.coordinateSystem;
+        return (c && c.getRect) ? c.getRect() : null;
+      };
+      // 右端に文字が出る系列（線の端ラベル・補助線・横棒の右ラベル）がある時は右の余白を詰めない
+      var shrinkRight = true;
+      model.eachSeries(function(sm) {
+        if (sm.get(['endLabel', 'show']) || sm.get('markLine') || sm.get('markPoint')) shrinkRight = false;
+        var pos = sm.get(['label', 'position']);
+        if (sm.get(['label', 'show']) && (pos === 'right' || pos === 'insideRight' || pos === 'end')) shrinkRight = false;
+      });
+      var PAD = 4, GAP = 6, SLACK = 6;
+      for (var pass = 0; pass < 2; pass++) {
+        model = instance.getModel();
+        var gm = model.getComponent('grid', 0);
+        var r = gridRect();
+        if (!gm || !r) return;
+        var ax = null;
+        ['xAxis', 'yAxis'].forEach(function(t) {
+          model.eachComponent(t, function(am) {
+            if (am.get('show') === false) return;
+            var b = _rectOfView(am);
+            if (!b) return;
+            if (!ax) ax = b; else ax.union(b);
+          });
+        });
+        if (!ax) return;
+        // 凡例・タイトル・スライダーなど、グラフの外側に置かれた部品の位置
+        var top0 = 0, bot0 = H, left0 = 0, right0 = W;
+        var block = function(b) {
+          if (!b) return;
+          if (b.height > H * 0.5 && b.width < W * 0.5) {  // 縦長の凡例（左右に配置）
+            if (b.x + b.width / 2 < W / 2) left0 = Math.max(left0, b.x + b.width);
+            else right0 = Math.min(right0, b.x);
+            return;
+          }
+          if (b.y + b.height / 2 < r.y + r.height / 2) top0 = Math.max(top0, b.y + b.height);
+          else bot0 = Math.min(bot0, b.y);
+        };
+        model.eachComponent('legend', function(c) { if (c.get('show') !== false) block(_rectOfView(c)); });
+        model.eachComponent('title', function(c) { if (c.get('show') !== false && (c.get('text') || c.get('subtext'))) block(_rectOfView(c)); });
+        model.eachComponent('toolbox', function(c) { if (c.get('show') !== false) block(_rectOfView(c)); });
+        model.eachComponent('dataZoom', function(c) { if (c.type === 'dataZoom.slider' && c.get('show') !== false) block(_rectOfView(c)); });
+
+        var oL = _px(gm.get('left'), W), oR = _px(gm.get('right'), W), oT = _px(gm.get('top'), H), oB = _px(gm.get('bottom'), H);
+        if (oL == null || oR == null || oT == null || oB == null) return;
+        var nL = oL, nR = oR, nT = oT, nB = oB;
+        var dL = ax.x - (left0 + PAD);
+        if (dL < 0 || dL > SLACK) nL = Math.max(0, oL - dL);
+        var dR = (right0 - (right0 < W ? PAD : 10)) - (ax.x + ax.width);
+        if (dR < 0 || (dR > SLACK && shrinkRight)) nR = Math.max(0, oR - dR);
+        var dT = ax.y - (top0 > 0 ? top0 + GAP : PAD);
+        if (dT < 0) nT = oT - dT;
+        else if (dT > SLACK) nT = Math.max(top0 > 0 ? top0 + 22 : 16, oT - dT);  // 一番上の値ラベルの分は空けておく
+        var dB = (bot0 < H ? bot0 - GAP : H - PAD) - (ax.y + ax.height);
+        if (dB < 0 || dB > SLACK) nB = Math.max(0, oB - dB);
+        if (Math.abs(nL - oL) < 2 && Math.abs(nR - oR) < 2 && Math.abs(nT - oT) < 2 && Math.abs(nB - oB) < 2) break;
+        _setOption({ grid: { left: Math.round(nL), right: Math.round(nR), top: Math.round(nT), bottom: Math.round(nB) } }, false);
+      }
+      // 描画エリアの高さが足りなければ、グラフ自体を縦に伸ばす（カード内のグラフのみ）
+      var MIN_PLOT = 200;
+      var rr = gridRect();
+      if (rr && rr.height < MIN_PLOT && dom.closest && dom.closest('.chart-card') && !dom.closest('.chart-fs-body')) {
+        var need = Math.min(Math.round(H + (MIN_PLOT - rr.height)), Math.round(H * 1.8), 900);
+        if (need > H + 8) {
+          dom.style.height = need + 'px';
+          _resizeOrig();
+        }
+      }
+    }
 
     // 凡例クリックで非表示シリーズを記録
     instance.on('legendselectchanged', function(params) {
@@ -572,6 +751,64 @@ window.CAR_PLACEHOLDER = 'data:image/svg+xml,' + encodeURIComponent("<svg xmlns=
       instance.getZr().on('mouseout', function(e) {
         resetHoverLabels();
       });
+    }
+
+    // ★ スマホ・タブレット（ホバーできない端末）：凡例をタップすると、その項目だけを表示する
+    //   （PCで凡例にマウスを乗せた時と同じ見え方。積み上げ棒は他の項目を消し、線は他を薄くして数値を表示）。
+    //   同じ項目をもう一度タップするか、グラフの外をタップすると元に戻る。
+    //   凡例タップで項目を消す動作の代わり（非表示になっている項目をタップした時だけは、従来どおり表示に戻す）。
+    //   凡例のタップはEChartsの内部で legendToggleSelect になるので、それを横取りする。
+    function _tapFocusIndex() {
+      for (var i = 0; i < _tapFocused.length; i++) if (_tapFocused[i].inst === instance) return i;
+      return -1;
+    }
+    function _clearTapFocus(doReset) {
+      var i = _tapFocusIndex();
+      if (i >= 0) _tapFocused.splice(i, 1);
+      if (_tapFocusName == null) return;
+      _tapFocusName = null;
+      if (doReset) resetHoverLabels();
+    }
+    function _canTapFocus(name) {
+      if (!_lastOption || !_lastOption.series || name == null) return false;
+      var arr = Array.isArray(_lastOption.series) ? _lastOption.series : [_lastOption.series];
+      var s = null;
+      for (var i = 0; i < arr.length; i++) if (arr[i] && arr[i].name === name) { s = arr[i]; break; }
+      if (!s || !(s.type === 'bar' || s.type === 'line' || s.type === 'scatter')) return false;
+      var model = instance.getModel && instance.getModel();
+      var lg = model && model.getComponent('legend');
+      if (lg) {
+        var mode = lg.get('selectedMode');
+        if (mode === 'single' || mode === false) return false;
+        if (!lg.isSelected(name)) return false;
+      }
+      return true;
+    }
+    if (_noHover && instance._api && typeof instance._api.dispatchAction === 'function') {
+      var _apiDispatch = instance._api.dispatchAction;
+      var _skipLegendHighlight = false;
+      instance._api.dispatchAction = function(payload) {
+        try {
+          if (payload && payload.type === 'legendToggleSelect' && _canTapFocus(payload.name)) {
+            var name = payload.name;
+            // 直後に凡例から来る強調（highlight）は不要なので1回だけ無視する
+            _skipLegendHighlight = true;
+            setTimeout(function() { _skipLegendHighlight = false; }, 0);
+            if (_tapFocusName === name) { _clearTapFocus(true); return; }
+            if (_tapFocusName != null) resetHoverLabels();
+            _tapFocusName = name;
+            if (_tapFocusIndex() < 0) {
+              _tapFocused.push({ inst: instance, dom: instance.getDom(), reset: function() { _clearTapFocus(true); } });
+            }
+            _isShowingHover = true;
+            showHoverLabels(name);
+            _showTapFocusHint();
+            return;
+          }
+          if (_skipLegendHighlight && payload && payload.type === 'highlight') { _skipLegendHighlight = false; return; }
+        } catch (e) {}
+        return _apiDispatch.apply(this, arguments);
+      };
     }
 
     // 単位を axis オブジェクトから判定
@@ -2790,7 +3027,7 @@ img.car-thumb {
   table.car-table thead { display: none; } /* スマホはカード型表示のため列ヘッダー非表示 */
 }
 @media (max-width: 576px) {
-  .echart-box { height: 300px; }
+  .echart-box { height: 380px; }
   .nav-tabs-main .nav-link { padding: 0.7rem 1rem; font-size: 0.95rem; }
 }
 
@@ -2866,7 +3103,7 @@ img.car-thumb {
   /* CAAMグラフ等のechart-box高さ調整（描画エリア確保のため260px→320pxに拡大）。
      インラインで高さ指定があるグラフ（例: 40社ランキングの850px等）は設計値を尊重して潰さない */
   .echart-box:not([style*="height"]) {
-    height: 320px !important;
+    height: 380px !important; /* スマホでも見やすいよう320px→380px（描画後、描画エリアが低すぎる場合はさらに自動で伸ばす） */
   }
 
   /* chartカードのパディング縮小 */
@@ -2908,11 +3145,76 @@ div[style*="position: absolute"][style*="z-index: 9999999"] {
   /* グラフの凡例テキストが詰まらないよう調整
      （768px以下で260px → 576px以下ではさらに低い240pxへ） */
   .echart-box:not([style*="height"]) {
-    height: 300px !important; /* 240px→300px: 凡例+軸余白を引いた実描画エリアを確保。インライン高さ指定は尊重 */
+    height: 380px !important; /* 300px→380px: 凡例と軸の分を引いても描画エリアが十分残るように。インライン高さ指定は尊重 */
   }
   /* スマホ：チャート見出しの情報密度を最適化 */
   .chart-title { font-size: 0.9rem; line-height: 1.35; }
   .chart-subtitle { font-size: 0.72rem; margin-bottom: 0.6rem; }
+}
+
+
+/* ========================================
+   スマホ：タブ・ボタンの一覧をコンパクトに（グラフや本文までの距離を短く）
+   ======================================== */
+/* 2つ並べたグラフ（スマホでは縦に並べる） */
+.cds-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 576px) {
+  .cds-2col { grid-template-columns: 1fr; }
+
+  /* 大タブ：4つが1行に収まるよう、アイコンと補足の語（「販売」「グラフ」）を省いて詰める */
+  .nav-tabs-main .nav-link i,
+  .nav-tabs-main .mt-long { display: none !important; }
+  .nav-tabs-main .nav-item { flex: 1 1 auto; }
+  .nav-tabs-main .nav-link {
+    width: 100%;
+    padding: 0.55rem 0.3rem !important;
+    font-size: 0.86rem !important;
+    white-space: nowrap;
+  }
+
+  /* ボタンの一覧は折り返さず、横にスワイプして選ぶ（右端のぼかしで続きがあることを示す） */
+  #cds-mid-tabs, #chartsPills, #cccmPills, #energyPills, #cnsuvChartPills, .cds-gc-items {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    padding-right: 28px !important;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  }
+  /* ランキングの小タブは元から横スクロールなので、続きがあることだけ示す */
+  .nav-tabs-sub {
+    padding-right: 28px;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+  }
+  #cds-mid-tabs::-webkit-scrollbar, #chartsPills::-webkit-scrollbar, #cccmPills::-webkit-scrollbar,
+  #energyPills::-webkit-scrollbar, #cnsuvChartPills::-webkit-scrollbar, .cds-gc-items::-webkit-scrollbar { display: none; }
+  #cds-mid-tabs > *, #chartsPills > *, #cccmPills > *, #energyPills > *, #cnsuvChartPills > *, .cds-gc-items > * { flex: 0 0 auto; }
+
+  /* 項目の多い一覧は2段にして、一度に見える数を増やす（上から下、左から右の順） */
+  #cds-mid-tabs, #chartsPills, #cccmPills {
+    display: grid !important;
+    grid-auto-flow: column;
+    grid-template-rows: auto auto;
+    grid-auto-columns: max-content;
+    justify-items: start;
+    gap: 6px !important;
+  }
+  #chartsPills .nav-link, #cccmPills .nav-link { padding: 0.38rem 0.85rem; font-size: 0.82rem; }
+
+  /* 崔東樹ブログの小分類：見出しを左に置き、ボタンは1行で横スワイプ */
+  .cds-nav-compact { gap: 7px; }
+  .cds-gc {
+    display: grid;
+    grid-template-columns: 4.4rem minmax(0, 1fr);
+    align-items: center;
+    column-gap: 6px;
+  }
+  .cds-gc-label { font-size: 0.64rem; line-height: 1.25; letter-spacing: 0; white-space: normal; }
+  .cds-gc-items .nav-link { padding: 3px 10px; font-size: 0.78rem; }
 }
 
 
@@ -3359,17 +3661,17 @@ body.tray-open { padding-bottom: 105px; }
     <ul class="nav nav-tabs nav-tabs-main" id="mainTabs" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="ranking-super-tab" data-bs-toggle="tab" data-bs-target="#ranking-super-content" type="button" role="tab">
-          <i class="fa-solid fa-trophy me-1"></i>販売ランキング
+          <i class="fa-solid fa-trophy me-1"></i><span class="mt-long">販売</span>ランキング
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="charts-super-tab" data-bs-toggle="tab" data-bs-target="#charts-super-content" type="button" role="tab">
-          <i class="fa-solid fa-chart-line me-1"></i>CAAM統計グラフ
+          <i class="fa-solid fa-chart-line me-1"></i>CAAM統計<span class="mt-long">グラフ</span>
         </button>
       </li>
       <li class="nav-item" role="presentation">
         <button class="nav-link" id="cccm-super-tab" data-bs-toggle="tab" data-bs-target="#cccm-super-content" type="button" role="tab">
-          <i class="fa-solid fa-motorcycle me-1"></i>CCCM統計グラフ
+          <i class="fa-solid fa-motorcycle me-1"></i>CCCM統計<span class="mt-long">グラフ</span>
         </button>
       </li>
       <li class="nav-item" role="presentation">
@@ -7431,7 +7733,7 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- ⑥ 価格帯・動力別 年次比較 -->
             <div class="cds-pane" id="price-cum-compare">
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="cds-2col">
                 <div class="chart-card">
                   <div class="chart-title">価格帯別 年次販売台数比較（万台）</div>
                   <div class="chart-subtitle">2024年・2025年通年 vs 2026年1-9月累計｜％は1-9月の前年同期比</div>
@@ -7481,7 +7783,7 @@ body.tray-open { padding-bottom: 105px; }
 
             <!-- ⑩ 車格別市場シェア -->
             <div class="cds-pane" id="price-segment-share">
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="cds-2col">
                 <div class="chart-card">
                   <div class="chart-title">車格別 市場シェア推移（%）</div>
                   <div class="chart-subtitle">C/B/A/A0/a0級の全体に占める割合</div>
@@ -7599,7 +7901,7 @@ body.tray-open { padding-bottom: 105px; }
             </div>
 
             <div class="cds-pane" id="stats-realestate">
-              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+              <div class="cds-2col">
                 <div class="chart-card">
                   <div class="chart-title">新築商品房 販売面積推移と伸び率（億㎡・%）</div>
                   <div id="ec-stats-re-area" class="echart-box" style="height:380px"></div>
@@ -17561,6 +17863,36 @@ window.addEventListener('resize', __rafThrottle(function(){
     'topic-outlook': renderOutlook, 'topic-accident': renderAccident
   };
   window.topicRender = function(id){ var fn = RENDER[id]; if (fn) fn(); };
+})();
+</script>
+
+<script>
+// ===== スマホ：横スワイプのボタン一覧で、選択中のボタンが隠れていたら見える位置までスクロールする =====
+(function () {
+  var SEL = '#cds-mid-tabs, #chartsPills, #cccmPills, #energyPills, #cnsuvChartPills, .cds-gc-items';
+  var mq = window.matchMedia ? window.matchMedia('(max-width: 576px)') : null;
+  function reveal(el) {
+    if (!mq || !mq.matches || !el || !el.closest) return;
+    var box = el.closest(SEL);
+    if (!box || !box.getClientRects().length || box.scrollWidth <= box.clientWidth + 2) return;
+    var br = box.getBoundingClientRect(), er = el.getBoundingClientRect();
+    if (er.left >= br.left + 4 && er.right <= br.right - 30) return;
+    var left = Math.max(0, box.scrollLeft + (er.left - br.left) - (br.width - er.width) / 2);
+    try { box.scrollTo({ left: left, behavior: 'smooth' }); } catch (e) { box.scrollLeft = left; }
+  }
+  function init() {
+    if (!window.MutationObserver) return;
+    var mo = new MutationObserver(function (muts) {
+      for (var i = 0; i < muts.length; i++) {
+        var t = muts[i].target;
+        if (t.classList && t.classList.contains('active')) reveal(t);
+      }
+    });
+    document.querySelectorAll(SEL).forEach(function (box) {
+      mo.observe(box, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
 </script>
 

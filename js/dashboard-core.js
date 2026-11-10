@@ -19,6 +19,198 @@ const DATA_SOURCES = {
   }
 };
 
+// ===== 過去月のランキング =====
+// パイプラインが毎月残している Autohome ランキングの控え（output/pipeline/autohome-ranking-archive/）を表示する。
+//   YYYY-MM.csv（総合） / YYYY-MM_hezi.csv（外資系） / YYYY-MM_energy_guochan.csv・_energy_hezi.csv（エネルギー別）
+// 画像は控えと一緒に保存されている images/by_series/ を使う。
+// 仕様表・口コミは、その月のランキングを掲載していた頃の版を GitHub の履歴から読む（rankSnapshot）。
+const ARCHIVE_DIR = 'output/pipeline/autohome-ranking-archive/';
+const ARCHIVE_BASE = `${RAW_BASE}${ARCHIVE_DIR}`;
+const REPO_RAW = RAW_BASE.replace(/main\/$/, '');   // 特定の版のファイル: REPO_RAW + コミット + '/' + パス
+const REPO_API = 'https://api.github.com/repos/atqgamtgbgt/a8f3x9data';
+const RANK_MONTH = { latest: '', selected: '', months: [] };   // selected が '' なら最新
+
+function rankMonthLabel(m) {
+  return /^\d{4}-\d{2}$/.test(m || '') ? `${+m.slice(0, 4)}年${+m.slice(5, 7)}月` : '';
+}
+function rankMonthAdd(m, n) {
+  let y = +m.slice(0, 4), mo = +m.slice(5, 7) - 1 + n;
+  y += Math.floor(mo / 12); mo = ((mo % 12) + 12) % 12;
+  return `${y}-${String(mo + 1).padStart(2, '0')}`;
+}
+// 過去月を表示中ならその月（YYYY-MM）、最新を表示中なら ''
+function pastRankMonth() {
+  const m = RANK_MONTH.selected;
+  return m && m !== RANK_MONTH.latest ? m : '';
+}
+// series_id 列（"614.0" のような書き方も）か、リンクの URL から車種IDを取る
+function rowSeriesId(r) {
+  const s = String(r.series_id || '').trim().replace(/\.0+$/, '');
+  if (/^\d+$/.test(s)) return s;
+  const m = String(r.link || r.series_url || '').match(/autohome\.com\.cn\/(\d+)/);
+  return m ? m[1] : '';
+}
+// 同じ行が二重に入った月（2026年4月の総合など）をまとめ、順位順に並べる
+function tidyRankRows(rows) {
+  const seen = new Set();
+  const out = [];
+  rows.forEach(r => {
+    const rank = parseInt(r.rank, 10);
+    const key = rank > 0 ? `${r.category_id || ''}|${rank}|${rowSeriesId(r) || r.name || ''}` : '';
+    if (key && seen.has(key)) return;
+    if (key) seen.add(key);
+    out.push(r);
+  });
+  const num = r => { const n = parseInt(r.rank, 10); return n > 0 ? n : Infinity; };
+  return out.sort((a, b) => num(a) - num(b));
+}
+// 1位から始まっていない（取得の一部に失敗した）ときは、欠けている順位の数
+function rankGap(rows) {
+  const ranks = (rows || []).map(r => parseInt(r.rank, 10)).filter(n => n > 0);
+  if (!ranks.length) return 0;
+  const min = Math.min(...ranks);
+  return min > 1 ? min - 1 : 0;
+}
+// 画像：控えの by_series 画像 → 同じ車種の別の月の画像 → 無ければ ''（代わりの画像になる）
+function archiveImageUrl(r) {
+  const u = String(r.image_url || '').trim();
+  if (u.startsWith('./images/by_series/')) return ARCHIVE_BASE + u.slice(2);
+  const sid = rowSeriesId(r);
+  const h = sid && window.SERIES_HISTORY ? window.SERIES_HISTORY[sid] : null;
+  const hu = h ? String(h.image_url || '') : '';
+  return hu.startsWith('./images/by_series/') ? ARCHIVE_BASE + hu.slice(2) : '';
+}
+function carImgHtml(src, model) {
+  return `<img class="car-thumb" src="${escHtml(src || window.CAR_PLACEHOLDER)}" alt="${escHtml(model)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=window.CAR_PLACEHOLDER;" />`;
+}
+
+// ===== メーカー名のリンク（Autohome のブランドページ）と販売動向ボタン =====
+// brand_id 列はパイプラインが車種ページから取ってくる。過去月の行にも、同じメーカーなら同じ番号を使う。
+const BRAND_IDS = {};
+function brandIdText(v) {
+  const s = String(v == null ? '' : v).trim().replace(/\.0+$/, '');
+  return /^\d+$/.test(s) ? s : '';
+}
+function noteBrandIds(rows) {
+  (rows || []).forEach(r => {
+    const id = brandIdText(r.brand_id);
+    const mk = String(r.manufacturer || '').trim();
+    if (mk && id && !BRAND_IDS[mk]) BRAND_IDS[mk] = id;
+  });
+}
+function brandIdOf(r) {
+  return brandIdText(r.brand_id) || BRAND_IDS[String(r.manufacturer || '').trim()] || '';
+}
+
+// メーカー販売動向は Autohome のメーカー月間販売ランキング（厂商月销榜、「メーカー販売ランキング」タブと同じデータ）。
+// ランキング表のメーカー名（ブランド名）と名前が違うものだけ対応を書く。
+// 合弁で工場が分かれるブランドは複数を合計する（その場合、順位は出さない）。
+const MAKER_TO_FACTORY = {
+  '特斯拉': ['特斯拉中国'], '小鹏': ['小鹏汽车'], '腾势': ['腾势汽车'], '名爵': ['MG'], '红旗': ['一汽红旗'],
+  '奔腾': ['一汽奔腾'], '捷达': ['一汽-大众捷达'], '宝马': ['华晨宝马'], '现代': ['北京现代'],
+  '别克': ['上汽通用别克'], '凯迪拉克': ['上汽通用凯迪拉克'], '林肯': ['长安林肯'], '马自达': ['长安马自达'],
+  '沃尔沃': ['沃尔沃亚太'], '标致': ['东风标致'], '雪铁龙': ['东风雪铁龙'], '猛士': ['猛士科技'],
+  '阿维塔': ['阿维塔科技'], '东风奕派': ['奕派科技'], '广汽昊铂': ['昊铂'], '蓝电': ['赛力斯蓝电'],
+  '212': ['二一二越野车'], '凯翼': ['凯翼汽车'],
+  '丰田': ['一汽丰田', '广汽丰田'], '大众': ['一汽-大众', '上汽大众', '大众安徽'],
+  '奔驰': ['北京奔驰', '福建奔驰'], '福特': ['长安福特', '江铃福特']
+};
+const MAKER_SALES = { months: null, promise: null, cache: {} };
+function loadMakerSales() {
+  if (!MAKER_SALES.promise) {
+    MAKER_SALES.promise = fetch(`${RAW_BASE}output/market/autohome_factory_monthly.json?v=${window.IMG_CACHE_VER}`)
+      .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+      .then(json => { MAKER_SALES.months = (json && json.months) || {}; })
+      .catch(err => { console.warn('メーカー販売データを読み込めませんでした:', err); MAKER_SALES.months = {}; })
+      .then(() => { decorateMakerCells(); return MAKER_SALES.months; });
+  }
+  return MAKER_SALES.promise;
+}
+// そのメーカーの月別の台数・順位。データが無ければ null
+function makerSalesSeries(maker) {
+  const months = MAKER_SALES.months;
+  if (!months || !maker) return null;
+  if (maker in MAKER_SALES.cache) return MAKER_SALES.cache[maker];
+  const factories = MAKER_TO_FACTORY[maker] || [maker];
+  const data = Object.keys(months).sort().map(m => {
+    const top = (months[m] && months[m].top) || [];
+    const hit = factories.map(f => top.find(r => r.factory === f)).filter(Boolean);
+    if (!hit.length) return { month: m, units: null, rank: null };
+    return {
+      month: m,
+      units: hit.reduce((s, r) => s + (Number(r.sales) || 0), 0),
+      rank: factories.length === 1 ? (Number(hit[0].rank) || null) : null,
+    };
+  });
+  const res = data.some(e => e.units != null) ? { maker, factories, data } : null;
+  MAKER_SALES.cache[maker] = res;
+  return res;
+}
+function makerTrendBtnHtml(maker, label) {
+  return `<button type="button" class="btn-maker-trend" data-act="maker" data-maker="${escHtml(maker)}" data-maker-ja="${escHtml(label)}" title="メーカーの販売動向" aria-label="${escHtml(label)}の販売動向"><i class="fa-solid fa-chart-column" aria-hidden="true"></i></button>`;
+}
+// ランキング表の「メーカー」欄（<td> ごと）
+function makerCellHtml(r) {
+  const mk = String(r.manufacturer || '').trim();
+  const label = String(r.manufacturer_ja || r.manufacturer || '').trim();
+  if (!label) return '<td class="maker-cell"></td>';
+  const bid = brandIdOf(r);
+  const name = bid
+    ? `<a class="maker-link" href="https://www.autohome.com.cn/price/brandid_${bid}" target="_blank" rel="noopener" title="Autohomeのブランドページを開く">${escHtml(label)}</a>`
+    : escHtml(label);
+  if (!mk) return `<td class="maker-cell">${name}</td>`;
+  const ready = !!MAKER_SALES.months;
+  const btn = ready && makerSalesSeries(mk) ? makerTrendBtnHtml(mk, label) : '';
+  return `<td class="maker-cell" data-maker="${escHtml(mk)}" data-maker-ja="${escHtml(label)}"${ready ? ' data-trend-done="1"' : ''}>${name}${btn}</td>`;
+}
+// 表を先に描いて、メーカー販売データが後から届いたときに販売動向ボタンを足す
+function decorateMakerCells() {
+  if (!MAKER_SALES.months) return;
+  document.querySelectorAll('td.maker-cell[data-maker]:not([data-trend-done])').forEach(td => {
+    td.setAttribute('data-trend-done', '1');
+    const mk = td.getAttribute('data-maker');
+    if (makerSalesSeries(mk)) td.insertAdjacentHTML('beforeend', makerTrendBtnHtml(mk, td.getAttribute('data-maker-ja') || mk));
+  });
+}
+function showMakerSales(maker, label) {
+  const s = makerSalesSeries(maker);
+  if (!s || typeof showSalesTrend !== 'function') return;
+  const sum = s.factories.length > 1;
+  // 表示は「メーカー販売ランキング」タブと同じ日本語名（一汽丰田 → 一汽トヨタ など）
+  const ja = n => (typeof CNSUV_MAKER_JA !== 'undefined' && CNSUV_MAKER_JA[n]) || n;
+  const names = s.factories.map(ja).join('＋');
+  showSalesTrend({
+    key: 'maker:' + maker,
+    title: `${label || maker} — メーカー販売動向`,
+    label: 'メーカー販売台数',
+    color: '#6366f1',
+    data: s.data,
+    note: (sum ? `${names} の合計（順位なし・上位50社に入らなかった工場は含まない月あり）` : `順位はメーカー販売ランキング内（${names}）`) +
+          '  |  出所：Autohome メーカー月間販売ランキング',
+    factories: s.factories,
+  });
+}
+// メーカー販売動向のモーダルから「メーカー販売ランキング」タブへ移り、そのメーカーにチェックを入れる
+function gotoMakerRanking(factories) {
+  const modalEl = document.getElementById('trendModal');
+  const modal = modalEl && bootstrap.Modal.getInstance(modalEl);
+  if (modal) modal.hide();
+  const tab = document.getElementById('cnsuv-charts-tab');
+  if (!tab) return;
+  tab.click();
+  let tries = 0;
+  const tick = () => {
+    const boxes = document.querySelectorAll('#cnsuvMakerCheckboxes input[type=checkbox]');
+    if (!boxes.length) { if (++tries < 50) setTimeout(tick, 200); return; }
+    let changed = false;
+    boxes.forEach(cb => { if ((factories || []).indexOf(cb.value) >= 0 && !cb.checked) { cb.checked = true; changed = true; } });
+    if (changed && typeof cnsuvRefresh === 'function') cnsuvRefresh();
+    const pane = document.getElementById('cnsuv-charts-content');
+    if (pane) pane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+  setTimeout(tick, 300);
+}
+
 const CNY_JPY_FALLBACK = 23.9;  // 為替APIが使えない時の値（2026年7月時点の実勢レート。年に数回は見直し推奨）
 let cnyToJpy = CNY_JPY_FALLBACK;
 let seriesUrlsMaps = {
@@ -85,7 +277,7 @@ function convertToJPY(priceStr) {
   return m[2] ? `（約${fmt(m[1])}〜${fmt(m[2])}万円）` : `（約${fmt(m[1])}万円）`;
 }
 
-function imgTag(rankStr, model, imageUrl, source, originalName) {
+function imgTag(rankStr, model, imageUrl, source, originalName, row) {
   const imgBase = DATA_SOURCES[source].imgBase;
 
   if (source === 'hezi') {
@@ -94,7 +286,8 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
       const fileName = imageUrl.replace("public/autohome_images/", "");
       return `<img class="car-thumb" src="${imgBase}${fileName}?v=${window.IMG_CACHE_VER}" alt="${escHtml(model)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=window.CAR_PLACEHOLDER;" />`;
     }
-    return "";
+    // 画像を撮れなかった行（image_url が空）は、同じ車種の控えの画像か、代わりの画像を出す
+    return carImgHtml(row ? archiveImageUrl(row) : '', model);
   }
 
   // autohome: CSVのimage_url（例 "/autohome_images/046_宋Pro新能源.png"）を使い、
@@ -109,40 +302,226 @@ function imgTag(rankStr, model, imageUrl, source, originalName) {
 }
 
 // ランキング表に「読み込み中」「読み込み失敗」の1行を出す
-function setTableStatus(tableId, kind) {
+function setTableStatus(tableId, kind, month) {
   const tbody = document.querySelector(`#${tableId} tbody`);
   if (!tbody) return;
   const html = kind === 'error'
     ? '<i class="fa-solid fa-triangle-exclamation me-2"></i>ランキングを読み込めませんでした。時間をおいてページを再読み込みしてください。'
+    : kind === 'nomonth'
+    ? `${escHtml(rankMonthLabel(month) || 'この月')}のランキングは保存されていません。`
     : '<span class="spinner-border spinner-border-sm text-primary me-2" role="status"></span>ランキングを読み込み中…';
   tbody.innerHTML = `<tr class="table-status"><td colspan="8" class="text-center py-4 ${kind === 'error' ? 'text-danger' : 'text-muted'}">${html}</td></tr>`;
 }
 
-async function loadData(source) {
+function domReady() {
+  return document.readyState === 'loading'
+    ? new Promise(resolve => document.addEventListener('DOMContentLoaded', resolve, { once: true }))
+    : Promise.resolve();
+}
+
+// month を渡すと過去月の控え、省略（''）なら最新を読む
+const _rankLoadToken = {};
+async function loadData(source, month) {
   currentSource = source;
+  const past = month || '';
   const tableId = source === 'autohome' ? 'autohomeTable' : 'heziTable';
   const tbody = document.querySelector(`#${tableId} tbody`);
-  if (tbody && !tbody.rows.length) setTableStatus(tableId, 'loading');
+  // 月を切り替えた時は、前の月の表を残さずに「読み込み中」にする
+  if (tbody && (!tbody.rows.length || (tbody.dataset.month || '') !== past)) setTableStatus(tableId, 'loading');
+  const token = (_rankLoadToken[source] = (_rankLoadToken[source] || 0) + 1);
+  const label = source === 'autohome' ? 'Autohome' : 'Hezi';
   try {
-    const csvPath = DATA_SOURCES[source].csvPath + `?v=${Date.now()}`;
+    const csvPath = past
+      ? `${ARCHIVE_BASE}${past}${source === 'hezi' ? '_hezi' : ''}.csv?v=${Date.now()}`
+      : DATA_SOURCES[source].csvPath + `?v=${Date.now()}`;
     const res = await fetch(csvPath, { cache: "no-store" });
+    if (token !== _rankLoadToken[source]) return;   // 別の月が選ばれた後に届いた結果は使わない
+    if (past && res.status === 404) {
+      setTableStatus(tableId, 'nomonth', past);
+      if (tbody) tbody.dataset.month = past;
+      updateRankNote(source, [], past);
+      return;
+    }
     if (!res.ok) throw new Error(res.statusText || ('HTTP ' + res.status));
     const text = await res.text();
+    if (token !== _rankLoadToken[source]) return;
     const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
     if (!parsed.meta.fields?.includes("rank")) throw new Error("rank 列が見つかりません");
 
-    renderTable(parsed.data, tableId, source);
-    console.log(`✅ ${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込み成功 (${parsed.data.length}件)`);
+    // 販売履歴（js/series-history.js、ページの最後で読む）が揃ってから描く（📈 と過去月の画像に使う）
+    await domReady();
+    if (token !== _rankLoadToken[source]) return;
+    const rows = tidyRankRows(parsed.data);
+    renderTable(rows, tableId, source, { month: past });
+    if (tbody) tbody.dataset.month = past;
+    updateRankNote(source, rows, past);
+    console.log(`✅ ${label} CSV 読み込み成功 (${rows.length}件${past ? '・' + past : ''})`);
   } catch (err) {
-    console.error(`${source === 'autohome' ? 'Autohome' : 'Hezi'} CSV 読み込みエラー: ` + err.message);
+    if (token !== _rankLoadToken[source]) return;
+    console.error(`${label} CSV 読み込みエラー: ` + err.message);
     setTableStatus(tableId, 'error');
   }
 }
 
-function renderTable(data, tableId, source) {
+// ランキングの上のお知らせ（過去月を表示中・取得の一部に失敗した月）
+function updateRankNote(kind, rows, past) {
+  const el = document.getElementById(`rankNote-${kind}`);
+  if (!el) return;
+  const parts = [];
+  if (past) {
+    parts.push(`<div class="rank-note rank-note-past"><i class="fa-regular fa-calendar me-1" aria-hidden="true"></i><b>${escHtml(rankMonthLabel(past))}</b>のランキングを表示しています。` +
+      '仕様表・口コミは当時の内容です（記録が無い場合は最新）。' +
+      '<button type="button" class="rank-month-reset" data-rank-month-reset>最新に戻す</button></div>');
+  }
+  const gap = rankGap(rows);
+  if (gap) {
+    const m = rankMonthLabel(past || RANK_MONTH.latest);
+    parts.push(`<div class="rank-note rank-note-warn">⚠️ ${m ? escHtml(m) + '分は' : ''}取得の一部に失敗したため、1〜${gap}位がありません（${gap + 1}位から表示）。</div>`);
+  }
+  el.innerHTML = parts.join('');
+  el.hidden = !parts.length;
+}
+
+// ===== 対象月の選択 =====
+function fillRankMonthSelects() {
+  const cur = RANK_MONTH.selected || RANK_MONTH.latest;
+  const html = RANK_MONTH.months.map(m =>
+    `<option value="${m}">${rankMonthLabel(m)}${m === RANK_MONTH.latest ? '（最新）' : ''}</option>`).join('');
+  document.querySelectorAll('select[data-rank-month]').forEach(sel => {
+    if (!html) return;
+    sel.innerHTML = html;
+    sel.value = cur;
+    sel.disabled = RANK_MONTH.months.length < 2;
+  });
+}
+// 選べる月：最新月（output/pipeline/.last_month）と、販売履歴（SERIES_HISTORY）に出てくる控えの月
+async function initRankMonths() {
+  let latest = '';
+  try {
+    const res = await fetch(`${RAW_BASE}output/pipeline/.last_month?v=${Date.now()}`, { cache: 'no-store' });
+    if (res.ok) latest = (await res.text()).trim();
+  } catch (e) {}
+  await domReady();
+  const valid = m => /^\d{4}-\d{2}$/.test(m || '');
+  const set = new Set();
+  Object.values(window.SERIES_HISTORY || {}).forEach(h => {
+    (h.overall || []).concat(h.hezi || []).forEach(e => e && set.add(e.month));
+    Object.values(h.energy || {}).forEach(c => ((c && c.data) || []).forEach(e => e && set.add(e.month)));
+  });
+  const known = [...set].filter(valid).sort();
+  if (!valid(latest)) latest = known[known.length - 1] || '';
+  if (!latest) return;
+  RANK_MONTH.latest = latest;
+  RANK_MONTH.months = [...new Set(known.concat(latest))].filter(m => m <= latest).sort().reverse();
+  fillRankMonthSelects();
+}
+function setRankMonth(m) {
+  const next = m && m !== RANK_MONTH.latest ? m : '';
+  if (next === RANK_MONTH.selected) { fillRankMonthSelects(); return; }
+  RANK_MONTH.selected = next;
+  fillRankMonthSelects();
+  loadData('autohome', next);
+  loadData('hezi', next);
+  if (typeof window.__reloadEnergyRanking === 'function') window.__reloadEnergyRanking();
+}
+document.addEventListener('change', e => {
+  const sel = e.target;
+  if (sel && sel.matches && sel.matches('select[data-rank-month]')) setRankMonth(sel.value);
+});
+document.addEventListener('click', e => {
+  if (e.target.closest && e.target.closest('[data-rank-month-reset]')) setRankMonth('');
+});
+
+// ===== 過去月の仕様表・口コミ =====
+// Autohome は毎月10日前後に前月のランキングを出すので、M月のランキングは M+1月中旬〜M+2月中旬に掲載されている。
+// その間の「M+2月1日になる直前」のサイトの版を、その月のランキング当時の仕様表・口コミとして使う。
+// （控えのファイルが追加された日では判断しない：2026年5月下旬に過去の月をまとめて追加したため）
+// 公開リポジトリの履歴より前の月や、GitHub に問い合わせられない時は最新を出す（モーダルの上に書く）。
+const _rankSnapshot = {};
+function rankSnapshot(month) {
+  if (_rankSnapshot[month]) return _rankSnapshot[month];
+  const store = 'rankSnapshot:' + month;
+  try {
+    const saved = sessionStorage.getItem(store);
+    if (saved) return (_rankSnapshot[month] = Promise.resolve(JSON.parse(saved)));
+  } catch (e) {}
+  const until = `${rankMonthAdd(month, 2)}-01T00:00:00+09:00`;
+  if (new Date(until) > new Date()) return Promise.resolve({ kind: 'latest', sha: '', date: '' });   // まだ掲載中
+  const p = fetch(`${REPO_API}/commits?sha=main&per_page=1&until=${encodeURIComponent(until)}`)
+    .then(res => { if (!res.ok) throw new Error('HTTP ' + res.status); return res.json(); })
+    .then(list => {
+      if (!Array.isArray(list)) throw new Error('unexpected response');
+      const c = list[0];
+      if (!c || !c.sha) return { kind: 'none', sha: '', date: '' };        // 公開リポジトリの履歴より前
+      const date = (c.commit && c.commit.committer && c.commit.committer.date) || '';
+      return { kind: 'snapshot', sha: c.sha, date };
+    })
+    .then(v => { try { sessionStorage.setItem(store, JSON.stringify(v)); } catch (e) {} return v; })
+    .catch(err => {
+      console.warn('当時の版を確認できませんでした:', err);
+      delete _rankSnapshot[month];   // 次に開いた時にもう一度問い合わせる
+      return { kind: 'error', sha: '', date: '' };
+    });
+  _rankSnapshot[month] = p;
+  return p;
+}
+function jstDateLabel(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return '';
+  return d.toLocaleDateString('ja-JP', { timeZone: 'Asia/Tokyo', year: 'numeric', month: 'long', day: 'numeric' });
+}
+// モーダル本文の上の「いつの内容か」の一行
+function setAsOfNote(modalEl, html, warn) {
+  const body = modalEl && modalEl.querySelector('.modal-body');
+  if (!body) return;
+  let note = body.querySelector(':scope > .asof-note');
+  if (!html) { if (note) note.remove(); return; }
+  if (!note) {
+    note = document.createElement('div');
+    body.insertBefore(note, body.firstChild);
+  }
+  note.className = 'asof-note' + (warn ? ' warn' : '');
+  note.innerHTML = html;
+}
+// 過去月なら当時の版を、そうでなければ最新（latestUrl）を読んで文字列で返す
+async function fetchAsOfText(month, relPath, latestUrl, what, modalEl, alive) {
+  const note = (html, warn) => { if (!alive || alive()) setAsOfNote(modalEl, html, warn); };
+  const latest = async () => {
+    const res = await fetch(latestUrl, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return res.text();
+  };
+  if (!month) { note(''); return latest(); }
+  const ml = escHtml(rankMonthLabel(month));
+  note(`<span class="spinner-border spinner-border-sm me-1" role="status"></span>${ml}のランキング当時の${what}を探しています…`);
+  const snap = await rankSnapshot(month);
+  if (snap.kind === 'snapshot') {
+    try {
+      const res = await fetch(`${REPO_RAW}${snap.sha}/${relPath}`);
+      if (res.ok) {
+        const text = await res.text();
+        const at = jstDateLabel(snap.date);
+        note(`<i class="fa-regular fa-calendar me-1" aria-hidden="true"></i>${ml}のランキングを掲載していた頃${at ? '（' + escHtml(at) + '時点）' : ''}の${what}です`);
+        return text;
+      }
+    } catch (e) {}
+    note(`${ml}のランキング当時の${what}は残っていないため、最新の${what}を表示しています`, true);
+  } else if (snap.kind === 'latest') {
+    note('');
+  } else if (snap.kind === 'none') {
+    note(`${ml}のランキング当時の${what}は記録が無いため、最新の${what}を表示しています`, true);
+  } else {
+    note(`当時の${what}を確認できなかったため、最新の${what}を表示しています`, true);
+  }
+  return latest();
+}
+
+function renderTable(data, tableId, source, opts = {}) {
   const tbody = document.querySelector(`#${tableId} tbody`);
   tbody.innerHTML = "";
   const esc = window.escHtml;
+  const past = opts.month || '';
+  noteBrandIds(data);
   data.forEach(r => {
     const rankStr = String(r.rank).padStart(3, "0");
     const diff = Number(r.delta_vs_last_month || 0);
@@ -166,9 +545,12 @@ function renderTable(data, tableId, source) {
 
     const price = esc(formatCnyPrice(r.price || ""));
     const priceJPY = convertToJPY(r.price || "");
-    const maker = esc(r.manufacturer_ja || r.manufacturer || "");
     const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + "台" : "";
-    const btnData = `data-car="${esc(carId)}" data-name="${esc(globalName)}" data-src="${esc(source)}"`;
+    const btnData = `data-car="${esc(carId)}" data-name="${esc(globalName)}" data-src="${esc(source)}"` +
+      (past ? ` data-month="${esc(past)}"` : '');
+    const img = past
+      ? carImgHtml(archiveImageUrl(r), originalName)
+      : imgTag(rankStr, originalName, r.image_url, source, originalName, r);
     const specBtn = carId
       ? `<button type="button" class="btn btn-outline-primary btn-sm btn-spec" data-act="spec" ${btnData}>仕様表</button>`
       : "";
@@ -179,12 +561,13 @@ function renderTable(data, tableId, source) {
       ? `<button type="button" class="btn btn-sm btn-trend" data-act="trend" ${btnData} title="販売トレンド" aria-label="販売トレンド">📈</button>`
       : "";
     const tr = document.createElement("tr");
+    if (parseInt(r.rank, 10) <= 3) tr.className = "rank-top3";
     tr.innerHTML = `
       <td class="rank-badge">${esc(r.rank)}</td>
       <td class="diff-badge">${diffHtml}</td>
-      <td>${imgTag(rankStr, originalName, r.image_url, source, originalName)}</td>
+      <td>${img}</td>
       <td><a href="${esc(safeUrl(link))}" target="_blank" rel="noopener">${displayName}</a></td>
-      <td>${maker}</td>
+      ${makerCellHtml(r)}
       <td style="white-space: nowrap;">${units}</td>
       <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
       <td>${specBtn}${storyBtn}${trendBtn}</td>`;
@@ -202,14 +585,19 @@ document.addEventListener('click', function (e) {
   const name = b.getAttribute('data-name') || '';
   const src = b.getAttribute('data-src') || 'autohome';
   const act = b.getAttribute('data-act');
-  if (act === 'spec') showConfigCsv(car, name, src);
-  else if (act === 'story') showStory(car, name, src);
+  const month = b.getAttribute('data-month') || '';
+  if (act === 'spec') showConfigCsv(car, name, src, month);
+  else if (act === 'story') showStory(car, name, src, month);
   else if (act === 'trend') showTrend(car, name);
+  else if (act === 'maker') showMakerSales(b.getAttribute('data-maker') || '', b.getAttribute('data-maker-ja') || '');
 });
 
 function openFullSpec() {
   const html = document.getElementById("csvContent").innerHTML;
-  const title = document.getElementById("csvModalLabel").textContent;
+  // 過去月のランキングから開いた仕様表は「いつの内容か」もタイトルに付ける
+  const asOfEl = document.querySelector('#csvModal .asof-note');
+  const asOf = asOfEl && !asOfEl.querySelector('.spinner-border') ? asOfEl.textContent.trim() : '';
+  const title = document.getElementById("csvModalLabel").textContent + (asOf ? '｜' + asOf : '');
   const configUrl = window.currentConfigUrl || '';
   
   const allStyles = document.querySelector('style').textContent;
@@ -606,8 +994,9 @@ function openFullSpec() {
   }
 }
 
-function showConfigCsv(carId, title, source) {
-  const path = `output/autohome/${encodeURIComponent(carId)}/config_${encodeURIComponent(carId)}.ja.csv?v=${Date.now()}`;
+function showConfigCsv(carId, title, source, month) {
+  const specRel = `output/autohome/${encodeURIComponent(carId)}/config_${encodeURIComponent(carId)}.ja.csv`;
+  const path = `${specRel}?v=${Date.now()}`;
   const target = document.getElementById("csvContent");
   const modalEl = document.getElementById("csvModal");
   const modalHeader = modalEl.querySelector('.modal-header');
@@ -633,11 +1022,7 @@ function showConfigCsv(carId, title, source) {
     target.innerHTML = `<div class="text-danger text-center py-5"><i class="fa-solid fa-triangle-exclamation me-2"></i>${esc(msg)}</div>`;
   };
 
-  Papa.parse(path, {
-    download: true,
-    header: false,
-    skipEmptyLines: false,
-    complete: (res) => {
+  const renderSpec = (res) => {
       if (token !== showConfigCsv._token) return;
       const rows = (res.data || []).map(r => (r || []).map(v => (v ?? "").toString().trim()));
       if (!rows.some(r => r.some(v => v))) { showError("この車種の仕様表データはまだありません。"); return; }
@@ -850,13 +1235,20 @@ function showConfigCsv(carId, title, source) {
       };
       if (modalEl.classList.contains('show')) requestAnimationFrame(setup);
       else modalEl.addEventListener('shown.bs.modal', setup, { once: true });
-    },
-    error: () => showError("仕様表を読み込めませんでした。この車種のデータがまだ無いか、通信エラーです。")
-  });
+  };
+
+  // 過去月のランキングから開いた時は、その頃の仕様表を読む
+  fetchAsOfText(month, specRel, path, '仕様表', modalEl, () => token === showConfigCsv._token)
+    .then(text => {
+      if (token !== showConfigCsv._token) return;
+      renderSpec(Papa.parse(text, { header: false, skipEmptyLines: false }));
+    })
+    .catch(() => showError("仕様表を読み込めませんでした。この車種のデータがまだ無いか、通信エラーです。"));
 }
 
-async function showStory(carId, title, source){
-  const path = `output/koubei/${encodeURIComponent(carId)}/story.txt?v=${Date.now()}`;
+async function showStory(carId, title, source, month){
+  const storyRel = `output/koubei/${encodeURIComponent(carId)}/story.txt`;
+  const path = `${storyRel}?v=${Date.now()}`;
   const target = document.getElementById("storyContent");
   const modalEl = document.getElementById("storyModal");
   const koubeiUrl = `https://k.autohome.com.cn/${encodeURIComponent(carId)}#pvareaid=3454440`;
@@ -886,10 +1278,9 @@ async function showStory(carId, title, source){
   bootstrap.Modal.getOrCreateInstance(modalEl).show();
 
   try{
-    const res = await fetch(path, { cache: "no-store" });
-    if (!res.ok) throw new Error("Not found");
     // 本文を先にエスケープしてから、見出し・太字・箇条書きだけをHTMLに変換する
-    let text = window.escHtml(await res.text());
+    // （過去月のランキングから開いた時は、その頃の口コミ概要を読む）
+    let text = window.escHtml(await fetchAsOfText(month, storyRel, path, '口コミ概要', modalEl, () => token === showStory._token));
     if (token !== showStory._token) return;
     text=text.replace(/```/g,"");
     text=text.replace(/^### (.*)$/gm,"<h6 class='mt-3 mb-2 fw-bold'>$1</h6>");
@@ -1201,6 +1592,8 @@ async function init() {
     fetchSeriesUrls('autohome'),
     fetchSeriesUrls('hezi')
   ]);
+  const months = initRankMonths();   // 対象月の一覧（表示は待たせない）
+  loadMakerSales();                   // メーカー販売動向のボタン。データが届いたら表に足す
   await fetchRate();  // 円換算に使うため先に取得（最大4秒で打ち切り）
 
   await Promise.all([
@@ -1208,6 +1601,7 @@ async function init() {
     loadData('hezi')
   ]);
   await seriesUrls;
+  await months;
 }
 
 document.getElementById('autohome-tab').addEventListener('shown.bs.tab', function (e) {
@@ -1234,12 +1628,15 @@ init();
   };
   const ENERGY_TABLES = { '456': 'energyTable456', '4': 'energyTable4', '1': 'energyTable1', '5': 'energyTable5', '6': 'energyTable6' };
 
-  // ロード済みキャッシュ（出所別）
+  // ロード済みキャッシュ（出所＋月ごと）
   const energyCache = {};
   let currentSource = 'guochan';
+  let loadToken = 0;
 
-  function energyImgTag(imageUrl, model, source) {
-    if (!imageUrl) return '';
+  function energyImgTag(imageUrl, model, source, row, past) {
+    // 過去月：控えの画像（無ければ同じ車種の別の月の画像か代わりの画像）
+    if (past || String(imageUrl || '').startsWith('./images/by_series/')) return carImgHtml(archiveImageUrl(row || { image_url: imageUrl }), model);
+    if (!imageUrl) return carImgHtml(row ? archiveImageUrl(row) : '', model);
     // image_url形式: public/autohome_energy/{source}/images/{catId}/{file}
     const m = imageUrl.match(/^public\/autohome_energy\/(?:guochan|hezi)\/images\/(\d+)\/(.+)$/);
     if (!m) return '';
@@ -1248,7 +1645,7 @@ init();
     return `<img class="car-thumb" src="${src}" alt="${escHtml(model)}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=window.CAR_PLACEHOLDER;" />`;
   }
 
-  function renderEnergyTable(rows, tableId, source) {
+  function renderEnergyTable(rows, tableId, source, past) {
     const tbody = document.querySelector(`#${tableId} tbody`);
     if (!tbody) return;
     tbody.innerHTML = '';
@@ -1257,6 +1654,7 @@ init();
       return;
     }
     const esc = window.escHtml;
+    noteBrandIds(rows);
     rows.forEach(r => {
       const globalName = r.global_name || r.name || '';
       const originalName = r.name || '';
@@ -1265,11 +1663,11 @@ init();
         : esc(globalName);
       const link = r.link || '';
       const carId = link.match(/\/(\d+)\//)?.[1] || '';
-      const maker = esc(r.manufacturer_ja || r.manufacturer || '');
       const units = r.units ? parseInt(r.units).toLocaleString('ja-JP') + '台' : '';
       const price = esc(formatCnyPrice(r.price || ''));
       const priceJPY = convertToJPY(r.price || '');
-      const btnData = `data-car="${esc(carId)}" data-name="${esc(globalName)}" data-src="autohome"`;
+      const btnData = `data-car="${esc(carId)}" data-name="${esc(globalName)}" data-src="autohome"` +
+        (past ? ` data-month="${esc(past)}"` : '');
       const specBtn = carId ? `<button type="button" class="btn btn-outline-primary btn-sm btn-spec" data-act="spec" ${btnData}>仕様表</button>` : '';
       const storyBtn = carId ? `<button type="button" class="btn btn-outline-secondary btn-sm btn-story" data-act="story" ${btnData}>口コミ</button>` : '';
       // 総合・外資のランキングと同じく、販売トレンドがある車種には 📈 を出す
@@ -1277,12 +1675,13 @@ init();
         ? `<button type="button" class="btn btn-sm btn-trend" data-act="trend" ${btnData} title="販売トレンド" aria-label="販売トレンド">📈</button>`
         : '';
       const tr = document.createElement('tr');
+      if (parseInt(r.rank, 10) <= 3) tr.className = 'rank-top3';
       tr.innerHTML = `
         <td class="rank-badge">${esc(r.rank)}</td>
         <td class="diff-badge"></td>
-        <td>${energyImgTag(r.image_url, originalName, source)}</td>
+        <td>${energyImgTag(r.image_url, originalName, source, r, past)}</td>
         <td><a href="${esc(safeUrl(link))}" target="_blank" rel="noopener">${displayName}</a></td>
-        <td>${maker}</td>
+        ${makerCellHtml(r)}
         <td style="white-space:nowrap;">${units}</td>
         <td>${price}<br><span class="price-jpy">${priceJPY}</span></td>
         <td>${specBtn}${storyBtn}${trendBtn}</td>`;
@@ -1297,43 +1696,57 @@ init();
     });
   }
 
-  function showErrorAll() {
+  function showErrorAll(message) {
     Object.values(ENERGY_TABLES).forEach(tableId => {
       const tbody = document.querySelector(`#${tableId} tbody`);
-      if (tbody) tbody.innerHTML = `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
+      if (tbody) tbody.innerHTML = message
+        ? `<tr><td colspan="8" class="text-center text-muted py-4">${escHtml(message)}</td></tr>`
+        : `<tr><td colspan="8" class="text-center text-danger py-4"><i class="fa-solid fa-triangle-exclamation me-2"></i>データ読み込みに失敗しました</td></tr>`;
     });
   }
 
-  function renderAllTables(source) {
-    const byCategory = energyCache[source] || {};
+  function renderAllTables(source, past) {
+    const byCategory = energyCache[`${source}|${past}`] || {};
     Object.entries(ENERGY_TABLES).forEach(([cid, tableId]) => {
-      renderEnergyTable(byCategory[cid] || [], tableId, source);
+      renderEnergyTable(byCategory[cid] || [], tableId, source, past);
     });
+    updateRankNote('energy', null, past);
   }
 
   async function loadEnergyData(source) {
+    const past = pastRankMonth();   // 過去月を選んでいれば、その月の控え
+    const key = `${source}|${past}`;
+    const token = ++loadToken;
     // キャッシュ済みならそのまま描画
-    if (energyCache[source]) {
-      renderAllTables(source);
+    if (energyCache[key]) {
+      renderAllTables(source, past);
       return;
     }
     showLoadingAll();
     try {
-      const csvUrl = ENERGY_SOURCES[source];
+      const csvUrl = past ? `${ARCHIVE_BASE}${past}_energy_${source}.csv` : ENERGY_SOURCES[source];
       const res = await fetch(csvUrl + `?v=${Date.now()}`, { cache: 'no-store' });
+      if (token !== loadToken) return;   // 出所や月が切り替わった後に届いた結果は使わない
+      if (past && res.status === 404) {
+        showErrorAll(`${rankMonthLabel(past)}のエネルギー別ランキングは保存されていません。`);
+        updateRankNote('energy', null, past);
+        return;
+      }
       if (!res.ok) throw new Error(res.statusText);
       const text = await res.text();
+      if (token !== loadToken) return;
       const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
       const byCategory = {};
-      parsed.data.forEach(r => {
+      tidyRankRows(parsed.data).forEach(r => {
         const cid = String(r.category_id);
         if (!byCategory[cid]) byCategory[cid] = [];
         byCategory[cid].push(r);
       });
-      energyCache[source] = byCategory;
-      renderAllTables(source);
-      console.log(`✅ エネルギー別ランキング [${source}] CSV 読み込み成功 (${parsed.data.length}件)`);
+      energyCache[key] = byCategory;
+      renderAllTables(source, past);
+      console.log(`✅ エネルギー別ランキング [${source}${past ? '・' + past : ''}] CSV 読み込み成功 (${parsed.data.length}件)`);
     } catch (err) {
+      if (token !== loadToken) return;
       console.error(`エネルギー別ランキング [${source}] CSV 読み込みエラー: ` + err.message);
       showErrorAll();
     }
@@ -1366,6 +1779,10 @@ init();
       loadEnergyData(currentSource);
     }
   });
+  // 対象月を変えた時（まだ開いていなければ、開いた時に選んだ月を読む）
+  window.__reloadEnergyRanking = function() {
+    if (energyLoaded) loadEnergyData(currentSource);
+  };
 })();
 
 // リサイズ時に線を再描画

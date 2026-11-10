@@ -11,6 +11,8 @@ on:
       - tools/extract_info_registry.py
       - js/info-registry.js
       - js/series-history.js
+      - js/dashboard-core.js
+      - tools/extract_dashboard_core.py
       - tools/extract_series_history.py
       - .github/workflows/index-audit.yml
   pull_request:
@@ -22,6 +24,8 @@ on:
       - tools/extract_info_registry.py
       - js/info-registry.js
       - js/series-history.js
+      - js/dashboard-core.js
+      - tools/extract_dashboard_core.py
       - tools/extract_series_history.py
       - .github/workflows/index-audit.yml
   workflow_dispatch:
@@ -47,5 +51,7 @@ jobs:
           node --check js/info-registry.js
           python tools/extract_series_history.py --check
           node --check js/series-history.js
+          python tools/extract_dashboard_core.py --check
+          node --check js/dashboard-core.js
       - name: Audit main page JavaScript and localization
         run: node tools/audit_index_html.js

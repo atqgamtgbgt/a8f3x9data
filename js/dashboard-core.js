@@ -6388,6 +6388,13 @@ function cdsSetMidTab(tab) {
     var tpTarget = window.TOPIC_CURRENT_ID || 'topic-h1-profit';
     if (tpTarget.indexOf('dc-') === 0) {
       cdsShowPane(tpTarget);
+    } else if (tpTarget.indexOf('wfin-') === 0 && typeof wfinShowPane === 'function') {
+      // 世界企業財務（個別テーマ内のグループ）
+      if (typeof window.topicShowPane === 'function') window.topicShowPane(tpTarget);
+      wfinShowPane(tpTarget);
+      requestAnimationFrame(function(){ requestAnimationFrame(function(){
+        if (typeof wfinRender === 'function') { wfinRender(tpTarget); setTimeout(function(){ wfinRender(tpTarget); }, 150); }
+      }); });
     } else {
       if (typeof window.topicShowPane === 'function') window.topicShowPane(tpTarget);
       requestAnimationFrame(function(){ requestAnimationFrame(function(){

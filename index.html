@@ -2663,6 +2663,9 @@ img.car-thumb {
 }
 .cds-mid-tab:hover { border-color: #3b82f6; color: #3b82f6; background: #eff6ff; }
 .cds-mid-tab.active { background: #1e40af; color: #fff; border-color: #1e40af; font-weight: 600; }
+/* 中タブの「最新の月」（記事タイトルから自動表示） */
+.cds-mid-asof { margin-left: 5px; font-size: 10.5px; font-weight: 400; color: #94a3b8; }
+.cds-mid-tab.active .cds-mid-asof { color: #c7d2fe; }
 
 /* ====== 解説パネル（INFO_REGISTRY方式） ====== */
 .cds-info-panel {
@@ -4264,9 +4267,6 @@ body.tray-open { padding-bottom: 105px; }
               <button id="cds-mid-btn-worldshare" class="cds-mid-tab" onclick="cdsSetMidTab('worldshare')">
                 🌐 世界シェア
               </button>
-              <button id="cds-mid-btn-wfin" class="cds-mid-tab" onclick="cdsSetMidTab('wfin')">
-                🌍 世界企業財務
-              </button>
               <button id="cds-mid-btn-profit" class="cds-mid-tab" onclick="cdsSetMidTab('profit')">
                 💹 利益率
               </button>
@@ -4373,7 +4373,7 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-target="#cds-nev-annual">⚡ NEV年別推移</button>
                     <button class="nav-link" data-cds-target="#cds-nev-trend">⚡ NEVトレンド</button>
                     <button class="nav-link" data-cds-target="#cds-russia">🇷🇺 対ロシア</button>
-                    <button class="nav-link" data-cds-target="#cds-russia-body">🇷🇺 対ロシア車種別</button>
+                    <button class="nav-link" data-cds-target="#cds-russia-body">🇷🇺 対ロシア車種別（26年1-4月）</button>
                   </div>
                 </div>
 
@@ -4395,8 +4395,8 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🌍 地域・国・省 </span>
                   <div class="cds-gc-items" id="cds-gc-g3">
-                    <button class="nav-link" data-cds-target="#cds-region">🌍 地域別</button>
-                    <button class="nav-link" data-cds-target="#cds-power-region">🌐 動力×地域</button>
+                    <button class="nav-link" data-cds-target="#cds-region">🌍 地域別（26年1-4月）</button>
+                    <button class="nav-link" data-cds-target="#cds-power-region">🌐 動力×地域（26年1-4月）</button>
                     <button class="nav-link" data-cds-target="#cds-country">🏳️ 国別</button>
                     <button class="nav-link" data-cds-target="#cds-nev-ctry">⚡ NEV国別</button>
                     <button class="nav-link" data-cds-target="#cds-prov">🏭 省別</button>
@@ -4424,7 +4424,7 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-target="#cds-r8">⛽ ICEトラック</button>
                     <button class="nav-link" data-cds-target="#cds-r9">🔋 PHEVトラック</button>
                     <button class="nav-link" data-cds-target="#cds-r10">🔌 BEVトラック</button>
-                    <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEVトラック</button>
+                    <button class="nav-link" data-cds-target="#cds-r9b">⚡ NEVトラック（26年1-4月）</button>
                     <button class="nav-link" data-cds-target="#cds-r11">⛽ ICEバス</button>
                     <button class="nav-link" data-cds-target="#cds-r12">⚡ NEVバス</button>
                   </div>
@@ -4448,8 +4448,8 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🏆 メーカー別 </span>
                   <div class="cds-gc-items" id="cds-gc-jh2">
-                    <button class="nav-link" data-cds-jh-target="#jh-maker-total">🚗 全体メーカー別</button>
-                    <button class="nav-link" data-cds-jh-target="#jh-maker-nev">⚡ NEVメーカー別</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-maker-total">🚗 全体メーカー別（26年1-2月）</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-maker-nev">⚡ NEVメーカー別（26年1-2月）</button>
 
                   </div>
                 </div>
@@ -4461,7 +4461,7 @@ body.tray-open { padding-bottom: 105px; }
                     <button class="nav-link" data-cds-jh-target="#jh-world-maker-region">🏭 メーカー×地域マトリクス</button>
                     <button class="nav-link" data-cds-jh-target="#jh-country-maker">🗺️ 国別×メーカー（全体）</button>
                     <button class="nav-link" data-cds-jh-target="#jh-country-maker-nev">⚡ 国別×メーカー（NEV）</button>
-                    <button class="nav-link" data-cds-jh-target="#jh-russia-detail">🇷🇺 ロシア詳細</button>
+                    <button class="nav-link" data-cds-jh-target="#jh-russia-detail">🇷🇺 ロシア詳細（26年1-2月）</button>
                   </div>
                 </div>
               </div>
@@ -4491,9 +4491,9 @@ body.tray-open { padding-bottom: 105px; }
                   <div class="cds-gc-items" id="cds-gc-gi3">
                     <button class="nav-link" data-cds-import-target="#imp-country">🌍 国別輸入</button>
                     <button class="nav-link" data-cds-import-target="#imp-nev-country">⚡ 新エネ国別</button>
-                    <button class="nav-link" data-cds-import-target="#imp-brand">🏷️ ブランド別</button>
+                    <button class="nav-link" data-cds-import-target="#imp-brand">🏷️ ブランド別（26年1-8月）</button>
                     <button class="nav-link" data-cds-import-target="#imp-luxury">💎 超高級車</button>
-                    <button class="nav-link" data-cds-import-target="#imp-lexus">🚘 レクサス</button>
+                    <button class="nav-link" data-cds-import-target="#imp-lexus">🚘 レクサス（26年1-2月）</button>
                   </div>
                 </div>
               </div>
@@ -4541,20 +4541,6 @@ body.tray-open { padding-bottom: 105px; }
               </div>
             </div><!-- end cds-sub-worldshare -->
 
-            <!-- 中タブ世界企業財務: サブナビ -->
-            <div id="cds-sub-wfin" class="cds-sub-nav" style="display:none">
-              <div class="cds-nav-compact">
-                <div class="cds-gc">
-                  <div class="cds-gc-items" id="cds-gc-gwfin">
-                    <button class="nav-link active" data-cds-wfin-target="#wfin-revenue">📊 売上・成長性</button>
-                    <button class="nav-link" data-cds-wfin-target="#wfin-profitability">💰 収益性</button>
-                    <button class="nav-link" data-cds-wfin-target="#wfin-capital">🔄 運転資本</button>
-                    <button class="nav-link" data-cds-wfin-target="#wfin-inventory">📦 在庫効率</button>
-                  </div>
-                </div>
-              </div>
-            </div><!-- end cds-sub-wfin -->
-
             <!-- 中タブC: 利益率 サブナビ -->
             <div id="cds-sub-profit" class="cds-sub-nav" style="display:none">
               <div class="cds-nav-compact">
@@ -4591,7 +4577,7 @@ body.tray-open { padding-bottom: 105px; }
               <div class="cds-nav-compact" style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:8px">
                 <div style="display:flex;flex-wrap:wrap;gap:0">
                 <div class="cds-gc">
-                  <span class="cds-gc-label">📦 総需要 </span>
+                  <span class="cds-gc-label">📦 総需要（26年1-6月） </span>
                   <div class="cds-gc-items" id="cds-gc-gb0">
                     <button class="nav-link" data-cds-battery-target="#bat-demand">📦 総需要構成</button>
                     <button class="nav-link" data-cds-battery-target="#bat-demand-monthly">📅 用途別月次需要</button>
@@ -4622,7 +4608,7 @@ body.tray-open { padding-bottom: 105px; }
                   </div>
                 </div>
                 <div class="cds-gc">
-                  <span class="cds-gc-label">🚢 電池輸出 </span>
+                  <span class="cds-gc-label">🚢 電池輸出（26年7月） </span>
                   <div class="cds-gc-items" id="cds-gc-gb4">
                     <button class="nav-link" data-cds-battery-target="#bat-export-trend">📈 月次輸出推移</button>
                     <button class="nav-link" data-cds-battery-target="#bat-export-detail">💰 単価・数量推移</button>
@@ -4834,13 +4820,22 @@ body.tray-open { padding-bottom: 105px; }
                   </div>
                 </div>
                 <div class="cds-gc">
+                  <span class="cds-gc-label">🌍 世界の企業財務（2020〜25年） </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-wfin-target="#wfin-revenue">📊 売上・成長性</button>
+                    <button class="nav-link" data-cds-wfin-target="#wfin-profitability">💰 収益性</button>
+                    <button class="nav-link" data-cds-wfin-target="#wfin-capital">🔄 運転資本</button>
+                    <button class="nav-link" data-cds-wfin-target="#wfin-inventory">📦 在庫効率</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
                   <span class="cds-gc-label">👪 人口・保有 </span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-topic-target="#topic-marriage">💍 結婚と年齢</button>
-                    <button class="nav-link" data-cds-topic-target="#topic-aging">👴 高齢化</button>
-                    <button class="nav-link" data-cds-topic-target="#topic-registration">🚗 登録・保有・中古車</button>
-                    <button class="nav-link" data-cds-topic-target="#topic-scrap">♻️ 廃車と買い替え</button>
-                    <button class="nav-link" data-cds-topic-target="#topic-accident">🚦 交通事故</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-marriage">💍 結婚と年齢（2025年）</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-aging">👴 高齢化（2025年）</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-registration">🚗 登録・保有・中古車（26年上半期）</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-scrap">♻️ 廃車と買い替え（2016〜25年）</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-accident">🚦 交通事故（2018〜25年）</button>
                   </div>
                 </div>
                 <div class="cds-gc">
@@ -4853,18 +4848,18 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="cds-gc">
                   <span class="cds-gc-label">🌍 輸出・見通し </span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-topic-target="#topic-eu">🇪🇺 対EU輸出（1-9月）</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-eu">🇪🇺 対EU輸出（26年1-9月）</button>
                     <button class="nav-link" data-cds-topic-target="#topic-outlook">🔮 2027年の小売予測</button>
                   </div>
                 </div>
                 <div class="cds-gc">
                   <span class="cds-gc-label">📉 株式市場 </span>
                   <div class="cds-gc-items">
-                    <button class="nav-link" data-cds-topic-target="#topic-mcap">💹 時価総額（9月）</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-mcap">💹 時価総額（26年9月）</button>
                   </div>
                 </div>
                 <div class="cds-gc">
-                  <span class="cds-gc-label">⚖️ ダブルクレジット</span>
+                  <span class="cds-gc-label">⚖️ ダブルクレジット（2025年）</span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-target="#dc-overview">📊 総合推移</button>
                     <button class="nav-link" data-cds-target="#dc-compliance">⚖️ 目標達成率</button>
@@ -15550,21 +15545,22 @@ function wfinShowPane(id) {
   });
   var el = document.getElementById(id);
   if (el) el.classList.add('cds-active');
-  document.querySelectorAll('#cds-sub-wfin [data-cds-wfin-target]').forEach(function(b){
+  document.querySelectorAll('[data-cds-wfin-target]').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-cds-wfin-target') === '#' + id);
   });
 }
 window.wfinShowPane = wfinShowPane;
 
-// サブナビボタンクリック
-document.addEventListener('DOMContentLoaded', function(){
-  document.querySelectorAll('#cds-sub-wfin [data-cds-wfin-target]').forEach(function(b){
-    b.addEventListener('click', function(){
-      var id = b.getAttribute('data-cds-wfin-target').replace('#','');
-      wfinShowPane(id);
-      setTimeout(function(){ wfinRender(id); }, 60);
-    });
-  });
+// サブナビボタンクリック（ボタンは「個別テーマ」の中にある）
+document.addEventListener('click', function(e){
+  var b = e.target.closest ? e.target.closest('[data-cds-wfin-target]') : null;
+  if (!b) return;
+  var id = b.getAttribute('data-cds-wfin-target').replace('#','');
+  // 個別テーマの他のペインを閉じてから表示する
+  if (typeof window.topicShowPane === 'function') window.topicShowPane(id);
+  wfinShowPane(id);
+  if (typeof window.cdsRenderInfoPanel === 'function') { try { window.cdsRenderInfoPanel(id); } catch (err) {} }
+  setTimeout(function(){ wfinRender(id); }, 60);
 });
 
 // ---- ECharts helper ----
@@ -16266,6 +16262,55 @@ window.addEventListener('resize', __rafThrottle(function(){
 
 
 <script src="js/info-registry.js"></script>
+<script>
+// 中タブに、そのタブの記事のうち最も新しい月（例「26年9月」）を表示する。
+// 月は INFO_PANE_MAP（タブ→記事）と INFO_REGISTRY の記事タイトルから読むので、記事を追加すれば自動で変わる。
+(function () {
+  function latestMonth(title) {
+    var re = /(\d{4})年\s*(?:\d{1,2}\s*[-〜~～－]\s*)?(\d{1,2})月/g, m, best = null;
+    while ((m = re.exec(String(title || '')))) {
+      var v = (+m[1]) * 12 + (+m[2]);
+      if (!best || v > best.v) best = { y: +m[1], m: +m[2], v: v };
+    }
+    return best;
+  }
+  function paneIdsOf(sub) {
+    var ids = [];
+    sub.querySelectorAll('button').forEach(function (b) {
+      Array.prototype.forEach.call(b.attributes, function (a) {
+        if (/^data-cds-(?:[a-z]+-)?target$/.test(a.name) && a.value.charAt(0) === '#') ids.push(a.value.slice(1));
+      });
+      var oc = /ztGo\('([^']+)'\)/.exec(b.getAttribute('onclick') || '');
+      if (oc) ids.push(oc[1]);
+    });
+    return ids;
+  }
+  function run() {
+    var map = window.INFO_PANE_MAP || {}, reg = window.INFO_REGISTRY || {};
+    document.querySelectorAll('#cds-mid-tabs .cds-mid-tab').forEach(function (btn) {
+      var key = (btn.id || '').replace('cds-mid-btn-', '');
+      if (!key || key === 'topic' || btn.querySelector('.cds-mid-asof')) return;  // 個別テーマは記事ごとに期間を表示
+      var sub = document.getElementById('cds-sub-' + key);
+      if (!sub) return;
+      var best = null;
+      paneIdsOf(sub).forEach(function (id) {
+        var keys = map[id];
+        (Array.isArray(keys) ? keys : keys ? [keys] : []).forEach(function (k) {
+          var t = latestMonth(reg[k] && reg[k].title);
+          if (t && (!best || t.v > best.v)) best = t;
+        });
+      });
+      if (!best) return;
+      var span = document.createElement('span');
+      span.className = 'cds-mid-asof';
+      span.textContent = String(best.y).slice(2) + '年' + best.m + '月';
+      span.title = '最新の記事：' + best.y + '年' + best.m + '月分';
+      btn.appendChild(span);
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
+})();
+</script>
 
 
 <!-- ===== 販売トレンド モーダル ===== -->
@@ -16870,12 +16915,15 @@ window.addEventListener('resize', __rafThrottle(function(){
     document.querySelectorAll('#cds-sub-topic [data-cds-topic-target]').forEach(function(b){
       b.classList.toggle('active', b.getAttribute('data-cds-topic-target') === '#' + id);
     });
+    document.querySelectorAll('#cds-sub-topic [data-cds-wfin-target]').forEach(function(b){
+      b.classList.toggle('active', b.getAttribute('data-cds-wfin-target') === '#' + id);
+    });
   };
   document.addEventListener('click', function(e){
     var btn = e.target.closest('#cds-sub-topic [data-cds-target^="#dc-"]');
     if (!btn) return;
     window.TOPIC_CURRENT_ID = btn.getAttribute('data-cds-target').slice(1);
-    document.querySelectorAll('#cds-sub-topic [data-cds-topic-target]').forEach(function(b){b.classList.remove('active');});
+    document.querySelectorAll('#cds-sub-topic [data-cds-topic-target], #cds-sub-topic [data-cds-wfin-target]').forEach(function(b){b.classList.remove('active');});
   });
   document.addEventListener('click', function(e){
     var btn = e.target.closest('[data-cds-topic-target]');

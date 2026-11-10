@@ -47,7 +47,7 @@ def main() -> int:
         wait.until(lambda d: d.execute_script("return !!window.INFO_REGISTRY"))
         # Confirm ranking data finished loading and Chinese price notation was converted.
         wait.until(lambda d: d.execute_script(
-            "return /\\b\\d{1,3}(?:,\\d{3})+元/.test(document.body.innerText)"))
+            "return /\\d{1,3}(?:,\\d{3})+〜\\d{1,3}(?:,\\d{3})+元/.test(document.body.innerText)"))
         assert not driver.execute_script(
             "return /\\d+\\.\\d+[-〜]\\d+\\.\\d+万元/.test(document.body.innerText)"
         ), "Untranslated Chinese-style price remains in visible ranking"

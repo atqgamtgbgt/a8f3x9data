@@ -45,6 +45,12 @@ def main() -> int:
         wait = WebDriverWait(driver, 30)
         wait.until(lambda d: d.execute_script("return document.readyState") != "loading")
         wait.until(lambda d: d.execute_script("return !!window.INFO_REGISTRY"))
+        # Confirm ranking data finished loading and Chinese price notation was converted.
+        wait.until(lambda d: d.execute_script(
+            "return /\\b\\d{1,3}(?:,\\d{3})+元/.test(document.body.innerText)"))
+        assert not driver.execute_script(
+            "return /\\d+\\.\\d+[-〜]\\d+\\.\\d+万元/.test(document.body.innerText)"
+        ), "Untranslated Chinese-style price remains in visible ranking"
 
         state = driver.execute_script("""
             const assets = Array.from(document.querySelectorAll('script[src]'))
@@ -86,8 +92,9 @@ def main() -> int:
         """)
         print("Mobile state:", mobile, flush=True)
         driver.save_screenshot(str(SCREENSHOTS / "mobile.png"))
-        if mobile["scrollWidth"] > mobile["viewport"] + 8:
-            print("WARN: Horizontal overflow on mobile:", mobile["scrollWidth"] - mobile["viewport"], "px")
+        assert mobile["scrollWidth"] <= mobile["viewport"] + 8, (
+            f"Unexpected whole-page horizontal overflow: {mobile['scrollWidth']} > {mobile['viewport']}"
+        )
 
         logs = driver.get_log("browser")
         severe = [log for log in logs if log.get("level") == "SEVERE"]

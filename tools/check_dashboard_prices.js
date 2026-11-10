@@ -10,8 +10,8 @@ const source = js.match(/function formatCnyPrice\(priceStr\) \{[\s\S]*?\n\}/)?.[
 if (!source) throw new Error('Expected CNY formatting helper not found');
 const formatter = vm.runInNewContext(source + '\nformatCnyPrice', { Intl });
 const cases = [
-  ['26.35-36.90万', '263,500元〜369,000元'],
-  ['6.48-9.48万', '64,800元〜94,800元'],
+  ['26.35-36.90万', '263,500〜369,000元'],
+  ['6.48-9.48万', '64,800〜94,800元'],
   ['24.98万', '249,800元'],
   ['17.98万元', '179,800元'],
   ['100元', '100元'],

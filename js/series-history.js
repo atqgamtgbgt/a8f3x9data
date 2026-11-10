@@ -6,16 +6,28 @@ window.SERIES_HISTORY = {"8211":{"name":"银河星耀6","global_name":"Galaxy Xi
 
 // =====================================================
 // 販売トレンド チャート
+// 他のグラフと同じ白地のデザイン。台数（棒）と順位（線）を上下の別々の枠に分け、
+// 数値ラベルと順位ラベルが重ならないようにしている。
 // =====================================================
-const TREND_PALETTE = {
-  overall_bar:  '#4fc3f7',
-  overall_line: '#ffd54f',
-  hezi_bar:     '#81c784',
-  hezi_line:    '#ffb74d',
-  energy: {'456':'#ce93d8','1':'#ef9a9a','4':'#4fc3f7','5':'#a5d6a7','6':'#fff176'},
+const TREND_FONT = "'Noto Sans JP', sans-serif";
+const TREND_COLORS = {
+  overall: '#3b82f6',   // 総合ランキングの台数
+  hezi:    '#10b981',   // 外資系ランキングの台数
+  rank:    '#f59e0b',   // 順位の線（全体・外資系）
+  energy: { '456': '#8b5cf6', '4': '#3b82f6', '5': '#f59e0b', '6': '#10b981', '1': '#64748b' },
 };
+// 元データの区分名をサイトの表記にそろえる（ガソリン → ICE、増程 → EREV）
+const TREND_ENERGY_LABEL = { '1': 'ICE', '6': 'HEV/EREV' };
 
 let _trendCarId = null, _trendData = null, _trendChart = null, _trendType = 'overall';
+
+function _trendMonthLabel(m) {
+  return String(m).replace(/^\d{2}(\d{2})-0?(\d+)$/, '$1年$2月');
+}
+function _trendUnits(v) {
+  if (v == null) return '';
+  return v >= 10000 ? (Math.round(v / 1000) / 10).toFixed(1) + '万' : v.toLocaleString('ja-JP');
+}
 
 function showTrend(carId, name) {
   const data = window.SERIES_HISTORY[carId];
@@ -55,12 +67,7 @@ function switchTrendTab(e, type) {
 function _activateTrendTab(type) {
   _trendType = type;
   document.querySelectorAll('.ttab').forEach(el => {
-    const t = el.id.replace('ttab-','');
-    const active = t === type;
-    el.classList.toggle('active', active);
-    el.style.color       = active ? '#fff' : '#aaa';
-    el.style.background  = active ? '#2a2a40' : 'transparent';
-    el.style.borderColor = active ? '#4fc3f7 #4fc3f7 transparent' : 'transparent';
+    el.classList.toggle('active', el.id === 'ttab-' + type);
   });
 }
 
@@ -73,104 +80,121 @@ function _drawTrendChart(type) {
   if (_trendChart) { try { _trendChart.dispose(); } catch(e) {} }
   _trendChart = echarts.init(box, null, {renderer:'canvas'});
 
-  let months = [], barSeries = [], lineSeries = [], subtitle = '';
-
-  if (type === 'overall' && data.overall) {
-    const h = data.overall;
-    months = h.map(x => x.month.replace(/^\d{2}(\d{2})-0?(\d+)$/, '$1年$2月'));
-    barSeries  = [{ name:'販売台数', data:h.map(x=>x.units), color:TREND_PALETTE.overall_bar }];
-    lineSeries = [{ name:'全体順位', data:h.map(x=>x.rank),  color:TREND_PALETTE.overall_line }];
-    subtitle = '全体ランキング内順位';
-
-  } else if (type === 'hezi' && data.hezi) {
-    const h = data.hezi;
-    months = h.map(x => x.month.replace(/^\d{2}(\d{2})-0?(\d+)$/, '$1年$2月'));
-    barSeries  = [{ name:'販売台数', data:h.map(x=>x.units), color:TREND_PALETTE.hezi_bar }];
-    lineSeries = [{ name:'合弁内順位', data:h.map(x=>x.rank), color:TREND_PALETTE.hezi_line }];
-    subtitle = '合弁ランキング内順位';
-
+  // 系列は「区分」ごとに台数（棒）と順位（線）を同じ名前で作る → 凡例は区分ごとに1つ
+  let months = [], groups = [], note = '';
+  if ((type === 'overall' && data.overall) || (type === 'hezi' && data.hezi)) {
+    const h = data[type];
+    months = h.map(x => x.month);
+    groups = [{
+      name: type === 'overall' ? '総合ランキング' : '外資系ランキング',
+      units: h.map(x => x.units), rank: h.map(x => x.rank),
+      bar: TREND_COLORS[type], line: TREND_COLORS.rank,
+    }];
+    note = type === 'overall' ? '順位は総合ランキング内' : '順位は外資系ランキング内';
   } else if (type === 'energy' && data.energy) {
-    const catOrder = ['456','1','4','5','6'];
-    const cats = catOrder.filter(id => data.energy[id]);
-    const allM = [...new Set(cats.flatMap(id => data.energy[id].data.map(d=>d.month)))].sort();
-    months = allM.map(m => m.replace(/^\d{2}(\d{2})-0?(\d+)$/, '$1年$2月'));
-    const pal = TREND_PALETTE.energy;
-    barSeries  = cats.map(id => ({
-      name: data.energy[id].label+'（台数）',
-      data: allM.map(m => { const e=data.energy[id].data.find(d=>d.month===m); return e?e.units:null; }),
-      color: pal[id]||'#aaa'
-    }));
-    lineSeries = cats.map(id => ({
-      name: data.energy[id].label+'（順位）',
-      data: allM.map(m => { const e=data.energy[id].data.find(d=>d.month===m); return e?e.rank:null; }),
-      color: pal[id]||'#aaa'
-    }));
-    subtitle = 'エネルギー別ランキング内順位';
+    const ids = ['456','4','5','6','1'].filter(id => data.energy[id]);
+    months = [...new Set(ids.flatMap(id => data.energy[id].data.map(d => d.month)))].sort();
+    groups = ids.map(id => {
+      const at = m => data.energy[id].data.find(d => d.month === m);
+      const col = TREND_COLORS.energy[id] || '#94a3b8';
+      return {
+        name: TREND_ENERGY_LABEL[id] || data.energy[id].label,
+        units: months.map(m => { const e = at(m); return e ? e.units : null; }),
+        rank:  months.map(m => { const e = at(m); return e ? e.rank : null; }),
+        bar: col, line: col,
+      };
+    });
+    note = '順位はエネルギー別ランキング内（区分ごと）';
   } else {
     return; // データなし
   }
 
-  const allRanks = lineSeries.flatMap(s=>s.data.filter(Boolean));
-  const maxRank  = allRanks.length ? Math.max(...allRanks) : 30;
-  const isSingle = barSeries.length === 1;
+  const single = groups.length === 1;
+  const ranks = groups.flatMap(g => g.rank.filter(v => v != null));
+  const maxRank = ranks.length ? Math.max(...ranks) : 10;
+  const narrow = box.clientWidth < 560;
+  const labels = months.map(_trendMonthLabel);
 
-  const mkBar = s => ({
-    name:s.name, type:'bar', data:s.data, yAxisIndex:0,
-    itemStyle:{color:s.color, borderRadius:[3,3,0,0]}, barMaxWidth:44,
-    label:{ show:isSingle, position:'top', color:s.color, fontSize:10,
-             formatter:p=>p.value!=null?p.value.toLocaleString('ja-JP'):'' }
-  });
-  const mkLine = s => ({
-    name:s.name, type:'line', data:s.data, yAxisIndex:1,
-    lineStyle:{color:s.color, width:2}, itemStyle:{color:s.color},
-    symbol:'circle', symbolSize:7, connectNulls:false,
-    label:{ show:isSingle, position:'bottom', color:s.color, fontSize:10,
-             formatter:p=>p.value!=null?p.value+'位':'' }
+  const series = [];
+  groups.forEach(g => {
+    series.push({
+      name: single ? '販売台数' : g.name, type: 'bar', xAxisIndex: 0, yAxisIndex: 0, data: g.units,
+      itemStyle: { color: g.bar, borderRadius: [3,3,0,0] }, barMaxWidth: 34,
+      label: { show: single, position: 'top', color: '#475569', fontSize: narrow ? 9 : 10, fontFamily: TREND_FONT,
+               formatter: p => _trendUnits(p.value) },
+      labelLayout: { hideOverlap: true },
+    });
+    series.push({
+      name: single ? '順位' : g.name, type: 'line', xAxisIndex: 1, yAxisIndex: 1, data: g.rank,
+      lineStyle: { color: g.line, width: 2 }, itemStyle: { color: g.line },
+      symbol: 'circle', symbolSize: 6, connectNulls: false,
+      label: { show: single, position: 'top', color: '#b45309', fontSize: narrow ? 9 : 10, fontFamily: TREND_FONT,
+               formatter: p => p.value != null ? p.value + '位' : '' },
+      labelLayout: { hideOverlap: true },
+    });
   });
 
+  const axisLabel = { color: '#64748b', fontSize: 10, fontFamily: TREND_FONT };
   _trendChart.setOption({
-    backgroundColor:'#13131f',
-    tooltip:{
-      trigger:'axis', axisPointer:{type:'cross'},
-      backgroundColor:'#1e1e35', borderColor:'#444', textStyle:{color:'#ddd'},
-      formatter(params){
-        let s=`<b>${params[0].axisValue}</b><br>`;
-        params.forEach(p=>{
-          if(p.value==null) return;
-          const isRank=p.seriesName.includes('順位');
-          s+=`${p.marker}${p.seriesName}: <b>${isRank?p.value+'位':p.value.toLocaleString('ja-JP')+'台'}</b><br>`;
+    textStyle: { fontFamily: TREND_FONT },
+    tooltip: {
+      trigger: 'axis', axisPointer: { type: 'shadow', link: [{ xAxisIndex: 'all' }] },
+      formatter(params) {
+        if (!params.length) return '';
+        const rows = {};
+        params.forEach(p => {
+          if (p.value == null) return;
+          const r = rows[p.seriesName] || (rows[p.seriesName] = { marker: '', units: null, rank: null });
+          if (p.seriesType === 'bar') { r.units = p.value; r.marker = p.marker; }
+          else { r.rank = p.value; if (!r.marker) r.marker = p.marker; }
+        });
+        let s = `<b>${params[0].axisValue}</b><br>`;
+        if (single) {
+          const u = params.find(p => p.seriesType === 'bar' && p.value != null);
+          const k = params.find(p => p.seriesType === 'line' && p.value != null);
+          if (u) s += `${u.marker}販売台数: <b>${u.value.toLocaleString('ja-JP')}台</b><br>`;
+          if (k) s += `${k.marker}順位: <b>${k.value}位</b><br>`;
+          return s;
+        }
+        Object.keys(rows).forEach(n => {
+          const r = rows[n];
+          s += `${r.marker}${n}: <b>${r.units != null ? r.units.toLocaleString('ja-JP') + '台' : '—'}</b>` +
+               (r.rank != null ? `（${r.rank}位）` : '') + '<br>';
         });
         return s;
       }
     },
-    legend:{
-      data:[...barSeries.map(s=>s.name),...lineSeries.map(s=>s.name)],
-      textStyle:{color:'#ccc'}, top:0, type:'scroll'
-    },
-    grid:{left:65, right:65, top:isSingle?30:50, bottom:36},
-    xAxis:{
-      type:'category', data:months,
-      axisLabel:{color:'#aaa', rotate:months.length>5?30:0, fontSize:11},
-      axisLine:{lineStyle:{color:'#444'}}
-    },
-    yAxis:[
-      {type:'value', name:'台数', nameTextStyle:{color:'#4fc3f7', fontSize:11},
-        axisLabel:{color:'#4fc3f7', fontSize:10,
-          formatter:v=>v>=10000?(v/10000).toFixed(0)+'万':v.toLocaleString('ja-JP')},
-        splitLine:{lineStyle:{color:'#2a2a40'}}, axisLine:{lineStyle:{color:'#4fc3f7'}}},
-      {type:'value', name:'順位', nameTextStyle:{color:'#ffd54f', fontSize:11},
-        inverse:true, min:1, max:Math.max(maxRank+3,20),
-        axisLabel:{color:'#ffd54f', fontSize:10, formatter:v=>v+'位'},
-        splitLine:{show:false}, axisLine:{lineStyle:{color:'#ffd54f'}}}
+    legend: { top: 0, left: 'center', textStyle: { color: '#475569', fontSize: 11 }, itemWidth: 14, itemHeight: 10, itemGap: 10 },
+    axisPointer: { link: [{ xAxisIndex: 'all' }] },
+    grid: [
+      { left: narrow ? 44 : 56, right: 16, top: single ? 52 : (narrow ? 64 : 52), bottom: '36%' },
+      { left: narrow ? 44 : 56, right: 16, top: '72%', bottom: narrow ? 44 : 36 },
     ],
-    series:[...barSeries.map(mkBar), ...lineSeries.map(mkLine)]
+    xAxis: [
+      { type: 'category', gridIndex: 0, data: labels, axisLabel: { show: false }, axisTick: { show: false },
+        axisLine: { lineStyle: { color: '#cbd5e1' } } },
+      { type: 'category', gridIndex: 1, data: labels, axisLine: { lineStyle: { color: '#cbd5e1' } },
+        axisLabel: Object.assign({ rotate: (narrow && months.length > 6) ? 40 : 0, hideOverlap: true }, axisLabel) },
+    ],
+    yAxis: [
+      { type: 'value', gridIndex: 0, name: '台数', nameTextStyle: { color: '#64748b', fontSize: 10 }, min: 0,
+        axisLabel: Object.assign({ formatter: v => v >= 10000 ? (v / 10000) + '万' : v.toLocaleString('ja-JP') }, axisLabel),
+        splitLine: { lineStyle: { color: '#eef2f7' } } },
+      { type: 'value', gridIndex: 1,  // 目盛りに「位」が付くので軸名は省く（上下反転の軸で、名前が値ラベルと重なるため）
+        inverse: true, min: 1, max: Math.max(maxRank + 2, 5), minInterval: 1, splitNumber: 2,
+        axisLabel: Object.assign({ formatter: v => v + '位' }, axisLabel),
+        splitLine: { lineStyle: { color: '#eef2f7' } } },
+    ],
+    series,
   }, true);
 
-  // 下部情報
+  // 下部情報（メーカー・価格・順位の説明）
   const infoEl = document.getElementById('trendInfoBar');
   if (infoEl) {
-    const parts = [data.manufacturer_ja, data.price?data.price+'万元':'', subtitle].filter(Boolean);
-    infoEl.textContent = parts.join('  |  ');
+    const price = data.price
+      ? (typeof formatCnyPrice === 'function' ? formatCnyPrice(data.price) : data.price + '元')
+      : '';
+    infoEl.textContent = [data.manufacturer_ja, price, note].filter(Boolean).join('  |  ');
   }
 }
 

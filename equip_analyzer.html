@@ -66,7 +66,7 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .section h2 .bar{width:4px;height:16px;border-radius:2px}
 .section .cnt{font-family:var(--mono);font-size:11px;color:var(--ink3);font-weight:500}
 .flist{margin-top:10px;display:flex;flex-direction:column;gap:2px}
-.frow{display:grid;grid-template-columns:220px 1fr 158px;gap:14px;align-items:center;
+.frow{display:grid;grid-template-columns:220px 1fr 184px;gap:14px;align-items:center;min-height:50px;
   padding:7px 10px;border-radius:8px;cursor:pointer;transition:background .1s}
 .frow:hover{background:var(--panel)}
 .fname{font-size:13px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -83,7 +83,7 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .distleg .lg i{width:9px;height:9px;border-radius:2px;display:inline-block;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
 .distleg .lg b{color:#0f172a;font-family:var(--mono);font-weight:700}
 .distrow{cursor:pointer}
-.distrow .segbar{grid-column:2 / 4;height:20px}
+.distrow .segbar{height:20px}
 .distrow .segbar:hover{outline:2px solid rgba(59,130,246,.35);outline-offset:1px}
 .tip{position:fixed;z-index:100;display:none;background:#fff;border:1px solid var(--line);border-radius:10px;
   box-shadow:0 12px 32px rgba(15,23,42,.20);padding:9px 11px;font-size:11.5px;color:var(--ink);pointer-events:none;max-width:280px}
@@ -99,8 +99,9 @@ h1{font-size:clamp(19px,3vw,26px);font-weight:900;letter-spacing:.01em;margin:4p
 .pct{text-align:right;line-height:1.35}
 .pct .num{font-family:var(--mono);font-size:15px;font-weight:700;color:#0f172a}
 .pct .num small{font-size:10px;color:var(--opt);font-weight:600;margin-left:2px}
-.pct .counts{display:block;font-size:10.5px;color:var(--ink3);margin-top:1px;white-space:normal;word-break:keep-all;overflow-wrap:anywhere}
+.pct .counts{display:block;font-size:10.5px;color:var(--ink3);margin-top:1px;white-space:nowrap}
 .pct .counts .cstd,.pct .counts .copt,.pct .counts .ctot,.pct .counts .cov{white-space:nowrap}
+.pct .counts .cov{color:var(--ink3)}
 .pct .counts .cstd{color:var(--std2);font-weight:700}
 .pct .counts .copt{color:#d97706;font-weight:700}
 .pct .counts .ctot{color:var(--ink2)}
@@ -147,10 +148,12 @@ footer b{color:var(--ink2)}
   .wrap{padding:12px 10px 40px}
   .controls{padding:10px;gap:8px}
   .cgroup{flex-wrap:wrap}
-  .frow{grid-template-columns:minmax(0,1fr) auto;gap:7px 10px;padding:10px 8px}
+  .frow{grid-template-columns:minmax(0,1fr) auto;gap:5px 10px;padding:9px 8px;min-height:0}
   .frow .fname{grid-column:1;grid-row:1;min-width:0;white-space:normal;overflow-wrap:anywhere;font-size:12.5px}
-  .frow .pct{grid-column:2;grid-row:1;min-width:90px}
+  .frow .pct{display:contents}
+  .frow .pct .num{grid-column:2;grid-row:1;text-align:right;align-self:center}
   .frow .track,.frow .segbar,.distrow .segbar{grid-column:1/-1;grid-row:2;width:100%;height:20px}
+  .frow .pct .counts{grid-column:1/-1;grid-row:3;margin-top:0;text-align:left}
   .modal-bg{padding:8px}
   .modal{max-height:94dvh}
   .modal .mh{padding:12px}
@@ -318,13 +321,14 @@ function renderNote(total){
 }
 
 function binRow(r){
-  const covTxt=`<span class="covline" title="掲載率＝仕様表に項目が載っている車種数／対象全車種数">掲載率 ${Math.round(r.cov)}%（${r.listed}/${r.total}車種）</span>`;
+  const covTxt=`<span class="cov">・掲載${Math.round(r.cov)}%</span>`;
+  const covTitle=`掲載率＝仕様表に項目が載っている車種数／対象全車種数（${r.listed}/${r.total}車種）`;
   const optPart=r.opt?` <span class="copt">OP${r.opt}</span>`:'';
   return `<div class="frow" data-bi="${r.i}" role="button" tabindex="0" aria-label="${escAttr(r.f.item)}の搭載内訳を表示">
     <div class="fname">${esc(r.f.item)}${bkLink(r.f)}${originalName(r.f)}</div>
     <div class="track"><div class="fill-std" style="width:${r.stdP.toFixed(1)}%"></div><div class="fill-opt" style="width:${r.optP.toFixed(1)}%"></div></div>
-    <div class="pct"><span class="num">${Math.round(r.stdP)}%${r.opt?`<small>+${Math.round(r.optP)}%</small>`:''}</span>
-      <span class="counts">全<span class="ctot">${r.denom}</span>中 <span class="cstd">標準${r.std}</span>${optPart}</span>${covTxt}</div>
+    <div class="pct" title="${escAttr(covTitle)}"><span class="num">${Math.round(r.stdP)}%${r.opt?`<small>+${Math.round(r.optP)}%</small>`:''}</span>
+      <span class="counts">全<span class="ctot">${r.denom}</span>中 <span class="cstd">標準${r.std}</span>${optPart}${covTxt}</span></div>
   </div>`;
 }
 function distRow(r){
@@ -343,6 +347,8 @@ function distRow(r){
   return `<div class="frow distrow" data-di="${r.j}" role="button" tabindex="0" aria-label="${escAttr(r.f.item)}の分布内訳を表示">
     <div class="fname">${esc(r.f.item)}<span class="distag">分布</span>${bkLink(r.f)}${originalName(r.f)}</div>
     <div class="segbar">${seg}<template class="tpl">${tip}</template></div>
+    <div class="pct"><span class="num">${Math.round(r.have/total*100)}%</span>
+      <span class="counts">全<span class="ctot">${r.total}</span>中 <span class="cstd">あり${r.have}</span></span></div>
   </div>`;
 }
 

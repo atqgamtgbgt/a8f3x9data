@@ -17,7 +17,7 @@ INDEX = ROOT / "index.html"
 TARGET = ROOT / "js" / "series-history.js"
 TAG = '<script src="js/series-history.js"></script>'
 SCRIPTS = re.compile(r"<script\b[^>]*>[\s\S]*?</script\s*>", re.I)
-MARKER = "SERIES_HISTORY (自動生成 - generate_series_history.py)"
+MARKER = "SERIES_HISTORY  (自動生成 - generate_series_history.py)"
 EXPECTED_ORDINAL = 19
 EXPECTED_BYTES = 302805
 

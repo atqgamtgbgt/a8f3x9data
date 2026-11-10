@@ -387,8 +387,8 @@ function formatChinaPrice(raw){
   const s=String(raw??'').trim();
   const m=s.match(/^(\d+(?:\.\d+)?)(?:-(\d+(?:\.\d+)?))?万$/);
   if(!m)return s?s+'元':'';
-  const yen=v=>new Intl.NumberFormat('ja-JP').format(Math.round(Number(v)*10000))+'元';
-  return yen(m[1])+(m[2]?'〜'+yen(m[2]):'');
+  const yuan=v=>new Intl.NumberFormat('ja-JP').format(Math.round(Number(v)*10000));
+  return yuan(m[1])+(m[2]?'〜'+yuan(m[2]):'')+'元';
 }
 const priceChip=p=>p?`<span class="price" title="中国国内の価格（人民元）">${esc(formatChinaPrice(p))}</span>`:'';
 const escAttr=esc;

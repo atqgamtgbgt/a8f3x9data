@@ -13,6 +13,7 @@ on:
       - js/series-history.js
       - js/dashboard-core.js
       - tools/extract_dashboard_core.py
+      - tools/check_dashboard_prices.js
       - tools/extract_series_history.py
       - .github/workflows/index-audit.yml
   pull_request:
@@ -26,6 +27,7 @@ on:
       - js/series-history.js
       - js/dashboard-core.js
       - tools/extract_dashboard_core.py
+      - tools/check_dashboard_prices.js
       - tools/extract_series_history.py
       - .github/workflows/index-audit.yml
   workflow_dispatch:
@@ -53,5 +55,6 @@ jobs:
           node --check js/series-history.js
           python tools/extract_dashboard_core.py --check
           node --check js/dashboard-core.js
+          node tools/check_dashboard_prices.js
       - name: Audit main page JavaScript and localization
         run: node tools/audit_index_html.js

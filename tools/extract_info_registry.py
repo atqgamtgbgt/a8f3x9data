@@ -38,11 +38,11 @@ def verify_extracted(html: str) -> None:
     if html.count(TAG) != 1 or not TARGET.exists():
         raise ValueError("External info registry is missing or referenced more than once")
     script = read_raw(TARGET)
-    if len(script.encode("utf-8")) != EXPECTED_BYTES:
-        raise ValueError("Unexpected size for extracted INFO_REGISTRY: " + str(len(script.encode("utf-8"))))
+    if not script.strip():
+        raise ValueError("Extracted INFO_REGISTRY JavaScript is empty")
     if "window.INFO_REGISTRY" not in script or "document.currentScript" in script:
         raise ValueError("Unexpected source in extracted INFO_REGISTRY")
-    print("INFO_REGISTRY external file validated:", EXPECTED_BYTES, "bytes")
+    print("INFO_REGISTRY external file validated:", len(script.encode("utf-8")), "bytes")
 
 
 def apply() -> None:

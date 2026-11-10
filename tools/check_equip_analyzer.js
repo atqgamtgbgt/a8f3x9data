@@ -15,7 +15,7 @@ if (!functionSource) throw new Error('Missing yuan price formatter');
 const format = vm.runInNewContext(functionSource + '\nformatChinaPrice', { Intl });
 
 const cases = [
-  ['26.35-36.90万', '263,500元〜369,000元'],
+  ['26.35-36.90万', '263,500〜369,000元'],
   ['7.99万', '79,900元'],
   ['0.98万', '9,800元'],
   ['', ''],

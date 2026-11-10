@@ -72,8 +72,8 @@ function formatCnyPrice(priceStr) {
   if (!value) return '';
   const match = /^(\d+(?:\.\d+)?)(?:\s*[-~〜～]\s*(\d+(?:\.\d+)?))?\s*万(?:元)?$/.exec(value);
   if (!match) return /元$/.test(value) ? value : value + '元';
-  const amount = part => new Intl.NumberFormat('ja-JP').format(Math.round(Number(part) * 10000)) + '元';
-  return amount(match[1]) + (match[2] ? '〜' + amount(match[2]) : '');
+  const amount = part => new Intl.NumberFormat('ja-JP').format(Math.round(Number(part) * 10000));
+  return amount(match[1]) + (match[2] ? '〜' + amount(match[2]) : '') + '元';
 }
 
 function convertToJPY(priceStr) {

@@ -1,0 +1,53 @@
+name: One-time main dashboard script extraction
+
+on:
+  push:
+    branches:
+      - refactor/extract-dashboard-core-20261110
+    paths:
+      - tools/extract_dashboard_core.py
+      - .github/workflows/extract-dashboard-core-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Check extraction script syntax
+        run: python -m py_compile tools/extract_dashboard_core.py
+      - name: Extract identical dashboard core
+        run: |
+          python tools/extract_dashboard_core.py --apply
+          python tools/extract_dashboard_core.py --check
+          node --check js/dashboard-core.js
+      - name: Validate JavaScript loading sequence and localization
+        run: |
+          node tools/audit_index_html.js | tee /tmp/index-audit.log
+          grep -q 'Inline classic scripts checked: 18; external scripts: 7; skipped/module/data scripts: 0; syntax errors: 0' /tmp/index-audit.log
+          python tools/localize_index_html.py --check
+          python tools/localize_additional_text.py --check
+          python tools/extract_info_registry.py --check
+          python tools/extract_series_history.py --check
+          git -c core.whitespace=cr-at-eol diff --check
+          test "$(git diff --name-only)" = "index.html"
+      - name: Verify external JavaScript is HTTP accessible
+        run: |
+          python -m http.server 8767 --bind 127.0.0.1 > /tmp/http.log 2>&1 &
+          sleep 2
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8767/index.html
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8767/js/dashboard-core.js
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8767/js/info-registry.js
+          curl --fail --silent --show-error --output /dev/null http://127.0.0.1:8767/js/series-history.js
+      - name: Commit only extracted JS and page
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html js/dashboard-core.js
+          git commit -m "Extract main dashboard core script with original loading order"
+          git push origin HEAD:refactor/extract-dashboard-core-20261110

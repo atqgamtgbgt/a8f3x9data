@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-09T14:23:09+00:00",
+ "updated_at": "2026-11-10T03:23:44+00:00",
  "articles": [
+  {
+   "id": "1099395111",
+   "title": "【月度分析】2026年10月份全国乘用车市场分析",
+   "published_at": "2026-11-09T15:34+08:00",
+   "url": "https://www.sohu.com/a/1099395111_115312",
+   "topic": "market",
+   "topic_label": "乗用車市場",
+   "path": "cds/articles/2026/11/1099395111",
+   "image_count": 9,
+   "images_saved": 9,
+   "text_chars": 10966,
+   "lead": "本文全文共9822字，阅读全文约需32分钟  1.2026年10月全国乘用车市场回顾  零售：2026年10月全国乘用车市场零售164.3万辆，同比下降27.1%，环比增长1.5%；1-10月乘用车累计零售1,497.8万辆，同比下降22.3%。  在2026年10月车市大盘承压、零售同比下滑的背景下，出口的强劲表现成",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1099395111/img/01.jpg",
+   "fetched_at": "2026-11-10T03:23:43+00:00"
+  },
   {
    "id": "1098754201",
    "title": "乘用车新车的分级测算探讨—10月",

@@ -64,7 +64,7 @@ def apply() -> None:
     if len(code.encode("utf-8")) != EXPECTED_BYTES:
         raise RuntimeError("Source size has changed; manual inspection required")
     if MARKER not in code or "document.currentScript" in code:
-        raise RuntimeError("Expected generated SERIES_HISTORY script not found")
+        raise RuntimeError(f"Unexpected generated block: marker={MARKER in code}, currentScript={'document.currentScript' in code}; prefix={code[:120]!r}")
     if TARGET.exists():
         raise RuntimeError("Target JS already exists; refusing to overwrite")
     updated = html[:block.start()] + TAG + html[block.end():]

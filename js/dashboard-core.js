@@ -3622,7 +3622,7 @@ const CCCM_COMMENTARY = {
     '経済指標（2023年通年・1-12月）：売上高1283.72億元（-1.65%）、利益総額80.28億元（+15.24%）、利益・税金総額107.82億元（+11.18%）。'
   ]},
   '2024-02': { source:'CCCM（2024年1-2月号）', paragraphs:[
-    '2月は春節（旧正月）の影響で生産・販売が前月比・前年同月比とも減少した。1-2月でみると、輸出の牽引によりICE車の販売は明確な増加を維持したが、電動二輪車は大幅に減少。輸出は良好な発展態勢を継続し、1-2月累計の輸出量は同期として過去最高を記録した。国内市場全体の需要は明らかに減速したものの、一部のレジャー用大排気量車の販売は比較的明確な増加を示した。',
+    '2月は春節（旧正月）の影響で生産・販売が前月比・前年同月比とも減少した。1-2月でみると、輸出の牽引によりICE車の販売は明確な増加を維持したが、電動二輪車は大幅に減少。輸出は良好な発展基調を継続し、1-2月累計の輸出量は同期として過去最高を記録した。国内市場全体の需要は明らかに減速したものの、一部のレジャー用大排気量車の販売は比較的明確な増加を示した。',
     '生産・販売：2月のオートバイは生産87.10万台・販売92.13万台（前月比-42.63%／-39.24%、前年同月比-51.43%／-47.08%）。電動二輪車は2月に前年同月比-83.89%／-83.04%と急減。1-2月累計は生産238.92万台・販売243.77万台（前年同期比-14.01%／-12.78%）。うちICE車は+13.4%／+13.74%、電動二輪車は-64.21%／-64.08%、大排気量は+5.73%／+10.31%。',
     '輸出：2月の輸出は51.52万台（前月比-40.91%、前年同月比+5.02%）、金額3.43億ドル（同-2.15%）。1-2月の製品輸出総額は11.43億ドル（前年同期比+31.8%）、累計輸出量は同期として過去最高。'
   ]},
@@ -3651,7 +3651,7 @@ const CCCM_COMMENTARY = {
     '経済指標（1-5月）：売上高540.62億元（+1.32%）、利益総額33.50億元（-29.13%）、利益・税金総額45.98億元（-22.96%）。'
   ]},
   '2024-07': { source:'CCCM（2024年7月号）', paragraphs:[
-    '7月は生産・販売が前年同月比で明確に増加、前月比では生産が増・販売が微減、輸出が高い伸びを継続し、内需はおおむね安定した。1-7月は輸出の高い伸びに牽引されICE車が明確に増加、内需の減少幅がさらに縮小、レジャー用大排気量車が高成長を維持、製品構造の最適化が進み、産業は堅調な好転態勢を保っている。',
+    '7月は生産・販売が前年同月比で明確に増加、前月比では生産が増・販売が微減、輸出が高い伸びを継続し、内需はおおむね安定した。1-7月は輸出の高い伸びに牽引されICE車が明確に増加、内需の減少幅がさらに縮小、レジャー用大排気量車が高成長を維持、製品構造の最適化が進み、産業は堅調な好転基調を保っている。',
     '生産・販売：7月のオートバイは生産182.98万台・販売183.09万台（前月比+2.72%／+1.71%、前年同月比+7.05%／+9.85%）。ICE車は生産150.47万・販売148.56万台（同+14.6%／+14.72%）、電動二輪車は生産32.5万・販売34.54万台（同-17.98%／-7.12%）。大排気量は生産8.32万・販売7.26万台（同+52.94%／+34.94%）。1-7月累計は生産1132.13万台・販売1134.75万台（前年同期比-4.18%／-1.04%）、大排気量は+43.94%／+37.34%。',
     '輸出：7月の輸出は101.11万台（前月比+2.07%、前年同月比+28.45%）、金額6.05億ドル（同+16.72%）。1-7月の製品輸出総額は49.24億ドル（前年同期比+20.23%）。',
     '経済指標（1-6月）：売上高674.50億元（+3.27%）、利益総額46.36億元（-17.84%）、利益・税金総額61.89億元（-12.43%）。'
@@ -6861,7 +6861,7 @@ function wsnDrawYearly(view) {
       ],
       series: [
         { name:'BEV（純電動）', type:'bar', stack:'nev', data:d.bev, itemStyle:{color:WSN_COLORS['BEV']} },
-        { name:'PHEV（プラグインHV）', type:'bar', stack:'nev', data:d.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
+        { name:'PHEV（プラグインハイブリッド）', type:'bar', stack:'nev', data:d.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
         { name:'FCEV（水素）', type:'bar', stack:'nev', data:d.h2, itemStyle:{color:WSN_COLORS['氢']} },
         { name:'HEV（ハイブリッド）', type:'bar', data:d.hev, itemStyle:{color:WSN_COLORS['HEV']} },
         { name:'ICE車（内燃機関）', type:'line', yAxisIndex:1, data:d.ice, smooth:false, lineStyle:{width:2,color:'#7f8c8d'}, itemStyle:{color:'#7f8c8d'} },
@@ -6878,7 +6878,7 @@ function wsnDrawYearly(view) {
       yAxis: { type:'value', max:100, axisLabel:{formatter:'{value}%'} },
       series: [
         { name:'BEV（純電動）', type:'bar', stack:'all', data:sd.bev, itemStyle:{color:WSN_COLORS['BEV']} },
-        { name:'PHEV（プラグインHV）', type:'bar', stack:'all', data:sd.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
+        { name:'PHEV（プラグインハイブリッド）', type:'bar', stack:'all', data:sd.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
         { name:'HEV（ハイブリッド）', type:'bar', stack:'all', data:sd.hev, itemStyle:{color:WSN_COLORS['HEV']} },
         { name:'ICE', type:'bar', stack:'all', data:sd.ice, itemStyle:{color:'#bdc3c7'} }
       ]
@@ -6893,7 +6893,7 @@ function wsnDrawYearly(view) {
       yAxis: { type:'value', max:100, axisLabel:{formatter:'{value}%'} },
       series: [
         { name:'BEV（純電動）', type:'bar', stack:'inner', data:si.bev, itemStyle:{color:WSN_COLORS['BEV']} },
-        { name:'PHEV（プラグインHV）', type:'bar', stack:'inner', data:si.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
+        { name:'PHEV（プラグインハイブリッド）', type:'bar', stack:'inner', data:si.phev, itemStyle:{color:WSN_COLORS['PHEV']} },
         { name:'FCEV（水素）', type:'bar', stack:'inner', data:si.h2, itemStyle:{color:WSN_COLORS['氢']} }
       ]
     };
@@ -7945,7 +7945,7 @@ function dcDrawCompliance() {
     xAxis: { type: 'category', data: DC.compliance_years },
     yAxis: { type: 'value', name: '%', nameGap: 18, nameLocation: 'end', max: 100, axisLabel: { formatter: '{value}%' } },
     series: [
-      { name: '自主', type: 'line', data: DC.comp_jishu_rate, smooth: true,
+      { name: '中国系', type: 'line', data: DC.comp_jishu_rate, smooth: true,
         lineStyle: { width: 3 }, itemStyle: { color: DC_COLORS.jishu },
         label: { show: true, position: 'top', formatter: '{c}%', fontSize: 10 } },
       { name: '合弁', type: 'line', data: DC.comp_goshi_rate, smooth: true,
@@ -8002,11 +8002,11 @@ function dcDrawNevCredits() {
     grid: { left: 60, right: 60, top: 100, bottom: 40 },
     xAxis: { type: 'category', data: DC.credit_years },
     yAxis: [
-      { type: 'value', name: '万点（自主）', nameGap: 18, nameLocation: 'end', position: 'left' },
+      { type: 'value', name: '万点（中国系）', nameGap: 18, nameLocation: 'end', position: 'left' },
       { type: 'value', name: '万点（外資）', nameGap: 18, nameLocation: 'end', position: 'right' }
     ],
     series: [
-      { name: '自主', type: 'bar', data: DC.nev_jishu, yAxisIndex: 0,
+      { name: '中国系', type: 'bar', data: DC.nev_jishu, yAxisIndex: 0,
         itemStyle: { color: DC_COLORS.jishu, opacity: 0.7 } },
       { name: '米系', type: 'line', data: DC.nev_us, yAxisIndex: 1, smooth:true,
         lineStyle: { width: 2.5 }, itemStyle: { color: DC_COLORS.us } },
@@ -8046,7 +8046,7 @@ function dcDrawNevCredits() {
   var ch3 = dcEc('ec-dc-nev-credits-pie');
   if (ch3) {
     var pieData = [
-      { name: '自主', value: 1825, itemStyle:{color:DC_COLORS.jishu} },
+      { name: '中国系', value: 1825, itemStyle:{color:DC_COLORS.jishu} },
       { name: '米系', value: 72, itemStyle:{color:DC_COLORS.us} },
       { name: '欧系', value: 0, itemStyle:{color:DC_COLORS.eu} },
       { name: '韓系', value: 0, itemStyle:{color:DC_COLORS.kr} },
@@ -8075,11 +8075,11 @@ function dcDrawFuelCredits() {
     grid: { left: 60, right: 60, top: 100, bottom: 40 },
     xAxis: { type: 'category', data: DC.credit_years },
     yAxis: [
-      { type: 'value', name: '万点（自主）', nameGap: 18, nameLocation: 'end', position: 'left' },
+      { type: 'value', name: '万点（中国系）', nameGap: 18, nameLocation: 'end', position: 'left' },
       { type: 'value', name: '万点（外資）', nameGap: 18, nameLocation: 'end', position: 'right' }
     ],
     series: [
-      { name: '自主', type: 'bar', data: DC.fuel_jishu, yAxisIndex: 0,
+      { name: '中国系', type: 'bar', data: DC.fuel_jishu, yAxisIndex: 0,
         itemStyle: { color: DC_COLORS.jishu, opacity: 0.7 } },
       { name: '米系', type: 'line', data: DC.fuel_us, yAxisIndex: 1, smooth:true,
         lineStyle: { width: 2.5 }, itemStyle: { color: DC_COLORS.us } },
@@ -8127,7 +8127,7 @@ function dcDrawFuelCredits() {
       xAxis: { type: 'category', data: DC.credit_years },
       yAxis: { type: 'value', name: '万点', nameGap: 18, nameLocation: 'end' },
       series: [
-        { name: '自主', type: 'bar', data: DC.fuel_jishu,
+        { name: '中国系', type: 'bar', data: DC.fuel_jishu,
           itemStyle: { color: DC_COLORS.jishu } },
         { name: '外資合計（米+欧+韓+日+独）', type: 'bar', data: foreignTotal,
           itemStyle: { color: DC_COLORS.gaishi } }
@@ -9047,9 +9047,9 @@ function showProvDetail(ja) {
     + '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏷️ ブランド構成 2026年9月</div>'
     + '<div id="cpca-pbrand" style="height:80px"></div>'
     + (gradeH > 0
-      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車型級別 2026年9月</div>'
+      ? '<div style="color:#5a8abc;font-size:11px;font-weight:700;margin:8px 0 2px">🏆 車格別 2026年9月</div>'
         + '<div id="cp-grade" style="height:' + gradeH + 'px"></div>'
-      : '<div style="font-size:10px;color:#3a5070;padding:4px 0">車型級別データなし（記事の表に未掲載）</div>');
+      : '<div style="font-size:10px;color:#3a5070;padding:4px 0">車格別データなし（記事の表に未掲載）</div>');
 
   // echarts 描画（DOM確定後）
   function makeChart(id) {

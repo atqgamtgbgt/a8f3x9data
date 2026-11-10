@@ -2,9 +2,10 @@ name: Dashboard browser smoke
 
 on:
   push:
-    branches:
-      - test/headless-browser-smoke-20261110
+    branches: [main, test/headless-browser-smoke-20261110]
     paths:
+      - index.html
+      - js/**
       - tools/browser_smoke_test.py
       - .github/workflows/browser-smoke.yml
   pull_request:

@@ -7,6 +7,7 @@ on:
       - index.html
       - tools/audit_index_html.js
       - tools/localize_index_html.py
+      - tools/localize_additional_text.py
       - tools/extract_info_registry.py
       - js/info-registry.js
       - .github/workflows/index-audit.yml
@@ -15,6 +16,7 @@ on:
       - index.html
       - tools/audit_index_html.js
       - tools/localize_index_html.py
+      - tools/localize_additional_text.py
       - tools/extract_info_registry.py
       - js/info-registry.js
       - .github/workflows/index-audit.yml
@@ -32,7 +34,9 @@ jobs:
       - name: Check diagnostic script syntax
         run: node --check tools/audit_index_html.js
       - name: Reject reintroduced Chinese UI labels
-        run: python tools/localize_index_html.py --check
+        run: |
+          python tools/localize_index_html.py --check
+          python tools/localize_additional_text.py --check
       - name: Verify extracted info registry and script syntax
         run: |
           python tools/extract_info_registry.py --check

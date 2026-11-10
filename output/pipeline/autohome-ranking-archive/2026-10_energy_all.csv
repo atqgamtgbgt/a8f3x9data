@@ -1,251 +1,251 @@
-category_id,category,month,rank,series_id,name,global_name,units,price,link,image_url,series_url,manufacturer,manufacturer_ja
-1,燃油车,2026-10,1,770.0,RAV4荣放,RAV4,17750,16.98-22.88万,https://www.autohome.com.cn/770/#pvareaid=6861512,./images/by_series/770_52fbc895.png,https://www.autohome.com.cn/770/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,2,6004.0,星越L,Monjaro,16376,13.97-17.97万,https://www.autohome.com.cn/6004/#pvareaid=6861512,./images/by_series/6004_aef1d886.png,https://www.autohome.com.cn/6004/#pvareaid=6861512,吉利汽车,Geely（吉利）
-1,燃油车,2026-10,3,6428.0,卡罗拉锐放,カローラクロス,16190,12.68-15.98万,https://www.autohome.com.cn/6428/#pvareaid=6861512,./images/by_series/6428_3209bada.png,https://www.autohome.com.cn/6428/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,4,6814.0,博越L,Boyue L,15547,9.99-13.69万,https://www.autohome.com.cn/6814/#pvareaid=6861512,./images/by_series/6814_69e99ceb.png,https://www.autohome.com.cn/6814/#pvareaid=6861512,吉利汽车,Geely（吉利）
-1,燃油车,2026-10,5,614.0,朗逸,ラヴィーダ (Lavida),13891,8.00-14.59万,https://www.autohome.com.cn/614/#pvareaid=6861512,./images/by_series/614_14f7438d.png,https://www.autohome.com.cn/614/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,6,5771.0,北京越野BJ30,BAIC BJ30,13647,9.99-13.99万,https://www.autohome.com.cn/5771/#pvareaid=6861512,./images/by_series/5771_78603b4f.png,https://www.autohome.com.cn/5771/#pvareaid=6861512,北京越野,北京越野
-1,燃油车,2026-10,7,110.0,凯美瑞,カムリ,12877,17.18-25.98万,https://www.autohome.com.cn/110/#pvareaid=6861512,./images/by_series/110_4f1ef7a5.png,https://www.autohome.com.cn/110/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,8,442.0,速腾,サギター (Sagitar),12866,9.38-16.49万,https://www.autohome.com.cn/442/#pvareaid=6861512,./images/by_series/442_fffabf8a.png,https://www.autohome.com.cn/442/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,9,4274.0,途观L,ティグアンL (Tiguan L),12483,18.68-26.68万,https://www.autohome.com.cn/4274/#pvareaid=6861512,./images/by_series/4274_39847c63.png,https://www.autohome.com.cn/4274/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,10,66.0,宝马3系,3シリーズ,11034,25.80-33.80万,https://www.autohome.com.cn/66/#pvareaid=6861512,./images/by_series/66_42d48ffb.png,https://www.autohome.com.cn/66/#pvareaid=6861512,宝马,BMW
-1,燃油车,2026-10,11,496.0,迈腾,マゴタン (Magotan),10780,17.49-24.69万,https://www.autohome.com.cn/496/#pvareaid=6861512,./images/by_series/496_5ac1491c.png,https://www.autohome.com.cn/496/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,12,528.0,帕萨特,パサート (Passat),10573,16.45-30.98万,https://www.autohome.com.cn/528/#pvareaid=6861512,./images/by_series/528_c8f3b593.png,https://www.autohome.com.cn/528/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,13,4744.0,探岳,タイロン (Tayron),10511,19.89-25.99万,https://www.autohome.com.cn/4744/#pvareaid=6861512,./images/by_series/4744_8f249a49.png,https://www.autohome.com.cn/4744/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,14,4701.0,缤越,Coolray,9850,6.68-9.78万,https://www.autohome.com.cn/4701/#pvareaid=6861512,./images/by_series/4701_3d6315ca.png,https://www.autohome.com.cn/4701/#pvareaid=6861512,吉利汽车,Geely（吉利）
-1,燃油车,2026-10,15,5472.0,威兰达,ウィランダー,9297,16.98-23.08万,https://www.autohome.com.cn/5472/#pvareaid=6861512,./images/by_series/5472_962ab92f.png,https://www.autohome.com.cn/5472/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,16,6414.0,锋兰达,フロントランダー,9246,13.28-17.28万,https://www.autohome.com.cn/6414/#pvareaid=6861512,./images/by_series/6414_436399e7.png,https://www.autohome.com.cn/6414/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,17,314.0,本田CR-V,CR-V,9067,18.59-24.99万,https://www.autohome.com.cn/314/#pvareaid=6861512,./images/by_series/314_36752b01.png,https://www.autohome.com.cn/314/#pvareaid=6861512,本田,ホンダ
-1,燃油车,2026-10,18,4693.0,瑞虎8,Tiggo 8,8780,9.99-12.99万,https://www.autohome.com.cn/4693/#pvareaid=6861512,./images/by_series/4693_0e9b6dd7.png,https://www.autohome.com.cn/4693/#pvareaid=6861512,奇瑞,Chery（奇瑞）
-1,燃油车,2026-10,19,5273.0,星瑞,Preface,8723,9.87-14.67万,https://www.autohome.com.cn/5273/#pvareaid=6861512,./images/by_series/5273_199554b9.png,https://www.autohome.com.cn/5273/#pvareaid=6861512,吉利汽车,Geely（吉利）
-1,燃油车,2026-10,20,448.0,轩逸,シルフィ,8116,7.99-17.49万,https://www.autohome.com.cn/448/#pvareaid=6861512,./images/by_series/448_1c5dc236.png,https://www.autohome.com.cn/448/#pvareaid=6861512,日产,日産
-1,燃油车,2026-10,21,197.0,奔驰E级,Eクラス,7960,37.88-50.98万,https://www.autohome.com.cn/197/#pvareaid=6861512,./images/by_series/197_7e6ef2d5.png,https://www.autohome.com.cn/197/#pvareaid=6861512,奔驰,Mercedes-Benz
-1,燃油车,2026-10,22,4962.0,亚洲龙,アバロン,7884,17.88-25.68万,https://www.autohome.com.cn/4962/#pvareaid=6861512,./images/by_series/4962_5ea32d9d.png,https://www.autohome.com.cn/4962/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,23,3862.0,奔驰GLC,GLC,7696,35.18-46.28万,https://www.autohome.com.cn/3862/#pvareaid=6861512,./images/by_series/3862_b4d43335.png,https://www.autohome.com.cn/3862/#pvareaid=6861512,奔驰,Mercedes-Benz
-1,燃油车,2026-10,24,6664.0,艾瑞泽8,Arrizo 8,7285,9.99-14.89万,https://www.autohome.com.cn/6664/#pvareaid=6861512,./images/by_series/6664_18fbc799.png,https://www.autohome.com.cn/6664/#pvareaid=6861512,奇瑞,Chery（奇瑞）
-1,燃油车,2026-10,25,5770.0,长城大狗,長城大狗,6968,11.99-14.99万,https://www.autohome.com.cn/5770/#pvareaid=6861512,./images/by_series/5770_a06584ab.png,https://www.autohome.com.cn/5770/#pvareaid=6861512,哈弗,Haval（哈弗）
-1,燃油车,2026-10,26,526.0,卡罗拉,カローラ,6923,11.68-15.58万,https://www.autohome.com.cn/526/#pvareaid=6861512,./images/by_series/526_cb4ce1ad.png,https://www.autohome.com.cn/526/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,27,3556.0,帝豪,Geely Emgrand,6604,6.29-9.79万,https://www.autohome.com.cn/3556/#pvareaid=6861512,./images/by_series/3556_4b6272ea.png,https://www.autohome.com.cn/3556/#pvareaid=6861512,吉利汽车,Geely（吉利）
-1,燃油车,2026-10,28,65.0,宝马5系,5シリーズ,6448,36.80-44.80万,https://www.autohome.com.cn/65/#pvareaid=6861512,./images/by_series/65_b36d38a9.png,https://www.autohome.com.cn/65/#pvareaid=6861512,宝马,BMW
-1,燃油车,2026-10,29,18.0,奥迪A6L,A6L,6420,32.29-55.89万,https://www.autohome.com.cn/18/#pvareaid=6861512,./images/by_series/18_094d1624.png,https://www.autohome.com.cn/18/#pvareaid=6861512,奥迪,Audi
-1,燃油车,2026-10,30,4410.0,红旗H5,H5,6361,15.98-21.58万,https://www.autohome.com.cn/4410/#pvareaid=6861512,./images/by_series/4410_30103952.png,https://www.autohome.com.cn/4410/#pvareaid=6861512,红旗,紅旗
-1,燃油车,2026-10,31,78.0,雅阁,アコード,6284,17.98-21.48万,https://www.autohome.com.cn/78/#pvareaid=6861512,./images/by_series/78_cb6c81c5.png,https://www.autohome.com.cn/78/#pvareaid=6861512,本田,ホンダ
-1,燃油车,2026-10,32,4745.0,途岳,トゥアレ (Tharu),5906,8.99-19.76万,https://www.autohome.com.cn/4745/#pvareaid=6861512,./images/by_series/4745_df3e78b5.png,https://www.autohome.com.cn/4745/#pvareaid=6861512,大众,Volkswagen
-1,燃油车,2026-10,33,4851.0,奥迪Q5L,Q5L,5846,30.98-39.98万,https://www.autohome.com.cn/4851/#pvareaid=6861512,./images/by_series/4851_eeb1b11e.png,https://www.autohome.com.cn/4851/#pvareaid=6861512,奥迪,Audi
-1,燃油车,2026-10,34,3554.0,昂科威Plus,Envision Plus,5654,22.99-25.99万,https://www.autohome.com.cn/3554/#pvareaid=6861512,./images/by_series/3554_5674c06a.png,https://www.autohome.com.cn/3554/#pvareaid=6861512,别克,Buick
-1,燃油车,2026-10,35,2429.0,逸动,Eado,5643,7.29-9.99万,https://www.autohome.com.cn/2429/#pvareaid=6861512,./images/by_series/2429_5ebb2e82.png,https://www.autohome.com.cn/2429/#pvareaid=6861512,长安,長安
-1,燃油车,2026-10,36,4658.0,宝马X3,X3,5583,31.80-39.80万,https://www.autohome.com.cn/4658/#pvareaid=6861512,./images/by_series/4658_197f4d01.png,https://www.autohome.com.cn/4658/#pvareaid=6861512,宝马,BMW
-1,燃油车,2026-10,37,4683.0,捷途X70,X70,5527,9.99-14.99万,https://www.autohome.com.cn/4683/#pvareaid=6861512,./images/by_series/4683_34bc4ceb.png,https://www.autohome.com.cn/4683/#pvareaid=6861512,捷途,Jetour（捷途）
-1,燃油车,2026-10,38,6272.0,赛那SIENNA,シエナ,5525,29.88-39.38万,https://www.autohome.com.cn/6272/#pvareaid=6861512,./images/by_series/6272_2915985e.png,https://www.autohome.com.cn/6272/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,39,5179.0,长安CS75PLUS,CS75 Plus,5372,10.89-14.39万,https://www.autohome.com.cn/5179/#pvareaid=6861512,./images/by_series/5179_00cc24d5.png,https://www.autohome.com.cn/5179/#pvareaid=6861512,长安,長安
-1,燃油车,2026-10,40,771.0,汉兰达,ハイランダー,5032,24.98-32.58万,https://www.autohome.com.cn/771/#pvareaid=6861512,./images/by_series/771_e1df166f.png,https://www.autohome.com.cn/771/#pvareaid=6861512,丰田,トヨタ
-1,燃油车,2026-10,41,588.0,奔驰C级,Cクラス,4893,29.99-34.56万,https://www.autohome.com.cn/588/#pvareaid=6861512,./images/by_series/588_e372ed03.png,https://www.autohome.com.cn/588/#pvareaid=6861512,奔驰,Mercedes-Benz
-1,燃油车,2026-10,42,5393.0,皓影,ブリーズ,4727,13.79-17.99万,https://www.autohome.com.cn/5393/#pvareaid=6861512,./images/by_series/5393_17d6451b.png,https://www.autohome.com.cn/5393/#pvareaid=6861512,本田,ホンダ
-1,燃油车,2026-10,43,3170.0,奥迪A3,A3,4623,16.59-20.99万,https://www.autohome.com.cn/3170/#pvareaid=6861512,./images/by_series/3170_c1122081.png,https://www.autohome.com.cn/3170/#pvareaid=6861512,奥迪,Audi
-1,燃油车,2026-10,44,6548.0,宝马X5,X5,4394,59.80-74.80万,https://www.autohome.com.cn/6548/#pvareaid=6861512,./images/by_series/6548_26178c20.png,https://www.autohome.com.cn/6548/#pvareaid=6861512,宝马,BMW
-1,燃油车,2026-10,45,834.0,君越,ラクロス (LaCrosse),4163,20.99-23.99万,https://www.autohome.com.cn/834/#pvareaid=6861512,./images/by_series/834_f1e03a62.png,https://www.autohome.com.cn/834/#pvareaid=6861512,别克,Buick
-1,燃油车,2026-10,46,2561.0,宝马X1,X1,3904,25.80-28.80万,https://www.autohome.com.cn/2561/#pvareaid=6861512,./images/by_series/2561_61702513.png,https://www.autohome.com.cn/2561/#pvareaid=6861512,宝马,BMW
-1,燃油车,2026-10,47,6606.0,捷途旅行者,Jetour Traveller,3506,13.99-23.99万,https://www.autohome.com.cn/6606/#pvareaid=6861512,./images/by_series/6606_b5af936b.png,https://www.autohome.com.cn/6606/#pvareaid=6861512,捷途,Jetour（捷途）
-1,燃油车,2026-10,48,3691.0,传祺GS4,伝祺GS4,3186,8.78-12.58万,https://www.autohome.com.cn/3691/#pvareaid=6861512,./images/by_series/3691_0e9c2f84.png,https://www.autohome.com.cn/3691/#pvareaid=6861512,广汽传祺,広汽伝祺
-1,燃油车,2026-10,49,7072.0,瑞虎9,Tiggo 9,3168,14.79-20.39万,https://www.autohome.com.cn/7072/#pvareaid=6861512,./images/by_series/7072_a6af04ef.png,https://www.autohome.com.cn/7072/#pvareaid=6861512,奇瑞,Chery（奇瑞）
-1,燃油车,2026-10,50,5498.0,长安CS55PLUS,CS55 PLUS,2903,9.29-11.79万,https://www.autohome.com.cn/5498/#pvareaid=6861512,./images/by_series/5498_fdc320b1.png,https://www.autohome.com.cn/5498/#pvareaid=6861512,长安,長安
-456,新能源,2026-10,1,,星愿,Geely Xingyuan,50190,6.48-9.48万,,public/autohome_energy/all/images/456/1_0_星愿.png,,,
-456,新能源,2026-10,2,,元UP,Atto 2,28514,7.48-11.98万,,public/autohome_energy/all/images/456/2_1_元UP.png,,,
-456,新能源,2026-10,3,,零跑A10,Leapmotor A10,27247,6.58-9.28万,,public/autohome_energy/all/images/456/3_2_零跑A10.png,,,
-456,新能源,2026-10,4,,宏光MINIEV,ウーリンMINIEV,24518,3.58-5.58万,,public/autohome_energy/all/images/456/4_3_宏光MINIEV.png,,,
-456,新能源,2026-10,5,,钛7,レオパード7 (Leopard 7),23663,17.98-23.98万,,public/autohome_energy/all/images/456/5_4_钛7.png,,,
-456,新能源,2026-10,6,,长安启源Q05,Qiyuan Q05,20022,7.99-11.49万,,public/autohome_energy/all/images/456/6_5_长安启源Q05.png,,,
-456,新能源,2026-10,7,,奔腾小马,Pony,17887,3.79-5.49万,,public/autohome_energy/all/images/456/7_6_奔腾小马.png,,,
-456,新能源,2026-10,8,,海豚,ドルフィン (Dolphin),17160,9.98-12.98万,,public/autohome_energy/all/images/456/8_7_海豚.png,,,
-456,新能源,2026-10,9,,海狮06,シーライオン06 (Sealion 06),16902,12.99-19.98万,,public/autohome_energy/all/images/456/9_8_海狮06.png,,,
-456,新能源,2026-10,10,,宋Ultra,宋Ultra,16844,12.99-17.99万,,public/autohome_energy/all/images/456/10_9_宋Ultra.png,,,
-456,新能源,2026-10,11,,小鹏MONA L03,小鹏MONA L03,16563,12.38-15.68万,,public/autohome_energy/all/images/456/11_10_小鹏MONA_L03.png,,,
-456,新能源,2026-10,12,,MG4,MG4,15503,6.88-10.28万,,public/autohome_energy/all/images/456/12_11_MG4.png,,,
-456,新能源,2026-10,13,,缤果Pro,缤果Pro,15331,5.68-7.08万,,public/autohome_energy/all/images/456/13_12_缤果Pro.png,,,
-456,新能源,2026-10,14,,小米澎程N70,小米澎程N70,14545,20.99-23.99万,,public/autohome_energy/all/images/456/14_13_小米澎程N70.png,,,
-456,新能源,2026-10,15,,AION i60,AION i60,14158,10.28-14.28万,,public/autohome_energy/all/images/456/15_14_AION_i60.png,,,
-456,新能源,2026-10,16,,QQ3 EV,QQ3 EV,14041,5.89-8.89万,,public/autohome_energy/all/images/456/16_15_QQ3_EV.png,,,
-456,新能源,2026-10,17,,宋Pro新能源,Sealion 5 DM-i,13928,10.29-13.38万,,public/autohome_energy/all/images/456/17_16_宋Pro新能源.png,,,
-456,新能源,2026-10,18,,小米SU7,SU7,12954,21.99-30.39万,,public/autohome_energy/all/images/456/18_17_小米SU7.png,,,
-456,新能源,2026-10,19,,小米澎程N90,小米澎程N90,12587,26.99-29.99万,,public/autohome_energy/all/images/456/19_18_小米澎程N90.png,,,
-456,新能源,2026-10,20,,MG 07,MG 07,12393,10.89-15.99万,,public/autohome_energy/all/images/456/20_19_MG_07.png,,,
-456,新能源,2026-10,21,,ID.AURA T6,ID.AURA T6,12032,12.99-16.69万,,public/autohome_energy/all/images/456/21_20_ID_AURA_T6.png,,,
-456,新能源,2026-10,22,,元PLUS,Atto 3,11954,11.58-14.99万,,public/autohome_energy/all/images/456/22_21_元PLUS.png,,,
-456,新能源,2026-10,23,,大唐,大唐,11658,23.99-30.99万,,public/autohome_energy/all/images/456/23_22_大唐.png,,,
-456,新能源,2026-10,24,,深蓝S05,Deepal S05,11411,11.99-15.19万,,public/autohome_energy/all/images/456/24_23_深蓝S05.png,,,
-456,新能源,2026-10,25,,海豹06,シール06 (Seal 06),11338,9.68-15.59万,,public/autohome_energy/all/images/456/25_24_海豹06.png,,,
-456,新能源,2026-10,26,,长城H10,長城H10,11006,20.98-23.18万,,public/autohome_energy/all/images/456/26_25_长城H10.png,,,
-456,新能源,2026-10,27,,零跑C10,C10,10802,12.58-14.28万,,public/autohome_energy/all/images/456/27_26_零跑C10.png,,,
-456,新能源,2026-10,28,,银河TT,銀河TT,10483,13.99-19.59万,,public/autohome_energy/all/images/456/28_27_银河TT.png,,,
-456,新能源,2026-10,29,,海鸥,シーガル (Seagull),10134,6.59-9.99万,,public/autohome_energy/all/images/456/29_28_海鸥.png,,,
-456,新能源,2026-10,30,,长安启源Q06,長安啓源Q06,10105,13.99-16.99万,,public/autohome_energy/all/images/456/30_29_长安启源Q06.png,,,
-456,新能源,2026-10,31,,小米YU7,YU7,10037,23.35-38.99万,,public/autohome_energy/all/images/456/31_30_小米YU7.png,,,
-456,新能源,2026-10,32,,理想L6,L6,9727,24.98万,,public/autohome_energy/all/images/456/32_31_理想L6.png,,,
-456,新能源,2026-10,33,,秦PLUS,Qin PLUS,9546,7.98-17.98万,,public/autohome_energy/all/images/456/33_32_秦PLUS.png,,,
-456,新能源,2026-10,34,,零跑B10,B10,9399,9.98-14.98万,,public/autohome_energy/all/images/456/34_33_零跑B10.png,,,
-456,新能源,2026-10,35,,海狮05 DM-i,海獅05 DM-i,9281,9.79-12.79万,,public/autohome_energy/all/images/456/35_34_海狮05_DM-i.png,,,
-456,新能源,2026-10,36,,零跑A05,零跑A05,9249,6.39-9.09万,,public/autohome_energy/all/images/456/36_35_零跑A05.png,,,
-456,新能源,2026-10,37,,问界M6,AITO M6,9130,22.98-29.98万,,public/autohome_energy/all/images/456/37_36_问界M6.png,,,
-456,新能源,2026-10,38,,铂智3X,bZ3X,9101,10.98-15.98万,,public/autohome_energy/all/images/456/38_37_铂智3X.png,,,
-456,新能源,2026-10,39,,海狮05 EV,シーライオン05 EV (Sealion 05 EV),9033,11.78-16.38万,,public/autohome_energy/all/images/456/39_38_海狮05_EV.png,,,
-456,新能源,2026-10,40,,蔚来ES8,NIO ES8,8735,38.28-44.68万,,public/autohome_energy/all/images/456/40_39_蔚来ES8.png,,,
-456,新能源,2026-10,41,,问界M9,AITO M9,8705,47.98-65.98万,,public/autohome_energy/all/images/456/41_40_问界M9.png,,,
-456,新能源,2026-10,42,,极狐贝塔T1,极狐贝塔T1,8347,6.28-13.08万,,public/autohome_energy/all/images/456/42_41_极狐贝塔T1.png,,,
-456,新能源,2026-10,43,,极狐 阿尔法T7,极狐 阿尔法T7,8131,13.68-17.28万,,public/autohome_energy/all/images/456/43_42_极狐_阿尔法T7.png,,,
-456,新能源,2026-10,44,,Model Y,モデルY,7807,26.35-36.90万,,public/autohome_energy/all/images/456/44_43_Model_Y.png,,,
-456,新能源,2026-10,45,,缤果S,Binguo S,7800,6.68-8.98万,,public/autohome_energy/all/images/456/45_44_缤果S.png,,,
-456,新能源,2026-10,46,,firefly萤火虫,firefly,7635,11.98-15.03万,,public/autohome_energy/all/images/456/46_45_firefly萤火虫.png,,,
-456,新能源,2026-10,47,,华境S,华境S,7507,15.98-20.68万,,public/autohome_energy/all/images/456/47_46_华境S.png,,,
-456,新能源,2026-10,48,,小鹏MONA M03,MONA M03,7160,11.98-15.18万,,public/autohome_energy/all/images/456/48_47_小鹏MONA_M03.png,,,
-456,新能源,2026-10,49,,秦MAX,秦MAX,7132,9.99-14.68万,,public/autohome_energy/all/images/456/49_48_秦MAX.png,,,
-456,新能源,2026-10,50,,ID. ERA 5S,ID. ERA 5S,7100,11.99-14.99万,,public/autohome_energy/all/images/456/50_49_ID_ERA_5S.png,,,
-4,纯电动,2026-10,1,,星愿,Geely Xingyuan,50190,6.48-9.48万,,public/autohome_energy/all/images/4/1_0_星愿.png,,,
-4,纯电动,2026-10,2,,元UP,Atto 2,28514,7.48-11.98万,,public/autohome_energy/all/images/4/2_1_元UP.png,,,
-4,纯电动,2026-10,3,,零跑A10,Leapmotor A10,27247,6.58-9.28万,,public/autohome_energy/all/images/4/3_2_零跑A10.png,,,
-4,纯电动,2026-10,4,,宏光MINIEV,ウーリンMINIEV,24518,3.58-5.58万,,public/autohome_energy/all/images/4/4_3_宏光MINIEV.png,,,
-4,纯电动,2026-10,5,,长安启源Q05,Qiyuan Q05,20022,7.99-11.49万,,public/autohome_energy/all/images/4/5_4_长安启源Q05.png,,,
-4,纯电动,2026-10,6,,奔腾小马,Pony,17887,3.79-5.49万,,public/autohome_energy/all/images/4/6_5_奔腾小马.png,,,
-4,纯电动,2026-10,7,,海豚,ドルフィン (Dolphin),17160,9.98-12.98万,,public/autohome_energy/all/images/4/7_6_海豚.png,,,
-4,纯电动,2026-10,8,,MG4,MG4,15503,6.88-10.28万,,public/autohome_energy/all/images/4/8_7_MG4.png,,,
-4,纯电动,2026-10,9,,缤果Pro,缤果Pro,15331,5.68-7.08万,,public/autohome_energy/all/images/4/9_8_缤果Pro.png,,,
-4,纯电动,2026-10,10,,小鹏MONA L03,小鹏MONA L03,14885,12.38-15.68万,,public/autohome_energy/all/images/4/10_9_小鹏MONA_L03.png,,,
-4,纯电动,2026-10,11,,QQ3 EV,QQ3 EV,14041,5.89-8.89万,,public/autohome_energy/all/images/4/11_10_QQ3_EV.png,,,
-4,纯电动,2026-10,12,,小米SU7,SU7,12954,21.99-30.39万,,public/autohome_energy/all/images/4/12_11_小米SU7.png,,,
-4,纯电动,2026-10,13,,AION i60,AION i60,12296,10.28-14.28万,,public/autohome_energy/all/images/4/13_12_AION_i60.png,,,
-4,纯电动,2026-10,14,,钛7,レオパード7 (Leopard 7),12152,17.98-23.98万,,public/autohome_energy/all/images/4/14_13_钛7.png,,,
-4,纯电动,2026-10,15,,ID.AURA T6,ID.AURA T6,12032,12.99-16.69万,,public/autohome_energy/all/images/4/15_14_ID_AURA_T6.png,,,
-4,纯电动,2026-10,16,,元PLUS,Atto 3,11954,11.58-14.99万,,public/autohome_energy/all/images/4/16_15_元PLUS.png,,,
-4,纯电动,2026-10,17,,大唐,大唐,11658,23.99-30.99万,,public/autohome_energy/all/images/4/17_16_大唐.png,,,
-4,纯电动,2026-10,18,,深蓝S05,Deepal S05,11411,11.99-15.19万,,public/autohome_energy/all/images/4/18_17_深蓝S05.png,,,
-4,纯电动,2026-10,19,,MG 07,MG 07,11166,10.89-15.99万,,public/autohome_energy/all/images/4/19_18_MG_07.png,,,
-4,纯电动,2026-10,20,,海狮06,シーライオン06 (Sealion 06),11085,12.99-19.98万,,public/autohome_energy/all/images/4/20_19_海狮06.png,,,
-4,纯电动,2026-10,21,,银河TT,銀河TT,10483,13.99-19.59万,,public/autohome_energy/all/images/4/21_20_银河TT.png,,,
-4,纯电动,2026-10,22,,海鸥,シーガル (Seagull),10134,6.59-9.99万,,public/autohome_energy/all/images/4/22_21_海鸥.png,,,
-4,纯电动,2026-10,23,,小米YU7,YU7,10037,23.35-38.99万,,public/autohome_energy/all/images/4/23_22_小米YU7.png,,,
-4,纯电动,2026-10,24,,长安启源Q06,長安啓源Q06,10024,13.99-16.99万,,public/autohome_energy/all/images/4/24_23_长安启源Q06.png,,,
-4,纯电动,2026-10,25,,零跑B10,B10,9399,9.98-14.98万,,public/autohome_energy/all/images/4/25_24_零跑B10.png,,,
-4,纯电动,2026-10,26,,零跑A05,零跑A05,9249,6.39-9.09万,,public/autohome_energy/all/images/4/26_25_零跑A05.png,,,
-4,纯电动,2026-10,27,,铂智3X,bZ3X,9101,10.98-15.98万,,public/autohome_energy/all/images/4/27_26_铂智3X.png,,,
-4,纯电动,2026-10,28,,海狮05 EV,シーライオン05 EV (Sealion 05 EV),9033,11.78-16.38万,,public/autohome_energy/all/images/4/28_27_海狮05_EV.png,,,
-4,纯电动,2026-10,29,,蔚来ES8,NIO ES8,8735,38.28-44.68万,,public/autohome_energy/all/images/4/29_28_蔚来ES8.png,,,
-4,纯电动,2026-10,30,,宋Ultra,宋Ultra,8436,12.99-17.99万,,public/autohome_energy/all/images/4/30_29_宋Ultra.png,,,
-4,纯电动,2026-10,31,,极狐贝塔T1,极狐贝塔T1,8347,6.28-13.08万,,public/autohome_energy/all/images/4/31_30_极狐贝塔T1.png,,,
-4,纯电动,2026-10,32,,极狐 阿尔法T7,极狐 阿尔法T7,7845,13.68-17.28万,,public/autohome_energy/all/images/4/32_31_极狐_阿尔法T7.png,,,
-4,纯电动,2026-10,33,,Model Y,モデルY,7807,26.35-36.90万,,public/autohome_energy/all/images/4/33_32_Model_Y.png,,,
-4,纯电动,2026-10,34,,缤果S,Binguo S,7800,6.68-8.98万,,public/autohome_energy/all/images/4/34_33_缤果S.png,,,
-4,纯电动,2026-10,35,,firefly萤火虫,firefly,7635,11.98-15.03万,,public/autohome_energy/all/images/4/35_34_firefly萤火虫.png,,,
-4,纯电动,2026-10,36,,小鹏MONA M03,MONA M03,7160,11.98-15.18万,,public/autohome_energy/all/images/4/36_35_小鹏MONA_M03.png,,,
-4,纯电动,2026-10,37,,问界M6,AITO M6,7089,22.98-29.98万,,public/autohome_energy/all/images/4/37_36_问界M6.png,,,
-4,纯电动,2026-10,38,,极狐贝塔S3,极狐贝塔S3,6892,8.48-16.28万,,public/autohome_energy/all/images/4/38_37_极狐贝塔S3.png,,,
-4,纯电动,2026-10,39,,蔚来ES9,蔚来ES9,6690,49.80-62.80万,,public/autohome_energy/all/images/4/39_38_蔚来ES9.png,,,
-4,纯电动,2026-10,40,,银河E5,Galaxy E5,6214,10.78-17.98万,,public/autohome_energy/all/images/4/40_39_银河E5.png,,,
-4,纯电动,2026-10,41,,AION RT,AION RT,5914,9.98-12.88万,,public/autohome_energy/all/images/4/41_40_AION_RT.png,,,
-4,纯电动,2026-10,42,,海豹06,シール06 (Seal 06),5872,9.68-15.59万,,public/autohome_energy/all/images/4/42_41_海豹06.png,,,
-4,纯电动,2026-10,43,,风云A9,風雲A9,5540,10.99-16.19万,,public/autohome_energy/all/images/4/43_42_风云A9.png,,,
-4,纯电动,2026-10,44,,理想i9,理想i9,5460,36.98万,,public/autohome_energy/all/images/4/44_43_理想i9.png,,,
-4,纯电动,2026-10,45,,长安Lumin,Lumin,5224,3.79-6.59万,,public/autohome_energy/all/images/4/45_44_长安Lumin.png,,,
-4,纯电动,2026-10,46,,智己LS6,IM LS6,5170,20.29-26.49万,,public/autohome_energy/all/images/4/46_45_智己LS6.png,,,
-4,纯电动,2026-10,47,,领克20,领克20,5082,12.38-16.38万,,public/autohome_energy/all/images/4/47_46_领克20.png,,,
-4,纯电动,2026-10,48,,风云T7,風雲T7,4931,9.79-12.99万,,public/autohome_energy/all/images/4/48_47_风云T7.png,,,
-4,纯电动,2026-10,49,,方程S,方程S,4567,18.99-23.99万,,public/autohome_energy/all/images/4/49_48_方程S.png,,,
-4,纯电动,2026-10,50,,海豹08,海豹08,4535,19.69-23.99万,,public/autohome_energy/all/images/4/50_49_海豹08.png,,,
-5,插电混动,2026-10,1,,宋Pro新能源,Sealion 5 DM-i,13928,10.29-13.38万,,public/autohome_energy/all/images/5/1_0_宋Pro新能源.png,,,
-5,插电混动,2026-10,2,,钛7,レオパード7 (Leopard 7),11511,17.98-23.98万,,public/autohome_energy/all/images/5/2_1_钛7.png,,,
-5,插电混动,2026-10,3,,长城H10,長城H10,11006,20.98-23.18万,,public/autohome_energy/all/images/5/3_2_长城H10.png,,,
-5,插电混动,2026-10,4,,海狮05 DM-i,海獅05 DM-i,9281,9.79-12.79万,,public/autohome_energy/all/images/5/4_3_海狮05_DM-i.png,,,
-5,插电混动,2026-10,5,,宋Ultra,宋Ultra,8408,12.99-17.99万,,public/autohome_energy/all/images/5/5_4_宋Ultra.png,,,
-5,插电混动,2026-10,6,,华境S,华境S,7507,15.98-20.68万,,public/autohome_energy/all/images/5/6_5_华境S.png,,,
-5,插电混动,2026-10,7,,ID. ERA 5S,ID. ERA 5S,7100,11.99-14.99万,,public/autohome_energy/all/images/5/7_6_ID_ERA_5S.png,,,
-5,插电混动,2026-10,8,,秦PLUS,Qin PLUS,6802,7.98-17.98万,,public/autohome_energy/all/images/5/8_7_秦PLUS.png,,,
-5,插电混动,2026-10,9,,哈弗猛龙新能源,Raptor,6501,17.38-20.88万,,public/autohome_energy/all/images/5/9_8_哈弗猛龙新能源.png,,,
-5,插电混动,2026-10,10,,星光L,星光L,6175,11.28-13.58万,,public/autohome_energy/all/images/5/10_9_星光L.png,,,
-5,插电混动,2026-10,11,,魏牌 高山新能源,魏牌 高山新能源,6103,27.28-38.58万,,public/autohome_energy/all/images/5/11_10_魏牌_高山新能源.png,,,
-5,插电混动,2026-10,12,,海狮06,シーライオン06 (Sealion 06),5817,12.99-19.98万,,public/autohome_energy/all/images/5/12_11_海狮06.png,,,
-5,插电混动,2026-10,13,,海豹06,シール06 (Seal 06),5466,9.68-15.59万,,public/autohome_energy/all/images/5/13_12_海豹06.png,,,
-5,插电混动,2026-10,14,,别克至境E7,别克至境E7,5005,15.99-19.99万,,public/autohome_energy/all/images/5/14_13_别克至境E7.png,,,
-5,插电混动,2026-10,15,,海豹05 DM-i,シール05 DM-i (Seal 05 DM-i),4672,7.98-11.58万,,public/autohome_energy/all/images/5/15_14_海豹05_DM-i.png,,,
-5,插电混动,2026-10,16,,银河M7,銀河M7,4652,11.98-14.78万,,public/autohome_energy/all/images/5/16_15_银河M7.png,,,
-5,插电混动,2026-10,17,,岚图梦想家,Lantu Dreamer,4472,32.99-70.99万,,public/autohome_energy/all/images/5/17_16_岚图梦想家.png,,,
-5,插电混动,2026-10,18,,银河战舰700,銀河戦艦700,4379,17.98-36.98万,,public/autohome_energy/all/images/5/18_17_银河战舰700.png,,,
-5,插电混动,2026-10,19,,极氪9X,Zeekr 9X,4356,46.59-59.99万,,public/autohome_energy/all/images/5/19_18_极氪9X.png,,,
-5,插电混动,2026-10,20,,别克GL8新能源,GL8 EV,4207,22.99-36.99万,,public/autohome_energy/all/images/5/20_19_别克GL8新能源.png,,,
-5,插电混动,2026-10,21,,领克07GT,领克07GT,4043,15.78-17.78万,,public/autohome_energy/all/images/5/21_20_领克07GT.png,,,
-5,插电混动,2026-10,22,,风云T9L,風雲T9L,3623,12.99-18.69万,,public/autohome_energy/all/images/5/22_21_风云T9L.png,,,
-5,插电混动,2026-10,23,,秦MAX,秦MAX,3497,9.99-14.68万,,public/autohome_energy/all/images/5/23_22_秦MAX.png,,,
-5,插电混动,2026-10,24,,腾势N8L,Denza N8L,3479,29.98-34.98万,,public/autohome_energy/all/images/5/24_23_腾势N8L.png,,,
-5,插电混动,2026-10,25,,坦克300新能源,坦克300新能源,3469,24.98万,,public/autohome_energy/all/images/5/25_24_坦克300新能源.png,,,
-5,插电混动,2026-10,26,,银河星耀7,銀河星耀7,3457,10.88-13.98万,,public/autohome_energy/all/images/5/26_25_银河星耀7.png,,,
-5,插电混动,2026-10,27,,腾势D9,デンツァD9 (Denza D9),3136,30.98-60.06万,,public/autohome_energy/all/images/5/27_26_腾势D9.png,,,
-5,插电混动,2026-10,28,,捷途山海L7 PLUS,Jetour Shanhai L7 Plus,2567,11.99-17.59万,,public/autohome_energy/all/images/5/28_27_捷途山海L7_PLUS.png,,,
-5,插电混动,2026-10,29,,极氪8X,极氪8X,2381,35.68-50.08万,,public/autohome_energy/all/images/5/29_28_极氪8X.png,,,
-5,插电混动,2026-10,30,,长安启源Q07,Qiyuan Q07,2252,12.98-17.98万,,public/autohome_energy/all/images/5/30_29_长安启源Q07.png,,,
-5,插电混动,2026-10,31,,银河星耀6,Galaxy Xingyao 6,2233,7.48-12.08万,,public/autohome_energy/all/images/5/31_30_银河星耀6.png,,,
-5,插电混动,2026-10,32,,豹5,Leopard 5,2213,23.98-32.98万,,public/autohome_energy/all/images/5/32_31_豹5.png,,,
-5,插电混动,2026-10,33,,银河A7 EM,銀河A7 EM,2113,8.98-13.18万,,public/autohome_energy/all/images/5/33_32_银河A7_EM.png,,,
-5,插电混动,2026-10,34,,传祺E8 PHEV,伝祺E8 PHEV,2084,18.98-23.88万,,public/autohome_energy/all/images/5/34_33_传祺E8_PHEV.png,,,
-5,插电混动,2026-10,35,,凯迪拉克XT5 PHEV,凯迪拉克XT5 PHEV,2021,29.00-35.00万,,public/autohome_energy/all/images/5/35_34_凯迪拉克XT5_PHEV.png,,,
-5,插电混动,2026-10,36,,银河M9,Galaxy M9,1969,18.38-26.98万,,public/autohome_energy/all/images/5/36_35_银河M9.png,,,
-5,插电混动,2026-10,37,,传祺向往S7,Trumpchi Xiangwang S7,1944,14.98-22.98万,,public/autohome_energy/all/images/5/37_36_传祺向往S7.png,,,
-5,插电混动,2026-10,38,,坦克400新能源,Tank 400 Hi4-T,1800,28.58-31.98万,,public/autohome_energy/all/images/5/38_37_坦克400新能源.png,,,
-5,插电混动,2026-10,39,,红旗HS6 PHEV,Hongqi HS6 PHEV,1755,17.88-22.88万,,public/autohome_energy/all/images/5/39_38_红旗HS6_PHEV.png,,,
-5,插电混动,2026-10,40,,坦克500新能源,Tank 500 Hi4-T,1695,33.50-38.50万,,public/autohome_energy/all/images/5/40_39_坦克500新能源.png,,,
-5,插电混动,2026-10,41,,银河星耀8,Galaxy X8,1682,13.58-17.28万,,public/autohome_energy/all/images/5/41_40_银河星耀8.png,,,
-5,插电混动,2026-10,42,,红旗HS3 PHEV,Hongqi HS3 PHEV,1561,15.98-16.18万,,public/autohome_energy/all/images/5/42_41_红旗HS3_PHEV.png,,,
-5,插电混动,2026-10,43,,秦L,Qin L,1553,9.68-15.58万,,public/autohome_energy/all/images/5/43_42_秦L.png,,,
-5,插电混动,2026-10,44,,沃尔沃XC70插电式混动,XC70 PHEV,1522,41.19-49.69万,,public/autohome_energy/all/images/5/44_43_沃尔沃XC70插电式混动.png,,,
-5,插电混动,2026-10,45,,领克08 EM-P,Lynk & Co 08 EM-P,1487,17.18-22.88万,,public/autohome_energy/all/images/5/45_44_领克08_EM-P.png,,,
-5,插电混动,2026-10,46,,日产N6,N6,1347,10.39-12.99万,,public/autohome_energy/all/images/5/46_45_日产N6.png,,,
-5,插电混动,2026-10,47,,领克10,Lynk & Co 10,1342,17.58-24.99万,,public/autohome_energy/all/images/5/47_46_领克10.png,,,
-5,插电混动,2026-10,48,,MG 07,MG 07,1227,10.89-15.99万,,public/autohome_energy/all/images/5/48_47_MG_07.png,,,
-5,插电混动,2026-10,49,,捷途旅行者C-DM,捷途旅行者C-DM,1199,15.99-23.99万,,public/autohome_energy/all/images/5/49_48_捷途旅行者C-DM.png,,,
-5,插电混动,2026-10,50,,银河星舰7,Galaxy Starship 7,1151,10.18-12.98万,,public/autohome_energy/all/images/5/50_49_银河星舰7.png,,,
-6,混动增程,2026-10,1,,小米澎程N70,小米澎程N70,14545,20.99-23.99万,,public/autohome_energy/all/images/6/1_0_小米澎程N70.png,,,
-6,混动增程,2026-10,2,,小米澎程N90,小米澎程N90,12587,26.99-29.99万,,public/autohome_energy/all/images/6/2_1_小米澎程N90.png,,,
-6,混动增程,2026-10,3,,理想L6,L6,9727,24.98万,,public/autohome_energy/all/images/6/3_2_理想L6.png,,,
-6,混动增程,2026-10,4,,零跑C10,C10,9330,12.58-14.28万,,public/autohome_energy/all/images/6/4_3_零跑C10.png,,,
-6,混动增程,2026-10,5,,问界M9,AITO M9,6651,47.98-65.98万,,public/autohome_energy/all/images/6/5_4_问界M9.png,,,
-6,混动增程,2026-10,6,,马自达EZ-60,EZ-60,5155,11.99-17.29万,,public/autohome_energy/all/images/6/6_5_马自达EZ-60.png,,,
-6,混动增程,2026-10,7,,零跑C11,C11,5151,14.38-15.98万,,public/autohome_energy/all/images/6/7_6_零跑C11.png,,,
-6,混动增程,2026-10,8,,零跑C16,C16,4955,14.58-16.98万,,public/autohome_energy/all/images/6/8_7_零跑C16.png,,,
-6,混动增程,2026-10,9,,北京越野BJ40增程,BAIC BJ40 EREV,4099,17.98-27.98万,,public/autohome_energy/all/images/6/9_8_北京越野BJ40增程.png,,,
-6,混动增程,2026-10,10,,理想L8,Li Auto L8,3934,36.98-42.98万,,public/autohome_energy/all/images/6/10_9_理想L8.png,,,
-6,混动增程,2026-10,11,,ID. ERA 8X,ID. ERA 8X,3500,22.68-28.98万,,public/autohome_energy/all/images/6/11_10_ID_ERA_8X.png,,,
-6,混动增程,2026-10,12,,马自达EZ-6,EZ-6,2454,11.98-16.28万,,public/autohome_energy/all/images/6/12_11_马自达EZ-6.png,,,
-6,混动增程,2026-10,13,,小鹏GX,小鹏GX,2453,27.98-35.98万,,public/autohome_energy/all/images/6/13_12_小鹏GX.png,,,
-6,混动增程,2026-10,14,,智界V9,智界V9,2263,38.98-51.98万,,public/autohome_energy/all/images/6/14_13_智界V9.png,,,
-6,混动增程,2026-10,15,,问界M7,Wenjie M7,2043,27.98-38.98万,,public/autohome_energy/all/images/6/15_14_问界M7.png,,,
-6,混动增程,2026-10,16,,问界M6,AITO M6,2041,22.98-29.98万,,public/autohome_energy/all/images/6/16_15_问界M6.png,,,
-6,混动增程,2026-10,17,,AION i60,AION i60,1862,10.28-14.28万,,public/autohome_energy/all/images/6/17_16_AION_i60.png,,,
-6,混动增程,2026-10,18,,零跑D19,零跑D19,1851,21.98-26.98万,,public/autohome_energy/all/images/6/18_17_零跑D19.png,,,
-6,混动增程,2026-10,19,,小鹏G9L,小鹏G9L,1772,24.18-31.98万,,public/autohome_energy/all/images/6/19_18_小鹏G9L.png,,,
-6,混动增程,2026-10,20,,小鹏MONA L03,小鹏MONA L03,1678,12.38-15.68万,,public/autohome_energy/all/images/6/20_19_小鹏MONA_L03.png,,,
-6,混动增程,2026-10,21,,理想L9,Li Auto L9,1677,45.98-50.98万,,public/autohome_energy/all/images/6/21_20_理想L9.png,,,
-6,混动增程,2026-10,22,,享界G9,享界G9,1449,42.98-54.98万,,public/autohome_energy/all/images/6/22_21_享界G9.png,,,
-6,混动增程,2026-10,23,,iCAR V27,iCAR V27,1235,16.98-20.38万,,public/autohome_energy/all/images/6/23_22_iCAR_V27.png,,,
-6,混动增程,2026-10,24,,日产NX8,日产NX8,1129,15.99-20.99万,,public/autohome_energy/all/images/6/24_23_日产NX8.png,,,
-6,混动增程,2026-10,25,,尚界H5,Shangjie H5,904,15.98-19.98万,,public/autohome_energy/all/images/6/25_24_尚界H5.png,,,
-6,混动增程,2026-10,26,,智己LS8,IM LS8,709,24.98-31.18万,,public/autohome_energy/all/images/6/26_25_智己LS8.png,,,
-6,混动增程,2026-10,27,,风云T11,Fengyun T11,693,18.99-25.99万,,public/autohome_energy/all/images/6/27_26_风云T11.png,,,
-6,混动增程,2026-10,28,,ID. ERA 9X,ID. ERA 9X,646,30.98-35.98万,,public/autohome_energy/all/images/6/28_27_ID_ERA_9X.png,,,
-6,混动增程,2026-10,29,,岚图FREE,Voyah Free,632,21.99-27.99万,,public/autohome_energy/all/images/6/29_28_岚图FREE.png,,,
-6,混动增程,2026-10,30,,奕派M8,奕派M8,605,17.98-21.98万,,public/autohome_energy/all/images/6/30_29_奕派M8.png,,,
-6,混动增程,2026-10,31,,尊界V800,尊界V800,605,76.60-101.60万,,public/autohome_energy/all/images/6/31_30_尊界V800.png,,,
-6,混动增程,2026-10,32,,智己LS9,IM LS9,566,33.28-37.98万,,public/autohome_energy/all/images/6/32_31_智己LS9.png,,,
-6,混动增程,2026-10,33,,五菱宏光新能源,Wuling Hongguang EV,517,6.88-7.98万,,public/autohome_energy/all/images/6/33_32_五菱宏光新能源.png,,,
-6,混动增程,2026-10,34,,问界M8,AITO M8,448,35.98-45.98万,,public/autohome_energy/all/images/6/34_33_问界M8.png,,,
-6,混动增程,2026-10,35,,阿维塔07,Avatr 07,356,21.99-28.99万,,public/autohome_energy/all/images/6/35_34_阿维塔07.png,,,
-6,混动增程,2026-10,36,,小鹏X9,X9,348,30.98-36.98万,,public/autohome_energy/all/images/6/36_35_小鹏X9.png,,,
-6,混动增程,2026-10,37,,别克至境L7,Envista L7,297,17.39-21.99万,,public/autohome_energy/all/images/6/37_36_别克至境L7.png,,,
-6,混动增程,2026-10,38,,极狐 阿尔法T7,极狐 阿尔法T7,286,13.68-17.28万,,public/autohome_energy/all/images/6/38_37_极狐_阿尔法T7.png,,,
-6,混动增程,2026-10,39,,享界S9T,Xiangjie S9T,269,31.98-37.98万,,public/autohome_energy/all/images/6/39_38_享界S9T.png,,,
-6,混动增程,2026-10,40,,零跑D99,零跑D99,262,24.98-33.98万,,public/autohome_energy/all/images/6/40_39_零跑D99.png,,,
-6,混动增程,2026-10,41,,长安启源A07,Qiyuan A07,251,13.99-16.59万,,public/autohome_energy/all/images/6/41_40_长安启源A07.png,,,
-6,混动增程,2026-10,42,,深蓝S07,Deepal S07,250,15.59-17.69万,,public/autohome_energy/all/images/6/42_41_深蓝S07.png,,,
-6,混动增程,2026-10,43,,iCAR V25,iCAR V25,220,13.98-17.58万,,public/autohome_energy/all/images/6/43_42_iCAR_V25.png,,,
-6,混动增程,2026-10,44,,尊界S800,Zunzhe S800,219,72.80-138.80万,,public/autohome_energy/all/images/6/44_43_尊界S800.png,,,
-6,混动增程,2026-10,45,,享界S9,Xiangjie S9,193,31.98-37.98万,,public/autohome_energy/all/images/6/45_44_享界S9.png,,,
-6,混动增程,2026-10,46,,深蓝G318,Deepal G318,187,18.59-23.98万,,public/autohome_energy/all/images/6/46_45_深蓝G318.png,,,
-6,混动增程,2026-10,47,,尊界V680,尊界V680,185,64.80万,,public/autohome_energy/all/images/6/47_46_尊界V680.png,,,
-6,混动增程,2026-10,48,,博越REV,Boyue REV,165,11.39-12.69万,,public/autohome_energy/all/images/6/48_47_博越REV.png,,,
-6,混动增程,2026-10,49,,红旗G919,紅旗G919,163,34.98-42.98万,,public/autohome_energy/all/images/6/49_48_红旗G919.png,,,
-6,混动增程,2026-10,50,,星途EX7,星途EX7,134,19.99-26.39万,,public/autohome_energy/all/images/6/50_49_星途EX7.png,,,
+category_id,category,month,rank,series_id,name,global_name,units,price,link,image_url,series_url,manufacturer,brand_id,manufacturer_ja
+1,燃油车,2026-10,1,770.0,RAV4荣放,RAV4,17750,16.98-22.88万,https://www.autohome.com.cn/770/#pvareaid=6861512,public/autohome_energy/all/images/1/1_0_RAV4荣放.png,https://www.autohome.com.cn/770/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,2,6004.0,星越L,Monjaro,16376,13.97-17.97万,https://www.autohome.com.cn/6004/#pvareaid=6861512,public/autohome_energy/all/images/1/2_1_星越L.png,https://www.autohome.com.cn/6004/#pvareaid=6861512,吉利汽车,25.0,Geely（吉利）
+1,燃油车,2026-10,3,6428.0,卡罗拉锐放,カローラクロス,16190,12.68-15.98万,https://www.autohome.com.cn/6428/#pvareaid=6861512,public/autohome_energy/all/images/1/3_2_卡罗拉锐放.png,https://www.autohome.com.cn/6428/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,4,6814.0,博越L,Boyue L,15547,9.99-13.69万,https://www.autohome.com.cn/6814/#pvareaid=6861512,public/autohome_energy/all/images/1/4_3_博越L.png,https://www.autohome.com.cn/6814/#pvareaid=6861512,吉利汽车,25.0,Geely（吉利）
+1,燃油车,2026-10,5,614.0,朗逸,ラヴィーダ (Lavida),13891,8.00-14.59万,https://www.autohome.com.cn/614/#pvareaid=6861512,public/autohome_energy/all/images/1/5_4_朗逸.png,https://www.autohome.com.cn/614/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,6,5771.0,北京越野BJ30,BAIC BJ30,13647,9.99-13.99万,https://www.autohome.com.cn/5771/#pvareaid=6861512,public/autohome_energy/all/images/1/6_5_北京越野BJ30.png,https://www.autohome.com.cn/5771/#pvareaid=6861512,北京越野,27.0,北京越野
+1,燃油车,2026-10,7,110.0,凯美瑞,カムリ,12877,17.18-25.98万,https://www.autohome.com.cn/110/#pvareaid=6861512,public/autohome_energy/all/images/1/7_6_凯美瑞.png,https://www.autohome.com.cn/110/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,8,442.0,速腾,サギター (Sagitar),12866,9.38-16.49万,https://www.autohome.com.cn/442/#pvareaid=6861512,public/autohome_energy/all/images/1/8_7_速腾.png,https://www.autohome.com.cn/442/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,9,4274.0,途观L,ティグアンL (Tiguan L),12483,18.68-26.68万,https://www.autohome.com.cn/4274/#pvareaid=6861512,public/autohome_energy/all/images/1/9_8_途观L.png,https://www.autohome.com.cn/4274/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,10,66.0,宝马3系,3シリーズ,11034,25.80-33.80万,https://www.autohome.com.cn/66/#pvareaid=6861512,public/autohome_energy/all/images/1/10_9_宝马3系.png,https://www.autohome.com.cn/66/#pvareaid=6861512,宝马,15.0,BMW
+1,燃油车,2026-10,11,496.0,迈腾,マゴタン (Magotan),10780,17.49-24.69万,https://www.autohome.com.cn/496/#pvareaid=6861512,public/autohome_energy/all/images/1/11_10_迈腾.png,https://www.autohome.com.cn/496/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,12,528.0,帕萨特,パサート (Passat),10573,16.45-30.98万,https://www.autohome.com.cn/528/#pvareaid=6861512,public/autohome_energy/all/images/1/12_11_帕萨特.png,https://www.autohome.com.cn/528/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,13,4744.0,探岳,タイロン (Tayron),10511,19.89-25.99万,https://www.autohome.com.cn/4744/#pvareaid=6861512,public/autohome_energy/all/images/1/13_12_探岳.png,https://www.autohome.com.cn/4744/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,14,4701.0,缤越,Coolray,9850,6.68-9.78万,https://www.autohome.com.cn/4701/#pvareaid=6861512,public/autohome_energy/all/images/1/14_13_缤越.png,https://www.autohome.com.cn/4701/#pvareaid=6861512,吉利汽车,25.0,Geely（吉利）
+1,燃油车,2026-10,15,5472.0,威兰达,ウィランダー,9297,16.98-23.08万,https://www.autohome.com.cn/5472/#pvareaid=6861512,public/autohome_energy/all/images/1/15_14_威兰达.png,https://www.autohome.com.cn/5472/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,16,6414.0,锋兰达,フロントランダー,9246,13.28-17.28万,https://www.autohome.com.cn/6414/#pvareaid=6861512,public/autohome_energy/all/images/1/16_15_锋兰达.png,https://www.autohome.com.cn/6414/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,17,314.0,本田CR-V,CR-V,9067,13.79-24.99万,https://www.autohome.com.cn/314/#pvareaid=6861512,public/autohome_energy/all/images/1/17_16_本田CR-V.png,https://www.autohome.com.cn/314/#pvareaid=6861512,本田,14.0,ホンダ
+1,燃油车,2026-10,18,4693.0,瑞虎8,Tiggo 8,8780,9.99-12.99万,https://www.autohome.com.cn/4693/#pvareaid=6861512,public/autohome_energy/all/images/1/18_17_瑞虎8.png,https://www.autohome.com.cn/4693/#pvareaid=6861512,奇瑞,26.0,Chery（奇瑞）
+1,燃油车,2026-10,19,5273.0,星瑞,Preface,8723,9.87-14.67万,https://www.autohome.com.cn/5273/#pvareaid=6861512,public/autohome_energy/all/images/1/19_18_星瑞.png,https://www.autohome.com.cn/5273/#pvareaid=6861512,吉利汽车,25.0,Geely（吉利）
+1,燃油车,2026-10,20,448.0,轩逸,シルフィ,8116,7.99-17.49万,https://www.autohome.com.cn/448/#pvareaid=6861512,public/autohome_energy/all/images/1/20_19_轩逸.png,https://www.autohome.com.cn/448/#pvareaid=6861512,日产,63.0,日産
+1,燃油车,2026-10,21,197.0,奔驰E级,Eクラス,7960,37.88-50.98万,https://www.autohome.com.cn/197/#pvareaid=6861512,public/autohome_energy/all/images/1/21_20_奔驰E级.png,https://www.autohome.com.cn/197/#pvareaid=6861512,奔驰,36.0,Mercedes-Benz
+1,燃油车,2026-10,22,4962.0,亚洲龙,アバロン,7884,17.88-25.68万,https://www.autohome.com.cn/4962/#pvareaid=6861512,./images/by_series/4962_5ea32d9d.png,https://www.autohome.com.cn/4962/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,23,3862.0,奔驰GLC,GLC,7696,34.98-46.28万,https://www.autohome.com.cn/3862/#pvareaid=6861512,./images/by_series/3862_b4d43335.png,https://www.autohome.com.cn/3862/#pvareaid=6861512,奔驰,36.0,Mercedes-Benz
+1,燃油车,2026-10,24,6664.0,艾瑞泽8,Arrizo 8,7285,9.99-14.89万,https://www.autohome.com.cn/6664/#pvareaid=6861512,./images/by_series/6664_18fbc799.png,https://www.autohome.com.cn/6664/#pvareaid=6861512,奇瑞,26.0,Chery（奇瑞）
+1,燃油车,2026-10,25,5770.0,长城大狗,長城大狗,6968,11.99-14.99万,https://www.autohome.com.cn/5770/#pvareaid=6861512,./images/by_series/5770_a06584ab.png,https://www.autohome.com.cn/5770/#pvareaid=6861512,哈弗,181.0,Haval（哈弗）
+1,燃油车,2026-10,26,526.0,卡罗拉,カローラ,6923,11.68-15.58万,https://www.autohome.com.cn/526/#pvareaid=6861512,./images/by_series/526_cb4ce1ad.png,https://www.autohome.com.cn/526/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,27,3556.0,帝豪,Geely Emgrand,6604,6.29-9.79万,https://www.autohome.com.cn/3556/#pvareaid=6861512,./images/by_series/3556_4b6272ea.png,https://www.autohome.com.cn/3556/#pvareaid=6861512,吉利汽车,25.0,Geely（吉利）
+1,燃油车,2026-10,28,65.0,宝马5系,5シリーズ,6448,36.80-44.80万,https://www.autohome.com.cn/65/#pvareaid=6861512,./images/by_series/65_b36d38a9.png,https://www.autohome.com.cn/65/#pvareaid=6861512,宝马,15.0,BMW
+1,燃油车,2026-10,29,18.0,奥迪A6L,A6L,6420,32.29-55.89万,https://www.autohome.com.cn/18/#pvareaid=6861512,./images/by_series/18_094d1624.png,https://www.autohome.com.cn/18/#pvareaid=6861512,奥迪,33.0,Audi
+1,燃油车,2026-10,30,4410.0,红旗H5,H5,6361,15.98-21.58万,https://www.autohome.com.cn/4410/#pvareaid=6861512,./images/by_series/4410_30103952.png,https://www.autohome.com.cn/4410/#pvareaid=6861512,红旗,91.0,紅旗
+1,燃油车,2026-10,31,78.0,雅阁,アコード,6284,17.98-21.48万,https://www.autohome.com.cn/78/#pvareaid=6861512,./images/by_series/78_cb6c81c5.png,https://www.autohome.com.cn/78/#pvareaid=6861512,本田,14.0,ホンダ
+1,燃油车,2026-10,32,4745.0,途岳,トゥアレ (Tharu),5906,8.99-19.76万,https://www.autohome.com.cn/4745/#pvareaid=6861512,./images/by_series/4745_df3e78b5.png,https://www.autohome.com.cn/4745/#pvareaid=6861512,大众,1.0,Volkswagen
+1,燃油车,2026-10,33,4851.0,奥迪Q5L,Q5L,5846,30.98-39.98万,https://www.autohome.com.cn/4851/#pvareaid=6861512,./images/by_series/4851_eeb1b11e.png,https://www.autohome.com.cn/4851/#pvareaid=6861512,奥迪,33.0,Audi
+1,燃油车,2026-10,34,3554.0,昂科威Plus,Envision Plus,5654,22.99-25.99万,https://www.autohome.com.cn/3554/#pvareaid=6861512,./images/by_series/3554_5674c06a.png,https://www.autohome.com.cn/3554/#pvareaid=6861512,别克,38.0,Buick
+1,燃油车,2026-10,35,2429.0,逸动,Eado,5643,7.29-9.99万,https://www.autohome.com.cn/2429/#pvareaid=6861512,./images/by_series/2429_5ebb2e82.png,https://www.autohome.com.cn/2429/#pvareaid=6861512,长安,76.0,長安
+1,燃油车,2026-10,36,4658.0,宝马X3,X3,5583,31.80-39.80万,https://www.autohome.com.cn/4658/#pvareaid=6861512,./images/by_series/4658_197f4d01.png,https://www.autohome.com.cn/4658/#pvareaid=6861512,宝马,15.0,BMW
+1,燃油车,2026-10,37,4683.0,捷途X70,X70,5527,9.99-14.99万,https://www.autohome.com.cn/4683/#pvareaid=6861512,./images/by_series/4683_34bc4ceb.png,https://www.autohome.com.cn/4683/#pvareaid=6861512,捷途,319.0,Jetour（捷途）
+1,燃油车,2026-10,38,6272.0,赛那SIENNA,シエナ,5525,29.88-39.38万,https://www.autohome.com.cn/6272/#pvareaid=6861512,./images/by_series/6272_2915985e.png,https://www.autohome.com.cn/6272/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,39,5179.0,长安CS75PLUS,CS75 Plus,5372,10.89-14.39万,https://www.autohome.com.cn/5179/#pvareaid=6861512,./images/by_series/5179_00cc24d5.png,https://www.autohome.com.cn/5179/#pvareaid=6861512,长安,76.0,長安
+1,燃油车,2026-10,40,771.0,汉兰达,ハイランダー,5032,24.98-32.58万,https://www.autohome.com.cn/771/#pvareaid=6861512,./images/by_series/771_e1df166f.png,https://www.autohome.com.cn/771/#pvareaid=6861512,丰田,3.0,トヨタ
+1,燃油车,2026-10,41,588.0,奔驰C级,Cクラス,4893,29.99-34.56万,https://www.autohome.com.cn/588/#pvareaid=6861512,./images/by_series/588_e372ed03.png,https://www.autohome.com.cn/588/#pvareaid=6861512,奔驰,36.0,Mercedes-Benz
+1,燃油车,2026-10,42,5393.0,皓影,ブリーズ,4727,13.79-17.99万,https://www.autohome.com.cn/5393/#pvareaid=6861512,./images/by_series/5393_17d6451b.png,https://www.autohome.com.cn/5393/#pvareaid=6861512,本田,14.0,ホンダ
+1,燃油车,2026-10,43,3170.0,奥迪A3,A3,4623,16.59-20.99万,https://www.autohome.com.cn/3170/#pvareaid=6861512,./images/by_series/3170_c1122081.png,https://www.autohome.com.cn/3170/#pvareaid=6861512,奥迪,33.0,Audi
+1,燃油车,2026-10,44,6548.0,宝马X5,X5,4394,59.80-74.80万,https://www.autohome.com.cn/6548/#pvareaid=6861512,./images/by_series/6548_26178c20.png,https://www.autohome.com.cn/6548/#pvareaid=6861512,宝马,15.0,BMW
+1,燃油车,2026-10,45,834.0,君越,ラクロス (LaCrosse),4163,20.99-23.99万,https://www.autohome.com.cn/834/#pvareaid=6861512,./images/by_series/834_f1e03a62.png,https://www.autohome.com.cn/834/#pvareaid=6861512,别克,38.0,Buick
+1,燃油车,2026-10,46,2561.0,宝马X1,X1,3904,25.80-28.80万,https://www.autohome.com.cn/2561/#pvareaid=6861512,./images/by_series/2561_61702513.png,https://www.autohome.com.cn/2561/#pvareaid=6861512,宝马,15.0,BMW
+1,燃油车,2026-10,47,6606.0,捷途旅行者,Jetour Traveller,3506,13.99-23.99万,https://www.autohome.com.cn/6606/#pvareaid=6861512,./images/by_series/6606_b5af936b.png,https://www.autohome.com.cn/6606/#pvareaid=6861512,捷途,319.0,Jetour（捷途）
+1,燃油车,2026-10,48,3691.0,传祺GS4,伝祺GS4,3186,8.78-12.58万,https://www.autohome.com.cn/3691/#pvareaid=6861512,./images/by_series/3691_0e9c2f84.png,https://www.autohome.com.cn/3691/#pvareaid=6861512,广汽传祺,82.0,広汽伝祺
+1,燃油车,2026-10,49,7072.0,瑞虎9,Tiggo 9,3168,14.79-20.39万,https://www.autohome.com.cn/7072/#pvareaid=6861512,./images/by_series/7072_a6af04ef.png,https://www.autohome.com.cn/7072/#pvareaid=6861512,奇瑞,26.0,Chery（奇瑞）
+1,燃油车,2026-10,50,5498.0,长安CS55PLUS,CS55 PLUS,2903,9.29-11.79万,https://www.autohome.com.cn/5498/#pvareaid=6861512,./images/by_series/5498_fdc320b1.png,https://www.autohome.com.cn/5498/#pvareaid=6861512,长安,76.0,長安
+456,新能源,2026-10,1,,星愿,Geely Xingyuan,50190,6.48-9.48万,,public/autohome_energy/all/images/456/1_0_星愿.png,,,,
+456,新能源,2026-10,2,,元UP,Atto 2,28514,7.48-11.98万,,public/autohome_energy/all/images/456/2_1_元UP.png,,,,
+456,新能源,2026-10,3,,零跑A10,Leapmotor A10,27247,6.58-9.28万,,public/autohome_energy/all/images/456/3_2_零跑A10.png,,,,
+456,新能源,2026-10,4,,宏光MINIEV,ウーリンMINIEV,24518,3.58-5.58万,,public/autohome_energy/all/images/456/4_3_宏光MINIEV.png,,,,
+456,新能源,2026-10,5,,钛7,レオパード7 (Leopard 7),23663,17.98-23.98万,,public/autohome_energy/all/images/456/5_4_钛7.png,,,,
+456,新能源,2026-10,6,,长安启源Q05,Qiyuan Q05,20022,7.99-11.49万,,public/autohome_energy/all/images/456/6_5_长安启源Q05.png,,,,
+456,新能源,2026-10,7,,奔腾小马,Pony,17887,3.79-5.49万,,public/autohome_energy/all/images/456/7_6_奔腾小马.png,,,,
+456,新能源,2026-10,8,,海豚,ドルフィン (Dolphin),17160,9.98-12.98万,,public/autohome_energy/all/images/456/8_7_海豚.png,,,,
+456,新能源,2026-10,9,,海狮06,シーライオン06 (Sealion 06),16902,12.99-19.98万,,public/autohome_energy/all/images/456/9_8_海狮06.png,,,,
+456,新能源,2026-10,10,,宋Ultra,宋Ultra,16844,12.99-17.99万,,public/autohome_energy/all/images/456/10_9_宋Ultra.png,,,,
+456,新能源,2026-10,11,,小鹏MONA L03,小鹏MONA L03,16563,12.38-15.68万,,public/autohome_energy/all/images/456/11_10_小鹏MONA_L03.png,,,,
+456,新能源,2026-10,12,,MG4,MG4,15503,6.88-10.28万,,public/autohome_energy/all/images/456/12_11_MG4.png,,,,
+456,新能源,2026-10,13,,缤果Pro,缤果Pro,15331,5.68-7.08万,,public/autohome_energy/all/images/456/13_12_缤果Pro.png,,,,
+456,新能源,2026-10,14,,小米澎程N70,小米澎程N70,14545,20.99-23.99万,,public/autohome_energy/all/images/456/14_13_小米澎程N70.png,,,,
+456,新能源,2026-10,15,,AION i60,AION i60,14158,10.28-14.28万,,public/autohome_energy/all/images/456/15_14_AION_i60.png,,,,
+456,新能源,2026-10,16,,QQ3 EV,QQ3 EV,14041,5.89-8.89万,,public/autohome_energy/all/images/456/16_15_QQ3_EV.png,,,,
+456,新能源,2026-10,17,,宋Pro新能源,Sealion 5 DM-i,13928,10.29-13.38万,,public/autohome_energy/all/images/456/17_16_宋Pro新能源.png,,,,
+456,新能源,2026-10,18,,小米SU7,SU7,12954,21.99-30.39万,,public/autohome_energy/all/images/456/18_17_小米SU7.png,,,,
+456,新能源,2026-10,19,,小米澎程N90,小米澎程N90,12587,26.99-29.99万,,public/autohome_energy/all/images/456/19_18_小米澎程N90.png,,,,
+456,新能源,2026-10,20,,MG 07,MG 07,12393,10.89-15.99万,,public/autohome_energy/all/images/456/20_19_MG_07.png,,,,
+456,新能源,2026-10,21,,ID.AURA T6,ID.AURA T6,12032,12.99-16.69万,,public/autohome_energy/all/images/456/21_20_ID_AURA_T6.png,,,,
+456,新能源,2026-10,22,,元PLUS,Atto 3,11954,11.58-14.99万,,public/autohome_energy/all/images/456/22_21_元PLUS.png,,,,
+456,新能源,2026-10,23,,大唐,大唐,11658,23.99-30.99万,,public/autohome_energy/all/images/456/23_22_大唐.png,,,,
+456,新能源,2026-10,24,,深蓝S05,Deepal S05,11411,11.99-15.19万,,public/autohome_energy/all/images/456/24_23_深蓝S05.png,,,,
+456,新能源,2026-10,25,,海豹06,シール06 (Seal 06),11338,9.68-15.59万,,public/autohome_energy/all/images/456/25_24_海豹06.png,,,,
+456,新能源,2026-10,26,,长城H10,長城H10,11006,20.98-23.18万,,public/autohome_energy/all/images/456/26_25_长城H10.png,,,,
+456,新能源,2026-10,27,,零跑C10,C10,10802,12.58-14.28万,,public/autohome_energy/all/images/456/27_26_零跑C10.png,,,,
+456,新能源,2026-10,28,,银河TT,銀河TT,10483,13.99-19.59万,,public/autohome_energy/all/images/456/28_27_银河TT.png,,,,
+456,新能源,2026-10,29,,海鸥,シーガル (Seagull),10134,6.59-9.99万,,public/autohome_energy/all/images/456/29_28_海鸥.png,,,,
+456,新能源,2026-10,30,,长安启源Q06,長安啓源Q06,10105,13.99-16.99万,,public/autohome_energy/all/images/456/30_29_长安启源Q06.png,,,,
+456,新能源,2026-10,31,,小米YU7,YU7,10037,23.35-38.99万,,public/autohome_energy/all/images/456/31_30_小米YU7.png,,,,
+456,新能源,2026-10,32,,理想L6,L6,9727,24.98万,,public/autohome_energy/all/images/456/32_31_理想L6.png,,,,
+456,新能源,2026-10,33,,秦PLUS,Qin PLUS,9546,7.98-17.98万,,public/autohome_energy/all/images/456/33_32_秦PLUS.png,,,,
+456,新能源,2026-10,34,,零跑B10,B10,9399,9.98-14.98万,,public/autohome_energy/all/images/456/34_33_零跑B10.png,,,,
+456,新能源,2026-10,35,,海狮05 DM-i,海獅05 DM-i,9281,9.79-12.79万,,public/autohome_energy/all/images/456/35_34_海狮05_DM-i.png,,,,
+456,新能源,2026-10,36,,零跑A05,零跑A05,9249,6.39-9.09万,,public/autohome_energy/all/images/456/36_35_零跑A05.png,,,,
+456,新能源,2026-10,37,,问界M6,AITO M6,9130,22.98-29.98万,,public/autohome_energy/all/images/456/37_36_问界M6.png,,,,
+456,新能源,2026-10,38,,铂智3X,bZ3X,9101,10.98-15.98万,,public/autohome_energy/all/images/456/38_37_铂智3X.png,,,,
+456,新能源,2026-10,39,,海狮05 EV,シーライオン05 EV (Sealion 05 EV),9033,11.78-16.38万,,public/autohome_energy/all/images/456/39_38_海狮05_EV.png,,,,
+456,新能源,2026-10,40,,蔚来ES8,NIO ES8,8735,38.28-44.68万,,public/autohome_energy/all/images/456/40_39_蔚来ES8.png,,,,
+456,新能源,2026-10,41,,问界M9,AITO M9,8705,47.98-65.98万,,public/autohome_energy/all/images/456/41_40_问界M9.png,,,,
+456,新能源,2026-10,42,,极狐贝塔T1,极狐贝塔T1,8347,6.28-13.08万,,public/autohome_energy/all/images/456/42_41_极狐贝塔T1.png,,,,
+456,新能源,2026-10,43,,极狐 阿尔法T7,极狐 阿尔法T7,8131,13.68-17.28万,,public/autohome_energy/all/images/456/43_42_极狐_阿尔法T7.png,,,,
+456,新能源,2026-10,44,,Model Y,モデルY,7807,26.35-36.90万,,public/autohome_energy/all/images/456/44_43_Model_Y.png,,,,
+456,新能源,2026-10,45,,缤果S,Binguo S,7800,6.68-8.98万,,public/autohome_energy/all/images/456/45_44_缤果S.png,,,,
+456,新能源,2026-10,46,,firefly萤火虫,firefly,7635,11.98-15.03万,,public/autohome_energy/all/images/456/46_45_firefly萤火虫.png,,,,
+456,新能源,2026-10,47,,华境S,华境S,7507,15.98-20.68万,,public/autohome_energy/all/images/456/47_46_华境S.png,,,,
+456,新能源,2026-10,48,,小鹏MONA M03,MONA M03,7160,11.98-15.18万,,public/autohome_energy/all/images/456/48_47_小鹏MONA_M03.png,,,,
+456,新能源,2026-10,49,,秦MAX,秦MAX,7132,9.99-14.68万,,public/autohome_energy/all/images/456/49_48_秦MAX.png,,,,
+456,新能源,2026-10,50,,ID. ERA 5S,ID. ERA 5S,7100,11.99-14.99万,,public/autohome_energy/all/images/456/50_49_ID_ERA_5S.png,,,,
+4,纯电动,2026-10,1,,星愿,Geely Xingyuan,50190,6.48-9.48万,,public/autohome_energy/all/images/4/1_0_星愿.png,,,,
+4,纯电动,2026-10,2,,元UP,Atto 2,28514,7.48-11.98万,,public/autohome_energy/all/images/4/2_1_元UP.png,,,,
+4,纯电动,2026-10,3,,零跑A10,Leapmotor A10,27247,6.58-9.28万,,public/autohome_energy/all/images/4/3_2_零跑A10.png,,,,
+4,纯电动,2026-10,4,,宏光MINIEV,ウーリンMINIEV,24518,3.58-5.58万,,public/autohome_energy/all/images/4/4_3_宏光MINIEV.png,,,,
+4,纯电动,2026-10,5,,长安启源Q05,Qiyuan Q05,20022,7.99-11.49万,,public/autohome_energy/all/images/4/5_4_长安启源Q05.png,,,,
+4,纯电动,2026-10,6,,奔腾小马,Pony,17887,3.79-5.49万,,public/autohome_energy/all/images/4/6_5_奔腾小马.png,,,,
+4,纯电动,2026-10,7,,海豚,ドルフィン (Dolphin),17160,9.98-12.98万,,public/autohome_energy/all/images/4/7_6_海豚.png,,,,
+4,纯电动,2026-10,8,,MG4,MG4,15503,6.88-10.28万,,public/autohome_energy/all/images/4/8_7_MG4.png,,,,
+4,纯电动,2026-10,9,,缤果Pro,缤果Pro,15331,5.68-7.08万,,public/autohome_energy/all/images/4/9_8_缤果Pro.png,,,,
+4,纯电动,2026-10,10,,小鹏MONA L03,小鹏MONA L03,14885,12.38-15.68万,,public/autohome_energy/all/images/4/10_9_小鹏MONA_L03.png,,,,
+4,纯电动,2026-10,11,,QQ3 EV,QQ3 EV,14041,5.89-8.89万,,public/autohome_energy/all/images/4/11_10_QQ3_EV.png,,,,
+4,纯电动,2026-10,12,,小米SU7,SU7,12954,21.99-30.39万,,public/autohome_energy/all/images/4/12_11_小米SU7.png,,,,
+4,纯电动,2026-10,13,,AION i60,AION i60,12296,10.28-14.28万,,public/autohome_energy/all/images/4/13_12_AION_i60.png,,,,
+4,纯电动,2026-10,14,,钛7,レオパード7 (Leopard 7),12152,17.98-23.98万,,public/autohome_energy/all/images/4/14_13_钛7.png,,,,
+4,纯电动,2026-10,15,,ID.AURA T6,ID.AURA T6,12032,12.99-16.69万,,public/autohome_energy/all/images/4/15_14_ID_AURA_T6.png,,,,
+4,纯电动,2026-10,16,,元PLUS,Atto 3,11954,11.58-14.99万,,public/autohome_energy/all/images/4/16_15_元PLUS.png,,,,
+4,纯电动,2026-10,17,,大唐,大唐,11658,23.99-30.99万,,public/autohome_energy/all/images/4/17_16_大唐.png,,,,
+4,纯电动,2026-10,18,,深蓝S05,Deepal S05,11411,11.99-15.19万,,public/autohome_energy/all/images/4/18_17_深蓝S05.png,,,,
+4,纯电动,2026-10,19,,MG 07,MG 07,11166,10.89-15.99万,,public/autohome_energy/all/images/4/19_18_MG_07.png,,,,
+4,纯电动,2026-10,20,,海狮06,シーライオン06 (Sealion 06),11085,12.99-19.98万,,public/autohome_energy/all/images/4/20_19_海狮06.png,,,,
+4,纯电动,2026-10,21,,银河TT,銀河TT,10483,13.99-19.59万,,public/autohome_energy/all/images/4/21_20_银河TT.png,,,,
+4,纯电动,2026-10,22,,海鸥,シーガル (Seagull),10134,6.59-9.99万,,public/autohome_energy/all/images/4/22_21_海鸥.png,,,,
+4,纯电动,2026-10,23,,小米YU7,YU7,10037,23.35-38.99万,,public/autohome_energy/all/images/4/23_22_小米YU7.png,,,,
+4,纯电动,2026-10,24,,长安启源Q06,長安啓源Q06,10024,13.99-16.99万,,public/autohome_energy/all/images/4/24_23_长安启源Q06.png,,,,
+4,纯电动,2026-10,25,,零跑B10,B10,9399,9.98-14.98万,,public/autohome_energy/all/images/4/25_24_零跑B10.png,,,,
+4,纯电动,2026-10,26,,零跑A05,零跑A05,9249,6.39-9.09万,,public/autohome_energy/all/images/4/26_25_零跑A05.png,,,,
+4,纯电动,2026-10,27,,铂智3X,bZ3X,9101,10.98-15.98万,,public/autohome_energy/all/images/4/27_26_铂智3X.png,,,,
+4,纯电动,2026-10,28,,海狮05 EV,シーライオン05 EV (Sealion 05 EV),9033,11.78-16.38万,,public/autohome_energy/all/images/4/28_27_海狮05_EV.png,,,,
+4,纯电动,2026-10,29,,蔚来ES8,NIO ES8,8735,38.28-44.68万,,public/autohome_energy/all/images/4/29_28_蔚来ES8.png,,,,
+4,纯电动,2026-10,30,,宋Ultra,宋Ultra,8436,12.99-17.99万,,public/autohome_energy/all/images/4/30_29_宋Ultra.png,,,,
+4,纯电动,2026-10,31,,极狐贝塔T1,极狐贝塔T1,8347,6.28-13.08万,,public/autohome_energy/all/images/4/31_30_极狐贝塔T1.png,,,,
+4,纯电动,2026-10,32,,极狐 阿尔法T7,极狐 阿尔法T7,7845,13.68-17.28万,,public/autohome_energy/all/images/4/32_31_极狐_阿尔法T7.png,,,,
+4,纯电动,2026-10,33,,Model Y,モデルY,7807,26.35-36.90万,,public/autohome_energy/all/images/4/33_32_Model_Y.png,,,,
+4,纯电动,2026-10,34,,缤果S,Binguo S,7800,6.68-8.98万,,public/autohome_energy/all/images/4/34_33_缤果S.png,,,,
+4,纯电动,2026-10,35,,firefly萤火虫,firefly,7635,11.98-15.03万,,public/autohome_energy/all/images/4/35_34_firefly萤火虫.png,,,,
+4,纯电动,2026-10,36,,小鹏MONA M03,MONA M03,7160,11.98-15.18万,,public/autohome_energy/all/images/4/36_35_小鹏MONA_M03.png,,,,
+4,纯电动,2026-10,37,,问界M6,AITO M6,7089,22.98-29.98万,,public/autohome_energy/all/images/4/37_36_问界M6.png,,,,
+4,纯电动,2026-10,38,,极狐贝塔S3,极狐贝塔S3,6892,8.48-16.28万,,public/autohome_energy/all/images/4/38_37_极狐贝塔S3.png,,,,
+4,纯电动,2026-10,39,,蔚来ES9,蔚来ES9,6690,49.80-62.80万,,public/autohome_energy/all/images/4/39_38_蔚来ES9.png,,,,
+4,纯电动,2026-10,40,,银河E5,Galaxy E5,6214,10.78-17.98万,,public/autohome_energy/all/images/4/40_39_银河E5.png,,,,
+4,纯电动,2026-10,41,,AION RT,AION RT,5914,9.98-12.88万,,public/autohome_energy/all/images/4/41_40_AION_RT.png,,,,
+4,纯电动,2026-10,42,,海豹06,シール06 (Seal 06),5872,9.68-15.59万,,public/autohome_energy/all/images/4/42_41_海豹06.png,,,,
+4,纯电动,2026-10,43,,风云A9,風雲A9,5540,10.99-16.19万,,public/autohome_energy/all/images/4/43_42_风云A9.png,,,,
+4,纯电动,2026-10,44,,理想i9,理想i9,5460,36.98万,,public/autohome_energy/all/images/4/44_43_理想i9.png,,,,
+4,纯电动,2026-10,45,,长安Lumin,Lumin,5224,3.79-6.59万,,public/autohome_energy/all/images/4/45_44_长安Lumin.png,,,,
+4,纯电动,2026-10,46,,智己LS6,IM LS6,5170,20.29-26.49万,,public/autohome_energy/all/images/4/46_45_智己LS6.png,,,,
+4,纯电动,2026-10,47,,领克20,领克20,5082,12.38-16.38万,,public/autohome_energy/all/images/4/47_46_领克20.png,,,,
+4,纯电动,2026-10,48,,风云T7,風雲T7,4931,9.79-12.99万,,public/autohome_energy/all/images/4/48_47_风云T7.png,,,,
+4,纯电动,2026-10,49,,方程S,方程S,4567,18.99-23.99万,,public/autohome_energy/all/images/4/49_48_方程S.png,,,,
+4,纯电动,2026-10,50,,海豹08,海豹08,4535,19.69-23.99万,,public/autohome_energy/all/images/4/50_49_海豹08.png,,,,
+5,插电混动,2026-10,1,,宋Pro新能源,Sealion 5 DM-i,13928,10.29-13.38万,,public/autohome_energy/all/images/5/1_0_宋Pro新能源.png,,,,
+5,插电混动,2026-10,2,,钛7,レオパード7 (Leopard 7),11511,17.98-23.98万,,public/autohome_energy/all/images/5/2_1_钛7.png,,,,
+5,插电混动,2026-10,3,,长城H10,長城H10,11006,20.98-23.18万,,public/autohome_energy/all/images/5/3_2_长城H10.png,,,,
+5,插电混动,2026-10,4,,海狮05 DM-i,海獅05 DM-i,9281,9.79-12.79万,,public/autohome_energy/all/images/5/4_3_海狮05_DM-i.png,,,,
+5,插电混动,2026-10,5,,宋Ultra,宋Ultra,8408,12.99-17.99万,,public/autohome_energy/all/images/5/5_4_宋Ultra.png,,,,
+5,插电混动,2026-10,6,,华境S,华境S,7507,15.98-20.68万,,public/autohome_energy/all/images/5/6_5_华境S.png,,,,
+5,插电混动,2026-10,7,,ID. ERA 5S,ID. ERA 5S,7100,11.99-14.99万,,public/autohome_energy/all/images/5/7_6_ID_ERA_5S.png,,,,
+5,插电混动,2026-10,8,,秦PLUS,Qin PLUS,6802,7.98-17.98万,,public/autohome_energy/all/images/5/8_7_秦PLUS.png,,,,
+5,插电混动,2026-10,9,,哈弗猛龙新能源,Raptor,6501,17.38-20.88万,,public/autohome_energy/all/images/5/9_8_哈弗猛龙新能源.png,,,,
+5,插电混动,2026-10,10,,星光L,星光L,6175,11.28-13.58万,,public/autohome_energy/all/images/5/10_9_星光L.png,,,,
+5,插电混动,2026-10,11,,魏牌 高山新能源,魏牌 高山新能源,6103,27.28-38.58万,,public/autohome_energy/all/images/5/11_10_魏牌_高山新能源.png,,,,
+5,插电混动,2026-10,12,,海狮06,シーライオン06 (Sealion 06),5817,12.99-19.98万,,public/autohome_energy/all/images/5/12_11_海狮06.png,,,,
+5,插电混动,2026-10,13,,海豹06,シール06 (Seal 06),5466,9.68-15.59万,,public/autohome_energy/all/images/5/13_12_海豹06.png,,,,
+5,插电混动,2026-10,14,,别克至境E7,别克至境E7,5005,15.99-19.99万,,public/autohome_energy/all/images/5/14_13_别克至境E7.png,,,,
+5,插电混动,2026-10,15,,海豹05 DM-i,シール05 DM-i (Seal 05 DM-i),4672,7.98-11.58万,,public/autohome_energy/all/images/5/15_14_海豹05_DM-i.png,,,,
+5,插电混动,2026-10,16,,银河M7,銀河M7,4652,11.98-14.78万,,public/autohome_energy/all/images/5/16_15_银河M7.png,,,,
+5,插电混动,2026-10,17,,岚图梦想家,Lantu Dreamer,4472,32.99-70.99万,,public/autohome_energy/all/images/5/17_16_岚图梦想家.png,,,,
+5,插电混动,2026-10,18,,银河战舰700,銀河戦艦700,4379,17.98-36.98万,,public/autohome_energy/all/images/5/18_17_银河战舰700.png,,,,
+5,插电混动,2026-10,19,,极氪9X,Zeekr 9X,4356,46.59-59.99万,,public/autohome_energy/all/images/5/19_18_极氪9X.png,,,,
+5,插电混动,2026-10,20,,别克GL8新能源,GL8 EV,4207,22.99-36.99万,,public/autohome_energy/all/images/5/20_19_别克GL8新能源.png,,,,
+5,插电混动,2026-10,21,,领克07GT,领克07GT,4043,15.78-17.78万,,public/autohome_energy/all/images/5/21_20_领克07GT.png,,,,
+5,插电混动,2026-10,22,,风云T9L,風雲T9L,3623,12.99-18.69万,,public/autohome_energy/all/images/5/22_21_风云T9L.png,,,,
+5,插电混动,2026-10,23,,秦MAX,秦MAX,3497,9.99-14.68万,,public/autohome_energy/all/images/5/23_22_秦MAX.png,,,,
+5,插电混动,2026-10,24,,腾势N8L,Denza N8L,3479,29.98-34.98万,,public/autohome_energy/all/images/5/24_23_腾势N8L.png,,,,
+5,插电混动,2026-10,25,,坦克300新能源,坦克300新能源,3469,24.98万,,public/autohome_energy/all/images/5/25_24_坦克300新能源.png,,,,
+5,插电混动,2026-10,26,,银河星耀7,銀河星耀7,3457,10.88-13.98万,,public/autohome_energy/all/images/5/26_25_银河星耀7.png,,,,
+5,插电混动,2026-10,27,,腾势D9,デンツァD9 (Denza D9),3136,30.98-60.06万,,public/autohome_energy/all/images/5/27_26_腾势D9.png,,,,
+5,插电混动,2026-10,28,,捷途山海L7 PLUS,Jetour Shanhai L7 Plus,2567,11.99-17.59万,,public/autohome_energy/all/images/5/28_27_捷途山海L7_PLUS.png,,,,
+5,插电混动,2026-10,29,,极氪8X,极氪8X,2381,35.68-50.08万,,public/autohome_energy/all/images/5/29_28_极氪8X.png,,,,
+5,插电混动,2026-10,30,,长安启源Q07,Qiyuan Q07,2252,12.98-17.98万,,public/autohome_energy/all/images/5/30_29_长安启源Q07.png,,,,
+5,插电混动,2026-10,31,,银河星耀6,Galaxy Xingyao 6,2233,7.48-12.08万,,public/autohome_energy/all/images/5/31_30_银河星耀6.png,,,,
+5,插电混动,2026-10,32,,豹5,Leopard 5,2213,23.98-32.98万,,public/autohome_energy/all/images/5/32_31_豹5.png,,,,
+5,插电混动,2026-10,33,,银河A7 EM,銀河A7 EM,2113,8.98-13.18万,,public/autohome_energy/all/images/5/33_32_银河A7_EM.png,,,,
+5,插电混动,2026-10,34,,传祺E8 PHEV,伝祺E8 PHEV,2084,18.98-23.88万,,public/autohome_energy/all/images/5/34_33_传祺E8_PHEV.png,,,,
+5,插电混动,2026-10,35,,凯迪拉克XT5 PHEV,凯迪拉克XT5 PHEV,2021,29.00-35.00万,,public/autohome_energy/all/images/5/35_34_凯迪拉克XT5_PHEV.png,,,,
+5,插电混动,2026-10,36,,银河M9,Galaxy M9,1969,18.38-26.98万,,public/autohome_energy/all/images/5/36_35_银河M9.png,,,,
+5,插电混动,2026-10,37,,传祺向往S7,Trumpchi Xiangwang S7,1944,14.98-22.98万,,public/autohome_energy/all/images/5/37_36_传祺向往S7.png,,,,
+5,插电混动,2026-10,38,,坦克400新能源,Tank 400 Hi4-T,1800,28.58-31.98万,,public/autohome_energy/all/images/5/38_37_坦克400新能源.png,,,,
+5,插电混动,2026-10,39,,红旗HS6 PHEV,Hongqi HS6 PHEV,1755,17.88-22.88万,,public/autohome_energy/all/images/5/39_38_红旗HS6_PHEV.png,,,,
+5,插电混动,2026-10,40,,坦克500新能源,Tank 500 Hi4-T,1695,33.50-38.50万,,public/autohome_energy/all/images/5/40_39_坦克500新能源.png,,,,
+5,插电混动,2026-10,41,,银河星耀8,Galaxy X8,1682,13.58-17.28万,,public/autohome_energy/all/images/5/41_40_银河星耀8.png,,,,
+5,插电混动,2026-10,42,,红旗HS3 PHEV,Hongqi HS3 PHEV,1561,15.98-16.18万,,public/autohome_energy/all/images/5/42_41_红旗HS3_PHEV.png,,,,
+5,插电混动,2026-10,43,,秦L,Qin L,1553,9.68-15.58万,,public/autohome_energy/all/images/5/43_42_秦L.png,,,,
+5,插电混动,2026-10,44,,沃尔沃XC70插电式混动,XC70 PHEV,1522,41.19-49.69万,,public/autohome_energy/all/images/5/44_43_沃尔沃XC70插电式混动.png,,,,
+5,插电混动,2026-10,45,,领克08 EM-P,Lynk & Co 08 EM-P,1487,17.18-22.88万,,public/autohome_energy/all/images/5/45_44_领克08_EM-P.png,,,,
+5,插电混动,2026-10,46,,日产N6,N6,1347,10.39-12.99万,,public/autohome_energy/all/images/5/46_45_日产N6.png,,,,
+5,插电混动,2026-10,47,,领克10,Lynk & Co 10,1342,17.58-24.99万,,public/autohome_energy/all/images/5/47_46_领克10.png,,,,
+5,插电混动,2026-10,48,,MG 07,MG 07,1227,10.89-15.99万,,public/autohome_energy/all/images/5/48_47_MG_07.png,,,,
+5,插电混动,2026-10,49,,捷途旅行者C-DM,捷途旅行者C-DM,1199,15.99-23.99万,,public/autohome_energy/all/images/5/49_48_捷途旅行者C-DM.png,,,,
+5,插电混动,2026-10,50,,银河星舰7,Galaxy Starship 7,1151,10.18-12.98万,,public/autohome_energy/all/images/5/50_49_银河星舰7.png,,,,
+6,混动增程,2026-10,1,,小米澎程N70,小米澎程N70,14545,20.99-23.99万,,public/autohome_energy/all/images/6/1_0_小米澎程N70.png,,,,
+6,混动增程,2026-10,2,,小米澎程N90,小米澎程N90,12587,26.99-29.99万,,public/autohome_energy/all/images/6/2_1_小米澎程N90.png,,,,
+6,混动增程,2026-10,3,,理想L6,L6,9727,24.98万,,public/autohome_energy/all/images/6/3_2_理想L6.png,,,,
+6,混动增程,2026-10,4,,零跑C10,C10,9330,12.58-14.28万,,public/autohome_energy/all/images/6/4_3_零跑C10.png,,,,
+6,混动增程,2026-10,5,,问界M9,AITO M9,6651,47.98-65.98万,,public/autohome_energy/all/images/6/5_4_问界M9.png,,,,
+6,混动增程,2026-10,6,,马自达EZ-60,EZ-60,5155,11.99-17.29万,,public/autohome_energy/all/images/6/6_5_马自达EZ-60.png,,,,
+6,混动增程,2026-10,7,,零跑C11,C11,5151,14.38-15.98万,,public/autohome_energy/all/images/6/7_6_零跑C11.png,,,,
+6,混动增程,2026-10,8,,零跑C16,C16,4955,14.58-16.98万,,public/autohome_energy/all/images/6/8_7_零跑C16.png,,,,
+6,混动增程,2026-10,9,,北京越野BJ40增程,BAIC BJ40 EREV,4099,17.98-27.98万,,public/autohome_energy/all/images/6/9_8_北京越野BJ40增程.png,,,,
+6,混动增程,2026-10,10,,理想L8,Li Auto L8,3934,36.98-42.98万,,public/autohome_energy/all/images/6/10_9_理想L8.png,,,,
+6,混动增程,2026-10,11,,ID. ERA 8X,ID. ERA 8X,3500,22.68-28.98万,,public/autohome_energy/all/images/6/11_10_ID_ERA_8X.png,,,,
+6,混动增程,2026-10,12,,马自达EZ-6,EZ-6,2454,11.98-16.28万,,public/autohome_energy/all/images/6/12_11_马自达EZ-6.png,,,,
+6,混动增程,2026-10,13,,小鹏GX,小鹏GX,2453,27.98-35.98万,,public/autohome_energy/all/images/6/13_12_小鹏GX.png,,,,
+6,混动增程,2026-10,14,,智界V9,智界V9,2263,38.98-51.98万,,public/autohome_energy/all/images/6/14_13_智界V9.png,,,,
+6,混动增程,2026-10,15,,问界M7,Wenjie M7,2043,27.98-38.98万,,public/autohome_energy/all/images/6/15_14_问界M7.png,,,,
+6,混动增程,2026-10,16,,问界M6,AITO M6,2041,22.98-29.98万,,public/autohome_energy/all/images/6/16_15_问界M6.png,,,,
+6,混动增程,2026-10,17,,AION i60,AION i60,1862,10.28-14.28万,,public/autohome_energy/all/images/6/17_16_AION_i60.png,,,,
+6,混动增程,2026-10,18,,零跑D19,零跑D19,1851,21.98-26.98万,,public/autohome_energy/all/images/6/18_17_零跑D19.png,,,,
+6,混动增程,2026-10,19,,小鹏G9L,小鹏G9L,1772,24.18-31.98万,,public/autohome_energy/all/images/6/19_18_小鹏G9L.png,,,,
+6,混动增程,2026-10,20,,小鹏MONA L03,小鹏MONA L03,1678,12.38-15.68万,,public/autohome_energy/all/images/6/20_19_小鹏MONA_L03.png,,,,
+6,混动增程,2026-10,21,,理想L9,Li Auto L9,1677,45.98-50.98万,,public/autohome_energy/all/images/6/21_20_理想L9.png,,,,
+6,混动增程,2026-10,22,,享界G9,享界G9,1449,42.98-54.98万,,public/autohome_energy/all/images/6/22_21_享界G9.png,,,,
+6,混动增程,2026-10,23,,iCAR V27,iCAR V27,1235,16.98-20.38万,,public/autohome_energy/all/images/6/23_22_iCAR_V27.png,,,,
+6,混动增程,2026-10,24,,日产NX8,日产NX8,1129,15.99-20.99万,,public/autohome_energy/all/images/6/24_23_日产NX8.png,,,,
+6,混动增程,2026-10,25,,尚界H5,Shangjie H5,904,15.98-19.98万,,public/autohome_energy/all/images/6/25_24_尚界H5.png,,,,
+6,混动增程,2026-10,26,,智己LS8,IM LS8,709,24.98-31.18万,,public/autohome_energy/all/images/6/26_25_智己LS8.png,,,,
+6,混动增程,2026-10,27,,风云T11,Fengyun T11,693,18.99-25.99万,,public/autohome_energy/all/images/6/27_26_风云T11.png,,,,
+6,混动增程,2026-10,28,,ID. ERA 9X,ID. ERA 9X,646,30.98-35.98万,,public/autohome_energy/all/images/6/28_27_ID_ERA_9X.png,,,,
+6,混动增程,2026-10,29,,岚图FREE,Voyah Free,632,21.99-27.99万,,public/autohome_energy/all/images/6/29_28_岚图FREE.png,,,,
+6,混动增程,2026-10,30,,奕派M8,奕派M8,605,17.98-21.98万,,public/autohome_energy/all/images/6/30_29_奕派M8.png,,,,
+6,混动增程,2026-10,31,,尊界V800,尊界V800,605,76.60-101.60万,,public/autohome_energy/all/images/6/31_30_尊界V800.png,,,,
+6,混动增程,2026-10,32,,智己LS9,IM LS9,566,33.28-37.98万,,public/autohome_energy/all/images/6/32_31_智己LS9.png,,,,
+6,混动增程,2026-10,33,,五菱宏光新能源,Wuling Hongguang EV,517,6.88-7.98万,,public/autohome_energy/all/images/6/33_32_五菱宏光新能源.png,,,,
+6,混动增程,2026-10,34,,问界M8,AITO M8,448,35.98-45.98万,,public/autohome_energy/all/images/6/34_33_问界M8.png,,,,
+6,混动增程,2026-10,35,,阿维塔07,Avatr 07,356,21.99-28.99万,,public/autohome_energy/all/images/6/35_34_阿维塔07.png,,,,
+6,混动增程,2026-10,36,,小鹏X9,X9,348,30.98-36.98万,,public/autohome_energy/all/images/6/36_35_小鹏X9.png,,,,
+6,混动增程,2026-10,37,,别克至境L7,Envista L7,297,17.39-21.99万,,public/autohome_energy/all/images/6/37_36_别克至境L7.png,,,,
+6,混动增程,2026-10,38,,极狐 阿尔法T7,极狐 阿尔法T7,286,13.68-17.28万,,public/autohome_energy/all/images/6/38_37_极狐_阿尔法T7.png,,,,
+6,混动增程,2026-10,39,,享界S9T,Xiangjie S9T,269,31.98-37.98万,,public/autohome_energy/all/images/6/39_38_享界S9T.png,,,,
+6,混动增程,2026-10,40,,零跑D99,零跑D99,262,24.98-33.98万,,public/autohome_energy/all/images/6/40_39_零跑D99.png,,,,
+6,混动增程,2026-10,41,,长安启源A07,Qiyuan A07,251,13.99-16.59万,,public/autohome_energy/all/images/6/41_40_长安启源A07.png,,,,
+6,混动增程,2026-10,42,,深蓝S07,Deepal S07,250,15.59-17.69万,,public/autohome_energy/all/images/6/42_41_深蓝S07.png,,,,
+6,混动增程,2026-10,43,,iCAR V25,iCAR V25,220,13.98-17.58万,,public/autohome_energy/all/images/6/43_42_iCAR_V25.png,,,,
+6,混动增程,2026-10,44,,尊界S800,Zunzhe S800,219,72.80-138.80万,,public/autohome_energy/all/images/6/44_43_尊界S800.png,,,,
+6,混动增程,2026-10,45,,享界S9,Xiangjie S9,193,31.98-37.98万,,public/autohome_energy/all/images/6/45_44_享界S9.png,,,,
+6,混动增程,2026-10,46,,深蓝G318,Deepal G318,187,18.59-23.98万,,public/autohome_energy/all/images/6/46_45_深蓝G318.png,,,,
+6,混动增程,2026-10,47,,尊界V680,尊界V680,185,64.80万,,public/autohome_energy/all/images/6/47_46_尊界V680.png,,,,
+6,混动增程,2026-10,48,,博越REV,Boyue REV,165,11.39-12.69万,,public/autohome_energy/all/images/6/48_47_博越REV.png,,,,
+6,混动增程,2026-10,49,,红旗G919,紅旗G919,163,34.98-42.98万,,public/autohome_energy/all/images/6/49_48_红旗G919.png,,,,
+6,混动增程,2026-10,50,,星途EX7,星途EX7,134,19.99-26.39万,,public/autohome_energy/all/images/6/50_49_星途EX7.png,,,,

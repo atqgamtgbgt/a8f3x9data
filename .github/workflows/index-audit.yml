@@ -10,6 +10,8 @@ on:
       - tools/localize_additional_text.py
       - tools/extract_info_registry.py
       - js/info-registry.js
+      - js/series-history.js
+      - tools/extract_series_history.py
       - .github/workflows/index-audit.yml
   pull_request:
     paths:
@@ -19,6 +21,8 @@ on:
       - tools/localize_additional_text.py
       - tools/extract_info_registry.py
       - js/info-registry.js
+      - js/series-history.js
+      - tools/extract_series_history.py
       - .github/workflows/index-audit.yml
   workflow_dispatch:
 
@@ -41,5 +45,7 @@ jobs:
         run: |
           python tools/extract_info_registry.py --check
           node --check js/info-registry.js
+          python tools/extract_series_history.py --check
+          node --check js/series-history.js
       - name: Audit main page JavaScript and localization
         run: node tools/audit_index_html.js

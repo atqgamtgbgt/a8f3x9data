@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-11T03:24:11+00:00",
- "total": 229,
+ "updated_at": "2026-11-11T14:22:47+00:00",
+ "total": 230,
  "articles": [
+  {
+   "id": "1100207933",
+   "title": "车市扫描-2026年43期（11月1日-11月8日）",
+   "published_at": "2026-11-11T17:05+08:00",
+   "url": "https://www.sohu.com/a/1100207933_115312",
+   "topic": "market_scan",
+   "topic_label": "車市スキャン（週次）",
+   "path": "cds/articles/2026/11/1100207933",
+   "image_count": 11,
+   "images_saved": 11,
+   "text_chars": 9078,
+   "lead": "主要信息源自乘联分会每日新闻等  中国汽车流通协会  乘用车市场信息联席分会（乘联分会）  网站：http://www.cpcaauto.com  一、本周车市概述1.2026年11月全国乘用车市场零售相对平稳  【2026年11月1-8日乘联会市场分析要闻】  11月1-8日全国乘用车厂家批发33.3万辆，同比去年同",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1100207933/img/01.jpg",
+   "fetched_at": "2026-11-11T14:22:45+00:00"
+  },
   {
    "id": "1099395111",
    "title": "【月度分析】2026年10月份全国乘用车市场分析",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1074901408/img/01.jpg",
    "fetched_at": "2026-10-11T03:29:16+00:00"
-  },
-  {
-   "id": "1073940327",
-   "title": "2026年8月全国乘用车市场运行特征分析",
-   "published_at": "2026-09-09T19:32+08:00",
-   "url": "https://www.sohu.com/a/1073940327_115312",
-   "topic": "market",
-   "topic_label": "乗用車市場",
-   "path": "cds/articles/2026/09/1073940327",
-   "image_count": 23,
-   "images_saved": 23,
-   "text_chars": 2930,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年8月全国乘用车市场零售154.1万辆，同比下降23.6%，环比增长5.5%；今年以来累计零售1,171.6万辆，同比下降20.7%。8月国内乘用车市场呈现“总量弱修复、环比走强、结构极致分化”的运行态势，淡季尾部阶段正在“筑底蓄力”，行业结构性调整进一",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1073940327/img/01.jpg",
-   "fetched_at": "2026-10-11T03:29:36+00:00"
   }
  ]
 }

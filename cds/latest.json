@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-12T03:24:12+00:00",
- "total": 230,
+ "updated_at": "2026-11-12T14:23:40+00:00",
+ "total": 231,
  "articles": [
+  {
+   "id": "1100651355",
+   "title": "2026年10月乘用车市场价格段跟踪",
+   "published_at": "2026-11-12T16:30+08:00",
+   "url": "https://www.sohu.com/a/1100651355_115312",
+   "topic": "price",
+   "topic_label": "価格帯",
+   "path": "cds/articles/2026/11/1100651355",
+   "image_count": 8,
+   "images_saved": 8,
+   "text_chars": 2743,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  新能源渗透率是高低两端最高，A级最低。10月各类级别市场的新能源渗透率均超50%。近期新能源车渗透率最高的是小车，10月的微型车新能源渗透率100%，A0级小型车新能源达到91%，C级车新能源渗透率73%，B级新能源渗透率69%，A级的新能源提升较好，10月渗透",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1100651355/img/01.jpg",
+   "fetched_at": "2026-11-12T14:23:39+00:00"
+  },
   {
    "id": "1100207933",
    "title": "车市扫描-2026年43期（11月1日-11月8日）",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1075225918/img/01.jpg",
    "fetched_at": "2026-10-11T03:29:10+00:00"
-  },
-  {
-   "id": "1074901408",
-   "title": "2030 汽车强国必成——",
-   "published_at": "2026-09-11T18:21+08:00",
-   "url": "https://www.sohu.com/a/1074901408_115312",
-   "topic": "other",
-   "topic_label": "その他",
-   "path": "cds/articles/2026/09/1074901408",
-   "image_count": 7,
-   "images_saved": 7,
-   "text_chars": 3620,
-   "lead": "9月11日，工业和信息化部等九部门联合印发《智能网联新能源汽车产业发展“十五五”规划》，提出到2030年进入世界汽车强国行列，新能源乘用车、商用车新车销量占比分别达到70%、40%，具备自动驾驶功能的汽车实现规模应用，搭载自动驾驶系统车辆的安全性能大幅超过人类驾驶员。三大亮点：安全目标首次硬性化，为智驾商用划定底线；产",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1074901408/img/01.jpg",
-   "fetched_at": "2026-10-11T03:29:16+00:00"
   }
  ]
 }

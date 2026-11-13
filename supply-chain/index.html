@@ -87,6 +87,9 @@ th { font-weight: 600; color: var(--text-2); white-space: nowrap; }
 td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 th button.sort { font: inherit; background: none; border: 0; color: inherit; cursor: pointer; padding: 0; }
 .tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -4px; padding: 0 4px; }
+/* 指標名の列が1文字ずつ折り返さないように（スマホでは表を横にスクロールし、先頭列は固定） */
+.tablewrap th:first-child, .tablewrap td:first-child { min-width: 7.5em; }
+#panel .tablewrap th:first-child, #panel .tablewrap td:first-child { min-width: 10em; position: sticky; left: 0; background: var(--card); z-index: 1; }
 .linkbtn { font: inherit; background: none; border: 0; padding: 0; color: var(--link); cursor: pointer;
   text-align: left; text-decoration: underline; text-underline-offset: 2px; }
 .muted { color: var(--muted); }

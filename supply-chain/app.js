@@ -317,7 +317,11 @@
       if (isNum(r.a)) g.appendChild(s('circle', { cx: X(r.a), cy: y, r: 4, fill: 'var(--card)', stroke: color, 'stroke-width': 2 }));
       if (isNum(r.b)) {
         g.appendChild(s('circle', { cx: X(r.b), cy: y, r: 5, fill: color, stroke: 'var(--card)', 'stroke-width': 2 }));
-        g.appendChild(s('text', { x: Math.max(X(r.a ?? r.b), X(r.b)) + 10, y: y + 4, 'font-size': 11, fill: 'var(--text-2)', text: r.b.toFixed(1) + (cfg.unit || '') }));
+        // 値のラベルは塗りの点（新しい年）の外側に置く。下がった行は左側（左端に余白がなければ右端の外）
+        const txt = r.b.toFixed(1) + (cfg.unit || '');
+        const left = isNum(r.a) && r.b < r.a && X(r.b) - 10 - txt.length * 6.5 > L;
+        g.appendChild(s('text', { x: left ? X(r.b) - 10 : Math.max(X(r.a ?? r.b), X(r.b)) + 10, y: y + 4, 'font-size': 11,
+          'text-anchor': left ? 'end' : 'start', fill: 'var(--text-2)', text: txt }));
       }
       g.appendChild(s('rect', { x: 0, y: y - rowH / 2, width: W, height: rowH, fill: 'transparent' }));
       bindTip(g, () => [h('div', null, r.label), h('div', null, cfg.aLabel + '：', h('b', null, pct(r.a))), h('div', null, cfg.bLabel + '：', h('b', null, pct(r.b))), r.n ? h('div', { class: 'muted' }, r.n) : null]);
@@ -793,8 +797,8 @@
         { label: '一覧で確認', num: true, get: i => String(i.listed_count) }, { label: '財務を取得', num: true, get: i => String(i.with_finance) }], INDEX.industries),
       h('h3', null, 'Gasgoo ADAS記事の取得状況'),
       table([{ label: '記事', get: a => h('a', { href: a.url, target: '_blank', rel: 'noopener' }, a.title || a.url) },
-        { label: '版', get: a => a.language === 'en' ? '英語' : '中国語' },
-        { label: '数値', get: a => a.extraction === 'text_lines' ? '本文から ' + a.rows + '行' : a.extraction === 'image_only' ? '画像のみ（未抽出）' : '数値なし' }],
+        { label: '版', get: a => h('span', { style: { whiteSpace: 'nowrap' } }, a.language === 'en' ? '英語' : '中国語') },
+        { label: '数値', get: a => h('span', { style: { whiteSpace: 'nowrap' } }, a.extraction === 'text_lines' ? '本文から ' + a.rows + '行' : a.extraction === 'image_only' ? '画像のみ（未抽出）' : '数値なし') }],
         (INDEX.articles || []).slice().sort((a, b) => (b.published_at || b.url) > (a.published_at || a.url) ? 1 : -1)),
       h('h3', null, '用語'), h('ul', null, [
         '通期＝12月期の1年。年初累計（1〜9月など）は通期と混ぜず、前年同期と比べる。単独四半期＝その3か月だけ。販売数量のランキングは、同じ期末に通期・累計・単独四半期の表があれば、比べられる社数が多い方（同数なら通期＞累計＞単独四半期）を使う。',

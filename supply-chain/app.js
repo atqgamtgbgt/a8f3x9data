@@ -117,8 +117,13 @@
   // ---------------------------------------------------------------- 表
   function table(columns, rows, opts = {}) {
     // columns: [{label, get(row)->node|string, num?:bool, sort?(row)->value}]
+    // opts.limit：先頭N行だけ表示し、残りは「すべて表示」で開く（並べ替えても状態は保つ）
     let sortIdx = opts.sortIdx ?? -1, asc = opts.asc ?? false;
+    let expanded = !(opts.limit && rows.length > opts.limit + 3);
     const wrap = h('div', { class: 'tablewrap' });
+    const outer = h('div');
+    const more = h('button', { class: 'linkbtn', type: 'button' });
+    more.addEventListener('click', () => { expanded = !expanded; render(); });
     function render() {
       let rs = rows.slice();
       if (sortIdx >= 0 && columns[sortIdx].sort) {
@@ -135,12 +140,19 @@
         c.sort ? h('button', { class: 'sort', onclick: () => { asc = sortIdx === i ? !asc : false; sortIdx = i; render(); },
           'aria-sort': sortIdx === i ? (asc ? 'ascending' : 'descending') : null },
         c.label + (sortIdx === i ? (asc ? ' ▲' : ' ▼') : '')) : c.label))));
-      const tbody = h('tbody', null, rs.map(r => h('tr', { class: opts.rowClass ? opts.rowClass(r) : null },
+      const shown = expanded ? rs : rs.slice(0, opts.limit);
+      const tbody = h('tbody', null, shown.map(r => h('tr', { class: opts.rowClass ? opts.rowClass(r) : null },
         columns.map(c => { const v = c.get(r); return h('td', { class: c.num ? 'n' : null }, v == null ? '—' : v); }))));
       wrap.replaceChildren(h('table', null, thead, tbody));
+      if (opts.limit && rows.length > opts.limit + 3) {
+        more.textContent = expanded ? '上位' + opts.limit + '行だけ表示' : 'すべて表示（' + rows.length + '行）';
+        more.hidden = false;
+      } else more.hidden = true;
     }
     render();
-    return wrap;
+    if (!opts.limit) return wrap;
+    outer.append(wrap, more);
+    return outer;
   }
   function withTableToggle(chartEl, tableFactory) {
     const box = h('div');
@@ -379,7 +391,7 @@
           const toInd = v.sector === 'oem' || v.sector === 'industries';
           return h('a', { href: toInd ? '#industries' : '#sector/' + v.sector, style: { marginRight: '12px' },
             onclick: toInd || !anchor ? null : e => { e.preventDefault(); pendingAnchor = 'v' + anchor; location.hash = '#sector/' + v.sector; } },
-          (toInd ? '業種別の利益率' : sectorName(v.sector) + (anchor ? '（' + ['①', '②', '③', '④'][anchor - 1] + '）' : '')) + ' を見る →');
+          (toInd ? '業種別の利益率' : sectorShort(v.sector) + (anchor ? '：' + VIEW_NAMES[anchor - 1] : '')) + ' を見る →');
         })));
       box.appendChild(card);
     }
@@ -474,13 +486,14 @@
         const same = m.periods.filter(p => p.year === t.year).sort((a, b) => a.end_month - b.end_month);
         if (same.length >= 2) {
           const latest = same[same.length - 1];
-          const top = latest.rows.slice(0, 4).map(r => r.raw);
+          const keyOf = r => r.id ? 'id:' + r.id + (r.chip_model ? '|' + r.chip_model : '') : 'raw:' + r.raw;
+          const top = latest.rows.slice(0, 4).map(keyOf);
           const colors = ['var(--s1)', 'var(--s2)', 'var(--s7)', 'var(--s3)'];
-          const ser = top.map((raw, i) => ({ name: (latest.rows.find(r => r.raw === raw) || {}).name || raw, color: colors[i],
-            values: same.map(p => (p.rows.find(r => r.raw === raw) || {}).share ?? null) }));
+          const ser = top.map((k, i) => ({ key: k, name: (latest.rows.find(r => keyOf(r) === k) || {}).name || k, color: colors[i],
+            values: same.map(p => (p.rows.find(r => keyOf(r) === k) || {}).share ?? null) }));
           const chart = lineChart({ x: same.map(p => '1〜' + p.end_month + '月'), series: ser, unit: '%', aria: m.name_ja + ' シェアの推移' });
           parts.push(h('h3', null, t.year + '年の推移（年初累計シェア、' + latest.label_ja + 'の上位4社）'),
-            withTableToggle(chart, () => table([{ label: '期間', get: p => p.label_ja }, ...ser.map(se => ({ label: se.name, num: true, get: p => pct((p.rows.find(r => r.name === se.name) || {}).share) }))], same)));
+            withTableToggle(chart, () => table([{ label: '期間', get: p => p.label_ja + (p.source.lang === 'en' ? '（英語版）' : '') }, ...ser.map(se => ({ label: se.name, num: true, get: p => pct((p.rows.find(r => keyOf(r) === se.key) || {}).share) }))], same)));
         }
       }
       parts.push(h('p', { class: 'source' }, '出典：蓋世汽車研究院（Gasgoo）ランキング記事（' + (t.source.lang === 'en' ? '英語版' : '中国語版') +
@@ -495,24 +508,52 @@
     return card;
   }
 
+  const PTYPE_SUFFIX = { FY: '（通期）', Q: '（単独四半期）' };
+  const ptypeSuffix = t => PTYPE_SUFFIX[t] || (String(t).startsWith('YTD') ? '（累計）' : '');
+
+  // 会社固有の区分名を使った行の根拠。同じ根拠はまとめて1行に
+  function basisNotes(rows) {
+    const by = new Map();
+    rows.forEach(r => { if (!by.has(r.basis_ja)) by.set(r.basis_ja, []); by.get(r.basis_ja).push(r.name + '「' + r.label.replace(/^销量[:：]/, '') + '」'); });
+    return [...by].map(([b, names]) => h('p', { class: 'note' }, '※ ' + names.join('、') + '：' + b));
+  }
+
+  const VIEW_NAMES = ['①誰が強い', '②儲け', '③単価と利益率', '④取引・生産構造'];
+  function sectorShort(id) { const s = ((INDEX || {}).sectors || []).find(x => x.id === id); return s ? (s.short_ja || s.ja) : id; }
+
   function volumeStrength(card, st, sec) {
-    const groups = (st.groups || []).filter(g => g.tables && g.tables.length);
+    const all = st.groups || [];
+    const groups = all.filter(g => g.tables && g.tables.length);
+    const missing = all.filter(g => !(g.tables && g.tables.length));
     card.appendChild(h('p', { class: 'lead' }, '市場シェアの公表がないため、同花順に載る各社の販売数量を、製品・単位・期間がそろう会社どうしで比べます（中国A株上場企業のみ）。'));
-    if (!groups.length) { card.appendChild(h('p', { class: 'empty' }, '比較できる販売数量がまだありません。')); return card; }
+    const missingNote = missing.length ? h('p', { class: 'note' }, missing.map(g => g.ja + '：' + (g.insufficient_ja || '比較できる数量がない')).join('。') + '。') : null;
+    if (!groups.length) { card.append(...[h('p', { class: 'empty' }, '比較できる販売数量がまだありません。'), missingNote].filter(Boolean)); return card; }
     const selG = h('select', { 'aria-label': '製品' }, groups.map((g, i) => h('option', { value: i }, g.ja)));
     const selP = h('select', { 'aria-label': '期間' });
     const body = h('div');
     card.append(h('div', { class: 'row' }, selG, selP), body);
-    const fill = () => { const g = groups[+selG.value]; selP.replaceChildren(...g.tables.map((t, i) => h('option', { value: i }, t.label_ja + (t.period_type === 'Q' ? '（単独四半期）' : '（通期）')))); };
+    const fill = () => {
+      const g = groups[+selG.value];
+      selP.replaceChildren(...g.tables.map((t, i) => h('option', { value: i }, t.label_ja + ptypeSuffix(t.period_type) + '・' + t.rows.length + '社')));
+      // 最新の表の社数が少ない（最大の6割未満）ときは、社数のそろう新しい表を最初に見せる
+      const max = Math.max(...g.tables.map(t => t.rows.length));
+      selP.value = String(Math.max(0, g.tables.findIndex(t => t.rows.length >= max * 0.6)));
+    };
     function draw() {
       const g = groups[+selG.value], t = g.tables[+selP.value];
       const rows = t.rows.map(r => ({ rank: r.rank, value: r.volume, valueText: vol(r.volume) + (g.unit_ja ? g.unit_ja : ''),
-        label: h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.code) }, r.name),
-        tipNodes: () => [h('b', null, r.raw + '（' + t.unit + '）'), h('div', null, r.name + '：' + r.label), r.archived ? h('div', { class: 'muted' }, '同花順の表から消えた過去値（保存分）') : null] }));
-      body.replaceChildren(hbars(rows),
+        label: h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.code) }, r.name + (r.basis_ja ? ' ※' : '')),
+        tipNodes: () => [h('b', null, r.raw + '（' + t.unit + '）'), h('div', null, r.name + '：' + r.label),
+          r.basis_ja ? h('div', null, '※ ' + r.basis_ja) : null,
+          r.archived ? h('div', { class: 'muted' }, '同花順の表から消えた過去値（保存分）') : null] }));
+      const basis = t.rows.filter(r => r.basis_ja);
+      body.replaceChildren(...[hbars(rows),
+        ...basisNotes(basis),
         t.excluded.length ? h('p', { class: 'note' }, '単位が違うため除外：' + t.excluded.map(e => e.name + '（' + e.label + '）').join('、')) : null,
+        g.note_ja ? h('p', { class: 'note' }, g.note_ja) : null,
         h('p', { class: 'note' }, '販売数量ランキング（会社開示の数量）。' + (sec.note_ja || '')),
-        h('p', { class: 'source' }, '出典：同花順 F10「経営分析・運営業務数据」（各社のページ。企業名から詳細へ）'));
+        missingNote,
+        h('p', { class: 'source' }, '出典：同花順 F10「経営分析・運営業務数据」（各社のページ。企業名から詳細へ）')].filter(Boolean));
     }
     selG.addEventListener('change', () => { fill(); draw(); });
     selP.addEventListener('change', draw);
@@ -559,7 +600,7 @@
       { label: '純利益率', num: true, get: c => pct(v(c, lastFy, 'net_margin')), sort: c => v(c, lastFy, 'net_margin') },
       { label: '純利益率 ' + (firstFy ? firstFy.slice(0, 4) : '') + '→' + (lastFy ? lastFy.slice(2, 4) : ''), num: true, get: c => pt(v(c, lastFy, 'net_margin') - v(c, firstFy, 'net_margin')), sort: c => isNum(v(c, lastFy, 'net_margin')) && isNum(v(c, firstFy, 'net_margin')) ? v(c, lastFy, 'net_margin') - v(c, firstFy, 'net_margin') : null },
       { label: (lastYtd ? periodLabel(lastYtd) : '累計') + ' 純利益率', num: true, get: c => pct(v(c, lastYtd, 'net_margin')) + (prevYtd && isNum(v(c, prevYtd, 'net_margin')) ? '（前年 ' + pct(v(c, prevYtd, 'net_margin')) + '）' : ''), sort: c => v(c, lastYtd, 'net_margin') }
-    ], comps, { sortIdx: 1, rowClass: c => c.focus ? 'focus-row' : null }),
+    ], comps, { sortIdx: 1, limit: 15, rowClass: c => c.focus ? 'focus-row' : null }),
     h('p', { class: 'note' }, '左端に線がある行は、この分野の市場ランキングや事業区分に関係する会社。数値は会社全体（他の事業を含む）。'),
     h('p', { class: 'source' }, '出典：同花順 F10「財務概況」（销售毛利率・销售净利率・营业总收入）'));
     // 事業別
@@ -570,11 +611,12 @@
       const allKeys = [...new Set(rows.flatMap(r => Object.keys(r.series)))].sort();
       const fyK = fyKeys(allKeys).slice(-2), h1K = allKeys.filter(k => k.includes('YTD_H1')).slice(-1);
       const cols = [...fyK, ...h1K];
-      card.append(h('h3', null, '特定製品・事業の粗利益率（事業別）'), table([
+      const shown = rows.filter(r => cols.some(k => r.series[k] && isNum(r.series[k].gross)));
+      if (shown.length) card.append(h('h3', null, '特定製品・事業の粗利益率（事業別）'), table([
         { label: '会社', get: r => h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.code) }, r.name), sort: r => r.name },
         { label: '事業区分（原文）', get: r => r.item },
         ...cols.map(k => ({ label: periodLabel(k), num: true, get: r => r.series[k] ? pct(r.series[k].gross) + '（構成比 ' + pct(r.series[k].ratio, 0) + '）' : '—', sort: r => r.series[k] ? r.series[k].gross : null }))
-      ], rows),
+      ], shown, { limit: 15 }),
       h('p', { class: 'note' }, '東方財富の主営構成（製品別）。会社全体の利益率とは別の指標で、会社ごとに区分の付け方が違います。'),
       h('p', { class: 'source' }, '出典：東方財富 F10「経営分析・主営構成」'));
     }
@@ -605,13 +647,37 @@
       { label: '会社・製品', get: p => p.label }, { label: '期間', get: p => p.period },
       { label: '数量', num: true, get: p => signed(p.x), sort: p => p.x }, { label: '単価', num: true, get: p => signed(p.y), sort: p => p.y }], pts)),
       h('p', { class: 'note' }, '単価は製品構成（サイズ・品種）や原材料価格の影響を受けます。規模の効果だけを示すものではありません。'));
-    // 組み合わせごとの表
-    card.appendChild(h('h3', null, '会社・製品ごとの数量・単価・利益率'));
-    ups.forEach(u => {
+    // 同じ製品区分・単位・期間がそろう会社どうしの単価（参考）
+    const groups = {};
+    ups.filter(u => u.market_id).forEach(u => { (groups[u.market_id + '|' + u.unit] = groups[u.market_id + '|' + u.unit] || []).push(u); });
+    Object.values(groups).forEach(list => {
+      const cnt = {};
+      list.forEach(u => u.series.filter(p => p.period_type === 'FY').forEach(p => { cnt[p.period_end] = (cnt[p.period_end] || 0) + 1; }));
+      const best = Object.keys(cnt).filter(k => cnt[k] >= 3).sort().pop();
+      if (!best) return;
+      const rows = list.map(u => ({ u, p: u.series.find(p => p.period_type === 'FY' && p.period_end === best) }))
+        .filter(x => x.p && isNum(x.p.unit_price)).sort((a, b) => b.p.unit_price - a.p.unit_price);
+      const unit = list[0].unit;
+      const fmtP = v => v.toLocaleString('ja-JP', { maximumFractionDigits: v < 100 ? 2 : 0 }) + '元/' + unit;
+      card.append(h('h3', null, '同じ製品区分の平均単価（' + rows[0].p.label_ja + '・参考）'),
+        hbars(rows.map((x, i) => ({ rank: i + 1, value: x.p.unit_price, valueText: fmtP(x.p.unit_price),
+          label: h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(x.u.code) }, x.u.name),
+          tipNodes: () => [h('b', null, fmtP(x.p.unit_price)), h('div', null, x.u.name + '：' + x.u.product),
+            h('div', null, '事業の粗利益率 ' + pct(x.p.segment_gross) + '／会社全体 ' + pct(x.p.company_gross))] }))),
+        h('p', { class: 'note' }, '製品構成（サイズ・品種・用途）の違いを含むため、単価の差がそのまま原価や競争力の差を示すわけではありません。'));
+    });
+    // 組み合わせごとの表（1つずつ選んで見る）
+    const sorted = ups.slice().sort((a, b) => {
+      const last = u => u.series.slice().sort((x, y) => (x.period_end < y.period_end ? 1 : -1))[0] || {};
+      return (last(b).revenue_oku || 0) - (last(a).revenue_oku || 0);
+    });
+    const sel = h('select', { 'aria-label': '会社・製品' }, sorted.map((u, i) => h('option', { value: i }, u.name + ' — ' + u.product + '（' + u.unit + '）')));
+    const box = h('div');
+    function drawPair() {
+      const u = sorted[+sel.value];
       const ser = u.series.slice().sort((a, b) => (a.period_type < b.period_type ? -1 : a.period_type > b.period_type ? 1 : (a.period_end < b.period_end ? -1 : 1)));
-      card.appendChild(h('div', { style: { margin: '10px 0 14px' } },
-        h('div', { style: { fontSize: '14px', fontWeight: '600' } }, h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(u.code) }, u.name), ' — ' + u.product + '（' + u.unit + '）'),
-        h('div', null, h('span', { class: 'chip' }, u.comparability_ja)),
+      box.replaceChildren(
+        h('div', null, h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(u.code) }, u.name + 'の詳細'), ' ', h('span', { class: 'chip' }, u.comparability_ja)),
         table([
           { label: '期間', get: p => p.label_ja },
           { label: '販売数量', num: true, get: p => vol(p.volume) + u.unit },
@@ -619,8 +685,11 @@
           { label: '平均単価', num: true, get: p => isNum(p.unit_price) ? p.unit_price.toLocaleString('ja-JP', { maximumFractionDigits: p.unit_price < 100 ? 2 : 0 }) + '元/' + u.unit : '—' },
           { label: '事業の粗利益率', num: true, get: p => pct(p.segment_gross) },
           { label: '会社全体の粗利益率', num: true, get: p => pct(p.company_gross) }], ser),
-        h('p', { class: 'note' }, '数量：「' + u.volume_label + '」／売上：「' + u.revenue_label + '」（' + (u.series.some(p => p.rule === 'ths_volume_em_segment') ? '同花順の数量と東方財富の事業別売上' : '同花順の同じ表') + '）')));
-    });
+        h('p', { class: 'note' }, '数量：「' + u.volume_label + '」／売上：「' + u.revenue_label + '」（' + (u.series.some(p => p.rule === 'ths_volume_em_segment') ? '同花順の数量と東方財富の事業別売上' : '同花順の同じ表') + '）'));
+    }
+    sel.addEventListener('change', drawPair);
+    card.append(h('h3', null, '会社・製品ごとの数量・単価・利益率（' + ups.length + '件）'), h('div', { class: 'row' }, sel), box);
+    drawPair();
     return card;
   }
 
@@ -651,7 +720,7 @@
       { label: '同 ' + (last ? last.slice(0, 4) : ''), num: true, get: c => days(v(c, last, 'ar_notes_days')), sort: c => v(c, last, 'ar_notes_days') },
       { label: '売掛（同花順）' + (last ? last.slice(0, 4) : ''), num: true, get: c => days(v(c, last, 'ar_days_ths')), sort: c => v(c, last, 'ar_days_ths') },
       { label: '在庫日数', num: true, get: c => days(v(c, last, 'inventory_days')), sort: c => v(c, last, 'inventory_days') }
-    ], comps, { sortIdx: 2 }));
+    ], comps, { sortIdx: 2, limit: 15 }));
     const util = (sec.structure || {}).utilization || [];
     if (util.length) {
       const yrs = [...new Set(util.map(u => u.period_end))].sort().slice(-3);
@@ -728,7 +797,7 @@
         { label: '数値', get: a => a.extraction === 'text_lines' ? '本文から ' + a.rows + '行' : a.extraction === 'image_only' ? '画像のみ（未抽出）' : '数値なし' }],
         (INDEX.articles || []).slice().sort((a, b) => (b.published_at || b.url) > (a.published_at || a.url) ? 1 : -1)),
       h('h3', null, '用語'), h('ul', null, [
-        '通期＝12月期の1年。年初累計（1〜9月など）は通期と混ぜず、前年同期と比べる。単独四半期＝その3か月だけ。',
+        '通期＝12月期の1年。年初累計（1〜9月など）は通期と混ぜず、前年同期と比べる。単独四半期＝その3か月だけ。販売数量のランキングは、同じ期末に通期・累計・単独四半期の表があれば、比べられる社数が多い方（同数なら通期＞累計＞単独四半期）を使う。',
         '売掛金回転日数（手形を含む）＝期間日数×（期首＋期末の応収账款・应收票据・应收款项融资）÷2÷営業収入。',
         '買掛金回転日数（手形を含む）＝期間日数×（期首＋期末の应付账款・应付票据）÷2÷営業原価。',
         '平均単価＝製品別の売上高÷販売数量。同じ表・同じ期間の同じ製品名（「产品」「业务」などの語尾を除いて一致）か、同花順の数量と東方財富の同じ名前の事業区分を対応させた場合だけ。',
@@ -796,7 +865,7 @@
     const src = c.sources || {};
     const links = [['財務概況', src.finance], ['財務報表', src.statements], ['運営データ', src.operate], ['会社資料', src.company], ['事業別構成', src.segments], ['根拠資料', c.evidence_url]].filter(x => x[1]);
     if (links.length) parts.push(h('p', { class: 'source' }, '出典：', ...links.flatMap(([n, u], i) => [i ? '、' : '', h('a', { href: u, target: '_blank', rel: 'noopener' }, n)])));
-    body.replaceChildren(...parts);
+    body.replaceChildren(...parts.filter(Boolean));
   }
 
   // ---------------------------------------------------------------- ルーティング

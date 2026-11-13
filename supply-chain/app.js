@@ -518,7 +518,7 @@
   // 会社固有の区分名を使った行の根拠。同じ根拠はまとめて1行に
   function basisNotes(rows) {
     const by = new Map();
-    rows.forEach(r => { if (!by.has(r.basis_ja)) by.set(r.basis_ja, []); by.get(r.basis_ja).push(r.name + '「' + r.label.replace(/^销量[:：]/, '') + '」'); });
+    rows.forEach(r => { if (!by.has(r.basis_ja)) by.set(r.basis_ja, []); by.get(r.basis_ja).push(r.name + '「' + r.label.replace(/^销量[:：]/, '').replace(/[（(][^（()）]*[)）]$/, '') + '」'); });
     return [...by].map(([b, names]) => h('p', { class: 'note' }, '※ ' + names.join('、') + '：' + b));
   }
 
@@ -538,7 +538,7 @@
     card.append(h('div', { class: 'row' }, selG, selP), body);
     const fill = () => {
       const g = groups[+selG.value];
-      selP.replaceChildren(...g.tables.map((t, i) => h('option', { value: i }, t.label_ja + ptypeSuffix(t.period_type) + '・' + t.rows.length + '社')));
+      selP.replaceChildren(...g.tables.map((t, i) => h('option', { value: i }, t.label_ja + (t.label_ja.includes('通期') ? '' : ptypeSuffix(t.period_type)) + '・' + t.rows.length + '社')));
       // 最新の表の社数が少ない（最大の6割未満）ときは、社数のそろう新しい表を最初に見せる
       const max = Math.max(...g.tables.map(t => t.rows.length));
       selP.value = String(Math.max(0, g.tables.findIndex(t => t.rows.length >= max * 0.6)));

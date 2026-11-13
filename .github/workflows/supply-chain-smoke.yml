@@ -1,0 +1,59 @@
+name: Supply chain page smoke
+
+# サプライチェーン分析ページ（supply-chain/）のブラウザ確認。既存の index.html の検査とは独立。
+# データ（output/supply_chain）は非公開リポジトリからの同期で入る。まだ無い時は確認を飛ばす。
+on:
+  push:
+    branches: [main, "supply-chain/**"]
+    paths:
+      - supply-chain/**
+      - output/supply_chain/**
+      - tools/supply_chain_smoke.mjs
+      - .github/workflows/supply-chain-smoke.yml
+  pull_request:
+    paths:
+      - supply-chain/**
+      - output/supply_chain/**
+      - tools/supply_chain_smoke.mjs
+      - .github/workflows/supply-chain-smoke.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check data presence
+        id: data
+        run: |
+          if [ -f output/supply_chain/index.json ]; then echo "present=true" >> "$GITHUB_OUTPUT";
+          else echo "::notice::output/supply_chain がまだ無いため、ブラウザ確認を飛ばします（初回同期後に有効）"; echo "present=false" >> "$GITHUB_OUTPUT"; fi
+      - name: Check script syntax
+        run: node --check supply-chain/app.js
+      - uses: actions/setup-node@v4
+        if: steps.data.outputs.present == 'true'
+        with:
+          node-version: 20
+      - name: Install puppeteer-core
+        if: steps.data.outputs.present == 'true'
+        run: npm install --no-save --no-package-lock puppeteer-core@23
+      - name: Start local server
+        if: steps.data.outputs.present == 'true'
+        run: |
+          python3 -m http.server 8770 --bind 127.0.0.1 >/tmp/http.log 2>&1 &
+          sleep 2
+          curl --fail --silent --show-error -I http://127.0.0.1:8770/supply-chain/
+      - name: Desktop and mobile checks
+        if: steps.data.outputs.present == 'true'
+        run: CHROME_PATH="$(command -v google-chrome)" node tools/supply_chain_smoke.mjs
+      - name: Save screenshots
+        if: always() && steps.data.outputs.present == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: supply-chain-screenshots
+          path: smoke_screenshots/
+          if-no-files-found: ignore

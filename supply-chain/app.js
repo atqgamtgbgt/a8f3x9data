@@ -592,6 +592,38 @@
 
   function seriesVals(ser, keys, metric) { return keys.map(k => ((ser || {})[k] || {})[metric]); }
 
+  // 現在公開されているJSONに pressure がない場合も、3試作分野は企業別データで計算する。
+  // 同じ申万業種に属する企業だけを使い、Gasgoo関係企業は分母に含めない。
+  function pressureFromDisplayedCompanies(companies, currentKey) {
+    const prev = previousYearKey(currentKey);
+    if (!prev) return null;
+    const nowNet = [], oldNet = [], paired = [], pairedSales = [];
+    for (const c of companies.filter(c => c.in_industry)) {
+      const now = (c.series || {})[currentKey] || {}, old = (c.series || {})[prev] || {};
+      if (isNum(now.net_margin)) nowNet.push(now.net_margin);
+      if (isNum(old.net_margin)) oldNet.push(old.net_margin);
+      if (isNum(now.net_margin) && isNum(old.net_margin)) {
+        paired.push(now.net_margin - old.net_margin);
+        if (isNum(now.revenue) && isNum(old.revenue) && old.revenue > 0) {
+          pairedSales.push({ revenue: now.revenue > old.revenue, margin: now.net_margin < old.net_margin });
+        }
+      }
+    }
+    if (!nowNet.length) return null;
+    const sorted = paired.slice().sort((a, b) => a - b);
+    const n = sorted.length, mid = n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+    const down = paired.filter(v => v < 0).length;
+    const loss = nowNet.filter(v => v < 0).length;
+    const upDown = pairedSales.filter(v => v.revenue && v.margin).length;
+    return {
+      previous_period: prev, current_net_n: nowNet.length, previous_net_n: oldNet.length,
+      net_paired_n: n, net_down_n: down, net_down_pct: n ? down / n * 100 : null,
+      net_change_median_pt: n ? mid : null, loss_n: loss, loss_pct: loss / nowNet.length * 100,
+      sales_up_net_down_n: upDown, sales_up_net_down_base_n: pairedSales.length,
+      sales_up_net_down_pct: pairedSales.length ? upDown / pairedSales.length * 100 : null
+    };
+  }
+
   function profitCard(sec, oem) {
     const card = h('section', { class: 'card', id: 'v2' }, h('h2', null, '② 部品メーカーはどの程度儲けているのか'),
       h('p', { class: 'lead' }, '「業種の中央値」「企業全体の利益率」「特定製品（事業）の粗利益率」は別の指標です。中央値には対象社数を付けています。'));
@@ -609,7 +641,8 @@
       card.appendChild(h('div', { class: 'tiles' }, tile(ind.ja + '：粗利益率の中央値', 'gross_margin'), tile(ind.ja + '：純利益率の中央値', 'net_margin')));
     }
     const lastYtdKey = ytd[ytd.length - 1];
-    const pressure = (((ind.series || {})[lastYtdKey] || {}).pressure);
+    const pressure = (((ind.series || {})[lastYtdKey] || {}).pressure)
+      || pressureFromDisplayedCompanies(sec.companies || [], lastYtdKey);
     if (pressure && pressure.net_paired_n) {
       card.append(h('h3', null, '前年同期比：利益が圧迫されている企業の広がり'),
         h('div', { class: 'tiles' },

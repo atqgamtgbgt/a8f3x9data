@@ -439,7 +439,7 @@
       sec.note_ja ? h('p', { class: 'note' }, sec.note_ja) : null,
       h('nav', { class: 'row', 'aria-label': '観点へ移動' }, ['①誰が強い', '②どの程度儲けている', '③単価と利益率', '④取引・生産構造'].map((t, i) =>
         h('a', { href: '#', onclick: e => { e.preventDefault(); document.getElementById('v' + (i + 1)).scrollIntoView({ behavior: 'smooth' }); }, style: { fontSize: '13px' } }, t))));
-    main.replaceChildren(head, strengthCard(sec), profitCard(sec, oem), unitPriceCard(sec), structureCard(sec, oem));
+    main.replaceChildren(head, strengthCard(sec), profitCard(sec, oem), marginBridgeCard(sec), unitPriceCard(sec), structureCard(sec, oem));
   }
 
   function strengthCard(sec) {
@@ -633,6 +633,74 @@
       sales_up_profit_down_n: upProfitDown, sales_up_profit_down_base_n: pairedProfit.length,
       sales_up_profit_down_pct: pairedProfit.length ? upProfitDown / pairedProfit.length * 100 : null
     };
+  }
+
+  // ------------------------------------------------------------------ 企業損益計算書：利益率悪化の会計上の要因分解
+  const BRIDGE_ITEMS = [
+    ['gross', '売上原価率（粗利益率）の変化'],
+    ['selling', '販売費用率の変化'],
+    ['administration', '管理費用率の変化'],
+    ['research', '研究開発費率の変化'],
+    ['finance', '財務費用率の変化'],
+    ['unexplained', 'その他・未分解']
+  ];
+  const bridgeValue = (bridge, key) => ((bridge || {}).effects_pt || {})[key];
+  const safeBridgeRate = (value, total) => total >= 5 ? countRate(value, total)
+    : total > 0 ? '対象' + total + '社（集計非表示）' : '—';
+  const bridgeDisplay = (value) => h('span', { class: isNum(value) ? (value < 0 ? 'down' : value > 0 ? 'up' : '') : '' }, pt(value, 2));
+  function marginBridgeCard(sec) {
+    const card = h('section', { class: 'card', id: 'cost-bridge' },
+      h('h2', null, '利益率悪化の要因分解（損益計算書）'),
+      h('p', { class: 'lead' }, '財務上、どの費用率が利益率の変化に寄与したかを分解します。売上原価率・販売費・管理費・研究開発費・財務費用を区別し、残りは「その他・未分解」として表示します。'));
+    const keys = ytdKeys(Object.keys((sec.industry || {}).series || {}));
+    const key = keys[keys.length - 1];
+    const industry = (((sec.industry || {}).series || {})[key] || {});
+    const summary = industry.cost_bridge_summary || {};
+    const rows = (sec.companies || []).filter(c => c.in_industry).map(c => ({
+      code: c.code, name: c.name,
+      bridge: (((c.series || {})[key] || {}).cost_bridge || null)
+    })).filter(r => r.bridge && r.bridge.status === 'reconciled');
+    card.append(h('p', { class: 'note' },
+      '比較期間：' + periodLabel(previousYearKey(key)) + ' → ' + periodLabel(key)
+      + '。比較可能：' + (summary.n || rows.length) + '社／所属 ' + (sec.industry.listed_count || '—') + '社。'
+      + '両年の損益計算書に必要科目があり、同花順掲載利益率との大幅な乖離がない企業のみ。'));
+    if (!rows.length) {
+      card.append(h('p', { class: 'empty' }, '比較できる企業の損益計算書はまだありません。外資系を含め、未開示のデータを補完せず空欄にしています。'));
+      return card;
+    }
+    if (summary.n >= 5) {
+      card.append(h('h3', null, '業種全体：費用負担が増えた企業の広がり'),
+        h('div', { class: 'tiles' },
+          h('div', { class: 'tile' },
+            h('div', { class: 'l' }, '粗利益率（売上原価率）が悪化した企業'),
+            h('div', { class: 'v' }, countRate(summary.gross_pressure_n, summary.n)),
+            h('div', { class: 'd' }, '同一企業の損益計算書に基づく')),
+          h('div', { class: 'tile' },
+            h('div', { class: 'l' }, '財務費用率の負担が増えた企業'),
+            h('div', { class: 'v' }, countRate(summary.finance_pressure_n, summary.n)),
+            h('div', { class: 'd' }, '支払利息・為替等の内訳は未特定'))));
+    }
+    const ranked = rows.slice().filter(r => isNum(r.bridge.net_change_pt) && r.bridge.net_change_pt < 0)
+      .sort((a, b) => a.bridge.net_change_pt - b.bridge.net_change_pt);
+    card.append(h('h3', null, '企業別：純利益率の低下を分解（悪化が大きい順）'));
+    if (!ranked.length) card.append(h('p', { class: 'empty' }, '今回、純利益率の低下を確認できた企業はありません。'));
+    else card.append(table([
+      { label: '会社', get: r => h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.code) }, r.name), sort: r => r.name },
+      { label: '純利益率の変化', num: true, get: r => bridgeDisplay(r.bridge.net_change_pt), sort: r => r.bridge.net_change_pt },
+      ...BRIDGE_ITEMS.map(([k, label]) => ({
+        label: label.replace('の変化', ''), num: true,
+        get: r => bridgeDisplay(bridgeValue(r.bridge, k)), sort: r => bridgeValue(r.bridge, k)
+      }))
+    ], ranked, { limit: 12 }));
+    card.append(h('p', { class: 'note' },
+      'マイナス値は純利益率を押し下げる方向、プラス値は押し上げる方向（単位：ポイント）。各企業では6項目の合計が純利益率の変化に一致します。'
+      + ' ただし業種ごとの寄与度中央値は相互に足し合わせられません。'));
+    card.append(h('p', { class: 'note' },
+      '「原価率の上昇」は、値下げ・材料費上昇・製品構成変化・歩留まり等のどれが原因かまでは示しません。'
+      + ' 財務費用の増加も、借入金利・為替差損等の区別はできません。'));
+    if (summary.n > 0 && summary.n < 5) card.append(h('p', { class: 'note' },
+      '費用要因を比較できる企業が' + summary.n + '社しかないため、業種の割合は表示せず、個社の値だけを参考表示しています。'));
+    return card;
   }
 
   function profitCard(sec, oem) {
@@ -900,7 +968,15 @@
         { label: '企業別変化の中央値', num: true, get: r => pt(r.p.net_change_median_pt), sort: r => r.p.net_change_median_pt },
         { label: '赤字企業', num: true, get: r => countRate(r.p.loss_n, r.p.current_net_n), sort: r => r.p.loss_pct },
         { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct },
-        { label: '増収減益（親会社帰属利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n), sort: r => r.p.sales_up_profit_down_pct }
+        { label: '増収減益（親会社帰属利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n), sort: r => r.p.sales_up_profit_down_pct },
+        { label: '原価率負担増（費用分解対象）', num: true,
+          get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.gross_pressure_n,
+            ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n),
+          sort: r => (((r.i.series || {})[latest] || {}).cost_bridge_summary || {}).gross_pressure_n },
+        { label: '財務費用率負担増（費用分解対象）', num: true,
+          get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.finance_pressure_n,
+            ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n),
+          sort: r => (((r.i.series || {})[latest] || {}).cost_bridge_summary || {}).finance_pressure_n }
       ], rows),
       h('p', { class: 'note' },
         '注意：各業種の中央値の差は企業ごとの変化の中央値とは一致しません。「利益率低下企業」は両期に純利益率がある企業を分母にし、「赤字企業」は最新期の純利益率がある企業を分母にします。増収＋利益率低下は利益額の減少を意味しません。「増収減益」は同花順の親会社帰属利益「净利润」の両期の金額がある会社だけ判定します。'),
@@ -951,7 +1027,8 @@
         ['財務を取得した会社', cov.companies_finance], ['財務諸表（回転日数の計算）', cov.companies_statements],
         ['運営データ（製品別数量）', cov.companies_operate], ['事業別構成（東方財富）', cov.companies_segments],
         ['Gasgooのランキング記事（ADAS）', cov.gasgoo_articles], ['うち本文に数値がある記事', cov.gasgoo_text_articles],
-        ['単価を計算できた組み合わせ', cov.unit_price_pairs]]),
+        ['単価を計算できた組み合わせ', cov.unit_price_pairs],
+        ['利益率の要因分解に成功した企業（いずれかの期間）', cov.cost_bridge_companies]]),
       h('h3', null, '業種ごとの社数'),
       table([{ label: '業種', get: i => i.ja + '（' + i.sw_l3 + '）' }, { label: '表示', num: true, get: i => String(i.stated_count ?? '—') },
         { label: '一覧で確認', num: true, get: i => String(i.listed_count) }, { label: '財務を取得', num: true, get: i => String(i.with_finance) }], INDEX.industries),
@@ -965,6 +1042,7 @@
         '売掛金回転日数（手形を含む）＝期間日数×（期首＋期末の応収账款・应收票据・应收款项融资）÷2÷営業収入。',
         '買掛金回転日数（手形を含む）＝期間日数×（期首＋期末の应付账款・应付票据）÷2÷営業原価。',
         '平均単価＝製品別の売上高÷販売数量。同じ表・同じ期間の同じ製品名（「产品」「业务」などの語尾を除いて一致）か、同花順の数量と東方財富の同じ名前の事業区分を対応させた場合だけ。',
+        '利益率悪化の要因分解＝同じ会社の前年同期の連結損益計算書を比較。純利益率変化＝粗利益率変化−販売費率変化−管理費率変化−研究開発費率変化−財務費用率変化＋その他・未分解。公開利益率と計算値が大きく違う会社は除外。これは財務上の分解で、売価・人件費・材料費が原因とは断定できない。',
         '国籍区分＝最終支配者による。根拠が資料で確認できない会社は「判定保留」、本社所在地・上場地による場合は「暫定」。完成車メーカーの内製は国籍とは別の属性。'].map(t => h('li', null, t))));
     const quality = INDEX.quality || {};
     card.append(h('h3', null, '財務データの検算状況'),
@@ -1019,6 +1097,28 @@
       parts.push(h('h3', null, '会社全体の財務'), table([{ label: '指標', get: r => r[1] },
         ...cols.map(k => ({ label: periodLabel(k), num: true, get: r => r[2]((c.series[k] || {})[r[0]]) }))], metrics),
         h('p', { class: 'note' }, '年初累計は通期と混ぜずに前年同期と比べてください。回転日数の「計算」は同花順の財務報表から算出。'));
+      const costKeys = ytdKeys(Object.keys(c.series || {}));
+      const costLatestKey = costKeys[costKeys.length - 1];
+      const bridge = ((c.series || {})[costLatestKey] || {}).cost_bridge;
+      if (bridge && bridge.status === 'reconciled') {
+        const klabels = { gross: '粗利益率', selling: '販売費用率', administration: '管理費用率',
+          research: '研究開発費率', finance: '財務費用率' };
+        parts.push(h('h3', null, 'なぜ利益率が変わったか：損益計算書による分解'),
+          h('p', { class: 'lead' },
+            periodLabel(bridge.previous_period) + ' → ' + periodLabel(bridge.period)
+            + '。連結純利益率の変化 ' + pt(bridge.net_change_pt, 2)
+            + '。各費用率の影響と「その他・未分解」を合計した値です。'),
+          table([
+            { label: '要因', get: r => r[1] },
+            { label: '前年の比率', num: true, get: r => klabels[r[0]] ? pct(bridge.previous_ratios_pct[r[0]], 2) : '—' },
+            { label: '直近の比率', num: true, get: r => klabels[r[0]] ? pct(bridge.current_ratios_pct[r[0]], 2) : '—' },
+            { label: '純利益率への影響', num: true, get: r => bridgeDisplay(bridge.effects_pt[r[0]]) }
+          ], BRIDGE_ITEMS),
+          h('p', { class: 'note' }, '費用率が増えると、その行の影響はマイナスになります。'
+            + '「その他・未分解」には税金、減損、投資損益、営業外損益などが含まれ得ます。'
+            + ' 損益計算書の連結純利益を基準にしており、親会社帰属利益とは区別します。'),
+          h('p', { class: 'source' }, '出典：', h('a', { href: bridge.source, target: '_blank', rel: 'noopener' }, '同花順 F10 財務報表')));
+      }
       if ((c.segments || []).length) {
         const sk = [...new Set(c.segments.flatMap(sg => Object.keys(sg.series)))].sort().slice(-4);
         parts.push(h('h3', null, '事業別の粗利益率（東方財富・製品別）'), table([{ label: '事業区分（原文）', get: sg => sg.item },

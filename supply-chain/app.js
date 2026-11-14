@@ -642,20 +642,35 @@
   }
   function cuiFallback(el,opt) {
     if (opt.series?.[0]?.type==='line' && opt.xAxis?.data) {
-      const lines=opt.series.map(s=>({name:s.name,color:s.itemStyle?.color || 'var(--s1)',values:s.data}));
+      const lines=opt.series.map(s=>({name:s.name,
+        color:s.itemStyle?.color || 'var(--s1)',values:s.data}));
       el.replaceChildren(lineChart({x:opt.xAxis.data,series:lines,unit:opt.yAxis?.name||'',
         aria:'折れ線：'+lines.map(x=>x.name).join('、')}));
       return;
     }
     if (opt.series?.[0]?.type==='heatmap') {
-      el.replaceChildren(h('p',{class:'note'},'費用別の割合は出典表で確認できます。'));
+      const cols=opt.xAxis?.data||[],rows=opt.yAxis?.data||[];
+      const lookup=new Map((opt.series[0].data||[]).map(x=>[x[1]+':'+x[0],x[2]]));
+      el.replaceChildren(h('div',{class:'cui-fallback-table tablewrap'},
+        h('table',null,
+          h('thead',null,h('tr',null,h('th',null,'業種'),...cols.map(x=>h('th',null,x)))),
+          h('tbody',null,rows.map((r,i)=>h('tr',null,h('th',null,r),
+            ...cols.map((_,j)=>{
+              const v=lookup.get(i+':'+j);
+              return h('td',{class:'n'},isNum(v)?pct(v):'—');
+            }))))));
       return;
     }
     const labels=opt.yAxis?.type==='category'?opt.yAxis.data:opt.xAxis?.data||[];
-    const values=opt.series?.[0]?.data||[];
+    const series=opt.series||[];
+    const vals=series.flatMap(s=>s.data||[]).filter(isNum);
+    const ceiling=Math.max(1,...vals.map(Math.abs));
     el.replaceChildren(h('div',{class:'cui-fallback-bars'},
-      ...labels.map((label,i)=>storyBarRow(label,values[i],Math.max(1,...values.filter(isNum)),
-        isNum(values[i])?String(values[i])+' '+(opt.xAxis?.name||opt.yAxis?.name||''):'—',null))));
+      ...labels.map((label,i)=>h('div',{class:'cui-fallback-group'},
+        h('strong',null,label),
+        ...series.map((se,k)=>storyBarRow(series.length>1?se.name:'',
+          se.data[i],ceiling,isNum(se.data[i])?String(se.data[i].toFixed(1))+' '+(opt.xAxis?.name||opt.yAxis?.name||''):'—',
+          null,null,CUI_PALETTE[k%CUI_PALETTE.length]))))));
   }
   function cuiPlot(node,optionFn,clickMapFn) {
     let chart=null;
@@ -689,9 +704,21 @@
     figure.append(filters,plot);
     const redraw=cuiPlot(plot,cfg.option,cfg.clickMap);
     if (cfg.controls) cfg.controls(filters,redraw);
-    figure.append(h('details',{class:'cui-source'},
+    const source=h('details',{class:'cui-source'},
       h('summary',null,'出典・集計条件'),
-      h('p',null,cfg.source||'同花順 F10。各期の比較可能データのみ表示。')));
+      h('p',null,cfg.source||'同花順 F10。各期の比較可能データのみ表示。'));
+    if (cfg.sourceLink) {
+      const link=h('a',{href:'#',target:'_blank',rel:'noopener noreferrer'},'原記事・資料を開く');
+      link.hidden=true;
+      source.append(link);
+      source.addEventListener('toggle',()=>{
+        if(!source.open)return;
+        const uri=cfg.sourceLink();
+        if(typeof uri==='string'&&/^https:\/\//.test(uri)){link.setAttribute('href',uri);link.hidden=false;}
+        else link.hidden=true;
+      });
+    }
+    figure.append(source);
     return figure;
   }
   function cuiGrid(...cards){return h('div',{class:'cui-chart-grid'},...cards.filter(Boolean));}
@@ -1076,6 +1103,7 @@
         '同一製品・同一期間・同じ単位で比較。国内市場シェアではありません。',
       source:isShare?'出典：蓋世汽車研究院（Gasgoo）。掲載上位のみで非掲載企業は0%ではありません。完成車の内製・系列会社を含みます。':
         '出典：同花順 F10 企業開示の製品別販売数量。世界販売を含む場合があります。A株上場企業以外は網羅していません。',
+      sourceLink:()=>isShare?choose().picked?.source?.url:null,
       option:()=>{
         choose();
         return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.v),unit,
@@ -1961,6 +1989,7 @@
     window.scrollTo(0, 0);
   }
   async function showView(view) {
+    cuiDispose();
     lastView = view;
     main.dataset.view = view;
     document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === view)));
@@ -1983,6 +2012,7 @@
   });
   window.addEventListener('hashchange', route);
   window.addEventListener('scroll', hideTip, { passive: true });
+  window.addEventListener('resize', () => { for(const chart of CUI_CHARTS) { try { chart.resize(); } catch(e) {} } }, { passive:true });
 
   (async () => {
     try {

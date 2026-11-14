@@ -645,6 +645,8 @@
     ['unexplained', 'その他・未分解']
   ];
   const bridgeValue = (bridge, key) => ((bridge || {}).effects_pt || {})[key];
+  const safeBridgeRate = (value, total) => total >= 5 ? countRate(value, total)
+    : total > 0 ? '対象' + total + '社（集計非表示）' : '—';
   const bridgeDisplay = (value) => h('span', { class: isNum(value) ? (value < 0 ? 'down' : value > 0 ? 'up' : '') : '' }, pt(value, 2));
   function marginBridgeCard(sec) {
     const card = h('section', { class: 'card', id: 'cost-bridge' },
@@ -666,7 +668,7 @@
       card.append(h('p', { class: 'empty' }, '比較できる企業の損益計算書はまだありません。外資系を含め、未開示のデータを補完せず空欄にしています。'));
       return card;
     }
-    if (summary.n) {
+    if (summary.n >= 5) {
       card.append(h('h3', null, '業種全体：費用負担が増えた企業の広がり'),
         h('div', { class: 'tiles' },
           h('div', { class: 'tile' },
@@ -696,6 +698,8 @@
     card.append(h('p', { class: 'note' },
       '「原価率の上昇」は、値下げ・材料費上昇・製品構成変化・歩留まり等のどれが原因かまでは示しません。'
       + ' 財務費用の増加も、借入金利・為替差損等の区別はできません。'));
+    if (summary.n > 0 && summary.n < 5) card.append(h('p', { class: 'note' },
+      '費用要因を比較できる企業が' + summary.n + '社しかないため、業種の割合は表示せず、個社の値だけを参考表示しています。'));
     return card;
   }
 
@@ -966,11 +970,11 @@
         { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct },
         { label: '増収減益（親会社帰属利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n), sort: r => r.p.sales_up_profit_down_pct },
         { label: '原価率負担増（費用分解対象）', num: true,
-          get: r => countRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.gross_pressure_n,
+          get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.gross_pressure_n,
             ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n),
           sort: r => (((r.i.series || {})[latest] || {}).cost_bridge_summary || {}).gross_pressure_n },
         { label: '財務費用率負担増（費用分解対象）', num: true,
-          get: r => countRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.finance_pressure_n,
+          get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.finance_pressure_n,
             ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n),
           sort: r => (((r.i.series || {})[latest] || {}).cost_bridge_summary || {}).finance_pressure_n }
       ], rows),
@@ -1023,7 +1027,8 @@
         ['財務を取得した会社', cov.companies_finance], ['財務諸表（回転日数の計算）', cov.companies_statements],
         ['運営データ（製品別数量）', cov.companies_operate], ['事業別構成（東方財富）', cov.companies_segments],
         ['Gasgooのランキング記事（ADAS）', cov.gasgoo_articles], ['うち本文に数値がある記事', cov.gasgoo_text_articles],
-        ['単価を計算できた組み合わせ', cov.unit_price_pairs]]),
+        ['単価を計算できた組み合わせ', cov.unit_price_pairs],
+        ['利益率の要因分解に成功した企業（いずれかの期間）', cov.cost_bridge_companies]]),
       h('h3', null, '業種ごとの社数'),
       table([{ label: '業種', get: i => i.ja + '（' + i.sw_l3 + '）' }, { label: '表示', num: true, get: i => String(i.stated_count ?? '—') },
         { label: '一覧で確認', num: true, get: i => String(i.listed_count) }, { label: '財務を取得', num: true, get: i => String(i.with_finance) }], INDEX.industries),

@@ -74,7 +74,7 @@
   const fyKeys = keys => keys.filter(k => k.endsWith('|FY')).sort();
   const ytdKeys = keys => keys.filter(k => k.includes('|YTD')).sort();
   const previousYearKey = key => {
-    if (!key || !/^20\\d{2}-\\d{2}-\\d{2}\\|(FY|YTD_Q1|YTD_H1|YTD_Q3)$/.test(key)) return null;
+    if (!key || !/^20\d{2}-\d{2}-\d{2}\|(FY|YTD_Q1|YTD_H1|YTD_Q3)$/.test(key)) return null;
     return (Number(key.slice(0, 4)) - 1) + key.slice(4);
   };
   const changePt = (a, b) => isNum(a) && isNum(b) ? a - b : null;

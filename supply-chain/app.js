@@ -605,14 +605,20 @@
     };
   }
   function cuiGroupBars(labels, series, unit, title) {
+    const horizontal=labels.length>7;
+    const axisLabel={fontSize:11,interval:0,overflow:'truncate',
+      width:horizontal?142:84,rotate:horizontal?0:(labels.length>4?23:0)};
+    const category={type:'category',data:labels,inverse:horizontal,axisLabel};
+    const numeric={type:'value',name:unit,axisLabel:{fontSize:11}};
     return {...cuiBase(title,'bar'),
       tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
       legend:{data:series.map(v=>v.name),top:3,type:'scroll',left:5,right:65},
-      grid:{top:65,right:15,bottom:72,left:12,containLabel:true},
-      xAxis:{type:'category',data:labels,axisLabel:{fontSize:11,interval:0,rotate:labels.length>4?23:0,overflow:'truncate',width:84}},
-      yAxis:{type:'value',name:unit,axisLabel:{fontSize:11}},
-      series:series.map((v,i)=>({name:v.name,type:'bar',barMaxWidth:30,data:v.values.map(cuiNum),
-        itemStyle:{color:CUI_PALETTE[i%CUI_PALETTE.length]}}))
+      grid:horizontal?{top:55,right:20,bottom:40,left:12,containLabel:true}:
+        {top:65,right:15,bottom:72,left:12,containLabel:true},
+      xAxis:horizontal?numeric:category,
+      yAxis:horizontal?category:numeric,
+      series:series.map((v,i)=>({name:v.name,type:'bar',barMaxWidth:horizontal?14:30,
+        data:v.values.map(cuiNum),itemStyle:{color:CUI_PALETTE[i%CUI_PALETTE.length]}}))
     };
   }
   function cuiHeat(industries,key) {
@@ -774,7 +780,7 @@
         .filter(x=>isNum(x.p.net_down_pct)&&x.p.net_paired_n>0)
         .sort((a,b)=>b.p.net_down_pct-a.p.net_down_pct);
         return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.p.net_down_pct),'%','利益率低下企業');}});
-    const sales=cuiChartCard({id:'cui-sales',title:'増収減益となった企業の割合',
+    const sales=cuiChartCard({id:'cui-sales',wide:true,title:'増収減益となった企業の割合',
       subtitle:'売上高は増加、親会社帰属利益額は減少（前年同期比）',
       source:'同花順。前年同期と比較可能な同一企業のみ。売上増でも会社全体で減益の企業割合です。',
       option:()=>{const rows=inds.map(i=>({name:i.ja,p:cuiP(i,latest)}))
@@ -796,7 +802,7 @@
       ...[['ADAS','sector/adas'],['タイヤ','sector/tires'],['電池材料','sector/battery_materials'],['全業種比較','industries']]
         .map(([label,hash])=>h('button',{type:'button',onclick:()=>{location.hash='#'+hash;}},label,'　›')));
     main.replaceChildren(cuiHeader('自動車部品の収益・費用データ',
-      '崔東樹タブと同じ方式で、グラフを切り替えて比較します。説明文は出典欄にまとめています。',latestLabel),
+      '申万三級の自動車部品5業種｜A株上場企業の連結財務・取引日数を比較',latestLabel),
       cuiAnchorNav(s),cuiGrid(trend,level,down,sales,expenses,cash),go);
   }
   function renderHypotheses(main) { cuiOverview(main); }
@@ -1179,9 +1185,6 @@
         sel.addEventListener('change',()=>{index=Number(sel.value);redraw();});filters.append(sel);
       }});
     return card;
-  }
-  function cuiSector(main,id) {
-    // Body handled by async renderSector() after the sector JSON is loaded.
   }
   async function renderSector(main,id) {
     const meta=(INDEX.sectors||[]).find(x=>x.id===id);

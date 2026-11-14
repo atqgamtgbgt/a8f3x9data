@@ -68,8 +68,8 @@ try {
     }
     // 企業詳細（最初の企業リンク）
     await page.goto(BASE + '#sector/tires', { waitUntil: 'networkidle0' });
-    await page.waitForSelector('#main .linkbtn', { timeout: 20000 });
-    await page.click('#main .linkbtn');
+    await page.waitForSelector('#main button[data-company-code]', { timeout: 20000 });
+    await page.click('#main button[data-company-code]');
     await page.waitForFunction(() => document.getElementById('panel').open &&
       !/読み込み中/.test(document.getElementById('panel-title').textContent), { timeout: 20000 });
     const panel = await page.evaluate(() => ({ title: document.getElementById('panel-title').textContent,

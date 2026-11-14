@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-14T03:23:17+00:00",
- "total": 232,
+ "updated_at": "2026-11-14T14:21:44+00:00",
+ "total": 233,
  "articles": [
+  {
+   "id": "1101612641",
+   "title": "2026年10月乘用车细分市场车型走势",
+   "published_at": "2026-11-14T21:38+08:00",
+   "url": "https://www.sohu.com/a/1101612641_115312",
+   "topic": "segment",
+   "topic_label": "セグメント・車種",
+   "path": "cds/articles/2026/11/1101612641",
+   "image_count": 9,
+   "images_saved": 9,
+   "text_chars": 2139,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  当前国内车市存量竞争特征凸显，出口需求暴增，行业内部分化持续加剧。新能源市场告别全域增长，呈现“高端电动车爆发、微型电动车车型承压”的两极分化态势，县乡市场、入门级车型下滑过大。同时“新车效应”短期化，对市场拉动效力大幅减弱。渠道端压力持续凸显，行业被动去库存节",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1101612641/img/01.jpg",
+   "fetched_at": "2026-11-14T14:21:43+00:00"
+  },
   {
    "id": "1101143360",
    "title": "2026年10月汽车细分市场走势和厂家竞争表现分析",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1075914000/img/01.jpg",
    "fetched_at": "2026-10-11T03:28:44+00:00"
-  },
-  {
-   "id": "1075519389",
-   "title": "2026年8月乘用车市场价格段跟踪",
-   "published_at": "2026-09-13T15:40+08:00",
-   "url": "https://www.sohu.com/a/1075519389_115312",
-   "topic": "price",
-   "topic_label": "価格帯",
-   "path": "cds/articles/2026/09/1075519389",
-   "image_count": 9,
-   "images_saved": 9,
-   "text_chars": 2813,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年8月乘用车市场价格总体微涨。2025年乘用车均价是16.8万元，较2024年均价下降1.6万元。2026年8月乘用车均价17.1万元，均价较同期提升0.5万元。其中常规燃油车价格持续上升，市场萎缩在中低端很明显，而高端萎缩慢，因此从2021年的16.6",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1075519389/img/01.jpg",
-   "fetched_at": "2026-10-11T03:28:54+00:00"
   }
  ]
 }

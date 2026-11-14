@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-14T03:23:17+00:00",
+ "updated_at": "2026-11-14T14:21:44+00:00",
  "articles": [
+  {
+   "id": "1101612641",
+   "title": "2026年10月乘用车细分市场车型走势",
+   "published_at": "2026-11-14T21:38+08:00",
+   "url": "https://www.sohu.com/a/1101612641_115312",
+   "topic": "segment",
+   "topic_label": "セグメント・車種",
+   "path": "cds/articles/2026/11/1101612641",
+   "image_count": 9,
+   "images_saved": 9,
+   "text_chars": 2139,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  当前国内车市存量竞争特征凸显，出口需求暴增，行业内部分化持续加剧。新能源市场告别全域增长，呈现“高端电动车爆发、微型电动车车型承压”的两极分化态势，县乡市场、入门级车型下滑过大。同时“新车效应”短期化，对市场拉动效力大幅减弱。渠道端压力持续凸显，行业被动去库存节",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1101612641/img/01.jpg",
+   "fetched_at": "2026-11-14T14:21:43+00:00"
+  },
   {
    "id": "1101143360",
    "title": "2026年10月汽车细分市场走势和厂家竞争表现分析",

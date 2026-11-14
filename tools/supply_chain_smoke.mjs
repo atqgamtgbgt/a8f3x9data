@@ -43,6 +43,24 @@ try {
       if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
       if (v === 'industries' && !state.text.includes('詳しい指標を表示')) errors.push(`[${label}] 業種別の詳細トグルが表示されない`);
       if (v === 'hyp' && !state.text.includes('中国の部品メーカーは、本当に余裕があるのか？')) errors.push(`[${label}] 最初に見る概要が表示されない`);
+      if (v === 'hyp') {
+        const charts = await page.evaluate(() => ({
+          count: document.querySelectorAll('#main .visual-panel').length,
+          rates: document.querySelectorAll('#main .visual-bar-track').length,
+          marginPairs: document.querySelectorAll('#main .visual-pair').length,
+          first: document.querySelector('#main > div')?.firstElementChild?.className || '',
+          legend: document.querySelector('#main .visual-legend')?.textContent || '',
+          bars: [...document.querySelectorAll('#main .visual-bar-fill')].map(b => ({
+            width: parseFloat(b.style.width), aria: b.parentElement.getAttribute('aria-label')
+          }))
+        }));
+        if (charts.count !== 2 || charts.rates < 5 || charts.marginPairs < 5) errors.push(`[${label}] トップの図が不足 ${JSON.stringify(charts)}`);
+        if (!charts.first.includes('visual-first')) errors.push(`[${label}] グラフが先頭ではない`);
+        if (!charts.legend.includes('2025年') || !charts.legend.includes('2026年')) errors.push(`[${label}] 前年同期凡例が不完全`);
+        if (charts.bars.some(b => !Number.isFinite(b.width) || b.width < 0 || b.width > 100 || !b.aria)) {
+          errors.push(`[${label}] 悪化率の棒が0〜100%でない、またはラベル不足`);
+        }
+      }
       if (v === 'hyp' && !state.text.includes('詳細を見る')) errors.push(`[${label}] 仮説の折りたたみ表示がない`);
       if (v.startsWith('sector/') && !state.text.includes('損益計算書で要因分解できた企業')) errors.push(`[${label}] 分野別の要点がない`);
       if (v === 'sector/tires' && !state.text.includes('利益率の変化')) errors.push(`[${label}] タイヤの利益率変化が表示されない`);

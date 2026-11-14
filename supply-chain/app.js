@@ -597,7 +597,7 @@
   function pressureFromDisplayedCompanies(companies, currentKey) {
     const prev = previousYearKey(currentKey);
     if (!prev) return null;
-    const nowNet = [], oldNet = [], paired = [], pairedSales = [];
+    const nowNet = [], oldNet = [], paired = [], pairedSales = [], pairedProfit = [];
     for (const c of companies.filter(c => c.in_industry)) {
       const now = (c.series || {})[currentKey] || {}, old = (c.series || {})[prev] || {};
       if (isNum(now.net_margin)) nowNet.push(now.net_margin);
@@ -608,6 +608,10 @@
           pairedSales.push({ revenue: now.revenue > old.revenue, margin: now.net_margin < old.net_margin });
         }
       }
+      if (isNum(now.revenue) && isNum(old.revenue) && old.revenue > 0
+          && isNum(now.net_profit_reported) && isNum(old.net_profit_reported)) {
+        pairedProfit.push({ revenue: now.revenue > old.revenue, profit: now.net_profit_reported < old.net_profit_reported });
+      }
     }
     if (!nowNet.length) return null;
     const sorted = paired.slice().sort((a, b) => a - b);
@@ -615,12 +619,15 @@
     const down = paired.filter(v => v < 0).length;
     const loss = nowNet.filter(v => v < 0).length;
     const upDown = pairedSales.filter(v => v.revenue && v.margin).length;
+    const upProfitDown = pairedProfit.filter(v => v.revenue && v.profit).length;
     return {
       previous_period: prev, current_net_n: nowNet.length, previous_net_n: oldNet.length,
       net_paired_n: n, net_down_n: down, net_down_pct: n ? down / n * 100 : null,
       net_change_median_pt: n ? mid : null, loss_n: loss, loss_pct: loss / nowNet.length * 100,
       sales_up_net_down_n: upDown, sales_up_net_down_base_n: pairedSales.length,
-      sales_up_net_down_pct: pairedSales.length ? upDown / pairedSales.length * 100 : null
+      sales_up_net_down_pct: pairedSales.length ? upDown / pairedSales.length * 100 : null,
+      sales_up_profit_down_n: upProfitDown, sales_up_profit_down_base_n: pairedProfit.length,
+      sales_up_profit_down_pct: pairedProfit.length ? upProfitDown / pairedProfit.length * 100 : null
     };
   }
 
@@ -657,7 +664,10 @@
             h('div', { class: 'd' }, pressure.loss_n + '/' + pressure.current_net_n + '社（最新期）')),
           h('div', { class: 'tile' }, h('div', { class: 'l' }, '増収かつ純利益率低下'),
             h('div', { class: 'v' }, pct(pressure.sales_up_net_down_pct)),
-            h('div', { class: 'd' }, pressure.sales_up_net_down_n + '/' + pressure.sales_up_net_down_base_n + '社（「増収減益」とは異なる）'))),
+            h('div', { class: 'd' }, pressure.sales_up_net_down_n + '/' + pressure.sales_up_net_down_base_n + '社（利益額ではない）')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '増収減益（開示純利益額）'),
+            h('div', { class: 'v' }, pct(pressure.sales_up_profit_down_pct)),
+            h('div', { class: 'd' }, pressure.sales_up_profit_down_n + '/' + pressure.sales_up_profit_down_base_n + '社（同花順「净利润」）'))),
         h('p', { class: 'note' }, '比較：' + periodLabel(pressure.previous_period) + ' → ' + periodLabel(lastYtdKey) +
           '。純利益率が低下した企業数と、業種の中央値の変化は異なる指標です。単価下落によるものと断定しません。'));
     } else card.append(h('p', { class: 'note' },
@@ -669,6 +679,8 @@
       const p = ((c.series || {})[pKey] || {});
       return { c, current: n.net_margin, previous: p.net_margin,
         delta: changePt(n.net_margin, p.net_margin), grossDelta: changePt(n.gross_margin, p.gross_margin),
+        profitChange: isNum(n.net_profit_reported) && isNum(p.net_profit_reported) ?
+          n.net_profit_reported - p.net_profit_reported : null,
         salesChange: isNum(n.revenue) && isNum(p.revenue) && p.revenue > 0 ?
           (n.revenue / p.revenue - 1) * 100 : null };
     }).filter(x => isNum(x.delta) && x.delta < 0).sort((a, b) => a.delta - b.delta);
@@ -679,7 +691,8 @@
         { label: '純利益率（直近）', num: true, get: r => pct(r.current) + (r.current < 0 ? '・赤字' : '') },
         { label: '利益率の変化', num: true, get: r => pt(r.delta), sort: r => r.delta },
         { label: '粗利益率の変化', num: true, get: r => pt(r.grossDelta), sort: r => r.grossDelta },
-        { label: '売上高の前年同期比', num: true, get: r => signed(r.salesChange), sort: r => r.salesChange }
+        { label: '売上高の前年同期比', num: true, get: r => signed(r.salesChange), sort: r => r.salesChange },
+        { label: '開示純利益額の増減', num: true, get: r => isNum(r.profitChange) ? signed(r.profitChange, 2, '億元') : '—', sort: r => r.profitChange }
       ], decliningCompanies, { limit: 10 }),
       h('p', { class: 'note' }, '最新の年初累計と前年同期間を比較。会社全体の利益率であり、単価低下や完成車メーカーからの値下げ要請が原因と断定はできません。'));
     const oemNet = fy.map(k => (((oem.medians || {})[k] || {}).net_margin || {}).median);
@@ -878,10 +891,11 @@
         { label: '利益率低下企業', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct },
         { label: '企業別変化の中央値', num: true, get: r => pt(r.p.net_change_median_pt), sort: r => r.p.net_change_median_pt },
         { label: '赤字企業', num: true, get: r => countRate(r.p.loss_n, r.p.current_net_n), sort: r => r.p.loss_pct },
-        { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct }
+        { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct },
+        { label: '増収減益（開示純利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n), sort: r => r.p.sales_up_profit_down_pct }
       ], rows),
       h('p', { class: 'note' },
-        '注意：各業種の中央値の差は企業ごとの変化の中央値とは一致しません。「利益率低下企業」は両期に純利益率がある企業を分母にし、「赤字企業」は最新期の純利益率がある企業を分母にします。増収＋利益率低下は利益額の減少を意味しません。'),
+        '注意：各業種の中央値の差は企業ごとの変化の中央値とは一致しません。「利益率低下企業」は両期に純利益率がある企業を分母にし、「赤字企業」は最新期の純利益率がある企業を分母にします。増収＋利益率低下は利益額の減少を意味しません。「増収減益」は同花順「净利润」の両期の金額がある会社だけ判定します。'),
       h('p', { class: 'note' }, '同一企業の前年比列は、収集済みデータを再集計した際に順次表示されます。空欄は0%ではありません。'));
     return card;
   }
@@ -991,7 +1005,7 @@
     } else {
       const keys = Object.keys(c.series || {}).sort();
       const cols = [...keys.filter(k => k.endsWith('|FY')), ...keys.filter(k => k.includes('|YTD')).slice(-2)];
-      const metrics = [['revenue', '売上高', oku], ['gross_margin', '粗利益率', pct], ['net_margin', '純利益率', pct],
+      const metrics = [['revenue', '売上高', oku], ['net_profit_reported', '開示「净利润」金額', oku], ['gross_margin', '粗利益率', pct], ['net_margin', '純利益率', pct],
         ['ar_days_ths', '売掛金回転日数（同花順）', days], ['ar_notes_days', '売掛金回転日数（手形を含む・計算）', days],
         ['ap_notes_days', '買掛金回転日数（手形を含む・計算）', days], ['inventory_days', '在庫回転日数', days]];
       parts.push(h('h3', null, '会社全体の財務'), table([{ label: '指標', get: r => r[1] },

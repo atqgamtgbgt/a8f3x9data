@@ -662,6 +662,26 @@
           '。純利益率が低下した企業数と、業種の中央値の変化は異なる指標です。単価下落によるものと断定しません。'));
     } else card.append(h('p', { class: 'note' },
       '企業ごとの前年同期比較は次回のデータ更新後に表示します。財務のない会社をゼロとして扱いません。'));
+    // 企業ごとの利幅縮小を可視化。中央値がプラスの業種でも悪化企業を見落とさない。
+    const pKey = previousYearKey(lastYtdKey);
+    const decliningCompanies = (sec.companies || []).filter(c => c.in_industry).map(c => {
+      const n = ((c.series || {})[lastYtdKey] || {});
+      const p = ((c.series || {})[pKey] || {});
+      return { c, current: n.net_margin, previous: p.net_margin,
+        delta: changePt(n.net_margin, p.net_margin), grossDelta: changePt(n.gross_margin, p.gross_margin),
+        salesChange: isNum(n.revenue) && isNum(p.revenue) && p.revenue > 0 ?
+          (n.revenue / p.revenue - 1) * 100 : null };
+    }).filter(x => isNum(x.delta) && x.delta < 0).sort((a, b) => a.delta - b.delta);
+    if (decliningCompanies.length) card.append(h('h3', null, '純利益率の低下が大きい企業（前年同期比）'),
+      table([
+        { label: '企業', get: r => h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.c.code) }, r.c.name) },
+        { label: '純利益率（前年）', num: true, get: r => pct(r.previous) },
+        { label: '純利益率（直近）', num: true, get: r => pct(r.current) + (r.current < 0 ? '・赤字' : '') },
+        { label: '利益率の変化', num: true, get: r => pt(r.delta), sort: r => r.delta },
+        { label: '粗利益率の変化', num: true, get: r => pt(r.grossDelta), sort: r => r.grossDelta },
+        { label: '売上高の前年同期比', num: true, get: r => signed(r.salesChange), sort: r => r.salesChange }
+      ], decliningCompanies, { limit: 10 }),
+      h('p', { class: 'note' }, '最新の年初累計と前年同期間を比較。会社全体の利益率であり、単価低下や完成車メーカーからの値下げ要請が原因と断定はできません。'));
     const oemNet = fy.map(k => (((oem.medians || {})[k] || {}).net_margin || {}).median);
     const chart = lineChart({ x: fy.map(k => k.slice(0, 4)), unit: '%', zero: true, aria: '利益率の中央値の推移', series: [
       { name: ind.ja + ' 粗利益率（中央値）', color: 'var(--s1)', values: fy.map(k => med(k, 'gross_margin').median), n: fy.map(k => med(k, 'gross_margin').n) },

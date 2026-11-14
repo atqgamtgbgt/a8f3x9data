@@ -1078,6 +1078,22 @@
       h('p', { class: 'note' },
         '注意：各業種の中央値の差は企業ごとの変化の中央値とは一致しません。「利益率低下企業」は両期に純利益率がある企業を分母にし、「赤字企業」は最新期の純利益率がある企業を分母にします。増収＋利益率低下は利益額の減少を意味しません。「増収減益」は同花順の親会社帰属利益「净利润」の両期の金額がある会社だけ判定します。'),
       h('p', { class: 'note' }, '同一企業の前年比列は、収集済みデータを再集計した際に順次表示されます。空欄は0%ではありません。'));
+    // 初期表示では4列だけの読みやすい表にし、12列の詳細表は展開式にする。
+    const elements = Array.from(card.children);
+    const startOfLongTable = elements.findIndex(el => el.tagName === 'H3');
+    if (startOfLongTable >= 0) {
+      const more = h('details', { class: 'deep-dive compact-table-details' },
+        h('summary', { class: 'deep-summary' }, '利益率・赤字・増収減益の詳細（全指標）'));
+      for (const el of elements.slice(startOfLongTable)) more.append(el);
+      card.append(h('h3', null, '主要指標：業種間の比較'),
+        table([
+          { label: '申万業種', get: r => r.i.ja, sort: r => r.i.ja },
+          { label: '純利益率', num: true, get: r => pct(net(r.i, latest)), sort: r => net(r.i, latest) },
+          { label: '前年同期との差', num: true, get: r => bridgeDisplay(r.delta), sort: r => r.delta },
+          { label: '低下企業の割合', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct }
+        ], rows),
+        more);
+    }
     return card;
   }
 
@@ -1107,6 +1123,13 @@
           ...cols.map(k => ({ label: periodLabel(k), num: true, get: i => pct(m(i, k, metric).median) + ' (' + (m(i, k, metric).n || 0) + ')', sort: i => m(i, k, metric).median }))], inds),
         h('p', { class: 'note' }, '現在の所属企業を過去の期間にも当てはめた系列（現時点コホート）。年初累計（1〜9月など）は通期と混ぜずに、前年同期と比べてください。'),
         h('p', { class: 'source' }, '出典：同花順 F10「行業対比」（所属企業）、「財務概況」（销售毛利率・销售净利率）'));
+      const elements = Array.from(body.children);
+      if (elements.length > 1) {
+        const more = h('details', { class: 'deep-dive compact-table-details' },
+          h('summary', { class: 'deep-summary' }, '過去の期間・社数を表で詳しく見る'));
+        elements.slice(1).forEach(el => more.append(el));
+        body.append(more);
+      }
     }
     draw();
     main.replaceChildren(industryPressureCard(inds, keys), card);

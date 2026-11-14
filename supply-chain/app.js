@@ -402,9 +402,9 @@
 
     const rateRows = rows.slice().sort((a, b) => b.rate - a.rate);
     const left = h('section', { class: 'card visual-panel' },
-      h('div', { class: 'eyebrow' }, 'グラフ 1｜同じ企業を前年同期と比較'),
-      h('h2', null, 'どの部品業種で利益率悪化が広がったか'),
-      h('p', { class: 'lead' }, '純利益率が前年同期より低下した企業の割合。棒の長さは0～100%を表します。'));
+      h('div', { class: 'eyebrow' }, '比較 01｜同一企業の前年同期比'),
+      h('h2', null, '純利益率が低下した企業の割合'),
+      h('p', { class: 'report-chart-subtitle' }, periodLabel(previousPeriod) + ' → ' + periodLabel(currentPeriod)));
     for (const r of rateRows) {
       const v = Math.max(0, Math.min(100, r.rate));
       const row = h('div', { class: 'visual-row' },
@@ -417,22 +417,18 @@
         h('div', { class: 'visual-row-sub' }, r.down + '/' + r.n + '社・前年同期と同一企業を比較'));
       left.appendChild(row);
     }
-    const sumN = rows.reduce((a, r) => a + r.n, 0);
-    const sumDown = rows.reduce((a, r) => a + r.down, 0);
-    left.append(
-      h('p', { class: 'visual-takeaway' },
-        '5部品業種の対象企業（延べ ' + sumN + '社）で、' + sumDown +
-        '社の純利益率が悪化。業種によって程度は異なります。'),
-      h('p', { class: 'note' }, '申万分類の上場企業に限定。母数は両期に数値がある企業。市場全体のメーカー比率ではありません。'));
+    left.append(h('details', { class: 'report-source-details' },
+      h('summary', null, '集計条件・出典'),
+      h('p', null, '同花順。各棒は前年同期の両期に純利益率がある同一企業の比率。'
+        + '市場全体の企業割合ではありません。')));
 
     const margins = rows.filter(r => isNum(r.oldMargin) && isNum(r.newMargin))
       .sort((a, b) => (a.newMargin - a.oldMargin) - (b.newMargin - b.oldMargin));
     const maxMargin = Math.max(1, ...margins.flatMap(r => [r.oldMargin, r.newMargin])) * 1.12;
     const right = h('section', { class: 'card visual-panel' },
-      h('div', { class: 'eyebrow' }, 'グラフ 2｜業種中央値の前年差'),
-      h('h2', null, '利益率の水準はどう変わったか'),
-      h('p', { class: 'lead' }, periodLabel(previousPeriod) + 'と' + periodLabel(currentPeriod) +
-        'の純利益率中央値。年初累計どうしを比較します。'),
+      h('div', { class: 'eyebrow' }, '比較 02｜各期の業種中央値'),
+      h('h2', null, '純利益率中央値の比較'),
+      h('p', { class: 'report-chart-subtitle' }, periodLabel(previousPeriod) + ' → ' + periodLabel(currentPeriod)),
       h('div', { class: 'visual-legend' },
         h('span', null, h('i', { class: 'visual-swatch visual-swatch-before' }), periodLabel(previousPeriod)),
         h('span', null, h('i', { class: 'visual-swatch visual-swatch-after' }), periodLabel(currentPeriod))));
@@ -452,76 +448,47 @@
             h('div', { class: 'visual-pair-fill after', style: { width: Math.max(0, r.newMargin) / maxMargin * 100 + '%' } }),
             h('span', { class: 'visual-pair-value' }, pct(r.newMargin))))));
     });
-    right.append(h('p', { class: 'note' },
-      '業種中央値は、その期に値がある企業の中央値です。左の「悪化した企業割合」と集計方法が異なります。'));
+    right.append(h('details', { class: 'report-source-details' },
+      h('summary', null, '集計条件・出典'),
+      h('p', null, '同花順。各期に掲載された企業全体の純利益率中央値。'
+        + '企業別の変化の中央値とは異なり、期ごとに母集団が変わる場合があります。')));
 
     return h('div', { class: 'visual-first', 'aria-label': '部品メーカーの収益性を示すグラフ' }, left, right);
   }
 
   function renderHypotheses(main) {
-    const box = h('div');
-    const allPeriods = ytdKeys(INDEX.periods || []);
-    const currentPeriod = allPeriods[allPeriods.length - 1];
+    // 全体比較もデータのグラフが主役。推測・解釈の文章は自動生成しない。
+    const currentPeriod = ytdKeys(INDEX.periods || []).at(-1);
     const previousPeriod = previousYearKey(currentPeriod);
-    const partsNow = (INDEX.industries || []).filter(i => i.group_ja === '自動車部品');
-    const partRates = partsNow.filter(i => isNum(((i.series || {})[currentPeriod] || {}).pressure?.net_down_pct));
-    const paired = partRates.reduce((a, i) => {
-      const p = i.series[currentPeriod].pressure;
-      a.down += p.net_down_n; a.total += p.net_paired_n;
-      return a;
-    }, { down: 0, total: 0 });
-    const costCoverage = (INDEX.coverage || {}).cost_bridge_companies;
-    const overview = h('section', { class: 'card overview', 'aria-label': '分析の要点' },
-      h('div', { class: 'eyebrow' }, '最初に確認したいこと'),
-      h('h2', null, '中国の部品メーカーは、本当に余裕があるのか？'),
-      h('p', { class: 'lead' }, '利益率がプラスでも、前年より利幅が縮んでいる企業はあります。まず全体の傾向を確認し、部品ごとの違いを調べます。'),
-      h('div', { class: 'tiles' },
-        h('div', { class: 'tile key-figure' }, h('div', { class: 'l' }, '純利益率が低下した部品企業'),
-          h('div', { class: 'v down' }, paired.total ? pct(paired.down / paired.total * 100) : '—'),
-          h('div', { class: 'd' }, paired.down + '/' + paired.total + '社・' + periodLabel(previousPeriod) + '比')),
-        h('div', { class: 'tile key-figure' }, h('div', { class: 'l' }, '費用別に分解可能な企業'),
-          h('div', { class: 'v' }, isNum(costCoverage) ? costCoverage + '社' : '—'),
-          h('div', { class: 'd' }, '同花順の連結損益計算書・いずれかの期間')),
-        h('div', { class: 'tile key-figure' }, h('div', { class: 'l' }, '分析の対象'),
-          h('div', { class: 'v' }, '3分野'),
-          h('div', { class: 'd' }, 'ADAS・タイヤ・電池材料'))),
-      h('p', { class: 'note' }, '重要：これは中国A株の申万5部品業種の企業別比較であり、中国の全部品企業や製品価格の動きを示すものではありません。分類間で同じ銘柄が重なる場合は延べ社数です。'),
-      h('div', { class: 'overview-links' },
-        h('a', { href: '#industries' }, '利益率悪化の内訳を見る'),
-        h('a', { href: '#sector/tires' }, 'タイヤの要因を見る'),
-        h('a', { href: '#sector/adas' }, 'ADASの市場シェアを見る')));
-    // 説明や表より先に、最新の企業別悪化率と利益率変化を提示する。
-    box.appendChild(topPressureCharts(partsNow, currentPeriod, previousPeriod));
-    box.appendChild(overview);
-    box.appendChild(h('div', { class: 'card' },
-      h('h2', null, '6つの仮説と、いまのデータで言えること'),
-      h('p', { class: 'lead' }, '数値はデータから自動で計算しています。「事実」はデータで確認できること、「相関」は同時に起きている動き、「仮説」はこのデータだけでは確かめられない解釈です。利益率の違いだけでは製造原価の違いは証明できません。')));
-    for (const hy of INDEX.hypotheses) {
-      const card = h('section', { class: 'card hyp', 'aria-labelledby': 'h-' + hy.id },
-        h('details', { class: 'hyp-fold', open: hy.id === 'H1' },
-          h('summary', { class: 'hyp-summary' },
-            h('span', { class: 'status' }, hy.id + '｜' + (hy.status_ja || STATUS_JA[hy.status] || '')),
-            h('h2', { id: 'h-' + hy.id }, hy.title_ja),
-            h('span', { class: 'fold-hint', 'aria-hidden': 'true' }, '詳細を見る')),
-        h('div', { class: 'hyp-content' },
-        h('ul', null,
-          (hy.facts || []).map(t => h('li', { class: 'f' }, t)),
-          (hy.correlations || []).map(t => h('li', { class: 'c' }, t)),
-          (hy.hypotheses || []).map(t => h('li', { class: 'h' }, t))),
-        (hy.facts || []).length === 0 ? h('p', { class: 'empty' }, 'この仮説に使えるデータはまだ取得できていません。') : null,
-        h('details', null, h('summary', null, 'このデータで言えないこと・使ったデータ'),
-          h('ul', null, (hy.limits || []).map(t => h('li', null, t))),
-          h('p', { class: 'note' }, '使ったデータ：' + (hy.data_used || []).join('、'))),
-        h('div', { class: 'links' }, (hy.views || []).filter(v => v.sector && v.sector !== '*').map(v => {
-          const anchor = { strength: 1, profit: 2, unit_price: 3, structure: 4 }[v.view];
-          const toInd = v.sector === 'oem' || v.sector === 'industries';
-          return h('a', { href: toInd ? '#industries' : '#sector/' + v.sector, style: { marginRight: '12px' },
-            onclick: toInd || !anchor ? null : e => { e.preventDefault(); pendingAnchor = 'v' + anchor; location.hash = '#sector/' + v.sector; } },
-          (toInd ? '業種別の利益率' : sectorShort(v.sector) + (anchor ? '：' + VIEW_NAMES[anchor - 1] : '')) + ' を見る →');
-        })))));
-      box.appendChild(card);
-    }
-    main.replaceChildren(box);
+    const industries = (INDEX.industries || []).filter(i => i.group_ja === '自動車部品');
+    const costRows = industries.map(i => ({
+      name: i.ja,
+      pressure: ((i.series || {})[currentPeriod] || {}).pressure || {}
+    })).filter(i => isNum(i.pressure.sales_up_profit_down_pct)
+      && i.pressure.sales_up_profit_down_base_n > 0)
+      .sort((a, b) => b.pressure.sales_up_profit_down_pct - a.pressure.sales_up_profit_down_pct);
+    const more = h('section', { class: 'card visual-panel report-overview-extra' },
+      h('div', { class: 'report-kicker' }, '比較 03'),
+      h('h2', null, '増収減益となった企業の割合'),
+      h('div', { class: 'report-chart' },
+        ...costRows.map(r => storyBarRow(r.name,
+          r.pressure.sales_up_profit_down_pct, 100,
+          pct(r.pressure.sales_up_profit_down_pct),
+          r.pressure.sales_up_profit_down_n + '/' +
+          r.pressure.sales_up_profit_down_base_n + '社'))),
+      h('details', { class: 'report-source-details' },
+        h('summary', null, '集計条件・出典'),
+        h('p', null, '同花順の同一企業・前年同期の売上高と親会社帰属利益額から判定。'
+          + '申万の自動車部品5業種で両期の値を確認できたA株企業に限ります。'
+          + '重複所属する銘柄は延べ社数。')));
+    main.replaceChildren(
+      topPressureCharts(industries, currentPeriod, previousPeriod),
+      more,
+      h('div', { class: 'report-navigation overview-links', role: 'navigation' },
+        h('a', { href: '#sector/adas' }, 'ADAS'),
+        h('a', { href: '#sector/tires' }, 'タイヤ'),
+        h('a', { href: '#sector/battery_materials' }, '電池材料'),
+        h('a', { href: '#industries' }, '業種別データ')));
   }
   const sectorName = id => (INDEX.sectors.find(s => s.id === id) || {}).ja || id;
 

@@ -70,8 +70,17 @@ try {
     await page.goto(BASE + '#sector/tires', { waitUntil: 'networkidle0' });
     await page.waitForSelector('#main button[data-company-code]', { timeout: 20000 });
     await page.click('#main button[data-company-code]');
+    await new Promise(resolve => setTimeout(resolve, 250));
+    const debug = await page.evaluate(() => ({
+      hash: location.hash,
+      panelOpen: document.getElementById('panel').open,
+      title: document.getElementById('panel-title').textContent,
+      panelSnippet: document.getElementById('panel-body').textContent.slice(0, 180),
+      selectedButton: document.querySelector('#main button[data-company-code]')?.textContent
+    }));
+    console.log(`[${label}] company click:`, JSON.stringify(debug));
     await page.waitForFunction(() => document.getElementById('panel').open &&
-      !/読み込み中/.test(document.getElementById('panel-title').textContent), { timeout: 20000 });
+      !/読み込み中/.test(document.getElementById('panel-title').textContent), { timeout: 5000 });
     const panel = await page.evaluate(() => ({ title: document.getElementById('panel-title').textContent,
       tables: document.querySelectorAll('#panel-body table').length }));
     if (!panel.tables) errors.push(`[${label}] 企業詳細に表がない（${panel.title}）`);

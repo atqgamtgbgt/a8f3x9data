@@ -382,47 +382,89 @@
   const STATUS_JA = { partial: '一部の根拠あり', correlation: '相関のみ', insufficient: 'データ不足', evidence: '根拠あり' };
   function renderHypotheses(main) {
     const box = h('div');
-    box.appendChild(h('div', { class: 'card' },
-      h('h2', null, '6つの仮説と、いまのデータで言えること'),
-      h('p', { class: 'lead' }, '数値はデータから自動で計算しています。「事実」はデータで確認できること、「相関」は同時に起きている動き、「仮説」はこのデータだけでは確かめられない解釈です。利益率の違いだけでは製造原価の違いは証明できません。')));
-    // 一見「部品企業は高利益」に見える偏りを避け、最初に前年同期の悪化を示す。
     const allYtd = ytdKeys(INDEX.periods || []);
-    const cur = allYtd[allYtd.length - 1], prev = previousYearKey(cur);
+    const latest = allYtd[allYtd.length - 1], previous = previousYearKey(latest);
     const parts = (INDEX.industries || []).filter(i => i.group_ja === '自動車部品');
-    const readable = parts.filter(i => isNum((((i.series || {})[cur] || {}).net_margin || {}).median)
-      && isNum((((i.series || {})[prev] || {}).net_margin || {}).median));
-    const declining = readable.filter(i => ((i.series[cur].net_margin.median) < i.series[prev].net_margin.median));
-    if (readable.length) box.appendChild(h('section', { class: 'card' },
-      h('h2', null, '先に見る：サプライヤーの利益率は本当に安定しているか'),
-      h('div', { class: 'tiles' },
-        h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率中央値が前年同期より低下した部品業種'),
-          h('div', { class: 'v' }, declining.length + ' / ' + readable.length),
-          h('div', { class: 'd' }, periodLabel(prev) + ' → ' + periodLabel(cur) + '・申万三級')),
-        h('div', { class: 'tile' }, h('div', { class: 'l' }, '収益性の変化の確認方法'),
-          h('div', { class: 'v' }, '同一企業比較'),
-          h('div', { class: 'd' }, '業種中央値の差と、悪化した企業の割合を分けて確認'))),
-      h('p', { class: 'note' }, '部品業種の利益率がプラスでも、その企業の利幅が縮小していないとは限りません。悪化の原因が値下げかどうかは、単価や費用を別途検証する必要があります。'),
-      h('p', null, h('a', { href: '#industries' }, '業種別の悪化企業割合と赤字比率を見る →'))));
+    const pressure = i => (((i.series || {})[latest] || {}).pressure || {});
+    const comparable = parts.filter(i => isNum(pressure(i).net_down_n) && pressure(i).net_paired_n > 0);
+    const totalDown = comparable.reduce((sum, i) => sum + pressure(i).net_down_n, 0);
+    const totalPairs = comparable.reduce((sum, i) => sum + pressure(i).net_paired_n, 0);
+    const median = (i, key) => ((((i.series || {})[key] || {}).net_margin || {}).median);
+    const declineSectors = parts.filter(i => isNum(median(i, latest)) && isNum(median(i, previous))
+      && median(i, latest) < median(i, previous));
+    const bridgeN = (INDEX.coverage || {}).cost_bridge_companies;
+    box.append(h('section', { class: 'dashboard-hero', 'aria-label': '分析の要点' },
+      h('p', { class: 'eyebrow' }, 'CHINA AUTO SUPPLY CHAIN  /  ANALYSIS'),
+      h('h2', null, '中国車の安さは、どこから来るのか。'),
+      h('p', { class: 'hero-description' },
+        'まず利益率の変化を確認し、その後に市場シェア・製品単価・費用・取引条件を掘り下げます。'
+        + ' 同時に動いた数字は見つかりますが、それだけで値下げ圧力や低原価を証明したことにはなりません。'),
+      h('div', { class: 'summary-grid' },
+        h('div', { class: 'summary-stat' },
+          h('span', { class: 'summary-label' }, '純利益率が低下した部品企業'),
+          h('strong', { class: 'summary-number' }, totalPairs ? pct(totalDown / totalPairs * 100) : '—'),
+          h('span', { class: 'summary-detail' }, totalPairs ? totalDown + ' / ' + totalPairs + '社・前年同期比' : '比較可能な企業なし')),
+        h('div', { class: 'summary-stat' },
+          h('span', { class: 'summary-label' }, '中央値が悪化した部品業種'),
+          h('strong', { class: 'summary-number' }, declineSectors.length + ' / ' + parts.length),
+          h('span', { class: 'summary-detail' }, '申万三級・会社全体の純利益率')),
+        h('div', { class: 'summary-stat' },
+          h('span', { class: 'summary-label' }, '費目別に要因分解できる会社'),
+          h('strong', { class: 'summary-number' }, isNum(bridgeN) ? bridgeN + '社' : '—'),
+          h('span', { class: 'summary-detail' }, 'いずれかの期間・同花順損益計算書'))),
+      h('div', { class: 'hero-actions' },
+        h('a', { class: 'primary-action', href: '#industries' }, '業種別に比較する'),
+        h('a', { class: 'secondary-action', href: '#sector/tires' }, 'タイヤの詳しい分析を見る')),
+      h('p', { class: 'hero-footnote' },
+        periodLabel(previous) + ' → ' + periodLabel(latest)
+        + '。中国A株・現在の申万所属企業を同一銘柄で比較。外資系は集計に含まれません。')));
+    const pulses = comparable.slice().sort((a, b) => pressure(b).net_down_pct - pressure(a).net_down_pct);
+    if (pulses.length) {
+      const pulse = h('section', { class: 'card compact-pulse' },
+        h('div', { class: 'section-heading' },
+          h('div', null, h('p', { class: 'eyebrow' }, 'BY SECTOR'), h('h2', null, 'どの部品分野で悪化が広がっているか')),
+          h('a', { href: '#industries', class: 'text-link' }, '全業種の数値を見る')),
+        h('p', { class: 'lead' }, '前年同期より純利益率が低下した企業の割合。同一銘柄の両期取得数を分母にしています。'));
+      for (const industry of pulses) {
+        const p = pressure(industry), percent = p.net_down_pct;
+        pulse.append(h('div', { class: 'pulse-row' },
+          h('div', { class: 'pulse-name' }, industry.ja),
+          h('div', { class: 'pulse-bar', role: 'img',
+            'aria-label': industry.ja + '：' + pct(percent) + '、' + p.net_down_n + '/' + p.net_paired_n + '社' },
+            h('div', { class: 'pulse-fill', style: { width: Math.max(0, Math.min(100, percent)) + '%' } })),
+          h('div', { class: 'pulse-number' }, pct(percent), h('small', null, p.net_down_n + '/' + p.net_paired_n + '社'))));
+      }
+      box.append(pulse);
+    }
+    box.append(h('div', { class: 'section-heading section-heading-spaced' },
+      h('div', null, h('p', { class: 'eyebrow' }, 'HYPOTHESES'), h('h2', null, '安さを説明する6つの仮説')),
+      h('span', { class: 'muted' }, '詳しい根拠は項目を開いて確認')));
     for (const hy of INDEX.hypotheses) {
-      const card = h('section', { class: 'card hyp', 'aria-labelledby': 'h-' + hy.id },
-        h('div', null, h('span', { class: 'status' }, hy.id + '｜' + (hy.status_ja || STATUS_JA[hy.status] || ''))),
-        h('h2', { id: 'h-' + hy.id }, hy.title_ja),
-        h('ul', null,
-          (hy.facts || []).map(t => h('li', { class: 'f' }, t)),
-          (hy.correlations || []).map(t => h('li', { class: 'c' }, t)),
-          (hy.hypotheses || []).map(t => h('li', { class: 'h' }, t))),
-        (hy.facts || []).length === 0 ? h('p', { class: 'empty' }, 'この仮説に使えるデータはまだ取得できていません。') : null,
-        h('details', null, h('summary', null, 'このデータで言えないこと・使ったデータ'),
+      const details = h('details', { class: 'hypothesis-details' },
+        h('summary', { class: 'hypothesis-summary' },
+          h('span', { class: 'hypothesis-id' }, hy.id),
+          h('span', { class: 'hypothesis-main' },
+            h('strong', null, hy.title_ja),
+            h('span', { class: 'hypothesis-preview' }, (hy.facts || [])[0] || (hy.correlations || [])[0] || '比較データがまだ不足しています。')),
+          h('span', { class: 'status' }, hy.status_ja || STATUS_JA[hy.status] || '検証中')),
+        h('div', { class: 'hypothesis-body hyp' },
+          h('ul', null, (hy.facts || []).map(t => h('li', { class: 'f' }, t)),
+            (hy.correlations || []).map(t => h('li', { class: 'c' }, t)),
+            (hy.hypotheses || []).map(t => h('li', { class: 'h' }, t))),
+          h('h3', null, 'このデータで言えないこと'),
           h('ul', null, (hy.limits || []).map(t => h('li', null, t))),
-          h('p', { class: 'note' }, '使ったデータ：' + (hy.data_used || []).join('、'))),
-        h('div', { class: 'links' }, (hy.views || []).filter(v => v.sector && v.sector !== '*').map(v => {
-          const anchor = { strength: 1, profit: 2, unit_price: 3, structure: 4 }[v.view];
-          const toInd = v.sector === 'oem' || v.sector === 'industries';
-          return h('a', { href: toInd ? '#industries' : '#sector/' + v.sector, style: { marginRight: '12px' },
-            onclick: toInd || !anchor ? null : e => { e.preventDefault(); pendingAnchor = 'v' + anchor; location.hash = '#sector/' + v.sector; } },
-          (toInd ? '業種別の利益率' : sectorShort(v.sector) + (anchor ? '：' + VIEW_NAMES[anchor - 1] : '')) + ' を見る →');
-        })));
-      box.appendChild(card);
+          h('p', { class: 'note' }, '使用データ：' + (hy.data_used || []).join('、')),
+          h('div', { class: 'links' }, (hy.views || []).filter(v => v.sector && v.sector !== '*').map(v => {
+            const anchor = { strength: 1, profit: 2, unit_price: 3, structure: 4 }[v.view];
+            const toInd = v.sector === 'oem' || v.sector === 'industries';
+            return h('a', { href: toInd ? '#industries' : '#sector/' + v.sector,
+              onclick: toInd || !anchor ? null : e => {
+                e.preventDefault();
+                pendingAnchor = 'v' + anchor;
+                location.hash = '#sector/' + v.sector;
+              } }, (toInd ? '業種別の利益率' : sectorShort(v.sector) + '：詳細') + ' を見る');
+          }))));
+      box.append(h('section', { class: 'hypothesis-card' }, details));
     }
     main.replaceChildren(box);
   }

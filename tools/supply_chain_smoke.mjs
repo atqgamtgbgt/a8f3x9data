@@ -42,6 +42,9 @@ try {
       if (!state.cards) errors.push(`[${label}] ${v}: カードが描画されていない`);
       if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
       if (v === 'sector/tires' && !state.text.includes('利益率の変化')) errors.push(`[${label}] タイヤの利益率変化が表示されない`);
+      if (v.startsWith('sector/') && !state.text.includes('利益率悪化の要因分解（損益計算書）')) {
+        errors.push(`[${label}] ${v}: 費用要因の分析が見つからない`);
+      }
       if (state.scrollWidth > state.viewport + 8) errors.push(`[${label}] ${v}: 横にはみ出し ${state.scrollWidth} > ${state.viewport}`);
       await page.screenshot({ path: `${OUT}/${label}_${v.replace('/', '_')}.png`, fullPage: true });
       console.log(`${label} ${v}: cards=${state.cards} width=${state.scrollWidth}/${state.viewport}`);

@@ -35,10 +35,13 @@ try {
         failed: /読み込めませんでした/.test(document.getElementById('main').textContent),
         cards: document.querySelectorAll('#main .card').length,
         scrollWidth: document.documentElement.scrollWidth, viewport: window.innerWidth,
-        title: document.title
+        title: document.title,
+        text: document.getElementById('main').textContent
       }));
       if (state.failed) errors.push(`[${label}] ${v}: データ読み込み失敗の表示`);
       if (!state.cards) errors.push(`[${label}] ${v}: カードが描画されていない`);
+      if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
+      if (v === 'sector/tires' && !state.text.includes('利益率の変化')) errors.push(`[${label}] タイヤの利益率変化が表示されない`);
       if (state.scrollWidth > state.viewport + 8) errors.push(`[${label}] ${v}: 横にはみ出し ${state.scrollWidth} > ${state.viewport}`);
       await page.screenshot({ path: `${OUT}/${label}_${v.replace('/', '_')}.png`, fullPage: true });
       console.log(`${label} ${v}: cards=${state.cards} width=${state.scrollWidth}/${state.viewport}`);

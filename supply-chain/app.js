@@ -73,6 +73,13 @@
   }
   const fyKeys = keys => keys.filter(k => k.endsWith('|FY')).sort();
   const ytdKeys = keys => keys.filter(k => k.includes('|YTD')).sort();
+  const previousYearKey = key => {
+    if (!key || !/^20\d{2}-\d{2}-\d{2}\|(FY|YTD_Q1|YTD_H1|YTD_Q3)$/.test(key)) return null;
+    return (Number(key.slice(0, 4)) - 1) + key.slice(4);
+  };
+  const changePt = (a, b) => isNum(a) && isNum(b) ? a - b : null;
+  const countRate = (count, total) => isNum(count) && total > 0 ? pct(count / total * 100) + '（' + count + '/' + total + '社）' : '—';
+
 
   const REGION = {
     cn_mainland: ['中国系', 'var(--s1)'], foreign: ['外資系', 'var(--s2)'], jv: ['合弁', 'var(--s7)'],
@@ -378,6 +385,24 @@
     box.appendChild(h('div', { class: 'card' },
       h('h2', null, '6つの仮説と、いまのデータで言えること'),
       h('p', { class: 'lead' }, '数値はデータから自動で計算しています。「事実」はデータで確認できること、「相関」は同時に起きている動き、「仮説」はこのデータだけでは確かめられない解釈です。利益率の違いだけでは製造原価の違いは証明できません。')));
+    // 一見「部品企業は高利益」に見える偏りを避け、最初に前年同期の悪化を示す。
+    const allYtd = ytdKeys(INDEX.periods || []);
+    const cur = allYtd[allYtd.length - 1], prev = previousYearKey(cur);
+    const parts = (INDEX.industries || []).filter(i => i.group_ja === '自動車部品');
+    const readable = parts.filter(i => isNum((((i.series || {})[cur] || {}).net_margin || {}).median)
+      && isNum((((i.series || {})[prev] || {}).net_margin || {}).median));
+    const declining = readable.filter(i => ((i.series[cur].net_margin.median) < i.series[prev].net_margin.median));
+    if (readable.length) box.appendChild(h('section', { class: 'card' },
+      h('h2', null, '先に見る：サプライヤーの利益率は本当に安定しているか'),
+      h('div', { class: 'tiles' },
+        h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率中央値が前年同期より低下した部品業種'),
+          h('div', { class: 'v' }, declining.length + ' / ' + readable.length),
+          h('div', { class: 'd' }, periodLabel(prev) + ' → ' + periodLabel(cur) + '・申万三級')),
+        h('div', { class: 'tile' }, h('div', { class: 'l' }, '収益性の変化の確認方法'),
+          h('div', { class: 'v' }, '同一企業比較'),
+          h('div', { class: 'd' }, '業種中央値の差と、悪化した企業の割合を分けて確認'))),
+      h('p', { class: 'note' }, '部品業種の利益率がプラスでも、その企業の利幅が縮小していないとは限りません。悪化の原因が値下げかどうかは、単価や費用を別途検証する必要があります。'),
+      h('p', null, h('a', { href: '#industries' }, '業種別の悪化企業割合と赤字比率を見る →'))));
     for (const hy of INDEX.hypotheses) {
       const card = h('section', { class: 'card hyp', 'aria-labelledby': 'h-' + hy.id },
         h('div', null, h('span', { class: 'status' }, hy.id + '｜' + (hy.status_ja || STATUS_JA[hy.status] || ''))),
@@ -567,6 +592,49 @@
 
   function seriesVals(ser, keys, metric) { return keys.map(k => ((ser || {})[k] || {})[metric]); }
 
+  // 現在公開されているJSONに pressure がない場合も、3試作分野は企業別データで計算する。
+  // 同じ申万業種に属する企業だけを使い、Gasgoo関係企業は分母に含めない。
+  function pressureFromDisplayedCompanies(companies, currentKey) {
+    const prev = previousYearKey(currentKey);
+    if (!prev) return null;
+    const nowNet = [], oldNet = [], paired = [], grossPaired = [], pairedSales = [], pairedProfit = [];
+    for (const c of companies.filter(c => c.in_industry)) {
+      const now = (c.series || {})[currentKey] || {}, old = (c.series || {})[prev] || {};
+      if (isNum(now.net_margin)) nowNet.push(now.net_margin);
+      if (isNum(old.net_margin)) oldNet.push(old.net_margin);
+      if (isNum(now.gross_margin) && isNum(old.gross_margin)) grossPaired.push(now.gross_margin - old.gross_margin);
+      if (isNum(now.net_margin) && isNum(old.net_margin)) {
+        paired.push(now.net_margin - old.net_margin);
+        if (isNum(now.revenue) && isNum(old.revenue) && old.revenue > 0) {
+          pairedSales.push({ revenue: now.revenue > old.revenue, margin: now.net_margin < old.net_margin });
+        }
+      }
+      if (isNum(now.revenue) && isNum(old.revenue) && old.revenue > 0
+          && isNum(now.net_profit_reported) && isNum(old.net_profit_reported)) {
+        pairedProfit.push({ revenue: now.revenue > old.revenue, profit: now.net_profit_reported < old.net_profit_reported });
+      }
+    }
+    if (!nowNet.length) return null;
+    const sorted = paired.slice().sort((a, b) => a - b);
+    const n = sorted.length, mid = n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
+    const down = paired.filter(v => v < 0).length;
+    const loss = nowNet.filter(v => v < 0).length;
+    const grossDown = grossPaired.filter(v => v < 0).length;
+    const upDown = pairedSales.filter(v => v.revenue && v.margin).length;
+    const upProfitDown = pairedProfit.filter(v => v.revenue && v.profit).length;
+    return {
+      previous_period: prev, current_net_n: nowNet.length, previous_net_n: oldNet.length,
+      net_paired_n: n, net_down_n: down, net_down_pct: n ? down / n * 100 : null,
+      net_change_median_pt: n ? mid : null, loss_n: loss, loss_pct: loss / nowNet.length * 100,
+      gross_paired_n: grossPaired.length, gross_down_n: grossDown,
+      gross_down_pct: grossPaired.length ? grossDown / grossPaired.length * 100 : null,
+      sales_up_net_down_n: upDown, sales_up_net_down_base_n: pairedSales.length,
+      sales_up_net_down_pct: pairedSales.length ? upDown / pairedSales.length * 100 : null,
+      sales_up_profit_down_n: upProfitDown, sales_up_profit_down_base_n: pairedProfit.length,
+      sales_up_profit_down_pct: pairedProfit.length ? upProfitDown / pairedProfit.length * 100 : null
+    };
+  }
+
   function profitCard(sec, oem) {
     const card = h('section', { class: 'card', id: 'v2' }, h('h2', null, '② 部品メーカーはどの程度儲けているのか'),
       h('p', { class: 'lead' }, '「業種の中央値」「企業全体の利益率」「特定製品（事業）の粗利益率」は別の指標です。中央値には対象社数を付けています。'));
@@ -576,12 +644,64 @@
     const med = (k, m) => (((ind.series || {})[k] || {})[m] || {});
     // タイル：最新の年初累計と前年同期
     if (ytd.length >= 1) {
-      const k1 = ytd[ytd.length - 1], k0 = ytd.length >= 2 ? ytd[ytd.length - 2] : null;
+      const k1 = ytd[ytd.length - 1], k0 = previousYearKey(k1);
+      const comparable = k0 && !!(ind.series || {})[k0];
       const tile = (label, m) => h('div', { class: 'tile' }, h('div', { class: 'l' }, label),
         h('div', { class: 'v' }, pct(med(k1, m).median)),
-        h('div', { class: 'd' }, periodLabel(k1) + '・' + (med(k1, m).n || 0) + '社' + (k0 ? '｜前年同期 ' + pct(med(k0, m).median) + '（' + pt(med(k1, m).median - med(k0, m).median) + '）' : '')));
+        h('div', { class: 'd' }, periodLabel(k1) + '・' + (med(k1, m).n || 0) + '社' + (comparable ? '｜前年同期 ' + pct(med(k0, m).median) + '（' + pt(changePt(med(k1, m).median, med(k0, m).median)) + '）' : '')));
       card.appendChild(h('div', { class: 'tiles' }, tile(ind.ja + '：粗利益率の中央値', 'gross_margin'), tile(ind.ja + '：純利益率の中央値', 'net_margin')));
     }
+    const lastYtdKey = ytd[ytd.length - 1];
+    const pressure = (((ind.series || {})[lastYtdKey] || {}).pressure)
+      || pressureFromDisplayedCompanies(sec.companies || [], lastYtdKey);
+    if (pressure && pressure.net_paired_n) {
+      card.append(h('h3', null, '前年同期比：利益が圧迫されている企業の広がり'),
+        h('div', { class: 'tiles' },
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率が低下した企業'),
+            h('div', { class: 'v' }, pct(pressure.net_down_pct)),
+            h('div', { class: 'd' }, pressure.net_down_n + '/' + pressure.net_paired_n + '社（両期取得）')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '粗利益率が低下した企業'),
+            h('div', { class: 'v' }, pct(pressure.gross_down_pct)),
+            h('div', { class: 'd' }, pressure.gross_down_n + '/' + pressure.gross_paired_n + '社（両期取得）')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率の企業別変化・中央値'),
+            h('div', { class: 'v' }, pt(pressure.net_change_median_pt)),
+            h('div', { class: 'd' }, '同一企業' + pressure.net_paired_n + '社の変化を集計')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '赤字企業の割合'),
+            h('div', { class: 'v' }, pct(pressure.loss_pct)),
+            h('div', { class: 'd' }, pressure.loss_n + '/' + pressure.current_net_n + '社（最新期）')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '増収かつ純利益率低下'),
+            h('div', { class: 'v' }, pct(pressure.sales_up_net_down_pct)),
+            h('div', { class: 'd' }, pressure.sales_up_net_down_n + '/' + pressure.sales_up_net_down_base_n + '社（利益額ではない）')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '増収減益（親会社帰属利益）'),
+            h('div', { class: 'v' }, pct(pressure.sales_up_profit_down_pct)),
+            h('div', { class: 'd' }, pressure.sales_up_profit_down_n + '/' + pressure.sales_up_profit_down_base_n + '社（同花順「净利润」）'))),
+        h('p', { class: 'note' }, '比較：' + periodLabel(pressure.previous_period) + ' → ' + periodLabel(lastYtdKey) +
+          '。純利益率が低下した企業数と、業種の中央値の変化は異なる指標です。単価下落によるものと断定しません。'));
+    } else card.append(h('p', { class: 'note' },
+      '企業ごとの前年同期比較は次回のデータ更新後に表示します。財務のない会社をゼロとして扱いません。'));
+    // 企業ごとの利幅縮小を可視化。中央値がプラスの業種でも悪化企業を見落とさない。
+    const pKey = previousYearKey(lastYtdKey);
+    const decliningCompanies = (sec.companies || []).filter(c => c.in_industry).map(c => {
+      const n = ((c.series || {})[lastYtdKey] || {});
+      const p = ((c.series || {})[pKey] || {});
+      return { c, current: n.net_margin, previous: p.net_margin,
+        delta: changePt(n.net_margin, p.net_margin), grossDelta: changePt(n.gross_margin, p.gross_margin),
+        profitChange: isNum(n.net_profit_reported) && isNum(p.net_profit_reported) ?
+          n.net_profit_reported - p.net_profit_reported : null,
+        salesChange: isNum(n.revenue) && isNum(p.revenue) && p.revenue > 0 ?
+          (n.revenue / p.revenue - 1) * 100 : null };
+    }).filter(x => isNum(x.delta) && x.delta < 0).sort((a, b) => a.delta - b.delta);
+    if (decliningCompanies.length) card.append(h('h3', null, '純利益率の低下が大きい企業（前年同期比）'),
+      table([
+        { label: '企業', get: r => h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.c.code) }, r.c.name) },
+        { label: '純利益率（前年）', num: true, get: r => pct(r.previous) },
+        { label: '純利益率（直近）', num: true, get: r => pct(r.current) + (r.current < 0 ? '・赤字' : '') },
+        { label: '利益率の変化', num: true, get: r => pt(r.delta), sort: r => r.delta },
+        { label: '粗利益率の変化', num: true, get: r => pt(r.grossDelta), sort: r => r.grossDelta },
+        { label: '売上高の前年同期比', num: true, get: r => signed(r.salesChange), sort: r => r.salesChange },
+        { label: '親会社帰属利益額の増減', num: true, get: r => isNum(r.profitChange) ? signed(r.profitChange, 2, '億元') : '—', sort: r => r.profitChange }
+      ], decliningCompanies, { limit: 10 }),
+      h('p', { class: 'note' }, '最新の年初累計と前年同期間を比較。会社全体の利益率であり、単価低下や完成車メーカーからの値下げ要請が原因と断定はできません。'));
     const oemNet = fy.map(k => (((oem.medians || {})[k] || {}).net_margin || {}).median);
     const chart = lineChart({ x: fy.map(k => k.slice(0, 4)), unit: '%', zero: true, aria: '利益率の中央値の推移', series: [
       { name: ind.ja + ' 粗利益率（中央値）', color: 'var(--s1)', values: fy.map(k => med(k, 'gross_margin').median), n: fy.map(k => med(k, 'gross_margin').n) },
@@ -603,7 +723,9 @@
       { label: '粗利益率', num: true, get: c => pct(v(c, lastFy, 'gross_margin')), sort: c => v(c, lastFy, 'gross_margin') },
       { label: '純利益率', num: true, get: c => pct(v(c, lastFy, 'net_margin')), sort: c => v(c, lastFy, 'net_margin') },
       { label: '純利益率 ' + (firstFy ? firstFy.slice(0, 4) : '') + '→' + (lastFy ? lastFy.slice(2, 4) : ''), num: true, get: c => pt(v(c, lastFy, 'net_margin') - v(c, firstFy, 'net_margin')), sort: c => isNum(v(c, lastFy, 'net_margin')) && isNum(v(c, firstFy, 'net_margin')) ? v(c, lastFy, 'net_margin') - v(c, firstFy, 'net_margin') : null },
-      { label: (lastYtd ? periodLabel(lastYtd) : '累計') + ' 純利益率', num: true, get: c => pct(v(c, lastYtd, 'net_margin')) + (prevYtd && isNum(v(c, prevYtd, 'net_margin')) ? '（前年 ' + pct(v(c, prevYtd, 'net_margin')) + '）' : ''), sort: c => v(c, lastYtd, 'net_margin') }
+      { label: (lastYtd ? periodLabel(lastYtd) : '累計') + ' 純利益率', num: true, get: c => pct(v(c, lastYtd, 'net_margin')) + (previousYearKey(lastYtd) && isNum(v(c, previousYearKey(lastYtd), 'net_margin')) ? '（前年 ' + pct(v(c, previousYearKey(lastYtd), 'net_margin')) + '）' : ''), sort: c => v(c, lastYtd, 'net_margin') },
+      { label: '純利益率の前年同期差', num: true, get: c => pt(changePt(v(c, lastYtd, 'net_margin'), v(c, previousYearKey(lastYtd), 'net_margin'))),
+        sort: c => changePt(v(c, lastYtd, 'net_margin'), v(c, previousYearKey(lastYtd), 'net_margin')) }
     ], comps, { sortIdx: 1, limit: 15, rowClass: c => c.focus ? 'focus-row' : null }),
     h('p', { class: 'note' }, '左端に線がある行は、この分野の市場ランキングや事業区分に関係する会社。数値は会社全体（他の事業を含む）。'),
     h('p', { class: 'source' }, '出典：同花順 F10「財務概況」（销售毛利率・销售净利率・营业总收入）'));
@@ -748,6 +870,44 @@
   }
 
   // ---------------------------------------------------------------- 画面：業種別
+  // ---------------------------------------------------------------- 収益圧迫：業種中央値と企業ペアの変化を分けて表示
+  function industryPressureCard(inds, allPeriods) {
+    const ytd = ytdKeys(allPeriods), latest = ytd[ytd.length - 1], previous = previousYearKey(latest);
+    const net = (i, k) => ((((i.series || {})[k] || {}).net_margin || {}).median);
+    const pressure = i => (((i.series || {})[latest] || {}).pressure || {});
+    const parts = inds.filter(i => i.group_ja === '自動車部品');
+    const valid = parts.filter(i => isNum(net(i, latest)) && isNum(net(i, previous)));
+    const falling = valid.filter(i => net(i, latest) < net(i, previous));
+    const card = h('section', { class: 'card' },
+      h('h2', null, '収益圧迫の広がり：前年同期との比較'),
+      h('p', { class: 'lead' }, '中央値の水準だけでは、部品メーカーの悪化を見落とします。業種の変化と、同一企業の利益率低下・赤字の割合を区別します。'),
+      h('div', { class: 'tiles' },
+        h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率中央値が低下した自動車部品業種'),
+          h('div', { class: 'v' }, falling.length + '/' + valid.length),
+          h('div', { class: 'd' }, periodLabel(previous) + ' → ' + periodLabel(latest))),
+        h('div', { class: 'tile' }, h('div', { class: 'l' }, '比較可能な企業の割合'),
+          h('div', { class: 'v' }, '企業ごとに算出'),
+          h('div', { class: 'd' }, '前年同期の同じ企業・指標だけを比較'))));
+    const rows = inds.map(i => ({ i, p: pressure(i), delta: changePt(net(i, latest), net(i, previous)) }));
+    card.append(h('h3', null, '業種別：純利益率・低下企業・赤字企業'),
+      table([
+        { label: '申万三級業種', get: r => r.i.ja, sort: r => r.i.ja },
+        { label: periodLabel(previous), num: true, get: r => pct(net(r.i, previous)), sort: r => net(r.i, previous) },
+        { label: periodLabel(latest), num: true, get: r => pct(net(r.i, latest)), sort: r => net(r.i, latest) },
+        { label: '中央値の前年同期差', num: true, get: r => pt(r.delta), sort: r => r.delta },
+        { label: '純利益率低下企業', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct },
+        { label: '粗利益率低下企業', num: true, get: r => countRate(r.p.gross_down_n, r.p.gross_paired_n), sort: r => r.p.gross_down_pct },
+        { label: '企業別変化の中央値', num: true, get: r => pt(r.p.net_change_median_pt), sort: r => r.p.net_change_median_pt },
+        { label: '赤字企業', num: true, get: r => countRate(r.p.loss_n, r.p.current_net_n), sort: r => r.p.loss_pct },
+        { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct },
+        { label: '増収減益（親会社帰属利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n), sort: r => r.p.sales_up_profit_down_pct }
+      ], rows),
+      h('p', { class: 'note' },
+        '注意：各業種の中央値の差は企業ごとの変化の中央値とは一致しません。「利益率低下企業」は両期に純利益率がある企業を分母にし、「赤字企業」は最新期の純利益率がある企業を分母にします。増収＋利益率低下は利益額の減少を意味しません。「増収減益」は同花順の親会社帰属利益「净利润」の両期の金額がある会社だけ判定します。'),
+      h('p', { class: 'note' }, '同一企業の前年比列は、収集済みデータを再集計した際に順次表示されます。空欄は0%ではありません。'));
+    return card;
+  }
+
   function renderIndustries(main) {
     const inds = INDEX.industries;
     const keys = INDEX.periods || [];
@@ -776,7 +936,7 @@
         h('p', { class: 'source' }, '出典：同花順 F10「行業対比」（所属企業）、「財務概況」（销售毛利率・销售净利率）'));
     }
     draw();
-    main.replaceChildren(card);
+    main.replaceChildren(industryPressureCard(inds, keys), card);
   }
 
   // ---------------------------------------------------------------- 画面：出典・方法
@@ -806,6 +966,17 @@
         '買掛金回転日数（手形を含む）＝期間日数×（期首＋期末の应付账款・应付票据）÷2÷営業原価。',
         '平均単価＝製品別の売上高÷販売数量。同じ表・同じ期間の同じ製品名（「产品」「业务」などの語尾を除いて一致）か、同花順の数量と東方財富の同じ名前の事業区分を対応させた場合だけ。',
         '国籍区分＝最終支配者による。根拠が資料で確認できない会社は「判定保留」、本社所在地・上場地による場合は「暫定」。完成車メーカーの内製は国籍とは別の属性。'].map(t => h('li', null, t))));
+    const quality = INDEX.quality || {};
+    card.append(h('h3', null, '財務データの検算状況'),
+      h('p', { class: 'note' },
+        '掲載値と損益計算書からの再計算が大きく違う場合、一次資料との照合が必要です。'
+        + '相違の理由は、遡及修正だけとは限りません。'),
+      isNum(quality.calculation_mismatch_over_3pt) ?
+        h('p', { class: 'note' },
+          '再計算差3ポイント超：' + quality.calculation_mismatch_over_3pt + '件。'
+          + (quality.share_quantity_mismatch ? ' シェアと搭載数量の不一致：' + quality.share_quantity_mismatch + '件。' : '')
+          + (quality.quality_note_ja || '')) :
+        h('p', { class: 'note' }, '検算件数は次回の集計データ更新後に公開します。'));
     main.replaceChildren(card);
   }
 
@@ -842,7 +1013,7 @@
     } else {
       const keys = Object.keys(c.series || {}).sort();
       const cols = [...keys.filter(k => k.endsWith('|FY')), ...keys.filter(k => k.includes('|YTD')).slice(-2)];
-      const metrics = [['revenue', '売上高', oku], ['gross_margin', '粗利益率', pct], ['net_margin', '純利益率', pct],
+      const metrics = [['revenue', '売上高', oku], ['net_profit_reported', '親会社帰属利益「净利润」', oku], ['gross_margin', '粗利益率', pct], ['net_margin', '純利益率', pct],
         ['ar_days_ths', '売掛金回転日数（同花順）', days], ['ar_notes_days', '売掛金回転日数（手形を含む・計算）', days],
         ['ap_notes_days', '買掛金回転日数（手形を含む・計算）', days], ['inventory_days', '在庫回転日数', days]];
       parts.push(h('h3', null, '会社全体の財務'), table([{ label: '指標', get: r => r[1] },

@@ -48,13 +48,13 @@ try {
           count: document.querySelectorAll('#main .visual-panel').length,
           rates: document.querySelectorAll('#main .visual-bar-track').length,
           marginPairs: document.querySelectorAll('#main .visual-pair').length,
-          first: document.querySelector('#main > div')?.firstElementChild?.className || '',
+          first: document.getElementById('main')?.firstElementChild?.className || '',
           legend: document.querySelector('#main .visual-legend')?.textContent || '',
           bars: [...document.querySelectorAll('#main .visual-bar-fill')].map(b => ({
             width: parseFloat(b.style.width), aria: b.parentElement.getAttribute('aria-label')
           }))
         }));
-        if (charts.count !== 2 || charts.rates < 5 || charts.marginPairs < 5) errors.push(`[${label}] トップの図が不足 ${JSON.stringify(charts)}`);
+        if (charts.count < 3 || charts.rates < 5 || charts.marginPairs < 5) errors.push(`[${label}] トップの図が不足 ${JSON.stringify(charts)}`);
         if (!charts.first.includes('visual-first')) errors.push(`[${label}] グラフが先頭ではない`);
         if (!charts.legend.includes('2025年') || !charts.legend.includes('2026年')) errors.push(`[${label}] 前年同期凡例が不完全`);
         if (charts.bars.some(b => !Number.isFinite(b.width) || b.width < 0 || b.width > 100 || !b.aria)) {

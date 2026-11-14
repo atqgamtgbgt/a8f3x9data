@@ -1014,27 +1014,30 @@
           h('div', { class: 'v' }, '企業ごとに算出'),
           h('div', { class: 'd' }, '前年同期の同じ企業・指標だけを比較'))));
     const rows = inds.map(i => ({ i, p: pressure(i), delta: changePt(net(i, latest), net(i, previous)) }));
-    card.append(h('h3', null, '業種別：純利益率・低下企業・赤字企業'),
+    card.append(h('h3', null, '業種別：まず見る6指標'),
       table([
         { label: '申万三級業種', get: r => r.i.ja, sort: r => r.i.ja },
         { label: periodLabel(previous), num: true, get: r => pct(net(r.i, previous)), sort: r => net(r.i, previous) },
         { label: periodLabel(latest), num: true, get: r => pct(net(r.i, latest)), sort: r => net(r.i, latest) },
-        { label: '中央値の前年同期差', num: true, get: r => pt(r.delta), sort: r => r.delta },
-        { label: '純利益率低下企業', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct },
-        { label: '粗利益率低下企業', num: true, get: r => countRate(r.p.gross_down_n, r.p.gross_paired_n), sort: r => r.p.gross_down_pct },
-        { label: '企業別変化の中央値', num: true, get: r => pt(r.p.net_change_median_pt), sort: r => r.p.net_change_median_pt },
-        { label: '赤字企業', num: true, get: r => countRate(r.p.loss_n, r.p.current_net_n), sort: r => r.p.loss_pct },
-        { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct },
-        { label: '増収減益（親会社帰属利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n), sort: r => r.p.sales_up_profit_down_pct },
-        { label: '原価率負担増（費用分解対象）', num: true,
-          get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.gross_pressure_n,
-            ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n),
-          sort: r => (((r.i.series || {})[latest] || {}).cost_bridge_summary || {}).gross_pressure_n },
-        { label: '財務費用率負担増（費用分解対象）', num: true,
-          get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.finance_pressure_n,
-            ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n),
-          sort: r => (((r.i.series || {})[latest] || {}).cost_bridge_summary || {}).finance_pressure_n }
+        { label: '中央値の前年差', num: true, get: r => pt(r.delta), sort: r => r.delta },
+        { label: '純利益率低下', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct },
+        { label: '赤字企業', num: true, get: r => countRate(r.p.loss_n, r.p.current_net_n), sort: r => r.p.loss_pct }
       ], rows),
+      h('details', { class: 'metric-details' },
+        h('summary', null, '詳しい指標を表示（粗利益率・増収減益・財務費用）'),
+        table([
+          { label: '申万三級業種', get: r => r.i.ja },
+          { label: '粗利益率低下', num: true, get: r => countRate(r.p.gross_down_n, r.p.gross_paired_n) },
+          { label: '企業別純利益率変化の中央値', num: true, get: r => pt(r.p.net_change_median_pt) },
+          { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n) },
+          { label: '増収減益（親会社帰属利益）', num: true, get: r => countRate(r.p.sales_up_profit_down_n, r.p.sales_up_profit_down_base_n) },
+          { label: '原価率負担増（費用分解対象）', num: true,
+            get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.gross_pressure_n,
+              ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n) },
+          { label: '財務費用率負担増（費用分解対象）', num: true,
+            get: r => safeBridgeRate(((r.i.series || {})[latest] || {}).cost_bridge_summary?.finance_pressure_n,
+              ((r.i.series || {})[latest] || {}).cost_bridge_summary?.n) }
+        ], rows)),
       h('p', { class: 'note' },
         '注意：各業種の中央値の差は企業ごとの変化の中央値とは一致しません。「利益率低下企業」は両期に純利益率がある企業を分母にし、「赤字企業」は最新期の純利益率がある企業を分母にします。増収＋利益率低下は利益額の減少を意味しません。「増収減益」は同花順の親会社帰属利益「净利润」の両期の金額がある会社だけ判定します。'),
       h('p', { class: 'note' }, '同一企業の前年比列は、収集済みデータを再集計した際に順次表示されます。空欄は0%ではありません。'));

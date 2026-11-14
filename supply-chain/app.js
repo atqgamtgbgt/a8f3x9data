@@ -832,41 +832,108 @@
       h('div', { class: 'report-details-content' }, content));
   }
 
+
+  // Build detail tables only when expanded; expensive finance datasets stay off the first paint.
+  function scLazyDetails(label, id, factory) {
+    const content = h('div', { class: 'report-details-content' },
+      h('p', { class: 'empty' }, '詳細を開くとデータを表示します。'));
+    const node = h('details', { class: 'report-details', id },
+      h('summary', null, h('span', { class: 'report-details-label' }, label),
+        h('span', { class: 'report-details-hint', 'aria-hidden': 'true' }, 'クリックして展開')),
+      content);
+    let pending = false;
+    node.addEventListener('toggle', async () => {
+      if (!node.open || pending || node.dataset.loaded) return;
+      pending = true;
+      content.replaceChildren(h('p', { class: 'empty' }, 'データを表示しています…'));
+      try {
+        const result = await factory();
+        content.replaceChildren(result);
+        node.dataset.loaded = 'true';
+      } catch (error) {
+        content.replaceChildren(h('p', { class: 'empty' }, '詳細の読み込みに失敗しました：' + error.message));
+      } finally { pending = false; }
+    });
+    return node;
+  }
+  function scSectorTrend(sec) {
+    const years = fyKeys(Object.keys((sec.industry || {}).series || {}));
+    const trends = [
+      { name: '粗利益率', color: 'var(--s1)', key: 'gross_margin' },
+      { name: '純利益率', color: 'var(--s2)', key: 'net_margin' }
+    ].map(t => ({
+      name: t.name, color: t.color,
+      values: years.map(year => ((sec.industry.series || {})[year] || {})[t.key]?.median),
+      n: years.map(year => ((sec.industry.series || {})[year] || {})[t.key]?.n || 0)
+    }));
+    return h('section', { class: 'card sc-sector-trend', id: 'report-trend' },
+      scSectionHead('01 / PROFITABILITY', '粗利益率・純利益率の推移',
+        '関連する上場企業の各通期決算中央値。会社全体の利益率であり、部品単体の採算ではありません。'),
+      h('div', { class: 'sc-wide-chart' },
+        withTableToggle(lineChart({ x: years.map(y => y.slice(0,4)),
+          series: trends, unit: '%', aria: sec.ja + ' 通期利益率の推移' }),
+          () => table([
+            { label: '通期', get: y => y.slice(0,4) },
+            ...trends.map(t => ({ label: t.name, num: true,
+              get: y => { const j = years.indexOf(y); return pct(t.values[j]) + '（' + t.n[j] + '社）'; } }))
+          ], years))),
+      h('details', { class: 'report-source-details' },
+        h('summary', null, '集計条件・出典'),
+        h('p', null, '同花順 F10。現在の所属銘柄を過去期間にも遡及適用しており、各年の比較可能社数は異なります。')));
+  }
   async function renderSector(main, id) {
     const meta = INDEX.sectors.find(s => s.id === id);
     if (!meta) { main.replaceChildren(h('p', { class: 'empty' }, '分野が見つかりません。')); return; }
-    main.replaceChildren(h('p', { class: 'empty' }, meta.ja + ' を読み込み中…'));
-    const [sec, oem] = await Promise.all([load(meta.file), load('oem.json')]);
-    const keys = ytdKeys(Object.keys((sec.industry || {}).series || {}));
+    main.replaceChildren(h('p', { class: 'empty' }, meta.ja + ' のグラフを読み込み中…'));
+    const sec = await load(meta.file);
+    const series = (sec.industry || {}).series || {};
+    const keys = ytdKeys(Object.keys(series));
     const latestKey = keys[keys.length - 1];
-    const latest = (((sec.industry || {}).series || {})[latestKey] || {});
-    const delta = latest.pressure?.net_down_pct;
-
-    const masthead = h('div', { class: 'report-masthead' },
-      h('h2', null, sec.ja),
-      h('span', { class: 'report-period' }, latestKey ? periodLabel(latestKey) + '決算' : '直近の開示'),
-      h('div', { class: 'report-navigation', role: 'navigation', 'aria-label': 'このレポートの章' },
-        [['report-market', '市場・数量'], ['report-profit', '利益率'], ['report-cost', '費用負担'], ['report-unit-price', '単価'], ['report-detail-title', '詳細']].map(([target, label]) =>
-          h('button', { type: 'button', onclick: () =>
-            document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, label))));
-    const leadMarket = reportMarket(sec), leadProfit = reportProfit(sec, latestKey),
-      leadCost = reportCost(sec, latestKey), leadPrices = reportUnitPrices(sec);
-    const detailTitle = h('div', { class: 'report-detail-title', id: 'report-detail-title' },
-      h('h2', null, '詳細データ'));
+    const latest = series[latestKey] || {};
+    const previous = series[previousYearKey(latestKey)] || {};
+    const net = latest.net_margin || {};
+    const delta = isNum(net.median) && isNum(previous.net_margin?.median)
+      ? net.median - previous.net_margin.median : null;
+    const press = latest.pressure || {};
+    const info = h('div', { class: 'sc-sector-hero' },
+      h('div', { class: 'sc-kicker' }, 'SECTOR DATA / ' + sec.ja),
+      h('div', { class: 'sc-sector-titlebar' },
+        h('h2', null, sec.ja + ' のデータ比較'),
+        h('span', { class: 'sc-period-pill' }, latestKey ? periodLabel(latestKey) : '直近の開示')),
+      h('p', { class: 'sc-caption' },
+        'まず利益率と市場・販売数量を確認。詳細表・企業別データは下部から展開できます。'));
+    const stats = h('div', { class: 'sc-kpis sc-sector-kpis' },
+      scKpi('純利益率の中央値', pct(net.median), (net.n || 0) + '社・会社全体'),
+      scKpi('中央値の前年同期差', isNum(delta) ? pt(delta) : '—', '前年同期との比較', isNum(delta) && delta < 0 ? 'sc-alert' : ''),
+      scKpi('純利益率が悪化した割合', pct(press.net_down_pct),
+        isNum(press.net_paired_n) ? press.net_down_n + '/' + press.net_paired_n + '社' : '比較対象なし'),
+      scKpi('直近の対象期間', latestKey ? periodLabel(latestKey) : '—', '各業種の財務指標'));
+    const nav = h('div', { class: 'sc-jump-bar', role: 'navigation', 'aria-label': 'グラフに移動' },
+      ...[['report-trend', '利益率推移'], ['report-market', 'シェア・数量'],
+        ['report-profit', '前年同期比較'], ['report-cost', '費用率'],
+        ['report-unit-price', '平均単価'], ['report-detail-title', '企業別詳細']]
+        .map(([anchor,label]) => h('button', { type:'button',
+          onclick: () => document.getElementById(anchor)?.scrollIntoView({ behavior:'smooth', block:'start' }) }, label)));
+    const market = reportMarket(sec);
+    const profit = reportProfit(sec, latestKey);
+    const costs = reportCost(sec, latestKey);
+    const prices = reportUnitPrices(sec);
+    const detailTitle = h('div', { class: 'sc-detail-heading', id: 'report-detail-title' },
+      scSectionHead('DETAILS', '企業別・期間別の詳細データ',
+        '下記の項目だけ必要に応じて開けます。数値表や出典へのリンクは従来どおり保持しています。'));
     const detailSections = [
-      reportDetails('① 市場シェア／販売数量：他の部品・期間も確認', strengthCard(sec), 'report-data-market'),
-      reportDetails('② 粗利益率・純利益率：時系列と会社別一覧', profitCard(sec, oem), 'report-data-profit'),
-      reportDetails('③ 費用の要因分解：企業別の内訳', marginBridgeCard(sec), 'report-data-cost'),
-      reportDetails('④ 平均単価：販売数量と価格の推移', unitPriceCard(sec), 'report-data-price'),
-      reportDetails('⑤ 取引構造：売掛金・買掛金と内製化', structureCard(sec, oem), 'report-data-structure')
+      scLazyDetails('市場シェア／開示販売数量：部品・期間別', 'report-data-market', () => strengthCard(sec)),
+      scLazyDetails('粗利益率・純利益率：会社別・期間別', 'report-data-profit',
+        async () => profitCard(sec, await load('oem.json'))),
+      scLazyDetails('費用負担の要因分解：会社別', 'report-data-cost', () => marginBridgeCard(sec)),
+      scLazyDetails('平均販売単価・数量の動き', 'report-data-price', () => unitPriceCard(sec)),
+      scLazyDetails('売掛・買掛・取引構造・内製化', 'report-data-structure',
+        async () => structureCard(sec, await load('oem.json')))
     ];
-    main.replaceChildren(masthead, leadMarket, leadProfit, leadCost,
-      ...(leadPrices ? [leadPrices] : []), detailTitle, ...detailSections);
-
-    // 企業詳細へ移動するボタン・既存の時系列グラフは詳細内でも保持する。
-    // チャートは最新期のみを使い、通期とYTDを混ぜない。
-    if (!isNum(delta)) masthead.appendChild(h('p', { class: 'note' },
-      '前年同期の企業別比較がないため、利益率悪化割合は表示できません。'));
+    main.replaceChildren(info, stats, nav, scSectorTrend(sec),
+      h('div', { class: 'sc-sector-chart-grid' }, market, profit),
+      h('div', { class: 'sc-sector-chart-grid' }, costs, ...(prices ? [prices] : [])),
+      detailTitle, ...detailSections);
   }
 
   function strengthCard(sec) {

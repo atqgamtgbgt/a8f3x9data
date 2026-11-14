@@ -224,6 +224,74 @@ section.card[id] { scroll-margin-top: 78px; }
   th, td { padding: 5px 6px; }
   .hyp li { padding-left: 46px; }
 }
+/* グラフ先行ダッシュボード：図表を見て、必要な数値を展開する */
+.report-masthead { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap;
+  gap:8px 18px; padding: 5px 2px 9px; }
+.report-masthead h2 { font-size: clamp(21px,2.5vw,27px); margin:0; line-height:1.3; }
+.report-period { color:var(--muted); font-size:12px; white-space:nowrap; font-variant-numeric:tabular-nums; }
+.report-navigation { display:flex; flex-wrap:wrap; gap:5px; width:100%; margin-top:3px; }
+.report-navigation button { color:var(--link); background:var(--card); border:1px solid var(--grid);
+  border-radius:7px; min-height:33px; padding:5px 11px; font:inherit; font-size:12px; cursor:pointer; }
+.report-navigation button:hover { border-color:var(--emph); }
+.report-figure { border-radius:9px; padding: 20px 25px 16px; margin: 12px 0 18px; }
+.report-figure > h2 { font-size: clamp(17px,2vw,21px); margin:2px 0 12px; letter-spacing:-.012em; }
+.report-kicker { color:var(--muted); font-size:11px; font-weight:600; margin:0; letter-spacing:.03em; }
+.report-chart { width:100%; max-width:940px; margin: 10px auto 10px; }
+.report-chart-subtitle { font-size:12px; color:var(--text-2); margin: 0 0 13px; font-variant-numeric:tabular-nums; }
+.story-bar-row { padding: 9px 0 8px; border-bottom:1px solid var(--grid); }
+.story-bar-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; min-width:0; font-size:13px; }
+.story-bar-head > span:first-child { flex:1 1 auto; min-width:0; overflow-wrap:anywhere; }
+.story-bar-head .linkbtn { text-decoration:none; font-weight:500; }
+.story-bar-head .linkbtn:hover { text-decoration:underline; }
+.story-number { font-size:14px; font-variant-numeric:tabular-nums; white-space:nowrap; letter-spacing:-.008em; }
+.story-bar-track { height:15px; width:100%; margin-top:6px; background:var(--neutral-2); border-radius:3px; overflow:hidden; }
+.story-bar-fill { height:100%; min-width:0; border-radius:3px; }
+.story-bar-sub { font-size:11px; color:var(--muted); line-height:1.45; margin-top:3px; overflow-wrap:anywhere; }
+.report-measure { font-size:11px; color:var(--muted); font-variant-numeric:tabular-nums; margin:10px 0 0; }
+.report-source-details { border-top:1px solid var(--grid); margin-top:14px; padding-top:7px;
+  color:var(--muted); font-size:11px; }
+.report-source-details > summary { font-size:11px; color:var(--link); cursor:pointer; min-height:28px; }
+.report-source-details p { margin: 4px 0; line-height:1.7; }
+.report-spotlight { display:flex; gap:14px; align-items:center; border-top:1px solid var(--grid);
+  padding-top:11px; margin-top:13px; font-size:12px; color:var(--muted); }
+.report-spotlight-number { font-size:clamp(22px,3vw,29px); font-weight:700; color:var(--text); }
+.report-pressure-chart { margin-top:22px; }
+.report-price-row { padding:10px 0; border-bottom:1px solid var(--grid); }
+.report-price-axis { position:relative; background:var(--surface); border-radius:3px; height:17px; margin:5px 0; }
+.report-price-zero { position:absolute; height:21px; top:-2px; width:1px; left:50%; background:var(--axis); }
+.report-price-bar { position:absolute; top:3px; height:11px; border-radius:2px; }
+.report-price-bar.negative { background:var(--s2); }
+.report-price-bar.positive { background:var(--s1); }
+.report-detail-title { margin:24px 3px 5px; }
+.report-detail-title h2 { font-size:16px; margin:0; color:var(--text-2); }
+.report-details { border:1px solid var(--grid); border-radius:9px; background:var(--card);
+  margin:7px 0; scroll-margin-top:76px; overflow:hidden; }
+.report-details > summary { display:flex; align-items:center; gap:9px; padding:13px 16px; cursor:pointer;
+  font-weight:500; font-size:13px; list-style:none; }
+.report-details > summary::-webkit-details-marker { display:none; }
+.report-details > summary::before { content:"＋"; font-size:16px; color:var(--link); }
+.report-details[open] > summary::before { content:"－"; }
+.report-details[open] > summary { border-bottom:1px solid var(--grid); }
+.report-details-label { flex:1; }
+.report-details-hint { color:var(--muted); font-size:11px; font-weight:400; }
+.report-details-content { padding:10px 18px 18px; }
+.report-details-content > .card { margin:0; padding:5px 0 10px; border:0; box-shadow:none; }
+.report-details-content .tablewrap { max-width:100%; }
+.report-overview-extra { margin-top:14px; }
+.report-overview-extra .report-chart { margin-top:0; }
+@media (max-width: 600px) {
+  .report-figure { padding:13px 12px 12px; margin:10px 0; }
+  .report-chart { margin:7px 0; }
+  .story-bar-row { padding:7px 0; }
+  .story-bar-track { height:13px; }
+  .story-bar-head { font-size:12px; }
+  .report-details-content { padding:9px 11px 13px; }
+  .report-details > summary { padding:12px; }
+  .report-masthead { padding:0 2px 7px; }
+  .report-navigation button { min-height:34px; }
+  .report-spotlight { gap:10px; }
+}
+
 @media print { nav.tabs { position: static; } .toggle-table, select { display: none; } }
 </style>
 </head>
@@ -231,11 +299,11 @@ section.card[id] { scroll-margin-top: 78px; }
 <header>
   <a class="back" href="../">← 中国自動車販売ランキング（トップ）へ</a>
   <h1>なぜ中国では自動車を安く作れるのか</h1>
-  <p class="sub">サプライチェーン分析（試作）：ADAS・タイヤ・電池材料と完成車の比較</p>
+  <p class="sub">メーカー別シェア・販売数量・利益率・費用率</p>
   <p class="meta" id="meta">データを読み込み中…</p>
 </header>
 <nav class="tabs" role="tablist" aria-label="表示の切り替え" id="tabs">
-  <button role="tab" data-view="hyp" aria-selected="true">仮説の検証</button>
+  <button role="tab" data-view="hyp" aria-selected="true">全体比較</button>
   <button role="tab" data-view="sector/adas" aria-selected="false">ADAS</button>
   <button role="tab" data-view="sector/tires" aria-selected="false">タイヤ</button>
   <button role="tab" data-view="sector/battery_materials" aria-selected="false">電池材料</button>

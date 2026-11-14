@@ -527,7 +527,7 @@
 
   // ---------------------------------------------------------------- 画面：分野
 
-  // ----------------------------------------------------- 研究レポート：グラフ→要旨→元データ
+  // ----------------------------------------------------- グラフ中心：事実の数値→詳細データ
   // いずれも既存JSON内の同一範囲・同一期間を使う。市場シェアと世界の販売数量を混合しない。
   function storyBarRow(label, value, max, printed, sub, code, color = 'var(--s1)') {
     const width = isNum(value) && isNum(max) && max > 0
@@ -546,10 +546,13 @@
   function reportFigure(number, headline, lead, nodes, sourceNote, key) {
     const figure = h('section', { class: 'card report-figure', id: key },
       h('div', { class: 'report-kicker' }, number),
-      h('h2', null, headline),
-      h('p', { class: 'lead' }, lead));
+      h('h2', null, headline));
     for (const node of nodes) if (node) figure.appendChild(node);
-    figure.appendChild(h('p', { class: 'report-method' }, sourceNote));
+    // 推測を本文に書かない。範囲と出典だけ必要なとき確認できる。
+    figure.append(h('details', { class: 'report-source-details' },
+      h('summary', null, '集計条件・出典'),
+      lead ? h('p', null, lead) : null,
+      sourceNote ? h('p', null, sourceNote) : null));
     return figure;
   }
 
@@ -569,14 +572,14 @@
         for (const item of rows) chart.appendChild(storyBarRow(item.name, item.share, 100,
           pct(item.share), item.oem_inhouse === 'yes' ? '完成車メーカーの内製・系列' : null,
           item.listed_code || null, item.oem_inhouse === 'yes' ? 'var(--s2)' : 'var(--s1)'));
-        chart.append(h('p', { class: 'report-signal' },
-          '掲載' + (p.listed_count || rows.length) + '社の合計 ' +
-          pct(p.listed_share_sum) + '。非掲載 ' + pct(p.unlisted_share) + 'は資本区分不明。'));
+        chart.append(h('p', { class: 'report-measure' },
+          '掲載10社合計 ' + pct(p.listed_share_sum) +
+          ' ／ 非掲載 ' + pct(p.unlisted_share)));
         const source = p.source?.url
           ? h('a', { href: p.source.url, target: '_blank', rel: 'noopener noreferrer' }, '蓋世汽車の掲載記事')
           : null;
-        return reportFigure('01 ｜ 市場を知る',
-          '走行ADASでは、どのメーカーが搭載を獲得しているか',
+        return reportFigure('01 ｜ 市場',
+          '走行ADAS｜企業別搭載シェア',
           'まず市場シェアの上位企業を確認します。これは掲載上位の市場シェアで、会社全体の売上高ではありません。',
           [chart, source ? h('p', { class: 'source' }, '原記事：', source) : null],
           '出典：蓋世汽車研究院。中国系・外資系・完成車の内製は除外しません。棒は市場全体の100%を基準としています。',
@@ -599,17 +602,17 @@
             group.ja + '｜' + p.label_ja + '｜開示販売数量'));
         for (const item of rows) chart.appendChild(storyBarRow(item.name, item.volume, max,
           vol(item.volume) + unit, null, item.code));
-        chart.append(h('p', { class: 'report-signal' },
-          '掲載企業の販売数量。上位企業を基準に棒の長さを表示（市場シェアではありません）。'));
-        return reportFigure('01 ｜ 生産・販売を知る',
-          sec.id === 'tires' ? '中国のタイヤ企業はどれだけ販売しているか'
-            : '電池材料の供給量はどの企業に集中しているか',
+        chart.append(h('p', { class: 'report-measure' },
+          '開示企業 ' + p.rows.length + '社｜最大値を100%として棒の長さを表示。市場シェアではありません。'));
+        return reportFigure('01 ｜ 販売数量',
+          sec.id === 'tires' ? 'タイヤ｜企業別販売数量'
+            : '電池材料｜企業別販売数量',
           '開示数量を同じ製品区分・同じ期間・同じ単位の範囲で並べています。',
           [chart], '出典：同花順 F10「運営業務数据」。企業が開示した販売数量で、海外販売を含み得ます。中国国内市場のシェアは算出していません。'
             + (group.note_ja ? ' ' + group.note_ja : ''), 'report-market');
       }
     }
-    return reportFigure('01 ｜ 市場を知る', '比較できる市場・数量データを確認中',
+    return reportFigure('01 ｜ 市場・数量', '市場シェア・販売数量',
       '期間・単位がそろうデータがない場合は、無理にランキングを作りません。',
       [h('p', { class: 'empty' }, '現在のデータでは比較できるランキングがありません。')],
       '出典：蓋世汽車研究院／同花順。欠損は0とは扱いません。', 'report-market');
@@ -638,7 +641,7 @@
       group.append(h('div', { class: 'report-spotlight' },
         h('div', { class: 'report-spotlight-number' },
           pt(current - previous)),
-        h('div', null, '関連業種の純利益率中央値の前年差')));
+        h('div', null, '純利益率中央値の前年差')));
       nodes.push(group);
     }
     if (isNum(declineShare) && paired) {
@@ -648,10 +651,8 @@
         down + '/' + paired + '社（同じ企業の前年同期比較）', null, 'var(--bad)'));
       nodes.push(box);
     }
-    return reportFigure('02 ｜ 収益性を知る',
-      isNum(declineShare) && declineShare >= 50
-        ? '利益率がプラスでも、多くの企業で利幅が縮小'
-        : '利益率の水準と悪化した企業の割合を分けて見る',
+    return reportFigure('02 ｜ 利益率',
+      '純利益率中央値・悪化企業割合',
       '中央値の前年差と、利益率が低下した企業の割合は異なる指標です。',
       nodes.length ? nodes : [h('p', { class: 'empty' }, '利益率の前年同期比較を取得できませんでした。')],
       '出典：同花順、申万三級の関連業種。Gasgooの市場ランキングに掲載された企業と同じ集合ではありません。' +
@@ -661,8 +662,8 @@
   function reportCost(sec, latestKey) {
     const stats = ((sec.industry?.series || {})[latestKey] || {}).cost_bridge_summary || {};
     const n = stats.n || 0;
-    if (n < 5) return reportFigure('03 ｜ 費用を知る',
-      '費用の要因分解は、まだ比較対象が不足しています',
+    if (n < 5) return reportFigure('03 ｜ 費用',
+      '費用率の前年同期比較',
       '同じ企業の損益計算書を比較できる社数が5社に達してから業種割合を示します。',
       [h('p', { class: 'empty' }, '現在の比較可能社数：' + n + '社')],
       '出典：同花順 F10 連結損益計算書。データ不足を0%と表示しません。', 'report-cost');
@@ -682,12 +683,9 @@
         count + '/' + n + '社', null,
         label.includes('財務') ? 'var(--s2)' : 'var(--s1)'));
     }
-    const top = fields.slice().sort((a, b) => b[1] - a[1])[0];
-    chart.append(h('p', { class: 'report-signal' },
-      top ? 'この業種では「' + top[0] + '」が' + top[1] + '/' + n + '社。'
-        : '費用率の比較が可能な企業を集計しています。'));
-    return reportFigure('03 ｜ 費用を知る',
-      '何が利益率を圧迫しているのか、費目ごとに確認',
+    chart.append(h('p', { class: 'report-measure' }, '比較可能 ' + n + '社｜複数項目に該当する企業あり'));
+    return reportFigure('03 ｜ 費用',
+      '費用率が悪化した企業の割合',
       '費用率が悪化した企業の割合を比べます。同じ会社が複数項目に該当するため、棒を合計してはいけません。',
       [chart],
       '出典：同花順 F10 連結損益計算書。原価率の上昇から値下げ・材料費・製品構成のどれが原因かは特定できません。' +
@@ -713,18 +711,15 @@
     const delta = latest.pressure?.net_down_pct;
 
     const masthead = h('div', { class: 'report-masthead' },
-      h('div', { class: 'report-kicker' }, '中国自動車サプライチェーン｜' + (latestKey ? periodLabel(latestKey) : '最新の開示')),
-      h('h2', null, sec.ja + '：市場・収益・コストの実態'),
-      h('p', null, 'まずグラフで全体を確認し、必要なときだけ企業別の原本データへ進めます。'),
+      h('h2', null, sec.ja),
+      h('span', { class: 'report-period' }, latestKey ? periodLabel(latestKey) + '決算' : '直近の開示'),
       h('div', { class: 'report-navigation', role: 'navigation', 'aria-label': 'このレポートの章' },
         [['report-market', '市場・数量'], ['report-profit', '利益率'], ['report-cost', '費用負担'], ['report-detail-title', '詳しいデータ']].map(([target, label]) =>
           h('button', { type: 'button', onclick: () =>
             document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, label))));
     const leadMarket = reportMarket(sec), leadProfit = reportProfit(sec, latestKey), leadCost = reportCost(sec, latestKey);
     const detailTitle = h('div', { class: 'report-detail-title', id: 'report-detail-title' },
-      h('div', { class: 'report-kicker' }, '詳細と根拠'),
-      h('h2', null, '企業別・時系列のデータを詳しく確認する'),
-      h('p', null, 'ここから先はデータ表・市場別の推移・会社別の比較です。必要な項目だけ開いてください。'));
+      h('h2', null, '詳細データ'));
     const detailSections = [
       reportDetails('① 市場シェア／販売数量：他の部品・期間も確認', strengthCard(sec), 'report-data-market'),
       reportDetails('② 粗利益率・純利益率：時系列と会社別一覧', profitCard(sec, oem), 'report-data-profit'),

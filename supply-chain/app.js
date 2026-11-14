@@ -924,6 +924,17 @@
         '買掛金回転日数（手形を含む）＝期間日数×（期首＋期末の应付账款・应付票据）÷2÷営業原価。',
         '平均単価＝製品別の売上高÷販売数量。同じ表・同じ期間の同じ製品名（「产品」「业务」などの語尾を除いて一致）か、同花順の数量と東方財富の同じ名前の事業区分を対応させた場合だけ。',
         '国籍区分＝最終支配者による。根拠が資料で確認できない会社は「判定保留」、本社所在地・上場地による場合は「暫定」。完成車メーカーの内製は国籍とは別の属性。'].map(t => h('li', null, t))));
+    const quality = INDEX.quality || {};
+    card.append(h('h3', null, '財務データの検算状況'),
+      h('p', { class: 'note' },
+        '掲載値と損益計算書からの再計算が大きく違う場合、一次資料との照合が必要です。'
+        + '相違の理由は、遡及修正だけとは限りません。'),
+      isNum(quality.calculation_mismatch_over_3pt) ?
+        h('p', { class: 'note' },
+          '再計算差3ポイント超：' + quality.calculation_mismatch_over_3pt + '件。'
+          + (quality.share_quantity_mismatch ? ' シェアと搭載数量の不一致：' + quality.share_quantity_mismatch + '件。' : '')
+          + (quality.quality_note_ja || '')) :
+        h('p', { class: 'note' }, '検算件数は次回の集計データ更新後に公開します。'));
     main.replaceChildren(card);
   }
 

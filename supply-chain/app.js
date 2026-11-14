@@ -692,6 +692,68 @@
       ' 財務費用の増加も借入・為替等に分解していません。', 'report-cost');
   }
 
+  function reportUnitPrices(sec) {
+    // 必ず同一会社・同一製品・同一単位・同一期間種別の前年比だけを比較。
+    // 複数製品を持つ会社は1本まで。不同の市場別平均価格を集計・平均しない。
+    const source = sec.unit_prices || [];
+    const marketFilter = sec.id === 'tires' ? 'tire'
+      : sec.id === 'battery_materials' ? 'cathode' : '__not_comparable__';
+    const selected = source.filter(x => x.market_id === marketFilter);
+    const choices = [
+      { a: '2025-09-30', b: '2026-09-30', type: 'Q', text: '2025年7～9月期 → 2026年7～9月期' },
+      { a: '2025-06-30', b: '2026-06-30', type: 'YTD_H1', text: '2025年1～6月 → 2026年1～6月' },
+      { a: '2024-12-31', b: '2025-12-31', type: 'FY', text: '2024年通期 → 2025年通期' }
+    ];
+    const pairs = choices.map(choice => {
+      const found = [];
+      const companies = new Set();
+      for (const item of selected) {
+        if (companies.has(item.code)) continue;
+        const before = (item.series || []).find(x => x.period_end === choice.a && x.period_type === choice.type);
+        const after = (item.series || []).find(x => x.period_end === choice.b && x.period_type === choice.type);
+        if (!before || !after || !isNum(before.unit_price) || !isNum(after.unit_price)
+          || before.unit_price <= 0 || after.unit_price <= 0
+          || !isNum(before.volume) || !isNum(after.volume)
+          || before.volume <= 0 || after.volume <= 0) continue;
+        companies.add(item.code);
+        found.push({
+          code: item.code, name: item.name, product: item.product, unit: item.unit,
+          before: before.unit_price, after: after.unit_price,
+          change: (after.unit_price / before.unit_price - 1) * 100
+        });
+      }
+      return { ...choice, rows: found };
+    });
+    const chosen = pairs.find(x => x.rows.length >= 3);
+    if (!chosen) return null; // データがない分野で無理に「平均単価」を出さない
+    const rows = chosen.rows.slice().sort((a, b) => a.change - b.change).slice(0, 8);
+    const maxAbs = Math.max(5, ...rows.map(x => Math.abs(x.change))) * 1.12;
+    const plot = h('div', { class: 'report-chart price-changes',
+      'aria-label': '同じ企業・製品の平均販売単価の前年同期比' },
+      h('div', { class: 'report-chart-subtitle' }, chosen.text + '｜平均販売単価の増減率'));
+    for (const item of rows) {
+      const v = Math.min(50, Math.abs(item.change) / maxAbs * 50);
+      plot.append(h('div', { class: 'report-price-row' },
+        h('div', { class: 'story-bar-head' },
+          h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(item.code) },
+            item.name),
+          h('strong', { class: 'story-number' }, signed(item.change))),
+        h('div', { class: 'report-price-axis', role: 'img',
+          'aria-label': item.name + ' ' + item.product + '：' + signed(item.change)
+          + '、' + item.before.toFixed(1) + '元 → ' + item.after.toFixed(1) + '元' },
+          h('span', { class: 'report-price-zero' }),
+          h('span', { class: 'report-price-bar ' + (item.change < 0 ? 'negative' : 'positive'),
+            style: { width: v + '%', left: item.change < 0 ? (50 - v) + '%' : '50%' } })),
+        h('div', { class: 'story-bar-sub' },
+          item.product + '｜' + item.before.toFixed(1) + ' → ' + item.after.toFixed(1) + '元/' + item.unit)));
+    }
+    return reportFigure('04 ｜ 平均単価', '企業別平均販売単価の変化',
+      '企業内で同じ製品・数量単位・期間を比較した値。異なる企業間の単価そのものの優劣は比較しません。',
+      [plot],
+      '出典：同花順の製品別売上高÷販売数量。製品構成・品質・通貨・販売先の変化が影響するため、値下げを意味するとは限りません。',
+      'report-unit-price');
+  }
+
   function reportDetails(label, content, id) {
     return h('details', { class: 'report-details', id },
       h('summary', null,
@@ -714,10 +776,11 @@
       h('h2', null, sec.ja),
       h('span', { class: 'report-period' }, latestKey ? periodLabel(latestKey) + '決算' : '直近の開示'),
       h('div', { class: 'report-navigation', role: 'navigation', 'aria-label': 'このレポートの章' },
-        [['report-market', '市場・数量'], ['report-profit', '利益率'], ['report-cost', '費用負担'], ['report-detail-title', '詳しいデータ']].map(([target, label]) =>
+        [['report-market', '市場・数量'], ['report-profit', '利益率'], ['report-cost', '費用負担'], ['report-unit-price', '単価'], ['report-detail-title', '詳細']].map(([target, label]) =>
           h('button', { type: 'button', onclick: () =>
             document.getElementById(target)?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }, label))));
-    const leadMarket = reportMarket(sec), leadProfit = reportProfit(sec, latestKey), leadCost = reportCost(sec, latestKey);
+    const leadMarket = reportMarket(sec), leadProfit = reportProfit(sec, latestKey),
+      leadCost = reportCost(sec, latestKey), leadPrices = reportUnitPrices(sec);
     const detailTitle = h('div', { class: 'report-detail-title', id: 'report-detail-title' },
       h('h2', null, '詳細データ'));
     const detailSections = [
@@ -727,7 +790,8 @@
       reportDetails('④ 平均単価：販売数量と価格の推移', unitPriceCard(sec), 'report-data-price'),
       reportDetails('⑤ 取引構造：売掛金・買掛金と内製化', structureCard(sec, oem), 'report-data-structure')
     ];
-    main.replaceChildren(masthead, leadMarket, leadProfit, leadCost, detailTitle, ...detailSections);
+    main.replaceChildren(masthead, leadMarket, leadProfit, leadCost,
+      ...(leadPrices ? [leadPrices] : []), detailTitle, ...detailSections);
 
     // 企業詳細へ移動するボタン・既存の時系列グラフは詳細内でも保持する。
     // チャートは最新期のみを使い、通期とYTDを混ぜない。

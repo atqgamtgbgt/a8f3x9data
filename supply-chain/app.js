@@ -644,33 +644,44 @@
     if (opt.series?.[0]?.type==='line' && opt.xAxis?.data) {
       const lines=opt.series.map(s=>({name:s.name,
         color:s.itemStyle?.color || 'var(--s1)',values:s.data}));
-      el.replaceChildren(lineChart({x:opt.xAxis.data,series:lines,unit:opt.yAxis?.name||'',
-        aria:'折れ線：'+lines.map(x=>x.name).join('、')}));
+      el.replaceChildren(lineChart({x:opt.xAxis.data,series:lines,
+        unit:opt.yAxis?.name||'',aria:'折れ線：'+lines.map(x=>x.name).join('、')}));
       return;
     }
     if (opt.series?.[0]?.type==='heatmap') {
       const cols=opt.xAxis?.data||[],rows=opt.yAxis?.data||[];
       const lookup=new Map((opt.series[0].data||[]).map(x=>[x[1]+':'+x[0],x[2]]));
+      const tableRows=[];
+      for(let i=0;i<rows.length;i++) {
+        const cells=[h('th',null,rows[i])];
+        for(let j=0;j<cols.length;j++) {
+          const v=lookup.get(i+':'+j);
+          cells.push(h('td',{class:'n'},isNum(v)?pct(v):'—'));
+        }
+        tableRows.push(h('tr',null,...cells));
+      }
+      const head=h('thead',null,h('tr',null,h('th',null,'業種'),...cols.map(x=>h('th',null,x))));
       el.replaceChildren(h('div',{class:'cui-fallback-table tablewrap'},
-        h('table',null,
-          h('thead',null,h('tr',null,h('th',null,'業種'),...cols.map(x=>h('th',null,x)))),
-          h('tbody',null,rows.map((r,i)=>h('tr',null,h('th',null,r),
-            ...cols.map((_,j)=>{
-              const v=lookup.get(i+':'+j);
-              return h('td',{class:'n'},isNum(v)?pct(v):'—');
-            }))))));
+        h('table',null,head,h('tbody',null,...tableRows))));
       return;
     }
     const labels=opt.yAxis?.type==='category'?opt.yAxis.data:opt.xAxis?.data||[];
     const series=opt.series||[];
-    const vals=series.flatMap(s=>s.data||[]).filter(isNum);
+    const vals=series.flatMap(se=>se.data||[]).filter(isNum);
     const ceiling=Math.max(1,...vals.map(Math.abs));
-    el.replaceChildren(h('div',{class:'cui-fallback-bars'},
-      ...labels.map((label,i)=>h('div',{class:'cui-fallback-group'},
-        h('strong',null,label),
-        ...series.map((se,k)=>storyBarRow(series.length>1?se.name:'',
-          se.data[i],ceiling,isNum(se.data[i])?String(se.data[i].toFixed(1))+' '+(opt.xAxis?.name||opt.yAxis?.name||''):'—',
-          null,null,CUI_PALETTE[k%CUI_PALETTE.length]))))));
+    const groups=[];
+    for(let i=0;i<labels.length;i++) {
+      const parts=[h('strong',null,labels[i])];
+      for(let k=0;k<series.length;k++) {
+        const value=series[k].data[i];
+        parts.push(storyBarRow(series.length>1?series[k].name:'',
+          isNum(value)?Math.abs(value):null,ceiling,
+          isNum(value)?value.toFixed(1)+' '+(opt.xAxis?.name||opt.yAxis?.name||''):'—',
+          null,null,CUI_PALETTE[k%CUI_PALETTE.length]));
+      }
+      groups.push(h('div',{class:'cui-fallback-group'},...parts));
+    }
+    el.replaceChildren(h('div',{class:'cui-fallback-bars'},...groups));
   }
   function cuiPlot(node,optionFn,clickMapFn) {
     let chart=null;

@@ -42,7 +42,7 @@ try {
       if (!state.cards) errors.push(`[${label}] ${v}: カードが描画されていない`);
       if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
       if (v === 'industries' && !state.text.includes('詳しい指標を表示')) errors.push(`[${label}] 業種別の詳細トグルが表示されない`);
-      if (v === 'hyp' && !state.text.includes('中国の部品メーカーは、本当に余裕があるのか？')) errors.push(`[${label}] 最初に見る概要が表示されない`);
+      if (v === 'hyp' && !state.text.includes('増収減益となった企業の割合')) errors.push(`[${label}] 全体比較の増収減益グラフがない`);
       if (v === 'hyp') {
         const charts = await page.evaluate(() => ({
           count: document.querySelectorAll('#main .visual-panel').length,
@@ -61,11 +61,25 @@ try {
           errors.push(`[${label}] 悪化率の棒が0〜100%でない、またはラベル不足`);
         }
       }
-      if (v === 'hyp' && !state.text.includes('詳細を見る')) errors.push(`[${label}] 仮説の折りたたみ表示がない`);
-      if (v.startsWith('sector/') && !state.text.includes('損益計算書で要因分解できた企業')) errors.push(`[${label}] 分野別の要点がない`);
-      if (v === 'sector/tires' && !state.text.includes('利益率の変化')) errors.push(`[${label}] タイヤの利益率変化が表示されない`);
-      if (v.startsWith('sector/') && !state.text.includes('利益率悪化の要因分解（損益計算書）')) {
-        errors.push(`[${label}] ${v}: 費用要因の分析が見つからない`);
+      if (v === 'hyp' && state.text.includes('6つの仮説と、いまのデータで言えること')) errors.push(`[${label}] 不要な仮説文章が残っている`);
+      if (v.startsWith('sector/')) {
+        const report = await page.evaluate(() => ({
+          figures: document.querySelectorAll('#main > .report-figure').length,
+          bars: document.querySelectorAll('#main > .report-figure .story-bar-track').length,
+          price: document.querySelectorAll('#main > .report-figure .report-price-axis').length,
+          first: document.getElementById('main')?.firstElementChild?.className || '',
+          second: document.getElementById('main')?.children[1]?.className || '',
+          details: document.querySelectorAll('#main > .report-details').length,
+          openDetails: [...document.querySelectorAll('#main > .report-details')].filter(x => x.open).length,
+          originalProse: document.querySelector('#main > .report-masthead p')?.textContent || '',
+          sourceVisible: [...document.querySelectorAll('#main > .report-figure > .report-source-details')].some(x => x.open)
+        }));
+        const minFigures = v === 'sector/adas' ? 3 : 4;
+        if (report.figures < minFigures || report.bars < 9) errors.push(`[${label}] ${v}: グラフ不足 ${JSON.stringify(report)}`);
+        if (!report.first.includes('report-masthead') || !report.second.includes('report-figure')) errors.push(`[${label}] ${v}: グラフが見出し直下にない`);
+        if (report.details !== 5 || report.openDetails !== 0 || report.sourceVisible) errors.push(`[${label}] ${v}: 詳細や出典が初期表示されている`);
+        if (report.originalProse.length > 0) errors.push(`[${label}] ${v}: 説明文がグラフより先に表示されている`);
+        if (v !== 'sector/adas' && report.price < 3) errors.push(`[${label}] ${v}: 単価の変化グラフ不足`);
       }
       if (state.scrollWidth > state.viewport + 8) errors.push(`[${label}] ${v}: 横にはみ出し ${state.scrollWidth} > ${state.viewport}`);
       await page.screenshot({ path: `${OUT}/${label}_${v.replace('/', '_')}.png`, fullPage: true });

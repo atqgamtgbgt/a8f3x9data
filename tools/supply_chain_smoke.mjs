@@ -41,6 +41,10 @@ try {
       if (state.failed) errors.push(`[${label}] ${v}: データ読み込み失敗の表示`);
       if (!state.cards) errors.push(`[${label}] ${v}: カードが描画されていない`);
       if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
+      if (v === 'industries' && !state.text.includes('詳しい指標を表示')) errors.push(`[${label}] 業種別の詳細トグルが表示されない`);
+      if (v === 'hyp' && !state.text.includes('中国の部品メーカーは、本当に余裕があるのか？')) errors.push(`[${label}] 最初に見る概要が表示されない`);
+      if (v === 'hyp' && !state.text.includes('詳細を見る')) errors.push(`[${label}] 仮説の折りたたみ表示がない`);
+      if (v.startsWith('sector/') && !state.text.includes('損益計算書で要因分解できた企業')) errors.push(`[${label}] 分野別の要点がない`);
       if (v === 'sector/tires' && !state.text.includes('利益率の変化')) errors.push(`[${label}] タイヤの利益率変化が表示されない`);
       if (v.startsWith('sector/') && !state.text.includes('利益率悪化の要因分解（損益計算書）')) {
         errors.push(`[${label}] ${v}: 費用要因の分析が見つからない`);

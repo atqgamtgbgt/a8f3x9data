@@ -13,7 +13,9 @@ const CHROME = process.env.CHROME_PATH || ['/usr/bin/google-chrome', '/usr/bin/c
 const OUT = process.env.SHOT_DIR || 'smoke_screenshots';
 mkdirSync(OUT, { recursive: true });
 
-const views = ['hyp', 'sector/adas', 'sector/tires', 'sector/battery_materials', 'industries', 'sources'];
+// 検索索引は生成側の公開同期後に追加される。存在する環境では必ず検証する。
+const views = ['hyp', 'sector/adas', 'sector/tires', 'sector/battery_materials', 'industries',
+  ...(existsSync('output/supply_chain/companies.json') ? ['companies'] : []), 'sources'];
 const errors = [];
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new',
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });
@@ -36,25 +38,46 @@ try {
         cards: document.querySelectorAll('#main .card').length,
         scrollWidth: document.documentElement.scrollWidth, viewport: window.innerWidth,
         title: document.title,
+        hero: document.querySelectorAll('#main .dashboard-hero').length,
+        sectorSnapshot: document.querySelectorAll('#main .sector-snapshot').length,
+        disclosures: document.querySelectorAll('#main .deep-dive').length,
+        hypothesisCount: document.querySelectorAll('#main .hypothesis-card').length,
+        directoryInput: document.querySelectorAll('#main #company-search').length,
         text: document.getElementById('main').textContent
       }));
       if (state.failed) errors.push(`[${label}] ${v}: データ読み込み失敗の表示`);
       if (!state.cards) errors.push(`[${label}] ${v}: カードが描画されていない`);
+      if (v === 'hyp' && (!state.hero || state.hypothesisCount !== 6)) errors.push(`[${label}] 分析サマリー・6仮説の表示が不完全`);
+      if (v === 'companies' && !state.directoryInput) errors.push(`[${label}] 企業検索が表示されない`);
+      if (v.startsWith('sector/') && (!state.sectorSnapshot || state.disclosures < 3))
+        errors.push(`[${label}] ${v}: 主要指標または折りたたみ式の詳細が表示されない`);
       if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
       if (v === 'sector/tires' && !state.text.includes('利益率の変化')) errors.push(`[${label}] タイヤの利益率変化が表示されない`);
       if (v.startsWith('sector/') && !state.text.includes('利益率悪化の要因分解（損益計算書）')) {
         errors.push(`[${label}] ${v}: 費用要因の分析が見つからない`);
       }
       if (state.scrollWidth > state.viewport + 8) errors.push(`[${label}] ${v}: 横にはみ出し ${state.scrollWidth} > ${state.viewport}`);
+      if (v === 'hyp') {
+        await page.click('.hypothesis-summary');
+        const opened = await page.$eval('.hypothesis-details', el => el.open);
+        if (!opened) errors.push(`[${label}] 仮説の展開ができない`);
+      }
+      if (v.startsWith('sector/')) {
+        await page.click('.deep-summary');
+        const opened = await page.$eval('.deep-dive', el => el.open);
+        if (!opened) errors.push(`[${label}] ${v}: 詳細セクションが展開できない`);
+      }
       await page.screenshot({ path: `${OUT}/${label}_${v.replace('/', '_')}.png`, fullPage: true });
       console.log(`${label} ${v}: cards=${state.cards} width=${state.scrollWidth}/${state.viewport}`);
     }
     // 企業詳細（最初の企業リンク）
     await page.goto(BASE + '#sector/tires', { waitUntil: 'networkidle0' });
-    await page.waitForSelector('#main .linkbtn', { timeout: 20000 });
-    await page.click('#main .linkbtn');
+    await page.waitForSelector('#main button[data-company-code]', { timeout: 20000 });
+    // スティッキーな上部タブに重ならない画面中央へ確実にスクロールする。
+    await page.$eval('#main button[data-company-code]', el => el.scrollIntoView({ block: 'center' }));
+    await page.click('#main button[data-company-code]');
     await page.waitForFunction(() => document.getElementById('panel').open &&
-      !/読み込み中/.test(document.getElementById('panel-title').textContent), { timeout: 20000 });
+      !/読み込み中/.test(document.getElementById('panel-title').textContent), { timeout: 5000 });
     const panel = await page.evaluate(() => ({ title: document.getElementById('panel-title').textContent,
       tables: document.querySelectorAll('#panel-body table').length }));
     if (!panel.tables) errors.push(`[${label}] 企業詳細に表がない（${panel.title}）`);

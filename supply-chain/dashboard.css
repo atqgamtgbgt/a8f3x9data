@@ -209,3 +209,14 @@ body.viz-root section[id], body.viz-root div[id^="report-"] { scroll-margin-top:
   .sc-sector-chart-grid,.sc-kpis,.sc-explore-grid { display:block; }
   body.viz-root .card { break-inside:avoid; }
 }
+
+/* Industry benchmark controls and large before/after graphic. */
+.sc-industry-controls { align-items: center; justify-content: space-between; flex-wrap: wrap; row-gap: 9px; }
+.sc-control-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.sc-industry-comparison figure { max-width: 1040px; margin: 8px auto; }
+.sc-industry-comparison figure svg { max-height: 490px; }
+.sc-industry-cover { margin-bottom: 17px; }
+@media(max-width: 640px) {
+  .sc-industry-controls { display: flex; flex-direction: column; align-items: flex-start; }
+  .sc-industry-comparison figure { min-width: 0; }
+}

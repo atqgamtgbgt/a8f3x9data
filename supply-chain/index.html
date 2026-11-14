@@ -121,6 +121,77 @@ dialog#panel::backdrop { background: rgba(0,0,0,.35); }
 .close { font: inherit; font-size: 20px; line-height: 1; background: none; border: 0; color: var(--text-2);
   cursor: pointer; padding: 4px 8px; }
 .focus-row td:first-child { box-shadow: inset 3px 0 0 var(--emph); }
+/* 先に要点、必要なときだけ詳細へ進める読み順。色より文字と余白で区別する */
+html { scroll-behavior: smooth; }
+main { max-width: 1160px; padding: 20px 18px 68px; }
+header { max-width: 1160px; padding: 24px 20px 15px; }
+header h1 { font-size: clamp(23px, 2.6vw, 30px); letter-spacing: -.025em; margin-top: 10px; }
+header .sub { max-width: 75ch; }
+nav.tabs { padding: 9px max(16px, calc((100vw - 1160px)/2)); gap: 7px; }
+nav.tabs button { min-height: 40px; padding: 9px 14px; border-radius: 10px; }
+nav.tabs button:hover { background: var(--chip); }
+nav.tabs button:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible, select:focus-visible {
+  outline: 3px solid var(--emph); outline-offset: 3px;
+}
+.card { border-radius: 16px; padding: 22px 24px; margin: 14px 0; }
+.card h2 { font-size: 19px; line-height: 1.45; letter-spacing: -.015em; }
+.card h3 { font-size: 16px; margin: 22px 0 9px; }
+.card > section + section { margin-top: 16px; }
+.lead { font-size: 14px; line-height: 1.7; margin-bottom: 14px; max-width: 90ch; }
+.eyebrow { color: var(--emph); font-size: 11px; font-weight: 700; letter-spacing: .06em; margin-bottom: 6px; }
+.overview, .sector-intro { border-top: 3px solid var(--emph); }
+.overview .tiles, .sector-intro .tiles { grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin: 16px 0; }
+.overview .tile, .sector-intro .tile { padding: 14px 16px; }
+.key-figure .v, .sector-intro .tile .v { font-size: clamp(22px, 3vw, 28px); font-variant-numeric: tabular-nums; }
+.overview-links, .section-jumps { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.overview-links a, .section-jumps button {
+  display: inline-flex; align-items: center; min-height: 38px; border-radius: 9px;
+  padding: 7px 12px; background: var(--surface); color: var(--link);
+  border: 1px solid var(--grid); font: inherit; font-size: 13px; text-decoration: none; cursor: pointer;
+}
+.overview-links a:hover, .section-jumps button:hover { border-color: var(--emph); background: var(--chip); }
+section.card[id] { scroll-margin-top: 78px; }
+.hyp { padding: 0; overflow: hidden; }
+.hyp-fold > summary { list-style: none; cursor: pointer; display: flex; align-items: center; flex-wrap: wrap; column-gap: 12px; row-gap: 6px; padding: 16px 20px; }
+.hyp-fold > summary::-webkit-details-marker { display: none; }
+.hyp-summary h2 { flex: 1 1 290px; margin: 0; font-size: 16px; }
+.fold-hint { font-size: 12px; color: var(--link); }
+.hyp-fold[open] .fold-hint { font-size: 0; }
+.hyp-fold[open] .fold-hint::after { content: "閉じる"; font-size: 12px; }
+.hyp-content { padding: 0 20px 18px; }
+.hyp-content .links a { display: inline-block; margin: 5px 0; }
+.tablewrap { border: 1px solid var(--grid); border-radius: 9px; margin: 8px 0; padding: 0; }
+.tablewrap table { width: max-content; min-width: 100%; }
+.tablewrap th { background: var(--surface); border-bottom: 1px solid var(--axis); }
+.tablewrap tbody tr:hover { background: var(--surface); }
+.tablewrap td, .tablewrap th { padding: 9px 11px; }
+.tablewrap th:first-child, .tablewrap td:first-child {
+  position: sticky; left: 0; z-index: 1; background: var(--card);
+  box-shadow: 1px 0 0 var(--grid);
+}
+.tablewrap th:first-child { z-index: 2; background: var(--surface); }
+.tile { border: 1px solid var(--grid); box-shadow: none; }
+.tile .v { font-variant-numeric: tabular-nums; }
+#panel .panel-head { z-index: 3; }
+#panel .panel-body { padding: 14px 20px 36px; }
+@media (max-width: 780px) {
+  .overview .tiles, .sector-intro .tiles { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .overview .tiles > :last-child, .sector-intro .tiles > :last-child { grid-column: 1 / -1; }
+}
+@media (max-width: 600px) {
+  .overview .tiles, .sector-intro .tiles { grid-template-columns: 1fr; }
+  .overview .tiles > :last-child, .sector-intro .tiles > :last-child { grid-column: auto; }
+  header { padding: 18px 14px 10px; }
+  main { padding: 12px 10px 42px; }
+  nav.tabs { padding: 7px 10px; }
+  nav.tabs button { font-size: 13px; min-height: 40px; padding: 7px 10px; }
+  .hyp-fold > summary { padding: 14px; }
+  .hyp-content { padding: 0 14px 14px; }
+  .hyp-summary h2 { flex-basis: 100%; }
+  .card { padding: 14px; border-radius: 12px; }
+  .card h2 { font-size: 17px; }
+  .tablewrap td, .tablewrap th { padding: 8px 10px; }
+  h1 { font-size: 22px; }
 @media (max-width: 600px) {
   h1 { font-size: 19px; }
   .card { padding: 12px; border-radius: 10px; }

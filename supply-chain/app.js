@@ -471,17 +471,72 @@
   const sectorName = id => (INDEX.sectors.find(s => s.id === id) || {}).ja || id;
 
   // ---------------------------------------------------------------- 画面：分野
+  function jumpToSection(id) {
+    const target = document.getElementById(id);
+    if (!target) return;
+    const disclosure = target.closest('details');
+    if (disclosure) disclosure.open = true;
+    target.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
+  }
+  function disclosure(card, label, open = false) {
+    const details = h('details', { class: 'deep-dive', open: open ? true : null },
+      h('summary', { class: 'deep-summary' },
+        h('span', null, label),
+        h('span', { class: 'deep-hint' }, 'クリックして詳細を表示')));
+    details.append(card);
+    return details;
+  }
+  function sectorQuickView(sec) {
+    const keys = ytdKeys(Object.keys((sec.industry || {}).series || {}));
+    const latest = keys[keys.length - 1];
+    const current = (((sec.industry || {}).series || {})[latest] || {});
+    const prev = (((sec.industry || {}).series || {})[previousYearKey(latest)] || {});
+    const p = current.pressure || {};
+    const bridge = current.cost_bridge_summary || {};
+    return h('section', { class: 'sector-snapshot', 'aria-label': 'この分野の概要' },
+      h('div', { class: 'snapshot-intro' },
+        h('p', { class: 'eyebrow' }, 'SECTOR SNAPSHOT'),
+        h('h2', null, sec.ja + 'の現状'),
+        h('p', { class: 'lead' },
+          '企業全体の財務データによる関連業種の状況です。特定部品そのものの収益性ではありません。')),
+      h('div', { class: 'summary-grid' },
+        h('div', { class: 'summary-stat' },
+          h('span', { class: 'summary-label' }, '最新の純利益率中央値'),
+          h('strong', { class: 'summary-number' }, pct(current.net_margin?.median)),
+          h('span', { class: 'summary-detail' }, (current.net_margin?.n || 0) + '社・' + periodLabel(latest))),
+        h('div', { class: 'summary-stat' },
+          h('span', { class: 'summary-label' }, '前年同期との変化'),
+          h('strong', { class: 'summary-number' }, pt(changePt(current.net_margin?.median, prev.net_margin?.median))),
+          h('span', { class: 'summary-detail' }, '各期間の業種中央値どうしの差')),
+        h('div', { class: 'summary-stat' },
+          h('span', { class: 'summary-label' }, '純利益率が低下した企業'),
+          h('strong', { class: 'summary-number' }, countRate(p.net_down_n, p.net_paired_n)),
+          h('span', { class: 'summary-detail' }, '同一企業の前年同期比較'))),
+      h('p', { class: 'snapshot-note' },
+        '費用別の要因分解：' + (bridge.n || 0) + '社。'
+        + ((bridge.n || 0) < 5 ? '業種としての傾向判定にはまだ社数が不足しています。'
+          : '詳しい原価率・財務費用率への影響は下の詳細から確認できます。')));
+  }
+
   async function renderSector(main, id) {
     const meta = INDEX.sectors.find(s => s.id === id);
     if (!meta) { main.replaceChildren(h('p', { class: 'empty' }, '分野が見つかりません。')); return; }
     main.replaceChildren(h('p', { class: 'empty' }, meta.ja + ' を読み込み中…'));
     const [sec, oem] = await Promise.all([load(meta.file), load('oem.json')]);
-    const head = h('div', { class: 'card' }, h('h2', null, sec.ja),
-      h('p', { class: 'lead' }, '4つの観点で見ます：①市場で誰が強いのか ②部品メーカーはどの程度儲けているのか ③単価と利益率はどう変化しているのか ④取引・生産構造はどうなっているのか。'),
+    const anchors = [['v1', '市場と数量'], ['v2', '利益率'], ['cost-bridge', '費用の内訳'], ['v3', '製品単価'], ['v4', '取引構造']];
+    const head = h('section', { class: 'card sector-header' },
+      h('p', { class: 'eyebrow' }, 'SUPPLIER ANALYSIS'),
+      h('h2', null, sec.ja),
+      h('p', { class: 'lead' }, '最初に重要指標を確認し、必要な分析項目だけ開けます。企業名を選ぶと、会社全体の財務・製品別データが表示されます。'),
       sec.note_ja ? h('p', { class: 'note' }, sec.note_ja) : null,
-      h('nav', { class: 'row', 'aria-label': '観点へ移動' }, ['①誰が強い', '②どの程度儲けている', '③単価と利益率', '④取引・生産構造'].map((t, i) =>
-        h('a', { href: '#', onclick: e => { e.preventDefault(); document.getElementById('v' + (i + 1)).scrollIntoView({ behavior: 'smooth' }); }, style: { fontSize: '13px' } }, t))));
-    main.replaceChildren(head, strengthCard(sec), profitCard(sec, oem), marginBridgeCard(sec), unitPriceCard(sec), structureCard(sec, oem));
+      h('nav', { class: 'quick-nav', 'aria-label': '分析項目に移動' },
+        anchors.map(([anchor, label]) => h('a', { href: '#' + anchor,
+          onclick: e => { e.preventDefault(); jumpToSection(anchor); } }, label))));
+    main.replaceChildren(head, sectorQuickView(sec),
+      strengthCard(sec), profitCard(sec, oem),
+      disclosure(marginBridgeCard(sec), '費用の内訳と利益率への影響'),
+      disclosure(unitPriceCard(sec), '製品単価・数量の詳細'),
+      disclosure(structureCard(sec, oem), '売掛・買掛と内製化の詳細'));
   }
 
   function strengthCard(sec) {
@@ -1206,7 +1261,7 @@
     try {
       if (view.startsWith('sector/')) {
         await renderSector(main, view.slice(7));
-        if (pendingAnchor) { const el = document.getElementById(pendingAnchor); pendingAnchor = null; if (el) el.scrollIntoView(); }
+        if (pendingAnchor) { const anchor = pendingAnchor; pendingAnchor = null; jumpToSection(anchor); }
       }
       else if (view === 'industries') renderIndustries(main);
       else if (view === 'sources') renderSources(main);

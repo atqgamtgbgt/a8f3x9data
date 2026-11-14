@@ -13,7 +13,9 @@ const CHROME = process.env.CHROME_PATH || ['/usr/bin/google-chrome', '/usr/bin/c
 const OUT = process.env.SHOT_DIR || 'smoke_screenshots';
 mkdirSync(OUT, { recursive: true });
 
-const views = ['hyp', 'sector/adas', 'sector/tires', 'sector/battery_materials', 'industries', 'sources'];
+// 検索索引は生成側の公開同期後に追加される。存在する環境では必ず検証する。
+const views = ['hyp', 'sector/adas', 'sector/tires', 'sector/battery_materials', 'industries',
+  ...(existsSync('output/supply_chain/companies.json') ? ['companies'] : []), 'sources'];
 const errors = [];
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new',
   args: ['--no-sandbox', '--disable-dev-shm-usage', '--disable-gpu'] });
@@ -40,11 +42,13 @@ try {
         sectorSnapshot: document.querySelectorAll('#main .sector-snapshot').length,
         disclosures: document.querySelectorAll('#main .deep-dive').length,
         hypothesisCount: document.querySelectorAll('#main .hypothesis-card').length,
+        directoryInput: document.querySelectorAll('#main #company-search').length,
         text: document.getElementById('main').textContent
       }));
       if (state.failed) errors.push(`[${label}] ${v}: データ読み込み失敗の表示`);
       if (!state.cards) errors.push(`[${label}] ${v}: カードが描画されていない`);
       if (v === 'hyp' && (!state.hero || state.hypothesisCount !== 6)) errors.push(`[${label}] 分析サマリー・6仮説の表示が不完全`);
+      if (v === 'companies' && !state.directoryInput) errors.push(`[${label}] 企業検索が表示されない`);
       if (v.startsWith('sector/') && (!state.sectorSnapshot || state.disclosures < 3))
         errors.push(`[${label}] ${v}: 主要指標または折りたたみ式の詳細が表示されない`);
       if (v === 'industries' && !state.text.includes('収益圧迫の広がり')) errors.push(`[${label}] 業種別の収益圧迫が表示されない`);
@@ -69,25 +73,9 @@ try {
     // 企業詳細（最初の企業リンク）
     await page.goto(BASE + '#sector/tires', { waitUntil: 'networkidle0' });
     await page.waitForSelector('#main button[data-company-code]', { timeout: 20000 });
-    await page.evaluate(() => {
-      window.__smokeNav = [{ hash: location.hash, source: 'before' }];
-      window.addEventListener('hashchange', () => window.__smokeNav.push({ hash: location.hash, source: 'hashchange' }));
-      document.getElementById('panel').addEventListener('close', () =>
-        window.__smokeNav.push({ hash: location.hash, source: 'dialog.close' }));
-    });
     // スティッキーな上部タブに重ならない画面中央へ確実にスクロールする。
     await page.$eval('#main button[data-company-code]', el => el.scrollIntoView({ block: 'center' }));
     await page.click('#main button[data-company-code]');
-    await new Promise(resolve => setTimeout(resolve, 250));
-    const debug = await page.evaluate(() => ({
-      hash: location.hash,
-      panelOpen: document.getElementById('panel').open,
-      title: document.getElementById('panel-title').textContent,
-      panelSnippet: document.getElementById('panel-body').textContent.slice(0, 180),
-      selectedButton: document.querySelector('#main button[data-company-code]')?.textContent,
-      navigations: window.__smokeNav
-    }));
-    console.log(`[${label}] company click:`, JSON.stringify(debug));
     await page.waitForFunction(() => document.getElementById('panel').open &&
       !/読み込み中/.test(document.getElementById('panel-title').textContent), { timeout: 5000 });
     const panel = await page.evaluate(() => ({ title: document.getElementById('panel-title').textContent,

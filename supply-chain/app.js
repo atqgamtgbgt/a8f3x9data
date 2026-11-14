@@ -597,11 +597,12 @@
   function pressureFromDisplayedCompanies(companies, currentKey) {
     const prev = previousYearKey(currentKey);
     if (!prev) return null;
-    const nowNet = [], oldNet = [], paired = [], pairedSales = [], pairedProfit = [];
+    const nowNet = [], oldNet = [], paired = [], grossPaired = [], pairedSales = [], pairedProfit = [];
     for (const c of companies.filter(c => c.in_industry)) {
       const now = (c.series || {})[currentKey] || {}, old = (c.series || {})[prev] || {};
       if (isNum(now.net_margin)) nowNet.push(now.net_margin);
       if (isNum(old.net_margin)) oldNet.push(old.net_margin);
+      if (isNum(now.gross_margin) && isNum(old.gross_margin)) grossPaired.push(now.gross_margin - old.gross_margin);
       if (isNum(now.net_margin) && isNum(old.net_margin)) {
         paired.push(now.net_margin - old.net_margin);
         if (isNum(now.revenue) && isNum(old.revenue) && old.revenue > 0) {
@@ -618,12 +619,15 @@
     const n = sorted.length, mid = n % 2 ? sorted[(n - 1) / 2] : (sorted[n / 2 - 1] + sorted[n / 2]) / 2;
     const down = paired.filter(v => v < 0).length;
     const loss = nowNet.filter(v => v < 0).length;
+    const grossDown = grossPaired.filter(v => v < 0).length;
     const upDown = pairedSales.filter(v => v.revenue && v.margin).length;
     const upProfitDown = pairedProfit.filter(v => v.revenue && v.profit).length;
     return {
       previous_period: prev, current_net_n: nowNet.length, previous_net_n: oldNet.length,
       net_paired_n: n, net_down_n: down, net_down_pct: n ? down / n * 100 : null,
       net_change_median_pt: n ? mid : null, loss_n: loss, loss_pct: loss / nowNet.length * 100,
+      gross_paired_n: grossPaired.length, gross_down_n: grossDown,
+      gross_down_pct: grossPaired.length ? grossDown / grossPaired.length * 100 : null,
       sales_up_net_down_n: upDown, sales_up_net_down_base_n: pairedSales.length,
       sales_up_net_down_pct: pairedSales.length ? upDown / pairedSales.length * 100 : null,
       sales_up_profit_down_n: upProfitDown, sales_up_profit_down_base_n: pairedProfit.length,
@@ -656,6 +660,9 @@
           h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率が低下した企業'),
             h('div', { class: 'v' }, pct(pressure.net_down_pct)),
             h('div', { class: 'd' }, pressure.net_down_n + '/' + pressure.net_paired_n + '社（両期取得）')),
+          h('div', { class: 'tile' }, h('div', { class: 'l' }, '粗利益率が低下した企業'),
+            h('div', { class: 'v' }, pct(pressure.gross_down_pct)),
+            h('div', { class: 'd' }, pressure.gross_down_n + '/' + pressure.gross_paired_n + '社（両期取得）')),
           h('div', { class: 'tile' }, h('div', { class: 'l' }, '純利益率の企業別変化・中央値'),
             h('div', { class: 'v' }, pt(pressure.net_change_median_pt)),
             h('div', { class: 'd' }, '同一企業' + pressure.net_paired_n + '社の変化を集計')),
@@ -888,7 +895,8 @@
         { label: periodLabel(previous), num: true, get: r => pct(net(r.i, previous)), sort: r => net(r.i, previous) },
         { label: periodLabel(latest), num: true, get: r => pct(net(r.i, latest)), sort: r => net(r.i, latest) },
         { label: '中央値の前年同期差', num: true, get: r => pt(r.delta), sort: r => r.delta },
-        { label: '利益率低下企業', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct },
+        { label: '純利益率低下企業', num: true, get: r => countRate(r.p.net_down_n, r.p.net_paired_n), sort: r => r.p.net_down_pct },
+        { label: '粗利益率低下企業', num: true, get: r => countRate(r.p.gross_down_n, r.p.gross_paired_n), sort: r => r.p.gross_down_pct },
         { label: '企業別変化の中央値', num: true, get: r => pt(r.p.net_change_median_pt), sort: r => r.p.net_change_median_pt },
         { label: '赤字企業', num: true, get: r => countRate(r.p.loss_n, r.p.current_net_n), sort: r => r.p.loss_pct },
         { label: '増収＋利益率低下', num: true, get: r => countRate(r.p.sales_up_net_down_n, r.p.sales_up_net_down_base_n), sort: r => r.p.sales_up_net_down_pct },

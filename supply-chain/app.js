@@ -668,7 +668,8 @@
     function draw() {
       const g = groups[+selG.value], t = g.tables[+selP.value];
       const rows = t.rows.map(r => ({ rank: r.rank, value: r.volume, valueText: vol(r.volume) + (g.unit_ja ? g.unit_ja : ''),
-        label: h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(r.code) }, r.name + (r.basis_ja ? ' ※' : '')),
+        label: h('button', { class: 'linkbtn', type: 'button', 'data-company-code': r.code,
+          'aria-label': r.name + 'の企業詳細を開く', onclick: () => openCompany(r.code) }, r.name + (r.basis_ja ? ' ※' : '')),
         tipNodes: () => [h('b', null, r.raw + '（' + t.unit + '）'), h('div', null, r.name + '：' + r.label),
           r.basis_ja ? h('div', null, '※ ' + r.basis_ja) : null,
           r.archived ? h('div', { class: 'muted' }, '同花順の表から消えた過去値（保存分）') : null] }));

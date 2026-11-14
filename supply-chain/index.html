@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>なぜ中国では自動車を安く作れるのか｜サプライチェーン分析（試作）</title>
-<meta name="description" content="中国の自動車部品メーカーの利益率・市場シェア・単価・支払条件を、同花順・蓋世汽車・東方財富のデータで継続的に比較する試作ページ。">
+<title>中国自動車サプライチェーン｜収益性・企業データをグラフで比較</title>
+<meta name="description" content="中国自動車産業のサプライチェーンを可視化。ADAS・タイヤ・電池材料の市場シェア、販売数量、業種別利益率、費用負担をグラフで比較。">
 <link rel="icon" href="data:,">
 <style>
 /* 配色はデータ可視化の参照パレット（明暗とも検証済み）。役割で参照する */
@@ -294,20 +294,21 @@ section.card[id] { scroll-margin-top: 78px; }
 
 @media print { nav.tabs { position: static; } .toggle-table, select { display: none; } }
 </style>
+<link rel="stylesheet" href="dashboard.css">
 </head>
 <body class="viz-root">
 <header>
   <a class="back" href="../">← 中国自動車販売ランキング（トップ）へ</a>
-  <h1>なぜ中国では自動車を安く作れるのか</h1>
-  <p class="sub">メーカー別シェア・販売数量・利益率・費用率</p>
+  <h1>中国自動車サプライチェーン</h1>
+  <p class="sub">市場シェア・販売数量・利益率・費用構造をグラフで比較</p>
   <p class="meta" id="meta">データを読み込み中…</p>
 </header>
 <nav class="tabs" role="tablist" aria-label="表示の切り替え" id="tabs">
-  <button role="tab" data-view="hyp" aria-selected="true">全体比較</button>
+  <button role="tab" data-view="hyp" aria-selected="true">📊 全体ダッシュボード</button>
   <button role="tab" data-view="sector/adas" aria-selected="false">ADAS</button>
   <button role="tab" data-view="sector/tires" aria-selected="false">タイヤ</button>
   <button role="tab" data-view="sector/battery_materials" aria-selected="false">電池材料</button>
-  <button role="tab" data-view="industries" aria-selected="false">業種別の利益率</button>
+  <button role="tab" data-view="industries" aria-selected="false">📈 業種比較</button>
   <button role="tab" data-view="sources" aria-selected="false">出典・方法</button>
 </nav>
 <main id="main" aria-live="polite"><p class="empty">読み込み中…</p></main>

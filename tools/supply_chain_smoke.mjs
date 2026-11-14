@@ -69,6 +69,12 @@ try {
     // 企業詳細（最初の企業リンク）
     await page.goto(BASE + '#sector/tires', { waitUntil: 'networkidle0' });
     await page.waitForSelector('#main button[data-company-code]', { timeout: 20000 });
+    await page.evaluate(() => {
+      window.__smokeNav = [{ hash: location.hash, source: 'before' }];
+      window.addEventListener('hashchange', () => window.__smokeNav.push({ hash: location.hash, source: 'hashchange' }));
+      document.getElementById('panel').addEventListener('close', () =>
+        window.__smokeNav.push({ hash: location.hash, source: 'dialog.close' }));
+    });
     await page.click('#main button[data-company-code]');
     await new Promise(resolve => setTimeout(resolve, 250));
     const debug = await page.evaluate(() => ({
@@ -76,7 +82,8 @@ try {
       panelOpen: document.getElementById('panel').open,
       title: document.getElementById('panel-title').textContent,
       panelSnippet: document.getElementById('panel-body').textContent.slice(0, 180),
-      selectedButton: document.querySelector('#main button[data-company-code]')?.textContent
+      selectedButton: document.querySelector('#main button[data-company-code]')?.textContent,
+      navigations: window.__smokeNav
     }));
     console.log(`[${label}] company click:`, JSON.stringify(debug));
     await page.waitForFunction(() => document.getElementById('panel').open &&

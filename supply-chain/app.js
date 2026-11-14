@@ -1135,6 +1135,59 @@
     main.replaceChildren(industryPressureCard(inds, keys), card);
   }
 
+  // ---------------------------------------------------------------- 画面：10分類の企業検索
+  async function renderCompanies(main) {
+    main.replaceChildren(h('p', { class: 'empty' }, '企業一覧を読み込み中…'));
+    const directory = await load('companies.json');
+    const rows = directory.rows || [];
+    const card = h('section', { class: 'card company-directory' },
+      h('p', { class: 'eyebrow' }, 'COMPANY DIRECTORY'),
+      h('h2', null, '企業を探す'),
+      h('p', { class: 'lead' }, '申万10分類に属する中国A株企業を、会社名・証券コード・業種で探せます。'
+        + ' 数値は会社全体の財務で、特定部品の利益率ではありません。'),
+      h('p', { class: 'note' }, '対象期間：' + periodLabel(directory.previous_period) + ' → '
+        + periodLabel(directory.period) + '。外資非上場企業は検索対象外です。'));
+    const search = h('input', { type: 'search', id: 'company-search', class: 'company-search-input',
+      placeholder: '会社名（中国語）・証券コードで検索', 'aria-label': '会社名と証券コードで検索', autocomplete: 'off' });
+    const filter = h('select', { id: 'industry-filter', 'aria-label': '申万業種で絞り込み' },
+      h('option', { value: '' }, 'すべての業種'),
+      (INDEX.industries || []).map(i => h('option', { value: i.id }, i.ja)));
+    const downOnly = h('input', { type: 'checkbox', id: 'declining-only' });
+    const toolbar = h('div', { class: 'directory-controls' },
+      h('label', { class: 'directory-search-label', for: 'company-search' }, '企業名・証券コード', search),
+      h('label', { class: 'directory-filter-label', for: 'industry-filter' }, '業種', filter),
+      h('label', { class: 'directory-checkbox' }, downOnly, '純利益率が低下した企業のみ'));
+    const count = h('p', { class: 'directory-count', role: 'status', 'aria-live': 'polite' });
+    const result = h('div');
+    card.append(toolbar, count, result);
+    const columns = [
+      { label: '会社', get: c => h('button', { class: 'linkbtn', type: 'button', onclick: () => openCompany(c.code) },
+        c.name + '（' + c.code + '）'), sort: c => c.name },
+      { label: '申万三級業種', get: c => (c.industries || []).join('／') },
+      { label: '売上高', num: true, get: c => oku(c.revenue_oku), sort: c => c.revenue_oku },
+      { label: '純利益率', num: true, get: c => pct(c.net_margin), sort: c => c.net_margin },
+      { label: '前年同期の変化', num: true, get: c => bridgeDisplay(c.net_delta_pt), sort: c => c.net_delta_pt },
+      { label: '費用の要因分解', get: c => c.cost_bridge ? 'あり' : '未取得／比較不可' },
+    ];
+    function refresh() {
+      const query = search.value.trim().toLocaleLowerCase();
+      const industry = filter.value;
+      const all = rows.filter(c => (!query || (c.name + ' ' + c.code).toLocaleLowerCase().includes(query))
+        && (!industry || (c.industry_ids || []).includes(industry))
+        && (!downOnly.checked || (isNum(c.net_delta_pt) && c.net_delta_pt < 0)));
+      all.sort((a, b) => (isNum(a.net_delta_pt) ? a.net_delta_pt : 999999)
+        - (isNum(b.net_delta_pt) ? b.net_delta_pt : 999999));
+      count.textContent = all.length + '社が該当（全' + rows.length + '社）。会社名を選ぶと企業詳細を開きます。';
+      result.replaceChildren(all.length ? table(columns, all, { limit: 30 })
+        : h('p', { class: 'empty' }, '条件に一致する企業がありません。条件を変えて検索してください。'));
+    }
+    search.addEventListener('input', refresh);
+    filter.addEventListener('change', refresh);
+    downOnly.addEventListener('change', refresh);
+    refresh();
+    main.replaceChildren(card);
+  }
+
   // ---------------------------------------------------------------- 画面：出典・方法
   function renderSources(main) {
     const cov = INDEX.coverage || {};
@@ -1287,6 +1340,7 @@
         if (pendingAnchor) { const anchor = pendingAnchor; pendingAnchor = null; jumpToSection(anchor); }
       }
       else if (view === 'industries') renderIndustries(main);
+      else if (view === 'companies') await renderCompanies(main);
       else if (view === 'sources') renderSources(main);
       else renderHypotheses(main);
     } catch (e) {

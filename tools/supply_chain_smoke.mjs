@@ -75,6 +75,8 @@ try {
       document.getElementById('panel').addEventListener('close', () =>
         window.__smokeNav.push({ hash: location.hash, source: 'dialog.close' }));
     });
+    // スティッキーな上部タブに重ならない画面中央へ確実にスクロールする。
+    await page.$eval('#main button[data-company-code]', el => el.scrollIntoView({ block: 'center' }));
     await page.click('#main button[data-company-code]');
     await new Promise(resolve => setTimeout(resolve, 250));
     const debug = await page.evaluate(() => ({

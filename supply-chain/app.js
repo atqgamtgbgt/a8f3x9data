@@ -863,8 +863,8 @@
       { name: '純利益率', color: 'var(--s2)', key: 'net_margin' }
     ].map(t => ({
       name: t.name, color: t.color,
-      values: years.map(year => ((sec.industry.series || {})[year] || {})[t.key]?.median),
-      n: years.map(year => ((sec.industry.series || {})[year] || {})[t.key]?.n || 0)
+      values: years.map(year => (((sec.industry || {}).series || {})[year] || {})[t.key]?.median),
+      n: years.map(year => (((sec.industry || {}).series || {})[year] || {})[t.key]?.n || 0)
     }));
     return h('section', { class: 'card sc-sector-trend', id: 'report-trend' },
       scSectionHead('01 / PROFITABILITY', '粗利益率・純利益率の推移',
@@ -1481,35 +1481,83 @@
     return card;
   }
 
+
   function renderIndustries(main) {
-    const inds = INDEX.industries;
-    const keys = INDEX.periods || [];
-    const fy = fyKeys(keys), ytd = ytdKeys(keys);
-    let metric = 'net_margin';
-    const card = h('section', { class: 'card' }, h('h2', null, '申万10分類の利益率（中央値）'),
-      h('p', { class: 'lead' }, '同花順の申万三級10分類。各社の会社全体の利益率の中央値で、外資系・非上場企業は含みません。完成車（濃い色）と部品・電池・資源を比べます。'));
-    const seg = h('div', { class: 'seg', role: 'group', 'aria-label': '指標' });
-    const body = h('div');
-    card.append(h('div', { class: 'row' }, seg), body);
-    const m = (i, k, mm) => ((((i.series || {})[k] || {})[mm]) || {});
+    const industries = INDEX.industries || [];
+    const fy = fyKeys(INDEX.periods || []);
+    const ytd = ytdKeys(INDEX.periods || []);
+    let type = 'parts', metric = 'net_margin';
+    const intro = h('section', { class: 'sc-cover sc-industry-cover' },
+      h('div', null,
+        h('div', { class: 'sc-kicker' }, 'SECTOR BENCHMARK / 10 INDUSTRIES'),
+        h('h2', null, '業種別の収益性を比較'),
+        h('p', null, '完成車・自動車部品・電池材料など、申万三級分類の上場企業を比較。会社全体の業績です。')),
+      h('div', { class: 'sc-period-pill' }, fy.at(-1) ? periodLabel(fy.at(-1)) + ' 通期' : '通期データ'));
+    const card = h('section', { class: 'card sc-industry-trend' },
+      scSectionHead('01 / INDUSTRY TREND', '業種別の利益率推移',
+        '通期決算の中央値。同じ企業群とは限らないため、各年の対象社数も参照してください。'));
+    const filters = h('div', { class: 'sc-controls sc-industry-controls' });
+    const graph = h('div', { class: 'sc-wide-chart' });
+    card.append(filters, graph);
+    const groups = [['parts','自動車部品5分類'],['others','その他5分類']];
+    const metrics = [['net_margin','純利益率'],['gross_margin','粗利益率']];
     function draw() {
-      seg.replaceChildren(...[['net_margin', '純利益率'], ['gross_margin', '粗利益率']].map(([v, lab]) =>
-        h('button', { type: 'button', 'aria-pressed': String(metric === v), onclick: () => { metric = v; draw(); } }, lab)));
-      const a = fy[0], b = fy[fy.length - 1];
-      const rows = inds.map(i => ({ label: i.ja, a: m(i, a, metric).median, b: m(i, b, metric).median, emph: i.role === 'oem',
-        n: (m(i, b, metric).n || 0) + '社（表示 ' + (i.stated_count ?? '—') + '社）' }))
-        .sort((x, y) => (y.b ?? -999) - (x.b ?? -999));
-      const chart = dumbbell(rows, { aLabel: a ? a.slice(0, 4) + '年' : '', bLabel: b ? b.slice(0, 4) + '年' : '', unit: '%', aria: '業種別の利益率の変化' });
-      const cols = [...fy, ...ytd];
-      body.replaceChildren(withTableToggle(chart, () => table([{ label: '業種', get: r => r.label }, { label: a.slice(0, 4), num: true, get: r => pct(r.a) }, { label: b.slice(0, 4), num: true, get: r => pct(r.b) }, { label: '社数', get: r => r.n }], rows)),
-        h('h3', null, '期間ごとの中央値（社数）'),
-        table([{ label: '業種', get: i => h('span', null, i.ja, h('br'), h('span', { class: 'muted', style: { fontSize: '11px' } }, i.sw_l3)), sort: i => i.ja },
-          ...cols.map(k => ({ label: periodLabel(k), num: true, get: i => pct(m(i, k, metric).median) + ' (' + (m(i, k, metric).n || 0) + ')', sort: i => m(i, k, metric).median }))], inds),
-        h('p', { class: 'note' }, '現在の所属企業を過去の期間にも当てはめた系列（現時点コホート）。年初累計（1〜9月など）は通期と混ぜずに、前年同期と比べてください。'),
-        h('p', { class: 'source' }, '出典：同花順 F10「行業対比」（所属企業）、「財務概況」（销售毛利率・销售净利率）'));
+      filters.replaceChildren(
+        h('div', { class: 'sc-control-row' }, ...groups.map(([v,label]) =>
+          h('button', { type:'button', class:'sc-filter', 'aria-pressed':String(type===v),
+            onclick:()=>{type=v;draw();} },label))),
+        h('div', { class: 'sc-control-row' }, ...metrics.map(([v,label]) =>
+          h('button', { type:'button', class:'sc-filter', 'aria-pressed':String(metric===v),
+            onclick:()=>{metric=v;draw();} },label))));
+      const candidates=industries.filter(i => (i.group_ja === '自動車部品') === (type==='parts'));
+      const ser=candidates.map((i,k)=>({
+        name:i.ja, color:SC_COLORS[k%SC_COLORS.length],
+        values:fy.map(key=>((i.series||{})[key]||{})[metric]?.median),
+        n:fy.map(key=>((i.series||{})[key]||{})[metric]?.n||0)
+      })).filter(s=>s.values.some(isNum));
+      if(!ser.length){graph.replaceChildren(h('p',{class:'empty'},'比較できる利益率データがありません。'));return;}
+      graph.replaceChildren(withTableToggle(
+        lineChart({x:fy.map(y=>y.slice(0,4)),series:ser,unit:'%',aria:'業種別'+(metric==='net_margin'?'純利益率':'粗利益率')+'通期推移'}),
+        ()=>table([{label:'年',get:y=>y.slice(0,4)},
+          ...ser.map(se=>({label:se.name,num:true,get:y=>{
+            const j=fy.indexOf(y);return pct(se.values[j])+'（'+se.n[j]+'社）';
+          }}))],fy)));
     }
     draw();
-    main.replaceChildren(industryPressureCard(inds, keys), card);
+    const earliest=fy[0],last=fy.at(-1);
+    const rows=industries.map(i=>({
+      label:i.ja, a:((i.series||{})[earliest]||{}).net_margin?.median,
+      b:((i.series||{})[last]||{}).net_margin?.median,
+      n:((i.series||{})[last]||{}).net_margin?.n||0,
+      emph:i.role==='oem'
+    })).filter(r=>isNum(r.a)&&isNum(r.b))
+      .sort((a,b)=>b.b-a.b);
+    const comparison=h('section', { class:'card sc-industry-comparison' },
+      scSectionHead('02 / LONG-TERM COMPARISON','純利益率：最初の年と最新年',
+        '業種ごとの純利益率中央値を比較。棒の終点は各年に異なる企業構成を含む場合があります。'),
+      withTableToggle(dumbbell(rows,{
+        aLabel:earliest?.slice(0,4)+'年',bLabel:last?.slice(0,4)+'年',
+        unit:'%',aria:'業種別純利益率の初期年と最新年の比較'
+      }),()=>table([
+        {label:'業種',get:r=>r.label},
+        {label:earliest?.slice(0,4),num:true,get:r=>pct(r.a)},
+        {label:last?.slice(0,4),num:true,get:r=>pct(r.b)},
+        {label:'社数',num:true,get:r=>String(r.n)}
+      ],rows)));
+    const metricRows=[...fy,...ytd];
+    main.replaceChildren(intro,card,comparison,
+      h('div', { class:'sc-detail-heading' },
+        scSectionHead('DETAILS','元データと集計条件','数値表は必要なときだけ開きます。')),
+      scLazyDetails('業種別の収益圧迫・前年比（6指標）','industry-pressure-detail',
+        ()=>industryPressureCard(industries,INDEX.periods||[])),
+      scLazyDetails('全10業種・全期間の利益率一覧','industry-period-detail',
+        ()=>h('section',{class:'card'},
+          h('h2',null,'利益率中央値・社数'),
+          table([{label:'業種',get:i=>i.ja},
+            ...metricRows.map(k=>({label:periodLabel(k),num:true,
+              get:i=>{const n=((i.series||{})[k]||{})[metric]||{};
+                return pct(n.median)+'（'+(n.n||0)+'社）';}}))],industries),
+          h('p',{class:'source'},'出典：同花順 F10。過去年には現時点の所属企業を遡及適用しています。'))));
   }
 
   // ---------------------------------------------------------------- 画面：出典・方法
@@ -1653,6 +1701,7 @@
     }
     closePanel();
     await showView(hash);
+    window.scrollTo(0, 0);
   }
   async function showView(view) {
     lastView = view;

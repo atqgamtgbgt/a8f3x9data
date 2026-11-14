@@ -537,61 +537,275 @@
         h('p', null, '同花順 F10 連結損益計算書。各業種に所属する比較可能企業の前年同期比較。欠損は0%として扱いません。')));
     return card;
   }
-  function renderHypotheses(main) {
-    const currentPeriod = ytdKeys(INDEX.periods || []).at(-1);
-    const previousPeriod = previousYearKey(currentPeriod);
-    const industries = (INDEX.industries || []).filter(i => i.group_ja === '自動車部品');
-    const fy = fyKeys(INDEX.periods || []);
-    const rates = industries.map(i => ({ name: i.ja, p: ((i.series || {})[currentPeriod] || {}).pressure || {},
-      m: ((i.series || {})[currentPeriod] || {}).net_margin || {} }));
-    const highest = rates.filter(x => isNum(x.p.net_down_pct))
-      .sort((a,b) => b.p.net_down_pct - a.p.net_down_pct)[0];
-    const marginTop = rates.filter(x => isNum(x.m.median))
-      .sort((a,b) => b.m.median - a.m.median)[0];
-    const cover = h('section', { class: 'sc-cover' },
-      h('div', { class: 'sc-cover-text' },
-        h('div', { class: 'sc-kicker' }, 'CHINA AUTO / SUPPLY CHAIN'),
-        h('h2', null, '部品産業の収益性を、グラフで比較'),
-        h('p', null, '利益率・販売数量・費用負担を、出典と集計条件がそろう範囲で可視化。文章による原因の推測は行いません。')),
-      h('div', { class: 'sc-period-pill' }, periodLabel(currentPeriod) + ' 時点'));
-    const kpis = h('div', { class: 'sc-kpis' },
-      scKpi('比較対象の部品業種', industries.length + '分類', '申万三級・A株上場企業'),
-      scKpi('利益率低下割合が最大', highest ? pct(highest.p.net_down_pct) : '—',
-        highest ? highest.name + '（' + highest.p.net_down_n + '/' + highest.p.net_paired_n + '社）' : '比較対象なし', 'sc-alert'),
-      scKpi('純利益率中央値が最高', marginTop ? pct(marginTop.m.median) : '—',
-        marginTop ? marginTop.name + '（' + marginTop.m.n + '社）' : '比較対象なし'));
-    const costRows = rates.filter(x => isNum(x.p.sales_up_profit_down_pct)
-      && x.p.sales_up_profit_down_base_n > 0)
-      .sort((a, b) => b.p.sales_up_profit_down_pct - a.p.sales_up_profit_down_pct);
-    const growth = h('section', { class: 'card sc-growth-card', id: 'overview-growth' },
-      scSectionHead('03 / SALES & PROFIT', '売上が増えても利益が減った企業',
-        '同じ会社の売上高が増え、親会社帰属利益額が減った企業の割合。'),
-      h('div', { class: 'sc-bars' },
-        ...costRows.map(r => storyBarRow(r.name, r.p.sales_up_profit_down_pct, 100,
-          pct(r.p.sales_up_profit_down_pct),
-          r.p.sales_up_profit_down_n + '/' + r.p.sales_up_profit_down_base_n + '社',
-          null, 'var(--s2)'))),
-      h('details', { class: 'report-source-details' },
-        h('summary', null, '集計条件・出典'),
-        h('p', null, '同花順。前年同期と比較可能なA株上場企業のみ。複数業種に所属する企業は重複し得ます。')));
-    const pressure = h('section', { class: 'sc-comparison-section', id: 'overview-pressure' },
-      scSectionHead('02 / PROFIT PRESSURE', '利益率の悪化はどこで目立つか',
-        periodLabel(previousPeriod) + ' と ' + periodLabel(currentPeriod) + ' を比較。業種中央値と企業別悪化割合は別指標です。'),
-      topPressureCharts(industries, currentPeriod, previousPeriod));
-    const links = h('section', { class: 'sc-explore' },
-      scSectionHead('05 / EXPLORE', '分野ごとの企業データ'),
-      h('div', { class: 'sc-explore-grid' }, ...[
-        ['ADAS', '国内乗用車の搭載シェア', 'sector/adas'],
-        ['タイヤ', '開示された企業別販売数量', 'sector/tires'],
-        ['電池材料', '製品別販売数量と価格', 'sector/battery_materials'],
-        ['業種比較', '完成車・部品・電池の利益率', 'industries']
-      ].map(([label, sub, target]) => h('a', { href: '#' + target, class: 'sc-explore-link' },
-        h('b', null, label), h('span', null, sub), h('span', { 'aria-hidden': 'true' }, '↗')))));
-    main.replaceChildren(cover, kpis,
-      scTrend(industries, fy, '業種別・利益率の年次推移',
-        '通期決算の中央値。途中年の年初累計値は混ぜず、同じ会計期間だけで比較しています。', true),
-      pressure, growth, scCostMatrix(industries, currentPeriod), links);
+
+  // Visualization model: mirror the existing 崔東樹 dashboard's ECharts graphs,
+  // selectable topic panes, interactive legends and succinct attribution.
+  // This layer uses published JSON as-is. It does not infer causes.
+  const CUI_PALETTE = ['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6',
+    '#ec4899','#14b8a6','#f97316','#6366f1','#84cc16'];
+  const CUI_CHARTS = new Set();
+  const cuiNum = value => isNum(value) ? Number(value.toFixed(1)) : null;
+  const cuiMedian = (industry, key, metric) =>
+    ((industry?.series || {})[key] || {})[metric]?.median ?? null;
+  const cuiP = (industry, key) => ((industry?.series || {})[key] || {}).pressure || {};
+  const cuiYear = key => key ? key.slice(0, 4) : '';
+  const cuiSeries = (industry, keys, metric) => keys.map(k => cuiMedian(industry, k, metric));
+  function cuiDispose() {
+    for (const chart of CUI_CHARTS) { try { chart.dispose(); } catch(e) {} }
+    CUI_CHARTS.clear();
   }
+  function cuiTitle(kicker, title, caption) {
+    return h('div', { class:'cui-section-title' },
+      h('div', { class:'cui-section-kicker' }, kicker),
+      h('h2', null, title),
+      caption ? h('p', { class:'cui-section-caption' }, caption) : null);
+  }
+  function cuiHeader(title, note, period) {
+    return h('div', { class:'cui-page-head' },
+      h('div', null, h('h2', null, title),
+        note ? h('p', null, note) : null),
+      period ? h('span', { class:'cui-period' }, period) : null);
+  }
+  function cuiAnchorNav(items) {
+    return h('nav', { class:'cui-anchor-nav', 'aria-label':'グラフを選択' },
+      ...items.map(([id,label]) => h('button', { type:'button',
+        onclick: () => document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'}) }, label)));
+  }
+  function cuiBase(title, chartType) {
+    return {
+      animationDuration: 450, color:CUI_PALETTE,
+      textStyle:{fontFamily:'system-ui,-apple-system,"Segoe UI","Noto Sans JP",sans-serif',fontSize:12},
+      toolbox:{right:5,top:3,itemSize:14,feature:{saveAsImage:{type:'png',title:'画像を保存'},restore:{title:'リセット'}}},
+      tooltip:{trigger:chartType==='heatmap'?'item':'axis',axisPointer:{type:'shadow'}},
+      grid:{top:58,right:35,bottom:43,left:62,containLabel:true}
+    };
+  }
+  function cuiHorizontal(labels, values, unit, name='値', extras={}) {
+    const t=cuiBase(name,'bar');
+    return {...t,
+      grid:{top:20,right:67,bottom:38,left:10,containLabel:true},
+      tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+      xAxis:{type:'value',name:unit,axisLabel:{fontSize:11}},
+      yAxis:{type:'category',inverse:true,data:labels,axisLabel:{fontSize:11,width:128,overflow:'truncate'}},
+      series:[{name,type:'bar',barMaxWidth:20,data:values.map(cuiNum),itemStyle:{color:extras.color||CUI_PALETTE[1],borderRadius:[0,3,3,0]},
+        label:{show:true,position:'right',fontSize:11,formatter:v=>v.value==null?'—':Number(v.value).toLocaleString('ja-JP',{maximumFractionDigits:1})+unit}}],
+      dataZoom:labels.length>12?[{type:'inside',yAxisIndex:0}]:[]
+    };
+  }
+  function cuiLine(keys, series, unit, title) {
+    return {...cuiBase(title,'line'),
+      tooltip:{trigger:'axis'},
+      legend:{data:series.map(x=>x.name),top:5,type:'scroll',left:5,right:62,textStyle:{fontSize:11}},
+      grid:{top:70,right:24,bottom:44,left:24,containLabel:true},
+      xAxis:{type:'category',boundaryGap:false,data:keys,axisLabel:{fontSize:11}},
+      yAxis:{type:'value',name:unit,scale:true,axisLabel:{fontSize:11}},
+      series:series.map((v,i)=>({type:'line',name:v.name,connectNulls:false,showSymbol:true,
+        symbol:'circle',symbolSize:6,smooth:false,lineStyle:{width:2.5},itemStyle:{color:CUI_PALETTE[i%CUI_PALETTE.length]},
+        data:v.values.map(cuiNum)}))
+    };
+  }
+  function cuiGroupBars(labels, series, unit, title) {
+    const horizontal=labels.length>7;
+    const axisLabel={fontSize:11,interval:0,overflow:'truncate',
+      width:horizontal?142:84,rotate:horizontal?0:(labels.length>4?23:0)};
+    const category={type:'category',data:labels,inverse:horizontal,axisLabel};
+    const numeric={type:'value',name:unit,axisLabel:{fontSize:11}};
+    return {...cuiBase(title,'bar'),
+      tooltip:{trigger:'axis',axisPointer:{type:'shadow'}},
+      legend:{data:series.map(v=>v.name),top:3,type:'scroll',left:5,right:65},
+      grid:horizontal?{top:55,right:20,bottom:40,left:12,containLabel:true}:
+        {top:65,right:15,bottom:72,left:12,containLabel:true},
+      xAxis:horizontal?numeric:category,
+      yAxis:horizontal?category:numeric,
+      series:series.map((v,i)=>({name:v.name,type:'bar',barMaxWidth:horizontal?14:30,
+        data:v.values.map(cuiNum),itemStyle:{color:CUI_PALETTE[i%CUI_PALETTE.length]}}))
+    };
+  }
+  function cuiHeat(industries,key) {
+    const fields=[
+      ['粗利益率', t=>t.gross_pressure_n],
+      ['販売費', t=>t.negative_n?.selling],
+      ['管理費', t=>t.negative_n?.administration],
+      ['研究開発費', t=>t.negative_n?.research],
+      ['財務費', t=>t.finance_pressure_n]];
+    const industryRows=industries.filter(i=>((i.series||{})[key]||{}).cost_bridge_summary?.n>=5);
+    const data=[];
+    industryRows.forEach((i,j)=>{
+      const t=((i.series||{})[key]||{}).cost_bridge_summary;
+      fields.forEach((f,k)=>{
+        const n=f[1](t);if(isNum(n))data.push([k,j,Math.round(n/t.n*1000)/10,t.n,n]);
+      });
+    });
+    return {...cuiBase('費用率','heatmap'),
+      tooltip:{trigger:'item',formatter:p=>{const d=p.value||[];return (fields[d[0]]?.[0]||'')+'：'+(industryRows[d[1]]?.ja||'')+'　'+(d[2]??'—')+'%（'+(d[4]??'—')+'/'+(d[3]??'—')+'社）';}},
+      grid:{top:28,right:30,bottom:65,left:10,containLabel:true},
+      xAxis:{type:'category',data:fields.map(f=>f[0]),axisLabel:{interval:0,rotate:20,fontSize:11}},
+      yAxis:{type:'category',inverse:true,data:industryRows.map(i=>i.ja),axisLabel:{fontSize:11,width:120,overflow:'truncate'}},
+      visualMap:{show:false,min:0,max:100,inRange:{color:['#edf4fa','#bddaf7','#6ba9e0','#2676bb']}},
+      series:[{type:'heatmap',data,emphasis:{itemStyle:{shadowBlur:5,shadowColor:'#667085'}},
+        label:{show:true,formatter:p=>isNum(p.value[2])?p.value[2].toFixed(0)+'%':'—',fontSize:11}}]
+    };
+  }
+  function cuiFallback(el,opt) {
+    if (opt.series?.[0]?.type==='line' && opt.xAxis?.data) {
+      const lines=opt.series.map(s=>({name:s.name,
+        color:s.itemStyle?.color || 'var(--s1)',values:s.data}));
+      el.replaceChildren(lineChart({x:opt.xAxis.data,series:lines,
+        unit:opt.yAxis?.name||'',aria:'折れ線：'+lines.map(x=>x.name).join('、')}));
+      return;
+    }
+    if (opt.series?.[0]?.type==='heatmap') {
+      const cols=opt.xAxis?.data||[],rows=opt.yAxis?.data||[];
+      const lookup=new Map((opt.series[0].data||[]).map(x=>[x[1]+':'+x[0],x[2]]));
+      const tableRows=[];
+      for(let i=0;i<rows.length;i++) {
+        const cells=[h('th',null,rows[i])];
+        for(let j=0;j<cols.length;j++) {
+          const v=lookup.get(i+':'+j);
+          cells.push(h('td',{class:'n'},isNum(v)?pct(v):'—'));
+        }
+        tableRows.push(h('tr',null,...cells));
+      }
+      const head=h('thead',null,h('tr',null,h('th',null,'業種'),...cols.map(x=>h('th',null,x))));
+      el.replaceChildren(h('div',{class:'cui-fallback-table tablewrap'},
+        h('table',null,head,h('tbody',null,...tableRows))));
+      return;
+    }
+    const labels=opt.yAxis?.type==='category'?opt.yAxis.data:opt.xAxis?.data||[];
+    const series=opt.series||[];
+    const vals=series.flatMap(se=>se.data||[]).filter(isNum);
+    const ceiling=Math.max(1,...vals.map(Math.abs));
+    const groups=[];
+    for(let i=0;i<labels.length;i++) {
+      const parts=[h('strong',null,labels[i])];
+      for(let k=0;k<series.length;k++) {
+        const value=series[k].data[i];
+        parts.push(storyBarRow(series.length>1?series[k].name:'',
+          isNum(value)?Math.abs(value):null,ceiling,
+          isNum(value)?value.toFixed(1)+' '+(opt.xAxis?.name||opt.yAxis?.name||''):'—',
+          null,null,CUI_PALETTE[k%CUI_PALETTE.length]));
+      }
+      groups.push(h('div',{class:'cui-fallback-group'},...parts));
+    }
+    el.replaceChildren(h('div',{class:'cui-fallback-bars'},...groups));
+  }
+  function cuiPlot(node,optionFn,clickMapFn) {
+    let chart=null;
+    function draw() {
+      const option=optionFn();
+      if (!option) { node.replaceChildren(h('p',{class:'empty'},'比較できる数値がありません。')); return; }
+      if (typeof window.echarts === 'undefined') { cuiFallback(node,option); return; }
+      try {
+        chart=chart || window.echarts.init(node,null,{renderer:'canvas'});
+        CUI_CHARTS.add(chart);
+        chart.clear();chart.setOption(option,{notMerge:true});
+        chart.off('click');
+        if (clickMapFn) chart.on('click',param=>{
+          const target=clickMapFn(param);
+          if (target) openCompany(target);
+        });
+        chart.resize();
+      } catch(err) { console.warn('chart fallback',err);cuiFallback(node,option); }
+    }
+    requestAnimationFrame(draw);
+    return draw;
+  }
+  function cuiChartCard(cfg) {
+    const figure=h('section',{class:'cui-chart-card'+(cfg.wide?' cui-chart-wide':''),
+      id:cfg.id||'', 'aria-label':cfg.title},
+      h('div',{class:'cui-card-head'},
+        h('h3',null,cfg.title),
+        cfg.subtitle?h('p',null,cfg.subtitle):null));
+    const filters=h('div',{class:'cui-chart-filters'});
+    const plot=h('div',{class:'cui-echart',role:'img','aria-label':cfg.title});
+    figure.append(filters,plot);
+    const redraw=cuiPlot(plot,cfg.option,cfg.clickMap);
+    if (cfg.controls) cfg.controls(filters,redraw);
+    const source=h('details',{class:'cui-source'},
+      h('summary',null,'出典・集計条件'),
+      h('p',null,cfg.source||'同花順 F10。各期の比較可能データのみ表示。'));
+    if (cfg.sourceLink) {
+      const link=h('a',{href:'#',target:'_blank',rel:'noopener noreferrer'},'原記事・資料を開く');
+      link.hidden=true;
+      source.append(link);
+      source.addEventListener('toggle',()=>{
+        if(!source.open)return;
+        const uri=cfg.sourceLink();
+        if(typeof uri==='string'&&/^https:\/\//.test(uri)){link.setAttribute('href',uri);link.hidden=false;}
+        else link.hidden=true;
+      });
+    }
+    figure.append(source);
+    return figure;
+  }
+  function cuiGrid(...cards){return h('div',{class:'cui-chart-grid'},...cards.filter(Boolean));}
+  function cuiPanel(label,content,id) {
+    return h('details',{class:'cui-detail',id},
+      h('summary',null,label),h('div',{class:'cui-detail-body'},content));
+  }
+  function cuiDetails(sec) {
+    return h('section',{class:'cui-detail-section'},
+      cuiTitle('DETAIL DATA','企業別データ・出典','詳細は必要な項目のみ開いて確認できます。'),
+      scLazyDetails('市場シェア／販売数量の全期間・製品別表示','report-data-market',()=>strengthCard(sec)),
+      scLazyDetails('粗利益率・純利益率の会社別一覧','report-data-profit',
+        async()=>profitCard(sec,await load('oem.json'))),
+      scLazyDetails('費用の要因分解（会社別）','report-data-cost',()=>marginBridgeCard(sec)),
+      scLazyDetails('販売数量と平均単価','report-data-price',()=>unitPriceCard(sec)),
+      scLazyDetails('売掛・買掛日数・内製化','report-data-structure',
+        async()=>structureCard(sec,await load('oem.json'))));
+  }
+  function cuiOverview(main) {
+    const inds=(INDEX.industries||[]).filter(x=>x.group_ja==='自動車部品');
+    const years=fyKeys(INDEX.periods||[]);
+    const latest=ytdKeys(INDEX.periods||[]).at(-1),prev=previousYearKey(latest);
+    const latestLabel=periodLabel(latest);
+    const s=[
+      ['cui-trend','利益率推移'],['cui-level','業種別利益率'],
+      ['cui-pressure','利益率の悪化'],['cui-sales','増収減益'],
+      ['cui-expense','費用内訳'],['cui-cash','取引・回転日数']];
+    const trend=cuiChartCard({id:'cui-trend',wide:true,title:'自動車部品5業種｜利益率の推移',
+      subtitle:'会社全体の通期中央値（%）／凡例を押すと系列を表示・非表示にできます',
+      source:'同花順 F10。各期の現時点の申万業種所属企業を集計。各期の比較対象企業数は変化します。',
+      option:()=>cuiLine(years.map(cuiYear),inds.map(i=>({name:i.ja,values:cuiSeries(i,years,'net_margin')})),'%','純利益率')});
+    const level=cuiChartCard({id:'cui-level',title:'最新期の純利益率中央値',
+      subtitle:latestLabel+'・会社全体の純利益率（%）',
+      source:'同花順。申万三級業種に分類されたA株上場企業の純利益率中央値。部品ごとの粗利益率ではありません。',
+      option:()=>{const rows=inds.map(i=>({name:i.ja,v:cuiMedian(i,latest,'net_margin')}))
+        .filter(r=>isNum(r.v)).sort((a,b)=>b.v-a.v);
+        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.v),'%','純利益率');}});
+    const down=cuiChartCard({id:'cui-pressure',title:'利益率が低下した企業の割合',
+      subtitle:periodLabel(prev)+' → '+latestLabel+' ／前年同期と同一企業を比較',
+      source:'同花順。前年同期と比較可能な同一企業に限る。業種中央値の前年差ではありません。',
+      option:()=>{const rows=inds.map(i=>({name:i.ja,p:cuiP(i,latest)}))
+        .filter(x=>isNum(x.p.net_down_pct)&&x.p.net_paired_n>0)
+        .sort((a,b)=>b.p.net_down_pct-a.p.net_down_pct);
+        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.p.net_down_pct),'%','利益率低下企業');}});
+    const sales=cuiChartCard({id:'cui-sales',wide:true,title:'増収減益となった企業の割合',
+      subtitle:'売上高は増加、親会社帰属利益額は減少（前年同期比）',
+      source:'同花順。前年同期と比較可能な同一企業のみ。売上増でも会社全体で減益の企業割合です。',
+      option:()=>{const rows=inds.map(i=>({name:i.ja,p:cuiP(i,latest)}))
+        .filter(x=>isNum(x.p.sales_up_profit_down_pct)&&x.p.sales_up_profit_down_base_n>0)
+        .sort((a,b)=>b.p.sales_up_profit_down_pct-a.p.sales_up_profit_down_pct);
+        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.p.sales_up_profit_down_pct),'%','増収減益企業');}});
+    const expenses=cuiChartCard({id:'cui-expense',wide:true,title:'費用率が悪化した企業の割合',
+      subtitle:'粗利益率・販売費・管理費・研究開発費・財務費 ／各業種の比較可能企業',
+      source:'同花順 F10 連結損益計算書。各セルは前年同期からその費用率が悪化した企業の割合。複数項目に該当する企業あり。原因は特定できません。',
+      option:()=>cuiHeat(inds,latest)});
+    const cash=cuiChartCard({id:'cui-cash',wide:true,title:'売掛・買掛回転日数の比較',
+      subtitle:latestLabel+' ／各業種の中央値（手形含む）',
+      source:'同花順 F10 資産負債表・損益計算書。期間日数と期首・期末の平均残高を使用した中央値。特定のOEMとの取引条件を示す値ではありません。',
+      option:()=>cuiGroupBars(inds.map(i=>i.ja),[
+        {name:'売掛・受取手形',values:inds.map(i=>((i.series||{})[latest]||{}).ar_notes_days?.median)},
+        {name:'買掛・支払手形',values:inds.map(i=>((i.series||{})[latest]||{}).ap_notes_days?.median)}
+      ],'日','取引日数')});
+    const go=h('div',{class:'cui-topic-links'},
+      ...[['ADAS','sector/adas'],['タイヤ','sector/tires'],['電池材料','sector/battery_materials'],['全業種比較','industries']]
+        .map(([label,hash])=>h('button',{type:'button',onclick:()=>{location.hash='#'+hash;}},label,'　›')));
+    main.replaceChildren(cuiHeader('自動車部品の収益・費用データ',
+      '申万三級の自動車部品5業種｜A株上場企業の連結財務・取引日数を比較',latestLabel),
+      cuiAnchorNav(s),cuiGrid(trend,level,down,sales,expenses,cash),go);
+  }
+  function renderHypotheses(main) { cuiOverview(main); }
 
   const sectorName = id => (INDEX.sectors.find(s => s.id === id) || {}).ja || id;
 
@@ -881,59 +1095,156 @@
         h('summary', null, '集計条件・出典'),
         h('p', null, '同花順 F10。現在の所属銘柄を過去期間にも遡及適用しており、各年の比較可能社数は異なります。')));
   }
-  async function renderSector(main, id) {
-    const meta = INDEX.sectors.find(s => s.id === id);
-    if (!meta) { main.replaceChildren(h('p', { class: 'empty' }, '分野が見つかりません。')); return; }
-    main.replaceChildren(h('p', { class: 'empty' }, meta.ja + ' のグラフを読み込み中…'));
-    const sec = await load(meta.file);
-    const series = (sec.industry || {}).series || {};
-    const keys = ytdKeys(Object.keys(series));
-    const latestKey = keys[keys.length - 1];
-    const latest = series[latestKey] || {};
-    const previous = series[previousYearKey(latestKey)] || {};
-    const net = latest.net_margin || {};
-    const delta = isNum(net.median) && isNum(previous.net_margin?.median)
-      ? net.median - previous.net_margin.median : null;
-    const press = latest.pressure || {};
-    const info = h('div', { class: 'sc-sector-hero' },
-      h('div', { class: 'sc-kicker' }, 'SECTOR DATA / ' + sec.ja),
-      h('div', { class: 'sc-sector-titlebar' },
-        h('h2', null, sec.ja + ' のデータ比較'),
-        h('span', { class: 'sc-period-pill' }, latestKey ? periodLabel(latestKey) : '直近の開示')),
-      h('p', { class: 'sc-caption' },
-        'まず利益率と市場・販売数量を確認。詳細表・企業別データは下部から展開できます。'));
-    const stats = h('div', { class: 'sc-kpis sc-sector-kpis' },
-      scKpi('純利益率の中央値', pct(net.median), (net.n || 0) + '社・会社全体'),
-      scKpi('中央値の前年同期差', isNum(delta) ? pt(delta) : '—', '前年同期との比較', isNum(delta) && delta < 0 ? 'sc-alert' : ''),
-      scKpi('純利益率が悪化した割合', pct(press.net_down_pct),
-        isNum(press.net_paired_n) ? press.net_down_n + '/' + press.net_paired_n + '社' : '比較対象なし'),
-      scKpi('直近の対象期間', latestKey ? periodLabel(latestKey) : '—', '各業種の財務指標'));
-    const nav = h('div', { class: 'sc-jump-bar', role: 'navigation', 'aria-label': 'グラフに移動' },
-      ...[['report-trend', '利益率推移'], ['report-market', 'シェア・数量'],
-        ['report-profit', '前年同期比較'], ['report-cost', '費用率'],
-        ['report-unit-price', '平均単価'], ['report-detail-title', '企業別詳細']]
-        .map(([anchor,label]) => h('button', { type:'button',
-          onclick: () => document.getElementById(anchor)?.scrollIntoView({ behavior:'smooth', block:'start' }) }, label)));
-    const market = reportMarket(sec);
-    const profit = reportProfit(sec, latestKey);
-    const costs = reportCost(sec, latestKey);
-    const prices = reportUnitPrices(sec);
-    const detailTitle = h('div', { class: 'sc-detail-heading', id: 'report-detail-title' },
-      scSectionHead('DETAILS', '企業別・期間別の詳細データ',
-        '下記の項目だけ必要に応じて開けます。数値表や出典へのリンクは従来どおり保持しています。'));
-    const detailSections = [
-      scLazyDetails('市場シェア／開示販売数量：部品・期間別', 'report-data-market', () => strengthCard(sec)),
-      scLazyDetails('粗利益率・純利益率：会社別・期間別', 'report-data-profit',
-        async () => profitCard(sec, await load('oem.json'))),
-      scLazyDetails('費用負担の要因分解：会社別', 'report-data-cost', () => marginBridgeCard(sec)),
-      scLazyDetails('平均販売単価・数量の動き', 'report-data-price', () => unitPriceCard(sec)),
-      scLazyDetails('売掛・買掛・取引構造・内製化', 'report-data-structure',
-        async () => structureCard(sec, await load('oem.json')))
+
+  function cuiSectorMarket(sec) {
+    const st=sec.strength||{};
+    const isShare=st.source==='gasgoo';
+    const groups=(isShare?st.markets:st.groups)||[];
+    if(!groups.length)return null;
+    let market=0,period=0,rows=[],unit=isShare?'%':'本';
+    function choose() {
+      const group=groups[market]||groups[0];
+      const list=(isShare?group.periods:group.tables)||[];
+      const indexed=list.slice().sort((a,b)=>(isShare?
+        (b.year-a.year)||(b.end_month-a.end_month):
+        String(b.period_end||'').localeCompare(String(a.period_end||''))));
+      const picked=indexed[Math.min(period,indexed.length-1)]||indexed[0];
+      unit=isShare?'%':(group.unit_ja||'');
+      rows=(picked?.rows||[]).filter(r=>isNum(isShare?r.share:r.volume))
+        .slice(0,10).map(r=>({...r,v:isShare?r.share:r.volume}));
+      return {group,picked};
+    }
+    const chart=cuiChartCard({id:'cui-market',wide:true,
+      title:isShare?'部品別・企業別搭載シェア':'企業別の販売数量',
+      subtitle:isShare?'蓋世汽車研究院の掲載上位。市場全体を100%として表示':
+        '同一製品・同一期間・同じ単位で比較。国内市場シェアではありません。',
+      source:isShare?'出典：蓋世汽車研究院（Gasgoo）。掲載上位のみで非掲載企業は0%ではありません。完成車の内製・系列会社を含みます。':
+        '出典：同花順 F10 企業開示の製品別販売数量。世界販売を含む場合があります。A株上場企業以外は網羅していません。',
+      sourceLink:()=>isShare?choose().picked?.source?.url:null,
+      option:()=>{
+        choose();
+        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.v),unit,
+          isShare?'搭載シェア':'開示数量');
+      },
+      clickMap:p=>{
+        const r=rows[p.dataIndex];return r?.code||r?.listed_code||(r?.id?'f_'+r.id:null);
+      },
+      controls:(filters,redraw)=>{
+        const selG=h('select',{'aria-label':'製品・部品'},...groups.map((g,i)=>
+          h('option',{value:i},g.name_ja||g.ja||g.market_id||'部品')));
+        const selP=h('select',{'aria-label':'対象期間'});
+        const periodOptions=()=>{
+          const g=groups[market]||groups[0],list=isShare?(g.periods||[]):(g.tables||[]);
+          const sorted=list.slice().sort((a,b)=>isShare?
+            (b.year-a.year)||(b.end_month-a.end_month):
+            String(b.period_end||'').localeCompare(String(a.period_end||'')));
+          selP.replaceChildren(...sorted.map((p,i)=>h('option',{value:i},p.label_ja||p.period_end||'期間')));
+          period=0;selP.value='0';
+        };
+        selG.addEventListener('change',()=>{market=Number(selG.value);periodOptions();redraw();});
+        selP.addEventListener('change',()=>{period=Number(selP.value);redraw();});
+        periodOptions();filters.append(selG,selP);
+      }});
+    return chart;
+  }
+  function cuiSectorPrices(sec) {
+    const market=sec.id==='tires'?'tire':sec.id==='battery_materials'?'cathode':'__no_comparable_market__';
+    const source=(sec.unit_prices||[]).filter(x=>x.market_id===market);
+    const choices=[
+      {before:'2025-09-30',after:'2026-09-30',type:'Q',label:'2026年7～9月期'},
+      {before:'2025-06-30',after:'2026-06-30',type:'YTD_H1',label:'2026年1～6月'},
+      {before:'2024-12-31',after:'2025-12-31',type:'FY',label:'2025年通期'}
     ];
-    main.replaceChildren(info, stats, nav, scSectorTrend(sec),
-      h('div', { class: 'sc-sector-chart-grid' }, market, profit),
-      h('div', { class: 'sc-sector-chart-grid' }, costs, ...(prices ? [prices] : [])),
-      detailTitle, ...detailSections);
+    const pairs=choices.map(choice=>{
+      const used=new Set(),items=[];
+      for(const p of source) {
+        if(used.has(p.code))continue;
+        const before=(p.series||[]).find(x=>x.period_end===choice.before&&x.period_type===choice.type);
+        const after=(p.series||[]).find(x=>x.period_end===choice.after&&x.period_type===choice.type);
+        if(!before||!after||!isNum(before.unit_price)||!isNum(after.unit_price)
+          ||before.unit_price<=0||after.unit_price<=0||
+          !isNum(before.volume)||!isNum(after.volume)||
+          before.volume<=0||after.volume<=0)continue;
+        used.add(p.code);
+        items.push({name:p.name,code:p.code,unit:p.unit,product:p.product,
+          change:(after.unit_price/before.unit_price-1)*100});
+      }
+      return {...choice,rows:items.sort((a,b)=>a.change-b.change)};
+    }).filter(x=>x.rows.length>=3);
+    if(!pairs.length)return null;
+    let index=0;
+    const card=cuiChartCard({id:'cui-price',title:'平均販売単価の前年同期比',
+      subtitle:'企業内の同一製品・同一数量単位を比較（%）',
+      source:'出典：同花順の製品別売上高÷販売数量。製品構成などの変化が含まれ、同一仕様の値下げ率を意味するものではありません。',
+      option:()=>{
+        const rows=pairs[index].rows.slice(0,10);
+        return cuiHorizontal(rows.map(x=>x.name),rows.map(x=>x.change),'%','平均単価の増減');
+      },clickMap:p=>pairs[index].rows[p.dataIndex]?.code,
+      controls:(filters,redraw)=>{
+        const sel=h('select',{'aria-label':'比較期間'},...pairs.map((p,i)=>h('option',{value:i},p.label+'（'+p.rows.length+'社）')));
+        sel.addEventListener('change',()=>{index=Number(sel.value);redraw();});filters.append(sel);
+      }});
+    return card;
+  }
+  async function renderSector(main,id) {
+    const meta=(INDEX.sectors||[]).find(x=>x.id===id);
+    if(!meta) {main.replaceChildren(h('p',{class:'empty'},'該当分野がありません。'));return;}
+    main.replaceChildren(h('p',{class:'empty'},'グラフデータを読み込み中…'));
+    const sec=await load(meta.file),fy=fyKeys(Object.keys(sec.industry?.series||{}));
+    const ytd=ytdKeys(Object.keys(sec.industry?.series||{}));
+    const latest=ytd.at(-1),prev=previousYearKey(latest),industry=sec.industry;
+    const intro=cuiHeader(sec.ja+'｜産業・企業データ',
+      'グラフの凡例・期間・製品を切り替えて比較できます。',periodLabel(latest));
+    const nav=cuiAnchorNav([['cui-market','シェア・数量'],['cui-sector-trend','利益率推移'],
+      ['cui-sector-prof','利益率の変化'],['cui-sector-cost','費用率'],
+      ['cui-price','平均単価'],['cui-sector-cash','取引・回転日数'],
+      ['cui-detail-data','企業別の数値']]);
+    const market=cuiSectorMarket(sec);
+    const trend=cuiChartCard({id:'cui-sector-trend',wide:true,title:'粗利益率・純利益率の推移',
+      subtitle:'関連業種の会社全体の通期中央値（%）',
+      source:'同花順 F10。各年の所属企業構成や比較可能社数は異なる場合があります。部品単独の利益率ではありません。',
+      option:()=>cuiLine(fy.map(cuiYear),[
+        {name:'粗利益率',values:cuiSeries(industry,fy,'gross_margin')},
+        {name:'純利益率',values:cuiSeries(industry,fy,'net_margin')}
+      ],'%','利益率推移')});
+    const prof=cuiChartCard({id:'cui-sector-prof',title:'純利益率の前年同期比較',
+      subtitle:'業種中央値／前年同期との2期間比較',
+      source:'同花順。各期間の中央値を比較。企業別利益率変化の中央値と異なり、比較対象企業が異なる場合があります。',
+      option:()=>cuiGroupBars([periodLabel(prev),periodLabel(latest)],[
+        {name:'粗利益率',values:[cuiMedian(industry,prev,'gross_margin'),cuiMedian(industry,latest,'gross_margin')]},
+        {name:'純利益率',values:[cuiMedian(industry,prev,'net_margin'),cuiMedian(industry,latest,'net_margin')]}
+      ],'%','利益率')});
+    const costs=cuiChartCard({id:'cui-sector-cost',title:'費用率が悪化した企業の割合',
+      subtitle:periodLabel(prev)+'から'+periodLabel(latest)+'へ・比較可能企業',
+      source:'同花順。粗利益率と各費用率の前年同期比較。個別の悪化原因は特定できません。複数の費用に該当する会社があります。',
+      option:()=>{
+        const d=(industry.series||{})[latest]?.cost_bridge_summary||{},n=d.n;
+        if(!n||n<5)return null;
+        const cols=[
+          ['粗利益率',d.gross_pressure_n],['販売費',d.negative_n?.selling],
+          ['管理費',d.negative_n?.administration],['研究開発費',d.negative_n?.research],
+          ['財務費',d.finance_pressure_n]].filter(x=>isNum(x[1]));
+        return cuiHorizontal(cols.map(x=>x[0]),cols.map(x=>x[1]/n*100),'%','費用率悪化');
+      }});
+    const price=cuiSectorPrices(sec);
+    const cash=cuiChartCard({id:'cui-sector-cash',title:'売掛・買掛回転日数の推移',
+      subtitle:'会社全体の各通期中央値（手形を含む）',
+      source:'同花順。期間日数×平均残高÷売上高または売上原価による計算値。対象の取引先は限定していません。',
+      option:()=>cuiLine(fy.map(cuiYear),[
+        {name:'売掛・受取手形',values:fy.map(k=>(industry.series||{})[k]?.ar_notes_days?.median)},
+        {name:'買掛・支払手形',values:fy.map(k=>(industry.series||{})[k]?.ap_notes_days?.median)}
+      ],'日','回転日数')});
+    const down=cuiChartCard({id:'cui-sector-down',title:'利益率が低下した会社の割合',
+      subtitle:periodLabel(prev)+'との比較・同一企業の前年差',
+      source:'同花順。会社ごとの利益率について両期の値があるものだけ比較。業種全体の企業割合ではありません。',
+      option:()=>{
+        const p=cuiP(industry,latest);
+        if(!(p.net_paired_n>0)&&!(p.gross_paired_n>0))return null;
+        return cuiHorizontal(['純利益率が悪化','粗利益率が悪化'],
+          [p.net_down_pct,p.gross_down_pct],'%','悪化会社割合');
+      }});
+    const detail=cuiDetails(sec);detail.id='cui-detail-data';
+    main.replaceChildren(intro,nav,cuiGrid(market,trend,prof,costs,down,price,cash),detail);
   }
 
   function strengthCard(sec) {
@@ -1482,82 +1793,70 @@
   }
 
 
+
   function renderIndustries(main) {
-    const industries = INDEX.industries || [];
-    const fy = fyKeys(INDEX.periods || []);
-    const ytd = ytdKeys(INDEX.periods || []);
-    let type = 'parts', metric = 'net_margin';
-    const intro = h('section', { class: 'sc-cover sc-industry-cover' },
-      h('div', null,
-        h('div', { class: 'sc-kicker' }, 'SECTOR BENCHMARK / 10 INDUSTRIES'),
-        h('h2', null, '業種別の収益性を比較'),
-        h('p', null, '完成車・自動車部品・電池材料など、申万三級分類の上場企業を比較。会社全体の業績です。')),
-      h('div', { class: 'sc-period-pill' }, fy.at(-1) ? periodLabel(fy.at(-1)) + ' 通期' : '通期データ'));
-    const card = h('section', { class: 'card sc-industry-trend' },
-      scSectionHead('01 / INDUSTRY TREND', '業種別の利益率推移',
-        '通期決算の中央値。同じ企業群とは限らないため、各年の対象社数も参照してください。'));
-    const filters = h('div', { class: 'sc-controls sc-industry-controls' });
-    const graph = h('div', { class: 'sc-wide-chart' });
-    card.append(filters, graph);
-    const groups = [['parts','自動車部品5分類'],['others','その他5分類']];
-    const metrics = [['net_margin','純利益率'],['gross_margin','粗利益率']];
-    function draw() {
-      filters.replaceChildren(
-        h('div', { class: 'sc-control-row' }, ...groups.map(([v,label]) =>
-          h('button', { type:'button', class:'sc-filter', 'aria-pressed':String(type===v),
-            onclick:()=>{type=v;draw();} },label))),
-        h('div', { class: 'sc-control-row' }, ...metrics.map(([v,label]) =>
-          h('button', { type:'button', class:'sc-filter', 'aria-pressed':String(metric===v),
-            onclick:()=>{metric=v;draw();} },label))));
-      const candidates=industries.filter(i => (i.group_ja === '自動車部品') === (type==='parts'));
-      const ser=candidates.map((i,k)=>({
-        name:i.ja, color:SC_COLORS[k%SC_COLORS.length],
-        values:fy.map(key=>((i.series||{})[key]||{})[metric]?.median),
-        n:fy.map(key=>((i.series||{})[key]||{})[metric]?.n||0)
-      })).filter(s=>s.values.some(isNum));
-      if(!ser.length){graph.replaceChildren(h('p',{class:'empty'},'比較できる利益率データがありません。'));return;}
-      graph.replaceChildren(withTableToggle(
-        lineChart({x:fy.map(y=>y.slice(0,4)),series:ser,unit:'%',aria:'業種別'+(metric==='net_margin'?'純利益率':'粗利益率')+'通期推移'}),
-        ()=>table([{label:'年',get:y=>y.slice(0,4)},
-          ...ser.map(se=>({label:se.name,num:true,get:y=>{
-            const j=fy.indexOf(y);return pct(se.values[j])+'（'+se.n[j]+'社）';
-          }}))],fy)));
-    }
-    draw();
-    const earliest=fy[0],last=fy.at(-1);
-    const rows=industries.map(i=>({
-      label:i.ja, a:((i.series||{})[earliest]||{}).net_margin?.median,
-      b:((i.series||{})[last]||{}).net_margin?.median,
-      n:((i.series||{})[last]||{}).net_margin?.n||0,
-      emph:i.role==='oem'
-    })).filter(r=>isNum(r.a)&&isNum(r.b))
-      .sort((a,b)=>b.b-a.b);
-    const comparison=h('section', { class:'card sc-industry-comparison' },
-      scSectionHead('02 / LONG-TERM COMPARISON','純利益率：最初の年と最新年',
-        '業種ごとの純利益率中央値を比較。棒の終点は各年に異なる企業構成を含む場合があります。'),
-      withTableToggle(dumbbell(rows,{
-        aLabel:earliest?.slice(0,4)+'年',bLabel:last?.slice(0,4)+'年',
-        unit:'%',aria:'業種別純利益率の初期年と最新年の比較'
-      }),()=>table([
-        {label:'業種',get:r=>r.label},
-        {label:earliest?.slice(0,4),num:true,get:r=>pct(r.a)},
-        {label:last?.slice(0,4),num:true,get:r=>pct(r.b)},
-        {label:'社数',num:true,get:r=>String(r.n)}
-      ],rows)));
-    const metricRows=[...fy,...ytd];
-    main.replaceChildren(intro,card,comparison,
-      h('div', { class:'sc-detail-heading' },
-        scSectionHead('DETAILS','元データと集計条件','数値表は必要なときだけ開きます。')),
-      scLazyDetails('業種別の収益圧迫・前年比（6指標）','industry-pressure-detail',
+    const industries=INDEX.industries||[];
+    const fy=fyKeys(INDEX.periods||[]);
+    const latest=ytdKeys(INDEX.periods||[]).at(-1);
+    let cohort='parts',metric='net_margin';
+    const selected=()=>industries.filter(i=>cohort==='all'||
+      (cohort==='parts'?i.group_ja==='自動車部品':i.group_ja!=='自動車部品'));
+    const t=()=>metric==='net_margin'?'純利益率':'粗利益率';
+    const setup=(filters,redraw)=>{
+      const group=h('select',{'aria-label':'比較する業種群'},
+        ...[['parts','自動車部品5業種'],['others','その他5業種'],['all','全10業種']]
+          .map(([v,label])=>h('option',{value:v},label)));
+      const metricSel=h('select',{'aria-label':'利益率の種類'},
+        ...[['net_margin','純利益率'],['gross_margin','粗利益率']]
+          .map(([v,label])=>h('option',{value:v},label)));
+      group.addEventListener('change',()=>{cohort=group.value;redraw();});
+      metricSel.addEventListener('change',()=>{metric=metricSel.value;redraw();});
+      filters.append(group,metricSel);
+    };
+    const trend=cuiChartCard({id:'cui-industry-trend',wide:true,title:'業種別の利益率推移',
+      subtitle:'通期・申万三級業種（グラフの凡例をクリックして表示を調整）',
+      source:'出典：同花順 F10。申万三級の業種分類と連結財務の会社全体の利益率。現時点の所属会社を過去に当てはめて算出しています。',
+      controls:setup,
+      option:()=>cuiLine(fy.map(cuiYear),selected().map(i=>({
+        name:i.ja,values:cuiSeries(i,fy,metric)
+      })),'%','利益率推移')});
+    const latestRank=cuiChartCard({id:'cui-industry-ranking',title:'直近期の業種別利益率',
+      subtitle:periodLabel(latest)+'の中央値（%）',
+      source:'同花順。A株上場企業の申万三級業種分類。会社全体の利益率中央値で、個々の製品・部品単体の収益性ではありません。',
+      option:()=>{const rows=industries.map(i=>({name:i.ja,v:cuiMedian(i,latest,'net_margin')}))
+        .filter(r=>isNum(r.v)).sort((a,b)=>b.v-a.v);
+        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.v),'%','利益率中央値');}});
+    const compare=cuiChartCard({id:'cui-industry-compare',title:'粗利益率と純利益率',
+      subtitle:periodLabel(latest)+'の業種別中央値（%）',
+      source:'同花順。粗利益率・純利益率ともに会社全体の指標。サプライヤーの製品別単価・収益性と混同しないでください。',
+      option:()=>cuiGroupBars(industries.map(i=>i.ja),
+        [{name:'粗利益率',values:industries.map(i=>cuiMedian(i,latest,'gross_margin'))},
+         {name:'純利益率',values:industries.map(i=>cuiMedian(i,latest,'net_margin'))}],'%','利益率')});
+    const ytd=ytdKeys(INDEX.periods||[]),prev=previousYearKey(latest);
+    const down=cuiChartCard({id:'cui-industry-down',wide:true,title:'利益率が低下した企業の割合（10業種）',
+      subtitle:periodLabel(prev)+'→'+periodLabel(latest)+'／同一企業の前年同期比較',
+      source:'同花順。業種内の比較可能企業のみを集計。業種ごとにサンプル数が異なり、重複する所属企業が存在する場合があります。',
+      option:()=>{const rows=industries.map(i=>({name:i.ja,p:cuiP(i,latest)}))
+        .filter(x=>isNum(x.p.net_down_pct)&&x.p.net_paired_n>0)
+        .sort((a,b)=>b.p.net_down_pct-a.p.net_down_pct);
+        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.p.net_down_pct),'%','利益率低下');}});
+    const detail=h('section',{class:'cui-detail-section'},
+      cuiTitle('DETAIL DATA','全期間の業種データ'),
+      scLazyDetails('業種別：前年同期比・赤字割合・企業数','industry-pressure-detail',
         ()=>industryPressureCard(industries,INDEX.periods||[])),
-      scLazyDetails('全10業種・全期間の利益率一覧','industry-period-detail',
+      scLazyDetails('全10業種の期間別利益率と社数','industry-period-detail',
         ()=>h('section',{class:'card'},
-          h('h2',null,'利益率中央値・社数'),
           table([{label:'業種',get:i=>i.ja},
-            ...metricRows.map(k=>({label:periodLabel(k),num:true,
-              get:i=>{const n=((i.series||{})[k]||{})[metric]||{};
-                return pct(n.median)+'（'+(n.n||0)+'社）';}}))],industries),
-          h('p',{class:'source'},'出典：同花順 F10。過去年には現時点の所属企業を遡及適用しています。'))));
+            ...[...fy,...ytd].map(k=>({label:periodLabel(k),num:true,get:i=>{
+              const d=((i.series||{})[k]||{}).net_margin||{};
+              return pct(d.median)+'（'+(d.n||0)+'社）';
+            }}))],industries),
+          h('p',{class:'source'},'出典：同花順 F10。現時点の企業構成を過去の期間に当てはめています。'))));
+    main.replaceChildren(cuiHeader('全10業種｜利益率・収益性比較',
+      '完成車・自動車部品・電池・資源を業種別に比較。',periodLabel(latest)),
+      cuiAnchorNav([['cui-industry-trend','通期トレンド'],['cui-industry-ranking','直近期の水準'],
+        ['cui-industry-compare','粗利と純利'],['cui-industry-down','低下企業の割合']]),
+      cuiGrid(trend,latestRank,compare,down),detail);
   }
 
   // ---------------------------------------------------------------- 画面：出典・方法
@@ -1704,6 +2003,7 @@
     window.scrollTo(0, 0);
   }
   async function showView(view) {
+    cuiDispose();
     lastView = view;
     main.dataset.view = view;
     document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', String(b.dataset.view === view)));
@@ -1726,6 +2026,7 @@
   });
   window.addEventListener('hashchange', route);
   window.addEventListener('scroll', hideTip, { passive: true });
+  window.addEventListener('resize', () => { for(const chart of CUI_CHARTS) { try { chart.resize(); } catch(e) {} } }, { passive:true });
 
   (async () => {
     try {

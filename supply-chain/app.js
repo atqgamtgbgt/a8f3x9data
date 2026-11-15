@@ -835,23 +835,43 @@
       ['cui-trend','利益率推移'],['cui-level','業種別利益率'],
       ['cui-pressure','利益率の悪化'],['cui-sales','増収減益'],
       ['cui-expense','費用内訳'],['cui-cash','取引・回転日数']];
-    const trend=cuiChartCard({id:'cui-trend',wide:true,title:'自動車部品5業種｜利益率の推移',
-      subtitle:'会社全体の通期中央値（%）／凡例を押すと系列を表示・非表示にできます',
-      source:'同花順 F10。各期の現時点の申万業種所属企業を集計。各期の比較対象企業数は変化します。',
-      option:()=>cuiLine(years.map(cuiYear),inds.map(i=>({name:i.ja,values:cuiSeries(i,years,'net_margin')})),'%','純利益率')});
+    const trendState={window:'annual'};
+    const trend=cuiChartCard({id:'cui-trend',wide:true,
+      title:'純利益率中央値｜業種別の長期推移',
+      subtitle:'会社全体の純利益率の中央値。通期と1〜9月累計は分けて表示します。',
+      source:'同花順 F10。申万三級業種に所属するA株上場企業の各期の中央値です。企業構成やサンプル数は変わる場合があります。累計期間を通期に混ぜて線で結びません。',
+      option:()=>{
+        const keys=trendState.window==='annual'?years:ytdKeys(INDEX.periods||[]);
+        return cuiLine(keys.map(periodLabel),inds.map(i=>({
+          name:i.ja,values:cuiSeries(i,keys,'net_margin')
+        })),'%','純利益率中央値');
+      },
+      controls:(filters,redraw)=>cuiHistoryControls(filters,redraw,trendState,years,
+        ytdKeys(INDEX.periods||[]))});
     const level=cuiChartCard({id:'cui-level',title:'最新期の純利益率中央値',
       subtitle:latestLabel+'・会社全体の純利益率（%）',
       source:'同花順。申万三級業種に分類されたA株上場企業の純利益率中央値。部品ごとの粗利益率ではありません。',
       option:()=>{const rows=inds.map(i=>({name:i.ja,v:cuiMedian(i,latest,'net_margin')}))
         .filter(r=>isNum(r.v)).sort((a,b)=>b.v-a.v);
         return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.v),'%','純利益率');}});
-    const down=cuiChartCard({id:'cui-pressure',title:'利益率が低下した企業の割合',
-      subtitle:periodLabel(prev)+' → '+latestLabel+' ／前年同期と同一企業を比較',
-      source:'同花順。前年同期と比較可能な同一企業に限る。業種中央値の前年差ではありません。',
-      option:()=>{const rows=inds.map(i=>({name:i.ja,p:cuiP(i,latest)}))
-        .filter(x=>isNum(x.p.net_down_pct)&&x.p.net_paired_n>0)
-        .sort((a,b)=>b.p.net_down_pct-a.p.net_down_pct);
-        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.p.net_down_pct),'%','利益率低下企業');}});
+    const declineState={window:'annual'};
+    const down=cuiChartCard({id:'cui-pressure',wide:true,
+      title:'純利益率が悪化した企業割合｜過去年からの推移',
+      subtitle:'各年の前年同期と同じ会社を比較（例：2021年通期は2020年通期比）。',
+      source:'同花順 F10。業種ごとに純利益率が前年同期より低下した企業の割合です。両年の利益率が確認できる同一企業を分母とします。年ごとの分母が異なる場合があります。',
+      option:()=>{
+        const keys=declineState.window==='annual'?years:ytdKeys(INDEX.periods||[]);
+        const chart=cuiLine(keys.map(periodLabel),inds.map(i=>({
+          name:i.ja,values:keys.map(k=>{
+            const p=cuiP(i,k);
+            return p.net_paired_n>0?p.net_down_pct:null;
+          })
+        })),'%','純利益率が低下した企業の割合');
+        chart.yAxis.scale=false;chart.yAxis.min=0;chart.yAxis.max=100;
+        return chart;
+      },
+      controls:(filters,redraw)=>cuiHistoryControls(filters,redraw,declineState,years,
+        ytdKeys(INDEX.periods||[]))});
     const sales=cuiChartCard({id:'cui-sales',wide:true,title:'増収減益となった企業の割合',
       subtitle:'売上高は増加、親会社帰属利益額は減少（前年同期比）',
       source:'同花順。前年同期と比較可能な同一企業のみ。売上増でも会社全体で減益の企業割合です。',
@@ -1314,18 +1334,25 @@
     const latest=ytd.at(-1),prev=previousYearKey(latest),industry=sec.industry;
     const intro=cuiHeader(sec.ja+'｜産業・企業データ',
       'グラフの凡例・期間・製品を切り替えて比較できます。',periodLabel(latest));
-    const nav=cuiAnchorNav([['cui-market','シェア・数量'],['cui-sector-trend','利益率推移'],
+    const nav=cuiAnchorNav([['cui-market','シェア・数量'],['cui-market-history','シェア推移'],['cui-sector-trend','利益率推移'],
       ['cui-sector-prof','利益率の変化'],['cui-sector-cost','費用率'],
       ['cui-price','平均単価'],['cui-sector-cash','取引・回転日数'],
       ['cui-detail-data','企業別の数値']]);
     const market=cuiSectorMarket(sec);
-    const trend=cuiChartCard({id:'cui-sector-trend',wide:true,title:'粗利益率・純利益率の推移',
-      subtitle:'関連業種の会社全体の通期中央値（%）',
-      source:'同花順 F10。各年の所属企業構成や比較可能社数は異なる場合があります。部品単独の利益率ではありません。',
-      option:()=>cuiLine(fy.map(cuiYear),[
-        {name:'粗利益率',values:cuiSeries(industry,fy,'gross_margin')},
-        {name:'純利益率',values:cuiSeries(industry,fy,'net_margin')}
-      ],'%','利益率推移')});
+    const marketHistory=sec.id==='adas'?cuiMarketHistory(sec):null;
+    const sectorProfitState={window:'annual'};
+    const trend=cuiChartCard({id:'cui-sector-trend',wide:true,
+      title:'粗利益率・純利益率｜長期推移',
+      subtitle:'関連業種の会社全体の中央値（%）。通期と1〜9月累計を切り替えられます。',
+      source:'同花順 F10。申万三級所属会社の連結財務中央値。2021年以降の通期と2025・2026年の1〜9月累計は別系列として表示。部品単体の利益率ではありません。',
+      option:()=>{
+        const keys=sectorProfitState.window==='annual'?fy:ytd;
+        return cuiLine(keys.map(periodLabel),[
+          {name:'粗利益率',values:cuiSeries(industry,keys,'gross_margin')},
+          {name:'純利益率',values:cuiSeries(industry,keys,'net_margin')}
+        ],'%','利益率推移');
+      },
+      controls:(filters,redraw)=>cuiHistoryControls(filters,redraw,sectorProfitState,fy,ytd)});
     const prof=cuiChartCard({id:'cui-sector-prof',title:'純利益率の前年同期比較',
       subtitle:'業種中央値／前年同期との2期間比較',
       source:'同花順。各期間の中央値を比較。企業別利益率変化の中央値と異なり、比較対象企業が異なる場合があります。',
@@ -1353,17 +1380,27 @@
         {name:'売掛・受取手形',values:fy.map(k=>(industry.series||{})[k]?.ar_notes_days?.median)},
         {name:'買掛・支払手形',values:fy.map(k=>(industry.series||{})[k]?.ap_notes_days?.median)}
       ],'日','回転日数')});
-    const down=cuiChartCard({id:'cui-sector-down',title:'利益率が低下した会社の割合',
-      subtitle:periodLabel(prev)+'との比較・同一企業の前年差',
-      source:'同花順。会社ごとの利益率について両期の値があるものだけ比較。業種全体の企業割合ではありません。',
+    const sectorDownState={window:'annual'};
+    const down=cuiChartCard({id:'cui-sector-down',wide:true,
+      title:'利益率が低下した会社の割合｜長期推移',
+      subtitle:'前年度または前年同期からの悪化企業割合。比較可能な同一会社の集計です。',
+      source:'同花順 F10。各年の前年同期と比較して、純利益率／粗利益率が低下した会社数を両期比較可能な会社数で除した割合。会社全体の指標です。',
       option:()=>{
-        const p=cuiP(industry,latest);
-        if(!(p.net_paired_n>0)&&!(p.gross_paired_n>0))return null;
-        return cuiHorizontal(['純利益率が悪化','粗利益率が悪化'],
-          [p.net_down_pct,p.gross_down_pct],'%','悪化会社割合');
-      }});
+        const keys=sectorDownState.window==='annual'?fy:ytd;
+        const chart=cuiLine(keys.map(periodLabel),[
+          {name:'純利益率が悪化',values:keys.map(k=>{
+            const p=cuiP(industry,k);return p.net_paired_n>0?p.net_down_pct:null;
+          })},
+          {name:'粗利益率が悪化',values:keys.map(k=>{
+            const p=cuiP(industry,k);return p.gross_paired_n>0?p.gross_down_pct:null;
+          })}
+        ],'%','業種内の悪化企業割合');
+        chart.yAxis.scale=false;chart.yAxis.min=0;chart.yAxis.max=100;
+        return chart;
+      },
+      controls:(filters,redraw)=>cuiHistoryControls(filters,redraw,sectorDownState,fy,ytd)});
     const detail=cuiDetails(sec);detail.id='cui-detail-data';
-    main.replaceChildren(intro,nav,cuiGrid(market,trend,prof,costs,down,price,cash),detail);
+    main.replaceChildren(intro,nav,cuiGrid(market,marketHistory,trend,prof,costs,down,price,cash),detail);
   }
 
   function strengthCard(sec) {
@@ -1917,7 +1954,7 @@
     const industries=INDEX.industries||[];
     const fy=fyKeys(INDEX.periods||[]);
     const latest=ytdKeys(INDEX.periods||[]).at(-1);
-    let cohort='parts',metric='net_margin';
+    let cohort='parts',metric='net_margin',timeWindow='annual',declineWindow='annual';
     const selected=()=>industries.filter(i=>cohort==='all'||
       (cohort==='parts'?i.group_ja==='自動車部品':i.group_ja!=='自動車部品'));
     const t=()=>metric==='net_margin'?'純利益率':'粗利益率';
@@ -1928,17 +1965,24 @@
       const metricSel=h('select',{'aria-label':'利益率の種類'},
         ...[['net_margin','純利益率'],['gross_margin','粗利益率']]
           .map(([v,label])=>h('option',{value:v},label)));
+      const periodSelect=h('select',{'aria-label':'利益率推移の期間'},
+        h('option',{value:'annual'},'通期（過去年）'),
+        h('option',{value:'ytd'},'1〜9月累計'));
+      periodSelect.addEventListener('change',()=>{timeWindow=periodSelect.value;redraw();});
       group.addEventListener('change',()=>{cohort=group.value;redraw();});
       metricSel.addEventListener('change',()=>{metric=metricSel.value;redraw();});
-      filters.append(group,metricSel);
+      filters.append(group,metricSel,periodSelect);
     };
     const trend=cuiChartCard({id:'cui-industry-trend',wide:true,title:'業種別の利益率推移',
       subtitle:'通期・申万三級業種（グラフの凡例をクリックして表示を調整）',
       source:'出典：同花順 F10。申万三級の業種分類と連結財務の会社全体の利益率。現時点の所属会社を過去に当てはめて算出しています。',
       controls:setup,
-      option:()=>cuiLine(fy.map(cuiYear),selected().map(i=>({
-        name:i.ja,values:cuiSeries(i,fy,metric)
-      })),'%','利益率推移')});
+      option:()=>{
+        const keys=timeWindow==='annual'?fy:ytdKeys(INDEX.periods||[]);
+        return cuiLine(keys.map(periodLabel),selected().map(i=>({
+          name:i.ja,values:cuiSeries(i,keys,metric)
+        })),'%','利益率推移');
+      }});
     const latestRank=cuiChartCard({id:'cui-industry-ranking',title:'直近期の業種別利益率',
       subtitle:periodLabel(latest)+'の中央値（%）',
       source:'同花順。A株上場企業の申万三級業種分類。会社全体の利益率中央値で、個々の製品・部品単体の収益性ではありません。',
@@ -1952,13 +1996,27 @@
         [{name:'粗利益率',values:industries.map(i=>cuiMedian(i,latest,'gross_margin'))},
          {name:'純利益率',values:industries.map(i=>cuiMedian(i,latest,'net_margin'))}],'%','利益率')});
     const ytd=ytdKeys(INDEX.periods||[]),prev=previousYearKey(latest);
-    const down=cuiChartCard({id:'cui-industry-down',wide:true,title:'利益率が低下した企業の割合（10業種）',
-      subtitle:periodLabel(prev)+'→'+periodLabel(latest)+'／同一企業の前年同期比較',
-      source:'同花順。業種内の比較可能企業のみを集計。業種ごとにサンプル数が異なり、重複する所属企業が存在する場合があります。',
-      option:()=>{const rows=industries.map(i=>({name:i.ja,p:cuiP(i,latest)}))
-        .filter(x=>isNum(x.p.net_down_pct)&&x.p.net_paired_n>0)
-        .sort((a,b)=>b.p.net_down_pct-a.p.net_down_pct);
-        return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.p.net_down_pct),'%','利益率低下');}});
+    const down=cuiChartCard({id:'cui-industry-down',wide:true,
+      title:'純利益率が低下した企業の割合｜全10業種の推移',
+      subtitle:'各年の前年同期比較。凡例を押して特定の業種だけを表示できます。',
+      source:'同花順 F10。前年同期に利益率データのある同じ企業だけを分母にした低下割合。所属銘柄の入れ替わりと分母の変化に注意してください。',
+      option:()=>{
+        const keys=declineWindow==='annual'?fy:ytdKeys(INDEX.periods||[]);
+        const chart=cuiLine(keys.map(periodLabel),selected().map(i=>({
+          name:i.ja,values:keys.map(k=>{
+            const p=cuiP(i,k);return p.net_paired_n>0?p.net_down_pct:null;
+          })
+        })),'%','低下企業割合');
+        chart.yAxis.scale=false;chart.yAxis.min=0;chart.yAxis.max=100;
+        return chart;
+      },
+      controls:(filters,redraw)=>{
+        const period=h('select',{'aria-label':'悪化割合の推移期間'},
+          h('option',{value:'annual'},'通期（過去年）'),
+          h('option',{value:'ytd'},'1〜9月累計'));
+        period.addEventListener('change',()=>{declineWindow=period.value;redraw();});
+        filters.append(period);
+      }});
     const detail=h('section',{class:'cui-detail-section'},
       cuiTitle('DETAIL DATA','全期間の業種データ'),
       scLazyDetails('業種別：前年同期比・赤字割合・企業数','industry-pressure-detail',

@@ -6,7 +6,7 @@
     "url_template": "https://www.autohome.com.cn/rank/1-3-1072-x/{month}.html",
     "total_sales_basis": "各月の掲載上位N社（通常50社）の合計",
     "name_variants": {},
-    "last_updated": "2026-10-15T10:14:12"
+    "last_updated": "2026-11-15T10:03:17"
   },
   "months": {
     "2026-03": {
@@ -3914,6 +3914,714 @@
       ],
       "source_url": "https://www.autohome.com.cn/rank/1-3-1072-x/2026-09.html",
       "scraped_at": "2026-10-15T10:14:12"
+    },
+    "2026-10": {
+      "total_sales": 1766586,
+      "factory_count": 100,
+      "top": [
+        {
+          "rank": 1,
+          "factory": "比亚迪",
+          "sales": 201860,
+          "rank_change": null,
+          "share_pct": 11.43
+        },
+        {
+          "rank": 2,
+          "factory": "吉利银河",
+          "sales": 98907,
+          "rank_change": null,
+          "share_pct": 5.6
+        },
+        {
+          "rank": 3,
+          "factory": "零跑汽车",
+          "sales": 81893,
+          "rank_change": null,
+          "share_pct": 4.64
+        },
+        {
+          "rank": 4,
+          "factory": "五菱汽车",
+          "sales": 71408,
+          "rank_change": 1,
+          "share_pct": 4.04
+        },
+        {
+          "rank": 5,
+          "factory": "吉利汽车",
+          "sales": 60995,
+          "rank_change": 4,
+          "share_pct": 3.45
+        },
+        {
+          "rank": 6,
+          "factory": "上汽大众",
+          "sales": 58000,
+          "rank_change": 2,
+          "share_pct": 3.28
+        },
+        {
+          "rank": 7,
+          "factory": "一汽丰田",
+          "sales": 55982,
+          "rank_change": -1,
+          "share_pct": 3.17
+        },
+        {
+          "rank": 8,
+          "factory": "广汽丰田",
+          "sales": 53022,
+          "rank_change": -1,
+          "share_pct": 3.0
+        },
+        {
+          "rank": 9,
+          "factory": "小米汽车",
+          "sales": 50123,
+          "rank_change": 2,
+          "share_pct": 2.84
+        },
+        {
+          "rank": 10,
+          "factory": "一汽-大众",
+          "sales": 49859,
+          "rank_change": null,
+          "share_pct": 2.82
+        },
+        {
+          "rank": 11,
+          "factory": "长安启源",
+          "sales": 43882,
+          "rank_change": 1,
+          "share_pct": 2.48
+        },
+        {
+          "rank": 12,
+          "factory": "长安启源（2）",
+          "sales": 38658,
+          "rank_change": 9,
+          "share_pct": 2.19
+        },
+        {
+          "rank": 13,
+          "factory": "小鹏汽车",
+          "sales": 36911,
+          "rank_change": 6,
+          "share_pct": 2.09
+        },
+        {
+          "rank": 14,
+          "factory": "方程豹",
+          "sales": 34761,
+          "rank_change": null,
+          "share_pct": 1.97
+        },
+        {
+          "rank": 15,
+          "factory": "鸿蒙智行",
+          "sales": 33538,
+          "rank_change": -2,
+          "share_pct": 1.9
+        },
+        {
+          "rank": 16,
+          "factory": "华晨宝马",
+          "sales": 32473,
+          "rank_change": -1,
+          "share_pct": 1.84
+        },
+        {
+          "rank": 17,
+          "factory": "MG",
+          "sales": 32059,
+          "rank_change": -1,
+          "share_pct": 1.81
+        },
+        {
+          "rank": 18,
+          "factory": "埃安",
+          "sales": 29518,
+          "rank_change": 9,
+          "share_pct": 1.67
+        },
+        {
+          "rank": 19,
+          "factory": "哈弗",
+          "sales": 29030,
+          "rank_change": 3,
+          "share_pct": 1.64
+        },
+        {
+          "rank": 20,
+          "factory": "本田",
+          "sales": 28623,
+          "rank_change": 3,
+          "share_pct": 1.62
+        },
+        {
+          "rank": 21,
+          "factory": "奥迪",
+          "sales": 27540,
+          "rank_change": -3,
+          "share_pct": 1.56
+        },
+        {
+          "rank": 22,
+          "factory": "理想汽车",
+          "sales": 27018,
+          "rank_change": -5,
+          "share_pct": 1.53
+        },
+        {
+          "rank": 23,
+          "factory": "一汽奥迪",
+          "sales": 25300,
+          "rank_change": -3,
+          "share_pct": 1.43
+        },
+        {
+          "rank": 24,
+          "factory": "ARCFOX极狐",
+          "sales": 24857,
+          "rank_change": 8,
+          "share_pct": 1.41
+        },
+        {
+          "rank": 25,
+          "factory": "奇瑞",
+          "sales": 24593,
+          "rank_change": null,
+          "share_pct": 1.39
+        },
+        {
+          "rank": 26,
+          "factory": "北京奔驰",
+          "sales": 24592,
+          "rank_change": null,
+          "share_pct": 1.39
+        },
+        {
+          "rank": 27,
+          "factory": "上汽通用别克",
+          "sales": 24001,
+          "rank_change": -3,
+          "share_pct": 1.36
+        },
+        {
+          "rank": 28,
+          "factory": "AITO 问界",
+          "sales": 21095,
+          "rank_change": null,
+          "share_pct": 1.19
+        },
+        {
+          "rank": 29,
+          "factory": "深蓝汽车",
+          "sales": 20901,
+          "rank_change": 4,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 30,
+          "factory": "一汽奔腾",
+          "sales": 20793,
+          "rank_change": 8,
+          "share_pct": 1.18
+        },
+        {
+          "rank": 31,
+          "factory": "长安",
+          "sales": 20600,
+          "rank_change": null,
+          "share_pct": 1.17
+        },
+        {
+          "rank": 32,
+          "factory": "北京越野",
+          "sales": 18832,
+          "rank_change": 9,
+          "share_pct": 1.07
+        },
+        {
+          "rank": 33,
+          "factory": "一汽红旗",
+          "sales": 18538,
+          "rank_change": 3,
+          "share_pct": 1.05
+        },
+        {
+          "rank": 34,
+          "factory": "极氪",
+          "sales": 18321,
+          "rank_change": -5,
+          "share_pct": 1.04
+        },
+        {
+          "rank": 35,
+          "factory": "日产",
+          "sales": 18184,
+          "rank_change": -1,
+          "share_pct": 1.03
+        },
+        {
+          "rank": 36,
+          "factory": "蔚来",
+          "sales": 18039,
+          "rank_change": -6,
+          "share_pct": 1.02
+        },
+        {
+          "rank": 37,
+          "factory": "领克",
+          "sales": 18032,
+          "rank_change": null,
+          "share_pct": 1.02
+        },
+        {
+          "rank": 38,
+          "factory": "广汽传祺",
+          "sales": 17195,
+          "rank_change": 5,
+          "share_pct": 0.97
+        },
+        {
+          "rank": 39,
+          "factory": "奇瑞风云",
+          "sales": 15823,
+          "rank_change": -4,
+          "share_pct": 0.9
+        },
+        {
+          "rank": 40,
+          "factory": "捷途",
+          "sales": 14964,
+          "rank_change": null,
+          "share_pct": 0.85
+        },
+        {
+          "rank": 41,
+          "factory": "奇瑞QQ",
+          "sales": 14041,
+          "rank_change": 1,
+          "share_pct": 0.79
+        },
+        {
+          "rank": 42,
+          "factory": "腾势汽车",
+          "sales": 13424,
+          "rank_change": -3,
+          "share_pct": 0.76
+        },
+        {
+          "rank": 43,
+          "factory": "广汽本田",
+          "sales": 13073,
+          "rank_change": 1,
+          "share_pct": 0.74
+        },
+        {
+          "rank": 44,
+          "factory": "岚图汽车",
+          "sales": 11596,
+          "rank_change": 2,
+          "share_pct": 0.66
+        },
+        {
+          "rank": 45,
+          "factory": "长安马自达",
+          "sales": 11001,
+          "rank_change": null,
+          "share_pct": 0.62
+        },
+        {
+          "rank": 46,
+          "factory": "坦克",
+          "sales": 9000,
+          "rank_change": 1,
+          "share_pct": 0.51
+        },
+        {
+          "rank": 47,
+          "factory": "特斯拉中国",
+          "sales": 8817,
+          "rank_change": -43,
+          "share_pct": 0.5
+        },
+        {
+          "rank": 48,
+          "factory": "乐道",
+          "sales": 8356,
+          "rank_change": null,
+          "share_pct": 0.47
+        },
+        {
+          "rank": 49,
+          "factory": "魏牌",
+          "sales": 7886,
+          "rank_change": 4,
+          "share_pct": 0.45
+        },
+        {
+          "rank": 50,
+          "factory": "智己汽车",
+          "sales": 7846,
+          "rank_change": 2,
+          "share_pct": 0.44
+        },
+        {
+          "rank": 51,
+          "factory": "firefly萤火虫",
+          "sales": 7635,
+          "rank_change": -1,
+          "share_pct": 0.43
+        },
+        {
+          "rank": 52,
+          "factory": "华境",
+          "sales": 7507,
+          "rank_change": -3,
+          "share_pct": 0.42
+        },
+        {
+          "rank": 53,
+          "factory": "一汽-大众捷达",
+          "sales": 6321,
+          "rank_change": -2,
+          "share_pct": 0.36
+        },
+        {
+          "rank": 54,
+          "factory": "欧拉",
+          "sales": 6008,
+          "rank_change": 5,
+          "share_pct": 0.34
+        },
+        {
+          "rank": 55,
+          "factory": "上汽通用凯迪拉克",
+          "sales": 6002,
+          "rank_change": 1,
+          "share_pct": 0.34
+        },
+        {
+          "rank": 56,
+          "factory": "北京现代",
+          "sales": 6000,
+          "rank_change": 12,
+          "share_pct": 0.34
+        },
+        {
+          "rank": 57,
+          "factory": "沃尔沃亚太",
+          "sales": 5740,
+          "rank_change": -3,
+          "share_pct": 0.32
+        },
+        {
+          "rank": 58,
+          "factory": "起亚",
+          "sales": 5213,
+          "rank_change": null,
+          "share_pct": 0.3
+        },
+        {
+          "rank": 59,
+          "factory": "荣威",
+          "sales": 4506,
+          "rank_change": 1,
+          "share_pct": 0.26
+        },
+        {
+          "rank": 60,
+          "factory": "尚界",
+          "sales": 4400,
+          "rank_change": -5,
+          "share_pct": 0.25
+        },
+        {
+          "rank": 61,
+          "factory": "东风乘用车",
+          "sales": 4126,
+          "rank_change": null,
+          "share_pct": 0.23
+        },
+        {
+          "rank": 62,
+          "factory": "smart",
+          "sales": 4062,
+          "rank_change": 4,
+          "share_pct": 0.23
+        },
+        {
+          "rank": 63,
+          "factory": "iCAR",
+          "sales": 4040,
+          "rank_change": -1,
+          "share_pct": 0.23
+        },
+        {
+          "rank": 64,
+          "factory": "智界",
+          "sales": 4016,
+          "rank_change": -7,
+          "share_pct": 0.23
+        },
+        {
+          "rank": 65,
+          "factory": "奕境汽车",
+          "sales": 3612,
+          "rank_change": null,
+          "share_pct": 0.2
+        },
+        {
+          "rank": 66,
+          "factory": "奕派科技",
+          "sales": 3268,
+          "rank_change": -2,
+          "share_pct": 0.18
+        },
+        {
+          "rank": 67,
+          "factory": "捷途山海",
+          "sales": 3161,
+          "rank_change": -4,
+          "share_pct": 0.18
+        },
+        {
+          "rank": 68,
+          "factory": "长安福特",
+          "sales": 3101,
+          "rank_change": -3,
+          "share_pct": 0.18
+        },
+        {
+          "rank": 69,
+          "factory": "享界",
+          "sales": 2976,
+          "rank_change": 8,
+          "share_pct": 0.17
+        },
+        {
+          "rank": 70,
+          "factory": "阿维塔科技",
+          "sales": 2858,
+          "rank_change": -3,
+          "share_pct": 0.16
+        },
+        {
+          "rank": 71,
+          "factory": "奥迪AUDI",
+          "sales": 1960,
+          "rank_change": null,
+          "share_pct": 0.11
+        },
+        {
+          "rank": 72,
+          "factory": "凯翼汽车",
+          "sales": 1871,
+          "rank_change": 2,
+          "share_pct": 0.11
+        },
+        {
+          "rank": 73,
+          "factory": "东风风行",
+          "sales": 1672,
+          "rank_change": -3,
+          "share_pct": 0.09
+        },
+        {
+          "rank": 74,
+          "factory": "金杯",
+          "sales": 1671,
+          "rank_change": -1,
+          "share_pct": 0.09
+        },
+        {
+          "rank": 75,
+          "factory": "开瑞汽车",
+          "sales": 1625,
+          "rank_change": 3,
+          "share_pct": 0.09
+        },
+        {
+          "rank": 76,
+          "factory": "大众安徽",
+          "sales": 1597,
+          "rank_change": -4,
+          "share_pct": 0.09
+        },
+        {
+          "rank": 77,
+          "factory": "长安林肯",
+          "sales": 1396,
+          "rank_change": -2,
+          "share_pct": 0.08
+        },
+        {
+          "rank": 78,
+          "factory": "猛士科技",
+          "sales": 1302,
+          "rank_change": 19,
+          "share_pct": 0.07
+        },
+        {
+          "rank": 79,
+          "factory": "尊界",
+          "sales": 1051,
+          "rank_change": -10,
+          "share_pct": 0.06
+        },
+        {
+          "rank": 80,
+          "factory": "北京汽车制造厂",
+          "sales": 1039,
+          "rank_change": null,
+          "share_pct": 0.06
+        },
+        {
+          "rank": 81,
+          "factory": "星途",
+          "sales": 1021,
+          "rank_change": null,
+          "share_pct": 0.06
+        },
+        {
+          "rank": 82,
+          "factory": "江铃福特",
+          "sales": 843,
+          "rank_change": null,
+          "share_pct": 0.05
+        },
+        {
+          "rank": 83,
+          "factory": "瑞驰汽车",
+          "sales": 757,
+          "rank_change": -4,
+          "share_pct": 0.04
+        },
+        {
+          "rank": 84,
+          "factory": "北汽新能源",
+          "sales": 680,
+          "rank_change": -8,
+          "share_pct": 0.04
+        },
+        {
+          "rank": 85,
+          "factory": "鑫源汽车",
+          "sales": 627,
+          "rank_change": 3,
+          "share_pct": 0.04
+        },
+        {
+          "rank": 86,
+          "factory": "纵横",
+          "sales": 618,
+          "rank_change": -1,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 87,
+          "factory": "东风雪铁龙",
+          "sales": 615,
+          "rank_change": 2,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 88,
+          "factory": "长安凯程",
+          "sales": 587,
+          "rank_change": -1,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 89,
+          "factory": "大通",
+          "sales": 562,
+          "rank_change": -6,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 90,
+          "factory": "东风标致",
+          "sales": 549,
+          "rank_change": -4,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 91,
+          "factory": "江铃集团",
+          "sales": 528,
+          "rank_change": 5,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 92,
+          "factory": "宝骏",
+          "sales": 503,
+          "rank_change": -8,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 93,
+          "factory": "昊铂",
+          "sales": 493,
+          "rank_change": -2,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 94,
+          "factory": "江淮瑞风",
+          "sales": 489,
+          "rank_change": null,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 95,
+          "factory": "长安欧尚",
+          "sales": 468,
+          "rank_change": -1,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 96,
+          "factory": "二一二越野车",
+          "sales": 447,
+          "rank_change": -4,
+          "share_pct": 0.03
+        },
+        {
+          "rank": 97,
+          "factory": "神龙汽车",
+          "sales": 400,
+          "rank_change": -4,
+          "share_pct": 0.02
+        },
+        {
+          "rank": 98,
+          "factory": "五菱新能源",
+          "sales": 370,
+          "rank_change": 3,
+          "share_pct": 0.02
+        },
+        {
+          "rank": 99,
+          "factory": "启辰",
+          "sales": 277,
+          "rank_change": -9,
+          "share_pct": 0.02
+        },
+        {
+          "rank": 100,
+          "factory": "仰望",
+          "sales": 256,
+          "rank_change": -1,
+          "share_pct": 0.01
+        }
+      ],
+      "source_url": "https://www.autohome.com.cn/rank/1-3-1072-x/2026-10.html",
+      "scraped_at": "2026-11-15T10:03:17"
     }
   }
 }

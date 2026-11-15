@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-15T03:24:10+00:00",
+ "updated_at": "2026-11-15T14:22:03+00:00",
  "articles": [
+  {
+   "id": "1101874141",
+   "title": "中国乘用车零售市场车长变化分析",
+   "published_at": "2026-11-15T16:43+08:00",
+   "url": "https://www.sohu.com/a/1101874141_115312",
+   "topic": "market",
+   "topic_label": "乗用車市場",
+   "path": "cds/articles/2026/11/1101874141",
+   "image_count": 2,
+   "images_saved": 2,
+   "text_chars": 3240,
+   "lead": "中国乘用车市场正经历一场由新能源技术与消费升级驱动的“形态革命”。十年间，新车平均车长增至4.72米，大盘格局被彻底颠覆：SUV以56%份额强势称王；MPV告别低端，全面走向5.2米以上的极致豪华；传统三厢轿车退守，两厢跨界车逆势上扬。整体结构上，4.5-4.8米的传统“黄金尺寸”遭遇严重挤压，市场呈现出向4.8米以上",
+   "content_method": "pc:lxml:#mp-editor",
+   "thumb": "cds/articles/2026/11/1101874141/img/01.jpg",
+   "fetched_at": "2026-11-15T14:22:01+00:00"
+  },
   {
    "id": "1101612641",
    "title": "2026年10月乘用车细分市场车型走势",

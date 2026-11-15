@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-15T03:24:10+00:00",
- "total": 233,
+ "updated_at": "2026-11-15T14:22:03+00:00",
+ "total": 234,
  "articles": [
+  {
+   "id": "1101874141",
+   "title": "中国乘用车零售市场车长变化分析",
+   "published_at": "2026-11-15T16:43+08:00",
+   "url": "https://www.sohu.com/a/1101874141_115312",
+   "topic": "market",
+   "topic_label": "乗用車市場",
+   "path": "cds/articles/2026/11/1101874141",
+   "image_count": 2,
+   "images_saved": 2,
+   "text_chars": 3240,
+   "lead": "中国乘用车市场正经历一场由新能源技术与消费升级驱动的“形态革命”。十年间，新车平均车长增至4.72米，大盘格局被彻底颠覆：SUV以56%份额强势称王；MPV告别低端，全面走向5.2米以上的极致豪华；传统三厢轿车退守，两厢跨界车逆势上扬。整体结构上，4.5-4.8米的传统“黄金尺寸”遭遇严重挤压，市场呈现出向4.8米以上",
+   "content_method": "pc:lxml:#mp-editor",
+   "thumb": "cds/articles/2026/11/1101874141/img/01.jpg",
+   "fetched_at": "2026-11-15T14:22:01+00:00"
+  },
   {
    "id": "1101612641",
    "title": "2026年10月乘用车细分市场车型走势",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1075914907/img/01.jpg",
    "fetched_at": "2026-10-11T03:28:41+00:00"
-  },
-  {
-   "id": "1075914000",
-   "title": "3万公里、生产一致性、质量提升“成人礼”背后：新能源竞争从“速度”转向“耐久”",
-   "published_at": "2026-09-14T16:43+08:00",
-   "url": "https://www.sohu.com/a/1075914000_115312",
-   "topic": "stats",
-   "topic_label": "産業統計",
-   "path": "cds/articles/2026/09/1075914000",
-   "image_count": 3,
-   "images_saved": 3,
-   "text_chars": 2539,
-   "lead": "2026年8月，全国汽车标准化技术委员会就三项电动汽车定型试验规程公开征求意见，核心调整是将新能源汽车可靠性行驶总里程从1.5万公里统一提升至不低于3万公里，全面拉平燃油车标准。8月27日，工业和信息化部、公安部、生态环境部、市场监管总局（下称“四部门”）决定，即日起在全国范围内开展为期1年的道路机动车辆产品生产一致性",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1075914000/img/01.jpg",
-   "fetched_at": "2026-10-11T03:28:44+00:00"
   }
  ]
 }

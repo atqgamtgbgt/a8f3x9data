@@ -621,6 +621,78 @@
         data:v.values.map(cuiNum),itemStyle:{color:CUI_PALETTE[i%CUI_PALETTE.length]}}))
     };
   }
+
+  // Percent values in Gasgoo rankings describe the whole specified market,
+  // but the published list generally covers only 10 suppliers.
+  // Keep any named unlisted/other portion visible; never normalize listed firms to 100%.
+  function cuiShareSlices(period, maximum=10) {
+    const published=(period?.rows||[]).filter(row=>isNum(row.share)&&row.share>0);
+    const ranked=published.slice(0,maximum);
+    const recorded=published.reduce((total,row)=>total+row.share,0);
+    const slices=ranked.map(row=>({name:row.name,value:row.share,
+      code:row.listed_relation==='same_entity'?row.listed_code||null:null,
+      id:row.id||null}));
+    if(recorded>100.5 || !ranked.length) return null;
+    const excluded=published.slice(maximum).reduce((sum,row)=>sum+row.share,0);
+    if(excluded>0) slices.push({name:'掲載上位の残り',value:excluded});
+    const existing=recorded+excluded*0;
+    const other=isNum(period?.other_share)?Math.max(0,period.other_share):0;
+    const unlisted=isNum(period?.unlisted_share)?Math.max(0,period.unlisted_share):null;
+    if(other>0 && existing+other<=100.5) slices.push({name:'記事のその他',value:other});
+    // The source can provide a separate 'other' category and an unlisted remainder.
+    // Never count the same residual twice. If inconsistent, use an explicitly unknown residual.
+    const inserted=recorded+(other>0&&existing+other<=100.5?other:0);
+    if(unlisted!==null && inserted+unlisted<=100.5 && unlisted>0){
+      slices.push({name:'非掲載（上位圏外）',value:unlisted});
+    }else if(unlisted===null && inserted<99.5){
+      slices.push({name:'非掲載・内訳不明',value:Math.round((100-inserted)*100)/100});
+    }else if(unlisted!==null && inserted+unlisted<99.5){
+      slices.push({name:'内訳不明',value:Math.round((100-inserted-unlisted)*100)/100});
+    }
+    if(slices.reduce((sum,row)=>sum+row.value,0)>100.5) return null;
+    return slices;
+  }
+  function cuiPie(segments,label) {
+    const options=cuiBase('搭載シェア','pie');
+    return {...options,
+      tooltip:{trigger:'item',formatter:p=>{
+        const v=isNum(p.value)?p.value.toFixed(1)+'%':'—';
+        return p.name+'：'+v;
+      }},
+      legend:{type:'scroll',orient:'vertical',right:4,top:'middle',bottom:8,
+        width:'32%',textStyle:{fontSize:11}},
+      toolbox:{right:5,top:3,itemSize:14,
+        feature:{saveAsImage:{type:'png',title:'画像を保存'},restore:{title:'リセット'}}},
+      graphic:[],
+      series:[{name:label||'掲載ランキングの搭載シェア',type:'pie',
+        center:['36%','53%'],radius:['33%','70%'],
+        minAngle:1.5,avoidLabelOverlap:true,
+        itemStyle:{borderColor:'#fff',borderWidth:1},
+        label:{show:false},
+        emphasis:{scale:true,scaleSize:7,label:{show:false}},
+        data:segments.map((part,i)=>({
+          name:part.name,value:cuiNum(part.value),
+          itemStyle:part.name.startsWith('非掲載')||part.name==='内訳不明'?
+            {color:'#b8c4d3'}:part.name==='記事のその他'?
+            {color:'#8c9aaf'}:{color:CUI_PALETTE[i%CUI_PALETTE.length]}
+        }))}],
+      media:[{query:{maxWidth:650},option:{
+        legend:{type:'scroll',orient:'horizontal',left:5,right:5,top:'bottom',bottom:0,width:'auto',textStyle:{fontSize:10}},
+        series:[{center:['50%','42%'],radius:['26%','60%']}]
+      }}]
+    };
+  }
+  // Present time series for comparable accounting windows only:
+  // FY years together, and 1–9 month YTD years together, never FY+YTD as one line.
+  function cuiHistoryControls(filters, redraw, state, annual, ytd) {
+    const periods=h('select',{'aria-label':'推移の対象期間'},
+      h('option',{value:'annual'},'通期（'+(annual[0]?.slice(0,4)||'—')+'〜'+(annual.at(-1)?.slice(0,4)||'—')+'年）'),
+      ...(ytd.length>1?[h('option',{value:'ytd'},'1〜9月累計（'+
+        ytd[0].slice(0,4)+'〜'+ytd.at(-1).slice(0,4)+'年）')]:[]));
+    periods.addEventListener('change',()=>{state.window=periods.value;redraw();});
+    filters.append(periods);
+  }
+
   function cuiHeat(industries,key) {
     const fields=[
       ['粗利益率', t=>t.gross_pressure_n],
@@ -1096,54 +1168,101 @@
         h('p', null, '同花順 F10。現在の所属銘柄を過去期間にも遡及適用しており、各年の比較可能社数は異なります。')));
   }
 
+
   function cuiSectorMarket(sec) {
     const st=sec.strength||{};
     const isShare=st.source==='gasgoo';
     const groups=(isShare?st.markets:st.groups)||[];
     if(!groups.length)return null;
-    let market=0,period=0,rows=[],unit=isShare?'%':'本';
+    let market=0,period=0,rows=[],segments=[],unit=isShare?'%':'本';
+    let display=isShare?'pie':'bar';
     function choose() {
       const group=groups[market]||groups[0];
       const list=(isShare?group.periods:group.tables)||[];
-      const indexed=list.slice().sort((a,b)=>(isShare?
+      const sorted=list.slice().sort((a,b)=>isShare?
         (b.year-a.year)||(b.end_month-a.end_month):
-        String(b.period_end||'').localeCompare(String(a.period_end||''))));
-      const picked=indexed[Math.min(period,indexed.length-1)]||indexed[0];
+        String(b.period_end||'').localeCompare(String(a.period_end||'')));
+      const picked=sorted[Math.min(period,sorted.length-1)]||sorted[0];
       unit=isShare?'%':(group.unit_ja||'');
       rows=(picked?.rows||[]).filter(r=>isNum(isShare?r.share:r.volume))
         .slice(0,10).map(r=>({...r,v:isShare?r.share:r.volume}));
+      segments=isShare?cuiShareSlices(picked)||[]:[];
       return {group,picked};
     }
     const chart=cuiChartCard({id:'cui-market',wide:true,
       title:isShare?'部品別・企業別搭載シェア':'企業別の販売数量',
-      subtitle:isShare?'蓋世汽車研究院の掲載上位。市場全体を100%として表示':
+      subtitle:isShare?'掲載企業と「非掲載（上位圏外）」を分けて表示。円グラフは市場全体を100%とする割合です':
         '同一製品・同一期間・同じ単位で比較。国内市場シェアではありません。',
-      source:isShare?'出典：蓋世汽車研究院（Gasgoo）。掲載上位のみで非掲載企業は0%ではありません。完成車の内製・系列会社を含みます。':
+      source:isShare?'出典：蓋世汽車研究院（Gasgoo）。円グラフは原記事の掲載シェアを使い、非掲載分を別に表示。掲載企業だけを100%に再計算していません。完成車の内製を含みます。':
         '出典：同花順 F10 企業開示の製品別販売数量。世界販売を含む場合があります。A株上場企業以外は網羅していません。',
       sourceLink:()=>isShare?choose().picked?.source?.url:null,
       option:()=>{
-        choose();
+        const {group,picked}=choose();
+        if(isShare&&display==='pie'&&segments.length)
+          return cuiPie(segments,group.name_ja||'搭載シェア');
         return cuiHorizontal(rows.map(r=>r.name),rows.map(r=>r.v),unit,
           isShare?'搭載シェア':'開示数量');
       },
       clickMap:p=>{
-        const r=rows[p.dataIndex];return r?.code||r?.listed_code||(r?.id?'f_'+r.id:null);
+        if(isShare&&display==='pie'){
+          const idx=p.dataIndex,record=segments[idx];
+          return record?.code||(record?.id?'f_'+record.id:null);
+        }
+        const r=rows[p.dataIndex];
+        return r?.code||(r?.listed_relation==='same_entity'?r?.listed_code:null)||(r?.id?'f_'+r.id:null);
       },
       controls:(filters,redraw)=>{
         const selG=h('select',{'aria-label':'製品・部品'},...groups.map((g,i)=>
           h('option',{value:i},g.name_ja||g.ja||g.market_id||'部品')));
         const selP=h('select',{'aria-label':'対象期間'});
+        const displaySel=isShare?h('select',{'aria-label':'グラフ形式'},
+          h('option',{value:'pie'},'円グラフ'),
+          h('option',{value:'bar'},'横棒グラフ')):null;
         const periodOptions=()=>{
           const g=groups[market]||groups[0],list=isShare?(g.periods||[]):(g.tables||[]);
           const sorted=list.slice().sort((a,b)=>isShare?
             (b.year-a.year)||(b.end_month-a.end_month):
             String(b.period_end||'').localeCompare(String(a.period_end||'')));
-          selP.replaceChildren(...sorted.map((p,i)=>h('option',{value:i},p.label_ja||p.period_end||'期間')));
+          selP.replaceChildren(...sorted.map((p,i)=>
+            h('option',{value:i},p.label_ja||p.period_end||'期間')));
           period=0;selP.value='0';
         };
         selG.addEventListener('change',()=>{market=Number(selG.value);periodOptions();redraw();});
         selP.addEventListener('change',()=>{period=Number(selP.value);redraw();});
-        periodOptions();filters.append(selG,selP);
+        if(displaySel) displaySel.addEventListener('change',()=>{display=displaySel.value;redraw();});
+        periodOptions();filters.append(selG,selP,displaySel);
+      }});
+    return chart;
+  }
+  function cuiMarketHistory(sec) {
+    const markets=(sec.strength?.markets||[]).filter(m=>(m.periods||[]).length>=2);
+    if(!markets.length)return null;
+    let selected=0;
+    const chart=cuiChartCard({id:'cui-market-history',wide:true,
+      title:'主要企業の搭載シェア推移',
+      subtitle:'同じ年の年初累計シェアを比較。各月単独のシェアではありません。',
+      source:'出典：蓋世汽車研究院（Gasgoo）の製品別掲載ランキング。同じ暦年の1月〜各月までの累計シェアのみ比較。未掲載の期間は欠損として表示します。',
+      sourceLink:()=>{
+        const m=markets[selected];return m.periods.at(-1)?.source?.url||null;
+      },
+      option:()=>{
+        const market=markets[selected],lastYear=Math.max(...market.periods.map(p=>p.year));
+        const periods=market.periods.filter(p=>p.year===lastYear)
+          .sort((a,b)=>a.end_month-b.end_month);
+        if(periods.length<2)return null;
+        const last=periods.at(-1),leaders=(last.rows||[]).slice(0,5);
+        const key=r=>r.id?'id:'+r.id+(r.chip_model?'|'+r.chip_model:''):'raw:'+r.raw;
+        const series=leaders.map(r=>({name:r.name,values:periods.map(p=>{
+          const v=(p.rows||[]).find(x=>key(x)===key(r));
+          return isNum(v?.share)?v.share:null;
+        })}));
+        return cuiLine(periods.map(p=>'1〜'+p.end_month+'月'),series,'%','搭載シェア推移');
+      },
+      controls:(filters,redraw)=>{
+        const sel=h('select',{'aria-label':'推移対象の部品'},
+          ...markets.map((m,i)=>h('option',{value:i},m.name_ja||m.market_id)));
+        sel.addEventListener('change',()=>{selected=Number(sel.value);redraw();});
+        filters.append(sel);
       }});
     return chart;
   }

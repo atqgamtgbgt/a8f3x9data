@@ -11,7 +11,7 @@ const OUT = process.env.SHOT_DIR || 'smoke_screenshots';
 mkdirSync(OUT,{recursive:true});
 
 const views=[
-  ['hyp',6],['sector/adas',6],['sector/tires',7],
+  ['hyp',6],['sector/adas',7],['sector/tires',7],
   ['sector/battery_materials',7],['industries',4],['sources',0]
 ];
 const failures=[],warnings=[];
@@ -74,6 +74,51 @@ try {
           failures.push(kind+' '+view+': company details broken '+check.details+'/'+check.detailsOpen);
         if(check.hasControls<2)failures.push(kind+' '+view+': missing market/period selectors');
       }
+
+      // Verify the visual data, not only the presence of canvases.
+      if(view==='hyp'||view==='sector/adas'||view==='industries'){
+        const history=await page.evaluate(()=>{
+          const id=document.querySelector('#cui-pressure')?'cui-pressure':
+            document.querySelector('#cui-sector-down')?'cui-sector-down':'cui-industry-down';
+          const root=document.getElementById(id),plot=root?.querySelector('.cui-echart');
+          const inst=plot&&window.echarts?.getInstanceByDom(plot);
+          const option=inst?.getOption();
+          return {id,points:option?.series?.[0]?.data?.length||0,
+            years:option?.xAxis?.[0]?.data||[],seriesType:option?.series?.[0]?.type,
+            yearly:option?.xAxis?.[0]?.data?.length>=5};
+        });
+        if(!history.yearly||history.seriesType!=='line')
+          failures.push(kind+' '+view+': five-year deterioration history missing '+JSON.stringify(history));
+        const selector=await page.$('#'+history.id+' select[aria-label="推移の対象期間"], #'+history.id+' select[aria-label="悪化割合の推移期間"]');
+        if(selector){
+          await selector.select('ytd');
+          const after=await page.evaluate(id=>{
+            const plot=document.getElementById(id)?.querySelector('.cui-echart');
+            const option=plot&&window.echarts?.getInstanceByDom(plot)?.getOption();
+            return option?.xAxis?.[0]?.data||[];
+          },history.id);
+          if(after.length!==2)failures.push(kind+' '+view+': 1〜9月 YTD selector failed '+JSON.stringify(after));
+        }
+      }
+      if(view==='sector/adas'){
+        const pie=await page.evaluate(()=>{
+          const plot=document.querySelector('#cui-market .cui-echart');
+          const chart=plot&&window.echarts?.getInstanceByDom(plot);
+          const opt=chart?.getOption(),series=opt?.series?.[0];
+          const parts=(series?.data||[]).map(x=>({name:x.name,value:x.value}));
+          return {type:series?.type,total:parts.reduce((sum,p)=>sum+Number(p.value||0),0),
+            unknown:parts.find(p=>p.name?.startsWith('非掲載')),slices:parts.length};
+        });
+        if(pie.type!=='pie'||Math.abs(pie.total-100)>0.6||!pie.unknown)
+          failures.push(kind+' '+view+': pie/unlisted share broken '+JSON.stringify(pie));
+        await page.select('#cui-market select[aria-label="グラフ形式"]','bar');
+        const swapped=await page.evaluate(()=>{
+          const plot=document.querySelector('#cui-market .cui-echart');
+          return window.echarts.getInstanceByDom(plot)?.getOption()?.series?.[0]?.type;
+        });
+        if(swapped!=='bar')failures.push(kind+' '+view+': pie to bar toggle failed');
+      }
+
       if(!check.chartLibrary&&view==='hyp')
         warnings.push(kind+': CDN not loaded; fallback charts are visible');
       await page.screenshot({path:OUT+'/'+kind+'_'+view.replace('/','_')+'.png',fullPage:true});

@@ -97,7 +97,35 @@ try {
             const option=plot&&window.echarts?.getInstanceByDom(plot)?.getOption();
             return option?.xAxis?.[0]?.data||[];
           },history.id);
-          if(after.length!==2)failures.push(kind+' '+view+': 1〜9月 YTD selector failed '+JSON.stringify(after));
+          if(after.length!==7||!after[0]?.includes('2020')||!after[6]?.includes('2026'))
+            failures.push(kind+' '+view+': seven-year 1〜9月 YTD history missing '+JSON.stringify(after));
+        }
+      }
+      if(view.startsWith('sector/')){
+        const prof=await page.evaluate(()=>{
+          const root=document.querySelector('#cui-sector-prof');
+          const plot=root?.querySelector('.cui-echart');
+          const chart=plot&&window.echarts?.getInstanceByDom(plot);
+          const options=chart?.getOption();
+          return {labelCount:options?.xAxis?.[0]?.data?.length,
+            firstLabel:options?.xAxis?.[0]?.data?.[0],
+            lastLabel:options?.xAxis?.[0]?.data?.at(-1),
+            series:options?.series?.map(v=>({name:v.name,data:v.data})),
+            selector:!!root?.querySelector('select[aria-label="前年同期比較の表示"]')};
+        });
+        if(!prof.selector||prof.labelCount!==7||!String(prof.firstLabel).includes('2020')||
+           !String(prof.lastLabel).includes('2026'))
+          failures.push(kind+' '+view+': long-range sector comparison missing '+JSON.stringify(prof));
+        else {
+          await page.select('#cui-sector-prof select[aria-label="前年同期比較の表示"]','differences');
+          const diff=await page.evaluate(()=>{
+            const plot=document.querySelector('#cui-sector-prof .cui-echart');
+            const series=window.echarts?.getInstanceByDom(plot)?.getOption()?.series?.[0];
+            return {name:series?.name,values:series?.data};
+          });
+          if(!diff.name?.includes('前年同期差')||diff.values?.length!==7||
+             diff.values?.[0]!==null)
+            failures.push(kind+' '+view+': median YoY percentage-point calculation broken '+JSON.stringify(diff));
         }
       }
       if(view==='sector/adas'){

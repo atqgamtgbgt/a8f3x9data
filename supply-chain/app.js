@@ -1370,7 +1370,7 @@
     const trend=cuiChartCard({id:'cui-sector-trend',wide:true,
       title:'粗利益率・純利益率｜長期推移',
       subtitle:'関連業種の会社全体の中央値（%）。通期と1〜9月累計を切り替えられます。',
-      source:'同花順 F10。申万三級所属会社の連結財務中央値。2021年以降の通期と2025・2026年の1〜9月累計は別系列として表示。部品単体の利益率ではありません。',
+      source:'同花順 F10。申万三級所属会社の連結財務中央値。通期（2020年以降）と同じ1〜9月累計（過去の各年）は別系列として表示。部品単体の利益率ではありません。',
       option:()=>{
         const keys=sectorProfitState.window==='annual'?fy:ytd;
         return cuiLine(keys.map(periodLabel),[
@@ -1379,13 +1379,44 @@
         ],'%','利益率推移');
       },
       controls:(filters,redraw)=>cuiHistoryControls(filters,redraw,sectorProfitState,fy,ytd)});
-    const prof=cuiChartCard({id:'cui-sector-prof',title:'純利益率の前年同期比較',
-      subtitle:'業種中央値／前年同期との2期間比較',
-      source:'同花順。各期間の中央値を比較。企業別利益率変化の中央値と異なり、比較対象企業が異なる場合があります。',
-      option:()=>cuiGroupBars([periodLabel(prev),periodLabel(latest)],[
-        {name:'粗利益率',values:[cuiMedian(industry,prev,'gross_margin'),cuiMedian(industry,latest,'gross_margin')]},
-        {name:'純利益率',values:[cuiMedian(industry,prev,'net_margin'),cuiMedian(industry,latest,'net_margin')]}
-      ],'%','利益率')});
+    // Every historical YTD_Q3 period uses Jan–Sep cumulative results.
+    // Distinguish two separate comparisons:
+    // (1) the median profitability level in each year;
+    // (2) differences between industry medians, in percentage points.
+    // The latter is NOT the same as the paired-company decline-rate chart.
+    const profitCompare={mode:'levels'};
+    const prof=cuiChartCard({id:'cui-sector-prof',wide:true,
+      title:'純利益率の前年同期比較｜各年1〜9月累計',
+      subtitle:'2020年以降の同期間比較。表示を「利益率（%）」と「前年同期差（pt）」から選べます。',
+      source:'出典：同花順 F10（申万三級所属企業、会社全体の連結財務）。すべて各年1〜9月の累計値です。前年差は各年の業種中央値を引き算した値（ポイント差）で、同一企業ごとの差の中央値ではありません。2020年の前年差は2019年の値がないため欠損とします。',
+      option:()=>{
+        const keys=ytd;
+        const label=keys.map(k=>k.slice(0,4)+'年');
+        if(profitCompare.mode==='differences'){
+          const delta=(key,metric)=>{
+            const previous=previousYearKey(key);
+            const currentMedian=cuiMedian(industry,key,metric);
+            const previousMedian=cuiMedian(industry,previous,metric);
+            return isNum(currentMedian)&&isNum(previousMedian)?
+              Number((currentMedian-previousMedian).toFixed(2)):null;
+          };
+          return cuiGroupBars(label,[
+            {name:'純利益率の前年同期差',values:keys.map(k=>delta(k,'net_margin'))},
+            {name:'粗利益率の前年同期差',values:keys.map(k=>delta(k,'gross_margin'))}
+          ],'pt','前年同期差');
+        }
+        return cuiGroupBars(label,[
+          {name:'純利益率',values:keys.map(k=>cuiMedian(industry,k,'net_margin'))},
+          {name:'粗利益率',values:keys.map(k=>cuiMedian(industry,k,'gross_margin'))}
+        ],'%','利益率');
+      },
+      controls:(filters,redraw)=>{
+        const view=h('select',{'aria-label':'前年同期比較の表示'},
+          h('option',{value:'levels'},'各年の利益率（%）'),
+          h('option',{value:'differences'},'前年同期差（pt）'));
+        view.addEventListener('change',()=>{profitCompare.mode=view.value;redraw();});
+        filters.append(view);
+      }});
     const costs=cuiChartCard({id:'cui-sector-cost',title:'費用率が悪化した企業の割合',
       subtitle:periodLabel(prev)+'から'+periodLabel(latest)+'へ・比較可能企業',
       source:'同花順。粗利益率と各費用率の前年同期比較。個別の悪化原因は特定できません。複数の費用に該当する会社があります。',

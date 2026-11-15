@@ -145,3 +145,23 @@ body.viz-root .report-source-details {font-size:11px;}
   .cui-chart-card {break-inside:avoid;margin:12px 0;}
   .cui-echart {height:300px;}
 }
+
+/* Interactive composition and line-series history */
+#cui-market .cui-echart {height:440px;}
+#cui-market-history .cui-echart {height:375px;}
+.cui-chart-filters select {background-color:#f8fafc;}
+.cui-pie-fallback {display:grid;grid-template-columns:minmax(200px,1fr) minmax(190px,.85fr);gap:12px;align-items:center;height:100%;}
+.cui-pie-fallback svg {height:min(100%,290px);width:100%;max-width:300px;justify-self:center;}
+.cui-pie-fallback-legend {display:flex;flex-direction:column;gap:5px;overflow-y:auto;max-height:365px;}
+.cui-pie-fallback-legend>div {display:grid;grid-template-columns:12px 1fr auto;align-items:center;gap:7px;font-size:11px;}
+.cui-pie-fallback-legend i {width:10px;height:10px;border-radius:2px;}
+.cui-pie-fallback-legend span {overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cui-pie-fallback-legend b {font-size:11px;font-variant-numeric:tabular-nums;}
+@media(max-width:600px) {
+  #cui-market .cui-echart {height:415px;}
+  #cui-market-history .cui-echart {height:330px;}
+  .cui-pie-fallback {grid-template-columns:1fr;gap:4px;overflow-y:auto;}
+  .cui-pie-fallback svg {max-height:230px;}
+  .cui-pie-fallback-legend {max-height:150px;display:grid;grid-template-columns:1fr 1fr;gap:5px 8px;}
+  .cui-pie-fallback-legend>div {grid-template-columns:9px 1fr auto;gap:4px;font-size:9px;}
+}

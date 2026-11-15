@@ -655,12 +655,13 @@
   function cuiPie(segments,label) {
     const options=cuiBase('搭載シェア','pie');
     return {...options,
-      tooltip:{trigger:'item',formatter:p=>{
+      tooltip:{trigger:'item',renderMode:'richText',formatter:p=>{
         const v=isNum(p.value)?p.value.toFixed(1)+'%':'—';
         return p.name+'：'+v;
       }},
       legend:{type:'scroll',orient:'vertical',right:4,top:'middle',bottom:8,
-        width:'32%',textStyle:{fontSize:11}},
+        width:'32%',textStyle:{fontSize:11},
+        formatter:name=>{const part=segments.find(s=>s.name===name);return (name.length>14?name.slice(0,13)+'…':name)+'  '+(part?part.value.toFixed(1)+'%':'');}},
       toolbox:{right:5,top:3,itemSize:14,
         feature:{saveAsImage:{type:'png',title:'画像を保存'},restore:{title:'リセット'}}},
       graphic:[],
@@ -719,6 +720,31 @@
     };
   }
   function cuiFallback(el,opt) {
+    if (opt.series?.[0]?.type==='pie') {
+      const data=(opt.series[0].data||[]).filter(p=>isNum(p.value)&&p.value>0);
+      const total=data.reduce((sum,p)=>sum+p.value,0)||1;
+      const size=270,circ=2*Math.PI*85;
+      const rings=[];
+      let offset=0;
+      data.forEach((item,i)=>{
+        const width=item.value/total*circ;
+        rings.push(s('circle',{cx:135,cy:135,r:85,fill:'none',
+          stroke:item.itemStyle?.color||CUI_PALETTE[i%CUI_PALETTE.length],
+          'stroke-width':36,'stroke-dasharray':width+' '+(circ-width),
+          'stroke-dashoffset':-offset,
+          transform:'rotate(-90 135 135)'}));
+        offset+=width;
+      });
+      const chart=s('svg',{viewBox:'0 0 270 270',role:'img',
+        'aria-label':data.map(d=>d.name+' '+pct(d.value)).join('、')},
+        ...rings,s('circle',{cx:135,cy:135,r:58,fill:'var(--card)'}));
+      const legend=h('div',{class:'cui-pie-fallback-legend'},
+        ...data.map((d,i)=>h('div',null,
+          h('i',{style:{background:d.itemStyle?.color||CUI_PALETTE[i%CUI_PALETTE.length]}}),
+          h('span',null,d.name),h('b',null,pct(d.value)))));
+      el.replaceChildren(h('div',{class:'cui-pie-fallback'},chart,legend));
+      return;
+    }
     if (opt.series?.[0]?.type==='line' && opt.xAxis?.data) {
       const lines=opt.series.map(s=>({name:s.name,
         color:s.itemStyle?.color || 'var(--s1)',values:s.data}));

@@ -117,6 +117,7 @@ try {
           return window.echarts.getInstanceByDom(plot)?.getOption()?.series?.[0]?.type;
         });
         if(swapped!=='bar')failures.push(kind+' '+view+': pie to bar toggle failed');
+        await page.select('#cui-market select[aria-label="グラフ形式"]','pie');
       }
 
       if(!check.chartLibrary&&view==='hyp')

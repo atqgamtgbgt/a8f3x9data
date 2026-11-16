@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-16T03:29:46+00:00",
- "total": 234,
+ "updated_at": "2026-11-16T14:41:21+00:00",
+ "total": 235,
  "articles": [
+  {
+   "id": "1102134629",
+   "title": "2026年10月汽车增加值0.9%、汽车生产降8%，消费降21%，新能源汽车渗透率67%",
+   "published_at": "2026-11-16T11:39+08:00",
+   "url": "https://www.sohu.com/a/1102134629_115312",
+   "topic": "stats",
+   "topic_label": "産業統計",
+   "path": "cds/articles/2026/11/1102134629",
+   "image_count": 11,
+   "images_saved": 11,
+   "text_chars": 3960,
+   "lead": "今年1-10月生产供给平稳增长，市场销售规模扩大，对外贸易快速增长，就业物价总体稳定，新质生产力茁壮成长，国民经济运行延续总体平稳、向新向优发展态势。但在国际高油价冲击下，传统汽车消费压力较大。  2026年1-10月汽车生产2641万台，同比降4%；新能源汽车生产1448万台，同比增13%，渗透率55%；燃油车生产1",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1102134629/img/01.jpg",
+   "fetched_at": "2026-11-16T14:41:20+00:00"
+  },
   {
    "id": "1101874141",
    "title": "中国乘用车零售市场车长变化分析",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1076256081/img/01.jpg",
    "fetched_at": "2026-10-11T03:28:34+00:00"
-  },
-  {
-   "id": "1075914907",
-   "title": "2026年8月乘用车细分市场车型走势",
-   "published_at": "2026-09-14T16:43+08:00",
-   "url": "https://www.sohu.com/a/1075914907_115312",
-   "topic": "segment",
-   "topic_label": "セグメント・車種",
-   "path": "cds/articles/2026/09/1075914907",
-   "image_count": 9,
-   "images_saved": 9,
-   "text_chars": 2975,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  当前国内车市存量竞争特征凸显，出口需求暴增，行业内部分化持续加剧。新能源市场告别全域增长，呈现“高端电动车爆发、微型电动车车型承压”的两极分化态势，县乡市场、入门级车型下滑过大。同时“新车效应”短期化，对市场拉动效力大幅减弱。渠道端压力持续凸显，行业被动去库存节",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1075914907/img/01.jpg",
-   "fetched_at": "2026-10-11T03:28:41+00:00"
   }
  ]
 }

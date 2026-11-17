@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-16T14:41:21+00:00",
- "total": 235,
+ "updated_at": "2026-11-17T03:24:38+00:00",
+ "total": 236,
  "articles": [
+  {
+   "id": "1102550582",
+   "title": "全国乘用车行业2026年10月末库存334万辆、库存60天、满意度21%",
+   "published_at": "2026-11-17T09:41+08:00",
+   "url": "https://www.sohu.com/a/1102550582_115312",
+   "topic": "inventory",
+   "topic_label": "在庫",
+   "path": "cds/articles/2026/11/1102550582",
+   "image_count": 15,
+   "images_saved": 15,
+   "text_chars": 2841,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年10月末全国乘用车行业库存334万辆，环比上月增13万辆，同比2025年10月下降7万辆，形成9-10月库存持续回升的特征。预测团队2025年对市场预测很乐观，2025年10月开始满意度持续暴跌到低位。2026年10月乐观度23%，11月初的10月月后",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1102550582/img/01.jpg",
+   "fetched_at": "2026-11-17T03:24:36+00:00"
+  },
   {
    "id": "1102134629",
    "title": "2026年10月汽车增加值0.9%、汽车生产降8%，消费降21%，新能源汽车渗透率67%",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1076870672/img/01.jpg",
    "fetched_at": "2026-10-11T03:28:25+00:00"
-  },
-  {
-   "id": "1076256081",
-   "title": "2026年8月汽车增加值8.7%、汽车生产降3%，消费降19%，新能源汽车渗透率61%",
-   "published_at": "2026-09-15T12:35+08:00",
-   "url": "https://www.sohu.com/a/1076256081_115312",
-   "topic": "stats",
-   "topic_label": "産業統計",
-   "path": "cds/articles/2026/09/1076256081",
-   "image_count": 11,
-   "images_saved": 11,
-   "text_chars": 3652,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  今年以来，扩内需、促消费政策措施持续落地见效，我国消费市场发展质量不断提升，消费新业态新模式活力迸发。由于低端车市不旺，消费不旺。  1—8月份，社会消费品零售总额327569亿元，同比增长1.1%。其中，汽车消费额25805亿元、同比降14%；除汽车以外的消费",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1076256081/img/01.jpg",
-   "fetched_at": "2026-10-11T03:28:34+00:00"
   }
  ]
 }

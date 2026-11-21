@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-21T03:23:47+00:00",
- "total": 236,
+ "updated_at": "2026-11-21T14:22:18+00:00",
+ "total": 237,
  "articles": [
+  {
+   "id": "1104564175",
+   "title": "全国商用车国内保险特征—10月重卡新能源渗透率58%",
+   "published_at": "2026-11-21T15:48+08:00",
+   "url": "https://www.sohu.com/a/1104564175_115312",
+   "topic": "commercial",
+   "topic_label": "商用車",
+   "path": "cds/articles/2026/11/1104564175",
+   "image_count": 13,
+   "images_saved": 13,
+   "text_chars": 2840,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  根据国家金融局交强险数据，2026年10月商用车交强险销量为23万辆，同比下降6%，环比下降12%，年末表现疲软；1-10月累计销量达250.0万辆，同比微降2%。整体来看，经历二季度短暂回暖后，下半年下行压力显著放大，市场重回存量博弈。  2026 年 10 ",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1104564175/img/01.jpg",
+   "fetched_at": "2026-11-21T14:22:17+00:00"
+  },
   {
    "id": "1102550582",
    "title": "全国乘用车行业2026年10月末库存334万辆、库存60天、满意度21%",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1077310177/img/01.jpg",
    "fetched_at": "2026-10-11T03:28:11+00:00"
-  },
-  {
-   "id": "1076870672",
-   "title": "车市扫描-2026年35期（9月7日-9月13日）",
-   "published_at": "2026-09-16T16:50+08:00",
-   "url": "https://www.sohu.com/a/1076870672_115312",
-   "topic": "market_scan",
-   "topic_label": "車市スキャン（週次）",
-   "path": "cds/articles/2026/09/1076870672",
-   "image_count": 16,
-   "images_saved": 16,
-   "text_chars": 10216,
-   "lead": "主要信息源自乘联分会每日新闻等  中国汽车流通协会  乘用车市场信息联席分会（乘联分会）  网站：http://www.cpcaauto.com  一、本周车市概述1.2026年9月全国乘用车市场零售相对平稳  【2026年9月1-13日乘联分会市场分析要闻】  9月1-13日全国乘用车厂家批发55.0万辆，同比去年同",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1076870672/img/01.jpg",
-   "fetched_at": "2026-10-11T03:28:25+00:00"
   }
  ]
 }

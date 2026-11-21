@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-21T03:23:47+00:00",
+ "updated_at": "2026-11-21T14:22:18+00:00",
  "articles": [
+  {
+   "id": "1104564175",
+   "title": "全国商用车国内保险特征—10月重卡新能源渗透率58%",
+   "published_at": "2026-11-21T15:48+08:00",
+   "url": "https://www.sohu.com/a/1104564175_115312",
+   "topic": "commercial",
+   "topic_label": "商用車",
+   "path": "cds/articles/2026/11/1104564175",
+   "image_count": 13,
+   "images_saved": 13,
+   "text_chars": 2840,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  根据国家金融局交强险数据，2026年10月商用车交强险销量为23万辆，同比下降6%，环比下降12%，年末表现疲软；1-10月累计销量达250.0万辆，同比微降2%。整体来看，经历二季度短暂回暖后，下半年下行压力显著放大，市场重回存量博弈。  2026 年 10 ",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1104564175/img/01.jpg",
+   "fetched_at": "2026-11-21T14:22:17+00:00"
+  },
   {
    "id": "1102550582",
    "title": "全国乘用车行业2026年10月末库存334万辆、库存60天、满意度21%",

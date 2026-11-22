@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-21T14:22:18+00:00",
- "total": 237,
+ "updated_at": "2026-11-22T03:24:55+00:00",
+ "total": 238,
  "articles": [
+  {
+   "id": "1104761949",
+   "title": "11月新能源新品与技术线路跟踪",
+   "published_at": "2026-11-22T10:13+08:00",
+   "url": "https://www.sohu.com/a/1104761949_115312",
+   "topic": "nev_products",
+   "topic_label": "NEV新製品・技術",
+   "path": "cds/articles/2026/11/1104761949",
+   "image_count": 5,
+   "images_saved": 5,
+   "text_chars": 1991,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年1-11月新能源车免税目录共有23228款，其中11月免税目录新增车型243款，较年均数量大幅下滑。分品类看：乘用车仅55款，纯电、插混、增程申报款数同步收缩；客车仅8款，投放显著降温。专用车为当月主力，合计180款，其中纯电动166款，占到当月总款数",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1104761949/img/01.jpg",
+   "fetched_at": "2026-11-22T03:24:53+00:00"
+  },
   {
    "id": "1104564175",
    "title": "全国商用车国内保险特征—10月重卡新能源渗透率58%",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1077310650/img/01.jpg",
    "fetched_at": "2026-10-11T03:27:55+00:00"
-  },
-  {
-   "id": "1077310177",
-   "title": "全国乘用车行业2026年8月末库存314万辆、库存56天、满意度17%",
-   "published_at": "2026-09-17T14:53+08:00",
-   "url": "https://www.sohu.com/a/1077310177_115312",
-   "topic": "inventory",
-   "topic_label": "在庫",
-   "path": "cds/articles/2026/09/1077310177",
-   "image_count": 15,
-   "images_saved": 15,
-   "text_chars": 2831,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年8月末全国乘用车行业库存314万辆，较上月下降8万辆，较2025年8月下降2万辆，形成库存持续下降的趋势。其中厂家库存占比27.1%，相对回落。  乘联分会预测团队2026年8月乐观度12%，9月初的8月月后满意度为17%，预期低但满意度也差，主要是高",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1077310177/img/01.jpg",
-   "fetched_at": "2026-10-11T03:28:11+00:00"
   }
  ]
 }

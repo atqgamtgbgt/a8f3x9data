@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-23T03:27:28+00:00",
- "total": 238,
+ "updated_at": "2026-11-23T14:24:13+00:00",
+ "total": 239,
  "articles": [
+  {
+   "id": "1105168884",
+   "title": "新能源车锂电池市场分析-2026年10月",
+   "published_at": "2026-11-23T12:00+08:00",
+   "url": "https://www.sohu.com/a/1105168884_115312",
+   "topic": "battery",
+   "topic_label": "電池",
+   "path": "cds/articles/2026/11/1105168884",
+   "image_count": 12,
+   "images_saved": 12,
+   "text_chars": 3180,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  10月动力电池产量245.1GWh，同比增44%。其中，磷酸铁锂213.1GWh（+56%），三元锂31.7GWh（-6%）。1-10月累计产量2078.1GWh（+61%），磷酸铁锂累计1736.4GWh（+70%）。  2026年10月动力电池装车99GWh",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1105168884/img/01.jpg",
+   "fetched_at": "2026-11-23T14:24:12+00:00"
+  },
   {
    "id": "1104761949",
    "title": "11月新能源新品与技术线路跟踪",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1077914313/img/01.jpg",
    "fetched_at": "2026-10-11T03:27:50+00:00"
-  },
-  {
-   "id": "1077310650",
-   "title": "广汽重组公告叠加别克至境 15 万台下线，合资车企进入深度调整转型期",
-   "published_at": "2026-09-17T14:53+08:00",
-   "url": "https://www.sohu.com/a/1077310650_115312",
-   "topic": "other",
-   "topic_label": "その他",
-   "path": "cds/articles/2026/09/1077310650",
-   "image_count": 3,
-   "images_saved": 3,
-   "text_chars": 2125,
-   "lead": "近期广汽集团发布重大资产重组公告，筹划收购一汽旗下整车合资公司部分股权，推动合资板块资源整合。几乎同一时间，别克至境新能源迎来第15 万台整车下线，品牌发布仅16 个月就实现规模化上量、25.7 万元平均成交价，量价齐升。一重组、一放量两件事放到一起看，标志国内合资车企已经告别简单的产品导入阶段，全面进入体系重构的深度",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1077310650/img/01.jpg",
-   "fetched_at": "2026-10-11T03:27:55+00:00"
   }
  ]
 }

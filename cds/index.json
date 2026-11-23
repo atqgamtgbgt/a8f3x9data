@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-23T03:27:28+00:00",
+ "updated_at": "2026-11-23T14:24:13+00:00",
  "articles": [
+  {
+   "id": "1105168884",
+   "title": "新能源车锂电池市场分析-2026年10月",
+   "published_at": "2026-11-23T12:00+08:00",
+   "url": "https://www.sohu.com/a/1105168884_115312",
+   "topic": "battery",
+   "topic_label": "電池",
+   "path": "cds/articles/2026/11/1105168884",
+   "image_count": 12,
+   "images_saved": 12,
+   "text_chars": 3180,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  10月动力电池产量245.1GWh，同比增44%。其中，磷酸铁锂213.1GWh（+56%），三元锂31.7GWh（-6%）。1-10月累计产量2078.1GWh（+61%），磷酸铁锂累计1736.4GWh（+70%）。  2026年10月动力电池装车99GWh",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1105168884/img/01.jpg",
+   "fetched_at": "2026-11-23T14:24:12+00:00"
+  },
   {
    "id": "1104761949",
    "title": "11月新能源新品与技术线路跟踪",

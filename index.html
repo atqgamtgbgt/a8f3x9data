@@ -5230,6 +5230,13 @@ body.tray-open { padding-bottom: 105px; }
                   </div>
                 </div>
                 <div class="cds-gc">
+                  <span class="cds-gc-label">🏭 省別の生産（26年1-8月） </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-topic-target="#topic-prod-region">🗺️ 地域別</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-prod-prov">🏙️ 省別</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
                   <span class="cds-gc-label">🌍 輸出・見通し </span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-topic-target="#topic-eu">🇪🇺 対EU輸出（26年1-9月）</button>
@@ -8720,6 +8727,61 @@ body.tray-open { padding-bottom: 105px; }
               </div>
               <div class="chart-card" style="margin-top:14px">
                 <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・10年で新車の<b>平均車長は4.72m</b>に（2022年4.61m→2026年4.72m、5年で11cm）。<b>SUVが56%</b>（2016年38%）で主役になり、セダン・ハッチバック（CAR）は52%→40%、MPVは11%→5%。<br>・4.5〜4.8mの従来の「黄金サイズ」は61.3%（2022年）→50.0%（2026年）に縮み、<b>4.8〜5mが16.0%→26.6%</b>に急増。5.2m超は1.5%→6.7%（2026年10月単月は7.5%）。一方で4.0〜4.5mも17.1%を保ち、大きい車とBEVの小型車に分かれる「ダンベル型」になった。<br>・CARの中ではハッチバックが15%→35%に伸び、4〜4.2mだけで約半分（48%）。セダンは4.8〜5.2mが計61%と大型化が進んだ（グラフ）。<br>・本文によると、MPVは4.2〜4.8mが91%→13%に急減し、5.2〜5.4mが1%→48%。SUVは4.6m未満が54%→23%に減り、4.8〜5mが5%→22%、5m以上が0%→15%に（SUV・MPV・全体の表は記事の図に無いため、グラフは2つだけ）。<br>・崔氏は、BEVのプラットフォームで広い室内を取りやすくなったことと、メーカーの「上のクラスへの内巻」が大型化を招いたとみる。軸距で車格を分ける時代は終わり、大きな室内とスマート化を組み合わせた使い方の競争に入ったという。</div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="topic-prod-region">
+              <div class="topic-grid2" style="margin-top:0">
+                <div class="chart-card">
+                  <div class="chart-title">地域別の自動車生産シェア（2015〜2026年、%）</div>
+                  <div class="chart-subtitle">崔東樹 2026年10月1日。「長四角」＝上海・江蘇・浙江・安徽（崔氏の区分）。2026年は1-8月累計と8月単月</div>
+                  <div id="ec-topic-prod-share" class="echart-box" style="height:400px"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">地域別の自動車生産（2026年1-8月、万台）</div>
+                  <div class="chart-subtitle">ラベルは前年同期比。全国は-3%で、長四角（+17%）と珠三角（+4%）だけがプラス</div>
+                  <div id="ec-topic-prod-vol" class="echart-box" style="height:400px"></div>
+                </div>
+              </div>
+              <div class="topic-grid2">
+                <div class="chart-card">
+                  <div class="chart-title">NEV生産の地域別シェア（%）</div>
+                  <div class="chart-subtitle">2026年1-8月のNEV生産は1,059万台（+13%）で、長四角が43%</div>
+                  <div id="ec-topic-prod-nevshare" class="echart-box" style="height:380px"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">地域別のNEV浸透率（生産ベース、%）</div>
+                  <div class="chart-subtitle">2026年8月単月は全国61%、長四角72%、東北17%（ラベルは8月単月）</div>
+                  <div id="ec-topic-prod-pen" class="echart-box" style="height:380px"></div>
+                </div>
+              </div>
+              <div class="chart-card" style="margin-top:14px">
+                <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・2026年1-8月の自動車生産は<b>前年比3%減</b>で、伸びはNEVが支える。<b>長四角は692万台・+17%</b>（8月単月+22%）と独り勝ちで、珠三角は+4%。中部・京津山河・成渝・東北はマイナスで、<b>東北は-22%</b>（8月-32%）。<br>・生産シェアは長四角が2015年の20.8%から<b>1-8月34.1%、8月単月36.5%</b>に上がり、全国の3分の1を超えた。中部は約20%で2番目。珠三角は22%前後から13〜14%に下がり、東北は5.9%（8月4.7%）。<br>・NEV生産は1-8月+13%。長四角は+37%（8月+44%）でシェア<b>43%</b>。珠三角は8月単月+50%と底堅い。中部・京津山河は累計でマイナスで、8月にわずかに持ち直しただけ。<br>・8月単月のNEV浸透率は全国61%、長四角72%、中部・珠三角・成渝も60%超。京津山河と東北は低く、東北は17%。<br>・崔氏は、安徽（合肥・蕪湖）で蔚来・比亜迪・大衆安徽・奇瑞などの生産が急増し、江浙滬と一体の産業チェーンになったとして、4省市をまとめて「長四角」と呼ぶ。安徽を中部に入れると華東への集積が見えなくなるという。</div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="topic-prod-prov">
+              <div class="topic-grid2" style="margin-top:0">
+                <div class="chart-card">
+                  <div class="chart-title">省別の自動車生産（2026年1-8月、万台）</div>
+                  <div class="chart-subtitle">ラベルは前年同期比。安徽の8月単月は図の透かしで読めないため、長四角の8月計（98万台）から他の3省市を引いた約33万台（ツールチップ）</div>
+                  <div id="ec-topic-prod-prov" class="echart-box" style="height:660px"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">省別のNEV生産（2026年1-8月、万台）</div>
+                  <div class="chart-subtitle">ラベルは前年同期比。8月単月の上位は安徽21.2・浙江18.6・上海15.5・江蘇15.4万台。福建・山西は小さい基数からの急増</div>
+                  <div id="ec-topic-prod-nevprov" class="echart-box" style="height:660px"></div>
+                </div>
+              </div>
+              <div class="topic-grid2">
+                <div class="chart-card">
+                  <div class="chart-title">主な省の自動車生産の推移（2016〜2025年、万台）</div>
+                  <div class="chart-subtitle">安徽は2018年の82万台から2025年は369万台に。吉林・湖北・上海は2016年より少ない</div>
+                  <div id="ec-topic-prod-trend" class="echart-box" style="height:380px"></div>
+                </div>
+                <div class="chart-card">
+                  <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・省別の生産は大きく入れ替わった。<b>安徽が8月単月で首位</b>（1-8月+14%）。浙江（+30%）・上海（+29%）も伸び、長四角の4省市がそろって好調。<br>・広東は累計ではなお上位だが、以前のピークから大きく下がった。<b>吉林（-30%）・陝西（-40%）</b>は大幅減で、湖北・重慶・湖南もマイナス。古い工業基地の生産は縮小が続く。<br>・NEVは8月単月で安徽・浙江・上海・江蘇が上位。<b>浙江+70%・上海+53%・広東+49%</b>。陝西・山東・河北・吉林はマイナスで、従来の生産基地は転換に苦しむ。<br>・本文によると、8月単月のNEV浸透率は浙江・上海が80%近く、貴州94%、安徽・江蘇・広東・重慶・陝西は60%超。吉林は10%と低く、河北・山東も低い（省別の浸透率の図は記事で重複掲載のため無し）。</div>
+                </div>
               </div>
             </div>
 
@@ -17362,6 +17424,7 @@ window.addEventListener('resize', __rafThrottle(function(){
   TP.acc = {"rows":["事故件数","死亡者","負傷者","直接財産損失"],"units":["件","人","人","万元"],"total":[256456,58777,251925,133214],"cats":["自動車","バイク","その他の機動車","非機動車","歩行者","その他"],"vals":[[140615,39644,119287,98842],[53840,9083,62380,15276],[11780,2717,12163,4327],[44922,5723,53703,11929],[5081,1590,4142,2723],[218,20,250,118]],"bike":[3136,470,3300,810],"tractor":[738,202,746,331],"chgCats":["自動車","バイク","非機動車"],"chg":[[-15.8,-29.4,-14.1],[17.4,13.3,-14.8],[75.8,85.3,53.0]],"y2018":{"バイク":[45868,55071,10663],"非機動車":[25556,28987,3741]},"y2025":{"自動車":[140615,119287,39644],"バイク":[53840,62380,9083],"非機動車":[44922,53703,5723]}};
   TP.ar = {"ind":[["工業企業 合計",76,71,5],["製造業 合計",78,73,5],["水の生産・供給",217,185,32],["非金属鉱物製品",154,136,18],["専用設備",147,139,8],["計器・計測器",138,130,8],["その他の採鉱",122,99,23],["汎用設備",120,114,7],["電気機械・器材",113,107,5],["PC・通信・電子機器",105,102,3],["医薬品",104,95,9],["鉄道・船舶・航空機器",104,99,5],["自動車製造",100,90,11],["非金属鉱の採掘",99,77,22],["金属製品・機械の修理",97,91,6],["その他の製造",88,76,12],["ゴム・プラスチック製品",88,84,4],["採掘の補助サービス",87,71,16],["印刷・記録媒体の複製",84,78,7],["金属製品",84,80,4],["家具",82,76,6],["衣料品・服飾",76,67,9],["皮革・毛皮・履物",71,63,8],["鉄鉱石の採掘",70,68,2],["木材加工・竹籐製品",67,60,7],["石炭の採掘・選炭",65,68,-3],["紙・紙製品",63,61,2],["繊維",63,59,4],["電力・熱供給",63,61,1],["採鉱業（計）",56,56,-1],["文具・スポーツ・娯楽用品",51,43,8],["食品",50,43,7],["化学製品",48,45,4],["酒・飲料・精製茶",46,36,9],["廃棄資源の再利用",34,28,6],["化学繊維",32,29,3],["農産物・副食品の加工",32,29,3],["非鉄金属鉱の採掘",30,35,-5],["石油・天然ガスの採掘",28,24,4],["たばこ製品",27,8,18],["ガスの生産・供給",25,22,2],["非鉄金属の製錬・圧延",24,22,2],["鉄鋼の製錬・圧延",21,20,1],["石油加工・コークス・核燃料",18,16,3]],"streamYears":["2020","2021","2022","2023","2024","2025","26年9月"],"stream":{"上流":[24,21,23,25,26,27,29],"中流":[71,70,75,86,91,95,102],"下流":[66,63,68,77,82,85,92],"工業企業 全体":[56,53,57,64,68,71,76],"自動車製造":[66,62,72,83,90,90,100]},"months":["2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],"days":{"2020":[95,84,77,77,74,74,73,72,72,74,66],"2021":[63,59,59,58,57,59,60,60,62,64,62],"2022":[66,64,65,67,68,71,71,72,74,76,72],"2023":[93,89,91,91,92,92,92,92,92,91,83],"2024":[95,90,92,93,94,95,98,98,101,99,90],"2025":[97,94,95,96,91,90,92,90,91,95,90],"2026":[102,96,97,100,99,100,101,100,null,null,null]},"bal":{"2023":[19972,21073,21627,22097,22855,23187,23616,24276,24716,24978,23323],"2024":[21738,22600,23558,24082,24901,25258,26061,26670,27926,28351,26550],"2025":[24029,25050,25694,26332,25806,25477,26039,26110,26980,28855,27882],"2026":[25244,25659,26911,28017,28477,28900,29606,29937,null,null,null]},"marginYears":["2014","2016","2018","2020","2022","2024","2025","26年1-9月"],"margin":{"自動車製造":[9.0,8.3,7.3,6.2,5.5,4.8,4.1,3.3],"下流 計":[7.3,7.2,6.9,7.0,5.9,6.0,5.9,6.7],"中流 計":[6.0,6.0,6.0,6.3,4.9,5.3,5.0,4.3],"工業 全体":[5.9,6.0,6.3,6.1,4.7,5.6,5.3,5.7]}};
   TP.len = {"years":["2016年","2017年","2018年","2019年","2020年","2021年","2022年","2023年","2024年","2025年","2026年"],"hb":{"cats":["2.8〜3m","3〜3.2m","3.2〜3.4m","3.4〜3.6m","3.6〜3.8m","3.8〜4m","4〜4.2m","4.2〜4.4m","4.4〜4.6m","4.6〜4.8m"],"shares":[[1,null,2,7,4,16,29,25,9,4],[3,null,2,5,10,11,30,22,11,3],[1,null,3,3,13,10,34,18,10,3],[null,null,4,5,5,10,41,20,7,2],[null,15,5,7,5,7,33,19,2,2],[0,32,7,5,14,3,17,17,0,2],[2,31,10,3,13,1,20,14,0,3],[1,23,9,1,16,11,21,16,0,3],[0,24,9,1,26,11,13,13,0,3],[0,12,24,1,3,6,28,24,1,2],[0,7,12,0,1,1,48,25,3,2]]},"sd":{"cats":["4〜4.2m","4.2〜4.4m","4.4〜4.6m","4.6〜4.8m","4.8〜5m","5〜5.2m","5.2〜5.4m","5.4m以上"],"shares":[[1,11,23,49,11,4,0,null],[1,8,21,52,12,6,0,null],[1,7,17,55,14,7,0,null],[1,4,14,57,17,7,0,0],[0,2,10,60,20,7,0,0],[0,1,9,57,23,8,0,null],[0,1,7,56,28,8,0,null],[0,1,4,57,30,9,0,null],[0,0,2,50,38,9,0,0],[null,0,1,43,43,13,0,0],[0,0,1,37,46,15,0,0]]}};
+  TP.prod = {"regions":["長四角","中部","京津山河","珠三角","成渝","東北"],"shareYears":["2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","26年\n1-8月","26年\n8月"],"share":{"長四角":[20.8,21.2,21.0,22.2,20.9,21.2,23.0,25.3,24.9,26.5,29.4,34.1,36.5],"中部":[14.8,15.9,16.4,17.0,17.5,16.3,15.8,16.3,16.7,16.3,21.3,19.7,20.3],"京津山河":[18.3,18.1,17.3,17.4,17.9,18.3,16.7,13.8,16.5,15.7,17.3,16.1,14.3],"珠三角":[19.9,19.6,20.0,20.1,20.0,20.5,21.3,23.0,21.9,22.4,12.9,13.6,14.1],"成渝":[12.7,12.1,12.3,9.4,8.4,9.5,10.7,10.6,11.3,11.4,12.2,10.6,10.1],"東北":[13.6,13.1,13.0,13.9,15.2,14.1,12.5,10.9,8.7,7.7,6.9,5.9,4.7]},"vol":[["全国",3478,2031,270,-3,-2],["長四角",1023,692,98,17,22],["中部",742,401,55,-12,-6],["京津山河",601,327,39,-10,-16],["珠三角",449,276,38,4,4],["成渝",423,215,27,-14,-23],["東北",239,120,13,-22,-32]],"nevPeriods":["2023年","2024年","2025年","26年1-8月","26年8月"],"nevShare":[[31,18,9,32,7,3],[31,16,8,33,9,2],[36,25,13,12,11,2],[43,21,10,14,10,2],[43,21,9,15,11,1]],"nevVol":{"全国":[944,1317,1652,1059,165],"長四角":[296,407,591,456,71],"中部":[168,214,418,221,34],"京津山河":[82,107,223,108,16],"珠三角":[307,441,199,144,24],"成渝":[66,119,185,109,18],"東北":[25,28,36,23,2]},"nevYoy":{"全国":[13,24],"長四角":[37,44],"中部":[-13,11],"京津山河":[-12,-17],"珠三角":[36,50],"成渝":[7,18],"東北":[4,-37]},"penCats":["全国","長四角","中部","珠三角","成渝","京津山河","東北"],"pen":{"2023年":[32,40,34,47,20,17,10],"2024年":[42,49,42,62,33,22,12],"2025年":[48,58,56,44,44,37,15],"26年1-8月":[52,66,55,52,50,33,19],"26年8月":[61,72,63,63,66,40,17]},"prov":[["安徽",139,82,91,175,262,369,235,33,14],["広東",280,322,313,415,571,304,183,25,3],["浙江",58,119,90,125,169,226,162,23,30],["江蘇",139,122,75,94,225,252,157,22,1],["上海",261,298,265,302,181,177,137,20,29],["重慶",266,173,158,209,254,279,145,17,-13],["山東",87,103,88,120,184,261,140,16,-10],["陝西",42,62,63,134,175,173,72,14,-40],["河南",58,59,47,55,81,150,103,13,15],["湖南",48,53,37,26,61,163,87,12,-15],["広西",245,215,174,177,111,115,72,10,5],["江西",54,55,45,43,57,104,63,9,12],["四川",60,75,69,72,89,115,57,9,-18],["北京",238,165,166,87,115,147,83,8,-8],["湖北",243,242,209,190,139,151,75,7,-13],["吉林",254,277,265,216,151,146,66,7,-30],["河北",129,121,98,91,95,97,49,6,-19],["天津",53,86,95,60,82,79,44,6,-10],["遼寧",108,95,75,77,83,84,49,5,-7],["福建",22,24,18,37,23,28,21,3,11],["貴州",2,0,8,7,14,28,12,2,-15],["山西",1,11,5,17,9,7,7,1,70],["内モンゴル",2,1,0,5,12,11,5,1,-23],["黒竜江",8,16,7,8,9,9,5,0,-22],["雲南",13,16,1,2,1,1,0,0,-52],["新疆",2,2,1,1,1,0,0,0,-50]],"nevProv":[["安徽",38,73,179,130,21.2,27],["浙江",60,92,138,122,18.6,70],["上海",129,122,116,103,15.5,53],["江蘇",69,119,157,101,15.4,9],["広東",253,362,118,91,15.0,49],["重慶",50,95,130,72,11.2,5],["陝西",105,120,109,44,9.9,-46],["湖南",5,14,104,55,7.9,-15],["広西",44,76,76,48,7.9,12],["河南",11,12,75,57,7.6,36],["山東",19,30,110,43,7.1,-25],["四川",15,13,30,25,5.3,29],["北京",38,29,70,42,5.0,11],["江西",9,16,61,30,4.8,-3],["湖北",39,51,68,35,4.1,-1],["河北",13,36,34,14,2.3,-36],["貴州",0,10,25,12,1.6,-11],["遼寧",13,13,18,15,1.4,34],["福建",10,2,4,5,1.0,191],["吉林",12,15,18,8,0.7,-25],["山西",7,6,4,6,0.7,155],["天津",6,6,4,3,0.4,22]],"trendYears":["2016","2018","2020","2022","2024","2025"],"trend":{"安徽":[139,82,91,175,262,369],"広東":[280,322,313,415,571,304],"浙江":[58,119,90,125,169,226],"上海":[261,298,265,302,181,177],"重慶":[266,173,158,209,254,279],"湖北":[243,242,209,190,139,151],"吉林":[254,277,265,216,151,146]}};
   var TP_EC = {};
   window.TOPIC_CURRENT_ID = 'topic-h1-profit';
   var FONT = 'Noto Sans JP, sans-serif';
@@ -18163,6 +18226,76 @@ window.addEventListener('resize', __rafThrottle(function(){
     });
   }
 
+
+  // 省別の生産 ① 地域別
+  var REGCOL = { '長四角':'#dc2626', '中部':'#f59e0b', '京津山河':'#3b82f6', '珠三角':'#10b981', '成渝':'#8b5cf6', '東北':'#64748b', '全国':'#1e293b' };
+  function renderProdRegion(){
+    var P = TP.prod;
+    namedLines('ec-topic-prod-share', P.shareYears, P.share, '%', '長四角',
+               { fmt:function(v){ return v.toFixed(1); }, colors: P.regions.map(function(r){ return REGCOL[r]; }), yAxis:{ min:0, max:40, interval:10 } });
+    var ec = initEc('ec-topic-prod-vol');
+    if (ec) {
+      var rows = P.vol;
+      ec.setOption({
+        tooltip: tt({ axisPointer:{type:'shadow'}, formatter:function(p){ var r = rows[p[0].dataIndex];
+          return '<b>' + r[0] + '</b><br>2026年1-8月：<b>' + num(r[2]) + '万台</b>（前年比 ' + sgn(r[4]) + '%）<br>2026年8月：' + num(r[3]) + '万台（' + sgn(r[5]) + '%）<br>2025年（通年）：' + num(r[1]) + '万台'; } }),
+        grid: { left:10, right:110, top:16, bottom:20, containLabel:true },
+        xAxis: valAxis('万台'),
+        yAxis: catAxis(rows.map(function(r){ return r[0]; }), { inverse:true }),
+        series: [{ name:'2026年1-8月', type:'bar', barMaxWidth:22,
+          data: rows.map(function(r){ return { value:r[2], itemStyle:{ color: r[0] === '全国' ? C.total : (r[4] >= 0 ? C.pos : C.neg) } }; }),
+          label:{ show:true, position:'right', fontFamily:FONT, fontSize:10.5, color:'#374151',
+                  formatter:function(p){ var r = rows[p.dataIndex]; return num(r[2]) + '万台（' + sgn(r[4]) + '%）'; } } }]
+      });
+    }
+    var sh = P.nevShare.map(function(r){ return r.slice(); });
+    stackBands('ec-topic-prod-nevshare', P.nevPeriods, P.regions, sh, P.regions.map(function(r){ return REGCOL[r]; }), { top:44 });
+    var ec2 = initEc('ec-topic-prod-pen');
+    if (ec2) {
+      var pers = Object.keys(P.pen), pcol = ['#cbd5e1','#94a3b8','#64748b','#3b82f6','#dc2626'];
+      ec2.setOption({
+        tooltip: tt({ axisPointer:{type:'shadow'}, formatter:function(p){
+          var s = '<b>' + p[0].axisValue + '</b>（NEV浸透率）<br>';
+          p.forEach(function(x){ s += x.marker + x.seriesName + '：<b>' + x.value + '%</b><br>'; });
+          return s; } }),
+        legend: leg({ data:pers }),
+        grid: { left:10, right:16, top:44, bottom:20, containLabel:true },
+        xAxis: catAxis(P.penCats, { axisLabel:{ interval:0, fontFamily:FONT, fontSize:11, color:'#374151' } }),
+        yAxis: valAxis('%', { min:0, max:80, interval:20 }),
+        series: pers.map(function(pp, k){
+          var last = k === pers.length - 1;
+          return { name:pp, type:'bar', barMaxWidth:12, itemStyle:{ color:pcol[k] }, data:P.pen[pp],
+                   label:{ show:last, position:'top', fontFamily:FONT, fontSize:10, color:'#b91c1c', fontWeight:'bold' } };
+        })
+      });
+    }
+  }
+  // 省別の生産 ② 省別
+  function provBars(ecId, rows, iCur, iMon, iYoy, tipFn){
+    var ec = initEc(ecId); if (!ec) return;
+    ec.setOption({
+      tooltip: tt({ axisPointer:{type:'shadow'}, formatter:function(p){ return tipFn(rows[p[0].dataIndex]); } }),
+      grid: { left:10, right:96, top:16, bottom:16, containLabel:true },
+      xAxis: valAxis('万台'),
+      yAxis: catAxis(rows.map(function(r){ return r[0]; }), { inverse:true, axisLabel:{ interval:0, fontFamily:FONT, fontSize:11, color:'#374151' } }),
+      series: [{ name:'2026年1-8月', type:'bar', barMaxWidth:14,
+        data: rows.map(function(r){ return { value:r[iCur], itemStyle:{ color: r[iYoy] >= 0 ? C.pos : C.neg } }; }),
+        label:{ show:true, position:'right', fontFamily:FONT, fontSize:10, color:'#374151',
+                formatter:function(p){ var r = rows[p.dataIndex]; return num(r[iCur]) + '（' + sgn(r[iYoy]) + '%）'; } } }]
+    });
+  }
+  function renderProdProv(){
+    var P = TP.prod;
+    provBars('ec-topic-prod-prov', P.prov, 7, 8, 9, function(r){
+      return '<b>' + r[0] + '</b><br>2026年1-8月：<b>' + num(r[7]) + '万台</b>（前年比 ' + sgn(r[9]) + '%）<br>2026年8月：' + (r[0] === '安徽' ? '約' : '') + num(r[8]) + '万台'
+           + '<br>2016年 ' + num(r[1]) + '／2018年 ' + num(r[2]) + '／2020年 ' + num(r[3]) + '<br>2022年 ' + num(r[4]) + '／2024年 ' + num(r[5]) + '／2025年 ' + num(r[6]) + '（万台）'; });
+    provBars('ec-topic-prod-nevprov', P.nevProv, 4, 5, 6, function(r){
+      return '<b>' + r[0] + '</b>（NEV）<br>2026年1-8月：<b>' + num(r[4]) + '万台</b>（前年比 ' + sgn(r[6]) + '%）<br>2026年8月：' + r[5] + '万台'
+           + '<br>2023年 ' + num(r[1]) + '／2024年 ' + num(r[2]) + '／2025年 ' + num(r[3]) + '（万台）'; });
+    namedLines('ec-topic-prod-trend', P.trendYears, P.trend, '万台', '安徽',
+               { colors:['#dc2626', C.amber, '#10b981', C.blue, C.violet, '#0ea5e9', C.slate], yAxis:{ min:0 } });
+  }
+
   var RENDER = {
     'topic-h1-profit': renderProfit, 'topic-h1-revenue': renderRevenue, 'topic-h1-chain': renderChain,
     'topic-h1-stock': renderStock, 'topic-marriage': renderMarriage, 'topic-aging': renderAging,
@@ -18171,7 +18304,9 @@ window.addEventListener('resize', __rafThrottle(function(){
     'topic-outlook': renderOutlook, 'topic-accident': renderAccident,
     'topic-ar-industry': renderArIndustry,
     'topic-ar-auto': renderArAuto,
-    'topic-length': renderLength
+    'topic-length': renderLength,
+    'topic-prod-region': renderProdRegion,
+    'topic-prod-prov': renderProdProv
   };
   window.topicRender = function(id){ var fn = RENDER[id]; if (fn) fn(); };
 })();

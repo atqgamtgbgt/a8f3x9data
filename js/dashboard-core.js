@@ -6612,7 +6612,7 @@ function cdsSetMidTab(tab) {
     'price':      'https://www.sohu.com/a/1089384727_115312',
     'stats':      'https://www.sohu.com/a/1102134629_115312',
     'dc':         'https://mp.weixin.qq.com/s/E91BkEc_iomunzKwdxs7jg',
-    'nev':        'https://www.sohu.com/a/1094497452_115312',
+    'nev':        'https://www.sohu.com/a/1104761949_115312',
     'commercial': 'https://www.sohu.com/a/1089077970_115312',
     'topic':      'https://www.sohu.com/a/1072054032_115312'
   };

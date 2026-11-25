@@ -8284,7 +8284,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="nev-tax-reduction">
               <div class="chart-card">
                 <div class="chart-title">📋 新エネルギー車 減税目録 掲載モデル数（四半期別）</div>
-                <div class="chart-subtitle">1Q／2Q／3Q／4Q　※2026年は1-10月で22,985車種（3Q 1,602車種：7月595・8月652・9月355、4Qは10月の225車種のみ）</div>
+                <div class="chart-subtitle">1Q／2Q／3Q／4Q　※2026年は1-11月で23,228車種（3Q 1,602車種：7月595・8月652・9月355、4Qは10月225・11月243車種）</div>
                 <div id="ec-nev-tax-reduction" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -8293,7 +8293,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="nev-tax-exempt">
               <div class="chart-card">
                 <div class="chart-title">🆓 新エネルギー車 免税目録 車種・動力別 掲載モデル数</div>
-                <div class="chart-subtitle">乗用車・客車・専用車 × BEV／PHEV／レンジエクステンダー／水素　2026年は1-10月計（「内訳を展開」で1Q・2Q・7〜10月）　※10月記事の目録表はPHEVとEREV（客車は水素とEREV）の行ラベルが前回までと逆になっているが、同記事の航続・密度・車種の表（10月：狭義PHEV 19車種・EREV 3車種）に合わせて従来の割り当てのまま掲載</div>
+                <div class="chart-subtitle">乗用車・客車・専用車 × BEV／PHEV／レンジエクステンダー／水素　2026年は1-11月計（「内訳を展開」で1Q・2Q・7〜11月）　※10月記事の目録表は行ラベルが入れ替わっていたが、11月記事の表で、従来の割り当て（10月：狭義PHEV 19車種・EREV 3車種）が正しいことを確認</div>
                 <div id="ec-nev-tax-exempt" class="echart-box" style="height:480px"></div>
               </div>
             </div>
@@ -8302,7 +8302,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="nev-range">
               <div class="chart-card">
                 <div class="chart-title">🛣️ 航続距離分布（動力別シェア・%）</div>
-                <div class="chart-subtitle">BEV／PHEV／レンジエクステンダー　平均航続距離（km）併記　2026年は1-10月（「内訳を展開」で1Q・2Q・7〜10月）　※10月記事で2022〜2025年と2026年1Qが改訂（BEV平均：2024年421→490km、1Q 506→579km）。7〜9月は9月記事の値（10月記事の3Qと整合）。2021年は分布のみ</div>
+                <div class="chart-subtitle">BEV／PHEV／レンジエクステンダー　平均航続距離（km）併記　2026年は1-11月（「内訳を展開」で1Q・2Q・7〜11月）　※2022〜2025年・1Q・2Q・10月・11月・1-11月計は11月記事の値。10月記事で改訂されていた2024年と1Qは、11月記事では改訂前の値に戻っている（BEV平均：2024年421km、1Q 506km）。7〜9月は9月記事の値（11月記事の3Qと整合）。2021年は分布のみ</div>
                 <div class="row g-3">
                   <div class="col-12">
                     <div style="font-weight:600;color:#1565C0;margin:4px 0 2px;font-size:13px">⚡ BEV</div>
@@ -8324,7 +8324,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="nev-density">
               <div class="chart-card">
                 <div class="chart-title">🔬 電池エネルギー密度分布（動力別シェア・%）</div>
-                <div class="chart-subtitle">BEV／PHEV／レンジエクステンダー　平均密度（Wh/kg）併記　2026年は1-10月（「内訳を展開」で1Q・2Q・7〜10月）　※10月記事の表は一部の帯（BEV 110・PHEV 90以下・EREV 100以下など）を省いているため、1-10月計と10月は合計が100%に届かない場合がある</div>
+                <div class="chart-subtitle">BEV／PHEV／レンジエクステンダー　平均密度（Wh/kg）併記　2026年は1-11月（「内訳を展開」で1Q・2Q・3Q・10月・11月）　※2022年以降は11月記事の表の値。11月記事は平均の求め方が以前と違う（BEVの10月分で144→149Wh/kg）ため、過去の年も同じ記事の値にそろえた。表は低い帯の一部（PHEV 90以下など）を省いているため、合計が100%に届かない年がある。2021年は以前の記事の分布のみ</div>
                 <div class="row g-3">
                   <div class="col-12">
                     <div style="font-weight:600;color:#1565C0;margin:4px 0 2px;font-size:13px">⚡ BEV</div>
@@ -10725,6 +10725,10 @@ window.addEventListener('resize', __rafThrottle(function(){
     var monthlyPanes = ['nev-tax-exempt','nev-range','nev-density'];
     var btn = document.getElementById('nev-toggle-monthly-btn');
     if (btn) btn.style.display = monthlyPanes.indexOf(id) >= 0 ? '' : 'none';
+    // 解説パネルと出典リンクも表示中のペインの記事に合わせる（35批のペインは10月の記事が出典）
+    if (typeof window.cdsRenderInfoPanel === 'function') {
+      try { window.cdsRenderInfoPanel(id); } catch(e) {}
+    }
   };
 
   // ---------- サブナビ クリック ----------
@@ -10794,16 +10798,16 @@ window.addEventListener('resize', __rafThrottle(function(){
     // 23年:1Q=485+226+227=938, 2Q=316+344+368=1028,3Q=991, 4Q=1031,計=3988
     // 24年:1Q=13523+213+356=14092,2Q=567+829+1419=2815,3Q=1458,4Q=1264,計=19629
     // 25年:1Q=456+365+319=1140, 2Q=385+487+521=1393,3Q=1513,4Q=1960,計=6006
-    // 26年:1Q=19977, 2Q=1181, 3Q=1602(7月595+8月652+9月355), 4Q=225(10月のみ), 1-10月計=22985（10月記事 図1）
-    var labels = ['2021年','2022年','2023年','2024年','2025年','2026年\n1-10月'];
+    // 26年:1Q=19977, 2Q=1181, 3Q=1602(7月595+8月652+9月355), 4Q=468(10月225+11月243), 1-11月計=23228（11月記事 図1）
+    var labels = ['2021年','2022年','2023年','2024年','2025年','2026年\n1-11月'];
     var Q1 = [451,  551,  938,  14092, 1140, 19977];
     var Q2 = [601,  743,  1028, 2815,  1393, 1181];
     var Q3 = [842,  859,  991,  1458,  1513, 1602];
-    var Q4 = [721,  643,  1031, 1264,  1960, 225];
-    var total = [2615,2796,3988,19629,6006,22985];
+    var Q4 = [721,  643,  1031, 1264,  1960, 468];
+    var total = [2615,2796,3988,19629,6006,23228];
 
     ec.setOption({
-      tooltip: unifiedStackTooltip({unit:'車種', digits:0, showTotal:false, note:'※2026年は1-10月（第4四半期は10月分のみ）'}),
+      tooltip: unifiedStackTooltip({unit:'車種', digits:0, showTotal:false, note:'※2026年は1-11月（第4四半期は10・11月分）'}),
       legend: baseLegend(),
       grid: Object.assign(baseGrid(),{bottom:80}),
       xAxis: baseXAxis(labels),
@@ -10822,36 +10826,37 @@ window.addEventListener('resize', __rafThrottle(function(){
 
   // ============================================================
   //  2. 免税目録（車種×動力別）  画像2
-  //  21-25年通年 + 26年1-10月計 / 26年の1Q・2Q・7〜10月（2021年は4月記事、7〜9月は9月記事の値）
+  //  21-25年通年 + 26年1-11月計 / 26年の1Q・2Q・7〜11月（2021年は4月記事、7〜9月は9月記事の値）
   // ============================================================
-  // データ: [21,22,23,24,25, 26年1-10月計, 1Q, 2Q, 7月, 8月, 9月, 10月]（単位：款）
-  // 10月記事の目録表は 乗用車・専用車の狭義PHEV⇔増程、客車の水素⇔増程 の行ラベルが前回までと入れ替わっているため、
-  // 同記事の続航・密度・35批の表（10月：狭義PHEV 19款・増程3款）に合わせて従来の割り当てで入れている
+  // データ: [21,22,23,24,25, 26年1-11月計, 1Q, 2Q, 7月, 8月, 9月, 10月, 11月]（単位：款）
+  // 11月記事 図1の表で、1Q・2Q・3Q（=7〜9月の合計）・10月の値と行ラベル（狭義PHEV・EREV・水素）が従来の割り当てと一致することを確認
   var TAXEXEMPT = {
     pass: {
-      bev  :[507,468,607,3158,780,2606,2196,187,81,77,44,21],
-      phev :[93,111,184,487,350,633,493,66,23,18,14,19],
-      erev :[19,12,40,186,150,417,315,45,21,26,7,3],
-      h2   :[3,3,1,16,null,6,6,null,null,null,null,null]
+      bev  :[507,468,607,3158,780,2643,2196,187,81,77,44,21,37],
+      phev :[93,111,184,487,350,646,493,66,23,18,14,19,13],
+      erev :[19,12,40,186,150,422,315,45,21,26,7,3,5],
+      h2   :[3,3,1,16,null,6,6,null,null,null,null,null,null]
     },
     bus: {
-      bev  :[458,259,260,3278,499,3396,3138,126,55,59,6,12],
-      phev :[19,10,2,100,5,100,100,null,null,null,null,null],
-      erev :[null,2,2,15,12,33,30,2,null,1,null,null],
-      h2   :[84,70,40,375,23,75,70,1,2,1,1,null]
+      bev  :[458,259,260,3278,499,3404,3138,126,55,59,6,12,8],
+      phev :[19,10,2,100,5,100,100,null,null,null,null,null,null],
+      erev :[null,2,2,15,12,33,30,2,null,1,null,null,null],
+      h2   :[84,70,40,375,23,75,70,1,2,1,1,null,null]
     },
     sv: {
-      bev  :[1279,1584,2497,10615,3653,14165,12294,667,371,416,266,151],
-      phev :[34,62,116,344,179,604,534,27,11,13,10,9],
-      erev :[2,10,50,164,207,465,380,40,14,20,5,6],
-      h2   :[117,205,189,891,148,485,421,20,17,21,2,4]
+      bev  :[1279,1584,2497,10615,3653,14331,12294,667,371,416,266,151,166],
+      phev :[34,62,116,344,179,613,534,27,11,13,10,9,9],
+      erev :[2,10,50,164,207,468,380,40,14,20,5,6,3],
+      h2   :[117,205,189,891,148,487,421,20,17,21,2,4,2]
     }
   };
 
-  // 列の並び: [21,22,23,24,25, 26年1-10月計, 26年1Q, 26年2Q, 26年7月, 26年8月, 26年9月, 26年10月]
-  // 通常表示は 2021〜2025年＋2026年1-10月計、「内訳を展開」で 2026年の1Q・2Q・7〜10月
-  var NEV_YTD_LABEL = '2026年\n1-10月';
-  var NEV_SUB_LABELS = ['2026年\n1Q','2026年\n2Q','2026年\n7月','2026年\n8月','2026年\n9月','2026年\n10月'];
+  // 列の並び: [21,22,23,24,25, 26年1-11月計, 26年1Q, 26年2Q, 26年7月, 26年8月, 26年9月, 26年10月, 26年11月]
+  // 通常表示は 2021〜2025年＋2026年1-11月計、「内訳を展開」で 2026年の1Q・2Q・7〜11月
+  var NEV_YTD_LABEL = '2026年\n1-11月';
+  var NEV_SUB_LABELS = ['2026年\n1Q','2026年\n2Q','2026年\n7月','2026年\n8月','2026年\n9月','2026年\n10月','2026年\n11月'];
+  // 電池密度だけは 11月記事の表（四半期）に合わせて 1Q・2Q・3Q・10月・11月
+  var NEV_SUB_LABELS_Q = ['2026年\n1Q','2026年\n2Q','2026年\n3Q','2026年\n10月','2026年\n11月'];
   function nevExpandTax(arr){
     if (!arr) return [];
     if (NEV_SHOW_MONTHLY) return arr.slice(0,5).concat(arr.slice(6, 6 + NEV_SUB_LABELS.length));
@@ -10898,50 +10903,51 @@ window.addEventListener('resize', __rafThrottle(function(){
   // ============================================================
   //  3. 続航距離分布  画像3
   // ============================================================
-  // データ: [21,22,23,24,25, 26年1-10月計, 1Q, 2Q, 7月, 8月, 9月, 10月]
-  // 2022〜2025年・1-10月計・1Q・2Q・10月は10月記事 図3（2024年と1Qが改訂）、7〜9月は9月記事（10月記事の3Qと整合）。
-  // 2021年は4月記事の分布で、基準が違うため平均は null
+  // データ: [21,22,23,24,25, 26年1-11月計, 1Q, 2Q, 7月, 8月, 9月, 10月, 11月]
+  // 2022〜2025年・1-11月計・1Q・2Q・10月・11月は11月記事 図2、7〜9月は9月記事（11月記事の3Qと整合）。
+  // 10月記事で改訂されていた2024年と1Qは、11月記事では改訂前の値に戻っている（BEV平均：2024年421km・1Q 506km）。
+  // 狭義PHEVの1-11月計の300-399km帯は図の透かしで読めないため空欄。2021年は4月記事の分布で、基準が違うため平均は null
   var RANGE = {
     bev: {
       bands: ['100-149','150-199','200-249','250-299','300-399','400-499','500-599','600-699','700以上'],
       rows: [
-        [null,3,1,1,null,null,null,null,null,null,null,null],
-        [null,7,2,1,null,null,null,null,null,null,null,null],
-        [null,7,7,4,3,1,null,2,null,4,null,null],
-        [null,3,4,3,2,1,null,3,null,null,null,null],
-        [16,11,9,8,21,11,9,16,9,8,5,14],
-        [35,19,18,21,19,14,10,17,16,13,9,19],
-        [23,24,29,27,23,21,17,20,23,23,32,14],
-        [9,19,21,23,18,21,21,22,17,19,30,19],
-        [2,7,10,13,14,30,43,20,35,32,25,33]
+        [null,3,1,2,null,0,0,null,null,null,null,null,null],
+        [null,7,3,4,null,0,0,null,null,null,null,null,null],
+        [null,7,6,4,3,2,3,2,null,4,null,null,null],
+        [null,3,4,5,2,1,1,3,null,null,null,null,null],
+        [16,11,9,16,20,10,10,16,9,8,5,14,null],
+        [35,19,18,27,19,16,17,17,16,13,9,19,5],
+        [23,24,29,22,24,28,30,20,23,23,32,14,11],
+        [9,18,21,14,19,24,24,22,17,19,30,19,32],
+        [2,7,9,6,14,18,15,20,35,32,25,33,51]
       ],
-      avg: [null,428,463,490,471,539,579,499,553,544,561,538]
+      avg: [null,425,462,421,474,511,506,499,553,544,561,538,630]
     },
     phev: {
       bands: ['50-79','80-99','100-149','150-199','200-249','250-299','300-399'],
       rows: [
-        [44,35,21,21,5,null,null,null,null,null,null,null],
-        [12,25,29,30,9,null,null,null,null,null,null,null],
-        [32,12,32,28,50,23,43,17,30,17,14,null],
-        [11,24,15,16,26,35,33,38,48,44,21,16],
-        [1,4,3,5,7,23,7,23,17,28,57,37],
-        [null,null,null,null,1,8,7,6,null,6,null,32],
-        [null,null,null,null,2,12,10,17,4,6,7,16]
+        [44,33,20,28,6,null,null,null,null,null,null,null,null],
+        [12,24,27,26,11,1,1,null,null,null,null,null,null],
+        [32,13,32,26,49,46,56,17,30,17,14,null,8],
+        [11,24,18,16,26,33,32,38,48,44,21,16,38],
+        [1,5,2,3,6,12,7,23,17,28,57,37,15],
+        [null,null,null,null,1,3,1,6,null,6,null,32,null],
+        [null,null,null,null,2,null,2,17,4,6,7,16,38]
       ],
-      avg: [null,93,94,96,121,175,154,184,150,169,182,224]
+      avg: [null,96,96,92,119,142,129,184,150,169,182,224,212]
     },
     erev: {
       bands: ['50-79','80-99','100-149','150-199','200-249','250-299','300-399'],
       rows: [
-        [null,null,null,2,null,null,null,null,null,null,null,null],
-        [null,17,3,4,2,null,null,null,null,null,null,null],
-        [95,25,14,20,15,10,null,13,19,4,null,33],
-        [5,58,74,53,43,20,21,27,19,12,14,null],
-        [null,null,9,20,21,26,21,22,29,31,43,33],
-        [null,null,null,null,11,21,21,20,19,27,14,null],
-        [null,null,null,null,7,24,38,18,14,27,29,33]
+        [null,null,null,2,null,null,null,null,null,null,null,null,null],
+        [null,17,3,4,3,0,0,null,null,null,null,null,null],
+        [95,25,18,26,15,13,13,13,19,4,null,33,null],
+        [5,58,73,55,43,45,53,27,19,12,14,null,null],
+        [null,null,8,13,21,22,20,22,29,31,43,33,40],
+        [null,null,null,null,11,11,7,20,19,27,14,null,60],
+        [null,null,null,null,7,10,6,18,14,27,29,33,null]
       ],
-      avg: [null,126,145,145,173,215,238,201,195,231,229,200]
+      avg: [null,126,143,139,173,180,170,201,195,231,229,200,230]
     }
   };
 
@@ -10995,81 +11001,90 @@ window.addEventListener('resize', __rafThrottle(function(){
   // ============================================================
   //  4. 電池エネルギー密度分布  画像4
   // ============================================================
-  // データ列: [21,22,23,24,25, 26年1-10月計, 1Q, 2Q, 7月, 8月, 9月, 10月]
-  // 1-10月計と10月は10月記事 図5（表に無い帯は null）、それ以外は9月記事（10月記事と同値）、2021年は4月記事
+  // データ: [21,22,23,24,25, 26年1-11月計, 1Q, 2Q, 3Q, 10月, 11月]（電池密度だけ四半期の並び）
+  // 2022年以降は11月記事 図4の値。11月記事は平均の求め方が10月記事までと違う（BEVの10月分で144→149Wh/kg）ので、
+  // 平均の線を同じ基準にそろえるため、過去の年も11月記事の値に置き換えた。表は低い帯の一部（PHEV 90以下など）を省いているため、
+  // 合計が100%に届かない年がある。1-11月計のBEV 110とEREV 180・190は図の透かしで読めないため空欄。
+  // 2021年は以前の記事の分布（11月記事の表に無い）で、平均は基準が違うため null
   var DENSITY = {
     bev: {
-      bands: ['90','100','110','120','130','140','150','160','170','180','190','200'],
+      bands: ['110','120','130','140','150','160','170','180','190','200','210'],
       rows: [
-        [null,1,0,null,null,null,null,null,null,null,null,null],
-        [null,3,2,1,0,null,null,null,null,null,null,null],
-        [4,9,6,2,1,null,null,3,null,null,null,null],
-        [9,11,14,13,15,6,9,7,1,6,null,null],
-        [19,20,23,26,34,31,22,35,30,29,39,43],
-        [14,10,12,21,28,39,38,39,36,42,45,33],
-        [18,12,11,10,7,7,9,6,14,6,null,null],
-        [14,13,18,13,4,3,11,1,null,null,null,null],
-        [10,14,9,8,7,6,8,4,5,6,5,19],
-        [4,4,4,5,3,4,3,2,11,4,7,null],
-        [0,0,1,1,0,3,null,3,4,6,5,null],
-        [null,2,0,1,null,null,null,null,null,null,null,null]
+        [4,10,6,5,1,null,1,3,null,null,null],
+        [9,11,14,12,15,10.29,12,7,3,null,null],
+        [19,20,23,23,34,27.2,26,35,31,43,22],
+        [14,10,11,17,29,24.44,22,39,40,33,32],
+        [18,13,10,14,6,9.04,9,6,8,null,11],
+        [14,13,17,13,4,11.39,14,1,null,null,null],
+        [10,14,10,8,8,10.33,11,4,5,19,8],
+        [4,4,5,3,3,4.46,4,2,7,null,19],
+        [0,0,1,1,0,1.36,1,3,5,null,5],
+        [null,1,0,1,null,0.04,0,null,null,5,3],
+        [null,null,null,null,null,0.04,null,null,null,null,3]
       ],
-      avg: [142,142,142,143,138,142,142,139,146,143,143,144]
+      avg: [null,147,147,146,143,149,149,143,149,149,159]
     },
     phev: {
-      bands: ['70','80','90','100','110','120','130','140','150','160','170','180'],
+      bands: ['80','90','100','110','120','130','140','150','160','170','180'],
       rows: [
-        [null,null,3,2,null,null,null,null,null,null,null,null],
-        [22,10,4,2,3,null,null,null,null,null,null,null],
-        [5,6,6,10,8,null,null,null,4,null,null,null],
-        [22,9,23,34,24,5,7,5,9,6,null,null],
-        [10,20,29,18,22,6,7,8,13,null,null,null],
-        [6,18,8,9,19,21,29,18,30,28,21,null],
-        [15,8,3,5,9,29,29,30,22,22,50,21],
-        [20,17,9,8,2,15,null,15,9,28,21,37],
-        [null,6,13,7,3,4,5,5,13,null,null,null],
-        [null,6,3,5,3,4,7,3,null,11,null,null],
-        [null,null,null,1,5,10,10,14,null,6,null,26],
-        [null,null,null,1,2,5,7,3,null,null,7,16]
+        [22,null,null,null,null,null,null,null,null,null,null],
+        [5,null,null,null,null,null,null,null,null,null,null],
+        [22,9,20,24,23,15.33,19,5,5,null,8],
+        [10,20,27,22,22,18.58,23,8,5,null,null],
+        [6,21,12,10,18,19.04,19,18,27,null,8],
+        [15,8,4,6,10,14.4,10,30,29,21,23],
+        [20,16,10,10,2,7.89,4,15,18,37,23],
+        [null,5,14,8,2,7.43,8,5,5,null,8],
+        [null,5,3,3,3,4.95,6,3,4,null,null],
+        [null,null,null,0,5,5.88,4,14,2,26,23],
+        [null,null,null,0,1,2.48,2,3,2,16,8]
       ],
-      avg: [109,118,115,113,116,135,134,136,123,134,134,152]
+      avg: [null,123,121,118,120,130,127,140,134,158,148]
     },
     erev: {
-      bands: ['70','90','100','110','120','130','140','150','160','170','180','190'],
+      bands: ['100','110','120','130','140','150','160','170','180','190'],
       rows: [
-        [null,null,null,1,null,null,null,null,null,null,null,null],
-        [null,null,null,1,3,null,null,null,null,null,null,null],
-        [null,null,null,6,4,null,null,2,null,null,null,null],
-        [null,null,14,15,9,6,4,2,5,8,14,33],
-        [null,null,null,33,47,25,17,38,29,15,null,null],
-        [5,17,null,12,8,17,17,7,24,19,43,33],
-        [53,25,26,5,8,21,21,29,5,19,29,null],
-        [42,17,14,10,4,2,null,2,5,null,null,null],
-        [null,42,46,12,6,9,17,7,14,4,null,null],
-        [null,null,null,5,12,13,25,9,14,8,null,33],
-        [null,null,null,null,null,7,null,4,5,19,14,null],
-        [null,null,null,null,null,2,null,null,null,8,null,null]
+        [null,null,null,4,4,2.13,3,2,null,null,null],
+        [null,null,18,12,10,9.24,10,2,7,33,null],
+        [null,null,null,22,47,31.99,34,38,19,null,null],
+        [5,17,null,7,8,11.14,9,7,24,33,60],
+        [53,25,23,16,7,13.74,11,29,15,null,40],
+        [42,17,13,13,3,5.45,7,2,2,null,null],
+        [null,42,48,21,7,14.22,17,7,7,null,null],
+        [null,null,null,3,11,9,9,9,9,33,null],
+        [null,null,null,null,null,null,null,4,13,null,null],
+        [null,null,null,null,null,null,null,null,4,null,null]
       ],
-      avg: [144,148,146,129,129,141,145,136,140,147,137,137]
+      avg: [null,155,151,139,133,140,139,141,148,143,139]
     }
   };
+
+  function nevExpandDensity(arr){
+    if (!arr) return [];
+    if (NEV_SHOW_MONTHLY) return arr.slice(0,5).concat(arr.slice(6, 6 + NEV_SUB_LABELS_Q.length));
+    return arr.slice(0,6);
+  }
+  function nevDensityLabels(){
+    var base = ['2021年','2022年','2023年','2024年','2025年'];
+    return NEV_SHOW_MONTHLY ? base.concat(NEV_SUB_LABELS_Q) : base.concat([NEV_YTD_LABEL]);
+  }
 
   // ※密度の関数は単位が%とWh/kgで違うので、専用関数を作る方がベターだが、
   //   汎用の_renderRangeOrDensityを少し改造して対応する
   // → 単位を切り替えるためにoverride
   function _renderDensityOne(ecId, defObj, palette){
     var ec = initOrGet(ecId); if(!ec) return;
-    var labels = nevRangeLabels();
+    var labels = nevDensityLabels();
     var pal = nevGrad(palette, defObj.bands.length);
     var series = defObj.bands.map(function(b, i){
       return {
         name: b + ' Wh/kg',
         type:'bar', stack:'s',
-        data: nevExpandRange(defObj.rows[i]),
+        data: nevExpandDensity(defObj.rows[i]),
         itemStyle:{ color: pal[i] }
       };
     });
-    var avgData = nevExpandRange(defObj.avg);
+    var avgData = nevExpandDensity(defObj.avg);
     series.push({
       name:'平均密度', type:'line', yAxisIndex:1,
       data: avgData,

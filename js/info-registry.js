@@ -1502,6 +1502,35 @@ window.INFO_REGISTRY = {
   },
 
   // ── NEV新エネ車製品技術線路グループ ──
+  'cnnev-newproducts-2026-11': {
+    title: '2026年11月 NEV新製品と技術ルートの動向 — 目録1-11月23,228車種、BEV平均航続630km',
+    source: '崔東樹',
+    date: '2026年11月22日',
+    url: 'https://www.sohu.com/a/1104761949_115312',
+    highlights: [
+      '<strong>2026年1-11月のNEV免税目録は累計23,228車種</strong>。11月の新規掲載は<strong>243車種</strong>で、年平均を大きく下回った。',
+      '11月の内訳：乗用車55車種、客車8車種で、ともに申請が縮小。<strong>専用車180車種（うちBEV 166車種）</strong>が当月の7割超を占める主力。',
+      '電池交換対応車種は17車種で、3Qの月平均を下回った。乗用車はBEVの1車種のみで、投入の低迷が続く。',
+      '<strong>BEV乗用車の平均航続は11月630km</strong>で、3Qの551kmからさらに伸びた。500km以上が合計95%。',
+      '<strong>狭義PHEVの平均航続は212km</strong>（2025年119km）、<strong>EREVは230km</strong>（2025年173km）。3方式とも高い航続帯へ移り、BEVの高級化とPHEV・EREVの長航続化が同時に強まる。',
+      '整備質量（11月）：BEVは2,000kg以上が100%、狭義PHEVは3,000kg級が69%、EREVは2,000kg以上が100%・3,000kg級が40%。長航続・大容量電池で車重が上がり続けている。',
+      '電池エネルギー密度：BEVは車種数が落ち着き、<strong>130-140Wh/kgの帯に54%</strong>が集中。PHEV・EREVの密度は変化が小さい。',
+      '<strong>第36批目録</strong>：BEVは平均車長5,006mm、EREVは5,022mm・50kWh・139Wh/kg、狭義PHEVは5,144mm・2,528kg・48kWh・148Wh/kgで「大きな車体＋小さめで高密度の電池」。燃費はいずれも6〜7L。',
+      '11月の乗用車の新型車：比亜迪9車種、奇瑞・北汽新能源・賽力斯各6車種、長城汽車5車種、一汽大衆・華晨宝馬各4車種、上汽乗用車・吉利汽車各3車種、上汽通用2車種。'
+    ],
+    sections: [
+      { heading:'1. 2026年 免税目録の全体像', body:'<p>2026年1-11月のNEV免税目録は<strong>累計23,228車種</strong>。11月の新規掲載は<strong>243車種</strong>で、年平均を大きく下回った。</p>' },
+      { heading:'2. 新車の動力構成', body:'<p>水素燃料は手厚い補助で商用車が一時好調だったが、足元は国内外とも弱含み。乗用車の水素は事実上考えなくてよい水準で、短期的な発展余地はない。<br>11月の新規掲載は243車種。乗用車は55車種でBEV・PHEV・EREVとも申請が縮小、客車は8車種と投入が大きく冷え込んだ。<strong>専用車が180車種（うちBEV 166車種）</strong>で当月の7割超を占める主力。乗用車・客車の申請ペースが落ちる一方、専用車が引き続き免税目録の中心を支える。</p>' },
+      { heading:'3. 電池交換対応車種', body:'<p>11月の電池交換対応車種は17車種で、3Qの月平均を下回った。乗用車はBEVの1車種のみで投入の低迷が続き、専用車は全てBEVで当月の主力。電池交換の申請は長く専用車が中心で、乗用車の新車申請は鈍い。11月の新規掲載数も低い水準にとどまり、業界の新製品投入は慎重。</p>' },
+      { heading:'4. 航続距離', body:'<p>11月の乗用車目録は構成のばらつきが大きく、申請の少ない区分もある。BEV乗用車の平均航続は<strong>630km</strong>で3Qの551kmからさらに伸び、500km以上が合計95%と長航続化がはっきりしている。狭義PHEVの平均航続は<strong>212km</strong>（2025年119km）と大きく伸び、EREVは<strong>230km</strong>（2025年173km）。3方式とも高い航続帯へ移り、BEVの高級化とPHEV・EREVの長航続化が同時に強まっている。</p>' },
+      { heading:'5. 整備質量', body:'<p>11月のBEVは2,000kg以上が100%を占め、軽量車はごく少なく平均車重は高止まり。狭義PHEVは3,000kg級が69%で中心の重量帯、EREVは2,000kg以上が100%・3,000kg級が40%と重い車種が主導。11月の申請車は総じて重く、BEVは2トン級に集中し、EREVは3トンを超える車種が多い。長航続と大容量電池が車重を押し上げ続けている。</p>' },
+      { heading:'6. 電池エネルギー密度', body:'<p>減税目録の車種構成ははっきり分かれている。BEVは車種数が落ち着き、<strong>130-140Wh/kgの帯に54%</strong>が集中。PHEV・EREVの電池密度は変化が小さい。</p>' },
+      { heading:'7. 第36批目録の車種比較', body:'<p>3方式の技術ルートははっきり分かれる。BEVは平均車長5,006mmで、航続が伸びるほど電池容量と車重が大きく増え、大容量電池が主体。EREVは平均車長5,022mmで、電池容量は50kWhと中間、密度は139Wh/kgで、大きな車体で長いBEV航続を狙う。狭義PHEVは車長5,144mm・2,528kgと最も大きく重いが、電池は48kWhに抑え、密度は148Wh/kg。BEV航続は比較的ばらつき、「大きな車体＋小さめで高密度の電池」で低コストに規制を満たす型。燃費はいずれも6〜7Lに抑えられている。</p>' },
+      { heading:'8. 第36批の狭義PHEV・EREV新車', body:'<p>狭義PHEVは「中大型化と大容量・高密度の電池」が並行して進み、車長は5〜5.3m、整備質量は1.8〜3.0トンが中心。EREVは「中大型化と大容量・低密度の電池」が並行し、車長は5m前後、整備質量は2トン以上が中心。</p>' },
+      { heading:'9. 11月の乗用車の新型車', body:'<p>11月の乗用車は比亜迪9車種、奇瑞汽車6車種、北汽新能源6車種、賽力斯6車種、長城汽車5車種、一汽大衆4車種、華晨宝馬4車種、上汽乗用車3車種、吉利汽車3車種、上汽通用2車種。</p>' }
+    ]
+  },
+
   'cnnev-newproducts-2026-10': {
     title: '2026年10月 NEV新製品と技術ルートの動向 — 目録1-10月22,985車種、BEV平均航続538km',
     source: '崔東樹',
@@ -2652,10 +2681,10 @@ window.INFO_PANE_MAP = {
   'jh-world-maker-region':      'cnoverseas-2026-1to8',
   'jh-world-maker-region-tabs': 'cnoverseas-2026-1to8',
   // NEV新エネ車製品技術線路グループ
-  'nev-tax-reduction': ['cnnev-newproducts-2026-10','cnnev-newproducts-2026-9'],
-  'nev-tax-exempt':    ['cnnev-newproducts-2026-10','cnnev-newproducts-2026-9'],
-  'nev-range':         ['cnnev-newproducts-2026-10','cnnev-newproducts-2026-9'],
-  'nev-density':       ['cnnev-newproducts-2026-10','cnnev-newproducts-2026-9'],
+  'nev-tax-reduction': ['cnnev-newproducts-2026-11','cnnev-newproducts-2026-10'],
+  'nev-tax-exempt':    ['cnnev-newproducts-2026-11','cnnev-newproducts-2026-10'],
+  'nev-range':         ['cnnev-newproducts-2026-11','cnnev-newproducts-2026-10'],
+  'nev-density':       ['cnnev-newproducts-2026-11','cnnev-newproducts-2026-10'],
   'nev-batch29':       ['cnnev-newproducts-2026-10','cnnev-newproducts-2026-9'],
   // トピック（単発の記事）
   'topic-h1-profit':    'cntopic-h1-2026',

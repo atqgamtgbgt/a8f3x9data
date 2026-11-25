@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-24T14:23:06+00:00",
+ "updated_at": "2026-11-25T03:26:31+00:00",
  "articles": [
+  {
+   "id": "1105889707",
+   "title": "制造业应收账款天数变化分析-9月汽车业100天",
+   "published_at": "2026-11-24T22:52+08:00",
+   "url": "https://www.sohu.com/a/1105889707_115312",
+   "topic": "other",
+   "topic_label": "その他",
+   "path": "cds/articles/2026/11/1105889707",
+   "image_count": 5,
+   "images_saved": 5,
+   "text_chars": 2014,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  根据国家统计局最新数据，2026年9月末，我国工业企业与制造业应收账款周转天数分别达76天和78天，应收账款总额逼近30万亿元。其中，中游（102天）与下游（92天）账期较往年持续拉长，创出历史新高。  作为国民经济的支柱产业，汽车制造业的数据尤为引人注目：20",
+   "content_method": "pc:lxml:#mp-editor",
+   "thumb": "cds/articles/2026/11/1105889707/img/01.jpg",
+   "fetched_at": "2026-11-25T03:26:30+00:00"
+  },
   {
    "id": "1105168884",
    "title": "新能源车锂电池市场分析-2026年10月",

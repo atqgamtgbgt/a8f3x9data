@@ -5224,6 +5224,12 @@ body.tray-open { padding-bottom: 105px; }
                   </div>
                 </div>
                 <div class="cds-gc">
+                  <span class="cds-gc-label">📏 車のサイズ（2016〜26年） </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-topic-target="#topic-length">📏 車長の変化</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
                   <span class="cds-gc-label">🌍 輸出・見通し </span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-topic-target="#topic-eu">🇪🇺 対EU輸出（26年1-9月）</button>
@@ -8696,6 +8702,24 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="chart-card">
                   <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・自動車業の売掛金は2026年に急な上昇が続き、9月は<b>3兆元近く</b>と前の3年の同月を大きく上回る。<br>・2026年1-9月の自動車業の利益は<b>23%減</b>、売上高利益率は<b>3.3%</b>（2014年は9%）。下流全体の利益は22%増、コンピューター・通信は104%増と、自動車の不振が目立つ。<br>・崔氏は、価格競争とNEVの研究開発で利益が圧迫された完成車メーカーが、強い立場を使って部品メーカーに資金の負担を移し、在庫を押しつけて支払いサイトを延ばしているとみる。「完成車は出血し、中流は資金を立て替えている」状態だという。<br>・国の「反内巻」の方針に沿い、販売の安定だけでなく、『中小企業の代金支払い保障条例』を厳しく守らせて支払いサイトを正すべきだと指摘している。</div>
                 </div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="topic-length">
+              <div class="topic-grid2" style="margin-top:0">
+                <div class="chart-card">
+                  <div class="chart-title">ハッチバックの車長別シェア（2016〜2026年、%）</div>
+                  <div class="chart-subtitle">国内小売（崔東樹 2026年11月15日）。表の先頭行（「3米-2.8米」）は「3〜3.2m」と同じ値の重複とみられるため除いた。合計が100%にならない年がある</div>
+                  <div id="ec-topic-len-hb" class="echart-box" style="height:420px"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">セダンの車長別シェア（2016〜2026年、%）</div>
+                  <div class="chart-subtitle">4.8〜5.2mが2016年の15%から2026年は61%に。4.6m未満は35%→1%</div>
+                  <div id="ec-topic-len-sd" class="echart-box" style="height:420px"></div>
+                </div>
+              </div>
+              <div class="chart-card" style="margin-top:14px">
+                <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・10年で新車の<b>平均車長は4.72m</b>に（2022年4.61m→2026年4.72m、5年で11cm）。<b>SUVが56%</b>（2016年38%）で主役になり、セダン・ハッチバック（CAR）は52%→40%、MPVは11%→5%。<br>・4.5〜4.8mの従来の「黄金サイズ」は61.3%（2022年）→50.0%（2026年）に縮み、<b>4.8〜5mが16.0%→26.6%</b>に急増。5.2m超は1.5%→6.7%（2026年10月単月は7.5%）。一方で4.0〜4.5mも17.1%を保ち、大きい車とBEVの小型車に分かれる「ダンベル型」になった。<br>・CARの中ではハッチバックが15%→35%に伸び、4〜4.2mだけで約半分（48%）。セダンは4.8〜5.2mが計61%と大型化が進んだ（グラフ）。<br>・本文によると、MPVは4.2〜4.8mが91%→13%に急減し、5.2〜5.4mが1%→48%。SUVは4.6m未満が54%→23%に減り、4.8〜5mが5%→22%、5m以上が0%→15%に（SUV・MPV・全体の表は記事の図に無いため、グラフは2つだけ）。<br>・崔氏は、BEVのプラットフォームで広い室内を取りやすくなったことと、メーカーの「上のクラスへの内巻」が大型化を招いたとみる。軸距で車格を分ける時代は終わり、大きな室内とスマート化を組み合わせた使い方の競争に入ったという。</div>
               </div>
             </div>
 
@@ -17337,6 +17361,7 @@ window.addEventListener('resize', __rafThrottle(function(){
   TP.outlook = {"labels":["2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026\n見込み","2027\n予測"],"retail":[1964,2323,2373,2239,2069,1929,2016,2055,2170,2288,2374],"y2026":1850,"y2027":1887,"lo":1850,"hi":1943,"box":[1929,2374]};
   TP.acc = {"rows":["事故件数","死亡者","負傷者","直接財産損失"],"units":["件","人","人","万元"],"total":[256456,58777,251925,133214],"cats":["自動車","バイク","その他の機動車","非機動車","歩行者","その他"],"vals":[[140615,39644,119287,98842],[53840,9083,62380,15276],[11780,2717,12163,4327],[44922,5723,53703,11929],[5081,1590,4142,2723],[218,20,250,118]],"bike":[3136,470,3300,810],"tractor":[738,202,746,331],"chgCats":["自動車","バイク","非機動車"],"chg":[[-15.8,-29.4,-14.1],[17.4,13.3,-14.8],[75.8,85.3,53.0]],"y2018":{"バイク":[45868,55071,10663],"非機動車":[25556,28987,3741]},"y2025":{"自動車":[140615,119287,39644],"バイク":[53840,62380,9083],"非機動車":[44922,53703,5723]}};
   TP.ar = {"ind":[["工業企業 合計",76,71,5],["製造業 合計",78,73,5],["水の生産・供給",217,185,32],["非金属鉱物製品",154,136,18],["専用設備",147,139,8],["計器・計測器",138,130,8],["その他の採鉱",122,99,23],["汎用設備",120,114,7],["電気機械・器材",113,107,5],["PC・通信・電子機器",105,102,3],["医薬品",104,95,9],["鉄道・船舶・航空機器",104,99,5],["自動車製造",100,90,11],["非金属鉱の採掘",99,77,22],["金属製品・機械の修理",97,91,6],["その他の製造",88,76,12],["ゴム・プラスチック製品",88,84,4],["採掘の補助サービス",87,71,16],["印刷・記録媒体の複製",84,78,7],["金属製品",84,80,4],["家具",82,76,6],["衣料品・服飾",76,67,9],["皮革・毛皮・履物",71,63,8],["鉄鉱石の採掘",70,68,2],["木材加工・竹籐製品",67,60,7],["石炭の採掘・選炭",65,68,-3],["紙・紙製品",63,61,2],["繊維",63,59,4],["電力・熱供給",63,61,1],["採鉱業（計）",56,56,-1],["文具・スポーツ・娯楽用品",51,43,8],["食品",50,43,7],["化学製品",48,45,4],["酒・飲料・精製茶",46,36,9],["廃棄資源の再利用",34,28,6],["化学繊維",32,29,3],["農産物・副食品の加工",32,29,3],["非鉄金属鉱の採掘",30,35,-5],["石油・天然ガスの採掘",28,24,4],["たばこ製品",27,8,18],["ガスの生産・供給",25,22,2],["非鉄金属の製錬・圧延",24,22,2],["鉄鋼の製錬・圧延",21,20,1],["石油加工・コークス・核燃料",18,16,3]],"streamYears":["2020","2021","2022","2023","2024","2025","26年9月"],"stream":{"上流":[24,21,23,25,26,27,29],"中流":[71,70,75,86,91,95,102],"下流":[66,63,68,77,82,85,92],"工業企業 全体":[56,53,57,64,68,71,76],"自動車製造":[66,62,72,83,90,90,100]},"months":["2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],"days":{"2020":[95,84,77,77,74,74,73,72,72,74,66],"2021":[63,59,59,58,57,59,60,60,62,64,62],"2022":[66,64,65,67,68,71,71,72,74,76,72],"2023":[93,89,91,91,92,92,92,92,92,91,83],"2024":[95,90,92,93,94,95,98,98,101,99,90],"2025":[97,94,95,96,91,90,92,90,91,95,90],"2026":[102,96,97,100,99,100,101,100,null,null,null]},"bal":{"2023":[19972,21073,21627,22097,22855,23187,23616,24276,24716,24978,23323],"2024":[21738,22600,23558,24082,24901,25258,26061,26670,27926,28351,26550],"2025":[24029,25050,25694,26332,25806,25477,26039,26110,26980,28855,27882],"2026":[25244,25659,26911,28017,28477,28900,29606,29937,null,null,null]},"marginYears":["2014","2016","2018","2020","2022","2024","2025","26年1-9月"],"margin":{"自動車製造":[9.0,8.3,7.3,6.2,5.5,4.8,4.1,3.3],"下流 計":[7.3,7.2,6.9,7.0,5.9,6.0,5.9,6.7],"中流 計":[6.0,6.0,6.0,6.3,4.9,5.3,5.0,4.3],"工業 全体":[5.9,6.0,6.3,6.1,4.7,5.6,5.3,5.7]}};
+  TP.len = {"years":["2016年","2017年","2018年","2019年","2020年","2021年","2022年","2023年","2024年","2025年","2026年"],"hb":{"cats":["2.8〜3m","3〜3.2m","3.2〜3.4m","3.4〜3.6m","3.6〜3.8m","3.8〜4m","4〜4.2m","4.2〜4.4m","4.4〜4.6m","4.6〜4.8m"],"shares":[[1,null,2,7,4,16,29,25,9,4],[3,null,2,5,10,11,30,22,11,3],[1,null,3,3,13,10,34,18,10,3],[null,null,4,5,5,10,41,20,7,2],[null,15,5,7,5,7,33,19,2,2],[0,32,7,5,14,3,17,17,0,2],[2,31,10,3,13,1,20,14,0,3],[1,23,9,1,16,11,21,16,0,3],[0,24,9,1,26,11,13,13,0,3],[0,12,24,1,3,6,28,24,1,2],[0,7,12,0,1,1,48,25,3,2]]},"sd":{"cats":["4〜4.2m","4.2〜4.4m","4.4〜4.6m","4.6〜4.8m","4.8〜5m","5〜5.2m","5.2〜5.4m","5.4m以上"],"shares":[[1,11,23,49,11,4,0,null],[1,8,21,52,12,6,0,null],[1,7,17,55,14,7,0,null],[1,4,14,57,17,7,0,0],[0,2,10,60,20,7,0,0],[0,1,9,57,23,8,0,null],[0,1,7,56,28,8,0,null],[0,1,4,57,30,9,0,null],[0,0,2,50,38,9,0,0],[null,0,1,43,43,13,0,0],[0,0,1,37,46,15,0,0]]}};
   var TP_EC = {};
   window.TOPIC_CURRENT_ID = 'topic-h1-profit';
   var FONT = 'Noto Sans JP, sans-serif';
@@ -18107,6 +18132,37 @@ window.addEventListener('resize', __rafThrottle(function(){
                { fmt:function(v){ return v.toFixed(1); }, colors:['#dc2626', C.blue, C.violet, C.total], yAxis:{ min:0, max:10, interval:2 } });
   }
 
+
+  // 車長 ① ハッチバック・セダンの車長別シェア
+  function renderLength(){
+    var L = TP.len;
+    var pal10 = ['#e2e8f0','#e0f2fe','#bae6fd','#7dd3fc','#38bdf8','#0ea5e9','#0284c7','#0369a1','#075985','#0c4a6e'];
+    var pal8 = ['#e0f2fe','#bae6fd','#7dd3fc','#38bdf8','#0284c7','#075985','#0c4a6e','#082f49'];
+    stackBands('ec-topic-len-hb', L.years, L.hb.cats, L.hb.shares, pal10);
+    stackBands('ec-topic-len-sd', L.years, L.sd.cats, L.sd.shares, pal8);
+  }
+  // 帯別シェアの100%積み上げ（凡例は折り返して全部見せる）
+  function stackBands(ecId, labels, cats, shares, colors, opts){
+    var ec = initEc(ecId); if (!ec) return;
+    opts = opts || {};
+    ec.setOption({
+      tooltip: tt({ axisPointer:{type:'shadow'}, formatter:function(p){
+        var s = '<b>' + p[0].axisValue + '</b><br>';
+        p.slice().reverse().forEach(function(x){ if (x.value != null) s += x.marker + x.seriesName + '：<b>' + x.value + '%</b><br>'; });
+        return s; } }),
+      legend: leg({ left:10, right:10, itemWidth:14, itemHeight:10, itemGap:8, selector:false }),
+      grid: { left:10, right:16, top: opts.top || 80, bottom:20, containLabel:true },
+      xAxis: catAxis(labels, { axisLabel:{ interval:0, fontFamily:FONT, fontSize:10.5, color:'#374151' } }),
+      yAxis: valAxis('', { min:0, max: opts.max || 100, axisLabel:{formatter:'{value}%', fontFamily:FONT, fontSize:11, color:AX} }),
+      series: cats.map(function(c, k){
+        return { name:c, type:'bar', stack:'s', barMaxWidth: opts.barMax || 34, itemStyle:{ color:colors[k], borderColor:'#fff', borderWidth:0.5 },
+          data: shares.map(function(r){ return r[k]; }),
+          label:{ show:true, position:'inside', fontFamily:FONT, fontSize:10, color:ink(colors[k]),
+                  formatter:function(p){ return p.value >= 6 ? Math.round(p.value) + '%' : ''; } } };
+      })
+    });
+  }
+
   var RENDER = {
     'topic-h1-profit': renderProfit, 'topic-h1-revenue': renderRevenue, 'topic-h1-chain': renderChain,
     'topic-h1-stock': renderStock, 'topic-marriage': renderMarriage, 'topic-aging': renderAging,
@@ -18114,7 +18170,8 @@ window.addEventListener('resize', __rafThrottle(function(){
     'topic-used': renderUsed, 'topic-used-nev': renderUsedNev, 'topic-eu': renderEu,
     'topic-outlook': renderOutlook, 'topic-accident': renderAccident,
     'topic-ar-industry': renderArIndustry,
-    'topic-ar-auto': renderArAuto
+    'topic-ar-auto': renderArAuto,
+    'topic-length': renderLength
   };
   window.topicRender = function(id){ var fn = RENDER[id]; if (fn) fn(); };
 })();

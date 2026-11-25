@@ -6607,7 +6607,7 @@ function cdsSetMidTab(tab) {
     'wfin':       'https://www.sohu.com/a/1018231789_115312',
     'profit':     'https://www.sohu.com/a/1093320265_115312',
     'inventory':  'https://www.sohu.com/a/1102550582_115312',
-    'battery':    'https://www.sohu.com/a/1079036468_115312',
+    'battery':    'https://www.sohu.com/a/1105168884_115312',
     'discount':   'https://www.sohu.com/a/1072954545_115312',
     'price':      'https://www.sohu.com/a/1089384727_115312',
     'stats':      'https://www.sohu.com/a/1102134629_115312',

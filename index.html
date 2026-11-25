@@ -7398,7 +7398,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-production">
               <div class="chart-card">
                 <div class="chart-title">🔋 動力電池 生産量推移（GWh）</div>
-                <div class="chart-subtitle">各年は年間累計、2026年は1-8月累計（「月次を展開」で各月時点の累計）</div>
+                <div class="chart-subtitle">各年は年間累計、2026年は1-10月累計（「月次を展開」で各月時点の累計。9月時点で1-8月までの累計が上方改訂されたため、8月→9月の増え方が大きい）</div>
                 <div id="ec-bat-production" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -7467,7 +7467,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-energy-density">
               <div class="chart-card">
                 <div class="chart-title">🔬 BEV乗用車　エネルギー密度分布（万台）</div>
-                <div class="chart-subtitle">※合格証ベース　125以下 / 125–140 / 140–160 / 160以上　2026年は1-8月（1Q＋2Q＋7-8月）</div>
+                <div class="chart-subtitle">※合格証ベース　125以下 / 125–140 / 140–160 / 160以上　2026年は1-10月（1Q＋2Q＋3Q＋10月）</div>
                 <div id="ec-bat-energy" class="echart-box" style="height:420px"></div>
               </div>
             </div>
@@ -7476,7 +7476,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-share-total">
               <div class="chart-card">
                 <div class="chart-title">🏆 電池企業 動力電池シェア推移（%）</div>
-                <div class="chart-subtitle">寧徳時代CATL・比亜迪BYD・その他　右の4本は2026年1-8月累計と四半期（3Qは7-8月）</div>
+                <div class="chart-subtitle">寧徳時代CATL・比亜迪BYD・その他　右の5本は2026年1-10月累計と四半期（4Qは10月のみ）</div>
                 <div id="ec-bat-share-total" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -7485,7 +7485,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-share-lfp">
               <div class="chart-card">
                 <div class="chart-title">🟢 LFP電池 企業シェア推移（%）</div>
-                <div class="chart-subtitle">主要企業　右の4本は2026年1-8月累計と四半期（3Qは7-8月）</div>
+                <div class="chart-subtitle">主要企業　右の5本は2026年1-10月累計と四半期（4Qは10月のみ）</div>
                 <div id="ec-bat-share-lfp" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -7494,7 +7494,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-share-nmc">
               <div class="chart-card">
                 <div class="chart-title">🔵 三元電池 企業シェア推移（%）</div>
-                <div class="chart-subtitle">主要企業　右の4本は2026年1-8月累計と四半期（3Qは7-8月）</div>
+                <div class="chart-subtitle">主要企業　右の5本は2026年1-10月累計と四半期（4Qは10月のみ）</div>
                 <div id="ec-bat-share-nmc" class="echart-box" style="height:440px"></div>
               </div>
             </div>
@@ -7503,7 +7503,7 @@ body.tray-open { padding-bottom: 105px; }
             <div class="cds-pane" id="bat-companies">
               <div class="chart-card">
                 <div class="chart-title">📊 動力電池サプライヤー企業数（社）</div>
-                <div class="chart-subtitle">月別企業数</div>
+                <div class="chart-subtitle">月別企業数（最新の28社は2026年10月記事の図では9月の欄にあり、本文では「10月」とされている）</div>
                 <div id="ec-bat-companies" class="echart-box" style="height:380px"></div>
               </div>
             </div>
@@ -9566,7 +9566,7 @@ window.addEventListener('resize', __rafThrottle(function(){
 
   // ---------- 月次トグル ----------
   var BAT_SHOW_MONTHLY = false;
-  var BAT_MONTHS = 8;   // 2026年の月次データの最終月（展開時は1〜この月の各時点の累計）
+  var BAT_MONTHS = 10;  // 2026年の月次データの最終月（展開時は1〜この月の各時点の累計）
 
   // 全データ配列レイアウト:
   //   生産推移:  [2020累計, 2021累計, 2022累計, 2023累計, 2024累計, 2025累計, 26/1月, 26/2月, 26/3月, 26/4月]
@@ -9648,7 +9648,7 @@ window.addEventListener('resize', __rafThrottle(function(){
       var isExport = id && id.indexOf('bat-export-') === 0;
       var url = (typeof window.cdsSourceForPane === 'function' && window.cdsSourceForPane(id)) || (isExport
         ? 'https://mp.weixin.qq.com/s/7-boPxQHF7rW5ai2zjOLBA'
-        : 'https://www.sohu.com/a/1079036468_115312');
+        : 'https://www.sohu.com/a/1105168884_115312');
       srcLink.href = url; srcLink.textContent = url;
     }
   };
@@ -9715,14 +9715,15 @@ window.addEventListener('resize', __rafThrottle(function(){
     // annualLen=6（26年累計は存在しないため、compact時は「26年\n1-4月累計」= 1+2+3+4月の合計で1点追加）
     var baseLabels = ['2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
     // 26年は「累計」値（YTD）：1月=1月単月、2月=1-2月累計、3月=1-3月累計、4月=1-4月累計
-    var nmcRaw = [49, 94, 213, 245, 278, 347.6,  31.3, 58.2, 89.5, 121.0, 156.7, 193.3, 231.4, 272.6];
-    var lfpRaw = [35, 125, 332, 531, 816, 1405.1, 136.7, 251.3, 397.5, 549.8, 705.7, 874.8, 1054.2, 1249.6];
+    // 9月・10月は2026年10月記事の図の累計値（9月時点で1-8月までの累計が上方改訂されている）
+    var nmcRaw = [49, 94, 213, 245, 278, 347.6,  31.3, 58.2, 89.5, 121.0, 156.7, 193.3, 231.4, 272.6, 307.6, 339.3];
+    var lfpRaw = [35, 125, 332, 531, 816, 1405.1, 136.7, 251.3, 397.5, 549.8, 705.7, 874.8, 1054.2, 1249.6, 1523.3, 1736.4];
     // compact用累計点（1+2+3+4月の累計GWh）
-    var nmcCum = [49, 94, 213, 245, 278, 347.6, 272.6];
-    var lfpCum = [35, 125, 332, 531, 816, 1405.1, 1249.6];
+    var nmcCum = [49, 94, 213, 245, 278, 347.6, 339.3];
+    var lfpCum = [35, 125, 332, 531, 816, 1405.1, 1736.4];
     var nmcData = BAT_SHOW_MONTHLY ? nmcRaw.slice(0,6).concat(nmcRaw.slice(6)) : nmcCum;
     var lfpData = BAT_SHOW_MONTHLY ? lfpRaw.slice(0,6).concat(lfpRaw.slice(6)) : lfpCum;
-    var labels  = batXl(baseLabels, '26年\n1-8月累計');
+    var labels  = batXl(baseLabels, '26年\n1-10月累計');
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
@@ -9744,13 +9745,13 @@ window.addEventListener('resize', __rafThrottle(function(){
     // layout: [2019〜2025累計(7点), 26/1月, 26/2月, 26/3月, 26/4月]
     var baseLabels = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
     // 26年は「累計」値（YTD）
-    var nmcRaw = [42, 39, 74, 110, 126, 139, 144.1,  9.4, 15.1, 25.8, 37.4, 51, 63, 75, 86];
-    var lfpRaw = [20, 24, 80, 184, 261, 409, 625.3, 32.7, 53.3, 99.0, 149.8, 208, 272, 335, 403];
-    var nmcCum = [42, 39, 74, 110, 126, 139, 144.1, 86];
-    var lfpCum = [20, 24, 80, 184, 261, 409, 625.3, 403];
+    var nmcRaw = [42, 39, 74, 110, 126, 139, 144.1,  9.4, 15.1, 25.8, 37.4, 51, 63, 75, 86, 98, 111];
+    var lfpRaw = [20, 24, 80, 184, 261, 409, 625.3, 32.7, 53.3, 99.0, 149.8, 208, 272, 335, 403, 477, 564];
+    var nmcCum = [42, 39, 74, 110, 126, 139, 144.1, 111];
+    var lfpCum = [20, 24, 80, 184, 261, 409, 625.3, 564];
     var nmcData = BAT_SHOW_MONTHLY ? nmcRaw.slice(0,7).concat(nmcRaw.slice(7)) : nmcCum;
     var lfpData = BAT_SHOW_MONTHLY ? lfpRaw.slice(0,7).concat(lfpRaw.slice(7)) : lfpCum;
-    var labels  = batXl(baseLabels, '26年\n1-8月累計');
+    var labels  = batXl(baseLabels, '26年\n1-10月累計');
     ec.setOption({
       tooltip: unifiedStackTooltip({unit:'GWh'}),
       legend:baseLegend(),
@@ -9774,8 +9775,8 @@ window.addEventListener('resize', __rafThrottle(function(){
     var ec = initOrGet('ec-bat-install-rate'); if(!ec) return;
     // layout: [2021〜2025累計(5点), 26/1月, 26/2月, 26/3月, 26/4月] ※累計値
     var baseLabels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
-    var rateRaw = [70, 54, 50, 50, 44, 25, 22, 26, 28, 30, 31, 32, 32];
-    var rateCum = [70, 54, 50, 50, 44, 32]; // 26年累計（8月時点）32%
+    var rateRaw = [70, 54, 50, 50, 44, 25, 22, 26, 28, 30, 31, 32, 32, 31, 33];
+    var rateCum = [70, 54, 50, 50, 44, 33]; // 26年累計（10月時点）33%
     var rate = BAT_SHOW_MONTHLY ? rateRaw.slice(0,5).concat(rateRaw.slice(5)) : rateCum;
     var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
@@ -9806,10 +9807,10 @@ window.addEventListener('resize', __rafThrottle(function(){
     var ec = initOrGet('ec-bat-type-rate'); if(!ec) return;
     var baseLabels = ['2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
     // 26年は累計値: 1月、1-2月累計、1-3月累計、1-4月累計
-    var nmcRateRaw = [79, 52, 51, 50, 41, 30, 26, 29, 31, 32, 33, 32, 31];
-    var lfpRateRaw = [64, 55, 49, 50, 45, 24, 21, 25, 27, 30, 31, 32, 32];
-    var nmcRateCum = [79, 52, 51, 50, 41, 31];
-    var lfpRateCum = [64, 55, 49, 50, 45, 32];
+    var nmcRateRaw = [79, 52, 51, 50, 41, 30, 26, 29, 31, 32, 33, 32, 31, 32, 33];
+    var lfpRateRaw = [64, 55, 49, 50, 45, 24, 21, 25, 27, 30, 31, 32, 32, 31, 32];
+    var nmcRateCum = [79, 52, 51, 50, 41, 33];
+    var lfpRateCum = [64, 55, 49, 50, 45, 32];  // 10月時点
     var nmcRate = BAT_SHOW_MONTHLY ? nmcRateRaw.slice(0,5).concat(nmcRateRaw.slice(5)) : nmcRateCum;
     var lfpRate = BAT_SHOW_MONTHLY ? lfpRateRaw.slice(0,5).concat(lfpRateRaw.slice(5)) : lfpRateCum;
     var labels = batXl(baseLabels, '26年\n累計');
@@ -9841,8 +9842,8 @@ window.addEventListener('resize', __rafThrottle(function(){
     var ec = initOrGet('ec-bat-lfp-share'); if(!ec) return;
     // layout: [2019〜2025累計(7点), 26/1月, 26/2月, 26/3月, 26/4月]
     var baseLabels = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
-    var raw = [33, 38, 52, 62, 67, 75, 81, 78, 78, 79, 80, 80, 81, 82, 82];
-    var cum = [33, 38, 52, 62, 67, 75, 81, 82];
+    var raw = [33, 38, 52, 62, 67, 75, 81, 78, 78, 79, 80, 80, 81, 82, 82, 83, 83];
+    var cum = [33, 38, 52, 62, 67, 75, 81, 83];
     var lfpShare = BAT_SHOW_MONTHLY ? raw.slice(0,7).concat(raw.slice(7)) : cum;
     var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
@@ -9867,8 +9868,8 @@ window.addEventListener('resize', __rafThrottle(function(){
   function renderNmcShare(){
     var ec = initOrGet('ec-bat-nmc-share'); if(!ec) return;
     var baseLabels = ['2019\n累計','2020\n累計','2021\n累計','2022\n累計','2023\n累計','2024\n累計','2025\n累計'];
-    var raw = [67, 61, 48, 37, 33, 25, 19, 22, 22, 21, 20, 20, 19, 18, 18];
-    var cum = [67, 61, 48, 37, 33, 25, 19, 18];
+    var raw = [67, 61, 48, 37, 33, 25, 19, 22, 22, 21, 20, 20, 19, 18, 18, 17, 16];
+    var cum = [67, 61, 48, 37, 33, 25, 19, 16];
     var nmcShare = BAT_SHOW_MONTHLY ? raw.slice(0,7).concat(raw.slice(7)) : cum;
     var labels = batXl(baseLabels, '26年\n累計');
     ec.setOption({
@@ -9895,16 +9896,16 @@ window.addEventListener('resize', __rafThrottle(function(){
   function renderVehicleDemand(){
     var ec = initOrGet('ec-bat-vehicle'); if(!ec) return;
     // 出所: PDFのp3「装車電池MWh」表 ← 装車ベース（合格証ベースではない）
-    // 全車種をPDF実値で収録。2026年は1-4月累計値
-    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-8月累計'];
+    // 全車種をPDF実値で収録。2026年は1-10月累計値（2026年10月記事 図4）
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-10月累計'];
 
     // ── PDF実値（MWh）──
-    var bev_pass   = [43114,  121734, 230092, 286841, 362178, 467978, 285145]; // 純電動乗用車
-    var phev_pass  = [4151,   10434,  31148,  65328,  118911, 139316, 79234];  // 插混乗用車 ※PDF実値
-    var bev_truck  = [null,   null,   null,   null,   null,   136237, 109069]; // 純電動貨車（2025年〜）
-    var phev_truck = [null,   null,   null,   null,   null,   770,    978];    // 插混貨車（2025年〜）
-    var bev_sv     = [4252,   12169,  21404,  28039,  56454,  12315,  9782];   // 純電動専用車
-    var bev_bus    = [11749,  9699,   11376,  6534,   9565,   10776,  4402];   // 純電動客車
+    var bev_pass   = [43114,  121734, 230092, 286841, 362178, 467978, 395226]; // 純電動乗用車
+    var phev_pass  = [4151,   10434,  31148,  65328,  118911, 139316, 109447]; // 插混乗用車 ※PDF実値
+    var bev_truck  = [null,   null,   null,   null,   null,   136237, 148632]; // 純電動貨車（2025年〜）
+    var phev_truck = [null,   null,   null,   null,   null,   770,    1351];   // 插混貨車（2025年〜）
+    var bev_sv     = [4252,   12169,  21404,  28039,  56454,  12315,  12836];  // 純電動専用車
+    var bev_bus    = [11749,  9699,   11376,  6534,   9565,   10776,  6756];   // 純電動客車
 
     // その他: 合計 - 上記6車種（插混客車/燃料電池客車/燃料電池貨車/插混専用車/燃料電池専用車）
     // PDF合計値から逆算（全て実値）
@@ -9915,7 +9916,7 @@ window.addEventListener('resize', __rafThrottle(function(){
       387638 - 286841- 65328 - 0     - 0    - 28039 - 6534,   // 2023: 896
       548431 - 362178- 118911- 0     - 0    - 56454 - 9565,   // 2024: 1323（燃料電池貨車1001含む）
       768869 - 467978- 139316- 136237- 770  - 12315 - 10776,  // 2025: 1477
-      489076 - 285145- 79234 - 109069- 978  - 9782  - 4402    // 26年1-8月: 466
+      675296 - 395226- 109447- 148632- 1351 - 12836 - 6756    // 26年1-10月: 1048
     ];
 
     function toGWh(arr){ return arr.map(function(v){ return v===null ? null : Math.round(v/100)/10; }); }
@@ -9944,12 +9945,12 @@ window.addEventListener('resize', __rafThrottle(function(){
   function renderEnergyDensity(){
     var ec = initOrGet('ec-bat-energy'); if(!ec) return;
     // 出所: PDFのSheet7「純電動合格証 Wh/kg別」（年次＋26年1Q+2Q累計）
-    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-8月'];
-    // 26年1-8月 = 26年1Q + 2Q + 3Q（7-8月）（図9の実値）
-    var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    0.0];           // 0.0 + 0.0 + 0.0
-    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  186.1];         // 48.2 + 80.7 + 57.2
-    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  211.6];         // 48.1 + 90.3 + 73.2
-    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   48.7];          // 15.4 + 20.7 + 12.6
+    var labels   = ['2018年','2019年','2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-10月'];
+    // 26年1-10月 = 26年1Q + 2Q + 3Q + 4Q（10月）（2026年10月記事 図9の実値）
+    var d125m    = [25,  3,   13,  49,  67,  48,  37,  8,    0.0];           // 0.0 + 0.0 + 0.0 + 0.0
+    var d125_140 = [25,  24,  16,  49,  99,  207, 325, 483,  258.5];         // 48.2 + 80.7 + 91.2 + 38.4
+    var d140_160 = [43,  59,  37,  76,  173, 174, 195, 281,  301.7];         // 48.1 + 90.3 + 113.8 + 49.5
+    var d160p    = [2,   12,  30,  79,  112, 95,  83,  69,   61.0];          // 15.4 + 20.7 + 19.2 + 5.7
     var totals   = labels.map(function(_,i){
       var v = [d125m,d125_140,d140_160,d160p].reduce(function(s,a){ return s+(a[i]||0); },0);
       return Math.round(v*10)/10;
@@ -9984,23 +9985,23 @@ window.addEventListener('resize', __rafThrottle(function(){
   function renderShareTotal(){
     var ec = initOrGet('ec-bat-share-total'); if(!ec) return;
 
-    // 年次ラベル（2020〜2025通年 + 2026年1-4月累計）
-    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-8月','26年\n1Q','26年\n2Q','26年\n7-8月'];
+    // 年次ラベル（2020〜2025通年 + 2026年1-10月累計・四半期。4Qは10月のみ）
+    var labels = ['2020年','2021年','2022年','2023年','2024年','2025年','26年\n1-10月','26年\n1Q','26年\n2Q','26年\n3Q','26年\n10月'];
 
-    // 画像⑩より（%）— 2026年は1-4月累計（PDF「2026」列）
+    // 2026年10月記事 図10より（%）。diff＝2026年1-10月−2025年
     var makers = [
-      { name:'寧德時代 CATL', color:'#2E75B6', data:[50,51.9,47.2,43.5,45.3,43.8,45.1,48.1,45.5,42.3], prev25:43.8, diff:1.3 },
-      { name:'比亜迪 BYD', color:'#FF6600', data:[14.9,16.2,24.4,26.9,24.8,21.8,18.2,16.9,17.5,20.3], prev25:21.8, diff:-3.6 },
-      { name:'国軒高科', color:'#F39C12', data:[5.2,5.2,4.7,4.1,4.6,5.7,6.2,5.9,6.4,6.1], prev25:5.7, diff:0.5 },
-      { name:'中創新航', color:'#E74C3C', data:[5.6,5.9,6.5,8.5,6.7,7,6.4,5.9,6.4,6.8], prev25:7, diff:-0.6 },
-      { name:'億緯鋰能', color:'#1ABC9C', data:[1.9,1.8,2.4,4.5,3.4,4.2,5.4,4.9,5.2,6.1], prev25:4.2, diff:1.2 },
-      { name:'瑞浦蘭鈞', color:'#9B59B6', data:[1.5,0.3,1.4,1.3,2.2,2.6,3.5,2.9,3.6,3.7], prev25:2.6, diff:0.9 },
-      { name:'欣旺達', color:'#E67E22', data:[0,1.1,2.6,2.2,2.9,3.2,3,2.7,2.8,3.6], prev25:3.2, diff:-0.2 },
-      { name:'蜂巣能源', color:'#3498DB', data:[0,2,2.1,2.2,3.2,2.7,2,2,1.9,2.1], prev25:2.7, diff:-0.8 },
-      { name:'正力新能', color:'#27AE60', data:[0,1.9,0.7,1.4,1.8,2.1,2.6,2.2,3,2.4], prev25:2.1, diff:0.5 },
-      { name:'吉利耀寧', color:'#8E44AD', data:[0,0,0,0,0.4,1.3,2.4,2.2,2.6,2.3], prev25:1.3, diff:1.2 },
-      { name:'LG新能源', color:'#2980B9', data:[6.5,3.9,1.7,2.2,1.4,1.8,1.9,2.9,1.6,1.5], prev25:1.8, diff:0.1 },
-      { name:'その他', color:'#BDC3C7', data:[14.4,9.8,6.3,3.2,3.3,3.8,3.3,3.4,3.5,2.8], prev25:3.8, diff:null }
+      { name:'寧德時代 CATL', color:'#2E75B6', data:[50,51.9,47.2,43.5,45.3,43.8,44,48.1,45.5,41.9,40.5], prev25:43.8, diff:0.1 },
+      { name:'比亜迪 BYD', color:'#FF6600', data:[14.9,16.2,24.4,26.9,24.8,21.8,19.1,16.9,17.5,20.7,21.6], prev25:21.8, diff:-2.7 },
+      { name:'国軒高科', color:'#F39C12', data:[5.2,5.2,4.7,4.1,4.6,5.7,6.1,5.9,6.4,6,6.1], prev25:5.7, diff:0.4 },
+      { name:'中創新航', color:'#E74C3C', data:[5.6,5.9,6.5,8.5,6.7,7,6.8,5.9,6.4,6.9,8.7], prev25:7, diff:-0.2 },
+      { name:'億緯鋰能', color:'#1ABC9C', data:[1.9,1.8,2.4,4.5,3.4,4.2,5.5,4.9,5.2,6,5.6], prev25:4.2, diff:1.3 },
+      { name:'瑞浦蘭鈞', color:'#9B59B6', data:[1.5,0.3,1.4,1.3,2.2,2.6,3.5,2.9,3.6,3.7,3.7], prev25:2.6, diff:1 },
+      { name:'欣旺達', color:'#E67E22', data:[0,1.1,2.6,2.2,2.9,3.2,3.2,2.7,2.8,3.6,3.6], prev25:3.2, diff:0 },
+      { name:'蜂巣能源', color:'#3498DB', data:[0,2,2.1,2.2,3.2,2.7,2,2,1.9,2,2.1], prev25:2.7, diff:-0.7 },
+      { name:'正力新能', color:'#27AE60', data:[0,1.9,0.7,1.4,1.8,2.1,2.5,2.2,3,2.3,1.9], prev25:2.1, diff:0.4 },
+      { name:'吉利耀寧', color:'#8E44AD', data:[0,0,0,0,0.4,1.3,2.5,2.2,2.6,2.5,2.4], prev25:1.3, diff:1.2 },
+      { name:'LG新能源', color:'#2980B9', data:[6.5,3.9,1.7,2.2,1.4,1.8,1.6,2.9,1.6,1.5,0.2], prev25:1.8, diff:-0.2 },
+      { name:'その他', color:'#BDC3C7', data:[14.4,9.8,6.3,3.2,3.3,3.8,3.2,3.4,3.5,2.9,3.6], prev25:3.8, diff:null }
     ];
 
     ec.setOption({
@@ -10029,22 +10030,22 @@ window.addEventListener('resize', __rafThrottle(function(){
   function renderShareLfp(){
     var ec = initOrGet('ec-bat-share-lfp'); if(!ec) return;
 
-    var labels = ['2022年','2023年','2024年','2025年','26年\n1-8月','26年\n1Q','26年\n2Q','26年\n7-8月'];
+    var labels = ['2022年','2023年','2024年','2025年','26年\n1-10月','26年\n1Q','26年\n2Q','26年\n3Q','26年\n10月'];
 
-    // 画像⑪より（%）2026年は1-4月累計（PDF「2026」列）
+    // 2026年10月記事 図11より（%）。diff＝2026年1-10月−2025年
     var makers = [
-      { name:'寧德時代 CATL', color:'#2E75B6', data:[42.2,34.1,37.3,37.6,38.9,41.4,38.7,37.3], prev25:37.6, diff:1.3 },
-      { name:'比亜迪 BYD', color:'#FF6600', data:[39,40.4,33.1,26.9,22.2,21.4,21.4,23.8], prev25:26.9, diff:-4.7 },
-      { name:'国軒高科', color:'#F39C12', data:[6.5,5.6,5.6,7,7.5,7.4,7.8,7.1], prev25:7, diff:0.5 },
-      { name:'億緯鋰能', color:'#1ABC9C', data:[2.5,5.5,4,5,6.4,6,6.2,7.1], prev25:5, diff:1.5 },
-      { name:'中創新航', color:'#E74C3C', data:[3.7,6.9,5.8,6.6,6.9,6.4,6.9,7.2], prev25:6.6, diff:0.2 },
-      { name:'瑞浦蘭鈞', color:'#9B59B6', data:[2.2,1.8,3,3.2,4.2,3.7,4.4,4.4], prev25:3.2, diff:1 },
-      { name:'欣旺達', color:'#E67E22', data:[0.7,1.3,2.9,3.7,3.2,3.4,3.1,3.3], prev25:3.7, diff:-0.5 },
-      { name:'正力新能', color:'#27AE60', data:[0.3,1.6,2,2.4,3.1,2.7,3.6,2.7], prev25:2.4, diff:0.7 },
-      { name:'吉利耀寧', color:'#8E44AD', data:[0,0,0.5,1.5,2.9,2.8,3.2,2.7], prev25:1.5, diff:1.4 },
-      { name:'楚能新能', color:'#16A085', data:[0,0,0.2,0.9,1,0.9,1.1,0.9], prev25:0.9, diff:0.1 },
-      { name:'蜂巣能源', color:'#3498DB', data:[1.5,1.4,2.6,1.7,0.8,0.8,0.6,1.2], prev25:1.7, diff:-0.9 },
-      { name:'その他', color:'#BDC3C7', data:[1.4,1.4,3,3.5,2.9,3.1,3,2.3], prev25:3.5, diff:null }
+      { name:'寧德時代 CATL', color:'#2E75B6', data:[42.2,34.1,37.3,37.6,38.4,41.4,38.7,37.1,37.1], prev25:37.6, diff:0.8 },
+      { name:'比亜迪 BYD', color:'#FF6600', data:[39,40.4,33.1,26.9,22.9,21.4,21.4,24.2,24.9], prev25:26.9, diff:-3.9 },
+      { name:'国軒高科', color:'#F39C12', data:[6.5,5.6,5.6,7,7.3,7.4,7.8,6.9,7], prev25:7, diff:0.3 },
+      { name:'億緯鋰能', color:'#1ABC9C', data:[2.5,5.5,4,5,6.5,6,6.2,7,6.4], prev25:5, diff:1.5 },
+      { name:'中創新航', color:'#E74C3C', data:[3.7,6.9,5.8,6.6,6.8,6.4,6.9,6.9,7.1], prev25:6.6, diff:0.2 },
+      { name:'瑞浦蘭鈞', color:'#9B59B6', data:[2.2,1.8,3,3.2,4.2,3.7,4.4,4.3,4.3], prev25:3.2, diff:1.1 },
+      { name:'欣旺達', color:'#E67E22', data:[0.7,1.3,2.9,3.7,3.3,3.4,3.1,3.5,3.2], prev25:3.7, diff:-0.4 },
+      { name:'正力新能', color:'#27AE60', data:[0.3,1.6,2,2.4,2.8,2.7,3.6,2.5,2.1], prev25:2.4, diff:0.4 },
+      { name:'吉利耀寧', color:'#8E44AD', data:[0,0,0.5,1.5,3,2.8,3.2,2.9,2.8], prev25:1.5, diff:1.4 },
+      { name:'楚能新能', color:'#16A085', data:[0,0,0.2,0.9,0.9,0.9,1.1,0.9,0.8], prev25:0.9, diff:0.1 },
+      { name:'蜂巣能源', color:'#3498DB', data:[1.5,1.4,2.6,1.7,1,0.8,0.6,1.2,1.3], prev25:1.7, diff:-0.8 },
+      { name:'その他', color:'#BDC3C7', data:[1.4,1.4,3,3.5,2.9,3.1,3,2.6,3], prev25:3.5, diff:null }
     ];
 
     ec.setOption({
@@ -10072,19 +10073,19 @@ window.addEventListener('resize', __rafThrottle(function(){
   function renderShareNmc(){
     var ec = initOrGet('ec-bat-share-nmc'); if(!ec) return;
 
-    var labels = ['2022年','2023年','2024年','2025年','26年\n1-8月','26年\n1Q','26年\n2Q','26年\n7-8月'];
+    var labels = ['2022年','2023年','2024年','2025年','26年\n1-10月','26年\n1Q','26年\n2Q','26年\n3Q','26年\n10月'];
 
-    // 画像⑫より（%）2026年は1-4月累計（PDF「2026」列）
+    // 2026年10月記事 図12より（%）。diff＝2026年1-10月−2025年
     var makers = [
-      { name:'寧德時代 CATL', color:'#2E75B6', data:[57,62.3,69.1,70.9,74.2,73.7,76.2,71.4], prev25:70.9, diff:3.3 },
-      { name:'LG新能源', color:'#2980B9', data:[4.7,6.5,5.6,9.6,10.9,14.1,8.9,10.5], prev25:9.6, diff:1.3 },
-      { name:'蜂巣能源', color:'#3498DB', data:[3.1,3.8,5.1,7.1,7.3,6.4,7.9,7.1], prev25:7.1, diff:0.2 },
-      { name:'中創新航', color:'#E74C3C', data:[11.5,11.8,9.5,8.9,4.3,4.1,4.4,4.3], prev25:8.9, diff:-4.6 },
-      { name:'億緯鋰能', color:'#1ABC9C', data:[2.3,2.6,1.9,0.7,0.4,0.7,0.4,0.1], prev25:0.7, diff:-0.3 },
-      { name:'正力新能', color:'#27AE60', data:[1.5,1,1.2,0.8,0.6,0.4,0.4,1], prev25:0.8, diff:-0.2 },
-      { name:'国軒高科', color:'#F39C12', data:[1.9,0.9,1.7,0.3,0.2,0.3,0.1,0.3], prev25:0.3, diff:-0.1 },
-      { name:'欣旺達', color:'#E67E22', data:[5.9,4,2.9,1.1,2,0.1,1.5,5.2], prev25:1.1, diff:1 },
-      { name:'その他', color:'#BDC3C7', data:[12.1,7.1,3,0.6,0.1,0.2,0.2,0.1], prev25:0.6, diff:null }
+      { name:'寧德時代 CATL', color:'#2E75B6', data:[57,62.3,69.1,70.9,72.2,73.7,76.2,70.1,63.1], prev25:70.9, diff:1.3 },
+      { name:'LG新能源', color:'#2980B9', data:[4.7,6.5,5.6,9.6,9.6,14.1,8.9,10,1.6], prev25:9.6, diff:0 },
+      { name:'蜂巣能源', color:'#3498DB', data:[3.1,3.8,5.1,7.1,7.2,6.4,7.9,6.8,7.6], prev25:7.1, diff:0.1 },
+      { name:'中創新航', color:'#E74C3C', data:[11.5,11.8,9.5,8.9,6.8,4.1,4.4,6.8,19.5], prev25:8.9, diff:-2.1 },
+      { name:'億緯鋰能', color:'#1ABC9C', data:[2.3,2.6,1.9,0.7,0.4,0.7,0.4,0.2,0.4], prev25:0.7, diff:-0.3 },
+      { name:'正力新能', color:'#27AE60', data:[1.5,1,1.2,0.8,0.7,0.4,0.4,1.1,0.8], prev25:0.8, diff:-0.1 },
+      { name:'国軒高科', color:'#F39C12', data:[1.9,0.9,1.7,0.3,0.2,0.3,0.1,0.3,0.2], prev25:0.3, diff:-0.1 },
+      { name:'欣旺達', color:'#E67E22', data:[5.9,4,2.9,1.1,2.7,0.1,1.5,4.6,6.5], prev25:1.1, diff:1.6 },
+      { name:'その他', color:'#BDC3C7', data:[12.1,7.1,3,0.6,0.2,0.2,0.2,0.1,0.3], prev25:0.6, diff:null }
     ];
 
     ec.setOption({
@@ -10114,19 +10115,19 @@ window.addEventListener('resize', __rafThrottle(function(){
 
     var months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
 
-    // 画像⑦より（社数）
+    // 2026年10月記事 図7より（社数）。最新の28社は図では9月の欄にある（本文は「10月は28社」）ので、図のとおり9月に置く
     var years = {
       '2021年': [36,39,42,40,40,39,45,38,39,39,43,47],
       '2022年': [35,35,39,34,37,37,37,37,36,40,42,41],
       '2023年': [35,39,39,36,35,43,36,33,33,35,37,43],
       '2024年': [38,35,39,40,38,40,39,37,38,39,38,41],
       '2025年': [36,38,41,40,37,37,33,33,35,33,36,40],
-      '2026年': [33,30,31,34,33,35,31,31,null,null,null,null]
+      '2026年': [33,30,31,34,33,35,31,31,28,null,null,null]
     };
 
     // 前年比（2026年各月 vs 2025年同月）
     var yoy = {
-      '2026年': { 1: 33-36, 2: 30-38, 3: 31-41, 4: 34-40, 5: 33-37, 6: 35-37, 7: 31-33, 8: 31-33 }
+      '2026年': { 1: 33-36, 2: 30-38, 3: 31-41, 4: 34-40, 5: 33-37, 6: 35-37, 7: 31-33, 8: 31-33, 9: 28-35 }
     };
 
     var colors = ['#BDC3C7','#95A5A6','#7F8C8D','#5D6D7E','#2E75B6','#E74C3C'];

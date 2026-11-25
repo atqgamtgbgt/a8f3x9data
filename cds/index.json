@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-25T03:26:31+00:00",
+ "updated_at": "2026-11-25T14:23:16+00:00",
  "articles": [
+  {
+   "id": "1106298469",
+   "title": "车市扫描-2026年45期（11月16日-11月22日）",
+   "published_at": "2026-11-25T17:33+08:00",
+   "url": "https://www.sohu.com/a/1106298469_115312",
+   "topic": "market_scan",
+   "topic_label": "車市スキャン（週次）",
+   "path": "cds/articles/2026/11/1106298469",
+   "image_count": 7,
+   "images_saved": 7,
+   "text_chars": 7379,
+   "lead": "主要信息源自乘联分会每日新闻等  中国汽车流通协会  乘用车市场信息联席分会（乘联分会）  网站：http://www.cpcaauto.com  一、本周车市概述1.2026年11月全国乘用车市场零售相对平稳  【2026年11月1-22日乘联会市场分析要闻】  11月1-22日全国乘用车厂家批发126.0万辆，同比",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1106298469/img/01.jpg",
+   "fetched_at": "2026-11-25T14:23:15+00:00"
+  },
   {
    "id": "1105889707",
    "title": "制造业应收账款天数变化分析-9月汽车业100天",

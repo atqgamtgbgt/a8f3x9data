@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-25T03:26:31+00:00",
- "total": 240,
+ "updated_at": "2026-11-25T14:23:16+00:00",
+ "total": 241,
  "articles": [
+  {
+   "id": "1106298469",
+   "title": "车市扫描-2026年45期（11月16日-11月22日）",
+   "published_at": "2026-11-25T17:33+08:00",
+   "url": "https://www.sohu.com/a/1106298469_115312",
+   "topic": "market_scan",
+   "topic_label": "車市スキャン（週次）",
+   "path": "cds/articles/2026/11/1106298469",
+   "image_count": 7,
+   "images_saved": 7,
+   "text_chars": 7379,
+   "lead": "主要信息源自乘联分会每日新闻等  中国汽车流通协会  乘用车市场信息联席分会（乘联分会）  网站：http://www.cpcaauto.com  一、本周车市概述1.2026年11月全国乘用车市场零售相对平稳  【2026年11月1-22日乘联会市场分析要闻】  11月1-22日全国乘用车厂家批发126.0万辆，同比",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1106298469/img/01.jpg",
+   "fetched_at": "2026-11-25T14:23:15+00:00"
+  },
   {
    "id": "1105889707",
    "title": "制造业应收账款天数变化分析-9月汽车业100天",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1079036468/img/01.jpg",
    "fetched_at": "2026-10-10T12:57:17+00:00"
-  },
-  {
-   "id": "1078592557",
-   "title": "全国商用车国内保险特征—8月重卡新能源渗透率48%",
-   "published_at": "2026-09-20T15:40+08:00",
-   "url": "https://www.sohu.com/a/1078592557_115312",
-   "topic": "commercial",
-   "topic_label": "商用車",
-   "path": "cds/articles/2026/09/1078592557",
-   "image_count": 14,
-   "images_saved": 14,
-   "text_chars": 5154,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  根据国家金融局交强险数据，2026年8月商用车销量23 万台，同比降7%、环比降1%，1-8 月累计200.5 万台，同比基本持平，远强于消费类乘用车走势。近几年商用车数据展现出客车强卡车弱的明显结构性分化。客车板块增长亮眼，轻客是核心拉动力量，2026 年汇总",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1078592557/img/01.jpg",
-   "fetched_at": "2026-10-10T12:57:08+00:00"
   }
  ]
 }

@@ -5191,6 +5191,13 @@ body.tray-open { padding-bottom: 105px; }
                   </div>
                 </div>
                 <div class="cds-gc">
+                  <span class="cds-gc-label">🧾 売掛金（26年9月） </span>
+                  <div class="cds-gc-items">
+                    <button class="nav-link" data-cds-topic-target="#topic-ar-industry">🏭 業種別の回収日数</button>
+                    <button class="nav-link" data-cds-topic-target="#topic-ar-auto">🚗 自動車業の推移</button>
+                  </div>
+                </div>
+                <div class="cds-gc">
                   <span class="cds-gc-label">🌍 世界の企業財務（2020〜25年） </span>
                   <div class="cds-gc-items">
                     <button class="nav-link" data-cds-wfin-target="#wfin-revenue">📊 売上・成長性</button>
@@ -8644,6 +8651,51 @@ body.tray-open { padding-bottom: 105px; }
                 <div class="chart-subtitle">外資系＝トヨタ・GMなど／民営＝比亜迪・吉利・長城など／スマホ系＝小米・賽力斯など　市場別では米国株のメーカー 12.9兆元（前月比−5%・前年比−13%）、香港株 0.87兆元（−11%・−50%）、A株 1.4兆元（−4%・−36%）</div>
                 <div id="ec-topic-mcap" class="echart-box" style="height:420px"></div>
                 <div style="margin-top:12px;padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444;"><b>📖 読みどころ</b><br>・消費者向けのメーカーは軒並み大幅安：<b>スマホ系−59%・新興勢力−58%</b>・国有−37%・民営−31%。新興勢力は2年来の最安値（レンジ内の位置0%）。<br>・<b>商用車は−7%</b>と底堅い。崔氏は、補助の手厚い商用車と、輸出の強い企業が相対的に評価されているとみる。<br>・テスラはAI・FSDへの期待で9.4兆元と単独で巨大だが、前年比では−11%。</div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="topic-ar-industry">
+              <div class="topic-grid2" style="margin-top:0">
+                <div class="chart-card">
+                  <div class="chart-title">業種別の売掛金回収日数（2026年9月末と2025年、日）</div>
+                  <div class="chart-subtitle">国家統計局のデータ（崔東樹 2026年11月24日）。売掛金回転日数＝売上の何日分の売掛金を抱えているか。ラベルは前年からの増減（記事の表の値）</div>
+                  <div id="ec-topic-ar-industry" class="echart-box" style="height:1000px"></div>
+                </div>
+                <div>
+                  <div class="chart-card">
+                    <div class="chart-title">上流・中流・下流と自動車の回収日数（日）</div>
+                    <div class="chart-subtitle">各年末（2026年は9月末）の値。自動車製造は月別の図の各年12月の値。中流102日・下流92日は過去最長</div>
+                    <div id="ec-topic-ar-stream" class="echart-box" style="height:400px"></div>
+                  </div>
+                  <div class="chart-card" style="margin-top:14px">
+                    <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・2026年9月末の回収日数は<b>工業企業76日・製造業78日</b>、売掛金の総額は30兆元に迫る。中流（102日）と下流（92日）は年々長くなり、過去最長を更新した。<br>・<b>自動車製造業は100日（前年比+11日）</b>で下流の平均を大きく上回る。ただしコンピューター・通信・電子機器（105日）や医薬（104日）、専用設備（147日）、汎用設備（120日）よりは短い。<br>・2020年の自動車業は66日で、コンピューター・通信・電子機器（90日）より短い「優等生」だった。この数年で34日長くなり、医薬（2020年68日→104日）とほぼ同じ水準に。最も長いのは水の生産・供給業の217日（2020年85日）。</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="cds-pane" id="topic-ar-auto">
+              <div class="topic-grid2" style="margin-top:0">
+                <div class="chart-card">
+                  <div class="chart-title">自動車製造業の売掛金回収日数（月別、日）</div>
+                  <div class="chart-subtitle">2020〜2026年（図は2月から）。2026年は100日前後が続き、9月は100日。2025年9月（90日）より10日長い（記事の表では+11日）</div>
+                  <div id="ec-topic-ar-days" class="echart-box" style="height:380px"></div>
+                </div>
+                <div class="chart-card">
+                  <div class="chart-title">自動車製造業の売掛金残高（月別、兆元）</div>
+                  <div class="chart-subtitle">2023〜2026年。2026年9月は2.99兆元（前年同月2.61兆元）で、前の3年の同月を大きく上回る</div>
+                  <div id="ec-topic-ar-bal" class="echart-box" style="height:380px"></div>
+                </div>
+              </div>
+              <div class="topic-grid2">
+                <div class="chart-card">
+                  <div class="chart-title">売上高利益率：自動車製造と工業の各段階（%）</div>
+                  <div class="chart-subtitle">2026年は1-9月累計。自動車製造は2014年の9.0%から3.3%に下がり、下流計（6.7%）を下回る</div>
+                  <div id="ec-topic-ar-margin" class="echart-box" style="height:360px"></div>
+                </div>
+                <div class="chart-card">
+                  <div style="padding:10px 14px;background:#f8f9fa;border-left:3px solid #5470c6;border-radius:4px;font-size:12.5px;line-height:1.8;color:#444"><b>📖 読みどころ</b><br>・自動車業の売掛金は2026年に急な上昇が続き、9月は<b>3兆元近く</b>と前の3年の同月を大きく上回る。<br>・2026年1-9月の自動車業の利益は<b>23%減</b>、売上高利益率は<b>3.3%</b>（2014年は9%）。下流全体の利益は22%増、コンピューター・通信は104%増と、自動車の不振が目立つ。<br>・崔氏は、価格競争とNEVの研究開発で利益が圧迫された完成車メーカーが、強い立場を使って部品メーカーに資金の負担を移し、在庫を押しつけて支払いサイトを延ばしているとみる。「完成車は出血し、中流は資金を立て替えている」状態だという。<br>・国の「反内巻」の方針に沿い、販売の安定だけでなく、『中小企業の代金支払い保障条例』を厳しく守らせて支払いサイトを正すべきだと指摘している。</div>
+                </div>
               </div>
             </div>
 
@@ -17268,6 +17320,7 @@ window.addEventListener('resize', __rafThrottle(function(){
 // ========== 🔎 トピック（単発の記事）モジュール ==========
 // 出典: 崔東樹「2026年上半年整车企业业绩分析」「2025年全国结婚年龄与老龄化对车市影响分析」
 //       「公安部2026年上半年的上牌和驾驶员数据分析」「汽车整车上市公司市值变化分析-9月」
+//       「制造业应收账款天数变化分析-9月汽车业100天」ほか（2026-11-25追加分）
 (function(){
   var TP = {"profit":[["宇通客車",20,19,24,11],["中通客車",2,3,17,7],["奇瑞汽車",99,90,16,6],["吉利汽車",95,92,18,5],["中国重汽",9,15,7,4],["金龍汽車",2,3,13,3],["上汽集団",83,80,12,3],["福田汽車",7,9,11,3],["長城汽車",63,25,18,2],["東風股份",1,1,5,2],["一汽解放",0,3,5,1],["零跑汽車",0,2,12,1],["長安汽車",18,2,15,0],["北京汽車",38,-3,10,-1],["蔚来",-117,-9,10,-2],["江淮汽車",-9,-7,11,-3],["賽力斯",31,-22,23,-4],["理想汽車",17,-40,10,-8],["小鵬汽車",-11,-31,21,-10],["広汽集団",-35,-59,-1,-13],["北汽藍谷",-33,-27,4,-23]],"profitIntl":[["トヨタ",914,888,17,7],["GM",340,275,9,4],["ホンダ",258,168,20,3],["テスラ",115,110,19,3],["フォード",32,83,15,1]],"revenue":[["上汽集団",2950,0],["吉利汽車",1736,16],["奇瑞汽車",1433,1],["長城汽車",1021,11],["長安汽車",656,-10],["北京汽車",577,-30],["賽力斯",575,-8],["蔚来",518,99],["理想汽車",486,-13],["広汽集団",461,9],["中国重汽",384,47],["零跑汽車",381,57],["一汽解放",376,34],["福田汽車",337,11],["小鵬汽車",328,-4],["江淮汽車",221,14],["宇通客車",167,4],["北汽藍谷",116,22],["金龍汽車",111,7],["東風股份",55,10],["中通客車",40,2]],"revTotal":{"labels":["21年上半期","22年上半期","23年上半期","24年上半期","25年上半期","26年上半期"],"cn":[8855,7890,9132,11184,12277,12930],"intl":[17127,25182,28590,32021,32729,32831]},"chain":{"labels":["23年上半期","24年上半期","25年上半期","26年上半期"],"bat":[376,433,532,683],"bat_m":[7,8,8,9],"veh":[144,325,281,145],"veh_m":[2,3,2,1],"svc":[42,18,-32,-1],"svc_m":[2,1,-2,0]},"invDays":[["広汽集団",150,187,239],["一汽解放",157,161,168],["小鵬汽車",70,151,137],["北京汽車",126,138,222],["長安汽車",84,127,231],["奇瑞汽車",70,120,478],["長城汽車",130,119,338],["上汽集団",93,108,888],["金龍汽車",91,104,32],["零跑汽車",38,88,93],["東風股份",91,83,13],["福田汽車",81,82,77],["蔚来",114,77,111],["中通客車",79,75,8],["宇通客車",71,72,33],["吉利汽車",64,70,338],["北汽藍谷",80,66,21],["理想汽車",75,62,83],["江淮汽車",74,54,33],["中国重汽",30,49,52],["賽力斯",19,14,23],["中国21社 合計",86,101,3620],["国際5社 合計",75,73,6658]],"payDays":[["金龍汽車",495,459,141],["零跑汽車",346,445,471],["一汽解放",530,434,453],["蔚来",483,419,604],["北汽藍谷",444,403,130],["中通客車",369,385,43],["奇瑞汽車",270,366,1457],["賽力斯",362,363,579],["江淮汽車",393,351,216],["福田汽車",340,343,321],["上汽集団",282,341,2796],["東風股份",377,341,52],["長安汽車",270,336,613],["広汽集団",258,300,384],["中国重汽",314,296,316],["理想汽車",320,287,388],["長城汽車",286,286,811],["吉利汽車",252,255,1227],["北京汽車",172,212,339],["小鵬汽車",324,173,157],["宇通客車",119,100,47],["中国21社 合計",292,321,11544],["国際5社 合計",89,91,8334]],"marriage":{"years":["2018","2019","2020","2021","2022","2023","2024","2025"],"total":[2028,1855,1629,1529,1367,1536,1221,1353],"pairs":[1014,927,814,764,684,768,611,677],"a20":[436,365,303,253,208,213,164,173],"a25":[736,642,568,539,509,583,429,499],"s20":[21,20,19,17,15,14,13,13],"a30":[856,848,758,737,650,740,628,681]},"rates":{"years":["2021","2022","2023","2024","2025"],"mar":[5.4,4.8,5.4,4.3,4.8],"div":[2.0,2.0,2.6,2.5,2.8]},"ageMix":{"groups":["20〜24歳","25〜29歳","30〜34歳","35〜39歳","40歳以上"],"y2018":[21,36,16,8,19],"y2025":[13,37,21,12,17]},"aging":{"years":["2021","2022","2023","2024","2025"],"pop":[26736,28004,29697,31031,32338],"share":[18.9,19.8,21.1,22.0,23.0]},"reg":{"labels":["2017","2018","2019","2020","2021","2022","2023","2024","2025","26年上半期"],"new":[2813,2673,2578,2424,2622,2323,2456,2690,2619,1051],"scrap":[509,388,456,324,522,571,756,990,1319,551],"net":[2304,2285,2122,2100,2100,1752,1700,1700,1300,500],"fleet":[2.17,2.4,2.6,2.81,3.02,3.19,3.36,3.53,3.66,3.71]},"used":{"labels":["2023","2024","2025","26年上半期"],"used":[3187,3502,3841,1705],"new":[2456,2690,2619,1051],"ratio":[130,130,147,162]},"nevFleet":{"labels":["2024年末","2025年末","2026年6月末"],"fleet":[3140,4397,4897],"share":[8.9,12.01,13.19],"newshare":[41.83,49.38,49.42],"newreg":[1125,1293,519.5]},"mcap":[["テスラ",105037,93858,-11,69,""],["外資系",38806,33558,-14,5,"トヨタ・GMなど"],["民営",13612,9456,-31,30,"比亜迪・吉利・長城など"],["スマホ系",15634,6388,-59,21,"小米・賽力斯など"],["国有",7346,4627,-37,13,""],["新興勢力",5721,2382,-58,0,""],["商用車",1869,1746,-7,45,""],["合計",188026,152015,-19,52,""]]};
   // ♻️ 報廃と買い替え（崔东树「汽车保有上牌报废出口组合分析」2026-11-07 図1・図4）
@@ -17283,6 +17336,7 @@ window.addEventListener('resize', __rafThrottle(function(){
   TP.eu = {"monthly":{"2021":[14529,14856,14276,24407,23686,18587,30805,52347,31622,52419,41946,21600],"2022":[51592,55731,25579,16347,50591,27306,43807,73068,86092,94919,95479,63372],"2023":[89114,80819,82162,80651,95469,71338,70090,58726,77137,112806,63376,73746],"2024":[84582,75935,77874,89012,76190,50912,78699,90187,110340,93047,68369,89245],"2025":[105885,74990,78465,104388,121300,109455,124835,139575,122481,124486,102207,173887],"2026":[160898,153701,163072,190996,182601,242088,243859,215747,279382,null,null,null]},"quarters":["25年1Q","25年2Q","25年3Q","25年4Q","26年1Q","26年2Q","26年3Q"],"power":{"bev":[71293,98707,109479,108242,160715,206101,296313],"phev":[36631,43941,58096,67203,152582,222164,279424],"hev":[32344,28369,35762,38183,50746,68078,65509],"other":[48047,57777,38701,58266,68538,74755,78850],"all":[188315,228794,242038,271894,432581,571098,720096]},"makers":{"all":[["比亜迪（BYD）",17.1,67.53,295],["奇瑞（Chery）",8.6,27.04,214],["上汽乗用車（MG）",22.4,26.85,20],["吉利（Geely）",1.2,13.57,991],["零跑（Leapmotor）",1.6,8.67,427],["テスラ（上海）",4.5,5.92,33],["光束（MINI）",3.8,3.74,0],["長安",1.4,3.55,154],["小鵬（XPeng）",1.2,3.39,172],["智馬達（smart）",0.8,1.64,94],["上汽大通（Maxus）",0.0,1.62,19363],["北汽乗用車",0.9,1.61,72],["広汽埃安（AION）",0.1,1.5,1018],["長城（GWM）",0.3,0.93,260],["その他の中国系",0,0.86,null]],"bev":[["比亜迪（BYD）",9.4,26.72,185],["零跑（Leapmotor）",1.4,7.82,444],["上汽乗用車（MG）",4.0,6.17,53],["テスラ（上海）",4.5,5.91,33],["吉利（Geely）",0.8,4.42,438],["光束（MINI）",3.8,3.74,0],["小鵬（XPeng）",1.2,3.39,172],["長安",0.9,2.22,137],["奇瑞（Chery）",0.6,1.77,202],["智馬達（smart）",0.8,1.64,94],["広汽埃安（AION）",0.1,1.47,993],["上汽大通（Maxus）",0,0.22,null]],"phev":[["比亜迪（BYD）",7.7,40.63,426],["奇瑞（Chery）",2.8,10.63,278],["吉利（Geely）",0,8.24,null],["上汽乗用車（MG）",2.7,3.74,38],["長安",0,0.86,null],["零跑（Leapmotor）",0.2,0.84,310],["東風ホンダ",0.1,0.19,48],["賽力斯（Seres）",0.2,0.12,-29],["長城（GWM）",0.1,0.07,-16],["江淮（JAC）",0.0,0.05,15067]],"hev":[["上汽乗用車（MG）",9.2,13.16,42],["奇瑞（Chery）",0,4.07,null],["長城（GWM）",0.0,0.4,802],["広汽ホンダ",0.1,0.38,392],["東風ホンダ",0.3,0.36,34],["東風乗用車",0,0.03,null],["北汽乗用車",0,0.02,null],["東風柳州",0.0,0.01,-38],["吉利（Geely）",0,0.0,null]]}};
   TP.outlook = {"labels":["2015","2016","2017","2018","2019","2020","2021","2022","2023","2024","2025","2026\n見込み","2027\n予測"],"retail":[1964,2323,2373,2239,2069,1929,2016,2055,2170,2288,2374],"y2026":1850,"y2027":1887,"lo":1850,"hi":1943,"box":[1929,2374]};
   TP.acc = {"rows":["事故件数","死亡者","負傷者","直接財産損失"],"units":["件","人","人","万元"],"total":[256456,58777,251925,133214],"cats":["自動車","バイク","その他の機動車","非機動車","歩行者","その他"],"vals":[[140615,39644,119287,98842],[53840,9083,62380,15276],[11780,2717,12163,4327],[44922,5723,53703,11929],[5081,1590,4142,2723],[218,20,250,118]],"bike":[3136,470,3300,810],"tractor":[738,202,746,331],"chgCats":["自動車","バイク","非機動車"],"chg":[[-15.8,-29.4,-14.1],[17.4,13.3,-14.8],[75.8,85.3,53.0]],"y2018":{"バイク":[45868,55071,10663],"非機動車":[25556,28987,3741]},"y2025":{"自動車":[140615,119287,39644],"バイク":[53840,62380,9083],"非機動車":[44922,53703,5723]}};
+  TP.ar = {"ind":[["工業企業 合計",76,71,5],["製造業 合計",78,73,5],["水の生産・供給",217,185,32],["非金属鉱物製品",154,136,18],["専用設備",147,139,8],["計器・計測器",138,130,8],["その他の採鉱",122,99,23],["汎用設備",120,114,7],["電気機械・器材",113,107,5],["PC・通信・電子機器",105,102,3],["医薬品",104,95,9],["鉄道・船舶・航空機器",104,99,5],["自動車製造",100,90,11],["非金属鉱の採掘",99,77,22],["金属製品・機械の修理",97,91,6],["その他の製造",88,76,12],["ゴム・プラスチック製品",88,84,4],["採掘の補助サービス",87,71,16],["印刷・記録媒体の複製",84,78,7],["金属製品",84,80,4],["家具",82,76,6],["衣料品・服飾",76,67,9],["皮革・毛皮・履物",71,63,8],["鉄鉱石の採掘",70,68,2],["木材加工・竹籐製品",67,60,7],["石炭の採掘・選炭",65,68,-3],["紙・紙製品",63,61,2],["繊維",63,59,4],["電力・熱供給",63,61,1],["採鉱業（計）",56,56,-1],["文具・スポーツ・娯楽用品",51,43,8],["食品",50,43,7],["化学製品",48,45,4],["酒・飲料・精製茶",46,36,9],["廃棄資源の再利用",34,28,6],["化学繊維",32,29,3],["農産物・副食品の加工",32,29,3],["非鉄金属鉱の採掘",30,35,-5],["石油・天然ガスの採掘",28,24,4],["たばこ製品",27,8,18],["ガスの生産・供給",25,22,2],["非鉄金属の製錬・圧延",24,22,2],["鉄鋼の製錬・圧延",21,20,1],["石油加工・コークス・核燃料",18,16,3]],"streamYears":["2020","2021","2022","2023","2024","2025","26年9月"],"stream":{"上流":[24,21,23,25,26,27,29],"中流":[71,70,75,86,91,95,102],"下流":[66,63,68,77,82,85,92],"工業企業 全体":[56,53,57,64,68,71,76],"自動車製造":[66,62,72,83,90,90,100]},"months":["2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],"days":{"2020":[95,84,77,77,74,74,73,72,72,74,66],"2021":[63,59,59,58,57,59,60,60,62,64,62],"2022":[66,64,65,67,68,71,71,72,74,76,72],"2023":[93,89,91,91,92,92,92,92,92,91,83],"2024":[95,90,92,93,94,95,98,98,101,99,90],"2025":[97,94,95,96,91,90,92,90,91,95,90],"2026":[102,96,97,100,99,100,101,100,null,null,null]},"bal":{"2023":[19972,21073,21627,22097,22855,23187,23616,24276,24716,24978,23323],"2024":[21738,22600,23558,24082,24901,25258,26061,26670,27926,28351,26550],"2025":[24029,25050,25694,26332,25806,25477,26039,26110,26980,28855,27882],"2026":[25244,25659,26911,28017,28477,28900,29606,29937,null,null,null]},"marginYears":["2014","2016","2018","2020","2022","2024","2025","26年1-9月"],"margin":{"自動車製造":[9.0,8.3,7.3,6.2,5.5,4.8,4.1,3.3],"下流 計":[7.3,7.2,6.9,7.0,5.9,6.0,5.9,6.7],"中流 計":[6.0,6.0,6.0,6.3,4.9,5.3,5.0,4.3],"工業 全体":[5.9,6.0,6.3,6.1,4.7,5.6,5.3,5.7]}};
   var TP_EC = {};
   window.TOPIC_CURRENT_ID = 'topic-h1-profit';
   var FONT = 'Noto Sans JP, sans-serif';
@@ -17965,12 +18019,102 @@ window.addEventListener('resize', __rafThrottle(function(){
     }
   }
 
+
+  // ── 2026-11-25追加：売掛金・車長・省別の生産・ロシア・十五五計画・世界500強・給与と車の消費 ──
+  var YCOL = { '2016':'#e5e7eb','2017':'#d1d5db','2018':'#cbd5e1','2019':'#b6c2d2','2020':'#94a3b8','2021':'#a5b4fc',
+               '2022':'#64748b','2023':'#0ea5e9','2024':'#8b5cf6','2025':'#10b981','2026':'#dc2626' };
+  // 各年の月次を重ねた折れ線（最新の年を太線・数値ラベル付き）
+  function yearLines(ecId, xlabels, data, unit, opts){
+    var ec = initEc(ecId); if (!ec) return;
+    opts = opts || {};
+    var yrs = Object.keys(data), last = yrs[yrs.length - 1];
+    var fmt = opts.fmt || function(v){ return num(v); };
+    ec.setOption({
+      tooltip: tt({ formatter:function(p){
+        var s = '<b>' + p[0].axisValue + '</b><br>';
+        p.slice().reverse().forEach(function(x){ if (x.value != null) s += x.marker + x.seriesName + '：<b>' + fmt(x.value) + unit + '</b><br>'; });
+        return s; } }),
+      legend: leg({ data: yrs.map(function(y){ return y + '年'; }) }),
+      grid: { left:10, right:24, top: opts.top || (yrs.length > 5 ? 70 : 44), bottom:20, containLabel:true },
+      xAxis: catAxis(xlabels, { axisLabel:{ interval:0, fontFamily:FONT, fontSize:11, color:'#374151' } }),
+      yAxis: valAxis(unit, opts.yAxis || { scale:true }),
+      series: yrs.map(function(y){
+        var cur = y === last;
+        return { name:y + '年', type:'line', connectNulls:false, symbol:'circle', symbolSize: cur ? 7 : 4, z: cur ? 5 : 2,
+          data: data[y], lineStyle:{ color:YCOL[y] || C.slate, width: cur ? 3 : 1.6 }, itemStyle:{ color:YCOL[y] || C.slate },
+          label:{ show:cur, position:'top', fontFamily:FONT, fontSize:10, color:'#b91c1c', formatter:function(p){ return p.value != null ? fmt(p.value) : ''; } } };
+      })
+    });
+  }
+  // 系列ごとの折れ線（強調する系列は太線・ラベル付き）
+  function namedLines(ecId, xlabels, data, unit, hi, opts){
+    var ec = initEc(ecId); if (!ec) return;
+    opts = opts || {};
+    var names = Object.keys(data), cols = opts.colors || [C.blue, C.amber, C.violet, C.slate, '#10b981', '#0ea5e9'];
+    var fmt = opts.fmt || function(v){ return num(v); };
+    ec.setOption({
+      tooltip: tt({ formatter:function(p){
+        var s = '<b>' + p[0].axisValue + '</b><br>';
+        p.forEach(function(x){ if (x.value != null) s += x.marker + x.seriesName + '：<b>' + fmt(x.value) + unit + '</b><br>'; });
+        return s; } }),
+      legend: leg({ data:names }),
+      grid: { left:10, right:24, top: opts.top || (names.length > 5 ? 70 : 44), bottom:20, containLabel:true },
+      xAxis: catAxis(xlabels, { axisLabel:{ interval:0, fontFamily:FONT, fontSize:10.5, color:'#374151' } }),
+      yAxis: valAxis(unit, opts.yAxis || { scale:true }),
+      series: names.map(function(n, k){
+        var h = n === hi, col = h ? '#dc2626' : cols[k % cols.length];
+        return { name:n, type:'line', symbol:'circle', symbolSize: h ? 7 : 5, z: h ? 5 : 2, data:data[n],
+          lineStyle:{ color:col, width: h ? 3 : 1.8 }, itemStyle:{ color:col },
+          label:{ show:h || !!opts.allLabels, position:'top', fontFamily:FONT, fontSize:10, color: h ? '#b91c1c' : '#475569',
+                  formatter:function(p){ return p.value != null ? fmt(p.value) : ''; } } };
+      })
+    });
+  }
+
+  // 売掛金 ① 業種別の回収日数
+  function renderArIndustry(){
+    var A = TP.ar, ec = initEc('ec-topic-ar-industry');
+    if (ec) {
+      var rows = A.ind, AUTO = '自動車製造';
+      ec.setOption({
+        tooltip: tt({ axisPointer:{type:'shadow'}, formatter:function(p){ var r = rows[p[0].dataIndex];
+          return '<b>' + r[0] + '</b><br>2026年9月末：<b>' + r[1] + '日</b><br>2025年：' + r[2] + '日<br>増減：<b style="color:' + (r[3] > 0 ? C.neg : C.pos) + '">' + sgn(r[3]) + '日</b>'; } }),
+        legend: leg({ data:['2025年','2026年9月末'] }),
+        grid: { left:10, right:70, top:36, bottom:16, containLabel:true },
+        xAxis: valAxis('日'),
+        yAxis: catAxis(rows.map(function(r){ return r[0]; }), { inverse:true, axisLabel:{ fontFamily:FONT, fontSize:10.5, color:'#374151',
+          formatter:function(v){ return v === AUTO ? '{a|' + v + '}' : (isTotal(v) ? '{b|' + v + '}' : v); },
+          rich:{ a:{ fontFamily:FONT, fontSize:11, fontWeight:'bold', color:'#dc2626' }, b:{ fontFamily:FONT, fontSize:11, fontWeight:'bold', color:'#0f172a' } } } }),
+        series: [
+          { name:'2025年', type:'bar', barGap:'10%', barMaxWidth:8, itemStyle:{color:C.prev}, data: rows.map(function(r){ return r[2]; }) },
+          { name:'2026年9月末', type:'bar', barMaxWidth:8,
+            data: rows.map(function(r){ return { value:r[1], itemStyle:{ color: r[0] === AUTO ? '#dc2626' : (isTotal(r[0]) ? C.total : C.blue) } }; }),
+            label:{ show:true, position:'right', fontFamily:FONT, fontSize:9.5, color:'#374151',
+                    formatter:function(p){ var r = rows[p.dataIndex]; return r[1] + '日（' + sgn(r[3]) + '）'; } } }
+        ]
+      });
+    }
+    namedLines('ec-topic-ar-stream', A.streamYears, A.stream, '日', '自動車製造',
+               { colors:['#94a3b8', C.violet, C.blue, C.total], yAxis:{ min:0, max:110, interval:20 } });
+  }
+  // 売掛金 ② 自動車業の推移
+  function renderArAuto(){
+    var A = TP.ar, bal = {};
+    Object.keys(A.bal).forEach(function(y){ bal[y] = A.bal[y].map(function(v){ return v == null ? null : Math.round(v / 100) / 100; }); });
+    yearLines('ec-topic-ar-days', A.months, A.days, '日', { yAxis:{ min:50, max:110, interval:10 } });
+    yearLines('ec-topic-ar-bal', A.months, bal, '兆元', { fmt:function(v){ return v.toFixed(2); }, yAxis:{ min:1.9, max:3.1, interval:0.2 } });
+    namedLines('ec-topic-ar-margin', A.marginYears, A.margin, '%', '自動車製造',
+               { fmt:function(v){ return v.toFixed(1); }, colors:['#dc2626', C.blue, C.violet, C.total], yAxis:{ min:0, max:10, interval:2 } });
+  }
+
   var RENDER = {
     'topic-h1-profit': renderProfit, 'topic-h1-revenue': renderRevenue, 'topic-h1-chain': renderChain,
     'topic-h1-stock': renderStock, 'topic-marriage': renderMarriage, 'topic-aging': renderAging,
     'topic-registration': renderRegistration, 'topic-mcap': renderMcap, 'topic-scrap': renderScrap,
     'topic-used': renderUsed, 'topic-used-nev': renderUsedNev, 'topic-eu': renderEu,
-    'topic-outlook': renderOutlook, 'topic-accident': renderAccident
+    'topic-outlook': renderOutlook, 'topic-accident': renderAccident,
+    'topic-ar-industry': renderArIndustry,
+    'topic-ar-auto': renderArAuto
   };
   window.topicRender = function(id){ var fn = RENDER[id]; if (fn) fn(); };
 })();

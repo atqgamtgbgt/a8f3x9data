@@ -6598,7 +6598,7 @@ function cdsSetMidTab(tab) {
 
   // ── 引用元リンク切替 ──
   var CDS_SOURCE_URLS = {
-    'zenntai':    'https://www.sohu.com/a/1087234171_115312',
+    'zenntai':    'https://www.sohu.com/a/1099395111_115312',
     'export':     'https://www.sohu.com/a/1091661532_115312',
     'jishuhaiex': 'https://www.sohu.com/a/1085170493_115312',
     'import':     'https://www.sohu.com/a/1092507419_115312',

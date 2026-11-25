@@ -1739,6 +1739,34 @@ window.INFO_REGISTRY = {
   },
 
   // ── 全国商用車（国内）市場分析グループ ──
+  'cnvcommercial-2026-10': {
+    title: '商用車の国内保険登録データ — 2026年10月（重トラックNEV浸透率58%）',
+    source: '崔東樹',
+    date: '2026年11月21日',
+    url: 'https://www.sohu.com/a/1104564175_115312',
+    highlights: [
+      '<strong>商用車10月販売23.2万台（YoY -6%、MoM -12%）</strong>で、需要期にしては弱い。1-10月累計は<strong>250.0万台（-2%）</strong>。2Qの一時的な回復の後、下期は下押し圧力が強まり、限られたパイの奪い合いに戻った。',
+      '<strong>NEV商用車10月12.10万台</strong>で、9月（13.07万台）から小幅に減ったが高水準を維持。1-10月累計<strong>98万台（+44%）</strong>。2月を除き3月以降は毎月9万台以上で、2023〜2025年の同期を大きく上回る。',
+      '<strong>NEV浸透率：10月52.2%、1-10月39.1%</strong>。BEVが圧倒的な主力で、PHEV・水素は小さく安定。商用車の電動化が加速。',
+      '車種別（10月）：<strong>重トラック58%</strong>、トラック計41%、軽トラック・微トラック35%、ピックアップ・中型トラックは低め。<strong>バス計86%</strong>。重トラックの電動化の突破が今回の浸透率上昇の中心。',
+      '構造：軽バスが+27%と伸び客車が好調。軽トラック・ピックアップ・中型トラックは減少、重トラックも小幅減で、トラックが全体を押し下げた。客車のシェアは上昇。',
+      '企業：乗用車の激変と違い、商用車の競争構造はおおむね安定。福田・五菱・重汽など上位の多くは前年割れ、<strong>吉利・徐工・長安跨越・湖南汽車</strong>はNEVへの転換でシェアを伸ばした。',
+      '10月の細分市場：中重トラック4.62万台（NEV 48%、<strong>黄河流域62%</strong>）、軽トラック5.76万台（NEV 32%、北汽福田は首位だが浸透率22%）、軽バス2.28万台（NEV 73%、<strong>江鈴33%</strong>）、大中型バス0.21万台（NEV 63%、<strong>宇通35%</strong>）。'
+    ],
+    sections: [
+      { heading:'1. 全国商用車市場 交強険データ分析', body:'<p>2026年の商用車市場は段階的な波動が顕著で、乗用車より明らかに強い。春節のずれで1-2月は前年割れ、3月に急回復し3-6月は高水準を維持したが、<strong>7-10月は例年の季節水準を大きく下回る独自の下落</strong>となった。<br>市場全体は圧力を受けている。10月は<strong>23.2万台（YoY -6%、MoM -12%）</strong>で、需要期にしては弱い。1-10月累計は250.0万台（-2%）。2Qの一時的な回復の後、下期は下押し圧力が大きく強まり、市場は限られたパイの奪い合いに戻った。</p>' },
+      { heading:'2. 全国NEV商用車市場 販売分析', body:'<p>2026年のNEV商用車は波を描きながら上昇。1月は年初の購入熱で5万台の高水準、2月は春節休暇や工事の停止などの季節要因で落ち込んだが、<strong>3-10月は爆発的に伸び、単月10万台前後の異例の強さ</strong>。商用車全体が小幅に減る中で、NEVは逆風の中で大きく伸び、業界で唯一の成長分野。<br>10月は<strong>12.10万台</strong>で9月の13.07万台から小幅に減ったが、高水準を維持。1-10月累計は<strong>98万台（+44%）</strong>と好調で、2月を除き3月以降は毎月9万台以上、2023〜2025年の同期を大きく上回る。</p>' },
+      { heading:'3. 商用車市場の構造', body:'<p>10月の商用車は計23.2万台（-6%）、1-10月累計250万台（-2%）。構造の分化がはっきりしており、<strong>軽バスが+27%</strong>と伸びて客車が好調。トラックは軽トラック・ピックアップ・中型トラックが減り、重トラックも小幅減で、トラック全体が市場を押し下げた。客車のシェアは上昇を続け、トラックの比率は縮小。</p>' },
+      { heading:'4. NEV浸透率', body:'<p>10月の商用車NEV浸透率は<strong>52.2%</strong>と上昇を続ける。BEVが圧倒的な主力で、PHEV・水素の比率は小さく安定。1-10月累計は<strong>39.1%</strong>で例年を大きく上回り、商用車の電動化が加速。ICE商用車のシェアは縮小を続け、電動化のペースは以前より明らかに速い。</p>' },
+      { heading:'5. 車種別の変化（10月）', body:'<p>10月の浸透率は52%で、車種による差が大きい。客車は<strong>86%</strong>と電動化の基盤が固い。トラックは41%で、うち<strong>重トラックは58%</strong>に達し、軽トラック・微トラックも35%。ピックアップ・中型トラックは相対的に低い。重トラックの電動化の突破が、今回の浸透率上昇の中心。</p>' },
+      { heading:'6. 競争構造', body:'<p>10月の商用車市場の競争構造は乗用車と対照的で、乗用車が激しく変わる一方、商用車はおおむね安定。10月の総量は23.2万台（-6%）。福田・五菱・重汽など上位の多くは前年割れ、<strong>吉利・徐工・長安跨越・湖南汽車</strong>は大きく伸び、NEVへの転換でシェアを急速に高めた。市場の分化が強まり、新興勢力と転換を進めるメーカーが強い。</p>' },
+      { heading:'7. 中重型トラック（10月）', body:'<p>10月の中重トラックは<strong>4.62万台、NEV浸透率48%</strong>で電動化が加速。地域差が大きく、<strong>黄河流域が62%で最高</strong>、華東・西南・華南も50%超。東北は16%にとどまり電動化が遅い。華北は引き続き最大の地域で、華東のシェアが上昇。浸透率の高い地域は、輸送の流れが活発な幹線市場に集中している。<br>企業別のデータでは<strong>4.946万台、NEV浸透率45%</strong>。伝統的な大手のシェアは横ばいからやや低下し、徐工・湖南汽車など転換を進める企業が急速に伸びる。<strong>徐工97%・湖南汽車100%</strong>と電動化で先行する一方、解放・重汽・東風の浸透率は低く、伝統大手の電動化はまだ遅れている。</p>' },
+      { heading:'8. 軽トラック（10月）', body:'<p>10月の軽トラックは<strong>5.76万台、NEV浸透率32%</strong>。地域差が大きく、華南・華東は55%を超え、都市配送の電動化が進む。西北は11%、東北は7%と電動化が遅い。西南・華北が主力市場で、華南・華東のシェアが着実に上昇。<br>企業別では<strong>北汽福田</strong>がシェア首位を保つが浸透率は22%にとどまる。吉利・比亜迪・奇瑞などの新興勢力は浸透率100%、飛碟・徐工も高い電動化水準に近い。伝統的な軽トラック大手は電動化が遅く、BEVブランドが都市配送の強みでシェアを急速に奪っている。</p>' },
+      { heading:'9. 軽バス（10月）', body:'<p>10月の軽バスは<strong>2.28万台、NEV浸透率73%</strong>で、商用車で最も電動化が進んだ分野。浸透率は<strong>華南88%</strong>が首位、華東・華北・黄河流域は75%前後、東北・西北は相対的に低い。華東は引き続き最大の地域で、都市配送の需要が軽バスの電動化を押し上げる。<br>企業別では<strong>江鈴がシェアを33%に大きく伸ばし</strong>首位を固め、浸透率は59%。吉利・奇瑞は100% BEV、福田・長安・安凱は85%超。上汽依維柯は3%と転換が遅く、メーカーごとの差が大きい。</p>' },
+      { heading:'10. 大中型バス（10月）', body:'<p>10月の大中型バスは<strong>0.21万台、NEV浸透率63%</strong>。<strong>華南はシェアが29%に上がり、浸透率86%</strong>で大きく先行。華東・直轄市も70%超。西北33%・華北30%と低く、地域差が大きい。華南は路線バス・観光バスの電動化需要が高い浸透率を支えている。<br>企業別では<strong>宇通がシェア35%で首位</strong>、浸透率58%。廈門金龍はシェア19%に上昇し、浸透率85%と目立つ。吉利・中車時代・上海申沃はBEVのみ、一汽豊田はNEVなしで、大手バスメーカーの間で電動化のペースに大きな差がある。</p>' }
+    ]
+  },
+
   'cnvcommercial-2026-9': {
     title: '商用車の国内保険登録データ — 2026年9月（重トラックNEV浸透率50%）',
     source: '崔東樹',
@@ -2654,20 +2682,20 @@ window.INFO_PANE_MAP = {
   'cds-power-region':  'cnexport-2026-1to4',
   'cds-prov-price':    'cnexport-2026-1to9',
   // 商用車（国内）グループ
-  'cv-monthly':          ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-annual':           ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-penetration':      ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-nev-monthly':      ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-nev-annual':       ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-nev-penetration':  ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-htruck-region':    ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-htruck-company':   ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-ltruck-region':    ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-ltruck-company':   ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-lbus-region':      ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-lbus-company':     ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-mbus-region':      ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
-  'cv-mbus-company':     ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
+  'cv-monthly':          ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-annual':           ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-penetration':      ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-nev-monthly':      ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-nev-annual':       ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-nev-penetration':  ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-htruck-region':    ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-htruck-company':   ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-ltruck-region':    ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-ltruck-company':   ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-lbus-region':      ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-lbus-company':     ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-mbus-region':      ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
+  'cv-mbus-company':     ['cnvcommercial-2026-10','cnvcommercial-2026-9'],
   'cv-companies':        ['cnvcommercial-2026-9','cnvcommercial-2026-8'],
   // 輸入グループ
   'imp-trend':       ['cnimport-2026-9','cnimport-2026-8'],

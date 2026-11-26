@@ -5,8 +5,24 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-26T03:25:17+00:00",
+ "updated_at": "2026-11-26T14:23:34+00:00",
  "articles": [
+  {
+   "id": "1106645613",
+   "title": "1-10月中国汽车出口974万辆增49%，全年预计1200万辆",
+   "published_at": "2026-11-26T12:41+08:00",
+   "url": "https://www.sohu.com/a/1106645613_115312",
+   "topic": "export",
+   "topic_label": "輸出",
+   "path": "cds/articles/2026/11/1106645613",
+   "image_count": 38,
+   "images_saved": 38,
+   "text_chars": 10200,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年1-10月中国汽车实现出口974万辆，同比2025年同期增速49%，10月中国汽车实现出口111万辆，同比增34%，环比下降6%，总体走势总体较强。今年的主要动力仍是高油价和中国产品竞争力提升和全球南方国家市场的持续增长。从结构看，乘用车出口占比逐步稳",
+   "content_method": "pc:lxml:#mp-editor",
+   "thumb": "cds/articles/2026/11/1106645613/img/01.jpg",
+   "fetched_at": "2026-11-26T14:23:32+00:00"
+  },
   {
    "id": "1106298469",
    "title": "车市扫描-2026年45期（11月16日-11月22日）",

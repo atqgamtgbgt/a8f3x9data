@@ -5,9 +5,25 @@
   "profile_url": "https://mp.sohu.com/profile?xpt=Y3VpZG9uZ3NodUBzb2h1LmNvbQ==",
   "author_id": "115312"
  },
- "updated_at": "2026-11-27T03:25:32+00:00",
- "total": 242,
+ "updated_at": "2026-11-27T14:22:57+00:00",
+ "total": 243,
  "articles": [
+  {
+   "id": "1107256295",
+   "title": "2026年10月中国汽车进口2.3万辆降48%",
+   "published_at": "2026-11-27T11:38+08:00",
+   "url": "https://www.sohu.com/a/1107256295_115312",
+   "topic": "import",
+   "topic_label": "輸入",
+   "path": "cds/articles/2026/11/1107256295",
+   "image_count": 16,
+   "images_saved": 16,
+   "text_chars": 3456,
+   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年10月进口车进口2.3万辆，同比下滑48%，环比增8%，降幅仍惊人。2026年1-10月进口汽车31万辆，同比下降23%。今年汽车进口结构中的乘用车占到超99%的绝对主力地位，如果包含轻卡中的皮卡，则乘用车数量占比更高。2026年1-10月进口新能源车",
+   "content_method": "pc:lxml:.content-main-detail",
+   "thumb": "cds/articles/2026/11/1107256295/img/01.jpg",
+   "fetched_at": "2026-11-27T14:22:56+00:00"
+  },
   {
    "id": "1106645613",
    "title": "1-10月中国汽车出口974万辆增49%，全年预计1200万辆",
@@ -947,22 +963,6 @@
    "content_method": "pc:lxml:.content-main-detail",
    "thumb": "cds/articles/2026/09/1080113775/img/01.jpg",
    "fetched_at": "2026-10-10T12:57:38+00:00"
-  },
-  {
-   "id": "1079610268",
-   "title": "9月新能源新品与技术线路跟踪",
-   "published_at": "2026-09-22T20:44+08:00",
-   "url": "https://www.sohu.com/a/1079610268_115312",
-   "topic": "nev_products",
-   "topic_label": "NEV新製品・技術",
-   "path": "cds/articles/2026/09/1079610268",
-   "image_count": 8,
-   "images_saved": 8,
-   "text_chars": 2830,
-   "lead": "注：本分析文章仅代表崔东树个人观点，如有异议，请留言。  2026年1-9月新能源车免税目录共有22760款，其中9月有355款新车型，相对近三年同期处于高位。2-9月的目录资源相对2025年同期相近数量，乘用车新品多、补贴少、市场低迷。卡车新品少补贴高市场好。9月免税目录新增车型355 款，环比8 月652 款大幅下",
-   "content_method": "pc:lxml:.content-main-detail",
-   "thumb": "cds/articles/2026/09/1079610268/img/01.jpg",
-   "fetched_at": "2026-10-10T12:57:28+00:00"
   }
  ]
 }
